@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Babel Editor Plug-in
+Bundle-SymbolicName: org.eclipse.babel.editor;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.eclipse.babel.editor.plugin.EditorPlugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.text,
+ org.eclipse.core.resources,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.jdt.ui,
+ org.eclipse.ui.views,
+ org.eclipse.babel.core
+Eclipse-LazyStart: true
