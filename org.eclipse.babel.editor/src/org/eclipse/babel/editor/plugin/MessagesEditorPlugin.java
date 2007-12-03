@@ -26,7 +26,7 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plug-in life cycle
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
-public class EditorPlugin extends AbstractUIPlugin {
+public class MessagesEditorPlugin extends AbstractUIPlugin {
 
 	//TODO move somewhere more appropriate
     public static final String MARKER_TYPE =
@@ -36,7 +36,7 @@ public class EditorPlugin extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "org.eclipse.babel.editor";
 
 	// The shared instance
-	private static EditorPlugin plugin;
+	private static MessagesEditorPlugin plugin;
 	
 	//Resource bundle.
 	//TODO Use Eclipse MessagesBundle instead.
@@ -45,7 +45,7 @@ public class EditorPlugin extends AbstractUIPlugin {
 	/**
 	 * The constructor
 	 */
-	public EditorPlugin() {
+	public MessagesEditorPlugin() {
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class EditorPlugin extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static EditorPlugin getDefault() {
+	public static MessagesEditorPlugin getDefault() {
 		return plugin;
 	}
 
@@ -98,7 +98,7 @@ public class EditorPlugin extends AbstractUIPlugin {
 	 */
 	public static String getString(String key) {
 		ResourceBundle bundle = 
-                EditorPlugin.getDefault().getResourceBundle();
+                MessagesEditorPlugin.getDefault().getResourceBundle();
 		try {
 			return (bundle != null) ? bundle.getString(key) : key;
 		} catch (MissingResourceException e) {
