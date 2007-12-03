@@ -35,12 +35,12 @@ public class PropertiesDeserializer {
     private static final String KEY_VALUE_SEPARATORS = "=:"; //$NON-NLS-1$
 
     /** MessagesBundle deserializer configuration. */
-    private PropertiesDeserializerConfig config;
+    private IPropertiesDeserializerConfig config;
     
     /**
      * Constructor.
      */
-    public PropertiesDeserializer(PropertiesDeserializerConfig config) {
+    public PropertiesDeserializer(IPropertiesDeserializerConfig config) {
         super();
         this.config = config;
     }

@@ -19,10 +19,10 @@ import java.util.Locale;
 import org.eclipse.babel.core.message.MessageException;
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.resource.PropertiesFileResource;
+import org.eclipse.babel.core.message.resource.ser.IPropertiesDeserializerConfig;
+import org.eclipse.babel.core.message.resource.ser.IPropertiesSerializerConfig;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
-import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializerConfig;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
-import org.eclipse.babel.core.message.resource.ser.PropertiesSerializerConfig;
 import org.eclipse.babel.core.util.BabelUtils;
 
 
@@ -47,13 +47,23 @@ public class DefaultFileGroupStrategy implements IMessagesBundleGroupStrategy {
     private final String fileExtension;
     /** Pattern used to match files in this strategy. */
     private final String fileMatchPattern;
+    /** Properties file serializer configuration. */
+    private final IPropertiesSerializerConfig serializerConfig;
+    /** Properties file deserializer configuration. */
+    private final IPropertiesDeserializerConfig deserializerConfig;
+    
     
     /**
      * Constructor.
      * @param file file from which to derive the group
      */
-    public DefaultFileGroupStrategy(File file) {
+    public DefaultFileGroupStrategy(
+            File file,
+            IPropertiesSerializerConfig serializerConfig,
+            IPropertiesDeserializerConfig deserializerConfig) {
         super();
+        this.serializerConfig = serializerConfig;
+        this.deserializerConfig = deserializerConfig;
         this.file = file;
         this.fileExtension = file.getName().replaceFirst(
                 "(.*\\.)(.*)", "$2"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -132,9 +142,8 @@ public class DefaultFileGroupStrategy implements IMessagesBundleGroupStrategy {
             //singleton per project, and listening for changes
             return new MessagesBundle(new PropertiesFileResource(
                     locale,
-                    new PropertiesSerializer(new PropertiesSerializerConfig()),
-                    new PropertiesDeserializer(
-                            new PropertiesDeserializerConfig()),
+                    new PropertiesSerializer(serializerConfig),
+                    new PropertiesDeserializer(deserializerConfig),
                     resource));
         } catch (FileNotFoundException e) {
             throw new MessageException(
