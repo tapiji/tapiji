@@ -2,30 +2,6 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            label="Sample Action Set"
-            visible="true"
-            id="com.essiembre.rbe.eclipse.actionSet">
-         <menu
-               label="Sample &amp;Menu"
-               id="sampleMenu">
-            <separator
-                  name="sampleGroup">
-            </separator>
-         </menu>
-         <action
-               label="&amp;Sample Action"
-               icon="icons/sample.gif"
-               class="org.eclilpse.babel.editor.actions.SampleAction"
-               tooltip="Hello, Eclipse world"
-               menubarPath="sampleMenu/sampleGroup"
-               toolbarPath="sampleGroup"
-               id="com.essiembre.rbe.eclipse.actions.SampleAction">
-         </action>
-      </actionSet>
-   </extension>
-   <extension
          point="org.eclipse.ui.editors">
       <editor
             class="org.eclipse.babel.editor.MessagesEditor"
@@ -34,40 +10,23 @@
             extensions="properties"
             icon="icons/propertiesfile.gif"
             id="com.essiembre.rbe.eclipse.editor.ResourceBundleEditor"
-            name="RBE 2"/>
-   </extension>
-   <extension
-         point="org.eclipse.ui.newWizards">
-      <category
-            name="%wizard.rb"
-            id="com.essiembre.eclipse.i18n.resourcebundle">
-      </category>
-      <wizard
-            name="ResourceBundle"
-            icon="icons/resourcebundle.gif"
-            category="com.essiembre.eclipse.i18n.resourcebundle"
-            class="com.essiembre.eclipse.rbe.ui.wizards.ResourceBundleWizard"
-            id="com.essiembre.eclipse.rbe.ui.wizards.ResourceBundleWizard">
-            <description> 
-               %wizard.description 
-            </description> 
-      </wizard>
+            name="%editor.title"/>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            name="%editor.rbe"
-            class="com.essiembre.eclipse.rbe.ui.preferences.RBEGeneralPrefPage"
-            id="com.essiembre.eclipse.rbe.ui.preferences.RBEGeneralPrefPage">
+            name="%editor.title"
+            class="org.eclipse.babel.editor.preferences.GeneralPrefPage"
+            id="org.eclipse.babel.editor.preferences.GeneralPrefPage">
       </page>
       <page
-            class="com.essiembre.eclipse.rbe.ui.preferences.RBEFormattingPrefPage"
-            category="com.essiembre.eclipse.rbe.ui.preferences.RBEGeneralPrefPage"
+            class="org.eclipse.babel.editor.preferences.FormattingPrefPage"
+            category="org.eclipse.babel.editor.preferences.GeneralPrefPage"
             name="%prefs.formatting"
-            id="com.essiembre.eclipse.rbe.ui.preferences.RBEFormattingPrefPage"/>
+            id="org.eclipse.babel.editor.preferences.FormattingPrefPage"/>
       <page
-            class="com.essiembre.eclipse.rbe.ui.preferences.RBEReportingPrefPage"
-            category="com.essiembre.eclipse.rbe.ui.preferences.RBEGeneralPrefPage"
+            class="org.eclipse.babel.editor.preferences.ReportingPrefPage"
+            category="org.eclipse.babel.editor.preferences.GeneralPrefPage"
             name="%prefs.performance"
             id="com.essiembre.eclipse.rbe.ui.preferences.RBEReportingPrefPage"/>
    </extension>
@@ -78,7 +37,7 @@
          <view
                ratio="0.5"
                relative="org.eclipse.ui.views.TaskList"
-               id="com.essiembre.eclipse.i18n.resourcebundle.views.ResourceBundleView"
+               id="org.eclipse.babel.editor.views.ResourceBundleView"
                relationship="right">
          </view>
       </perspectiveExtension>
@@ -86,7 +45,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="com.essiembre.eclipse.rbe.ui.preferences.RBEPreferenceInitializer">
+            class="org.eclipse.babel.editor.preferences.PreferenceInitializer">
       </initializer>
    </extension>
 
