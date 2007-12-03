@@ -19,11 +19,10 @@ import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.resource.PropertiesIFileResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
-import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializerConfig;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
-import org.eclipse.babel.core.message.resource.ser.PropertiesSerializerConfig;
 import org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy;
 import org.eclipse.babel.core.util.BabelUtils;
+import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.resource.EclipsePropertiesEditorResource;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -138,9 +137,7 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
     protected MessagesBundle createBundle(Locale locale, IResource resource)
             throws MessageException {
         try {
-            //TODO have the text de/serializer tied to Eclipse preferences,
-            //singleton per project, and listening for changes
-
+            MsgEditorPreferences prefs = MsgEditorPreferences.getInstance();
             
             //TODO have bundleResource created in a separate factory
             //shared between strategies
@@ -148,14 +145,14 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
             if (site == null) {
                 messagesResource = new PropertiesIFileResource(
                         locale,
-                        new PropertiesSerializer(new PropertiesSerializerConfig()),
-                        new PropertiesDeserializer(new PropertiesDeserializerConfig()),
+                        new PropertiesSerializer(prefs),
+                        new PropertiesDeserializer(prefs),
                         (IFile) resource);
             } else {
                 messagesResource = new EclipsePropertiesEditorResource(
                         locale,
-                        new PropertiesSerializer(new PropertiesSerializerConfig()),
-                        new PropertiesDeserializer(new PropertiesDeserializerConfig()),
+                        new PropertiesSerializer(prefs),
+                        new PropertiesDeserializer(prefs),
                         createEditor(resource, locale));
             }
             return new MessagesBundle(messagesResource);
