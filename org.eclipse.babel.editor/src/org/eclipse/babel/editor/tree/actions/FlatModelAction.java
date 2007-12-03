@@ -12,7 +12,7 @@ package org.eclipse.babel.editor.tree.actions;
 
 import org.eclipse.babel.core.message.tree.FlatKeyTreeModel;
 import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.plugin.EditorPlugin;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -29,7 +29,7 @@ public class FlatModelAction extends AbstractTreeAction {
      */
     public FlatModelAction(MessagesEditor editor, TreeViewer treeViewer) {
         super(editor, treeViewer, IAction.AS_RADIO_BUTTON);
-        setText(EditorPlugin.getString("key.layout.flat")); //$NON-NLS-1$
+        setText(MessagesEditorPlugin.getString("key.layout.flat")); //$NON-NLS-1$
         setImageDescriptor(
                 UIUtils.getImageDescriptor(UIUtils.IMAGE_LAYOUT_FLAT));
         setDisabledImageDescriptor(

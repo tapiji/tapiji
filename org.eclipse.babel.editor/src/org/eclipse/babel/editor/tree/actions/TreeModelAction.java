@@ -12,7 +12,7 @@ package org.eclipse.babel.editor.tree.actions;
 
 import org.eclipse.babel.core.message.tree.DefaultKeyTreeModel;
 import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.plugin.EditorPlugin;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -29,7 +29,7 @@ public class TreeModelAction extends AbstractTreeAction {
      */
     public TreeModelAction(MessagesEditor editor, TreeViewer treeViewer) {
         super(editor, treeViewer, IAction.AS_RADIO_BUTTON);
-        setText(EditorPlugin.getString("key.layout.tree")); //$NON-NLS-1$
+        setText(MessagesEditorPlugin.getString("key.layout.tree")); //$NON-NLS-1$
         setImageDescriptor(
                 UIUtils.getImageDescriptor(UIUtils.IMAGE_LAYOUT_HIERARCHICAL));
         setToolTipText("TODO put something here"); //TODO put tooltip

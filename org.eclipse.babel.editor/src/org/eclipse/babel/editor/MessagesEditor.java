@@ -25,7 +25,7 @@ import org.eclipse.babel.core.message.tree.DefaultKeyTreeModel;
 import org.eclipse.babel.core.message.tree.IKeyTreeModel;
 import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
 import org.eclipse.babel.editor.i18n.I18NPage;
-import org.eclipse.babel.editor.plugin.EditorPlugin;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.resource.EclipsePropertiesEditorResource;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.editor.views.MessagesBundleGroupOutline;
@@ -130,7 +130,7 @@ public class MessagesEditor extends MultiPageEditorPart
         i18nPage = new I18NPage(
                 getContainer(), SWT.NONE, this);
         int index = addPage(i18nPage);
-        setPageText(index, EditorPlugin.getString(
+        setPageText(index, MessagesEditorPlugin.getString(
                 "editor.properties")); //$NON-NLS-1$
         setPageImage(index, UIUtils.getImage(UIUtils.IMAGE_RESOURCE_BUNDLE));
         

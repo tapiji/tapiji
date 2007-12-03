@@ -81,7 +81,7 @@ public class KeyTreeLabelProvider
         
         // Maybe add warning icon
         //TODO implement preferences here
-//        if (RBEPreferences.getReportMissingValues()) {
+//        if (MsgEditorPreferences.getReportMissingValues()) {
         if (editor.getMarkers().isMarked(key)) {
             iconFlags += BADGE_WARNING;
         } else if (isOneChildrenMarked(node)) {

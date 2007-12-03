@@ -13,7 +13,7 @@ package org.eclipse.babel.editor.tree.actions;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
 import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.plugin.EditorPlugin;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
@@ -31,7 +31,7 @@ public class DeleteKeyAction extends AbstractTreeAction {
      */
     public DeleteKeyAction(MessagesEditor editor, TreeViewer treeViewer) {
         super(editor, treeViewer);
-        setText(EditorPlugin.getString("key.delete")); //$NON-NLS-1$
+        setText(MessagesEditorPlugin.getString("key.delete")); //$NON-NLS-1$
         setImageDescriptor(
                 PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(
                         ISharedImages.IMG_TOOL_DELETE));
@@ -51,14 +51,14 @@ public class DeleteKeyAction extends AbstractTreeAction {
         String msgHead = null;
         String msgBody = null;
         if (getContentProvider().hasChildren(node)) {
-            msgHead = EditorPlugin.getString(
+            msgHead = MessagesEditorPlugin.getString(
                     "dialog.delete.head.multiple"); //$NON-NLS-1$
-            msgBody = EditorPlugin.getString(
+            msgBody = MessagesEditorPlugin.getString(
                     "dialog.delete.body.multiple", key);//$NON-NLS-1$ 
         } else {
-            msgHead = EditorPlugin.getString(
+            msgHead = MessagesEditorPlugin.getString(
                     "dialog.delete.head.single"); //$NON-NLS-1$
-            msgBody = EditorPlugin.getString(
+            msgBody = MessagesEditorPlugin.getString(
                     "dialog.delete.body.single", key); //$NON-NLS-1$
         }
         MessageBox msgBox = new MessageBox(

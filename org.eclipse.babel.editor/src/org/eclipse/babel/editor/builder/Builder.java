@@ -22,7 +22,7 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import org.eclipse.babel.editor.plugin.EditorPlugin;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.resource.validator.FileMarkerStrategy;
 import org.eclipse.babel.editor.resource.validator.IValidationMarkerStrategy;
 import org.eclipse.babel.editor.resource.validator.ResourceValidator;
@@ -108,7 +108,7 @@ public class Builder extends IncrementalProjectBuilder {
 	private void deleteMarkers(IFile file) {
 		try {
             System.out.println("Builder: deleteMarkers"); //$NON-NLS-1$
-			file.deleteMarkers(EditorPlugin.MARKER_TYPE, false, IResource.DEPTH_ZERO);
+			file.deleteMarkers(MessagesEditorPlugin.MARKER_TYPE, false, IResource.DEPTH_ZERO);
 		} catch (CoreException ce) {
 		}
 	}

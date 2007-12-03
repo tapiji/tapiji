@@ -11,7 +11,7 @@
 package org.eclipse.babel.editor.tree.actions;
 
 import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.plugin.EditorPlugin;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.viewers.TreeViewer;
 
@@ -27,7 +27,7 @@ public class ExpandAllAction extends AbstractTreeAction {
      */
     public ExpandAllAction(MessagesEditor editor, TreeViewer treeViewer) {
         super(editor, treeViewer);
-        setText(EditorPlugin.getString("key.expandAll")); //$NON-NLS-1$
+        setText(MessagesEditorPlugin.getString("key.expandAll")); //$NON-NLS-1$
         setImageDescriptor(
                 UIUtils.getImageDescriptor(UIUtils.IMAGE_EXPAND_ALL));
         setToolTipText("TODO put something here"); //TODO put tooltip

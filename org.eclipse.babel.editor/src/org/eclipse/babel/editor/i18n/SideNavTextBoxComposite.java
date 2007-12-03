@@ -28,7 +28,7 @@ import org.eclipse.babel.core.message.tree.KeyTreeNode;
 import org.eclipse.babel.core.message.tree.visitor.NodePathRegexVisitor;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
-import org.eclipse.babel.editor.plugin.EditorPlugin;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 
 /**
  * Tree for displaying and navigating through resource bundle keys.
@@ -78,7 +78,7 @@ public class SideNavTextBoxComposite extends Composite {
 
         // Add button
         final Button addButton = new Button(this, SWT.PUSH);
-        addButton.setText(EditorPlugin.getString("key.add")); //$NON-NLS-1$
+        addButton.setText(MessagesEditorPlugin.getString("key.add")); //$NON-NLS-1$
         addButton.setEnabled(false);
         addButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {

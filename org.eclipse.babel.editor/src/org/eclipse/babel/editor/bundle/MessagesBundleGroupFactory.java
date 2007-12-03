@@ -44,7 +44,7 @@ public final class MessagesBundleGroupFactory {
          * Check if NL is supported.
          */
         //TODO implement NL support
-//       if (!RBEPreferences.getSupportNL()) {
+//       if (!MsgEditorPreferences.getSupportNL()) {
 //           return defaultGroup;
 //       }
 //

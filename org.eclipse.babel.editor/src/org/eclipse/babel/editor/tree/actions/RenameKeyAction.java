@@ -13,7 +13,7 @@ package org.eclipse.babel.editor.tree.actions;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
 import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.plugin.EditorPlugin;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -30,7 +30,7 @@ public class RenameKeyAction extends AbstractTreeAction {
      */
     public RenameKeyAction(MessagesEditor editor, TreeViewer treeViewer) {
         super(editor, treeViewer);
-        setText(EditorPlugin.getString("key.rename")); //$NON-NLS-1$
+        setText(MessagesEditorPlugin.getString("key.rename")); //$NON-NLS-1$
         setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_RENAME));
         setToolTipText("TODO put something here"); //TODO put tooltip
     }
@@ -45,15 +45,15 @@ public class RenameKeyAction extends AbstractTreeAction {
         String msgHead = null;
         String msgBody = null;
         if (getContentProvider().hasChildren(node)) {
-            msgHead = EditorPlugin.getString(
+            msgHead = MessagesEditorPlugin.getString(
                     "dialog.rename.head.multiple"); //$NON-NLS-1$
-            msgBody = EditorPlugin.getString(
+            msgBody = MessagesEditorPlugin.getString(
                     "dialog.rename.body.multiple", //$NON-NLS-1$
                     key);
         } else {
-            msgHead = EditorPlugin.getString(
+            msgHead = MessagesEditorPlugin.getString(
                     "dialog.rename.head.single"); //$NON-NLS-1$
-            msgBody = EditorPlugin.getString(
+            msgBody = MessagesEditorPlugin.getString(
                     "dialog.rename.body.single", key); //$NON-NLS-1$
         }
         // Rename single item

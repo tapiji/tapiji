@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.babel.core.message.checks.DuplicateValueCheck;
 import org.eclipse.babel.core.message.checks.MissingValueCheck;
 import org.eclipse.babel.core.util.BabelUtils;
-import org.eclipse.babel.editor.plugin.EditorPlugin;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 
 /**
  * @author Pascal Essiembre
@@ -61,7 +61,7 @@ public class FileMarkerStrategy implements IValidationMarkerStrategy {
             int severity) {
         try {
             //TODO move MARKER_TYPE elsewhere.
-            IMarker marker = resource.createMarker(EditorPlugin.MARKER_TYPE);
+            IMarker marker = resource.createMarker(MessagesEditorPlugin.MARKER_TYPE);
             marker.setAttribute(IMarker.MESSAGE, message);
             marker.setAttribute(IMarker.SEVERITY, severity);
             marker.setAttribute(IMarker.LOCATION, key);

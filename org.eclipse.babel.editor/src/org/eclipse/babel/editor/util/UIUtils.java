@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 
-import org.eclipse.babel.editor.plugin.EditorPlugin;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -134,7 +134,7 @@ public final class UIUtils {
      * @return newly created font
      */
     public static Font createFont(int style, int relSize) {
-        Display display = EditorPlugin.getDefault().getWorkbench().getDisplay();
+        Display display = MessagesEditorPlugin.getDefault().getWorkbench().getDisplay();
         FontData[] fontData = display.getSystemFont().getFontData();
         for (int i = 0; i < fontData.length; i++) {
             fontData[i].setHeight(fontData[i].getHeight() + relSize);
@@ -149,7 +149,7 @@ public final class UIUtils {
      * @return newly created cursor
      */
     public static Cursor createCursor(int style) {
-        Display display = EditorPlugin.getDefault().getWorkbench().getDisplay();
+        Display display = MessagesEditorPlugin.getDefault().getWorkbench().getDisplay();
         return new Cursor(display, style);
     }
     
@@ -159,7 +159,7 @@ public final class UIUtils {
      * @return system color
      */
     public static Color getSystemColor(int colorId) {
-        return EditorPlugin.getDefault().getWorkbench()
+        return MessagesEditorPlugin.getDefault().getWorkbench()
                 .getDisplay().getSystemColor(colorId);
     }
     
@@ -202,7 +202,7 @@ public final class UIUtils {
         exception.printStackTrace();
         ErrorDialog.openError(
                 shell,
-                EditorPlugin.getString(msgKey),
+                MessagesEditorPlugin.getString(msgKey),
                 exception.getLocalizedMessage(),
                 exception.getStatus());
     }
@@ -218,14 +218,14 @@ public final class UIUtils {
         exception.printStackTrace();
         IStatus status = new Status(
                 IStatus.ERROR, 
-                EditorPlugin.PLUGIN_ID,
+                MessagesEditorPlugin.PLUGIN_ID,
                 0, 
-                EditorPlugin.getString(msgKey) + " " //$NON-NLS-1$
-                        + EditorPlugin.getString("error.seeLogs"), //$NON-NLS-1$
+                MessagesEditorPlugin.getString(msgKey) + " " //$NON-NLS-1$
+                        + MessagesEditorPlugin.getString("error.seeLogs"), //$NON-NLS-1$
                 exception);
         ErrorDialog.openError(
                 shell,
-                EditorPlugin.getString(msgKey),
+                MessagesEditorPlugin.getString(msgKey),
                 exception.getLocalizedMessage(),
                 status);
     }
@@ -237,7 +237,7 @@ public final class UIUtils {
      */
     public static String getDisplayName(Locale locale) {
         if (locale == null) {
-            return EditorPlugin.getString("editor.default"); //$NON-NLS-1$
+            return MessagesEditorPlugin.getString("editor.default"); //$NON-NLS-1$
         }
         return locale.getDisplayName();
     }
@@ -250,7 +250,7 @@ public final class UIUtils {
     public static ImageDescriptor getImageDescriptor(String name) {
         String iconPath = "icons/"; //$NON-NLS-1$
         try {
-            URL installURL = EditorPlugin.getDefault().getBundle().getEntry(
+            URL installURL = MessagesEditorPlugin.getDefault().getBundle().getEntry(
                     "/"); //$NON-NLS-1$
             URL url = new URL(installURL, iconPath + name);
             return ImageDescriptor.createFromURL(url);

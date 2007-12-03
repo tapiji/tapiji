@@ -175,7 +175,7 @@ public class I18NEntry extends Composite {
         //TODO add a preference property listener and add/remove this listener
         textBox.addTraverseListener(new TraverseListener() {
             public void keyTraversed(TraverseEvent event) {
-//                if (!RBEPreferences.getFieldTabInserts() 
+//                if (!MsgEditorPreferences.getFieldTabInserts() 
 //                        && event.character == SWT.TAB) {
 //                    event.doit = true;
 //                }
@@ -268,7 +268,7 @@ public class I18NEntry extends Composite {
 ///**
 // * Represents a data entry section for a bundle entry.
 // * @author Pascal Essiembre (essiembre@users.sourceforge.net)
-// * @version $Author: pessiembr $ $Revision: 1.1 $ $Date: 2007/11/18 15:49:22 $
+// * @version $Author: pessiembr $ $Revision: 1.2 $ $Date: 2007/12/03 05:15:57 $
 // */
 //public class BundleEntryComposite extends Composite {
 //
@@ -404,12 +404,12 @@ public class I18NEntry extends Composite {
 //            commentedCheckbox.setEnabled(!sourceEditor.isReadOnly());
 //            textBox.setEnabled(!sourceEditor.isReadOnly());
 //            gotoButton.setEnabled(true);
-//            if (RBEPreferences.getReportDuplicateValues()) {
+//            if (MsgEditorPreferences.getReportDuplicateValues()) {
 //                findDuplicates(bundleEntry);
 //            } else {
 //                duplVisitor = null;
 //            }
-//            if (RBEPreferences.getReportSimilarValues()) {
+//            if (MsgEditorPreferences.getReportSimilarValues()) {
 //                findSimilar(bundleEntry);
 //            } else {
 //                similarVisitor = null;
@@ -428,7 +428,7 @@ public class I18NEntry extends Composite {
 //       
 //    private void findSimilar(Message bundleEntry) {
 //        ProximityAnalyzer analyzer;
-//        if (RBEPreferences.getReportSimilarValuesLevensthein()) {
+//        if (MsgEditorPreferences.getReportSimilarValuesLevensthein()) {
 //            analyzer = LevenshteinDistanceAnalyzer.getInstance();
 //        } else {
 //            analyzer = WordCountAnalyzer.getInstance();
@@ -609,7 +609,7 @@ public class I18NEntry extends Composite {
 //        //TODO add a preference property listener and add/remove this listener
 //        textBox.addTraverseListener(new TraverseListener() {
 //            public void keyTraversed(TraverseEvent event) {
-//                if (!RBEPreferences.getFieldTabInserts() 
+//                if (!MsgEditorPreferences.getFieldTabInserts() 
 //                        && event.character == SWT.TAB) {
 //                    event.doit = true;
 //                }
