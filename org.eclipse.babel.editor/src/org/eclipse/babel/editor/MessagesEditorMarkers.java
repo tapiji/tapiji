@@ -58,13 +58,15 @@ public class MessagesEditorMarkers
         validationEvents.add(event);
         failedKeys.add(event.getKey());
         System.out.println("CREATE EDITOR MARKER");
-        hasChanged();
+        setChanged();
+        notifyObservers(this);
     }
 
     public void clear() {
         validationEvents.clear();
         failedKeys.clear();
-        hasChanged();
+        setChanged();
+        notifyObservers(this);
     }
 
     public boolean isMarked(String key)  {
