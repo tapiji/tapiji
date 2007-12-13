@@ -10,12 +10,11 @@
  ******************************************************************************/
 package org.eclipse.babel.core.message.tree;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
 import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.MessagesBundleGroupAdapter;
 
 
 /**
@@ -55,20 +54,13 @@ public class DefaultKeyTreeModel extends AbstractKeyTreeModel {
         this.delimiter = delimiter;
         createTree();
         
-        messagesBundleGroup.addPropertyChangeListener(
-                new PropertyChangeListener(){
-            public void propertyChange(PropertyChangeEvent event) {
-                if (MessagesBundleGroup.PROPERTY_KEYS.equals(
-                        event.getPropertyName())) {
-                    String oldKey = (String) event.getOldValue();
-                    String newKey = (String) event.getNewValue();
-                    // MessagesBundle entry added
-                    if (oldKey == null && newKey != null) {
-                        createTreeNodes(newKey);
-                    } else if (oldKey != null && newKey == null) {
-                        removeTreeNodes(oldKey);
-                    }
-                }
+        messagesBundleGroup.addMessagesBundleGroupListener(
+                new MessagesBundleGroupAdapter() {
+            public void keyAdded(String key) {
+                createTreeNodes(key);
+            }
+            public void keyRemoved(String key) {
+                removeTreeNodes(key);
             }
         });
     }
@@ -171,12 +163,12 @@ public class DefaultKeyTreeModel extends AbstractKeyTreeModel {
         parentNode.removeChild(node);
         fireNodeRemoved(node);
         while (parentNode != rootNode) {
-            if (!parentNode.hasChildren()
-                    && parentNode.getMessageKey() == null) {
+            if (!parentNode.hasChildren() && !messagesBundleGroup.isMessageKey(
+                    parentNode.getMessageKey())) {
                 parentNode.getParent().removeChild(parentNode);
                 fireNodeRemoved(parentNode);
-                parentNode = parentNode.getParent();
             }
+            parentNode = parentNode.getParent();
         }
     }
 }

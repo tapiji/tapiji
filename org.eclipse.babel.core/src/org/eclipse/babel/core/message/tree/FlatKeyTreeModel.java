@@ -10,13 +10,12 @@
  ******************************************************************************/
 package org.eclipse.babel.core.message.tree;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.MessagesBundleGroupAdapter;
 
 /**
  * A flat representation of a tree.  In essence this model is meant to represent
@@ -39,25 +38,16 @@ public class FlatKeyTreeModel extends AbstractKeyTreeModel {
         super();
         this.messagesBundleGroup = messagesBundleGroup;
         createTree();
-        messagesBundleGroup.addPropertyChangeListener(
-                new PropertyChangeListener(){
-            public void propertyChange(PropertyChangeEvent event) {
-                if (MessagesBundleGroup.PROPERTY_KEYS.equals(
-                        event.getPropertyName())) {
-                    String oldKey = (String) event.getOldValue();
-                    String newKey = (String) event.getNewValue();
-                    // Key added
-                    if (oldKey == null && newKey != null) {
-                        KeyTreeNode node =
-                                new KeyTreeNode(null, newKey, newKey);
-                        nodes.put(newKey, node);
-                        fireNodeAdded(node);
-                    // Key removed
-                    } else if (oldKey != null && newKey == null) {
-                        KeyTreeNode node = (KeyTreeNode) nodes.get(oldKey);
-                        fireNodeRemoved(node);
-                    }
-                }
+        messagesBundleGroup.addMessagesBundleGroupListener(
+                new MessagesBundleGroupAdapter() {
+            public void keyAdded(String key) {
+                KeyTreeNode node = new KeyTreeNode(null, key, key);
+                nodes.put(key, node);
+                fireNodeAdded(node);
+            }
+            public void keyRemoved(String key) {
+                KeyTreeNode node = (KeyTreeNode) nodes.get(key);
+                fireNodeRemoved(node);
             }
         });
     }
