@@ -13,43 +13,44 @@ package org.eclipse.babel.core.message;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
-import org.eclipse.babel.core.Model;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.resource.IMessagesResourceChangeListener;
 import org.eclipse.babel.core.util.BabelUtils;
 
-
 /**
  * For a given scope, all messages for a national language.  
- * @author Pascal Essiembre
+ * @author Pascal Essiembre (pascal@essiembre.com)
  */
-public class MessagesBundle extends Model
+public class MessagesBundle extends AbstractMessageModel
 		implements IMessagesResourceChangeListener {
 
     private static final long serialVersionUID = -331515196227475652L;
 
     public static final String PROPERTY_COMMENT = "comment"; //$NON-NLS-1$
-    public static final String PROPERTY_ENTRIES = "entries"; //$NON-NLS-1$
+    public static final String PROPERTY_MESSAGES_COUNT =
+            "messagesCount"; //$NON-NLS-1$
 
-    private String comment;
-    
+    private static final IMessagesBundleListener[] EMPTY_MSG_BUNDLE_LISTENERS =
+        new IMessagesBundleListener[] {};
     private final Collection orderedKeys = new ArrayList();
     private final Map keyedMessages = new HashMap();
 
     private final IMessagesResource resource;
     
-    private final PropertyChangeListener entryChangeListener =
+    private final PropertyChangeListener messageListener =
         new PropertyChangeListener(){
                 public void propertyChange(PropertyChangeEvent event) {
-                    firePropertyChange(event);
+                    fireMessageChanged(event);
                 }
     };
+    private String comment;
 
     /**
      * Creates a new <code>MessagesBundle</code>.
@@ -67,8 +68,12 @@ public class MessagesBundle extends Model
             }
         });
         // Handle bundle changes
-        addPropertyChangeListener(new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent arg0) {
+        addMessagesBundleListener(new MessagesBundleAdapter() {
+            public void messageChanged(MessagesBundle messagesBundle,
+                    PropertyChangeEvent changeEvent) {
+                writetoResource();
+            }
+            public void propertyChange(PropertyChangeEvent evt) {
                 writetoResource();
             }
         });
@@ -80,6 +85,10 @@ public class MessagesBundle extends Model
      */
     public IMessagesResource getResource() {
         return resource;
+    }
+    
+    public int getMessagesCount() {
+        return keyedMessages.size();
     }
     
     /**
@@ -124,13 +133,16 @@ public class MessagesBundle extends Model
      * @param message the message to add
      */
     public void addMessage(Message message) {
+        int oldCount = getMessagesCount();
         if (!orderedKeys.contains(message.getKey())) {
             orderedKeys.add(message.getKey());
         }
         if (!keyedMessages.containsKey(message.getKey())) {
             keyedMessages.put(message.getKey(), message);
-            message.addPropertyChangeListener(entryChangeListener);
-            firePropertyChange(PROPERTY_ENTRIES, null, message);
+            message.addMessageListener(messageListener);
+            firePropertyChange(
+                    PROPERTY_MESSAGES_COUNT, oldCount, getMessagesCount());
+            fireMessageAdded(message);
         } else {
             // Entry already exists, update it.
             Message matchingEntry =
@@ -143,12 +155,15 @@ public class MessagesBundle extends Model
      * @param messageKey the key of the message to remove
      */
     public void removeMessage(String messageKey) {
+        int oldCount = getMessagesCount();
         orderedKeys.remove(messageKey);
         Message message = (Message) keyedMessages.get(messageKey);
         if (message != null) {
-            message.removePropertyChangeListener(entryChangeListener);
+            message.removePropertyChangeListener(messageListener);
             keyedMessages.remove(messageKey);
-            firePropertyChange(PROPERTY_ENTRIES, message, null);
+            firePropertyChange(
+                    PROPERTY_MESSAGES_COUNT, oldCount, getMessagesCount());
+            fireMessageRemoved(message);
         }
     }
     /**
@@ -253,8 +268,8 @@ public class MessagesBundle extends Model
         final int PRIME = 31;
         int result = 1;
         result = PRIME * result + ((comment == null) ? 0 : comment.hashCode());
-        result = PRIME * result + ((entryChangeListener == null)
-        		? 0 : entryChangeListener.hashCode());
+        result = PRIME * result + ((messageListener == null)
+        		? 0 : messageListener.hashCode());
         result = PRIME * result + ((keyedMessages == null)
         		? 0 : keyedMessages.hashCode());
         result = PRIME * result + ((orderedKeys == null)
@@ -275,11 +290,50 @@ public class MessagesBundle extends Model
         return equals(comment, messagesBundle.comment)
             && equals(keyedMessages, messagesBundle.keyedMessages);
     }    
+
+    public final synchronized void addMessagesBundleListener(
+            final IMessagesBundleListener listener) {
+        addPropertyChangeListener(listener);
+    }
+    public final synchronized void removeMessagesBundleListener(
+            final IMessagesBundleListener listener) {
+        removePropertyChangeListener(listener);
+    }
+    public final synchronized IMessagesBundleListener[] 
+                getMessagesBundleListeners() {
+        //TODO find more efficient way to avoid class cast.
+        return (IMessagesBundleListener[]) Arrays.asList(
+                getPropertyChangeListeners()).toArray(
+                        EMPTY_MSG_BUNDLE_LISTENERS);
+    }
+
     
     private void readFromResource() {
         this.resource.deserialize(this);
     }
     private void writetoResource() {
         this.resource.serialize(this);
+    }
+    
+    private void fireMessageAdded(Message message) {
+        IMessagesBundleListener[] listeners = getMessagesBundleListeners();
+        for (int i = 0; i < listeners.length; i++) {
+            IMessagesBundleListener listener = listeners[i];
+            listener.messageAdded(this, message);
+        }
+    }
+    private void fireMessageRemoved(Message message) {
+        IMessagesBundleListener[] listeners = getMessagesBundleListeners();
+        for (int i = 0; i < listeners.length; i++) {
+            IMessagesBundleListener listener = listeners[i];
+            listener.messageRemoved(this, message);
+        }
+    }
+    private void fireMessageChanged(PropertyChangeEvent event) {
+        IMessagesBundleListener[] listeners = getMessagesBundleListeners();
+        for (int i = 0; i < listeners.length; i++) {
+            IMessagesBundleListener listener = listeners[i];
+            listener.messageChanged(this, event);
+        }
     }
 }

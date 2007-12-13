@@ -11,53 +11,43 @@
 package org.eclipse.babel.core.message;
 
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.eclipse.babel.core.Model;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy;
 import org.eclipse.babel.core.util.BabelUtils;
 
-
 /**
  * Grouping of all messages bundle of the same kind.
- * @author Pascal Essiembre
+ * @author Pascal Essiembre (pascal@essiembre.com)
  */
-public class MessagesBundleGroup extends Model {
+public class MessagesBundleGroup extends AbstractMessageModel {
 
-    public static final String PROPERTY_BUNDLES = "bundles"; //$NON-NLS-1$
-    public static final String PROPERTY_KEYS = "keys"; //$NON-NLS-1$
+    private static final IMessagesBundleGroupListener[]
+            EMPTY_GROUP_LISTENERS = new IMessagesBundleGroupListener[] {};
+    private static final Message[] EMPTY_MESSAGES = new Message[] {};
+    
+    public static final String PROPERTY_MESSAGES_BUNDLE_COUNT =
+            "messagesBundleCount"; //$NON-NLS-1$
+    public static final String PROPERTY_KEY_COUNT =
+        "keyCount"; //$NON-NLS-1$
 
     /** For serialization. */
     private static final long serialVersionUID = -1977849534191384324L;
     /** Bundles forming the group (key=Locale; value=MessagesBundle). */
     private final Map localeBundles = new HashMap();
     private final Set keys = new TreeSet(); 
-    private final PropertyChangeListener bundleChangeListener =
-        new PropertyChangeListener(){
-            public void propertyChange(PropertyChangeEvent event) {
-                if (MessagesBundle.PROPERTY_ENTRIES.equals(
-                		event.getPropertyName())) {
-                    String key = ((Message) event.getSource()).getKey();
-                    if (isChangedFromNull(event)
-                            && getMessages(key).length == 1) {
-                        keys.add(key);
-                        firePropertyChange(PROPERTY_KEYS, null, key);
-                    } else if (isChangedToNull(event)
-                            && getMessages(key).length == 0) {
-                        keys.remove(key);
-                        firePropertyChange(PROPERTY_KEYS, key, null);
-                    }
-                }
-                firePropertyChange(event);
-            }
-    };
+    private final IMessagesBundleListener messagesBundleListener =
+            new MessagesBundleListener();
+    
     private final IMessagesBundleGroupStrategy groupStrategy;
     private static final Locale[] EMPTY_LOCALES = new Locale[] {};
     private final String name;
@@ -128,13 +118,15 @@ public class MessagesBundleGroup extends Model {
      * @return messages
      */
     public Message[] getMessages(String key) {
-        Message[] entries = new Message[getMessagesBundleCount()];
-        int idx = 0;
+        List messages = new ArrayList();
         for (Iterator iter = messagesBundleIterator(); iter.hasNext();) {
             MessagesBundle messagesBundle = (MessagesBundle) iter.next();
-            entries[idx++] = messagesBundle.getMessage(key);
+            Message message = messagesBundle.getMessage(key);
+            if (message != null) {
+                messages.add(message);
+            }
         }
-        return entries;
+        return (Message[]) messages.toArray(EMPTY_MESSAGES);
     }
 
     /**
@@ -163,17 +155,25 @@ public class MessagesBundleGroup extends Model {
             throw new MessageException(
                  "A bundle with the same locale already exists."); //$NON-NLS-1$
         }
+        
+        int oldBundleCount = localeBundles.size();
         localeBundles.put(messagesBundle.getLocale(), messagesBundle);
-        firePropertyChange(PROPERTY_BUNDLES, null, messagesBundle);
+        firePropertyChange(PROPERTY_MESSAGES_BUNDLE_COUNT,
+                oldBundleCount, localeBundles.size());
+        fireMessagesBundleAdded(messagesBundle);
+        
         String[] bundleKeys = messagesBundle.getKeys();
         for (int i = 0; i < bundleKeys.length; i++) {
 			String key = bundleKeys[i];
             if (!keys.contains(key)) {
+                int oldKeyCount = keys.size();
                 keys.add(key);
-                firePropertyChange(PROPERTY_KEYS, null, key);
+                firePropertyChange(
+                        PROPERTY_KEY_COUNT, oldKeyCount, keys.size());
+                fireKeyAdded(key);
             }
         }
-        messagesBundle.addPropertyChangeListener(bundleChangeListener);
+        messagesBundle.addMessagesBundleListener(messagesBundleListener);
     }
 
     /**
@@ -306,4 +306,114 @@ public class MessagesBundleGroup extends Model {
         MessagesBundleGroup messagesBundleGroup = (MessagesBundleGroup) obj;
         return equals(localeBundles, messagesBundleGroup.localeBundles);
     }    
+    
+    public final synchronized void addMessagesBundleGroupListener(
+            final IMessagesBundleGroupListener listener) {
+        addPropertyChangeListener(listener);
+    }
+    public final synchronized void removeMessagesBundleGroupListener(
+            final IMessagesBundleGroupListener listener) {
+        removePropertyChangeListener(listener);
+    }
+    public final synchronized IMessagesBundleGroupListener[] 
+                getMessagesBundleGroupListeners() {
+        //TODO find more efficient way to avoid class cast.
+        return (IMessagesBundleGroupListener[]) Arrays.asList(
+                getPropertyChangeListeners()).toArray(
+                        EMPTY_GROUP_LISTENERS);
+    }
+    
+    
+    private void fireKeyAdded(String key) {
+        IMessagesBundleGroupListener[] listeners =
+                getMessagesBundleGroupListeners();
+        for (int i = 0; i < listeners.length; i++) {
+            IMessagesBundleGroupListener listener = listeners[i];
+            listener.keyAdded(key);
+        }
+    }
+    private void fireKeyRemoved(String key) {
+        IMessagesBundleGroupListener[] listeners =
+                getMessagesBundleGroupListeners();
+        for (int i = 0; i < listeners.length; i++) {
+            IMessagesBundleGroupListener listener = listeners[i];
+            listener.keyRemoved(key);
+        }
+    }
+    private void fireMessagesBundleAdded(MessagesBundle messagesBundle) {
+        IMessagesBundleGroupListener[] listeners =
+                getMessagesBundleGroupListeners();
+        for (int i = 0; i < listeners.length; i++) {
+            IMessagesBundleGroupListener listener = listeners[i];
+            listener.messagesBundleAdded(messagesBundle);
+        }
+    }
+    private void fireMessagesBundleRemoved(MessagesBundle messagesBundle) {
+        IMessagesBundleGroupListener[] listeners =
+                getMessagesBundleGroupListeners();
+        for (int i = 0; i < listeners.length; i++) {
+            IMessagesBundleGroupListener listener = listeners[i];
+            listener.messagesBundleRemoved(messagesBundle);
+        }
+    }
+    
+    
+    /**
+     * Class listening for changes in underlying messages bundle and 
+     * relays them to the listeners for MessagesBundleGroup.
+     */
+    private class MessagesBundleListener implements IMessagesBundleListener {
+        public void messageAdded(MessagesBundle messagesBundle,
+                Message message) {
+            int oldCount = keys.size();
+            IMessagesBundleGroupListener[] listeners =
+                    getMessagesBundleGroupListeners();
+            for (int i = 0; i < listeners.length; i++) {
+                IMessagesBundleGroupListener listener = listeners[i];
+                listener.messageAdded(messagesBundle, message);
+                if (getMessages(message.getKey()).length == 1) {
+                    keys.add(message.getKey());
+                    firePropertyChange(
+                            PROPERTY_KEY_COUNT, oldCount, keys.size());
+                    fireKeyAdded(message.getKey());
+                }
+            }
+        }
+        public void messageRemoved(MessagesBundle messagesBundle,
+                Message message) {
+            int oldCount = keys.size();
+            IMessagesBundleGroupListener[] listeners =
+                    getMessagesBundleGroupListeners();
+            for (int i = 0; i < listeners.length; i++) {
+                IMessagesBundleGroupListener listener = listeners[i];
+                listener.messageRemoved(messagesBundle, message);
+                int keyMessagesCount = getMessages(message.getKey()).length;
+                if (keyMessagesCount == 0 && keys.contains(message.getKey())) {
+                    keys.remove(message.getKey());
+                    firePropertyChange(
+                            PROPERTY_KEY_COUNT, oldCount, keys.size());
+                    fireKeyRemoved(message.getKey());
+                }
+            }
+        }
+        public void messageChanged(MessagesBundle messagesBundle,
+                PropertyChangeEvent changeEvent) {
+            IMessagesBundleGroupListener[] listeners =
+                    getMessagesBundleGroupListeners();
+            for (int i = 0; i < listeners.length; i++) {
+                IMessagesBundleGroupListener listener = listeners[i];
+                listener.messageChanged(messagesBundle, changeEvent);
+            }
+        }
+        // MessagesBundle property changes:
+        public void propertyChange(PropertyChangeEvent evt) {
+            MessagesBundle bundle = (MessagesBundle) evt.getSource();
+            IMessagesBundleGroupListener[] listeners =
+                    getMessagesBundleGroupListeners();
+            for (int i = 0; i < listeners.length; i++) {
+                IMessagesBundleGroupListener listener = listeners[i];
+                listener.messagesBundleChanged(bundle, evt);
+            }
+        }
+    }
 }

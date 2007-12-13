@@ -12,7 +12,7 @@ package org.eclipse.babel.core.message;
 
 /**
  * Exception thrown when a message-related operation raised a problem. 
- * @author Pascal Essiembre
+ * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public class MessageException extends RuntimeException {
 

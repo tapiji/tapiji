@@ -10,9 +10,8 @@
  ******************************************************************************/
 package org.eclipse.babel.core.message;
 
+import java.beans.PropertyChangeListener;
 import java.util.Locale;
-
-import org.eclipse.babel.core.Model;
 
 /**
  * A single entry in a <code>MessagesBundle</code>.
@@ -20,7 +19,7 @@ import org.eclipse.babel.core.Model;
  * @see MessagesBundle
  * @see MessagesBundleGroup
  */
-public final class Message extends Model {
+public final class Message extends AbstractMessageModel {
 
     /** For serialisation. */
     private static final long serialVersionUID = 1160670351341655427L;
@@ -51,6 +50,8 @@ public final class Message extends Model {
         this.locale = locale;
     }
 
+    
+    
     /**
      * Sets the message comment.
      * @param comment The comment to set.
@@ -147,7 +148,7 @@ public final class Message extends Model {
         Message entry = (Message) obj;
         return equals(key, entry.key)
             && equals(locale, entry.locale)
-            && equals(active, entry.active)
+            && active == entry.active
             && equals(text, entry.text)
             && equals(comment, entry.comment);
     }
@@ -161,5 +162,17 @@ public final class Message extends Model {
                 + "][comment=" + comment //$NON-NLS-1$
                 + "][active=" + active //$NON-NLS-1$
                 + "]]";  //$NON-NLS-1$
+    }
+    
+    public final synchronized void addMessageListener(
+            final PropertyChangeListener listener) {
+        addPropertyChangeListener(listener);
+    }
+    public final synchronized void removeMessageListener(
+            final PropertyChangeListener listener) {
+        removePropertyChangeListener(listener);
+    }
+    public final synchronized PropertyChangeListener[] getMessageListeners() {
+        return getPropertyChangeListeners();
     }
 }
