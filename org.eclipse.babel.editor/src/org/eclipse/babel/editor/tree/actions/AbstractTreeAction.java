@@ -10,10 +10,6 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.tree.actions;
 
-import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.tree.IKeyTreeModel;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
