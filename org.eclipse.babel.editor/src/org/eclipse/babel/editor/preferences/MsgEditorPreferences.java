@@ -131,14 +131,15 @@ public final class MsgEditorPreferences
     public static final String KEEP_EMPTY_FIELDS = 
             "keepEmptyFields"; //$NON-NLS-1$
     
-    // PAUL
+    /** Sort keys. */
+    public static final String SORT_KEYS = "sortKeys"; //$NON-NLS-1$
+    
     /** Display comment editor for default language. */
     public static final String DISPLAY_DEFAULT_COMMENT_FIELD =
             "displayCommentFieldNL"; //$NON-NLS-1$
     /** Display comment editor for all languages*/
     public static final String DISPLAY_LANG_COMMENT_FIELDS =
             "displayLangCommentFieldsNL"; //$NON-NLS-1$
-    
     
     /** MsgEditorPreferences. */
     private static final Preferences PREFS = 
@@ -445,4 +446,11 @@ public final class MsgEditorPreferences
         return PREFS.getBoolean(KEEP_EMPTY_FIELDS);
     }
 
+    /**
+     * Gets whether to sort keys upon serializing them.
+     * @return <code>true</code> if keys are to be sorted.
+     */
+    public boolean isKeySortingEnabled() {
+        return PREFS.getBoolean(SORT_KEYS);
+    }
 }

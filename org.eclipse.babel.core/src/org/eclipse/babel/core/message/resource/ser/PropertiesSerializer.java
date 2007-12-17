@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.core.message.resource.ser;
 
+import java.util.Arrays;
 import java.util.Properties;
 
 import org.eclipse.babel.core.message.Message;
@@ -90,6 +91,9 @@ public class PropertiesSerializer {
         String group = null;
         int equalIndex = -1;
         String[] keys = messagesBundle.getKeys();
+        if (config.isKeySortingEnabled()) {
+            Arrays.sort(keys);
+        }
         for (int i = 0; i < keys.length; i++) {
 			String key = keys[i];
             Message message = messagesBundle.getMessage(key);

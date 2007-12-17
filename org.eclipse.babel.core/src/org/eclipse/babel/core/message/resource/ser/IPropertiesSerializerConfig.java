@@ -100,5 +100,11 @@ public interface IPropertiesSerializerConfig {
      * @return Returns the groupAlignEqualsEnabled.
      */
     boolean isGroupAlignEqualsEnabled();
+    
+    /**
+     * Defaults to true.
+     * @return <code>true</code> if keys are to be sorted
+     */
+    boolean isKeySortingEnabled();
 
 }

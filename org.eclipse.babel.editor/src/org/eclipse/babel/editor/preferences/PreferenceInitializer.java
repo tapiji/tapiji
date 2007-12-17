@@ -66,6 +66,7 @@ public class PreferenceInitializer extends
                 MsgEditorPreferences.NEW_LINE_UNIX);
 
         prefs.setDefault(MsgEditorPreferences.KEEP_EMPTY_FIELDS, false);
+        prefs.setDefault(MsgEditorPreferences.SORT_KEYS, true);
         
         // Reporting/Performance
         prefs.setDefault(MsgEditorPreferences.REPORT_MISSING_VALUES, true);

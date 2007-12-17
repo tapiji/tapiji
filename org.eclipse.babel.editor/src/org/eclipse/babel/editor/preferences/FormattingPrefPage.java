@@ -53,6 +53,7 @@ public class FormattingPrefPage extends AbstractPrefPage {
     private Button[] newLineTypes = new Button[3];
 
     private Button keepEmptyFields;
+    private Button sortKeys;
     
     /**
      * Constructor.
@@ -254,9 +255,17 @@ public class FormattingPrefPage extends AbstractPrefPage {
         keepEmptyFields = new Button(field, SWT.CHECK);
         keepEmptyFields.setSelection(prefs.getBoolean(
                 MsgEditorPreferences.KEEP_EMPTY_FIELDS));
-        new Label(field, SWT.NONE).setText(
-                MessagesEditorPlugin.getString("prefs.keepEmptyFields"));//$NON-NLS-1$
-        
+        new Label(field, SWT.NONE).setText(MessagesEditorPlugin.getString(
+                "prefs.keepEmptyFields"));//$NON-NLS-1$
+
+        // Sort keys?
+        field = createFieldComposite(composite);
+        sortKeys = new Button(field, SWT.CHECK);
+        sortKeys.setSelection(prefs.getBoolean(
+                MsgEditorPreferences.SORT_KEYS));
+        new Label(field, SWT.NONE).setText(MessagesEditorPlugin.getString(
+                "prefs.keysSorted"));//$NON-NLS-1$
+
         refreshEnabledStatuses();
         
         return composite;
@@ -305,6 +314,7 @@ public class FormattingPrefPage extends AbstractPrefPage {
         }
         prefs.setValue(MsgEditorPreferences.KEEP_EMPTY_FIELDS,
                 keepEmptyFields.getSelection());
+        prefs.setValue(MsgEditorPreferences.SORT_KEYS, sortKeys.getSelection());
         refreshEnabledStatuses();
         return super.performOk();
     }
@@ -321,34 +331,37 @@ public class FormattingPrefPage extends AbstractPrefPage {
                 MsgEditorPreferences.UNICODE_ESCAPE_ENABLED));
         convertUnicodeToEncoded.setSelection(prefs.getDefaultBoolean(
                 MsgEditorPreferences.UNICODE_ESCAPE_UPPERCASE));
-        alignEqualSigns.setSelection(
-                prefs.getDefaultBoolean(MsgEditorPreferences.ALIGN_EQUALS_ENABLED));
+        alignEqualSigns.setSelection(prefs.getDefaultBoolean(
+                MsgEditorPreferences.ALIGN_EQUALS_ENABLED));
         alignEqualSigns.setSelection(prefs.getDefaultBoolean(
                 MsgEditorPreferences.SPACES_AROUND_EQUALS_ENABLED));
-        groupKeys.setSelection(
-                prefs.getDefaultBoolean(MsgEditorPreferences.GROUP_KEYS_ENABLED));
-        groupLevelDeep.setText(
-                prefs.getDefaultString(MsgEditorPreferences.GROUP_LEVEL_DEEP));
-        groupLineBreaks.setText(
-                prefs.getDefaultString(MsgEditorPreferences.GROUP_SEP_BLANK_LINE_COUNT));
+        groupKeys.setSelection(prefs.getDefaultBoolean(
+                MsgEditorPreferences.GROUP_KEYS_ENABLED));
+        groupLevelDeep.setText(prefs.getDefaultString(
+                MsgEditorPreferences.GROUP_LEVEL_DEEP));
+        groupLineBreaks.setText(prefs.getDefaultString(
+                MsgEditorPreferences.GROUP_SEP_BLANK_LINE_COUNT));
         groupAlignEqualSigns.setSelection(prefs.getDefaultBoolean(
                 MsgEditorPreferences.GROUP_ALIGN_EQUALS_ENABLED));
-        wrapLines.setSelection(
-                prefs.getDefaultBoolean(MsgEditorPreferences.WRAP_LINES_ENABLED));
-        wrapCharLimit.setText(
-                prefs.getDefaultString(MsgEditorPreferences.WRAP_LINE_LENGTH));
-        wrapAlignEqualSigns.setSelection(
-                prefs.getDefaultBoolean(MsgEditorPreferences.WRAP_ALIGN_EQUALS_ENABLED));
-        wrapIndentSpaces.setText(
-                prefs.getDefaultString(MsgEditorPreferences.WRAP_INDENT_LENGTH));
-        wrapNewLine.setSelection(
-                prefs.getDefaultBoolean(MsgEditorPreferences.NEW_LINE_NICE));
-        newLineTypeForce.setSelection(
-                prefs.getDefaultBoolean(MsgEditorPreferences.FORCE_NEW_LINE_TYPE));
+        wrapLines.setSelection(prefs.getDefaultBoolean(
+                MsgEditorPreferences.WRAP_LINES_ENABLED));
+        wrapCharLimit.setText(prefs.getDefaultString(
+                MsgEditorPreferences.WRAP_LINE_LENGTH));
+        wrapAlignEqualSigns.setSelection(prefs.getDefaultBoolean(
+                MsgEditorPreferences.WRAP_ALIGN_EQUALS_ENABLED));
+        wrapIndentSpaces.setText(prefs.getDefaultString(
+                MsgEditorPreferences.WRAP_INDENT_LENGTH));
+        wrapNewLine.setSelection(prefs.getDefaultBoolean(
+                MsgEditorPreferences.NEW_LINE_NICE));
+        newLineTypeForce.setSelection(prefs.getDefaultBoolean(
+                MsgEditorPreferences.FORCE_NEW_LINE_TYPE));
         newLineTypes[Math.min(prefs.getDefaultInt(
-                MsgEditorPreferences.NEW_LINE_STYLE) - 1, 0)].setSelection(true);
-        keepEmptyFields.setSelection(
-                prefs.getDefaultBoolean(MsgEditorPreferences.KEEP_EMPTY_FIELDS));
+                MsgEditorPreferences.NEW_LINE_STYLE) - 1, 0)].setSelection(
+                        true);
+        keepEmptyFields.setSelection(prefs.getDefaultBoolean(
+                MsgEditorPreferences.KEEP_EMPTY_FIELDS));
+        sortKeys.setSelection(prefs.getDefaultBoolean(
+                MsgEditorPreferences.SORT_KEYS));
         refreshEnabledStatuses();
         super.performDefaults();
     }
