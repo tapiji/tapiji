@@ -17,6 +17,7 @@ import java.util.Iterator;
 import org.eclipse.babel.core.message.Message;
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.util.BabelUtils;
 
 /**
  * Checks if key as a duplicate value.
@@ -43,7 +44,7 @@ public class DuplicateValueCheck implements IMessageCheck {
             		iter.hasNext();) {
                 Message duplicateEntry = (Message) iter.next();
                 if (!message.getKey().equals(duplicateEntry.getKey())
-                            && message.getValue().equals(
+                            && BabelUtils.equals(message.getValue(),
                                     duplicateEntry.getValue())) {
                     keys.add(duplicateEntry.getKey());
                 }
