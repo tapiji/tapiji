@@ -89,7 +89,7 @@ public class SideNavTextBoxComposite extends Composite {
         addTextBox.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent event) {
                 String key = addTextBox.getText();
-                if (event.character == SWT.CR) {
+                if (event.character == SWT.CR && isNewKey(key)) {
                     addKey(key);
                 } else if (key.length() > 0){
                     NodePathRegexVisitor visitor = new NodePathRegexVisitor(
@@ -105,13 +105,7 @@ public class SideNavTextBoxComposite extends Composite {
         });
         addTextBox.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent event) {
-                String key = addTextBox.getText();
-                boolean keyExist = editor.getBundleGroup().isMessageKey(key);
-                if (keyExist || key.length() == 0) {
-                    addButton.setEnabled(false);
-                } else {
-                    addButton.setEnabled(true);
-                }
+                addButton.setEnabled(isNewKey(addTextBox.getText()));
             }
         });
         editor.addChangeListener(new MessagesEditorChangeAdapter() {
@@ -128,5 +122,9 @@ public class SideNavTextBoxComposite extends Composite {
     private void addKey(String key) {
         editor.getBundleGroup().addMessages(key);
         editor.setSelectedKey(key);
+    }
+    
+    private boolean isNewKey(String key) {
+        return !editor.getBundleGroup().isMessageKey(key) && key.length() > 0;
     }
 }
