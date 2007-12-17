@@ -56,6 +56,8 @@ public final class UIUtils {
     public static final String IMAGE_LAYOUT_FLAT = 
             "flatLayout.gif";  //$NON-NLS-1$
 
+    /** Name of add icon. */
+    public static final String IMAGE_ADD = "add.png";  //$NON-NLS-1$
     /** Name of edit icon. */
     public static final String IMAGE_RENAME = "rename.png";  //$NON-NLS-1$
     /** Name of "view left" icon. */
