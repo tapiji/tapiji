@@ -19,6 +19,7 @@ import org.eclipse.babel.core.message.tree.IKeyTreeModelListener;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
+import org.eclipse.babel.editor.tree.actions.AddKeyAction;
 import org.eclipse.babel.editor.tree.actions.DeleteKeyAction;
 import org.eclipse.babel.editor.tree.actions.RenameKeyAction;
 import org.eclipse.jface.action.IAction;
@@ -242,6 +243,9 @@ public class KeyTreeContributor {
         MenuManager menuManager = new MenuManager();
         Menu menu = menuManager.createContextMenu(tree);
 
+        // Add
+        final IAction addAction = new AddKeyAction(editor, treeViewer);
+        menuManager.add(addAction);
         // Delete
         final IAction deleteAction = new DeleteKeyAction(editor, treeViewer);
         menuManager.add(deleteAction);
