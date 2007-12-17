@@ -15,6 +15,7 @@ import org.eclipse.babel.core.message.tree.KeyTreeNode;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.util.UIUtils;
+import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
@@ -57,8 +58,16 @@ public class RenameKeyAction extends AbstractTreeAction {
                     "dialog.rename.body.single", key); //$NON-NLS-1$
         }
         // Rename single item
-        InputDialog dialog =
-                new InputDialog(getShell(), msgHead, msgBody, key, null);
+        InputDialog dialog = new InputDialog(
+                getShell(), msgHead, msgBody, key,  new IInputValidator() {
+                    public String isValid(String newText) {
+                        if (getBundleGroup().isMessageKey(newText)) {
+                            return  MessagesEditorPlugin.getString(
+                                    "dialog.error.exists");
+                        }
+                        return null;
+                    }
+                });
         dialog.open();
         if (dialog.getReturnCode() == Window.OK ) {
             String inputKey = dialog.getValue();
