@@ -97,4 +97,21 @@
        point="org.eclipse.ui.startup">
     <startup class="org.eclipse.babel.editor.plugin.Startup"/>
  </extension>
+ <extension
+       point="org.eclipse.ui.newWizards">
+    <category
+          id="org.eclipse.babel.editor.wizards.ResourceBundle"
+          name="%wizard.category">
+    </category>
+    <wizard
+          category="org.eclipse.babel.editor.wizards.ResourceBundle"
+          class="org.eclipse.babel.editor.wizards.ResourceBundleWizard"
+          icon="icons/resourcebundle.gif"
+          id="org.eclipse.babel.editor.wizards.ResourceBundleWizard"
+          name="%wizard.rb.title">
+       <description>
+          %wizard.rb.description
+       </description>
+    </wizard>
+ </extension>
 </plugin>
