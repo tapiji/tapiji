@@ -137,15 +137,15 @@ public class MessagesEditor extends MultiPageEditorPart
         // Create text editor pages for each locales
         try {
             Locale[] locales = messagesBundleGroup.getLocales();
+            UIUtils.sortLocales(locales);
             for (int i = 0; i < locales.length; i++) {
-                Locale locale = locales[i];
-                MessagesBundle messagesBundle = messagesBundleGroup.getMessagesBundle(locales[i]);
-                EclipsePropertiesEditorResource resource =
-                            (EclipsePropertiesEditorResource) messagesBundle.getResource();
+            	Locale locale = locales[i];
+                MessagesBundle messagesBundle = messagesBundleGroup.getMessagesBundle(locale);
+                IMessagesResource resource = messagesBundle.getResource();
                 TextEditor textEditor = (TextEditor) resource.getSource();
                 index = addPage(textEditor, textEditor.getEditorInput());
                 setPageText(index, UIUtils.getDisplayName(
-                        resource.getLocale()));
+                        messagesBundle.getLocale()));
                 setPageImage(index, 
                         UIUtils.getImage(UIUtils.IMAGE_PROPERTIES_FILE));
                 localesIndex.add(locale);
