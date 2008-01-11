@@ -33,7 +33,7 @@ import org.eclipse.babel.core.util.BabelUtils;
  * workspace.
  * @author Pascal Essiembre
  */
-public class DefaultFileGroupStrategy implements IMessagesBundleGroupStrategy {
+public class PropertiesFileGroupStrategy implements IMessagesBundleGroupStrategy {
 
     /** Empty bundle array. */
     private static final MessagesBundle[] EMPTY_MESSAGES =
@@ -57,7 +57,7 @@ public class DefaultFileGroupStrategy implements IMessagesBundleGroupStrategy {
      * Constructor.
      * @param file file from which to derive the group
      */
-    public DefaultFileGroupStrategy(
+    public PropertiesFileGroupStrategy(
             File file,
             IPropertiesSerializerConfig serializerConfig,
             IPropertiesDeserializerConfig deserializerConfig) {
