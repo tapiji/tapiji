@@ -13,6 +13,7 @@ package org.eclipse.babel.editor.i18n;
 import java.util.Locale;
 
 import org.eclipse.babel.editor.i18n.actions.FoldingAction;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.editor.widgets.ActionButton;
 import org.eclipse.jface.action.IAction;
@@ -57,8 +58,15 @@ public class EntryLeftBanner extends Composite {
         
         Link localeLabel = new Link(this, SWT.NONE);
         localeLabel.setFont(UIUtils.createFont(localeLabel, SWT.BOLD));
-        localeLabel.setText(
-                "<a>" + UIUtils.getDisplayName(i18NEntry.getLocale()) + "</a>");
+        
+        boolean isEditable = i18NEntry.isEditable();
+        localeLabel.setText("<a>" + UIUtils.getDisplayName(i18NEntry.getLocale()) + "</a>"
+     			+ (!isEditable ? " (read-only)" : ""));
+        
+        localeLabel.setToolTipText(
+    			MessagesEditorPlugin.getString("editor.i18nentry.resourcelocation",
+    					i18NEntry.getResourceLocationLabel())); //$NON-NLS-1$
+        
         localeLabel.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent e) {
                 i18NEntry.getResourceBundleEditor().setActivePage(
