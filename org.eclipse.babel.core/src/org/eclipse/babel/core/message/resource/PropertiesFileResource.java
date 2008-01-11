@@ -119,6 +119,13 @@ public class PropertiesFileResource extends AbstractPropertiesResource {
         return file;
     }
     
+    /**
+     * @return The resource location label. or null if unknown.
+     */
+    public String getResourceLocationLabel() {
+    	return file.getAbsolutePath();
+    }
+    
     //TODO move to util class for convinience???
     private void closeWriter(Writer writer) {
         if (writer != null) {

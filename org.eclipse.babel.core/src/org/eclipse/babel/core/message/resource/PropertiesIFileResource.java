@@ -105,6 +105,13 @@ public class PropertiesIFileResource extends AbstractPropertiesResource{
     }    
     
     /**
+     * @return The resource location label. or null if unknown.
+     */
+    public String getResourceLocationLabel() {
+    	return file.getFullPath().toString();
+    }
+    
+    /**
      * Checks whether this source editor is read-only.
      * @return <code>true</code> if read-only.
      */

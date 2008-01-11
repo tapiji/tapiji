@@ -54,4 +54,8 @@ public interface IMessagesResource {
      */
     void removeMessagesResourceChangeListener(
     		IMessagesResourceChangeListener listener);
+    /**
+     * @return The resource location label. or null if unknown.
+     */
+    String getResourceLocationLabel();
 }
