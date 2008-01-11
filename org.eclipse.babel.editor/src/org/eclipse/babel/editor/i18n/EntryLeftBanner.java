@@ -60,8 +60,10 @@ public class EntryLeftBanner extends Composite {
         localeLabel.setFont(UIUtils.createFont(localeLabel, SWT.BOLD));
         
         boolean isEditable = i18NEntry.isEditable();
-        localeLabel.setText("<a>" + UIUtils.getDisplayName(i18NEntry.getLocale()) + "</a>"
-     			+ (!isEditable ? " (read-only)" : ""));
+        localeLabel.setText("<a>" + UIUtils.getDisplayName(
+                i18NEntry.getLocale()) + "</a>" + (!isEditable
+                        ? " (" +  MessagesEditorPlugin.getString(
+                                "editor.readOnly") + ")" : ""));
         
         localeLabel.setToolTipText(
     			MessagesEditorPlugin.getString("editor.i18nentry.resourcelocation",
