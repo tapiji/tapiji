@@ -50,7 +50,7 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
     private static final MessagesBundle[] EMPTY_BUNDLES = new MessagesBundle[] {};
     
     /** Eclipse editor site. */
-    private IEditorSite site;
+    protected IEditorSite site;
     /** File being open, triggering the creation of a bundle group. */
     private IFile file;
     /** MessagesBundle group base name. */
@@ -191,6 +191,18 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
         }
         return textEditor;
     }
+    
+    /**
+     * @return The file opened.
+     */
+    protected IFile getOpenedFile() {
+    	return file;
+    }
 
-
+    /**
+     * @return The base name of the resource bundle.
+     */
+    protected String getBaseName() {
+    	return baseName;
+    }
 }
