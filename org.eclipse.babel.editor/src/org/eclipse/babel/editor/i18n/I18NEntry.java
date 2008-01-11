@@ -31,6 +31,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.editors.text.TextEditor;
 
 /**
  * Tree for displaying and navigating through resource bundle keys.
@@ -145,6 +146,15 @@ public class I18NEntry extends Composite {
         return locale;
     }
     
+    public boolean isEditable() {
+    	return ((TextEditor) messagesBundleGroup.
+        	getMessagesBundle(locale).getResource().getSource()).isEditable();
+    }
+    
+    public String getResourceLocationLabel() {
+    	return messagesBundleGroup.getMessagesBundle(locale).getResource().getResourceLocationLabel();
+    }
+    
 //    /*default*/ Text getTextBox() {
 //        return textBox;
 //    }
@@ -170,6 +180,11 @@ public class I18NEntry extends Composite {
                 updateModel();
              }
         });
+        //-- Setup read-only textbox --
+        //that is the case if the corresponding editor is itself read-only.
+        //it happens when the corresponding resource is defined inside the
+        //target-platform for example
+        textBox.setEditable(isEditable());
         
         //--- Handle tab key ---
         //TODO add a preference property listener and add/remove this listener
@@ -268,7 +283,7 @@ public class I18NEntry extends Composite {
 ///**
 // * Represents a data entry section for a bundle entry.
 // * @author Pascal Essiembre (essiembre@users.sourceforge.net)
-// * @version $Author: pessiembr $ $Revision: 1.2 $ $Date: 2007/12/03 05:15:57 $
+// * @version $Author: pessiembr $ $Revision: 1.3 $ $Date: 2008/01/11 04:15:15 $
 // */
 //public class BundleEntryComposite extends Composite {
 //
