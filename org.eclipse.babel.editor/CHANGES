@@ -1,3 +1,8 @@
+2008-01-10:
+---------------
+* New: Wizard for creating new resource bundles.
+* Added some support for NL structures.
+* Added resource location tooltips to locale.
 
 2007-12-16:
 ---------------
