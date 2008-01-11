@@ -13,6 +13,11 @@ package org.eclipse.babel.editor.util;
 import java.awt.ComponentOrientation;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
@@ -40,6 +45,7 @@ import org.eclipse.swt.widgets.Shell;
  */
 public final class UIUtils {
 
+    
     /** Name of resource bundle image. */
     public static final String IMAGE_RESOURCE_BUNDLE = 
             "resourcebundle.gif";  //$NON-NLS-1$
@@ -79,7 +85,49 @@ public final class UIUtils {
     
     /** Image registry. */
     private static final ImageRegistry imageRegistry = new ImageRegistry();
+
+//TO BE MOVED TO babel.core?
+    /**
+     * The root locale used for the original properties file.
+     * This constant is defined in java.util.Local starting with jdk6.
+     */
+    public static final Locale ROOT_LOCALE = new Locale(""); //$NON-NLS-1$
     
+    /**
+     * Sort the Locales alphabetically. Make sure the root Locale is first.
+     * 
+     * @param locales
+     */
+    public static final void sortLocales(Locale[] locales) {
+        List localesList = new ArrayList(Arrays.asList(locales));
+        Comparator comp = new Comparator() {
+            public int compare(Object o1, Object o2) {
+                Locale l1 = (Locale) o1;
+                Locale l2 = (Locale) o2;
+                if (ROOT_LOCALE.equals(o1)) {
+                    return -1;
+                }
+                if (ROOT_LOCALE.equals(o2)) {
+                    return 1;
+                }
+                String name1 = "";
+                String name2 = "";
+                if (l1 != null) {
+                    name1 = l1.getDisplayName();
+                }
+                if (l2 != null) {
+                    name2 = l2.getDisplayName();
+                }
+                return name1.compareTo(name2);
+            }
+        };
+        Collections.sort(localesList, comp);
+        for (int i = 0; i < locales.length; i++) {
+        	locales[i] = (Locale) localesList.get(i);
+        }
+    }
+//--end of TO BE MOVED TO babel.core?
+
     /**
      * Constructor.
      */
@@ -238,8 +286,8 @@ public final class UIUtils {
      * @return display name
      */
     public static String getDisplayName(Locale locale) {
-        if (locale == null) {
-            return MessagesEditorPlugin.getString("editor.default"); //$NON-NLS-1$
+        if (locale == null || ROOT_LOCALE.equals(locale)) {
+            return MessagesEditorPlugin.getString("editor.i18nentry.rootlocale.label"); //$NON-NLS-1$
         }
         return locale.getDisplayName();
     }
