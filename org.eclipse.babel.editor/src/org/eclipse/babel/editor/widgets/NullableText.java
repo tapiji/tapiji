@@ -168,6 +168,13 @@ public class NullableText extends Composite {
     public void removeKeyListener(KeyListener listener) {
         text.removeKeyListener(listener);
     }
-    
+
+    /**
+     * @param editable true if editable false otherwise.
+     * If never called it is editable by default.
+     */
+    public void setEditable(boolean editable) {
+        text.setEditable(editable);
+    }
     
 }
