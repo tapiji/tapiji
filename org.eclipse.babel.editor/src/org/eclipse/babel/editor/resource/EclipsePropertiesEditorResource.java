@@ -37,6 +37,9 @@ import org.eclipse.ui.editors.text.TextEditor;
 public class EclipsePropertiesEditorResource extends AbstractPropertiesResource{
 
     private TextEditor textEditor;
+    /** label of the location of the resource edited here.
+     * When null, try to locate the resource and use it to return that label.  */
+    private String _resourceLocationLabel;
     
     /**
      * Constructor.
@@ -58,7 +61,7 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource{
         public void resourceChanged(IResourceChangeEvent event) {
             IResource resource = event.getResource();
             System.out.println("RESOURCE CHANGED:" + resource);
-            if (resource.getFileExtension().equals("escript")) {
+            if (resource != null && resource.getFileExtension().equals("escript")) {
                // run the compiler
             }
          }
@@ -149,6 +152,26 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource{
         return null;
     }
     
+    /**
+     * @return The resource location label. or null if unknown.
+     */
+    public String getResourceLocationLabel() {
+    	if (_resourceLocationLabel != null) {
+    		return _resourceLocationLabel;
+    	}
+    	IResource resource = getResource();
+    	if (resource != null) {
+    		return resource.getFullPath().toString();
+    	}
+    	return null;
+    }
+    
+    /**
+     * @param resourceLocationLabel The label of the location of the edited resource.
+     */
+    public void setResourceLocationLabel(String resourceLocationLabel) {
+    	_resourceLocationLabel = resourceLocationLabel;
+    }
     
     /**
      * Checks whether this source editor is read-only.
