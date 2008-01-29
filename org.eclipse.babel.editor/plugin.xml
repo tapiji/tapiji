@@ -57,7 +57,7 @@
 	   <super type="org.eclipse.core.resources.problemmarker"/>
 	   <super type="org.eclipse.babel.editor.nlsmarker"/>
 	   <attribute name="bundleId"/>
-	   <persistent value="false"/>
+	   <persistent value="true"/>
 	</extension>
  <extension
        id="rbeBuilder"
@@ -78,7 +78,7 @@
  </extension>
  <extension
        point="org.eclipse.ui.popupMenus">
-    <objectContribution
+    <!--objectContribution
           adaptable="true"
           id="com.essiembre.rbe.eclipse.contribution1"
           nameFilter="*"
@@ -87,9 +87,56 @@
              class="org.eclipse.babel.editor.builder.ToggleNatureAction"
              enablesFor="+"
              id="com.essiembre.rbe.eclipse.addRemoveNatureAction"
-             label="Add/Remove Sample Nature"
+             label="Unable/Disable i18n properties validator builder"
              menubarPath="additions"/>
-    </objectContribution>
+    </objectContribution-->
+    
+    <objectContribution
+            adaptable="true"
+            id="com.essiembre.rbe.eclipse.objectContribution2"
+            objectClass="org.eclipse.core.resources.IProject">
+       	 <visibility>
+         <and>
+            <objectState
+                  name="open"
+                  value="true"/>
+        	<not>
+            <objectState 
+	            name="nature" 
+	            value="org.eclipse.babel.editor.rbeNature"/>
+            </not>
+         </and>
+         </visibility>
+         <action
+               class="org.eclipse.babel.editor.builder.ToggleNatureActionAdd"
+               enablesFor="1"
+               id="com.essiembre.rbe.eclipse.addNatureAction"
+               label="Unable i18n properties validator"
+               menubarPath="additions"
+               tooltip="Setup the i18n validator builder"/>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="com.essiembre.rbe.eclipse.objectContribution3"
+            objectClass="org.eclipse.core.resources.IProject">
+       	 <visibility>
+         <and>
+            <objectState
+                  name="open"
+                  value="true"/>
+        	<objectState 
+	            name="nature" 
+	            value="org.eclipse.babel.editor.rbeNature"/>
+         </and>
+         </visibility>
+         <action
+               class="org.eclipse.babel.editor.builder.ToggleNatureActionRemove"
+               enablesFor="1"
+               id="com.essiembre.rbe.eclipse.removeNatureAction"
+               label="Disable i18n properties validator"
+               menubarPath="additions"
+               tooltip="Remove the i18n validator builder"/>
+      </objectContribution>
  </extension>
  <extension
        id="com.essiembre.rbe.startup"

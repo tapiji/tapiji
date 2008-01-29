@@ -10,8 +10,20 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.builder;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
+import org.eclipse.babel.core.message.MessagesBundle;
+import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
+import org.eclipse.babel.editor.resource.validator.FileMarkerStrategy;
+import org.eclipse.babel.editor.resource.validator.IValidationMarkerStrategy;
+import org.eclipse.babel.editor.resource.validator.ResourceValidator;
+import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -19,13 +31,9 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
-import org.eclipse.babel.editor.resource.validator.FileMarkerStrategy;
-import org.eclipse.babel.editor.resource.validator.IValidationMarkerStrategy;
-import org.eclipse.babel.editor.resource.validator.ResourceValidator;
 
 /**
  * @author Pascal Essiembre
@@ -35,7 +43,7 @@ public class Builder extends IncrementalProjectBuilder {
 
     public static final String BUILDER_ID =
             "org.eclipse.babel.editor.rbeBuilder"; //$NON-NLS-1$
-   
+        
     private IValidationMarkerStrategy markerStrategy = new FileMarkerStrategy();
     
 	class SampleDeltaVisitor implements IResourceDeltaVisitor {
@@ -73,36 +81,144 @@ public class Builder extends IncrementalProjectBuilder {
 		}
 	}
 
-    
+	/** list built during a single build of the properties files.
+	 * Contains the list of files that must be validated.
+	 * The validation is done only at the end of the visitor.
+	 * This way the visitor can add extra files to be visited.
+	 * For example: if the default properties file is
+	 * changed, it is a good idea to rebuild all
+	 * localized files in the same MessageBundleGroup even if themselves
+	 * were not changed. */
+    private Set _resourcesToValidate;
 
-  
+    /**
+     * Index built during a single build.
+     * <p>
+     * The values of that map are message bundles.
+     * The key is a resource that belongs to that message bundle.
+     * </p>
+     */
+    private Map _alreadBuiltMessageBundle;
+      
 	/**
 	 * @see org.eclipse.core.resources.IncrementalProjectBuilder#build(
      *          int, java.util.Map, org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor)
 			throws CoreException {
-		if (kind == FULL_BUILD) {
-			fullBuild(monitor);
-		} else {
-			IResourceDelta delta = getDelta(getProject());
-			if (delta == null) {
+		try {
+			_alreadBuiltMessageBundle = null;
+			_resourcesToValidate = null;
+			if (kind == FULL_BUILD) {
 				fullBuild(monitor);
 			} else {
-				incrementalBuild(delta, monitor);
+				IResourceDelta delta = getDelta(getProject());
+				if (delta == null) {
+					fullBuild(monitor);
+				} else {
+					incrementalBuild(delta, monitor);
+				}
 			}
+		} finally {
+			finishBuild();
+			_resourcesToValidate = null;
+			_alreadBuiltMessageBundle = null;
 		}
 		return null;
 	}
 
+	/**
+	 * Collect the resource bundles to validate and
+	 * index the corresponding MessageBundleGroup(s).
+	 * @param resource The resource currently validated.
+	 */
 	void checkBundleResource(IResource resource) {
         if (resource instanceof IFile && resource.getName().endsWith(
                 ".properties")) { //$NON-NLS-1$ //TODO have customized?
             IFile file = (IFile) resource;
+            //System.err.println("Looking at " + file.getFullPath());
             deleteMarkers(file);
-            System.out.println("Find markers"); //$NON-NLS-1$
-            ResourceValidator.validate(file, markerStrategy);
+            MessagesBundleGroup msgBundleGrp = null;
+            if (_alreadBuiltMessageBundle == null) {
+            	_alreadBuiltMessageBundle = new HashMap();
+            	_resourcesToValidate = new HashSet();
+            } else {
+            	msgBundleGrp = (MessagesBundleGroup)_alreadBuiltMessageBundle.get(file);
+            }
+            if (msgBundleGrp == null) {
+            	msgBundleGrp = MessagesBundleGroupFactory.createBundleGroup(null, file);
+            	if (msgBundleGrp != null) {
+            		//index the files for which this MessagesBundleGroup
+            		//should be used for the validation.
+            		//cheaper than creating a group for each on of those
+            		//files.
+            		boolean validateEntireGroup = false;
+            		for (Iterator it = msgBundleGrp.messagesBundleIterator();
+            					it.hasNext();) {
+            			MessagesBundle msgBundle = (MessagesBundle)it.next();
+            			Object src = msgBundle.getResource().getSource();
+            			//System.err.println(src + " -> " + msgBundleGrp);
+            			if (src instanceof IFile) {//when it is a read-only thing we don't index it.
+	            			_alreadBuiltMessageBundle.put(src, msgBundleGrp);
+	            			if (!validateEntireGroup && src == resource) {
+	            				if (msgBundle.getLocale() == null
+	            						|| msgBundle.getLocale().equals(UIUtils.ROOT_LOCALE)) {
+	            					//ok the default properties have been changed.
+	            					//make sure that all resources in this bundle group
+	            					//are validated too:
+	            					validateEntireGroup = true;
+	            					
+	            					//TODO: eventually something similar.
+	            					//with foo_en.properties changed.
+	            					//then foo_en_US.properties must be revalidated
+	            					//and foo_en_CA.properties as well.
+	            					
+	            				}
+	            			}
+            			}
+            		}
+            		if (validateEntireGroup) {
+                   		for (Iterator it = msgBundleGrp.messagesBundleIterator();
+			    					it.hasNext();) {
+			    			MessagesBundle msgBundle = (MessagesBundle)it.next();
+			    			Object src = msgBundle.getResource().getSource();
+			    			_resourcesToValidate.add(src);
+                   		}
+            		}
+            	}
+            }
+            
+            _resourcesToValidate.add(resource);
+            
         }
+	}
+	
+	/**
+	 * Validates the message bundles collected by the visitor.
+	 * Makes sure we validate only once each message bundle and build only once each
+	 * MessageBundleGroup it belongs to.
+	 */
+	private void finishBuild() {
+		if (_resourcesToValidate != null) {
+			for (Iterator it = _resourcesToValidate.iterator(); it.hasNext();) {
+				IFile resource = (IFile)it.next();
+				MessagesBundleGroup msgBundleGrp =
+					(MessagesBundleGroup)_alreadBuiltMessageBundle.get(resource);
+				
+				if (msgBundleGrp != null) {
+					//when null it is probably because it was skipped from
+					//the group because the locale was filtered.
+					try {
+				//		System.out.println("Validate " + resource); //$NON-NLS-1$
+						ResourceValidator.validate(resource, markerStrategy, msgBundleGrp);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+				//	System.out.println("Not validating " + resource); //$NON-NLS-1$
+				}
+			}
+		}
 	}
 
 	private void deleteMarkers(IFile file) {
@@ -124,4 +240,11 @@ public class Builder extends IncrementalProjectBuilder {
         System.out.println("Builder: incrementalBuild"); //$NON-NLS-1$
 		delta.accept(new SampleDeltaVisitor());
 	}
+	
+	protected void clean(IProgressMonitor monitor) throws CoreException {
+		ResourcesPlugin.getWorkspace().getRoot()
+			.deleteMarkers(MessagesEditorPlugin.MARKER_TYPE, false, IResource.DEPTH_INFINITE);
+	}
+	
+	
 }

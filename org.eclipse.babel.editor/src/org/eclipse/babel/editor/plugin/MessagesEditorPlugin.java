@@ -17,6 +17,8 @@ import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
+import org.eclipse.babel.editor.builder.ToggleNatureAction;
+import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -55,6 +57,12 @@ public class MessagesEditorPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		
+		//make sure the rbe nature and builder are set on java projects
+		//if that is what the users prefers.
+		if (MsgEditorPreferences.getInstance().isBuilderSetupAutomatically()) {
+			ToggleNatureAction.addOrRemoveNatureOnAllJavaProjects(true);
+		}
 
 		//TODO replace deprecated
         try {

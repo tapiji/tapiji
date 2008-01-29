@@ -23,14 +23,17 @@ import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.tree.DefaultKeyTreeModel;
 import org.eclipse.babel.core.message.tree.IKeyTreeModel;
+import org.eclipse.babel.editor.builder.ToggleNatureAction;
 import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
 import org.eclipse.babel.editor.i18n.I18NPage;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
+import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.resource.EclipsePropertiesEditorResource;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.editor.views.MessagesBundleGroupOutline;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -98,6 +101,12 @@ public class MessagesEditor extends MultiPageEditorPart
         throws PartInitException {
         if (editorInput instanceof IFileEditorInput) {
             IFile file = ((IFileEditorInput) editorInput).getFile();
+            if (MsgEditorPreferences.getInstance().isBuilderSetupAutomatically()) {
+	            IProject p = file.getProject();
+	            if (p != null && p.isAccessible()) {
+	            	ToggleNatureAction.addOrRemoveNatureOnProject(p, true, true);
+	            }
+            }
             try {
                 messagesBundleGroup = MessagesBundleGroupFactory.createBundleGroup(site, file);
             } catch (MessageException e) {
@@ -137,7 +146,10 @@ public class MessagesEditor extends MultiPageEditorPart
         // Create text editor pages for each locales
         try {
             Locale[] locales = messagesBundleGroup.getLocales();
+            //first: sort the locales.
             UIUtils.sortLocales(locales);
+            //second: filter+sort them according to the filter preferences.
+            locales = UIUtils.filterLocales(locales);
             for (int i = 0; i < locales.length; i++) {
             	Locale locale = locales[i];
                 MessagesBundle messagesBundle = messagesBundleGroup.getMessagesBundle(locale);
@@ -156,6 +168,26 @@ public class MessagesEditor extends MultiPageEditorPart
                 "Error creating text editor page.", //$NON-NLS-1$
                 null, e.getStatus());
         }
+    }
+    
+    /**
+     * Called when the editor's pages need to be reloaded.
+     * For example when the filters of locale is changed.
+     * <p>
+     * Currently this only reloads the index page.
+     * TODO: remove and add the new locales? it actually looks quite hard to do.
+     * </p>
+     */
+    public void reloadDisplayedContents() {
+    	super.removePage(0);
+    	int currentlyActivePage = super.getActivePage();
+    	i18nPage.dispose();
+    	i18nPage = new I18NPage(
+                getContainer(), SWT.NONE, this);
+    	super.addPage(0, i18nPage);
+    	if (currentlyActivePage == 0) {
+    		super.setActivePage(currentlyActivePage);
+    	}
     }
 
     /**
@@ -217,6 +249,20 @@ public class MessagesEditor extends MultiPageEditorPart
                     EclipsePropertiesEditorResource propFile =
                             (EclipsePropertiesEditorResource) messagesResource;
                     if (resource.equals(propFile.getResource())) {
+                    	//ok we got the locale.
+                    	//try to open the master i18n page and select the corresponding key.
+                    	try {
+	                    	String key = (String) marker.getAttribute(IMarker.LOCATION);
+	                    	if (key != null && key.length() > 0) {
+	                    		getI18NPage().selectLocale(locales[i]);
+	                    		setActivePage(0);
+	                    		setSelectedKey(key);
+	                    		return;
+	                    	}
+                    	} catch (Exception e) {
+                    		e.printStackTrace();//something better.s
+                    	}
+                    	//it did not work... fall back to the text editor.
                         setActivePage(locales[i]);
                         IDE.gotoMarker(
                                 (IEditorPart) propFile.getSource(), marker);

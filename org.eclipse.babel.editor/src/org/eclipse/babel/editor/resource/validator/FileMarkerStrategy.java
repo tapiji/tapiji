@@ -19,6 +19,7 @@ import org.eclipse.babel.core.message.checks.DuplicateValueCheck;
 import org.eclipse.babel.core.message.checks.MissingValueCheck;
 import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
+import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 
 /**
  * @author Pascal Essiembre
@@ -38,7 +39,8 @@ public class FileMarkerStrategy implements IValidationMarkerStrategy {
                     event.getKey(),
                     "Key \"" + event.getKey() //$NON-NLS-1$
                     + "\" is missing a value.", //$NON-NLS-1$
-              IMarker.SEVERITY_WARNING);
+                 getSeverity(MsgEditorPreferences.getInstance()
+                		 .getReportMissingValuesLevel()));
             
         } else if (event.getCheck() instanceof DuplicateValueCheck) {
             String duplicates = BabelUtils.join(
@@ -49,8 +51,9 @@ public class FileMarkerStrategy implements IValidationMarkerStrategy {
 //            addMarker(event.getResource(),
                     event.getKey(),
                     "Key \"" + event.getKey() //$NON-NLS-1$
-                          + "\" is a duplicate of: " + duplicates, //$NON-NLS-1$
-                    IMarker.SEVERITY_WARNING);
+                          + "\" duplicates " + duplicates, //$NON-NLS-1$
+                  getSeverity(MsgEditorPreferences.getInstance()
+                         		 .getReportDuplicateValuesLevel()));
         }
     }
 
@@ -74,4 +77,25 @@ public class FileMarkerStrategy implements IValidationMarkerStrategy {
         }
     }
 
+    /**
+     * Translates the validation level as defined in 
+     * MsgEditorPreferences.VALIDATION_MESSAGE_* to the corresponding value
+     * for the marker attribute IMarke.SEVERITY.
+     * @param msgValidationLevel
+     * @return The value for the marker attribute IMarker.SEVERITY.
+     */
+    private static int getSeverity(int msgValidationLevel) {
+    	switch (msgValidationLevel) {
+    	case MsgEditorPreferences.VALIDATION_MESSAGE_ERROR:
+    		return IMarker.SEVERITY_ERROR;
+    	case MsgEditorPreferences.VALIDATION_MESSAGE_WARNING:
+    		return IMarker.SEVERITY_WARNING;
+    	case MsgEditorPreferences.VALIDATION_MESSAGE_INFO:
+    		return IMarker.SEVERITY_INFO;
+    	case MsgEditorPreferences.VALIDATION_MESSAGE_IGNORE:
+    	default:
+    		return IMarker.SEVERITY_INFO;//why are we here?
+    	}
+    }
+    
 }

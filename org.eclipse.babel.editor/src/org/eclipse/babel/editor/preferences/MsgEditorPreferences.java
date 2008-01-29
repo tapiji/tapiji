@@ -10,18 +10,51 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.preferences;
 
+import java.util.StringTokenizer;
+
 import org.eclipse.babel.core.message.resource.ser.IPropertiesDeserializerConfig;
 import org.eclipse.babel.core.message.resource.ser.IPropertiesSerializerConfig;
+import org.eclipse.babel.editor.MessagesEditor;
+import org.eclipse.babel.editor.builder.Builder;
+import org.eclipse.babel.editor.builder.ToggleNatureAction;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
+import org.eclipse.core.resources.ICommand;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Preferences;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.Preferences.IPropertyChangeListener;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.misc.StringMatcher;
 
 /**
  * Messages Editor preferences.
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public final class MsgEditorPreferences
-        implements IPropertiesSerializerConfig, IPropertiesDeserializerConfig {
+        implements IPropertiesSerializerConfig, IPropertiesDeserializerConfig, IPropertyChangeListener {
    
+	/** the corresponding validation message with such a preference should
+	 * not be generated */
+	public static final int VALIDATION_MESSAGE_IGNORE = 0;
+	/** the corresponding validation message with such a preference should
+	 * generate a marker with severity 'info' */
+	public static final int VALIDATION_MESSAGE_INFO = 1;
+	/** the corresponding validation message with such a preference should
+	 * generate a marker with severity 'warning' */
+	public static final int VALIDATION_MESSAGE_WARNING = 2;
+	/** the corresponding validation message with such a preference should
+	 * generate a marker with severity 'error' */
+	public static final int VALIDATION_MESSAGE_ERROR = 3;
+	
     /** Key group separator. */
     public static final String GROUP__LEVEL_SEPARATOR =
             "groupLevelSeparator"; //$NON-NLS-1$
@@ -104,15 +137,18 @@ public final class MsgEditorPreferences
     /** Should new lines character produce a line break in properties files. */
     public static final String NEW_LINE_NICE = "newLineNice"; //$NON-NLS-1$
 
-    /** Report missing values. */
-    public static final String REPORT_MISSING_VALUES = 
-            "detectMissingValues"; //$NON-NLS-1$
+    /** Report missing values with given level of reporting: IGNORE, INFO, WARNING, ERROR. */
+    public static final String REPORT_MISSING_VALUES_LEVEL = 
+            "detectMissingValuesLevel"; //$NON-NLS-1$
     /** Report duplicate values. */
-    public static final String REPORT_DUPL_VALUES = 
-            "reportDuplicateValues"; //$NON-NLS-1$
+    public static final String REPORT_DUPL_VALUES_LEVEL = 
+            "reportDuplicateValuesLevel"; //$NON-NLS-1$
+    /** Report duplicate values. */
+    public static final String REPORT_DUPL_VALUES_ONLY_IN_ROOT_LOCALE = 
+            "reportDuplicateValuesOnlyInRootLocale"; //$NON-NLS-1$
     /** Report similar values. */
-    public static final String REPORT_SIM_VALUES = 
-            "reportSimilarValues"; //$NON-NLS-1$
+    public static final String REPORT_SIM_VALUES_LEVEL = 
+            "reportSimilarValuesLevel"; //$NON-NLS-1$
     /** Report similar values: word compare. */
     public static final String REPORT_SIM_VALUES_WORD_COMPARE = 
             "reportSimilarValuesWordCompare"; //$NON-NLS-1$
@@ -141,12 +177,23 @@ public final class MsgEditorPreferences
     public static final String DISPLAY_LANG_COMMENT_FIELDS =
             "displayLangCommentFieldsNL"; //$NON-NLS-1$
     
+    /** Locales filter and order defined as a comma separated list of string matchers */
+    public static final String FILTER_LOCALES_STRING_MATCHERS = "localesFilterStringMatchers";
+    
+    /** When true the builder that validates translation files is
+     * automatically added to java projects when the plugin is started
+     * or when a new project is added. */
+    public static final String ADD_MSG_EDITOR_BUILDER_TO_JAVA_PROJECTS =
+    	"addMsgEditorBuilderToJavaProjects";
+    	    
     /** MsgEditorPreferences. */
     private static final Preferences PREFS = 
             MessagesEditorPlugin.getDefault().getPluginPreferences();
     
     private static final MsgEditorPreferences INSTANCE =
                 new MsgEditorPreferences();
+    
+    private StringMatcher[] cachedCompiledLocaleFilter;
     
     /**
      * Constructor.
@@ -384,15 +431,43 @@ public final class MsgEditorPreferences
      * @return <code>true</code> if reporting
      */
     public boolean getReportMissingValues() {
-        return PREFS.getBoolean(REPORT_MISSING_VALUES);
+    	return PREFS.getInt(REPORT_MISSING_VALUES_LEVEL) != VALIDATION_MESSAGE_IGNORE;
+        //return PREFS.getBoolean(REPORT_MISSING_VALUES);
     }
+    /**
+     * Returns the level of reporting for missing values.
+     * @return VALIDATION_MESSAGE_IGNORE or VALIDATION_MESSAGE_INFO or
+     * VALIDATION_MESSAGE_WARNING or VALIDATION_MESSAGE_ERROR. 
+     */
+    public int getReportMissingValuesLevel() {
+    	return PREFS.getInt(REPORT_MISSING_VALUES_LEVEL);
+    }
+    
     
     /**
      * Gets whether to report keys with duplicate values.
      * @return <code>true</code> if reporting
      */
     public boolean getReportDuplicateValues() {
-        return PREFS.getBoolean(REPORT_DUPL_VALUES);
+        return PREFS.getInt(REPORT_DUPL_VALUES_LEVEL) != VALIDATION_MESSAGE_IGNORE;
+    }
+    
+    /**
+     * Returns the level of reporting for duplicate values.
+     * @return VALIDATION_MESSAGE_IGNORE or VALIDATION_MESSAGE_INFO or
+     * VALIDATION_MESSAGE_WARNING or VALIDATION_MESSAGE_ERROR. 
+     */
+    public int getReportDuplicateValuesLevel() {
+        return PREFS.getInt(REPORT_DUPL_VALUES_LEVEL);
+    }
+    
+    /**
+     * Gets whether to report keys with duplicate values.
+     * @return <code>true</code> if reporting duplicate is applied
+     * only for the root locale (aka default properties file.)
+     */
+    public boolean getReportDuplicateValuesOnlyInRootLocales() {
+        return PREFS.getBoolean(REPORT_DUPL_VALUES_ONLY_IN_ROOT_LOCALE);
     }
     
     /**
@@ -400,7 +475,15 @@ public final class MsgEditorPreferences
      * @return <code>true</code> if reporting
      */
     public boolean getReportSimilarValues() {
-        return PREFS.getBoolean(REPORT_SIM_VALUES);
+        return PREFS.getInt(REPORT_SIM_VALUES_LEVEL) != VALIDATION_MESSAGE_IGNORE;
+    }
+    /**
+     * Returns the level of reporting for similar values.
+     * @return VALIDATION_MESSAGE_IGNORE or VALIDATION_MESSAGE_INFO or
+     * VALIDATION_MESSAGE_WARNING or VALIDATION_MESSAGE_ERROR. 
+     */
+    public int getReportSimilarValuesLevel() {
+    	return PREFS.getInt(REPORT_SIM_VALUES_LEVEL);
     }
 
     /**
@@ -453,4 +536,145 @@ public final class MsgEditorPreferences
     public boolean isKeySortingEnabled() {
         return PREFS.getBoolean(SORT_KEYS);
     }
+    
+    /**
+     * @return a comma separated list of locales-string-matchers.
+     * <p>
+     * Note: StringMatcher is an internal API duplicated in many different places of eclipse.
+     * The only project that decided to make it public is GMF (org.eclipse.gmf.runtime.common.core.util)
+     * Although they have been request to make it public since 2001:
+     * http://dev.eclipse.org/newslists/news.eclipse.tools/msg00666.html
+     * </p>
+     * <p>
+     * We choose org.eclipse.ui.internal.misc in the org.eclipse.ui.workbench
+     * plugin as it is part of RCP; the most common one. 
+     * </p>
+     * @see org.eclipse.ui.internal.misc.StringMatcher
+     */
+    public String getFilterLocalesStringMatcher() {
+    	return PREFS.getString(FILTER_LOCALES_STRING_MATCHERS);
+    }
+    /**
+     * @return The StringMatchers compiled from #getFilterLocalesStringMatcher()
+     */
+    public synchronized StringMatcher[] getFilterLocalesStringMatchers() {
+    	if (cachedCompiledLocaleFilter != null) {
+    		return cachedCompiledLocaleFilter;
+    	}
+    	
+    	String pref = PREFS.getString(FILTER_LOCALES_STRING_MATCHERS);
+    	StringTokenizer tokenizer = new StringTokenizer(pref, ";, ", false);
+    	cachedCompiledLocaleFilter = new StringMatcher[tokenizer.countTokens()];
+    	int ii = 0;
+    	while (tokenizer.hasMoreTokens()) {
+    		StringMatcher pattern = new StringMatcher(tokenizer.nextToken().trim(), true, false);
+    		cachedCompiledLocaleFilter[ii] = pattern;
+    		ii++;
+    	}
+    	return cachedCompiledLocaleFilter;
+    }
+    
+    /**
+     * Gets whether the rbe nature and rbe builder are automatically setup
+     * on java projects in the workspace.
+     * @return <code>true</code> Setup automatically the rbe builder
+     * on java projects.
+     */
+    public boolean isBuilderSetupAutomatically() {
+        return PREFS.getBoolean(ADD_MSG_EDITOR_BUILDER_TO_JAVA_PROJECTS);
+    }
+    
+    /**
+	 * Notified when the value of the filter locales preferences changes.
+	 *
+	 * @param event the property change event object describing which
+	 *    property changed and how
+	 */
+	public void propertyChange(Preferences.PropertyChangeEvent event) {
+		if (FILTER_LOCALES_STRING_MATCHERS.equals(event.getProperty())) {
+			onLocalFilterChange();
+		} else if (ADD_MSG_EDITOR_BUILDER_TO_JAVA_PROJECTS.equals(event.getProperty())) {
+			onAddValidationBuilderChange();
+		}
+	}
+	
+	/**
+	 * Called when the locales filter value is changed.
+	 * <p>
+	 * Takes care of reloading the opened editors and calling the full-build
+	 * of the rbeBuilder on all project that use it.
+	 * </p>
+	 */
+	private void onLocalFilterChange() {
+		cachedCompiledLocaleFilter = null;
+		
+		//first: refresh the editors.
+		//look at the opened editors and reload them if possible
+		//otherwise, save them, close them and re-open them.
+		IWorkbenchPage[] pages =
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPages();
+		for (int i = 0; i < pages.length; i++) {
+			IEditorReference[] edRefs = pages[i].getEditorReferences();
+			for (int j = 0; j < edRefs.length; j++) {
+				IEditorReference ref = edRefs[j];
+				IEditorPart edPart = ref.getEditor(false);
+				if (edPart != null && edPart instanceof MessagesEditor) {
+					//the editor was loaded. reload it:
+					MessagesEditor meToReload = (MessagesEditor)edPart;
+					meToReload.reloadDisplayedContents();
+				}
+			}
+		}
+		
+		//second: clean and build all the projects that have the rbe builder.
+		//Calls the builder for a clean and build on all projects of the workspace.
+		try {
+			IProject[] projs = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+			for (int i = 0; i < projs.length; i++) {
+				if (projs[i].isAccessible()) {
+					ICommand[] builders = projs[i].getDescription().getBuildSpec();
+					for (int j = 0; j < builders.length; j++) {
+						if (Builder.BUILDER_ID.equals(builders[j].getBuilderName())) {
+							projs[i].build(IncrementalProjectBuilder.FULL_BUILD,
+									Builder.BUILDER_ID, null, new NullProgressMonitor());
+							break;
+						}
+					}
+				}
+			}
+		} catch (CoreException ce) {
+			IStatus status= new Status(IStatus.ERROR, MessagesEditorPlugin.PLUGIN_ID, IStatus.OK,
+					ce.getMessage(), ce);
+			MessagesEditorPlugin.getDefault().getLog().log(status);
+		}
+	}
+	
+	/**
+	 * Called when the value of the setting up automatically the validation builder to
+	 * projects is changed.
+	 * <p>
+	 * When changed to true, call the static method that goes through
+	 * the projects accessible in the workspace and if they have a java nature,
+	 * make sure they also have the rbe nature and rbe builder.
+	 * </p>
+	 * <p>
+	 * When changed to false, make a dialog offering the user to remove all setup
+	 * builders from the projects where it can be found.
+	 * </p>
+	 */
+	private void onAddValidationBuilderChange() {
+		if (isBuilderSetupAutomatically()) {
+			ToggleNatureAction.addOrRemoveNatureOnAllJavaProjects(true);
+		} else {
+			boolean res =
+				MessageDialog.openQuestion(
+					PlatformUI.getWorkbench().getDisplay().getActiveShell(),
+					MessagesEditorPlugin.getString("prefs.removeAlreadyInstalledValidators.title"),
+					MessagesEditorPlugin.getString("prefs.removeAlreadyInstalledValidators.text"));
+			if (res) {
+				ToggleNatureAction.addOrRemoveNatureOnAllJavaProjects(false);
+			}
+		}
+	}
+        
 }

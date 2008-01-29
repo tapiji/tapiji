@@ -16,6 +16,7 @@ import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.checks.DuplicateValueCheck;
 import org.eclipse.babel.core.message.checks.IMessageCheck;
 import org.eclipse.babel.core.message.checks.MissingValueCheck;
+import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 
 
 /**
@@ -26,8 +27,7 @@ public class MessagesBundleGroupValidator {
     
 
     
-    private static IMessageCheck missingCheck =
-            new MissingValueCheck();
+    private static IMessageCheck missingCheck = new MissingValueCheck();
     //TODO have above react to preferences
     
     
@@ -49,22 +49,34 @@ public class MessagesBundleGroupValidator {
         //TODO check if there is a matching EclipsePropertiesEditorResource already open.
         //else, create MessagesBundle from PropertiesIFileResource
         
+    	DuplicateValueCheck duplicateCheck =
+    		MsgEditorPreferences.getInstance().getReportDuplicateValues()
+	    		? new DuplicateValueCheck()
+	    		: null;
     	String[] keys = messagesBundleGroup.getMessageKeys();
     	for (int i = 0; i < keys.length; i++) {
 			String key = keys[i];
-            //TODO call only those supported by preferences
-            if (missingCheck.checkKey(
-                    messagesBundleGroup,
-                    messagesBundleGroup.getMessage(key, locale))) {
-                markerStrategy.markFailed(new ValidationFailureEvent(
-                        messagesBundleGroup, locale, key, missingCheck));
+            if (MsgEditorPreferences.getInstance().getReportMissingValues()) {
+	            if (missingCheck.checkKey(
+	                    messagesBundleGroup,
+	                    messagesBundleGroup.getMessage(key, locale))) {
+	                markerStrategy.markFailed(new ValidationFailureEvent(
+	                        messagesBundleGroup, locale, key, missingCheck));
+	            }
             }
-            DuplicateValueCheck duplicateCheck = new DuplicateValueCheck();
-            if (duplicateCheck.checkKey(
-                    messagesBundleGroup,
-                    messagesBundleGroup.getMessage(key, locale))) {
-                markerStrategy.markFailed(new ValidationFailureEvent(
-                        messagesBundleGroup, locale, key, duplicateCheck));
+            if (duplicateCheck != null) {
+            	if (!MsgEditorPreferences.getInstance().getReportDuplicateValuesOnlyInRootLocales()
+            			|| (locale == null || locale.toString().length() == 0)) {
+            		//either the locale is the root locale either
+            		//we report duplicated on all the locales anyways.
+		            if (duplicateCheck.checkKey(
+		                    messagesBundleGroup,
+		                    messagesBundleGroup.getMessage(key, locale))) {
+		                markerStrategy.markFailed(new ValidationFailureEvent(
+		                        messagesBundleGroup, locale, key, duplicateCheck));
+		            }
+	            	duplicateCheck.reset();
+            	}
             }
         }
     }

@@ -27,6 +27,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import org.eclipse.babel.core.message.MessagesBundle;
+import org.eclipse.babel.core.message.resource.PropertiesIFileResource;
+import org.eclipse.babel.core.message.resource.PropertiesReadOnlyResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
@@ -95,11 +97,11 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
     public MessagesBundle[] loadMessagesBundles() {
     	MessagesBundle[] defaultFiles = super.loadMessagesBundles();
     	//look if the defaut properties is already in there.
-    	//if that is the case we don't try to load extra properties
+    	//if that is the case we don't try to load extra properties    	
     	for (int i = 0 ; i < defaultFiles.length ; i++) {
     	    MessagesBundle mb = defaultFiles[i];
-    		if (UIUtils.ROOT_LOCALE.equals(mb.getLocale())) {
-    			//... if this is the base one then:
+    		if (UIUtils.ROOT_LOCALE.equals(mb.getLocale()) || mb.getLocale() == null) {
+    			//... if this is the base one then no need to look any further.:
     			return defaultFiles;
     		}
     	}
@@ -163,6 +165,16 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
         				//try inside the jars:
         				String[] jarredProps = getJarredPropertiesAndResourceLocationLabel(developpedProject, propertiesBasePath);
         				if (jarredProps != null) {
+        					if (site == null) {
+        						//then we are currently executing a build,
+        						//not creating editors:
+        						MsgEditorPreferences prefs = MsgEditorPreferences.getInstance();
+        						return new MessagesBundle(new PropertiesReadOnlyResource(
+        									UIUtils.ROOT_LOCALE, 
+        	                                new PropertiesSerializer(prefs),
+        	                                new PropertiesDeserializer(prefs),
+        	                                jarredProps[0], jarredProps[1]));
+        					}
         					newEditorInput = new DummyEditorInput(jarredProps[0], 
         							 getPropertiesPath().lastSegment(),
         							 jarredProps[1]);
@@ -172,6 +184,20 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
         			}
         			//well if the file does not exist, it will be clear where we were looking for
         			//it and that we could not find it
+        			if (site == null) {
+						//then we are currently executing a build,
+						//not creating editors:
+        				if (file.exists()) {
+							MsgEditorPreferences prefs = MsgEditorPreferences.getInstance();
+							return new MessagesBundle(new PropertiesIFileResource(
+										UIUtils.ROOT_LOCALE, 
+		                                new PropertiesSerializer(prefs),
+		                                new PropertiesDeserializer(prefs), file));
+        				} else {
+        					//during the build if the file does not exist. skip.
+        					return null;
+        				}
+        			}
     				newEditorInput = new FileEditorInput(file);
         	        //assume there is no more than one version of the plugin
         	        //in the same workspace.
@@ -210,6 +236,16 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
 	            
 	            if (in != null) {
 	            	String contents = getContents(in);
+	            	if (site == null) {
+						//then we are currently executing a build,
+						//not creating editors:
+						MsgEditorPreferences prefs = MsgEditorPreferences.getInstance();
+						return new MessagesBundle(new PropertiesReadOnlyResource(
+									UIUtils.ROOT_LOCALE, 
+	                                new PropertiesSerializer(prefs),
+	                                new PropertiesDeserializer(prefs),
+	                                contents, resourceLocationLabel));
+	            	}
 	                newEditorInput = new DummyEditorInput(contents, 
 	                        getPropertiesPath().lastSegment(), getPropertiesPath().toString());
 	            }
@@ -222,15 +258,22 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
         // we create a text editor and the whole MessagesBundle.
         if (newEditorInput != null) {
             TextEditor textEditor = null;
-            try {
-                // Use PropertiesFileEditor if available
-                textEditor = (TextEditor) Class.forName(
-                        PROPERTIES_EDITOR_CLASS_NAME).newInstance();
-            } catch (Exception e) {
-                // Use default editor otherwise
-                textEditor = new TextEditor();
+            if (site != null) {
+            	//during a build the site is not there and we don't edit things anyways.
+            	//we need a new type of PropertiesEditorResource. not based on file and ifile and
+            	//editorinput.
+	            try {
+	                // Use PropertiesFileEditor if available
+	                textEditor = (TextEditor) Class.forName(
+	                        PROPERTIES_EDITOR_CLASS_NAME).newInstance();
+	            } catch (Exception e) {
+	                // Use default editor otherwise
+	                textEditor = new TextEditor();
+	            }
+	            textEditor.init(site, newEditorInput);
+            } else {
+            	System.err.println("the site " + site);
             }
-            textEditor.init(site, newEditorInput);
 
             MsgEditorPreferences prefs = MsgEditorPreferences.getInstance();
             
@@ -257,7 +300,7 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
         in.close();
         return buffer.toString();
     }
-    
+        
     /**
      * The resource bundle can be either with the rest of the classes or
      * with the bundle resources.

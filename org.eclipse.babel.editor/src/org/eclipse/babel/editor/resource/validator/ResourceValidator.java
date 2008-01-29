@@ -32,12 +32,27 @@ public class ResourceValidator {
         //TODO use BundleGroupRegistry (LRUMap)
         MessagesBundleGroup messagesBundleGroup = MessagesBundleGroupFactory.createBundleGroup(
                 null, file);
-        MessagesBundle messagesBundle = messagesBundleGroup.getMessagesBundle(file);
+        validate(file, markerStrategy, messagesBundleGroup);
+    }
+    
+    /**
+     * @param file
+     * @param markerStrategy
+     * @param alreadyBuiltMessageBundle
+     */
+    public static void validate(
+            IFile file, IValidationMarkerStrategy markerStrategy,
+            MessagesBundleGroup alreadyBuiltMessageBundle) {
+        //TODO check if there is a matching EclipsePropertiesEditorResource already open.
+        //else, create MessagesBundle from PropertiesIFileResource
+    	MessagesBundle messagesBundle = alreadyBuiltMessageBundle.getMessagesBundle(file);
         if (messagesBundle == null) {
             return;
         }
         Locale locale = messagesBundle.getLocale();
-        MessagesBundleGroupValidator.validate(messagesBundleGroup, locale, markerStrategy);
+        MessagesBundleGroupValidator.validate(alreadyBuiltMessageBundle, locale, markerStrategy);
     }
+    
+
     
 }

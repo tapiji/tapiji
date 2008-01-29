@@ -15,8 +15,10 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -29,12 +31,12 @@ import org.eclipse.swt.widgets.Text;
 public class ReportingPrefPage extends AbstractPrefPage {
     
     /* Preference fields. */
-    private Button reportMissingVals;
-    private Button reportDuplVals;
-    private Button reportSimVals;
+    private Combo reportMissingVals;
+    private Combo reportDuplVals;
+    private Combo reportSimVals;
     private Text reportSimPrecision;
     private Button[] reportSimValsMode = new Button[2];
-
+    
     /**
      * Constructor.
      */
@@ -60,27 +62,39 @@ public class ReportingPrefPage extends AbstractPrefPage {
         
         // Report missing values?
         field = createFieldComposite(composite);
-        reportMissingVals = new Button(field, SWT.CHECK);
-        reportMissingVals.setSelection(
-                prefs.getBoolean(MsgEditorPreferences.REPORT_MISSING_VALUES));
+    	GridData gridData = new GridData();
+    	gridData.grabExcessHorizontalSpace = true;
+    	field.setLayoutData(gridData);
         new Label(field, SWT.NONE).setText(
                 MessagesEditorPlugin.getString("prefs.perform.missingVals")); //$NON-NLS-1$
+        reportMissingVals = new Combo(field, SWT.READ_ONLY);
+        populateCombo(reportMissingVals,
+        		prefs.getInt(MsgEditorPreferences.REPORT_MISSING_VALUES_LEVEL));
+//        reportMissingVals.setSelection(
+//                prefs.getBoolean(MsgEditorPreferences.REPORT_MISSING_VALUES));
 
         // Report duplicate values?
         field = createFieldComposite(composite);
-        reportDuplVals = new Button(field, SWT.CHECK);
-        reportDuplVals.setSelection(
-                prefs.getBoolean(MsgEditorPreferences.REPORT_DUPL_VALUES));
+    	gridData = new GridData();
+    	gridData.grabExcessHorizontalSpace = true;
+    	field.setLayoutData(gridData);
         new Label(field, SWT.NONE).setText(
                 MessagesEditorPlugin.getString("prefs.perform.duplVals")); //$NON-NLS-1$
+        reportDuplVals = new Combo(field, SWT.READ_ONLY);
+        populateCombo(reportDuplVals,
+        		prefs.getInt(MsgEditorPreferences.REPORT_DUPL_VALUES_LEVEL));
         
         // Report similar values?
         field = createFieldComposite(composite);
-        reportSimVals = new Button(field, SWT.CHECK);
-        reportSimVals.setSelection(
-                prefs.getBoolean(MsgEditorPreferences.REPORT_SIM_VALUES));
+    	gridData = new GridData();
+    	gridData.grabExcessHorizontalSpace = true;
+    	field.setLayoutData(gridData);
+
         new Label(field, SWT.NONE).setText(
                 MessagesEditorPlugin.getString("prefs.perform.simVals")); //$NON-NLS-1$
+        reportSimVals = new Combo(field, SWT.READ_ONLY);
+        populateCombo(reportSimVals,
+        		prefs.getInt(MsgEditorPreferences.REPORT_SIM_VALUES_LEVEL));
         reportSimVals.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
                 refreshEnabledStatuses();
@@ -127,18 +141,36 @@ public class ReportingPrefPage extends AbstractPrefPage {
         return composite;
     }
 
+    /**
+     * Creates the items in the combo and select the item that matches the
+     * current value.
+     * @param combo
+     * @param selectedLevel
+     */
+    private void populateCombo(Combo combo, int selectedLevel) {
+    	combo.add(MessagesEditorPlugin.getString("prefs.perform.message.ignore"));
+    	combo.add(MessagesEditorPlugin.getString("prefs.perform.message.info"));
+    	combo.add(MessagesEditorPlugin.getString("prefs.perform.message.warning"));
+    	combo.add(MessagesEditorPlugin.getString("prefs.perform.message.error"));
+    	combo.select(selectedLevel);
+    	GridData gridData = new GridData();
+    	gridData.grabExcessHorizontalSpace = true;
+    	gridData.horizontalAlignment = SWT.RIGHT;
+    	combo.setLayoutData(gridData);
+    }
+    
 
     /**
      * @see org.eclipse.jface.preference.IPreferencePage#performOk()
      */
     public boolean performOk() {
         IPreferenceStore prefs = getPreferenceStore();
-        prefs.setValue(MsgEditorPreferences.REPORT_MISSING_VALUES,
-                reportMissingVals.getSelection());
-        prefs.setValue(MsgEditorPreferences.REPORT_DUPL_VALUES,
-                reportDuplVals.getSelection());
-        prefs.setValue(MsgEditorPreferences.REPORT_SIM_VALUES,
-                reportSimVals.getSelection());
+        prefs.setValue(MsgEditorPreferences.REPORT_MISSING_VALUES_LEVEL,
+                reportMissingVals.getSelectionIndex());
+        prefs.setValue(MsgEditorPreferences.REPORT_DUPL_VALUES_LEVEL,
+                reportDuplVals.getSelectionIndex());
+        prefs.setValue(MsgEditorPreferences.REPORT_SIM_VALUES_LEVEL,
+                reportSimVals.getSelectionIndex());
         prefs.setValue(MsgEditorPreferences.REPORT_SIM_VALUES_WORD_COMPARE,
                 reportSimValsMode[0].getSelection());
         prefs.setValue(MsgEditorPreferences.REPORT_SIM_VALUES_LEVENSTHEIN,
@@ -155,12 +187,12 @@ public class ReportingPrefPage extends AbstractPrefPage {
      */
     protected void performDefaults() {
         IPreferenceStore prefs = getPreferenceStore();
-        reportMissingVals.setSelection(prefs.getDefaultBoolean(
-                MsgEditorPreferences.REPORT_MISSING_VALUES));
-        reportDuplVals.setSelection(prefs.getDefaultBoolean(
-                MsgEditorPreferences.REPORT_DUPL_VALUES));
-        reportSimVals.setSelection(prefs.getDefaultBoolean(
-                MsgEditorPreferences.REPORT_SIM_VALUES));
+        reportMissingVals.select(prefs.getDefaultInt(
+                MsgEditorPreferences.REPORT_MISSING_VALUES_LEVEL));
+        reportDuplVals.select(prefs.getDefaultInt(
+                MsgEditorPreferences.REPORT_DUPL_VALUES_LEVEL));
+        reportSimVals.select(prefs.getDefaultInt(
+                MsgEditorPreferences.REPORT_SIM_VALUES_LEVEL));
         reportSimValsMode[0].setSelection(prefs.getDefaultBoolean(
                 MsgEditorPreferences.REPORT_SIM_VALUES_WORD_COMPARE));
         reportSimValsMode[1].setSelection(prefs.getDefaultBoolean(
@@ -172,7 +204,8 @@ public class ReportingPrefPage extends AbstractPrefPage {
     }
 
     /*default*/ void refreshEnabledStatuses() {
-        boolean isReportingSimilar = reportSimVals.getSelection();
+        boolean isReportingSimilar = reportSimVals.getSelectionIndex()
+        			!= MsgEditorPreferences.VALIDATION_MESSAGE_IGNORE;
 
         for (int i = 0; i < reportSimValsMode.length; i++) {
             reportSimValsMode[i].setEnabled(isReportingSimilar);

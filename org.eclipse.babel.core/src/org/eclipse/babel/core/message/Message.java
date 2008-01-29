@@ -15,6 +15,7 @@ import java.util.Locale;
 
 /**
  * A single entry in a <code>MessagesBundle</code>.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  * @see MessagesBundle
  * @see MessagesBundleGroup

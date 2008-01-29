@@ -139,6 +139,7 @@ public class I18NPage extends ScrolledComposite {
         entriesComposite.setLayout(new GridLayout(1, false));
         Locale[] locales = editor.getBundleGroup().getLocales();
         UIUtils.sortLocales(locales);
+        locales = UIUtils.filterLocales(locales);
         for (int i = 0; i < locales.length; i++) {
             Locale locale = locales[i];
             I18NEntry i18NEntry = new I18NEntry(

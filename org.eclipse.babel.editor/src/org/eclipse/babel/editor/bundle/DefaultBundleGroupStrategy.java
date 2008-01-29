@@ -24,6 +24,7 @@ import org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy;
 import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.resource.EclipsePropertiesEditorResource;
+import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -113,7 +114,9 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
                 String localeText = resourceName.replaceFirst(
                         fileMatchPattern, "$2"); //$NON-NLS-1$
                 Locale locale = BabelUtils.parseLocale(localeText);
-                bundles.add(createBundle(locale, resource));
+                if (UIUtils.isDisplayed(locale)) {
+                	bundles.add(createBundle(locale, resource));
+                }
             }
         }
         return (MessagesBundle[]) bundles.toArray(EMPTY_BUNDLES);

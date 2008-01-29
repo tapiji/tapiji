@@ -8,24 +8,12 @@
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.editor.plugin;
+package org.eclipse.babel.editor.builder;
 
-import org.eclipse.ui.IStartup;
 
 /**
- * @author Pascal Essiembre
- *
+ * @author hmalphettes
  */
-public class Startup implements IStartup {
-
-    /**
-     * @see org.eclipse.ui.IStartup#earlyStartup()
-     */
-    public void earlyStartup() {
-    	//done.
-//        System.out.println("Starting up.  "
-//                + "TODO: Register nature with every project and listen for new "
-//                + "projects???");
-    }
+public class ToggleNatureActionRemove extends ToggleNatureAction {
 
 }

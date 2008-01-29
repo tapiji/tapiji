@@ -18,6 +18,7 @@ import java.io.Reader;
 
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
+import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -76,7 +77,7 @@ public final class MessagesBundleGroupFactory {
     	   //now look if we are inside a fragment plugin:
     	   String hostId = getHostPluginId(file);
     	   if (hostId != null) {
-    	   	   //we are indeed inside a fragment
+    	   	   //we are indeed inside a fragment    
     	   	   //use the appropriate strategy.
     		   return new MessagesBundleGroup(
     	                new NLFragmentBundleGroupStrategy(site, file, hostId));
@@ -114,7 +115,6 @@ public final class MessagesBundleGroupFactory {
     
 //reading plugin manifests related utility methods. TO BE MOVED TO CORE ?
     
-    private static final String PDE_NATURE = "org.eclipse.pde.PluginNature"; //$NON-NLS-1$
     private static String FRAG_HOST = "Fragment-Host:"; //$NON-NLS-1$
     /**
      * @param file
@@ -136,7 +136,7 @@ public final class MessagesBundleGroupFactory {
     		return null;
     	}
     	try {
-			if (proj.getNature(PDE_NATURE) == null) { //$NON-NLS-1$
+			if (proj.getNature(UIUtils.PDE_NATURE) == null) { //$NON-NLS-1$
 				return null;
 			}
 		} catch (CoreException e) {

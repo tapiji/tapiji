@@ -69,12 +69,26 @@ public class PreferenceInitializer extends
         prefs.setDefault(MsgEditorPreferences.SORT_KEYS, true);
         
         // Reporting/Performance
-        prefs.setDefault(MsgEditorPreferences.REPORT_MISSING_VALUES, true);
-        prefs.setDefault(MsgEditorPreferences.REPORT_DUPL_VALUES, true);
+        prefs.setDefault(MsgEditorPreferences.REPORT_MISSING_VALUES_LEVEL,
+        		MsgEditorPreferences.VALIDATION_MESSAGE_ERROR);
+        prefs.setDefault(MsgEditorPreferences.REPORT_DUPL_VALUES_LEVEL,
+        		MsgEditorPreferences.VALIDATION_MESSAGE_WARNING);
+        prefs.setDefault(MsgEditorPreferences.REPORT_DUPL_VALUES_ONLY_IN_ROOT_LOCALE, true);
         prefs.setDefault(MsgEditorPreferences.REPORT_SIM_VALUES_WORD_COMPARE, true);
         prefs.setDefault(MsgEditorPreferences.REPORT_SIM_VALUES_PRECISION, 0.75d);
         
         prefs.setDefault(MsgEditorPreferences.EDITOR_TREE_HIDDEN, false);
+        
+        //locales filter: by default: don't filter locales.
+        prefs.setDefault(MsgEditorPreferences.FILTER_LOCALES_STRING_MATCHERS, "*"); //$NON-NLS-1$
+        prefs.addPropertyChangeListener(MsgEditorPreferences.getInstance());
+        
+        //setup the i18n validation nature and its associated builder
+        //on all java projects when the plugin is started
+        //an when the editor is opened.
+        prefs.setDefault(MsgEditorPreferences.ADD_MSG_EDITOR_BUILDER_TO_JAVA_PROJECTS, true); //$NON-NLS-1$
+        prefs.addPropertyChangeListener(MsgEditorPreferences.getInstance());
+        
         
     }
 

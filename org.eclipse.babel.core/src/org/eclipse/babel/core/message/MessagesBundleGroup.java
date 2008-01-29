@@ -285,18 +285,6 @@ public class MessagesBundleGroup extends AbstractMessageModel {
     }
     
     /**
-     * @see java.lang.Object#toString()
-     */
-    public String toString() {
-        String str = "MessagesBundleGroup=[bundles="; //$NON-NLS-1$
-        for (Iterator iter = messagesBundleIterator(); iter.hasNext();) {
-            str += iter.next().toString();
-        }
-        str += "]"; //$NON-NLS-1$
-        return str;
-    }
-    
-    /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {

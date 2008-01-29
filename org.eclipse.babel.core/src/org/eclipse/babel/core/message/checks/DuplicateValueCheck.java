@@ -33,6 +33,13 @@ public class DuplicateValueCheck implements IMessageCheck {
     public DuplicateValueCheck() {
         super();
     }
+    
+    /**
+     * Resets the collected keys to null.
+     */
+    public void reset() {
+    	duplicateKeys = null;
+    }
 
     public boolean checkKey(
             MessagesBundleGroup messagesBundleGroup, Message message) {
@@ -61,4 +68,5 @@ public class DuplicateValueCheck implements IMessageCheck {
     public String[] getDuplicateKeys() {
         return duplicateKeys;
     }
+    
 }

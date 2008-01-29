@@ -71,12 +71,6 @@ public class ValidationFailureEvent {
     public Locale getLocale() {
         return locale;
     }
-//    /**
-//     * @return the resource
-//     */
-//    public IResource getResource() {
-//        return resource;
-//    }
 
     
     

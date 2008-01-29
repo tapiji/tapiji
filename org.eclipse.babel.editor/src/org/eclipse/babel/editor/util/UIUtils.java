@@ -17,10 +17,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
+import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -38,6 +41,8 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.misc.StringMatcher;
 
 /**
  * Utility methods related to application UI.
@@ -84,9 +89,18 @@ public final class UIUtils {
     	    "incomplete.gif";  //$NON-NLS-1$
     
     /** Image registry. */
-    private static final ImageRegistry imageRegistry = new ImageRegistry();
+    private static final ImageRegistry imageRegistry =
+    	//TODO: REMOVE this comment eventually:
+    	//necessary to specify the display otherwise Display.getCurrent()
+    	//is called and will return null if this is not the UI-thread.
+    	//this happens if the builder is called and initialize this class:
+    	//the thread will not be the UI-thread.
+    	new ImageRegistry(PlatformUI.getWorkbench().getDisplay());
 
-//TO BE MOVED TO babel.core?
+    public static final String PDE_NATURE = "org.eclipse.pde.PluginNature"; //$NON-NLS-1$
+    public static final String JDT_JAVA_NATURE = "org.eclipse.jdt.core.javanature"; //$NON-NLS-1$
+    
+    
     /**
      * The root locale used for the original properties file.
      * This constant is defined in java.util.Local starting with jdk6.
@@ -126,7 +140,76 @@ public final class UIUtils {
         	locales[i] = (Locale) localesList.get(i);
         }
     }
-//--end of TO BE MOVED TO babel.core?
+    
+    /**
+     * @param locale
+     * @return true if the locale is selected by the local-filter defined in the rpeferences
+     * @see MsgEditorPreferences#getFilterLocalesStringMatcher()
+     */
+    public static boolean isDisplayed(Locale locale) {
+    	if (ROOT_LOCALE.equals(locale) || locale == null) {
+    		return true;
+    	}
+    	StringMatcher[] patterns = 
+    		MsgEditorPreferences.getInstance().getFilterLocalesStringMatchers();
+    	if (patterns == null || patterns.length == 0) {
+    		return true;
+    	}
+    	String locStr = locale.toString();
+    	for (int i = 0; i < patterns.length; i++) {
+    		if (patterns[i].match(locStr)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    /**
+     * Reads the filter of locales in the preferences and apply it
+     * to filter the passed locales.
+     * @param locales
+     * @return The new collection of locales; removed the ones not selected by the preferences.
+     */
+    public static Locale[] filterLocales(Locale[] locales) {
+    	StringMatcher[] patterns = 
+    		MsgEditorPreferences.getInstance().getFilterLocalesStringMatchers();
+    	Set already = new HashSet();
+    	//first look for the root locale:
+    	ArrayList result = new ArrayList();
+    	for (int j = 0; j < locales.length; j++) {
+    		Locale loc = locales[j];
+    		if (ROOT_LOCALE.equals(loc) || loc == null) {
+    			already.add(loc);
+    			result.add(loc);
+    			break;
+    		}
+    	}
+    	//now go through each pattern until already indexed locales found all locales
+    	//or we run out of locales.
+    	for (int pi = 0; pi < patterns.length; pi++) {
+    		StringMatcher pattern = patterns[pi];
+    		for (int j = 0; j < locales.length; j++) {
+        		Locale loc = locales[j];
+        		if (!already.contains(loc)) {
+        			if (pattern.match(loc.toString())) {
+            			already.add(loc);
+            			result.add(loc);
+            			if (already.size() == locales.length) {
+            		        for (int k = 0; k < locales.length; k++) {
+            		        	locales[k] = (Locale) result.get(k);
+            		        }
+        		        	return locales;
+            			}
+        			}
+        		}
+    		}
+    	}
+    	Locale[] filtered = new Locale[result.size()];
+        for (int k = 0; k < filtered.length; k++) {
+        	filtered[k] = (Locale) result.get(k);
+        }
+    	return filtered;
+    }
 
     /**
      * Constructor.
