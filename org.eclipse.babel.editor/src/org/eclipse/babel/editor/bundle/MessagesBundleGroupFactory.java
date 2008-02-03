@@ -21,10 +21,10 @@ import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.IEditorSite;
 
@@ -51,61 +51,45 @@ public final class MessagesBundleGroupFactory {
      * @return
      */
     public static MessagesBundleGroup createBundleGroup(IEditorSite site, IFile file) {
-//        MessagesBundleGroup defaultGroup = new MessagesBundleGroup(
-//                new DefaultBundleGroupStrategy(site, file));
-        //return defaultGroup;
-        /*
-         * Check if NL is supported.
-         */
-        //TODO implement NL support
-       if (!MsgEditorPreferences.getInstance().isNLSupportEnabled()) {
-           return createDefaultBundleGroup(site, file);
-       }
+//  	MessagesBundleGroup defaultGroup = new MessagesBundleGroup(
+//  	new DefaultBundleGroupStrategy(site, file));
+    	//return defaultGroup;
+    	/*
+    	 * Check if NL is supported.
+    	 */
+    	//TODO implement NL support
+    	if (!MsgEditorPreferences.getInstance().isNLSupportEnabled()) {
+    		return createDefaultBundleGroup(site, file);
+    	}
 
-       /*
-        * Check if there is an NL directory
-        */
-       IContainer container = file.getParent();
-       IResource nlDir = null;
-       while (container != null 
-               && (nlDir == null || nlDir.getType() != IResource.FOLDER)) {
-           nlDir = container.findMember("nl"); //$NON-NLS-1$
-           container = container.getParent();
-       }
-       if (nlDir == null || nlDir.getType() != IResource.FOLDER) {
-    	   
-    	   //now look if we are inside a fragment plugin:
-    	   String hostId = getHostPluginId(file);
-    	   if (hostId != null) {
-    	   	   //we are indeed inside a fragment    
-    	   	   //use the appropriate strategy.
-    		   return new MessagesBundleGroup(
-    	                new NLFragmentBundleGroupStrategy(site, file, hostId));
-    	   }
-    	   
-    	   return createDefaultBundleGroup(site, file);
-       }
+    	//check we are inside an eclipse plugin project where NL is supported at runtime:
+    	try {
+    		IProject proj = file.getProject();
+    		if (proj == null || proj.getNature(UIUtils.PDE_NATURE) == null) { //$NON-NLS-1$
+    			return createDefaultBundleGroup(site, file);
+    		}
+    	} catch (CoreException e) {
+    		return createDefaultBundleGroup(site, file);
+    	}
 
-       /*
-        * Ensures NL directory is part of file path, or that file dir
-        * is parent of NL directory.
-        */
-       IPath filePath = file.getFullPath();
-       IPath nlDirPath = nlDir.getFullPath();
-       if (!nlDirPath.isPrefixOf(filePath)
-               && !filePath.removeLastSegments(1).isPrefixOf(nlDirPath)) {
-    	   return createDefaultBundleGroup(site, file);
-       }
-       
-       /*
-        * Ensure that there are no other files which could make a standard
-        * resource bundle.
-        */
-       MessagesBundleGroup defaultGroup = createDefaultBundleGroup(site, file);
-       if (defaultGroup.getMessagesBundleCount() > 1) {
-    	   return createDefaultBundleGroup(site, file);
-       }
-       return new MessagesBundleGroup(new NLPluginBundleGroupStrategy());
+    	IFolder nl = getNLFolder(file);
+    	//look if we are inside a fragment plugin:
+    	String hostId = getHostPluginId(file);
+    	if (hostId != null) {
+    		//we are indeed inside a fragment.
+    		//use the appropriate strategy.
+    		return new MessagesBundleGroup(
+    				new NLFragmentBundleGroupStrategy(site, file, hostId, nl));
+    	}
+
+    	/*
+    	 * Check if there is an NL directory
+    	 * something like: nl/en/US/messages.properties
+    	 * which is for eclipse runtime equivalent to: messages_en_US.properties
+    	 */
+    	return new MessagesBundleGroup(new NLPluginBundleGroupStrategy(
+    			site, file, nl));
+
     }
 
     private static MessagesBundleGroup createDefaultBundleGroup(IEditorSite site, IFile file) {
@@ -182,6 +166,27 @@ public final class MessagesBundleGroupFactory {
 		return null;
     }
     
-    
+    /**
+     * @see http://dev.eclipse.org/mhonarc/lists/babel-dev/msg00111.
+     * 
+     * @param openedFile
+     * @return The nl folder that is a direct child of the project and an ancestor
+     * of the opened file or null if no such thing.
+     */
+    protected static IFolder getNLFolder(IFile openedFile) {
+    	IContainer cont = openedFile.getParent();
+    	while (cont != null) {
+    		if (cont.getParent() != null
+    				&& cont.getParent().getType() == IResource.PROJECT) {
+    			if (cont.getName().equals("nl")) {
+    				return (IFolder)cont;
+    			}
+    			return null;
+    		}
+    		cont = cont.getParent();
+    	}
+    	return null;
+    }   
         
 }
+ 

@@ -53,22 +53,22 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 import org.osgi.framework.Bundle;
 
-
-
 /**
- * This strategy is used when a resource bundle that belongs to Plugin-Fragment project
- * is loaded.
+ * This strategy is used when a resource bundle that belongs to Plugin-Fragment 
+ * project is loaded.
  * <p>
  * This class loads resource bundles following the default strategy.
  * If no root locale resource is found, it tries to locate that resource
- * inside the host-plugin of the fragment. The host plugin is searched inside the workspace
+ * inside the host-plugin of the fragment. The host plugin is searched inside
+ * the workspace
  * first and if not found inside the eclipse-platform being run.
  * </p>
  * <p>
  * This is useful for the developement of i18n packages for eclipse plugin:
  * The best practice is to define the root locale messages inside the plugin
  * itself and to define the other locales in a fragment that host that plugin.
- * <br/>Thanks to this strategy the root locale can be used by the user when he edits
+ * <br/>Thanks to this strategy the root locale can be used by the user when
+ *  he edits
  * the messages defined in the fragment alone.
  * <p>
  * See Bug #214521.
@@ -76,18 +76,22 @@ import org.osgi.framework.Bundle;
  * @author Pascal Essiembre
  * @author Hugues Malphettes
  */
-public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
+public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
 
     private static String BUNDLE_NAME = "Bundle-SymbolicName:"; //$NON-NLS-1$
 	
 	private final String _fragmentHostID;
+	
+	private boolean hostPluginInWorkspaceWasLookedFor = false;
+	private IProject hostPluginInWorkspace;
+	
 		
 	/**
      * 
      */
     public NLFragmentBundleGroupStrategy(IEditorSite site, IFile file,
-    		String fragmentHostID) {
-        super(site, file);
+    		String fragmentHostID, IFolder nlFolder) {
+        super(site, file, nlFolder);
         _fragmentHostID = fragmentHostID;
     }
 
@@ -100,7 +104,8 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
     	//if that is the case we don't try to load extra properties    	
     	for (int i = 0 ; i < defaultFiles.length ; i++) {
     	    MessagesBundle mb = defaultFiles[i];
-    		if (UIUtils.ROOT_LOCALE.equals(mb.getLocale()) || mb.getLocale() == null) {
+    		if (UIUtils.ROOT_LOCALE.equals(mb.getLocale())
+    		        || mb.getLocale() == null) {
     			//... if this is the base one then no need to look any further.:
     			return defaultFiles;
     		}
@@ -108,9 +113,11 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
     	try {
 			MessagesBundle locatedBaseProperties = loadDefaultMessagesBundle();
 			if (locatedBaseProperties != null) {
-				MessagesBundle[] result = new MessagesBundle[defaultFiles.length+1];
+				MessagesBundle[] result =
+				        new MessagesBundle[defaultFiles.length+1];
 				result[0] = locatedBaseProperties;
-				System.arraycopy(defaultFiles, 0, result, 1, defaultFiles.length);
+				System.arraycopy(
+				        defaultFiles, 0, result, 1, defaultFiles.length);
 				return result;
 			}
 		} catch (IOException e) {
@@ -124,14 +131,16 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
     }
 
     /**
-     * @see org.eclipse.babel.core.bundle.IBundleGroupStrategy#createBundle(java.util.Locale)
+     * @see org.eclipse.babel.core.bundle.IBundleGroupStrategy
+     *          #createBundle(java.util.Locale)
      */
     public MessagesBundle createMessagesBundle(Locale locale) {
         return super.createMessagesBundle(locale);
     }
 
     /**
-     * @see org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy#createMessagesBundleGroupName()
+     * @see org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy
+     *          #createMessagesBundleGroupName()
      */
     public String createMessagesBundleGroupName() {
         return super.createMessagesBundleGroupName();
@@ -145,66 +154,64 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
      * @throws CoreException
      * @throws IOException 
      */
-    private MessagesBundle loadDefaultMessagesBundle() throws IOException, CoreException {
+    private MessagesBundle loadDefaultMessagesBundle()
+            throws IOException, CoreException {
         IEditorInput newEditorInput = null;
         IPath propertiesBasePath = getPropertiesPath();
         //look for the bundle with the given symbolic name.
         //first look into the workspace itself through the various pde projects
-        IProject thisProject = getOpenedFile().getProject();
-        IResource[] members = ((IContainer)thisProject.getParent()).members();
         String resourceLocationLabel = null;
-        for (int i = 0 ; i < members.length ; i++ ) {
-            IResource childRes = members[i];
-        	if (childRes != thisProject && childRes.getType() == IResource.PROJECT) {
-        		String bundle = MessagesBundleGroupFactory
-        				.getPDEManifestAttribute(childRes, BUNDLE_NAME);
-        		if (_fragmentHostID.equals(bundle)) {
-        			IProject developpedProject = (IProject)childRes;
-        			IFile file = getPropertiesFile(developpedProject, propertiesBasePath);
-        			if (!file.exists()) {
-        				//try inside the jars:
-        				String[] jarredProps = getJarredPropertiesAndResourceLocationLabel(developpedProject, propertiesBasePath);
-        				if (jarredProps != null) {
-        					if (site == null) {
-        						//then we are currently executing a build,
-        						//not creating editors:
-        						MsgEditorPreferences prefs = MsgEditorPreferences.getInstance();
-        						return new MessagesBundle(new PropertiesReadOnlyResource(
-        									UIUtils.ROOT_LOCALE, 
-        	                                new PropertiesSerializer(prefs),
-        	                                new PropertiesDeserializer(prefs),
-        	                                jarredProps[0], jarredProps[1]));
-        					}
-        					newEditorInput = new DummyEditorInput(jarredProps[0], 
-        							 getPropertiesPath().lastSegment(),
-        							 jarredProps[1]);
-        					resourceLocationLabel = jarredProps[1];
-        					break;
-        				}
-        			}
-        			//well if the file does not exist, it will be clear where we were looking for
-        			//it and that we could not find it
-        			if (site == null) {
+
+		IProject developpedProject = getHostPluginProjectDevelopedInWorkspace();
+		if (developpedProject != null) {
+			IFile file = getPropertiesFile(
+			        developpedProject, propertiesBasePath);
+			if (!file.exists()) {
+				//try inside the jars:
+				String[] jarredProps =
+					getJarredPropertiesAndResourceLocationLabel(
+					        developpedProject, propertiesBasePath);
+				if (jarredProps != null) {
+					if (site == null) {
 						//then we are currently executing a build,
 						//not creating editors:
-        				if (file.exists()) {
-							MsgEditorPreferences prefs = MsgEditorPreferences.getInstance();
-							return new MessagesBundle(new PropertiesIFileResource(
-										UIUtils.ROOT_LOCALE, 
-		                                new PropertiesSerializer(prefs),
-		                                new PropertiesDeserializer(prefs), file));
-        				} else {
-        					//during the build if the file does not exist. skip.
-        					return null;
-        				}
-        			}
-    				newEditorInput = new FileEditorInput(file);
-        	        //assume there is no more than one version of the plugin
-        	        //in the same workspace.
-        	        break;
-        		}
-        	}
-        }
+						MsgEditorPreferences prefs = 
+						        MsgEditorPreferences.getInstance();
+						return new MessagesBundle(
+						        new PropertiesReadOnlyResource(
+									UIUtils.ROOT_LOCALE, 
+	                                new PropertiesSerializer(prefs),
+	                                new PropertiesDeserializer(prefs),
+	                                jarredProps[0], jarredProps[1]));
+					}
+					newEditorInput = new DummyEditorInput(jarredProps[0], 
+							 getPropertiesPath().lastSegment(),
+							 jarredProps[1]);
+					resourceLocationLabel = jarredProps[1];
+				}
+			}
+			//well if the file does not exist, it will be clear where we were
+			//looking for it and that we could not find it
+			if (site == null) {
+				//then we are currently executing a build,
+				//not creating editors:
+				if (file.exists()) {
+					MsgEditorPreferences prefs =
+					        MsgEditorPreferences.getInstance();
+					return new MessagesBundle(new PropertiesIFileResource(
+								UIUtils.ROOT_LOCALE, 
+                                new PropertiesSerializer(prefs),
+                                new PropertiesDeserializer(prefs), file));
+				} else {
+					//during the build if the file does not exist. skip.
+					return null;
+				}
+			}
+			newEditorInput = new FileEditorInput(file);
+	        //assume there is no more than one version of the plugin
+	        //in the same workspace.
+		}
+
         //second look into the current platform.
         if (newEditorInput == null) {
             InputStream in = null;
@@ -216,7 +223,8 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
 	            if (bundle != null) {
 	                //at this point there are 2 strategies:
 	                //use the osgi apis to look into the bundle's resources
-	                //or grab the physical artifact behind the bundle and dive into it.
+	                //or grab the physical artifact behind the bundle and dive
+	                //into it.
 	                resourceName = propertiesBasePath.toString();
 	                URL url = bundle.getEntry(resourceName);
 	                if (url != null) {
@@ -224,8 +232,8 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
 	                    resourceLocationLabel = url.toExternalForm();
 	                } else {
 	                	//it seems this is unused. at least
-		                //we might need to transform the path into the name of the properties
-		                //for the classloader here.
+		                //we might need to transform the path into the name of
+	                    //the properties for the classloader here.
 		                url = bundle.getResource(resourceName);
 		                if (url != null) {
 		                    in = url.openStream();
@@ -239,15 +247,18 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
 	            	if (site == null) {
 						//then we are currently executing a build,
 						//not creating editors:
-						MsgEditorPreferences prefs = MsgEditorPreferences.getInstance();
-						return new MessagesBundle(new PropertiesReadOnlyResource(
+						MsgEditorPreferences prefs =
+						        MsgEditorPreferences.getInstance();
+						return new MessagesBundle(
+						        new PropertiesReadOnlyResource(
 									UIUtils.ROOT_LOCALE, 
 	                                new PropertiesSerializer(prefs),
 	                                new PropertiesDeserializer(prefs),
 	                                contents, resourceLocationLabel));
 	            	}
 	                newEditorInput = new DummyEditorInput(contents, 
-	                        getPropertiesPath().lastSegment(), getPropertiesPath().toString());
+	                        getPropertiesPath().lastSegment(),
+	                        getPropertiesPath().toString());
 	            }
             } finally {
             	if (in != null) try { in.close(); } catch (IOException ioe) {}
@@ -259,8 +270,10 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
         if (newEditorInput != null) {
             TextEditor textEditor = null;
             if (site != null) {
-            	//during a build the site is not there and we don't edit things anyways.
-            	//we need a new type of PropertiesEditorResource. not based on file and ifile and
+            	//during a build the site is not there and we don't edit things
+                //anyways.
+            	//we need a new type of PropertiesEditorResource. not based on
+                //file and ifile and
             	//editorinput.
 	            try {
 	                // Use PropertiesFileEditor if available
@@ -291,7 +304,9 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
     }
     
     private String getContents(InputStream in) throws IOException {
-        Reader reader = new BufferedReader(new InputStreamReader(in));//, "ISO 8859-1");need to find the actual name
+        Reader reader = new BufferedReader(
+                new InputStreamReader(in));
+                //, "ISO 8859-1");need to find  actual name
         int ch;
         StringBuffer buffer = new StringBuffer();
         while ((ch = reader.read()) > -1) {
@@ -325,13 +340,18 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
     /**
      * @return The path of the base properties file. Relative to a source folder
      * or the root of the project if there is no source folder.
-     * 
-     * For example if the properties file is for the package org.eclipse.ui.workbench.internal.messages.properties
+     * <p>
+     * For example if the properties file is for the package 
+     * org.eclipse.ui.workbench.internal.messages.properties
      * The path return is org/eclipse/ui/workbench/internal/messages/properties
+     * </p>
      */
     protected IPath getPropertiesPath() {
-    	IPath projRelative = super.getOpenedFile().getParent().getProjectRelativePath();
-    	Collection srcPathes = getSourceFolderPathes(getOpenedFile().getProject());
+    	IPath projRelative = super.basePathInsideNL == null
+    		? super.getOpenedFile().getParent().getProjectRelativePath()
+    		: new Path(super.basePathInsideNL);
+    	Collection srcPathes = getSourceFolderPathes(
+    	        getOpenedFile().getProject());
     	if (srcPathes == null) {
     		return projRelative.append(getBaseName() + ".properties");
     	}
@@ -348,12 +368,13 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
     }
     
     /**
-     * 
-     * @param hostPluginProject The project in the workspace that is the host plugin
+     * @param hostPluginProject The project in the workspace that is the host
+     *        plugin
      * @param propertiesBasePath The result of getPropertiesPath();
      * @return
      */
-    protected IFile getPropertiesFile(IProject hostPluginProject, IPath propertiesBasePath) {
+    protected IFile getPropertiesFile(
+            IProject hostPluginProject, IPath propertiesBasePath) {
     	//first look directly in the plugin resources:
     	IResource r = hostPluginProject.findMember(propertiesBasePath);
     	if (r != null &&  r.getType() == IResource.FILE) {
@@ -366,7 +387,8 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
         	Iterator iter = srcPathes.iterator();
         	while(iter.hasNext()) {
         		String srcPath = (String) iter.next();
-        		IFolder srcFolder = hostPluginProject.getFolder(new Path(srcPath));
+        		IFolder srcFolder = hostPluginProject.getFolder(
+        		        new Path(srcPath));
         		if (srcFolder.exists()) {
         			r = srcFolder.findMember(propertiesBasePath);
         	    	if (r != null &&  r.getType() == IResource.FILE) {
@@ -386,7 +408,8 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
      * @return The content and location label of the properties or null if
      * they could not be found.
      */
-    private String[] getJarredPropertiesAndResourceLocationLabel(IProject hostPluginProject, IPath propertiesBasePath) {
+    private String[] getJarredPropertiesAndResourceLocationLabel(
+            IProject hostPluginProject, IPath propertiesBasePath) {
     	//third look into the jars:
     	Collection libPathes = getLibPathes(hostPluginProject);
     	if (libPathes != null) {
@@ -404,14 +427,23 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
         						jf = new JarFile(file);
         						JarEntry je = jf.getJarEntry(entryName);
         						if (je != null) {
-        							String content = getContents(jf.getInputStream(je));
-        							String location = jar.getFullPath().toString() + "!/" + entryName;
+        							String content = 
+        							        getContents(jf.getInputStream(je));
+        							String location = 
+        							        jar.getFullPath().toString()
+        							      + "!/" + entryName;
         							return new String[] {content, location};
         						}
         					} catch (IOException e) {
         						
         					} finally {
-        						if (jf != null) try { jf.close(); } catch (IOException e) {}
+        						if (jf != null) {
+        						    try { 
+        						        jf.close();
+        						    } catch (IOException e) {
+        						        // swallow
+        						    }
+        						}
         					}
         				}
         			}
@@ -426,7 +458,8 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
      * Redo a little parser utility in order to not depend on pde.
      * 
      * @param proj
-     * @return The pathes of the source folders extracted from the .classpath file
+     * @return The pathes of the source folders extracted from 
+     *          the .classpath file
      */
     protected Collection getSourceFolderPathes(IProject proj) {
     	return getClasspathEntryPathes(proj, "src"); //$NON-NLS-1$
@@ -435,12 +468,14 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
      * Redo a little parser utility in order to not depend on pde.
      * 
      * @param proj
-     * @return The pathes of the source folders extracted from the .classpath file
+     * @return The pathes of the source folders extracted from the
+     *           .classpath file
      */
     protected Collection getLibPathes(IProject proj) {
     	return getClasspathEntryPathes(proj, "lib"); //$NON-NLS-1$
     }
-    protected Collection getClasspathEntryPathes(IProject proj, String classpathentryKind) {
+    protected Collection getClasspathEntryPathes(
+            IProject proj, String classpathentryKind) {
     	IFile classpathRes = proj.getFile(".classpath");
     	if (!classpathRes.exists()) {
     		return null;
@@ -457,13 +492,15 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
 			 String line = lnr.readLine();
 			 while (line != null) {
 				if (line.indexOf("<classpathentry ") != -1
-						&& line.indexOf(" kind=\"" + classpathentryKind + "\" ") != -1) {
+						&& line.indexOf(" kind=\"" + classpathentryKind + "\" ")
+						!= -1) {
 					int pathIndex = line.indexOf(" path=\"");
 					if (pathIndex != -1) {
 						int secondQuoteIndex = line.indexOf('\"',
 								pathIndex + " path=\"".length());
 						if (secondQuoteIndex != -1) {
-							res.add(line.substring(pathIndex + " path=\"".length(),
+							res.add(line.substring(
+							        pathIndex + " path=\"".length(),
 									secondQuoteIndex));
 						}
 					}
@@ -508,7 +545,8 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
          * @param contents
          * @param _name
          */
-        public DummyEditorInput(String contents, String _name, boolean isEditable) {
+        public DummyEditorInput(
+                String contents, String _name, boolean isEditable) {
             this(contents, _name, _name);
         }
         /**
@@ -596,6 +634,102 @@ public class NLFragmentBundleGroupStrategy extends DefaultBundleGroupStrategy {
         public boolean isReadOnly() {
             return true;
         }
-
     }
+    
+    /**
+     * Called when using an nl structure.
+     * We need to find out whether the variant is in fact a folder.
+     * If we locate a folder inside the project with this name we assume it is
+     * not a variant.
+     * <p>
+     * This method is overridden inside the NLFragment thing as we need to
+     * check 2 projects over there:
+     * the host-plugin project and the current project.
+     * </p>
+     * @param possibleVariant
+     * @return
+     */
+    protected boolean isExistingFirstFolderForDefaultLocale(String folderName) {
+    	IProject thisProject = getOpenedFile().getProject();
+    	if (thisProject == null) {
+    		return false;
+    	}
+		 boolean res = thisProject.getFolder(folderName).exists();
+		 if (res) {
+			 //that is in the same plugin.
+			 return true;
+		 }
+		 IProject developpedProject = 
+		         getHostPluginProjectDevelopedInWorkspace();
+		 if (developpedProject != null) {
+			 res = developpedProject.getFolder(folderName).exists();
+			 if (res) {
+				 //that is in the same plugin.
+				 return true;
+			 }
+			 //we don't need to look in the jar:
+			 //when this method is called it is because we
+			 //are looking inside the nl folder which is never inside a source
+			 //folder or inside a jar.
+			 return false;
+		 }
+		 //ok no project in the workspace with this.
+		 //maybe in the bundle
+		 Bundle bundle = getHostPluginBundleInPlatform();
+		 if (bundle != null) {
+			 if (bundle.getEntry(folderName) != null) {
+				 return true;
+			 }
+		 }
+		 
+		 return false;
+    }
+    
+    /**
+     * Look for the host plugin inside the workspace itself.
+     * Caches the result.
+     * @return
+     */
+    private IProject getHostPluginProjectDevelopedInWorkspace() {
+    	if (hostPluginInWorkspaceWasLookedFor) {
+    		return hostPluginInWorkspace;
+    	} else {
+    		hostPluginInWorkspaceWasLookedFor = true;
+    	}
+    	
+    	IProject thisProject = getOpenedFile().getProject();
+    	if (thisProject == null) {
+    		return null;
+    	}
+		try {
+			 //now look in the workspace for the host-plugin as a 
+		     //developed project:
+			 IResource[] members =
+			         ((IContainer)thisProject.getParent()).members();
+			 for (int i = 0 ; i < members.length ; i++ ) {
+				 IResource childRes = members[i];
+				 if (childRes != thisProject 
+				         && childRes.getType() == IResource.PROJECT) {
+					 String bundle = MessagesBundleGroupFactory
+					 	.getPDEManifestAttribute(childRes, BUNDLE_NAME);
+					 if (_fragmentHostID.equals(bundle)) {
+						 hostPluginInWorkspace = (IProject)childRes;
+						 return hostPluginInWorkspace;
+					 }
+				 }
+			 }
+			 //ok no project in the workspace with this.
+		 } catch (Exception e) {
+			 
+		 }
+		 return null;
+    }
+    private Bundle getHostPluginBundleInPlatform() {
+    	Bundle bundle = Platform.getBundle(_fragmentHostID);
+        if (bundle != null) {
+        	return bundle;
+        }
+		return null;
+    }
+    
 }

@@ -48,7 +48,7 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
           + "PropertiesFileEditor"; //$NON-NLS-1$
 
     /** Empty bundle array. */
-    private static final MessagesBundle[] EMPTY_BUNDLES = new MessagesBundle[] {};
+    protected static final MessagesBundle[] EMPTY_BUNDLES = new MessagesBundle[] {};
     
     /** Eclipse editor site. */
     protected IEditorSite site;

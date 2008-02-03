@@ -136,6 +136,9 @@ public class Builder extends IncrementalProjectBuilder {
         if (resource instanceof IFile && resource.getName().endsWith(
                 ".properties")) { //$NON-NLS-1$ //TODO have customized?
             IFile file = (IFile) resource;
+            if (file.isDerived()) {
+            	return;
+            }
             //System.err.println("Looking at " + file.getFullPath());
             deleteMarkers(file);
             MessagesBundleGroup msgBundleGrp = null;

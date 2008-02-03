@@ -34,10 +34,10 @@ import org.eclipse.ui.texteditor.ITextEditorActionConstants;
  * Multi-page contributor replaces the contributors for the individual editors
  * in the multi-page editor.
  */
-public class MessagesEditorContributor extends MultiPageEditorActionBarContributor {
+public class MessagesEditorContributor 
+        extends MultiPageEditorActionBarContributor {
 	private IEditorPart activeEditorPart;
 
-//    private Action sampleAction;
     private KeyTreeVisibleAction toggleKeyTreeAction;
     private NewLocaleAction newLocaleAction;
     
@@ -65,13 +65,11 @@ public class MessagesEditorContributor extends MultiPageEditorActionBarContribut
      *         #setActivePage(org.eclipse.ui.IEditorPart)
 	 */
 	public void setActivePage(IEditorPart part) {
-//        System.out.println("activePage editor is:" + rbEditor);
         if (activeEditorPart == part) {
 			return;
         }
 
 		activeEditorPart = part;
-//        System.out.println("active page, active editor part:" +activeEditorPart);
 
 		IActionBars actionBars = getActionBars();
 		if (actionBars != null) {

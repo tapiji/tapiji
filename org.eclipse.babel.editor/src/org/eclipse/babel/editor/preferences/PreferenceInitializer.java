@@ -41,6 +41,7 @@ public class PreferenceInitializer extends
         prefs.setDefault(MsgEditorPreferences.KEY_TREE_HIERARCHICAL, true);
         prefs.setDefault(MsgEditorPreferences.KEY_TREE_EXPANDED, true);
         prefs.setDefault(MsgEditorPreferences.SUPPORT_FRAGMENTS, true);
+        prefs.setDefault(MsgEditorPreferences.NL_SUPPORT_ENABLED, true);
         prefs.setDefault(MsgEditorPreferences.LOADING_ONLY_FRAGMENT_RESOURCES, false);
         
         //Formatting
