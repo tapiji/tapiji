@@ -25,6 +25,7 @@ import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.resource.EclipsePropertiesEditorResource;
 import org.eclipse.babel.editor.util.UIUtils;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -97,14 +98,24 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
      *          #loadMessagesBundles()
      */
     public MessagesBundle[] loadMessagesBundles() throws MessageException {
+        Collection bundles = new ArrayList();
+        collectBundlesInContainer(file.getParent(), bundles);
+        return (MessagesBundle[]) bundles.toArray(EMPTY_BUNDLES);
+    }
+    
+    protected void collectBundlesInContainer(IContainer container,
+    		Collection bundlesCollector) throws MessageException {
+    	if (!container.exists()) {
+    		return;
+    	}
         IResource[] resources = null;
         try {
-            resources = file.getParent().members();
+            resources = container.members();
         } catch (CoreException e) {
             throw new MessageException(
                    "Can't load resource bundles.", e); //$NON-NLS-1$
         }
-        Collection bundles = new ArrayList();
+
         for (int i = 0; i < resources.length; i++) {
             IResource resource = resources[i];
             String resourceName = resource.getName();
@@ -115,12 +126,11 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
                         fileMatchPattern, "$2"); //$NON-NLS-1$
                 Locale locale = BabelUtils.parseLocale(localeText);
                 if (UIUtils.isDisplayed(locale)) {
-                	bundles.add(createBundle(locale, resource));
+                	bundlesCollector.add(createBundle(locale, resource));
                 }
             }
         }
-        return (MessagesBundle[]) bundles.toArray(EMPTY_BUNDLES);
-
+        
     }
 
     /* (non-Javadoc)

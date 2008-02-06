@@ -78,7 +78,6 @@ import org.osgi.framework.Bundle;
  */
 public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
 
-    private static String BUNDLE_NAME = "Bundle-SymbolicName:"; //$NON-NLS-1$
 	
 	private final String _fragmentHostID;
 	
@@ -207,7 +206,9 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
 					return null;
 				}
 			}
-			newEditorInput = new FileEditorInput(file);
+			if (file.exists()) {
+				newEditorInput = new FileEditorInput(file);
+			}
 	        //assume there is no more than one version of the plugin
 	        //in the same workspace.
 		}
@@ -350,21 +351,8 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
     	IPath projRelative = super.basePathInsideNL == null
     		? super.getOpenedFile().getParent().getProjectRelativePath()
     		: new Path(super.basePathInsideNL);
-    	Collection srcPathes = getSourceFolderPathes(
-    	        getOpenedFile().getProject());
-    	if (srcPathes == null) {
-    		return projRelative.append(getBaseName() + ".properties");
-    	}
-    	String projRelativePathStr = projRelative.toString();
-    	Iterator iter = srcPathes.iterator();
-        while(iter.hasNext()) {
-            String srcPath = (String) iter.next();
-    		if (projRelativePathStr.startsWith(srcPath)) {
-    			return new Path(projRelativePathStr.substring(srcPath.length()))
-    							.append(getBaseName() + ".properties");
-    		}
-    	}
-    	return projRelative.append(getBaseName() + ".properties");
+        return removePathToSourceFolder(projRelative)
+        			.append(getBaseName() + ".properties"); //NON-NLS-1$
     }
     
     /**
@@ -461,7 +449,7 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
      * @return The pathes of the source folders extracted from 
      *          the .classpath file
      */
-    protected Collection getSourceFolderPathes(IProject proj) {
+    protected static Collection getSourceFolderPathes(IProject proj) {
     	return getClasspathEntryPathes(proj, "src"); //$NON-NLS-1$
     }
     /**
@@ -474,7 +462,7 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
     protected Collection getLibPathes(IProject proj) {
     	return getClasspathEntryPathes(proj, "lib"); //$NON-NLS-1$
     }
-    protected Collection getClasspathEntryPathes(
+    protected static Collection getClasspathEntryPathes(
             IProject proj, String classpathentryKind) {
     	IFile classpathRes = proj.getFile(".classpath");
     	if (!classpathRes.exists()) {
@@ -546,8 +534,8 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
          * @param _name
          */
         public DummyEditorInput(
-                String contents, String _name, boolean isEditable) {
-            this(contents, _name, _name);
+                String contents, String name, boolean isEditable) {
+            this(contents, name, name);
         }
         /**
          * The complete constructor.
@@ -710,8 +698,7 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
 				 IResource childRes = members[i];
 				 if (childRes != thisProject 
 				         && childRes.getType() == IResource.PROJECT) {
-					 String bundle = MessagesBundleGroupFactory
-					 	.getPDEManifestAttribute(childRes, BUNDLE_NAME);
+					 String bundle = MessagesBundleGroupFactory.getBundleId(childRes);
 					 if (_fragmentHostID.equals(bundle)) {
 						 hostPluginInWorkspace = (IProject)childRes;
 						 return hostPluginInWorkspace;

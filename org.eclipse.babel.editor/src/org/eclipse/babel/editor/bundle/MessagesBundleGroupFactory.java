@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
@@ -51,13 +53,9 @@ public final class MessagesBundleGroupFactory {
      * @return
      */
     public static MessagesBundleGroup createBundleGroup(IEditorSite site, IFile file) {
-//  	MessagesBundleGroup defaultGroup = new MessagesBundleGroup(
-//  	new DefaultBundleGroupStrategy(site, file));
-    	//return defaultGroup;
     	/*
     	 * Check if NL is supported.
     	 */
-    	//TODO implement NL support
     	if (!MsgEditorPreferences.getInstance().isNLSupportEnabled()) {
     		return createDefaultBundleGroup(site, file);
     	}
@@ -73,15 +71,40 @@ public final class MessagesBundleGroupFactory {
     	}
 
     	IFolder nl = getNLFolder(file);
+    	
     	//look if we are inside a fragment plugin:
     	String hostId = getHostPluginId(file);
     	if (hostId != null) {
     		//we are indeed inside a fragment.
     		//use the appropriate strategy.
+    		//we are a priori not interested in
+    		//looking for the files of other languages
+    		//that might be in other fragments plugins.
+    		//this behavior could be changed.
     		return new MessagesBundleGroup(
     				new NLFragmentBundleGroupStrategy(site, file, hostId, nl));
     	}
+    	
+    	if (site == null) {
+    		//this is during the build we are not interested in validating files
+    		//coming from other projects:
+    		//no need to look in other projects for related files.
+    		return new MessagesBundleGroup(new NLPluginBundleGroupStrategy(
+        			site, file, nl));
+    	}
 
+    	//if we are in a host plugin we might have fragments for it.
+    	//let's look for them so we can eventually load them all.
+    	//in this situation we are only looking for those fragments
+    	//inside the workspace and with files being developed there;
+    	//in other words: we don't look for read-only resources
+    	//located inside jars or the platform itself.
+    	IProject[] frags = collectTargetingFragments(file);
+    	if (frags != null) {
+    		return new MessagesBundleGroup(new NLPluginBundleGroupStrategy(
+        			site, file, nl, frags));
+    	}
+    	
     	/*
     	 * Check if there is an NL directory
     	 * something like: nl/en/US/messages.properties
@@ -99,14 +122,23 @@ public final class MessagesBundleGroupFactory {
     
 //reading plugin manifests related utility methods. TO BE MOVED TO CORE ?
     
-    private static String FRAG_HOST = "Fragment-Host:"; //$NON-NLS-1$
+    private static final String BUNDLE_NAME = "Bundle-SymbolicName:"; //$NON-NLS-1$
+    private static final String FRAG_HOST = "Fragment-Host:"; //$NON-NLS-1$
     /**
      * @param file
      * @return The id of the host-plugin if the edited file is inside a
      * pde-project that is a fragment. null otherwise.
      */
-    private static String getHostPluginId(IFile file) {
+    static String getHostPluginId(IResource file) {
     	return getPDEManifestAttribute(file, FRAG_HOST);
+    }
+    /**
+     * @param file
+     * @return The id of the BUNDLE_NAME if the edited file is inside a
+     * pde-project. null otherwise.
+     */
+    static String getBundleId(IResource file) {
+    	return getPDEManifestAttribute(file, BUNDLE_NAME);
     }
     /**
      * Fetches the IProject in which openedFile is located.
@@ -116,7 +148,7 @@ public final class MessagesBundleGroupFactory {
      */
     static String getPDEManifestAttribute(IResource openedFile, String key) {
     	IProject proj = openedFile.getProject();
-    	if (proj == null && proj.isAccessible()) {
+    	if (proj == null || !proj.isAccessible()) {
     		return null;
     	}
     	try {
@@ -186,7 +218,48 @@ public final class MessagesBundleGroupFactory {
     		cont = cont.getParent();
     	}
     	return null;
-    }   
+    }
+    
+    private static final IProject[] EMPTY_PROJECTS = new IProject[0];
+    
+    /**
+     * Searches in the workspace for plugins that are fragment that target
+     * the current pde plugin.
+     * 
+     * @param openedFile
+     * @return
+     */
+    protected static IProject[] collectTargetingFragments(IFile openedFile) {
+    	IProject thisProject = openedFile.getProject();
+    	if (thisProject == null) {
+    		return null;
+    	}
+    	Collection projs = null;
+    	String bundleId = getBundleId(openedFile);
+		try {
+			 //now look in the workspace for the host-plugin as a 
+		     //developed project:
+			 IResource[] members =
+			         ((IContainer)thisProject.getParent()).members();
+			 for (int i = 0 ; i < members.length ; i++ ) {
+				 IResource childRes = members[i];
+				 if (childRes != thisProject 
+				         && childRes.getType() == IResource.PROJECT) {
+					 String hostId = getHostPluginId(childRes);
+					 if (bundleId.equals(hostId)) {
+						 if (projs == null) {
+							 projs = new ArrayList();
+						 }
+						 projs.add(childRes);
+					 }
+				 }
+			 }
+		 } catch (Exception e) {
+			 
+		 }
+		 return projs == null ? null
+				: (IProject[]) projs.toArray(EMPTY_PROJECTS);
+    }
         
 }
  
