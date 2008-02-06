@@ -11,6 +11,11 @@
 package org.eclipse.babel.editor.util;
 
 import java.awt.ComponentOrientation;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,6 +29,8 @@ import java.util.Set;
 
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -422,5 +429,54 @@ public final class UIUtils {
         }
         return SWT.LEFT_TO_RIGHT;
     }
+    
+    /**
+     * Parses manually the project descriptor looking for a nature.
+     * <p>
+     * Calling IProject.getNature(naturedId) throws exception if the 
+     * Nature is not defined in the currently executed platform.
+     * For example if looking for a pde nature inside an eclipse-platform.
+     * </p>
+     * <p>
+     * This method returns the result without that constraint.
+     * </p>
+     * @param proj The project to examine
+     * @param nature The nature to look for.
+     * @return true if the nature is defined in that project.
+     */
+    public static boolean hasNature(
+            IProject proj, String nature) {
+    	IFile projDescr = proj.getFile(".project"); //$NON-NLS-1$
+    	if (!projDescr.exists()) {
+    		return false;//a corrupted project
+    	}
+    	
+    	//<classpathentry kind="src" path="src"/>
+		InputStream in = null;
+		try {
+			 in = ((IFile)projDescr).getContents();
+			//supposedly in utf-8. should not really matter for us
+			 Reader r = new InputStreamReader(in, "UTF-8");
+			 LineNumberReader lnr = new LineNumberReader(r);
+			 String line = lnr.readLine();
+			 while (line != null) {
+				if (line.trim().equals("<nature>" + nature + "</nature>")) {
+					lnr.close();
+					 r.close();
+					return true;
+				}
+				line = lnr.readLine();
+			 }
+			 lnr.close();
+			 r.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (in != null) try { in.close(); } catch (IOException e) {}
+		}
+		return false;
+    }
+
+
 }
 

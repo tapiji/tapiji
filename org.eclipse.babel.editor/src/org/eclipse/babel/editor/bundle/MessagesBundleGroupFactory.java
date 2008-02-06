@@ -61,14 +61,10 @@ public final class MessagesBundleGroupFactory {
     	}
 
     	//check we are inside an eclipse plugin project where NL is supported at runtime:
-    	try {
-    		IProject proj = file.getProject();
-    		if (proj == null || proj.getNature(UIUtils.PDE_NATURE) == null) { //$NON-NLS-1$
-    			return createDefaultBundleGroup(site, file);
-    		}
-    	} catch (CoreException e) {
-    		return createDefaultBundleGroup(site, file);
-    	}
+		IProject proj = file.getProject();
+		if (proj == null || !UIUtils.hasNature(proj, UIUtils.PDE_NATURE)) { //$NON-NLS-1$
+			return createDefaultBundleGroup(site, file);
+		}
 
     	IFolder nl = getNLFolder(file);
     	
@@ -151,11 +147,7 @@ public final class MessagesBundleGroupFactory {
     	if (proj == null || !proj.isAccessible()) {
     		return null;
     	}
-    	try {
-			if (proj.getNature(UIUtils.PDE_NATURE) == null) { //$NON-NLS-1$
-				return null;
-			}
-		} catch (CoreException e) {
+		if (!UIUtils.hasNature(proj, UIUtils.PDE_NATURE)) { //$NON-NLS-1$
 			return null;
 		}
 		IResource mf = proj.findMember(new Path("META-INF/MANIFEST.MF")); //$NON-NLS-1$
@@ -260,6 +252,8 @@ public final class MessagesBundleGroupFactory {
 		 return projs == null ? null
 				: (IProject[]) projs.toArray(EMPTY_PROJECTS);
     }
+    
+    
         
 }
  

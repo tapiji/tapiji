@@ -54,7 +54,7 @@ public class ToggleNatureAction implements IObjectActionDelegate {
 			boolean doAdd, boolean onlyJavaProject) {
 		try {
 			if (project.isAccessible() && (!onlyJavaProject ||
-					project.getNature(UIUtils.JDT_JAVA_NATURE) != null)) {
+					UIUtils.hasNature(project, UIUtils.JDT_JAVA_NATURE))) {
 				if (doAdd) {
 					if (project.getNature(Nature.NATURE_ID) == null) {
 						toggleNature(project);
