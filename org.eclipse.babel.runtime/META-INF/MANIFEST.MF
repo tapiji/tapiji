@@ -9,6 +9,6 @@ Bundle-Vendor: Nigel Westbury
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.search,
- org.eclipse.ui.forms;bundle-version="3.3.100"
+ org.eclipse.ui.forms
 Eclipse-LazyStart: true
 Export-Package: org.eclipse.babel.runtime.external
