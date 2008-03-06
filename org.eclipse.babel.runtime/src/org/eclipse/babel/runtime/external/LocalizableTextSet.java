@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.ui.forms.editor.FormPage;
+import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -88,7 +88,7 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 	}
 
 	public void associateToolTip(final Button button, ILocalizationText localizableText) {
-		associate(button, new LocalizedTextInput(localizableText) {
+		associate(new ToolTipKey(button), new LocalizedTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				button.setToolTipText(text);
@@ -142,7 +142,7 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 	}
 
 	public void associateDescription(final Section section, ILocalizationText localizableText) {
-		associate(section, new LocalizedTextInput(localizableText) {
+		associate(new DescriptionKey(section), new LocalizedTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				section.setDescription(text);
@@ -150,7 +150,16 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 		}); 
 	}
 
-//	public void associate(
+	public void associate(final Hyperlink link, ILocalizationText localizableText) {
+		associate(link, new LocalizedTextInput(localizableText) {
+			@Override
+			public void updateControl(String text) {
+				link.setText(text);
+			}
+		}); 
+	}
+
+	//	public void associate(
 //			FormPage formPage, ILocalizationText localizableText) {
 //		associate(formPage, new LocalizedTextInput(localizableText) {
 //			@Override
@@ -201,5 +210,57 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 				// do nothing
 			}
 		}); 
+	}
+	
+	/**
+	 * This class is used to form a key that identifies the tooltip
+	 * for a control.  Normally the control itself is used as the key.
+	 * However that would cause a conflict with the primary text for
+	 * the control, hence the need to use this wrapper as a key for
+	 * the tooltip.
+	 */
+	class ToolTipKey {
+		private Object control;
+		
+		ToolTipKey(Object control) {
+			this.control = control;
+		}
+		
+		@Override
+		public boolean equals(Object other) {
+			return other instanceof ToolTipKey
+				&& ((ToolTipKey)other).control.equals(control);
+		}
+		
+		@Override
+		public int hashCode() {
+			return control.hashCode();
+		}
+	}
+	
+	/**
+	 * This class is used to form a key that identifies the description for a
+	 * section. The section itself is used as the key for the title. Therefore
+	 * we cannot use the section as a key for the description because that would
+	 * cause a conflict. Hence the need to use this wrapper as a key for the
+	 * description.
+	 */
+	class DescriptionKey {
+		private Object control;
+		
+		DescriptionKey(Object control) {
+			this.control = control;
+		}
+		
+		@Override
+		public boolean equals(Object other) {
+			return other instanceof ToolTipKey
+				&& ((ToolTipKey)other).control.equals(control);
+		}
+		
+		@Override
+		public int hashCode() {
+			return control.hashCode();
+		}
 	}
 }
