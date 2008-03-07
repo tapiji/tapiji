@@ -115,11 +115,11 @@ public class LocalizeDialog extends LocalizableTrayDialog {
 		final TabFolder tabFolder = new TabFolder(container, SWT.NONE);
 
 //		addFeaturesTab(tabFolder);
-		addPluginsTab(tabFolder);
-		addMenuTab(tabFolder);
 		if (tabTitle != null) {
 			addActivePartTab(tabFolder);
 		}
+		addMenuTab(tabFolder);
+		addPluginsTab(tabFolder);
 		
 		languageSet.associate(recursiveUseText);
 		
