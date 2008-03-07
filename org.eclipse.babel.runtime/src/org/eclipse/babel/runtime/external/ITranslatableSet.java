@@ -13,9 +13,9 @@ package org.eclipse.babel.runtime.external;
 
 import java.util.Locale;
 
-public interface ILocalizableTextSet {
+public interface ITranslatableSet {
 
-	LocalizedTextInput [] getLocalizedTexts();
+	TranslatableTextInput [] getLocalizedTexts();
 
 	Locale getLocale();
 

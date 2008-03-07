@@ -17,12 +17,12 @@ import java.util.Set;
 
 import org.eclipse.babel.runtime.Messages;
 
-public class LocalizableText implements ILocalizationText {
+public class TranslatableText implements ITranslatableText {
 
-	private UpdatableResourceBundle resourceBundle;
+	private TranslatableResourceBundle resourceBundle;
 	private String key;
 	
-	public LocalizableText(UpdatableResourceBundle resourceBundle, String key) {
+	public TranslatableText(TranslatableResourceBundle resourceBundle, String key) {
 		if (resourceBundle == null)
 			throw new RuntimeException("");
 		this.resourceBundle = resourceBundle;
@@ -34,7 +34,7 @@ public class LocalizableText implements ILocalizationText {
 	}
 
 	public String getLocalizedText(Locale locale) {
-		UpdatableResourceBundle rb = resourceBundle;
+		TranslatableResourceBundle rb = resourceBundle;
 		while (rb != null && !rb.getMyLocale().equals(locale)) {
 			rb = rb.getParent();
 		}
@@ -57,8 +57,8 @@ public class LocalizableText implements ILocalizationText {
 	 * 		the text for the parent locale is to be displayed
 	 * @param updatedBundles
 	 */
-	public void setLocalizedText(Locale locale, String newValue, Set<UpdatableResourceBundle> updatedBundles) {
-		UpdatableResourceBundle rb = resourceBundle;
+	public void setLocalizedText(Locale locale, String newValue, Set<TranslatableResourceBundle> updatedBundles) {
+		TranslatableResourceBundle rb = resourceBundle;
 		while (rb != null && !rb.getMyLocale().equals(locale)) {
 			rb = rb.getParent();
 		}
@@ -75,9 +75,9 @@ public class LocalizableText implements ILocalizationText {
 		return key;
 	}
 	
-	public ILocalizationText getTooltip() {
-		return new FormattedLocalizationText( 
-			new NonLocalizableText("{0}\n{1}\n{2}"),	
+	public ITranslatableText getTooltip() {
+		return new FormattedTranslatableText( 
+			new NonTranslatableText("{0}\n{1}\n{2}"),	
 			Messages.bind(Messages.LocalizeDialog_TableTooltip_Plugin, resourceBundle.getOsgiBundle().getSymbolicName()),
 			Messages.bind(Messages.LocalizeDialog_TableTooltip_ResourceBundle, resourceBundle.getDescription()),
 			Messages.bind(Messages.LocalizeDialog_TableTooltip_Key, key));
@@ -93,8 +93,8 @@ public class LocalizableText implements ILocalizationText {
 	 * Reverts the text back to the original text in the resource file packaged with the
 	 * bundle.
 	 */
-	public void revertLocalizedText(Locale locale, Set<UpdatableResourceBundle> updatedBundles) {
-		UpdatableResourceBundle rb = resourceBundle;
+	public void revertLocalizedText(Locale locale, Set<TranslatableResourceBundle> updatedBundles) {
+		TranslatableResourceBundle rb = resourceBundle;
 		while (rb != null && !rb.getLocale().equals(locale)) {
 			rb = rb.getParent();
 		}

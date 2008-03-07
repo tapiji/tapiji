@@ -11,10 +11,10 @@
 
 package org.eclipse.babel.runtime;
 
-import org.eclipse.babel.runtime.external.DynamicNLS;
-import org.eclipse.babel.runtime.external.ILocalizationText;
+import org.eclipse.babel.runtime.external.TranslatableNLS;
+import org.eclipse.babel.runtime.external.ITranslatableText;
 
-public class Messages extends DynamicNLS {
+public class Messages extends TranslatableNLS {
 	private static final String BUNDLE_NAME = "org.eclipse.babel.runtime.messages"; //$NON-NLS-1$
 
 	static {
@@ -23,29 +23,29 @@ public class Messages extends DynamicNLS {
 		initializeMessages(BUNDLE_NAME, Messages.class, Activator.getDefault().getBundle());
 	}
 
-	public static ILocalizationText LocalizeDialog_TabTitle_EditorPart;
-	public static ILocalizationText LocalizeDialog_TabTitle_ViewPart;
-	public static ILocalizationText LocalizeDialog_TabTitle_OtherPart;
-	public static ILocalizationText LocalizeDialog_Title;
-	public static ILocalizationText LocalizeDialog_TabTitle_Plugins;
-	public static ILocalizationText LocalizeDialog_Title_DialogPart;
-	public static ILocalizationText LocalizeDialog_TabTitle_Menu;
-	public static ILocalizationText LocalizeDialog_TabTitle_PluginXml;
-	public static ILocalizationText LocalizeDialog_Command_Translate;
-	public static ILocalizationText LocalizeDialog_CommandLabel_Revert;
-	public static ILocalizationText LocalizeDialog_CommandTooltip_Revert;
-	public static ILocalizationText LocalizeDialog_TableTooltip_Plugin;
-	public static ILocalizationText LocalizeDialog_TableTooltip_ResourceBundle;
-	public static ILocalizationText LocalizeDialog_TableTooltip_Key;
-	public static ILocalizationText LocalizeDialog_TabTitle_Dialog; 
-	public static ILocalizationText LocalizeDialog_Title_PluginPart;
+	public static ITranslatableText LocalizeDialog_TabTitle_EditorPart;
+	public static ITranslatableText LocalizeDialog_TabTitle_ViewPart;
+	public static ITranslatableText LocalizeDialog_TabTitle_OtherPart;
+	public static ITranslatableText LocalizeDialog_Title;
+	public static ITranslatableText LocalizeDialog_TabTitle_Plugins;
+	public static ITranslatableText LocalizeDialog_Title_DialogPart;
+	public static ITranslatableText LocalizeDialog_TabTitle_Menu;
+	public static ITranslatableText LocalizeDialog_TabTitle_PluginXml;
+	public static ITranslatableText LocalizeDialog_Command_Translate;
+	public static ITranslatableText LocalizeDialog_CommandLabel_Revert;
+	public static ITranslatableText LocalizeDialog_CommandTooltip_Revert;
+	public static ITranslatableText LocalizeDialog_TableTooltip_Plugin;
+	public static ITranslatableText LocalizeDialog_TableTooltip_ResourceBundle;
+	public static ITranslatableText LocalizeDialog_TableTooltip_Key;
+	public static ITranslatableText LocalizeDialog_TabTitle_Dialog; 
+	public static ITranslatableText LocalizeDialog_Title_PluginPart;
 	
-	public static ILocalizationText exception_failedDelete;
-	public static ILocalizationText exception_loadException;
-	public static ILocalizationText exception_saveException;
+	public static ITranslatableText exception_failedDelete;
+	public static ITranslatableText exception_loadException;
+	public static ITranslatableText exception_saveException;
 
-	public static ILocalizationText AboutPluginsDialog_provider;
-	public static ILocalizationText AboutPluginsDialog_pluginName;
-	public static ILocalizationText AboutPluginsDialog_version;
-	public static ILocalizationText AboutPluginsDialog_pluginId;
+	public static ITranslatableText AboutPluginsDialog_provider;
+	public static ITranslatableText AboutPluginsDialog_pluginName;
+	public static ITranslatableText AboutPluginsDialog_version;
+	public static ITranslatableText AboutPluginsDialog_pluginId;
 }

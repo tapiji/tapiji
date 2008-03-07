@@ -25,15 +25,15 @@ import java.util.Set;
 
 import org.osgi.framework.Bundle;
 
-public class UpdatableResourceBundle extends ResourceBundle {
+public class TranslatableResourceBundle extends ResourceBundle {
 	private static final String EXTENSION = ".properties"; //$NON-NLS-1$
 	private static String[] nlSuffixes;
 	
-	private static Map<Bundle, Collection<UpdatableResourceBundle>> allUpdatableBundles = new HashMap<Bundle, Collection<UpdatableResourceBundle>>();
+	private static Map<Bundle, Collection<TranslatableResourceBundle>> allUpdatableBundles = new HashMap<Bundle, Collection<TranslatableResourceBundle>>();
 
 	private Bundle osgiBundle;
 	private String description;
-	private UpdatableResourceFile variantResources;
+	private TranslatableResourceFile variantResources;
 
 	/**
 	 * For some extraordinary reason, the base version of locale and its accessors is private,
@@ -41,7 +41,7 @@ public class UpdatableResourceBundle extends ResourceBundle {
 	 */
 	private Locale myLocale;
 	
-	public UpdatableResourceBundle(String description, UpdatableResourceFile variantResources, Locale locale, Bundle osgiBundle) {
+	public TranslatableResourceBundle(String description, TranslatableResourceFile variantResources, Locale locale, Bundle osgiBundle) {
 		this.description = description;
 		this.variantResources = variantResources;
 		this.myLocale = locale;
@@ -79,7 +79,7 @@ public class UpdatableResourceBundle extends ResourceBundle {
 		
 		// TODO: How is this used?  Should we be saving the parent changes?
 		if (parent != null) {
-			((UpdatableResourceBundle)parent).save();
+			((TranslatableResourceBundle)parent).save();
 		}
 	}
 
@@ -123,8 +123,8 @@ public class UpdatableResourceBundle extends ResourceBundle {
 		variantResources.revertString(key);
 	}
 
-	public UpdatableResourceBundle getParent() {
-		return (UpdatableResourceBundle)parent;
+	public TranslatableResourceBundle getParent() {
+		return (TranslatableResourceBundle)parent;
 	}
 
 	/**
@@ -135,10 +135,10 @@ public class UpdatableResourceBundle extends ResourceBundle {
 	 * @param resourceBundle
 	 * @param currencyPagePlugin 
 	 */
-	public static void register(UpdatableResourceBundle resourceBundle, Bundle osgiBundle) {
-		Collection<UpdatableResourceBundle> resourceBundles = allUpdatableBundles.get(osgiBundle);
+	public static void register(TranslatableResourceBundle resourceBundle, Bundle osgiBundle) {
+		Collection<TranslatableResourceBundle> resourceBundles = allUpdatableBundles.get(osgiBundle);
 		if (resourceBundles == null) {
-			resourceBundles = new ArrayList<UpdatableResourceBundle>();
+			resourceBundles = new ArrayList<TranslatableResourceBundle>();
 			allUpdatableBundles.put(osgiBundle, resourceBundles);
 		}
 		resourceBundles.add(resourceBundle);
@@ -150,7 +150,7 @@ public class UpdatableResourceBundle extends ResourceBundle {
 		
 	}
 
-	public static Map<Bundle, Collection<UpdatableResourceBundle>> getAllResourceBundles() {
+	public static Map<Bundle, Collection<TranslatableResourceBundle>> getAllResourceBundles() {
 		return allUpdatableBundles;
 	}
 
@@ -162,7 +162,7 @@ public class UpdatableResourceBundle extends ResourceBundle {
 		return description;
 	}
 
-	public static UpdatableResourceBundle get(Bundle osgiBundle, ClassLoader loader, String bundleResourceFile) {
+	public static TranslatableResourceBundle get(Bundle osgiBundle, ClassLoader loader, String bundleResourceFile) {
 		String [] variants = buildVariants(bundleResourceFile);
 		
 		Locale nl = Locale.getDefault();
@@ -178,10 +178,10 @@ public class UpdatableResourceBundle extends ResourceBundle {
 			}
 		}
 			
-		UpdatableResourceBundle lastBundle = null;
+		TranslatableResourceBundle lastBundle = null;
 		for (int i = variants.length-1; i >= 0; i--) {
-			UpdatableResourceFile variantResources = UpdatableResourceFile.get(osgiBundle, loader, variants[i]);
-			UpdatableResourceBundle resourceBundle = new UpdatableResourceBundle("description", variantResources, locales.get(i), osgiBundle);
+			TranslatableResourceFile variantResources = TranslatableResourceFile.get(osgiBundle, loader, variants[i]);
+			TranslatableResourceBundle resourceBundle = new TranslatableResourceBundle("description", variantResources, locales.get(i), osgiBundle);
 			resourceBundle.setParent(lastBundle);
 			lastBundle = resourceBundle;
 		}

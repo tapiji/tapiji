@@ -22,12 +22,12 @@ import org.eclipse.babel.runtime.MenuAnalyzer;
 import org.eclipse.babel.runtime.Messages;
 import org.eclipse.babel.runtime.TranslatableMenuItem;
 import org.eclipse.babel.runtime.dialogs.LocalizableTrayDialog;
-import org.eclipse.babel.runtime.external.DynamicNLS;
-import org.eclipse.babel.runtime.external.ILocalizableTextSet;
-import org.eclipse.babel.runtime.external.ILocalizationText;
-import org.eclipse.babel.runtime.external.LocalizableText;
-import org.eclipse.babel.runtime.external.LocalizedTextInput;
-import org.eclipse.babel.runtime.external.UpdatableResourceBundle;
+import org.eclipse.babel.runtime.external.TranslatableNLS;
+import org.eclipse.babel.runtime.external.ITranslatableSet;
+import org.eclipse.babel.runtime.external.ITranslatableText;
+import org.eclipse.babel.runtime.external.TranslatableText;
+import org.eclipse.babel.runtime.external.TranslatableTextInput;
+import org.eclipse.babel.runtime.external.TranslatableResourceBundle;
 import org.eclipse.core.runtime.IBundleGroup;
 import org.eclipse.core.runtime.IBundleGroupProvider;
 import org.eclipse.core.runtime.IStatus;
@@ -70,19 +70,19 @@ import org.osgi.framework.Bundle;
 
 public class LocalizeDialog extends LocalizableTrayDialog {
 
-	private ILocalizationText tabTitle;
+	private ITranslatableText tabTitle;
 
-	private ILocalizableTextSet targetLanguageSet;
+	private ITranslatableSet targetLanguageSet;
 
-	private ILocalizableTextSet menuTextSet;
+	private ITranslatableSet menuTextSet;
 	
-	private Set<UpdatableResourceBundle> updatedBundles = new HashSet<UpdatableResourceBundle>();
+	private Set<TranslatableResourceBundle> updatedBundles = new HashSet<TranslatableResourceBundle>();
 
 	private AboutBundleGroupData[] bundleGroupInfos;
 
 	private TableViewer pluginTableViewer;
 
-	public LocalizeDialog(Shell shell, ILocalizationText tabTitle, ILocalizableTextSet targetLanguageSet, ILocalizableTextSet menuTextSet) {
+	public LocalizeDialog(Shell shell, ITranslatableText tabTitle, ITranslatableSet targetLanguageSet, ITranslatableSet menuTextSet) {
 		super(shell);
 		this.tabTitle = tabTitle;
 		this.targetLanguageSet = targetLanguageSet;
@@ -132,7 +132,7 @@ public class LocalizeDialog extends LocalizableTrayDialog {
 
 		languageSet.associate(
 				"features",  //$NON-NLS-1$
-				new LocalizedTextInput(Activator.getLocalizableText("LocalizeDialog.featuresTab")) { //$NON-NLS-1$
+				new TranslatableTextInput(Activator.getLocalizableText("LocalizeDialog.featuresTab")) { //$NON-NLS-1$
 					@Override
 					public void updateControl(String text) {
 						tabItem.setText(text);
@@ -184,8 +184,8 @@ public class LocalizeDialog extends LocalizableTrayDialog {
 
 		if (targetLanguageSet != null) {
 
-			LocalizedTextInput[] textInputs = targetLanguageSet.getLocalizedTexts();
-			ILocalizationText[] texts = new ILocalizationText[textInputs.length];
+			TranslatableTextInput[] textInputs = targetLanguageSet.getLocalizedTexts();
+			ITranslatableText[] texts = new ITranslatableText[textInputs.length];
 			for (int i = 0; i < textInputs.length; i++) {
 				texts[i] = textInputs[i].getLocalizedTextObject();
 			}
@@ -239,7 +239,7 @@ public class LocalizeDialog extends LocalizableTrayDialog {
 	 */
 	private static final int TABLE_HEIGHT = 200;
 
-	private LocalizableText recursiveUseText = Activator.getLocalizableText("LocalizeDialog.recursiveUse");
+	private TranslatableText recursiveUseText = Activator.getLocalizableText("LocalizeDialog.recursiveUse");
 
 	public class BundleTableLabelProvider extends LabelProvider implements ITableLabelProvider  {
 
@@ -314,7 +314,7 @@ public class LocalizeDialog extends LocalizableTrayDialog {
 	 *            the parent composite to contain the dialog area
 	 */
 	protected Control createPluginsTable(Composite parent, AboutBundleData[] bundleInfos) {
-		ILocalizationText columnTitles[] = {
+		ITranslatableText columnTitles[] = {
 				Messages.AboutPluginsDialog_provider,
 				Messages.AboutPluginsDialog_pluginName,
 				Messages.AboutPluginsDialog_version, 
@@ -527,14 +527,14 @@ public class LocalizeDialog extends LocalizableTrayDialog {
 	protected void okPressed() {
 		// Update part messages, if any
 		if (targetLanguageSet != null) {
-			for (LocalizedTextInput textInput: targetLanguageSet.getLocalizedTexts()) {
+			for (TranslatableTextInput textInput: targetLanguageSet.getLocalizedTexts()) {
 				textInput.updateControl();
 			}
 			targetLanguageSet.layout();
 		}
 
 		// Update menu messages
-		for (LocalizedTextInput textInput: menuTextSet.getLocalizedTexts()) {
+		for (TranslatableTextInput textInput: menuTextSet.getLocalizedTexts()) {
 			textInput.updateControl();
 		}
 		menuTextSet.layout();  // Never does anything, actually
@@ -543,7 +543,7 @@ public class LocalizeDialog extends LocalizableTrayDialog {
 		 * Save all bundles that have had changes.  These have been put
 		 * into a set, so it is easy for us to know which ones have been changed.
 		 */
-		for (UpdatableResourceBundle bundle: updatedBundles) {
+		for (TranslatableResourceBundle bundle: updatedBundles) {
 			bundle.save();
 		}
 
@@ -565,7 +565,7 @@ public class LocalizeDialog extends LocalizableTrayDialog {
 		 * It's a little kludgy, but we detect recursive use by testing the title
 		 * used for the active dialog tab.
 		 */
-		if (tabTitle.getLocalizedText().equals(DynamicNLS.bind(Messages.LocalizeDialog_TabTitle_Dialog, getShell().getText()).getLocalizedText())) {
+		if (tabTitle.getLocalizedText().equals(TranslatableNLS.bind(Messages.LocalizeDialog_TabTitle_Dialog, getShell().getText()).getLocalizedText())) {
 			MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_ERROR | SWT.OK);
 			messageBox.setMessage(recursiveUseText.getLocalizedText());
 			messageBox.open();

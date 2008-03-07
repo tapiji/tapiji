@@ -43,7 +43,7 @@ ITreeContentProvider {
 			return ((TranslatableMenuItem)parent).getChildren().toArray();
 		}		
 
-		// It may be LocalizableText, not wrapped in menu stuff.
+		// It may be TranslatableText, not wrapped in menu stuff.
 		// It will never have child objects, because menu labels do not contain
 		// formatted text.
 		// (Returning null causes exception)
@@ -115,24 +115,24 @@ ITreeContentProvider {
 		for (Iterator i = actions.iterator(); i.hasNext();) {
 			IViewDescriptor action = (IViewDescriptor) i.next();
 
-			ILocalizationText localizableText = extractFromPluginXml("org.eclipse.ui.views", "view", action.getId(), "name", false);
+			ITranslatableText localizableText = extractFromPluginXml("org.eclipse.ui.views", "view", action.getId(), "name", false);
 			children.add(localizableText);
 		}
 
 //						// Add Other ..
 
 //						// Build resource bundle for WorkbenchMessages.
-//						UpdatableResourceBundle resourceBundle = (UpdatableResourceBundle)ResourceBundle.getBundle(
+//						TranslatableResourceBundle resourceBundle = (TranslatableResourceBundle)ResourceBundle.getBundle(
 //						"org.eclipse.ui.internal.messages", // WorkbenchMessages.BUNDLE_NAME //$NON-NLS-1$
 //						Locale.getDefault(),
 //						org.eclipse.ui.internal.WorkbenchPlugin.class.getClassLoader(),
 //						new UpdatableResourceControl(org.eclipse.ui.internal.WorkbenchPlugin.getDefault().getStateLocation()));
-//						UpdatableResourceBundle.register(resourceBundle, org.eclipse.ui.internal.WorkbenchPlugin.getDefault().getBundle());
+//						TranslatableResourceBundle.register(resourceBundle, org.eclipse.ui.internal.WorkbenchPlugin.getDefault().getBundle());
 
 
-//						ILocalizationText localizableText = new LocalizableText(resourceBundle, "ShowView_title");
+//						ITranslatableText localizableText = new TranslatableText(resourceBundle, "ShowView_title");
 
-//						LocalizedTextInput textInput = new LocalizedTextInput(localizableText) {
+//						TranslatableTextInput textInput = new TranslatableTextInput(localizableText) {
 //						@Override
 //						public void updateControl(String text) {
 //						WorkbenchMessages.ShowView_title = text;
@@ -141,7 +141,7 @@ ITreeContentProvider {
 //						};
 	}
 
-	private ILocalizationText extractFromPluginXml(String extensionPointId, String elementName, String subElementName, String id, String labelAttributeName, boolean localMatchOnly) {
+	private ITranslatableText extractFromPluginXml(String extensionPointId, String elementName, String subElementName, String id, String labelAttributeName, boolean localMatchOnly) {
 		for (IConfigurationElement element: Platform.getExtensionRegistry().getConfigurationElementsFor(extensionPointId)) {
 			if (element.getName().equals(elementName)) {
 				for (IConfigurationElement subElement: element.getChildren(subElementName)) {
@@ -163,7 +163,7 @@ ITreeContentProvider {
 							 * text.
 							 * /
 							e1.printStackTrace();
-							return new NonLocalizableText(element.getAttribute(labelAttributeName));
+							return new NonTranslatableText(element.getAttribute(labelAttributeName));
 						}
 					}
 				}
@@ -172,7 +172,7 @@ ITreeContentProvider {
 		return null;
 	}
 
-	private ILocalizationText extractFromPluginXml(String extensionPointId, String elementName, String id, String labelAttributeName, boolean localMatchOnly) {
+	private ITranslatableText extractFromPluginXml(String extensionPointId, String elementName, String id, String labelAttributeName, boolean localMatchOnly) {
 
 		for (IConfigurationElement element: Platform.getExtensionRegistry().getConfigurationElementsFor(extensionPointId)) {
 			if ((element.getName().equals(elementName))) {
@@ -194,7 +194,7 @@ ITreeContentProvider {
 						 * text.
 						 * /
 						e1.printStackTrace();
-						return new NonLocalizableText(element.getAttribute(labelAttributeName));
+						return new NonTranslatableText(element.getAttribute(labelAttributeName));
 					}
 				}
 			}

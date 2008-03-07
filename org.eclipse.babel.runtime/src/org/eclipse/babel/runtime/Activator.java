@@ -14,9 +14,9 @@ package org.eclipse.babel.runtime;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.eclipse.babel.runtime.external.ILocalizableTextSet;
-import org.eclipse.babel.runtime.external.LocalizableText;
-import org.eclipse.babel.runtime.external.UpdatableResourceBundle;
+import org.eclipse.babel.runtime.external.ITranslatableSet;
+import org.eclipse.babel.runtime.external.TranslatableText;
+import org.eclipse.babel.runtime.external.TranslatableResourceBundle;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -37,7 +37,7 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin;
 	
 	//Resource bundle.
-	private UpdatableResourceBundle resourceBundle;
+	private TranslatableResourceBundle resourceBundle;
 
 	/**
 	 * The constructor
@@ -62,15 +62,15 @@ public class Activator extends AbstractUIPlugin {
 		 */
 		
 		/* This is the Java 6 method...
-		resourceBundle = (UpdatableResourceBundle)ResourceBundle.getBundle("org.eclipse.babel.runtime.messages",
+		resourceBundle = (TranslatableResourceBundle)ResourceBundle.getBundle("org.eclipse.babel.runtime.messages",
   	          new UpdatableResourceControl(getStateLocation()));
 		*/
-		resourceBundle = UpdatableResourceBundle.get(getBundle(), getClass().getClassLoader(), "org.eclipse.babel.runtime.messages");
+		resourceBundle = TranslatableResourceBundle.get(getBundle(), getClass().getClassLoader(), "org.eclipse.babel.runtime.messages");
 		
-		UpdatableResourceBundle.register(getBundle(), "org.eclipse.babel.runtime.messages");
+		TranslatableResourceBundle.register(getBundle(), "org.eclipse.babel.runtime.messages");
 
-		// Now done in DynamicNLS derived class		
-//		UpdatableResourceBundle.register(resourceBundle, getBundle());
+		// Now done in TranslatableNLS derived class		
+//		TranslatableResourceBundle.register(resourceBundle, getBundle());
 	}
 
 	/*
@@ -102,8 +102,8 @@ public class Activator extends AbstractUIPlugin {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 
-	public static LocalizableText getLocalizableText(String key) {
-		return new LocalizableText(getDefault().resourceBundle, key);
+	public static TranslatableText getLocalizableText(String key) {
+		return new TranslatableText(getDefault().resourceBundle, key);
 	}
 
 	public static ImageDescriptor createImageDescriptor(String name) {
@@ -133,9 +133,9 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	private TranslatableMenuItem translatableMenu;
-	private ILocalizableTextSet menuTextSet;
+	private ITranslatableSet menuTextSet;
 	
-	public void setTranslatableMenu(TranslatableMenuItem translatableMenu, ILocalizableTextSet menuTextSet) {
+	public void setTranslatableMenu(TranslatableMenuItem translatableMenu, ITranslatableSet menuTextSet) {
 		this.translatableMenu = translatableMenu;
 		this.menuTextSet = menuTextSet;
 	}
@@ -144,7 +144,7 @@ public class Activator extends AbstractUIPlugin {
 		return translatableMenu;
 	}
 	
-	public ILocalizableTextSet getMenuTextSet() {
+	public ITranslatableSet getMenuTextSet() {
 		return menuTextSet;
 	}
 }

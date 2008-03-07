@@ -13,7 +13,7 @@ package org.eclipse.babel.runtime.external;
 
 import java.util.Locale;
 
-public interface ILocalizationText {
+public interface ITranslatableText {
 
 	/**
 	 * This method gets the localized text for a particular locale.

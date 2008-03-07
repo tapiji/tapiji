@@ -14,9 +14,9 @@ package org.eclipse.babel.runtime.dialogs;
 import org.eclipse.babel.runtime.Activator;
 import org.eclipse.babel.runtime.Messages;
 import org.eclipse.babel.runtime.actions.LocalizeDialog;
-import org.eclipse.babel.runtime.external.DynamicNLS;
-import org.eclipse.babel.runtime.external.LocalizableTextSet;
-import org.eclipse.babel.runtime.external.LocalizedTextInput;
+import org.eclipse.babel.runtime.external.TranslatableNLS;
+import org.eclipse.babel.runtime.external.TranslatableSet;
+import org.eclipse.babel.runtime.external.TranslatableTextInput;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
@@ -42,7 +42,7 @@ import org.eclipse.swt.widgets.ToolItem;
 public class LocalizableTrayDialog extends TrayDialog {
 
 	private static ImageDescriptor localizationImageDescriptor = Activator.createImageDescriptor("icons/babel.gif"); //$NON-NLS-1$
-	protected LocalizableTextSet languageSet = new LocalizableTextSet();
+	protected TranslatableSet languageSet = new TranslatableSet();
 	
 	/**
 	 * Creates a tray dialog instance. Note that the window will have no visual
@@ -128,7 +128,7 @@ public class LocalizableTrayDialog extends TrayDialog {
 		
 		languageSet.associate(
 				"localizationToolTip",  //$NON-NLS-1$
-				new LocalizedTextInput(Activator.getLocalizableText("LocalizableTrayDialog.localizationToolTip")) { //$NON-NLS-1$
+				new TranslatableTextInput(Activator.getLocalizableText("LocalizableTrayDialog.localizationToolTip")) { //$NON-NLS-1$
 					@Override
 					public void updateControl(String text) {
 						item.setToolTipText(text);
@@ -167,7 +167,7 @@ public class LocalizableTrayDialog extends TrayDialog {
 	 * This will bring up a dialog that can be used to localize this dialog.
 	 */
 	protected void localizationPressed() {
-		Dialog dialog = new LocalizeDialog(getShell(), DynamicNLS.bind(Messages.LocalizeDialog_Title_DialogPart, getShell().getText()), languageSet, Activator.getDefault().getMenuTextSet());
+		Dialog dialog = new LocalizeDialog(getShell(), TranslatableNLS.bind(Messages.LocalizeDialog_Title_DialogPart, getShell().getText()), languageSet, Activator.getDefault().getMenuTextSet());
 		dialog.open();
 	}
 }

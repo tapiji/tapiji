@@ -11,21 +11,21 @@
 
 package org.eclipse.babel.runtime.actions;
 
-import org.eclipse.babel.runtime.external.ILocalizationText;
+import org.eclipse.babel.runtime.external.ITranslatableText;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.action.IContributionItem;
 
 /**
  * A container class that contains a MenuManager object (used
- * by the content provided to get child items) and a ILocalizationText
+ * by the content provided to get child items) and a ITranslatableText
  * object (used by the label provider and in-place editor support).
  */
 public class LocalizableMenuManager implements IAdaptable {
 
 	private IContributionItem menuManager;
-	private ILocalizationText localizableText;
+	private ITranslatableText localizableText;
 
-	public LocalizableMenuManager(IContributionItem menuManager, ILocalizationText localizableText) {
+	public LocalizableMenuManager(IContributionItem menuManager, ITranslatableText localizableText) {
 		this.menuManager = menuManager;
 		this.localizableText = localizableText;
 	}
@@ -34,12 +34,12 @@ public class LocalizableMenuManager implements IAdaptable {
 		return menuManager;
 	}
 
-	public ILocalizationText getLocalizableText() {
+	public ITranslatableText getLocalizableText() {
 		return localizableText;
 	}
 
 	public Object getAdapter(Class adapter) {
-		if (adapter == ILocalizationText.class) {
+		if (adapter == ITranslatableText.class) {
 			return localizableText;
 		}
 		return null;

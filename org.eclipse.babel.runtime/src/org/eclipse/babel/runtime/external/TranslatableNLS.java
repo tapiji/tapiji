@@ -56,7 +56,7 @@ import org.osgi.framework.Bundle;
  * 
  * @since 3.1
  */
-public abstract class DynamicNLS {
+public abstract class TranslatableNLS {
 
 	private static final Object[] EMPTY_ARGS = new Object[0];
 	private static final String EXTENSION = ".properties"; //$NON-NLS-1$
@@ -77,7 +77,7 @@ public abstract class DynamicNLS {
 	/**
 	 * Creates a new NLS instance.
 	 */
-	protected DynamicNLS() {
+	protected TranslatableNLS() {
 		super();
 	}
 
@@ -88,7 +88,7 @@ public abstract class DynamicNLS {
 	 * @param binding the object to be inserted into the message
 	 * @return the manipulated String
 	 */
-	public static ILocalizationText bind(ILocalizationText message, Object binding) {
+	public static ITranslatableText bind(ITranslatableText message, Object binding) {
 		return internalBind(message, convert(binding));
 	}
 
@@ -100,7 +100,7 @@ public abstract class DynamicNLS {
 	 * @param binding2 A second object to be inserted into the message
 	 * @return the manipulated String
 	 */
-	public static ILocalizationText bind(ILocalizationText message, Object binding1, Object binding2) {
+	public static ITranslatableText bind(ITranslatableText message, Object binding1, Object binding2) {
 		return internalBind(message, convert(binding1), convert(binding2));
 	}
 
@@ -111,14 +111,14 @@ public abstract class DynamicNLS {
 	 * @param bindings An array of objects to be inserted into the message
 	 * @return the manipulated String
 	 */
-	public static ILocalizationText bind(ILocalizationText message, Object[] bindings) {
+	public static ITranslatableText bind(ITranslatableText message, Object[] bindings) {
 		return internalBind(message, bindings);
 	}
 
-	private static ILocalizationText convert(Object binding) {
-		return (binding instanceof ILocalizationText)
-		? (ILocalizationText)binding
-				: new NonLocalizableText(String.valueOf(binding));
+	private static ITranslatableText convert(Object binding) {
+		return (binding instanceof ITranslatableText)
+		? (ITranslatableText)binding
+				: new NonTranslatableText(String.valueOf(binding));
 	}
 
 	/**
@@ -144,18 +144,18 @@ public abstract class DynamicNLS {
 	 * Perform the string substitution on the given message with the specified args.
 	 * See the class comment for exact details.
 	 */
-	private static ILocalizationText internalBind(ILocalizationText message, Object... args) {
+	private static ITranslatableText internalBind(ITranslatableText message, Object... args) {
 		if (message == null)
-			return new NonLocalizableText("No message available."); //$NON-NLS-1$
+			return new NonTranslatableText("No message available."); //$NON-NLS-1$
 		if (args == null || args.length == 0)
 			args = EMPTY_ARGS;
 
-		ILocalizationText [] passOnArgs = new ILocalizationText[1 + args.length];
+		ITranslatableText [] passOnArgs = new ITranslatableText[1 + args.length];
 		passOnArgs[0] = message;
 		for (int i = 0; i < args.length; i++) {
 			passOnArgs[i+1] = convert(args[i]);
 		}
-		return new FormattedLocalizationText(passOnArgs);
+		return new FormattedTranslatableText(passOnArgs);
 	}
 
 	/*
@@ -246,19 +246,19 @@ public abstract class DynamicNLS {
 		
 //		for (int i = 0; i < variants.length; i++) {
 //			final MessagesProperties properties = new MessagesProperties(fields, bundleName, isAccessible);
-//			UpdatableResourceFile variantProperties = UpdatableResourceFile.get(osgiBundle, loader, variants[i]);
+//			TranslatableResourceFile variantProperties = TranslatableResourceFile.get(osgiBundle, loader, variants[i]);
 //			for (Object key: variantProperties.getKeys()) {
 //				Object value = variantProperties.getValue((String)key);
 //				properties.put(key, value);
 //			}
 //		}
 		
-		UpdatableResourceBundle resourceBundle = UpdatableResourceBundle.get(osgiBundle, loader, bundleName);
+		TranslatableResourceBundle resourceBundle = TranslatableResourceBundle.get(osgiBundle, loader, bundleName);
 		
 		final MessagesProperties properties = new MessagesProperties(fields, bundleName, isAccessible);
 		for (Enumeration<String> enumerator = resourceBundle.getKeys(); enumerator.hasMoreElements(); ) {
 			String key = enumerator.nextElement();
-			ILocalizationText value = new LocalizableText(resourceBundle, key);
+			ITranslatableText value = new TranslatableText(resourceBundle, key);
 			properties.put(key, value);
 		}
 

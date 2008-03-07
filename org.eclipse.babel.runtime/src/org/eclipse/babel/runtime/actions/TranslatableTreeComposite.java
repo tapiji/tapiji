@@ -17,10 +17,10 @@ import java.util.Set;
 import org.eclipse.babel.runtime.Activator;
 import org.eclipse.babel.runtime.Messages;
 import org.eclipse.babel.runtime.TranslatableMenuItem;
-import org.eclipse.babel.runtime.external.ILocalizationText;
-import org.eclipse.babel.runtime.external.LocalizableText;
-import org.eclipse.babel.runtime.external.LocalizableTextSet;
-import org.eclipse.babel.runtime.external.UpdatableResourceBundle;
+import org.eclipse.babel.runtime.external.ITranslatableText;
+import org.eclipse.babel.runtime.external.TranslatableText;
+import org.eclipse.babel.runtime.external.TranslatableSet;
+import org.eclipse.babel.runtime.external.TranslatableResourceBundle;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -52,7 +52,7 @@ public class TranslatableTreeComposite extends Composite {
 
 	private TreeViewerFocusCellManager focusCellManager;
 
-	public TranslatableTreeComposite(Composite parent, ITreeContentProvider contentProvider, Object input, LocalizableTextSet languageSet, Set<UpdatableResourceBundle> updatedBundles) {
+	public TranslatableTreeComposite(Composite parent, ITreeContentProvider contentProvider, Object input, TranslatableSet languageSet, Set<TranslatableResourceBundle> updatedBundles) {
 		super(parent, SWT.NONE);
 
 		setLayout(new GridLayout(1, false));
@@ -79,7 +79,7 @@ public class TranslatableTreeComposite extends Composite {
 	 * @param tv
 	 * @return
 	 */
-	private void createTreeColumns(final TreeViewer tv, final LocalizableTextSet languageSet, final Set<UpdatableResourceBundle> updatedBundles) {
+	private void createTreeColumns(final TreeViewer tv, final TranslatableSet languageSet, final Set<TranslatableResourceBundle> updatedBundles) {
 		focusCellManager = new TreeViewerFocusCellManager(tv, new FocusCellOwnerDrawHighlighter(tv));
 		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tv) {
 			@Override
@@ -115,7 +115,7 @@ public class TranslatableTreeComposite extends Composite {
 					element = ((TranslatableMenuItem)element).getLocalizableText();
 				}
 
-				if (element instanceof LocalizableText) {
+				if (element instanceof TranslatableText) {
 					return Activator.getImage("icons/localizable.gif"); //$NON-NLS-1$
 				} else {
 					return Activator.getImage("icons/nonLocalizable.gif"); //$NON-NLS-1$
@@ -124,15 +124,15 @@ public class TranslatableTreeComposite extends Composite {
 
 			@Override
 			public String getToolTipText(Object element) {
-				ILocalizationText text = null;
-				if (element instanceof ILocalizationText) {
-					text = (ILocalizationText)element;
+				ITranslatableText text = null;
+				if (element instanceof ITranslatableText) {
+					text = (ITranslatableText)element;
 				} else if (element instanceof IAdaptable) {
-					text = (ILocalizationText)((IAdaptable)element).getAdapter(ILocalizationText.class);
+					text = (ITranslatableText)((IAdaptable)element).getAdapter(ITranslatableText.class);
 				}
-				if (text instanceof LocalizableText) {
-					LocalizableText localizableText = (LocalizableText)text;
-					ILocalizationText tooltipLocalizableText = localizableText.getTooltip();
+				if (text instanceof TranslatableText) {
+					TranslatableText localizableText = (TranslatableText)text;
+					ITranslatableText tooltipLocalizableText = localizableText.getTooltip();
 					languageSet.associate2(columnKey, tooltipLocalizableText);
 					return tooltipLocalizableText.getLocalizedText();
 				} else {
@@ -164,7 +164,7 @@ public class TranslatableTreeComposite extends Composite {
 	}
 
 	private void createLocaleColumn(final TreeViewer tv,
-			final Set<UpdatableResourceBundle> updatedBundles,
+			final Set<TranslatableResourceBundle> updatedBundles,
 			final Locale locale, final Locale previousLocale) {
 		TreeViewerColumn column = new TreeViewerColumn(tv, SWT.LEFT);
 		column.getColumn().setWidth(150);
@@ -176,7 +176,7 @@ public class TranslatableTreeComposite extends Composite {
 					element = ((TranslatableMenuItem)element).getLocalizableText();
 				}
 
-				ILocalizationText text = (ILocalizationText)element;
+				ITranslatableText text = (ITranslatableText)element;
 				String message = text.getLocalizedText(locale);
 				if (previousLocale == null) {
 					return message;
@@ -194,7 +194,7 @@ public class TranslatableTreeComposite extends Composite {
 					element = ((TranslatableMenuItem)element).getLocalizableText();
 				}
 
-				return element instanceof LocalizableText;
+				return element instanceof TranslatableText;
 			}
 
 			@Override
@@ -210,7 +210,7 @@ public class TranslatableTreeComposite extends Composite {
 
 				// The text cell editor requires that null is never returned
 				// by this method.
-				ILocalizationText text = (ILocalizationText)element;
+				ITranslatableText text = (ITranslatableText)element;
 				String message = text.getLocalizedText(locale);
 				if (previousLocale == null) {
 					return message;
@@ -222,12 +222,12 @@ public class TranslatableTreeComposite extends Composite {
 
 			@Override
 			protected void setValue(Object element, Object value) {
-				ILocalizationText localizableText;
+				ITranslatableText localizableText;
 
 				if (element instanceof TranslatableMenuItem) {
 					localizableText = ((TranslatableMenuItem)element).getLocalizableText();
 				} else {
-					localizableText = (ILocalizationText)element;
+					localizableText = (ITranslatableText)element;
 				}
 
 				String text = (String)value;
@@ -269,7 +269,7 @@ public class TranslatableTreeComposite extends Composite {
 				}
 
 				// If it's editable, it's localizable
-				((LocalizableText)localizableText).setLocalizedText(locale, text, updatedBundles);
+				((TranslatableText)localizableText).setLocalizedText(locale, text, updatedBundles);
 				tv.update(element, null);
 			}
 		});
@@ -278,7 +278,7 @@ public class TranslatableTreeComposite extends Composite {
 	}
 
 	
-	private Control createButtonsSection(Composite parent, final TreeViewer viewer, LocalizableTextSet languageSet, final Set<UpdatableResourceBundle> updatedBundles) {
+	private Control createButtonsSection(Composite parent, final TreeViewer viewer, TranslatableSet languageSet, final Set<TranslatableResourceBundle> updatedBundles) {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout());
 
@@ -293,11 +293,11 @@ public class TranslatableTreeComposite extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				int columnIndex = focusCellManager.getFocusCell().getColumnIndex();
 				Object element = focusCellManager.getFocusCell().getElement();
-				ILocalizationText localizableText;
+				ITranslatableText localizableText;
 				if (element instanceof TranslatableMenuItem) {
 					localizableText = ((TranslatableMenuItem)element).getLocalizableText();
-				} else if (element instanceof ILocalizationText) {
-					localizableText = (ILocalizationText)element;
+				} else if (element instanceof ITranslatableText) {
+					localizableText = (ITranslatableText)element;
 				} else {
 					System.out.println("something wrong"); //$NON-NLS-1$
 					return;
@@ -306,7 +306,7 @@ public class TranslatableTreeComposite extends Composite {
 				Locale locale = (Locale)viewer.getTree().getColumn(columnIndex).getData();
 				
 				// If this button is enabled, the text should be revertable.
-				((LocalizableText)localizableText).revertLocalizedText(locale, updatedBundles);
+				((TranslatableText)localizableText).revertLocalizedText(locale, updatedBundles);
 				viewer.update(element, null);
 				
 			}

@@ -23,9 +23,9 @@ import java.util.Locale;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.babel.runtime.actions.LocalizableMenuSet;
-import org.eclipse.babel.runtime.external.ILocalizableTextSet;
-import org.eclipse.babel.runtime.external.ILocalizationText;
-import org.eclipse.babel.runtime.external.NonLocalizableText;
+import org.eclipse.babel.runtime.external.ITranslatableSet;
+import org.eclipse.babel.runtime.external.ITranslatableText;
+import org.eclipse.babel.runtime.external.NonTranslatableText;
 import org.eclipse.babel.runtime.pluginXmlParsing.LocalizableContribution;
 import org.eclipse.babel.runtime.pluginXmlParsing.PluginXmlRegistry;
 import org.eclipse.core.internal.registry.ConfigurationElementHandle;
@@ -81,7 +81,7 @@ public class MenuAnalyzer {
 		return createTranslatableMenu(menuManager, null);
 	}
 
-	private TranslatableMenuItem createTranslatableMenu(IContributionItem item, ILocalizationText parentLocalizableText) {
+	private TranslatableMenuItem createTranslatableMenu(IContributionItem item, ITranslatableText parentLocalizableText) {
 		TranslatableMenuItem translatableMenuItem = new TranslatableMenuItem(parentLocalizableText); 
 
 		if (item == null) {
@@ -117,7 +117,7 @@ public class MenuAnalyzer {
 					/*
 					 * Fetch the original localization text for this item.
 					 */
-					ILocalizationText localizableText = null;
+					ITranslatableText localizableText = null;
 
 					if (contributionItem instanceof MenuManager) {
 						MenuManager subMenuManager = (MenuManager)contributionItem;
@@ -134,7 +134,7 @@ public class MenuAnalyzer {
 							localizableText = extractFromPluginXml("org.eclipse.ui.actionSets", "actionSet", "menu", id, "label", false);
 						}
 						if (localizableText == null) {
-							localizableText = new NonLocalizableText(subMenuManager.getMenuText());
+							localizableText = new NonTranslatableText(subMenuManager.getMenuText());
 						}
 					} else if (contributionItem instanceof ActionContributionItem) {
 						ActionContributionItem pluginAction = (ActionContributionItem)contributionItem;
@@ -158,7 +158,7 @@ public class MenuAnalyzer {
 							if (localizableText != null) {
 								textSet.associate(pluginAction, localizableText);
 							} else {
-								localizableText = new NonLocalizableText(pluginAction.getAction().getText());
+								localizableText = new NonTranslatableText(pluginAction.getAction().getText());
 							}
 						}
 						} // needed???
@@ -234,16 +234,16 @@ public class MenuAnalyzer {
 								textSet.associate(pluginAction, localizableText);
 							} catch (ParserConfigurationException e1) {
 								e1.printStackTrace();
-								localizableText = new NonLocalizableText(pluginAction.getId());
+								localizableText = new NonTranslatableText(pluginAction.getId());
 							} catch (SAXException e1) {
 								e1.printStackTrace();
-								localizableText = new NonLocalizableText(pluginAction.getId());
+								localizableText = new NonTranslatableText(pluginAction.getId());
 							} catch (IOException e1) {
 								e1.printStackTrace();
-								localizableText = new NonLocalizableText(pluginAction.getId());
+								localizableText = new NonTranslatableText(pluginAction.getId());
 							}
 						} else {
-							localizableText = new NonLocalizableText(pluginAction.getId());
+							localizableText = new NonTranslatableText(pluginAction.getId());
 						}
 
 //					} else if (contributionItem instanceof NewWizardMenu) {
@@ -274,7 +274,7 @@ public class MenuAnalyzer {
 								if (localizableText != null) {
 //									textSet.associate(pluginAction, localizableText);
 								} else {
-									localizableText = new NonLocalizableText(subItem.toString());
+									localizableText = new NonTranslatableText(subItem.toString());
 								}
 							}
 
@@ -285,7 +285,7 @@ public class MenuAnalyzer {
 */							
 						
 					} else {
-						localizableText = new NonLocalizableText(contributionItem.toString());
+						localizableText = new NonTranslatableText(contributionItem.toString());
 					}
 				
 					if (localizableText != null) {
@@ -378,24 +378,24 @@ public class MenuAnalyzer {
 		for (Iterator i = actions.iterator(); i.hasNext();) {
 			IViewDescriptor action = (IViewDescriptor) i.next();
 
-			ILocalizationText localizableText = extractFromPluginXml("org.eclipse.ui.views", "view", action.getId(), "name", false);
+			ITranslatableText localizableText = extractFromPluginXml("org.eclipse.ui.views", "view", action.getId(), "name", false);
 			parentItem.add(new TranslatableMenuItem(localizableText));
 		}
 
 //						// Add Other ..
 
 //						// Build resource bundle for WorkbenchMessages.
-//						UpdatableResourceBundle resourceBundle = (UpdatableResourceBundle)ResourceBundle.getBundle(
+//						TranslatableResourceBundle resourceBundle = (TranslatableResourceBundle)ResourceBundle.getBundle(
 //						"org.eclipse.ui.internal.messages", // WorkbenchMessages.BUNDLE_NAME //$NON-NLS-1$
 //						Locale.getDefault(),
 //						org.eclipse.ui.internal.WorkbenchPlugin.class.getClassLoader(),
 //						new UpdatableResourceControl(org.eclipse.ui.internal.WorkbenchPlugin.getDefault().getStateLocation()));
-//						UpdatableResourceBundle.register(resourceBundle, org.eclipse.ui.internal.WorkbenchPlugin.getDefault().getBundle());
+//						TranslatableResourceBundle.register(resourceBundle, org.eclipse.ui.internal.WorkbenchPlugin.getDefault().getBundle());
 
 
-//						ILocalizationText localizableText = new LocalizableText(resourceBundle, "ShowView_title");
+//						ITranslatableText localizableText = new TranslatableText(resourceBundle, "ShowView_title");
 
-//						LocalizedTextInput textInput = new LocalizedTextInput(localizableText) {
+//						TranslatableTextInput textInput = new TranslatableTextInput(localizableText) {
 //						@Override
 //						public void updateControl(String text) {
 //						WorkbenchMessages.ShowView_title = text;
@@ -429,7 +429,7 @@ public class MenuAnalyzer {
 		return result;
 	}
 
-	private ILocalizationText extractFromPluginXml(String extensionPointId, String elementName, String subElementName, String id, String labelAttributeName, boolean localMatchOnly) {
+	private ITranslatableText extractFromPluginXml(String extensionPointId, String elementName, String subElementName, String id, String labelAttributeName, boolean localMatchOnly) {
 		for (IConfigurationElement element: Platform.getExtensionRegistry().getConfigurationElementsFor(extensionPointId)) {
 			if (element.getName().equals(elementName)) {
 				for (IConfigurationElement subElement: element.getChildren(subElementName)) {
@@ -451,7 +451,7 @@ public class MenuAnalyzer {
 							 * text.
 							 */
 							e1.printStackTrace();
-							return new NonLocalizableText(element.getAttribute(labelAttributeName));
+							return new NonTranslatableText(element.getAttribute(labelAttributeName));
 						}
 					}
 				}
@@ -460,7 +460,7 @@ public class MenuAnalyzer {
 		return null;
 	}
 
-	private ILocalizationText extractFromPluginXml(String extensionPointId, String elementName, String id, String labelAttributeName, boolean localMatchOnly) {
+	private ITranslatableText extractFromPluginXml(String extensionPointId, String elementName, String id, String labelAttributeName, boolean localMatchOnly) {
 
 		for (IConfigurationElement element: Platform.getExtensionRegistry().getConfigurationElementsFor(extensionPointId)) {
 			if ((element.getName().equals(elementName))) {
@@ -482,7 +482,7 @@ public class MenuAnalyzer {
 						 * text.
 						 */
 						e1.printStackTrace();
-						return new NonLocalizableText(element.getAttribute(labelAttributeName));
+						return new NonTranslatableText(element.getAttribute(labelAttributeName));
 					}
 				}
 			}
@@ -495,7 +495,7 @@ public class MenuAnalyzer {
 	 * 
 	 * @return
 	 */
-	public ILocalizableTextSet getTextSet() {
+	public ITranslatableSet getTextSet() {
 		return textSet;
 	}
 

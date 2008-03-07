@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import org.eclipse.babel.runtime.external.ILocalizationText;
+import org.eclipse.babel.runtime.external.ITranslatableText;
 import org.eclipse.core.runtime.IAdaptable;
 
 /**
@@ -32,16 +32,16 @@ import org.eclipse.core.runtime.IAdaptable;
  */
 public class TranslatableMenuItem implements IAdaptable {
 
-	ILocalizationText localizableText;
+	ITranslatableText localizableText;
 	
 	List<TranslatableMenuItem> children = new ArrayList<TranslatableMenuItem>();
 	
-	TranslatableMenuItem(ILocalizationText localizableText) {
+	TranslatableMenuItem(ITranslatableText localizableText) {
 		this.localizableText = localizableText;
 	}
 	
 	public Object getAdapter(Class adapter) {
-		if (adapter == ILocalizationText.class) {
+		if (adapter == ITranslatableText.class) {
 			return localizableText;
 		}
 		return null;
@@ -55,7 +55,7 @@ public class TranslatableMenuItem implements IAdaptable {
 		children.add(childItem);
 	}
 
-	public ILocalizationText getLocalizableText() {
+	public ITranslatableText getLocalizableText() {
 		return localizableText;
 	}
 

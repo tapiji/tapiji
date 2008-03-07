@@ -27,10 +27,10 @@ import java.util.ResourceBundle;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.eclipse.babel.runtime.external.ILocalizationText;
-import org.eclipse.babel.runtime.external.LocalizableText;
-import org.eclipse.babel.runtime.external.NonLocalizableText;
-import org.eclipse.babel.runtime.external.UpdatableResourceBundle;
+import org.eclipse.babel.runtime.external.ITranslatableText;
+import org.eclipse.babel.runtime.external.TranslatableText;
+import org.eclipse.babel.runtime.external.NonTranslatableText;
+import org.eclipse.babel.runtime.external.TranslatableResourceBundle;
 import org.eclipse.core.internal.registry.osgi.EclipseBundleListener;
 import org.eclipse.core.internal.runtime.Activator;
 import org.eclipse.core.internal.runtime.DevClassPathHelper;
@@ -55,13 +55,13 @@ public class PluginXmlRegistry {
 	}
 
 	// Helper method
-	static ILocalizationText translate(UpdatableResourceBundle translationBundle, String originalText) {
+	static ITranslatableText translate(TranslatableResourceBundle translationBundle, String originalText) {
 		String trimmedText = originalText.trim();
 		if (trimmedText.length() == 0)
-			return new NonLocalizableText(trimmedText);
+			return new NonTranslatableText(trimmedText);
 		if (trimmedText.charAt(0) != '%')
-			return new NonLocalizableText(trimmedText);
-		return new LocalizableText(translationBundle, trimmedText.substring(1));
+			return new NonTranslatableText(trimmedText);
+		return new TranslatableText(translationBundle, trimmedText.substring(1));
 	}
 
 	
@@ -126,18 +126,18 @@ public class PluginXmlRegistry {
 		
 		
 		
-		UpdatableResourceBundle translationBundle = null;
+		TranslatableResourceBundle translationBundle = null;
 		try {
 			ResourceBundle immutableTranslationBundle = ResourceTranslator.getResourceBundle(osgiBundle);
 
 /* This code works with Java 6 only			
-			translationBundle = (UpdatableResourceBundle)ResourceBundle.getBundle(bundleResourceFile,
+			translationBundle = (TranslatableResourceBundle)ResourceBundle.getBundle(bundleResourceFile,
 					Locale.getDefault(),
 					createTempClassloader(osgiBundle),
 		  	          new UpdatableResourceControl(Platform.getStateLocation(bundle)));
-			UpdatableResourceBundle.register(translationBundle, osgiBundle);
+			TranslatableResourceBundle.register(translationBundle, osgiBundle);
 */
-			translationBundle = UpdatableResourceBundle.get(osgiBundle, createTempClassloader(osgiBundle), bundleResourceFile);
+			translationBundle = TranslatableResourceBundle.get(osgiBundle, createTempClassloader(osgiBundle), bundleResourceFile);
 			
 				
 		} catch (MissingResourceException e) {

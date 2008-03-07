@@ -13,9 +13,9 @@ package org.eclipse.babel.runtime.actions;
 
 import org.eclipse.babel.runtime.Activator;
 import org.eclipse.babel.runtime.Messages;
-import org.eclipse.babel.runtime.external.DynamicNLS;
-import org.eclipse.babel.runtime.external.ILocalizableTextSet;
-import org.eclipse.babel.runtime.external.ILocalizationText;
+import org.eclipse.babel.runtime.external.TranslatableNLS;
+import org.eclipse.babel.runtime.external.ITranslatableSet;
+import org.eclipse.babel.runtime.external.ITranslatableText;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -50,16 +50,16 @@ public class LocalizeAction implements IWorkbenchWindowActionDelegate {
 	public void run(IAction action) {
 		IWorkbenchPart activePart = window.getActivePage().getActivePart();
 
-		ILocalizationText tabTitle;
+		ITranslatableText tabTitle;
 		if (activePart instanceof IEditorPart) {
-			tabTitle = DynamicNLS.bind(Messages.LocalizeDialog_TabTitle_EditorPart, activePart.getTitle()); //$NON-NLS-1$
+			tabTitle = TranslatableNLS.bind(Messages.LocalizeDialog_TabTitle_EditorPart, activePart.getTitle()); //$NON-NLS-1$
 		} else if (activePart instanceof IViewPart) {
-			tabTitle = DynamicNLS.bind(Messages.LocalizeDialog_TabTitle_ViewPart, activePart.getTitle()); //$NON-NLS-1$
+			tabTitle = TranslatableNLS.bind(Messages.LocalizeDialog_TabTitle_ViewPart, activePart.getTitle()); //$NON-NLS-1$
 		} else {
-			tabTitle = DynamicNLS.bind(Messages.LocalizeDialog_TabTitle_OtherPart, activePart.getTitle()); //$NON-NLS-1$
+			tabTitle = TranslatableNLS.bind(Messages.LocalizeDialog_TabTitle_OtherPart, activePart.getTitle()); //$NON-NLS-1$
 		}
 		
-		ILocalizableTextSet languageSet = (ILocalizableTextSet)activePart.getAdapter(ILocalizableTextSet.class);
+		ITranslatableSet languageSet = (ITranslatableSet)activePart.getAdapter(ITranslatableSet.class);
 
 		Dialog dialog = new LocalizeDialog(window.getShell(), tabTitle, languageSet, Activator.getDefault().getMenuTextSet()); 
 		dialog.open();

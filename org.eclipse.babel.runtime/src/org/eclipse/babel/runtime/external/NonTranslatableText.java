@@ -13,36 +13,29 @@ package org.eclipse.babel.runtime.external;
 
 import java.util.Locale;
 
-import org.eclipse.osgi.util.NLS;
+public class NonTranslatableText implements ITranslatableText {
 
-public class FormattedLocalizationText implements ILocalizationText {
-
-	ILocalizationText [] dependentText;
+	private String text;
 	
-	public FormattedLocalizationText(ILocalizationText... dependentText) {
-		this.dependentText = dependentText;
+	public NonTranslatableText(String text) {
+		this.text = text;
 	}
-	
+
 	public String getLocalizedText(Locale locale) {
-		String format = dependentText[0].getLocalizedText(locale);
-		String args [] = new String[dependentText.length-1];
-		for (int i = 0; i < args.length; i++) {
-			args[i] = dependentText[i+1].getLocalizedText(locale);
-		}
-		return NLS.bind(format, args);
+		/*
+		 * The value is the same regardless of the locale.
+		 */
+		return text;
 	}
 
 	public String getLocalizedText() {
 		return getLocalizedText(Locale.getDefault());
 	}
 
-	public ILocalizationText[] getDependentTexts() {
-		return dependentText;
-	}
-
 	public void validateLocale(Locale locale) {
-		for (ILocalizationText localizedText: dependentText) {
-			localizedText.validateLocale(locale);
-		}
+		/*
+		 * We don't care about locales, so always assume it is a valid
+		 * locale.
+		 */
 	}
 }

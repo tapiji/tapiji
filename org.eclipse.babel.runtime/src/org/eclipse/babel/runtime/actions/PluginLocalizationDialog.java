@@ -24,12 +24,12 @@ import java.util.Set;
 
 import org.eclipse.babel.runtime.Messages;
 import org.eclipse.babel.runtime.dialogs.LocalizableTrayDialog;
-import org.eclipse.babel.runtime.external.DynamicNLS;
-import org.eclipse.babel.runtime.external.ILocalizableTextSet;
-import org.eclipse.babel.runtime.external.ILocalizationText;
-import org.eclipse.babel.runtime.external.LocalizableText;
-import org.eclipse.babel.runtime.external.LocalizedTextInput;
-import org.eclipse.babel.runtime.external.UpdatableResourceBundle;
+import org.eclipse.babel.runtime.external.TranslatableNLS;
+import org.eclipse.babel.runtime.external.ITranslatableSet;
+import org.eclipse.babel.runtime.external.ITranslatableText;
+import org.eclipse.babel.runtime.external.TranslatableText;
+import org.eclipse.babel.runtime.external.TranslatableTextInput;
+import org.eclipse.babel.runtime.external.TranslatableResourceBundle;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -46,11 +46,11 @@ public class PluginLocalizationDialog extends LocalizableTrayDialog {
 
 	private Bundle bundle;
 
-	private ILocalizableTextSet targetLanguageSet;
+	private ITranslatableSet targetLanguageSet;
 
-	private Set<UpdatableResourceBundle> updatedBundles = new HashSet<UpdatableResourceBundle>();
+	private Set<TranslatableResourceBundle> updatedBundles = new HashSet<TranslatableResourceBundle>();
 
-	protected PluginLocalizationDialog(Shell shell, AboutBundleData bundleData, ILocalizableTextSet targetLanguageSet) {
+	protected PluginLocalizationDialog(Shell shell, AboutBundleData bundleData, ITranslatableSet targetLanguageSet) {
 		super(shell);
 
 		this.bundle = bundleData.getBundle();
@@ -58,7 +58,7 @@ public class PluginLocalizationDialog extends LocalizableTrayDialog {
 	}
 
 	protected Control createDialogArea(Composite parent) {
-		languageSet.associate(getShell(), DynamicNLS.bind(Messages.LocalizeDialog_Title_PluginPart, bundle.getSymbolicName()));
+		languageSet.associate(getShell(), TranslatableNLS.bind(Messages.LocalizeDialog_Title_PluginPart, bundle.getSymbolicName()));
 
 		Composite container = (Composite)super.createDialogArea(parent);
 
@@ -71,9 +71,9 @@ public class PluginLocalizationDialog extends LocalizableTrayDialog {
 		 * For each resource bundle in the plug-in, add a tab for that
 		 * too.
 		 */
-		Collection<UpdatableResourceBundle> resourceBundles = UpdatableResourceBundle.getAllResourceBundles().get(bundle);
+		Collection<TranslatableResourceBundle> resourceBundles = TranslatableResourceBundle.getAllResourceBundles().get(bundle);
 		if (resourceBundles != null) {
-			for (UpdatableResourceBundle resourceBundle: resourceBundles) {
+			for (TranslatableResourceBundle resourceBundle: resourceBundles) {
 				addPostActivationResourceTab(tabFolder, resourceBundle);
 			}
 		}
@@ -107,10 +107,10 @@ public class PluginLocalizationDialog extends LocalizableTrayDialog {
 			break;
 		}
 
-		ILocalizationText[] texts = new ILocalizationText[p.size()];
+		ITranslatableText[] texts = new ITranslatableText[p.size()];
 		int i = 0;
 		for (final Object key: p.keySet()) {
-			texts[i++] = new ILocalizationText() {
+			texts[i++] = new ITranslatableText() {
 
 				public String getLocalizedText(Locale locale) {
 					return p.getProperty((String)key);
@@ -129,7 +129,7 @@ public class PluginLocalizationDialog extends LocalizableTrayDialog {
 		tv.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 	}
 
-	private void addPostActivationResourceTab(TabFolder tabFolder, UpdatableResourceBundle resourceBundle) {
+	private void addPostActivationResourceTab(TabFolder tabFolder, TranslatableResourceBundle resourceBundle) {
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText(resourceBundle.getDescription());
 
@@ -138,20 +138,20 @@ public class PluginLocalizationDialog extends LocalizableTrayDialog {
 
 		c.setLayout(new GridLayout());
 
-		ArrayList<ILocalizationText> texts = new ArrayList<ILocalizationText>();
+		ArrayList<ITranslatableText> texts = new ArrayList<ITranslatableText>();
 		Enumeration<String> e = resourceBundle.getKeys();
 		while (e.hasMoreElements()) {
-			texts.add(new LocalizableText(resourceBundle, e.nextElement()));
+			texts.add(new TranslatableText(resourceBundle, e.nextElement()));
 		}
 
-		Control tv = new TranslatableTreeComposite(c, new TextInputContentProvider(), texts.toArray(new ILocalizationText[0]), languageSet, updatedBundles);
+		Control tv = new TranslatableTreeComposite(c, new TextInputContentProvider(), texts.toArray(new ITranslatableText[0]), languageSet, updatedBundles);
 		tv.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 	}
 
 	@Override
 	protected void okPressed() {
 		if (targetLanguageSet != null) {
-			for (LocalizedTextInput textInput: targetLanguageSet.getLocalizedTexts()) {
+			for (TranslatableTextInput textInput: targetLanguageSet.getLocalizedTexts()) {
 				textInput.updateControl();
 			}
 		}
@@ -160,7 +160,7 @@ public class PluginLocalizationDialog extends LocalizableTrayDialog {
 		 * Save all bundles that have had changes.  These have been put
 		 * into a set, so it is easy for us to know which ones have been changed.
 		 */
-		for (UpdatableResourceBundle bundle: updatedBundles) {
+		for (TranslatableResourceBundle bundle: updatedBundles) {
 			bundle.save();
 		}
 

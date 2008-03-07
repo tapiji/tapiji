@@ -16,14 +16,14 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.eclipse.babel.runtime.external.ILocalizableTextSet;
-import org.eclipse.babel.runtime.external.ILocalizationText;
-import org.eclipse.babel.runtime.external.LocalizedTextInput;
+import org.eclipse.babel.runtime.external.ITranslatableSet;
+import org.eclipse.babel.runtime.external.ITranslatableText;
+import org.eclipse.babel.runtime.external.TranslatableTextInput;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.menus.CommandContributionItem;
 
-public class LocalizableMenuSet implements ILocalizableTextSet {
+public class LocalizableMenuSet implements ITranslatableSet {
 
 	/**
 	 * All messages added to this object must come from bundles that have the same
@@ -31,20 +31,20 @@ public class LocalizableMenuSet implements ILocalizableTextSet {
 	 */
 	private Locale locale;
 	
-	protected Map<Object, LocalizedTextInput> localizableTextCollection = new HashMap<Object, LocalizedTextInput>();	
+	protected Map<Object, TranslatableTextInput> localizableTextCollection = new HashMap<Object, TranslatableTextInput>();	
 	protected ArrayList<Object> controlOrder = new ArrayList<Object>();	
 
 	public LocalizableMenuSet() {
 		this.locale = Locale.getDefault();
 	}
 	
-	public LocalizedTextInput[] getLocalizedTexts() {
+	public TranslatableTextInput[] getLocalizedTexts() {
 		/*
 		 * We need to get the values from the map, but return them in the order
 		 * in which the controls were originally added. This ensures a more
 		 * sensible order.
 		 */
-		LocalizedTextInput[] result = new LocalizedTextInput[controlOrder.size()];
+		TranslatableTextInput[] result = new TranslatableTextInput[controlOrder.size()];
 		int i = 0;
 		for (Object controlKey: controlOrder) {
 			result[i++] = localizableTextCollection.get(controlKey); 
@@ -52,7 +52,7 @@ public class LocalizableMenuSet implements ILocalizableTextSet {
 		return result;
 	}
 
-	public void associate(Object controlKey, LocalizedTextInput textInput) {
+	public void associate(Object controlKey, TranslatableTextInput textInput) {
 		textInput.getLocalizedTextObject().validateLocale(locale);
 		
 		if (!controlOrder.contains(controlKey)) {
@@ -61,8 +61,8 @@ public class LocalizableMenuSet implements ILocalizableTextSet {
 		localizableTextCollection.put(controlKey, textInput);
 	}
 
-	public void associate(final MenuItem label, ILocalizationText localizableText) {
-		associate(label, new LocalizedTextInput(localizableText) {
+	public void associate(final MenuItem label, ITranslatableText localizableText) {
+		associate(label, new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				label.setText(text);
@@ -75,8 +75,8 @@ public class LocalizableMenuSet implements ILocalizableTextSet {
 	}
 
 	public void associate(final ActionContributionItem pluginAction,
-			ILocalizationText localizableText) {
-		associate(pluginAction, new LocalizedTextInput(localizableText) {
+			ITranslatableText localizableText) {
+		associate(pluginAction, new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				pluginAction.getAction().setText(text);
@@ -86,8 +86,8 @@ public class LocalizableMenuSet implements ILocalizableTextSet {
 	}
 
 	public void associate(final CommandContributionItem pluginAction,
-			ILocalizationText localizableText) {
-		associate(pluginAction, new LocalizedTextInput(localizableText) {
+			ITranslatableText localizableText) {
+		associate(pluginAction, new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				// TODO: Don't know how to do this.  The setText method

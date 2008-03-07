@@ -14,9 +14,9 @@ package org.eclipse.babel.runtime.handlers;
 import org.eclipse.babel.runtime.Activator;
 import org.eclipse.babel.runtime.Messages;
 import org.eclipse.babel.runtime.actions.LocalizeDialog;
-import org.eclipse.babel.runtime.external.DynamicNLS;
-import org.eclipse.babel.runtime.external.ILocalizableTextSet;
-import org.eclipse.babel.runtime.external.ILocalizationText;
+import org.eclipse.babel.runtime.external.TranslatableNLS;
+import org.eclipse.babel.runtime.external.ITranslatableSet;
+import org.eclipse.babel.runtime.external.ITranslatableText;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -36,18 +36,18 @@ public class LocalizeHandler extends AbstractHandler {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 		IWorkbenchPart activePart = window.getActivePage().getActivePart();
 
-		ILocalizationText tabTitle;
-		ILocalizableTextSet languageSet;
+		ITranslatableText tabTitle;
+		ITranslatableSet languageSet;
 		if (activePart != null) {
 			if (activePart instanceof IEditorPart) {
-				tabTitle = DynamicNLS.bind(Messages.LocalizeDialog_TabTitle_EditorPart, activePart.getTitle()); //$NON-NLS-1$
+				tabTitle = TranslatableNLS.bind(Messages.LocalizeDialog_TabTitle_EditorPart, activePart.getTitle()); //$NON-NLS-1$
 			} else if (activePart instanceof IViewPart) {
-				tabTitle = DynamicNLS.bind(Messages.LocalizeDialog_TabTitle_ViewPart, activePart.getTitle()); //$NON-NLS-1$
+				tabTitle = TranslatableNLS.bind(Messages.LocalizeDialog_TabTitle_ViewPart, activePart.getTitle()); //$NON-NLS-1$
 			} else {
 				// When can this happen?
-				tabTitle = DynamicNLS.bind(Messages.LocalizeDialog_TabTitle_OtherPart, activePart.getTitle()); //$NON-NLS-1$
+				tabTitle = TranslatableNLS.bind(Messages.LocalizeDialog_TabTitle_OtherPart, activePart.getTitle()); //$NON-NLS-1$
 			}
-			languageSet = (ILocalizableTextSet)activePart.getAdapter(ILocalizableTextSet.class);
+			languageSet = (ITranslatableSet)activePart.getAdapter(ITranslatableSet.class);
 		} else {
 			// No view or editor is active
 			tabTitle = null;

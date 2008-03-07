@@ -11,7 +11,7 @@
 
 package org.eclipse.babel.runtime;
 
-import org.eclipse.babel.runtime.external.ILocalizableTextSet;
+import org.eclipse.babel.runtime.external.ITranslatableSet;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbench;
@@ -58,7 +58,7 @@ public class StartupClass implements IStartup {
 
 								MenuAnalyzer analyser = new MenuAnalyzer();
 								TranslatableMenuItem translatableMenu = analyser.createTranslatableMenu();
-								ILocalizableTextSet textSet = analyser.getTextSet();
+								ITranslatableSet textSet = analyser.getTextSet();
 								Activator.getDefault().setTranslatableMenu(translatableMenu, textSet);
 							}
 						});

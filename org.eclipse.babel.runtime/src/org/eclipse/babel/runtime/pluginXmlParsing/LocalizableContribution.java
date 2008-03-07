@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.babel.runtime.external.ILocalizationText;
-import org.eclipse.babel.runtime.external.UpdatableResourceBundle;
+import org.eclipse.babel.runtime.external.ITranslatableText;
+import org.eclipse.babel.runtime.external.TranslatableResourceBundle;
 import org.xml.sax.Attributes;
 
 public class LocalizableContribution implements IObjectBuiltFromElement {
@@ -28,11 +28,11 @@ public class LocalizableContribution implements IObjectBuiltFromElement {
 
 	private String defaultNamespace = null;
 
-	private UpdatableResourceBundle translationBundle;
+	private TranslatableResourceBundle translationBundle;
 	
 	private List<LocalizableExtension> children = new ArrayList<LocalizableExtension>();
 
-	protected LocalizableContribution(String defaultNamespace, UpdatableResourceBundle translationBundle) {
+	protected LocalizableContribution(String defaultNamespace, TranslatableResourceBundle translationBundle) {
 		this.defaultNamespace = defaultNamespace;
 		this.translationBundle = translationBundle;
 	}
@@ -63,12 +63,12 @@ public class LocalizableContribution implements IObjectBuiltFromElement {
 	 * @param attributeName
 	 *            the name of the attribute which contains the required
 	 *            localizable text
-	 * @return an appropriate ILocalizationText implementation, being a
-	 *         LocalizableText object if the original text started with a
-	 *         percent character and being a NonLocalizableText object if the
+	 * @return an appropriate ITranslatableText implementation, being a
+	 *         TranslatableText object if the original text started with a
+	 *         percent character and being a NonTranslatableText object if the
 	 *         text did not start with the percent character
 	 */
-	public ILocalizationText getLocalizableText(String extensionPointId, String elementName, String configurationElementId, String attributeName) {
+	public ITranslatableText getLocalizableText(String extensionPointId, String elementName, String configurationElementId, String attributeName) {
 		ConfigurationElement element = null;
 		for (LocalizableExtension extension : children) {
 			if (extension.getExtensionPointIdentifier().equals(extensionPointId)) {
@@ -89,7 +89,7 @@ public class LocalizableContribution implements IObjectBuiltFromElement {
 		return PluginXmlRegistry.translate(translationBundle, originalText);
 	}
 
-	public ILocalizationText getLocalizableText(String extensionPointId, String elementName, String subElementName, String configurationElementId, String attributeName) {
+	public ITranslatableText getLocalizableText(String extensionPointId, String elementName, String subElementName, String configurationElementId, String attributeName) {
 		ConfigurationElement element = null;
 		for (LocalizableExtension extension : children) {
 			if (extension.getExtensionPointIdentifier().equals(extensionPointId)) {

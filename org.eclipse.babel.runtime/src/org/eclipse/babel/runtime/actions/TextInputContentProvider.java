@@ -11,8 +11,8 @@
 
 package org.eclipse.babel.runtime.actions;
 
-import org.eclipse.babel.runtime.external.FormattedLocalizationText;
-import org.eclipse.babel.runtime.external.ILocalizationText;
+import org.eclipse.babel.runtime.external.FormattedTranslatableText;
+import org.eclipse.babel.runtime.external.ITranslatableText;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -35,15 +35,15 @@ class TextInputContentProvider implements IStructuredContentProvider,
   	}
 
   	public Object [] getChildren(Object parent) {
-  		if (parent instanceof ILocalizationText[]) {
+  		if (parent instanceof ITranslatableText[]) {
   			return (Object[])parent;
-  		} else if (parent instanceof FormattedLocalizationText) {
-  			return ((FormattedLocalizationText)parent).getDependentTexts();
+  		} else if (parent instanceof FormattedTranslatableText) {
+  			return ((FormattedTranslatableText)parent).getDependentTexts();
   		}
   		return new Object[0];
   	}
 
   	public boolean hasChildren(Object parent) {
-  		return (parent instanceof FormattedLocalizationText);
+  		return (parent instanceof FormattedTranslatableText);
   	}
   }

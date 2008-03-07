@@ -25,7 +25,7 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
-public class LocalizableTextSet implements ILocalizableTextSet {
+public class TranslatableSet implements ITranslatableSet {
 
 	/**
 	 * All messages added to this object must come from bundles that have the same
@@ -33,20 +33,20 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 	 */
 	private Locale locale;
 	
-	protected Map<Object, LocalizedTextInput> localizableTextCollection = new HashMap<Object, LocalizedTextInput>();	
+	protected Map<Object, TranslatableTextInput> localizableTextCollection = new HashMap<Object, TranslatableTextInput>();	
 	protected ArrayList<Object> controlOrder = new ArrayList<Object>();	
 
-	public LocalizableTextSet() {
+	public TranslatableSet() {
 		this.locale = Locale.getDefault();
 	}
 	
-	public LocalizedTextInput[] getLocalizedTexts() {
+	public TranslatableTextInput[] getLocalizedTexts() {
 		/*
 		 * We need to get the values from the map, but return them in the order
 		 * in which the controls were originally added. This ensures a more
 		 * sensible order.
 		 */
-		LocalizedTextInput[] result = new LocalizedTextInput[controlOrder.size()];
+		TranslatableTextInput[] result = new TranslatableTextInput[controlOrder.size()];
 		int i = 0;
 		for (Object controlKey: controlOrder) {
 			result[i++] = localizableTextCollection.get(controlKey); 
@@ -60,7 +60,7 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 		// be affected by changes to the text values in this set.
 	}
 	
-	public void associate(Object controlKey, LocalizedTextInput textInput) {
+	public void associate(Object controlKey, TranslatableTextInput textInput) {
 		textInput.getLocalizedTextObject().validateLocale(locale);
 		
 		if (!controlOrder.contains(controlKey)) {
@@ -69,8 +69,8 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 		localizableTextCollection.put(controlKey, textInput);
 	}
 
-	public void associate(final Label label, ILocalizationText localizableText) {
-		associate(label, new LocalizedTextInput(localizableText) {
+	public void associate(final Label label, ITranslatableText localizableText) {
+		associate(label, new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				label.setText(text);
@@ -78,8 +78,11 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 		}); 
 	}
 
-	public void associate(final Button button, ILocalizationText localizableText) {
-		associate(button, new LocalizedTextInput(localizableText) {
+	public void associate(final Button button, ITranslatableText localizableText) {
+		if (localizableText.getLocalizedText().equals("adde....")) {
+			System.out.println("here");
+		}
+		associate(button, new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				button.setText(text);
@@ -87,8 +90,8 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 		}); 
 	}
 
-	public void associateToolTip(final Button button, ILocalizationText localizableText) {
-		associate(new ToolTipKey(button), new LocalizedTextInput(localizableText) {
+	public void associateToolTip(final Button button, ITranslatableText localizableText) {
+		associate(new ToolTipKey(button), new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				button.setToolTipText(text);
@@ -96,8 +99,8 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 		}); 
 	}
 
-	public void associate(final Item item, ILocalizationText localizableText) {
-		associate(item, new LocalizedTextInput(localizableText) {
+	public void associate(final Item item, ITranslatableText localizableText) {
+		associate(item, new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				item.setText(text);
@@ -105,8 +108,8 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 		}); 
 	}
 
-	public void associate(final Shell shell, ILocalizationText localizableText) {
-		associate(shell, new LocalizedTextInput(localizableText) {
+	public void associate(final Shell shell, ITranslatableText localizableText) {
+		associate(shell, new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				shell.setText(text);
@@ -114,8 +117,8 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 		}); 
 	}
 
-	public void associate(final TabItem tabItem, ILocalizationText localizableText) {
-		associate(tabItem, new LocalizedTextInput(localizableText) {
+	public void associate(final TabItem tabItem, ITranslatableText localizableText) {
+		associate(tabItem, new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				tabItem.setText(text);
@@ -123,8 +126,8 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 		}); 
 	}
 
-	public void associate(final ScrolledForm form, ILocalizationText localizableText) {
-		associate(form, new LocalizedTextInput(localizableText) {
+	public void associate(final ScrolledForm form, ITranslatableText localizableText) {
+		associate(form, new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				form.setText(text);
@@ -132,8 +135,8 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 		}); 
 	}
 
-	public void associate(final Section section, ILocalizationText localizableText) {
-		associate(section, new LocalizedTextInput(localizableText) {
+	public void associate(final Section section, ITranslatableText localizableText) {
+		associate(section, new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				section.setText(text);
@@ -141,8 +144,8 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 		}); 
 	}
 
-	public void associateDescription(final Section section, ILocalizationText localizableText) {
-		associate(new DescriptionKey(section), new LocalizedTextInput(localizableText) {
+	public void associateDescription(final Section section, ITranslatableText localizableText) {
+		associate(new DescriptionKey(section), new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				section.setDescription(text);
@@ -150,8 +153,8 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 		}); 
 	}
 
-	public void associate(final Hyperlink link, ILocalizationText localizableText) {
-		associate(link, new LocalizedTextInput(localizableText) {
+	public void associate(final Hyperlink link, ITranslatableText localizableText) {
+		associate(link, new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				link.setText(text);
@@ -160,8 +163,8 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 	}
 
 	//	public void associate(
-//			FormPage formPage, ILocalizationText localizableText) {
-//		associate(formPage, new LocalizedTextInput(localizableText) {
+//			FormPage formPage, ITranslatableText localizableText) {
+//		associate(formPage, new TranslatableTextInput(localizableText) {
 //			@Override
 //			public void updateControl(String text) {
 //				formPage.setPartName(text);
@@ -181,8 +184,8 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 	 *  
 	 * @param localizableText
 	 */
-	public void associate(ILocalizationText localizableText) {
-		associate(new Object(), new LocalizedTextInput(localizableText) {
+	public void associate(ITranslatableText localizableText) {
+		associate(new Object(), new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				// do nothing
@@ -203,8 +206,8 @@ public class LocalizableTextSet implements ILocalizableTextSet {
 	 *  
 	 * @param localizableText
 	 */
-	public void associate2(Object control, ILocalizationText localizableText) {
-		associate(control, new LocalizedTextInput(localizableText) {
+	public void associate2(Object control, ITranslatableText localizableText) {
+		associate(control, new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
 				// do nothing

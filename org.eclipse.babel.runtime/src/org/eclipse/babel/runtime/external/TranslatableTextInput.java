@@ -13,11 +13,11 @@ package org.eclipse.babel.runtime.external;
 
 import java.util.Locale;
 
-public abstract class LocalizedTextInput {
+public abstract class TranslatableTextInput {
 
-	private ILocalizationText localizedText;
+	private ITranslatableText localizedText;
 	
-	public LocalizedTextInput(ILocalizationText localizedText) {
+	public TranslatableTextInput(ITranslatableText localizedText) {
 		this.localizedText = localizedText;
 		
 		updateControl();
@@ -25,7 +25,7 @@ public abstract class LocalizedTextInput {
 	
 	/**
 	 * This method should be used when the caller wants to take responsibility
-	 * for setting the initial text but the setText method in the given LocalizedTextInput
+	 * for setting the initial text but the setText method in the given TranslatableTextInput
 	 * object is to take responsibility to set the text should it be changed.
 	 * 
 	 * This method is used, for example, when setting the part name.  This is called
@@ -33,7 +33,7 @@ public abstract class LocalizedTextInput {
 	 * because the part has not yet been constructed.  In fact, this method should be
 	 * used in any situation where the initial text value must be passed to a constructor.
 	 */
-	public LocalizedTextInput(ILocalizationText localizedText, boolean noInitialUpdate) {
+	public TranslatableTextInput(ITranslatableText localizedText, boolean noInitialUpdate) {
 		this.localizedText = localizedText;
 	}
 	
@@ -43,7 +43,7 @@ public abstract class LocalizedTextInput {
 
 	public abstract void updateControl(String text);
 
-	public ILocalizationText getLocalizedTextObject() {
+	public ITranslatableText getLocalizedTextObject() {
 		return localizedText;
 	}
 }

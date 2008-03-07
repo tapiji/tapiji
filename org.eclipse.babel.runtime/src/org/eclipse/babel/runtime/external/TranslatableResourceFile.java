@@ -43,7 +43,7 @@ import org.osgi.framework.Bundle;
  * to Properties.load would have done.  This class maintains the delta file, while also
  * accessing the fixed properties file.
  */
-public class UpdatableResourceFile {
+public class TranslatableResourceFile {
 	private static final String NULL_VALUE_TEXT = "<<<null>>>";
 	protected static final String VERSION_KEY = "eclipse.translations.version"; //$NON-NLS-1$
 	protected static final String VERSION_VALUE = "1"; //$NON-NLS-1$
@@ -52,13 +52,13 @@ public class UpdatableResourceFile {
 	
 	static final int SEVERITY_ERROR = 0x04;
 
-	private static Map<Bundle, Map<String, UpdatableResourceFile>> allResources = new HashMap<Bundle, Map<String, UpdatableResourceFile>>();
+	private static Map<Bundle, Map<String, TranslatableResourceFile>> allResources = new HashMap<Bundle, Map<String, TranslatableResourceFile>>();
 	
 	private Properties readOnlyProperties;
 	private IPath updatedPropertiesFile;
 	private Properties updatedProperties;
 	
-	public UpdatableResourceFile(Properties readOnlyProperties, IPath updatedPropertiesFile) {
+	public TranslatableResourceFile(Properties readOnlyProperties, IPath updatedPropertiesFile) {
 		this.readOnlyProperties = readOnlyProperties;
 		this.updatedPropertiesFile = updatedPropertiesFile;
 		
@@ -79,7 +79,7 @@ public class UpdatableResourceFile {
 			 */
 			return;
 		} catch (IOException e) {
-			String message = DynamicNLS.bind(Messages.exception_loadException, updatedPropertiesFile).getLocalizedText();
+			String message = TranslatableNLS.bind(Messages.exception_loadException, updatedPropertiesFile).getLocalizedText();
 			RuntimeLog.log(new Status(IStatus.INFO, "org.eclipse.babel.runtime", IStatus.INFO, message, e));
 			// Leave the updatedProperties empty and continue
 		} finally {
@@ -136,7 +136,7 @@ public class UpdatableResourceFile {
 		if (updatedProperties.isEmpty()) {
 			// nothing to save. delete existing file if one exists.
 			if (updatedPropertiesFile.toFile().exists() && !updatedPropertiesFile.toFile().delete()) {
-				String message = DynamicNLS.bind(Messages.exception_failedDelete, updatedPropertiesFile).getLocalizedText();
+				String message = TranslatableNLS.bind(Messages.exception_failedDelete, updatedPropertiesFile).getLocalizedText();
 				RuntimeLog.log(new Status(IStatus.WARNING, "org.eclipse.babel.runtime", IStatus.WARNING, message, null));
 			}
 			return;
@@ -158,7 +158,7 @@ public class UpdatableResourceFile {
 			output.flush();
 			fos.getFD().sync();
 		} catch (IOException e) {
-			String message = DynamicNLS.bind(Messages.exception_saveException, updatedPropertiesFile).getLocalizedText();
+			String message = TranslatableNLS.bind(Messages.exception_saveException, updatedPropertiesFile).getLocalizedText();
 			RuntimeLog.log(new Status(IStatus.ERROR, "org.eclipse.babel.runtime", IStatus.ERROR, message, e));
 		} finally {
 			if (output != null)
@@ -236,7 +236,7 @@ public class UpdatableResourceFile {
 				: text1.equals(text2);
 	}
 
-	public static UpdatableResourceFile get(Bundle osgiBundle, ClassLoader loader, String variant) {
+	public static TranslatableResourceFile get(Bundle osgiBundle, ClassLoader loader, String variant) {
 		/*
 		 * Look to see if we already have a one in our map.  We don't want to create
 		 * two that are the same because then they will not see each other's changes.
@@ -245,12 +245,12 @@ public class UpdatableResourceFile {
 		 * We use the plugin and the variant name to determine if two resource bundles
 		 * are the same.
 		 */
-		Map<String, UpdatableResourceFile> pluginResources = allResources.get(osgiBundle);
+		Map<String, TranslatableResourceFile> pluginResources = allResources.get(osgiBundle);
 		if (pluginResources == null) {
-			pluginResources = new HashMap<String, UpdatableResourceFile>();
+			pluginResources = new HashMap<String, TranslatableResourceFile>();
 			allResources.put(osgiBundle, pluginResources);
 		}
-		UpdatableResourceFile variantResources = pluginResources.get(variant);
+		TranslatableResourceFile variantResources = pluginResources.get(variant);
 		if (variantResources == null) {
 			// loader==null if we're launched off the Java boot classpath
 			final InputStream stream = loader==null ? ClassLoader.getSystemResourceAsStream(variant) : loader.getResourceAsStream(variant);
@@ -261,7 +261,7 @@ public class UpdatableResourceFile {
             		readOnlyProperties.load(bis);
             		bis.close();
             	} catch (IOException e) {
-            		DynamicNLS.log(SEVERITY_ERROR, "Error loading " + variant, e); //$NON-NLS-1$
+            		TranslatableNLS.log(SEVERITY_ERROR, "Error loading " + variant, e); //$NON-NLS-1$
             	} finally {
             		try {
             			if (bis != null)
@@ -276,7 +276,7 @@ public class UpdatableResourceFile {
 
 			IPath updatedPropertiesFile = Platform.getStateLocation(osgiBundle).append(F_TRANSLATIONS_DATA).append(variant+".properties"); //$NON-NLS-1$
 			
-			variantResources = new UpdatableResourceFile(readOnlyProperties, updatedPropertiesFile);
+			variantResources = new TranslatableResourceFile(readOnlyProperties, updatedPropertiesFile);
 			pluginResources.put(variant, variantResources);
 		}
  		
