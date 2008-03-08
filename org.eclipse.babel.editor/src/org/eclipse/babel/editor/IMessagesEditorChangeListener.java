@@ -20,7 +20,14 @@ import org.eclipse.babel.core.message.tree.IKeyTreeModel;
  */
 public interface IMessagesEditorChangeListener {
 
+    public static int SHOW_ALL = 0;
+    public static int SHOW_ONLY_MISSING_AND_UNUSED = 1;
+    public static int SHOW_ONLY_MISSING = 2;
+    public static int SHOW_ONLY_UNUSED = 3;
+	
     void keyTreeVisibleChanged(boolean visible);
+    
+    void showOnlyUnusedAndMissingChanged(int showFlag);
     
     void selectedKeyChanged(String oldKey, String newKey);
     

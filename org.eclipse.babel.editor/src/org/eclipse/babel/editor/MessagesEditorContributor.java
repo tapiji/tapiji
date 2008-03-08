@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor;
 
+import org.eclipse.babel.editor.actions.FilterKeysAction;
 import org.eclipse.babel.editor.actions.KeyTreeVisibleAction;
 import org.eclipse.babel.editor.actions.NewLocaleAction;
 import org.eclipse.jface.action.IAction;
@@ -21,6 +22,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.ide.IDEActionFactory;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -40,9 +42,12 @@ public class MessagesEditorContributor
 
     private KeyTreeVisibleAction toggleKeyTreeAction;
     private NewLocaleAction newLocaleAction;
+    private IMenuManager resourceBundleMenu;
+    private static String resourceBundleMenuID;
     
-    private MessagesEditor rbEditor;
-    
+    /** singleton: probably not the cleanest way to access it from anywhere. */
+    public static ActionGroup FILTERS = new FilterKeysActionGroup();
+        
     /**
 	 * Creates a multi-page contributor.
 	 */
@@ -122,6 +127,8 @@ public class MessagesEditorContributor
         
         toggleKeyTreeAction = new KeyTreeVisibleAction();
         newLocaleAction = new NewLocaleAction();
+        
+
 //        toggleKeyTreeAction.setText("Show/Hide Key Tree");
 //        toggleKeyTreeAction.setToolTipText("Click to show/hide the key tree");
 //        toggleKeyTreeAction.setImageDescriptor(
@@ -136,10 +143,12 @@ public class MessagesEditorContributor
     public void contributeToMenu(IMenuManager manager) {
 //        System.out.println("active editor part:" +activeEditorPart);
 //        System.out.println("menu editor:" + rbEditor);
-		IMenuManager menu = new MenuManager("&ResourceBundle Editor");
-		manager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, menu);
-		menu.add(toggleKeyTreeAction);
-        menu.add(newLocaleAction);
+		resourceBundleMenu = new MenuManager("&ResourceBundle Editor", resourceBundleMenuID);
+		manager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, resourceBundleMenu);
+		resourceBundleMenu.add(toggleKeyTreeAction);
+		resourceBundleMenu.add(newLocaleAction);
+		
+		FILTERS.fillContextMenu(resourceBundleMenu);
 	}
     /**
      * @see org.eclipse.ui.part.EditorActionBarContributor
@@ -150,16 +159,61 @@ public class MessagesEditorContributor
 //        System.out.println("toolbar editor:" + rbEditor);
 		manager.add(new Separator());
 //		manager.add(sampleAction);
-        
-        manager.add(toggleKeyTreeAction);
+		manager.add(toggleKeyTreeAction);
         manager.add(newLocaleAction);
+        
+        ((FilterKeysActionGroup)FILTERS).fillActionBars(getActionBars());
 	}
     /* (non-Javadoc)
      * @see org.eclipse.ui.part.MultiPageEditorActionBarContributor#setActiveEditor(org.eclipse.ui.IEditorPart)
      */
     public void setActiveEditor(IEditorPart part) {
         super.setActiveEditor(part);
-        toggleKeyTreeAction.setEditor((MessagesEditor) part);
-//        System.out.println("PART IS:" + part);
+    	MessagesEditor me = part instanceof MessagesEditor
+			? (MessagesEditor)part : null;
+        toggleKeyTreeAction.setEditor(me);
+        ((FilterKeysActionGroup) FILTERS).setActiveEditor(part);
     }
+    
+    /**
+     * Groups the filter actions together.
+     */
+    private static class FilterKeysActionGroup extends ActionGroup {
+        FilterKeysAction[] filtersAction = new FilterKeysAction[4];
+
+        public FilterKeysActionGroup() {
+            filtersAction[0] = new FilterKeysAction(IMessagesEditorChangeListener.SHOW_ALL);
+            filtersAction[1] = new FilterKeysAction(IMessagesEditorChangeListener.SHOW_ONLY_MISSING);
+            filtersAction[2] = new FilterKeysAction(IMessagesEditorChangeListener.SHOW_ONLY_MISSING_AND_UNUSED);
+            filtersAction[3] = new FilterKeysAction(IMessagesEditorChangeListener.SHOW_ONLY_UNUSED);
+        }
+        
+		public void fillActionBars(IActionBars actionBars) {
+	        for (int i = 0; i < filtersAction.length; i++) {
+	        	actionBars.getToolBarManager().add(filtersAction[i]);
+	        }
+		}
+
+		public void fillContextMenu(IMenuManager menu) {
+	        MenuManager filters = new MenuManager("Filters");
+	        for (int i = 0; i < filtersAction.length; i++) {
+	        	filters.add(filtersAction[i]);
+	        }
+	        menu.add(filters);
+		}
+
+		public void updateActionBars() {
+			for (int i = 0; i < filtersAction.length;i++) {
+				filtersAction[i].update();
+			}
+		}
+	    public void setActiveEditor(IEditorPart part) {
+	    	MessagesEditor me = part instanceof MessagesEditor
+	    		? (MessagesEditor)part : null;
+	    	for (int i = 0; i < filtersAction.length; i++) {
+	        	filtersAction[i].setEditor(me);
+	        }
+	    }
+    }
+    
 }

@@ -20,6 +20,7 @@ import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.util.UIUtils;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -49,6 +50,7 @@ public class I18NPage extends ScrolledComposite {
 //    private final StackLayout layout = new StackLayout();
     private final SashForm sashForm;
     
+    
     /**
      * Constructor.
      * @param parent parent component.
@@ -60,7 +62,6 @@ public class I18NPage extends ScrolledComposite {
             final MessagesEditor editor) {
         super(parent, style);
         this.editor = editor; 
-
         sashForm = new SashForm(this, SWT.SMOOTH);
         sashForm.setBackground(UIUtils.getSystemColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT));
         editor.getEditorSite().getPage().addPartListener(new IPartListener(){
@@ -116,10 +117,11 @@ public class I18NPage extends ScrolledComposite {
             ((IMessagesEditorChangeListener) iter.next()).keyTreeVisibleChanged(visible);
         }
     }
+    
     public boolean isKeyTreeVisible() {
         return keyTreeVisible;
     }
-    
+ 
     
     private Composite createValuesComposite(SashForm parent) {
         final ScrolledComposite scrolledComposite =

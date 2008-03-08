@@ -11,6 +11,7 @@
 package org.eclipse.babel.core.message.tree;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -96,6 +97,13 @@ public class KeyTreeNode implements Comparable {
     }
     
     /**
+     * @return the children without creating a new object
+     */
+    Collection getChildrenInternal() {
+    	return children.values();
+    }
+    
+    /**
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     public int compareTo(Object o) {
@@ -137,4 +145,5 @@ public class KeyTreeNode implements Comparable {
         children.remove(childNode.getName());
         //TODO remove parent on child node?
     }
+    
 }

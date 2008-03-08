@@ -30,7 +30,7 @@ public class CollapseAllAction extends AbstractTreeAction {
         setText(MessagesEditorPlugin.getString("key.collapseAll")); //$NON-NLS-1$
         setImageDescriptor(
                 UIUtils.getImageDescriptor(UIUtils.IMAGE_COLLAPSE_ALL));
-        setToolTipText("TODO put something here"); //TODO put tooltip
+        setToolTipText("Collapse all"); //TODO put tooltip
     }
 
     /**

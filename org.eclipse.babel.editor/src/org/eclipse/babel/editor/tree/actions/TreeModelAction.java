@@ -32,7 +32,7 @@ public class TreeModelAction extends AbstractTreeAction {
         setText(MessagesEditorPlugin.getString("key.layout.tree")); //$NON-NLS-1$
         setImageDescriptor(
                 UIUtils.getImageDescriptor(UIUtils.IMAGE_LAYOUT_HIERARCHICAL));
-        setToolTipText("TODO put something here"); //TODO put tooltip
+        setToolTipText("Display as in a Tree"); //TODO put tooltip
         setChecked(true);
     }
 

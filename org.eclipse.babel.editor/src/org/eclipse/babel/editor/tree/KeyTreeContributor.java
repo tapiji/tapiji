@@ -17,8 +17,10 @@ import org.eclipse.babel.core.message.tree.DefaultKeyTreeModel;
 import org.eclipse.babel.core.message.tree.IKeyTreeModel;
 import org.eclipse.babel.core.message.tree.IKeyTreeModelListener;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
+import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
+import org.eclipse.babel.editor.MessagesEditorMarkers;
 import org.eclipse.babel.editor.tree.actions.AddKeyAction;
 import org.eclipse.babel.editor.tree.actions.DeleteKeyAction;
 import org.eclipse.babel.editor.tree.actions.RenameKeyAction;
@@ -28,6 +30,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -69,6 +73,10 @@ public class KeyTreeContributor {
         treeViewer.setContentProvider(new KeyTreeContentProvider());
         treeViewer.setLabelProvider(new KeyTreeLabelProvider(editor, treeModel));
         treeViewer.setUseHashlookup(true);
+        
+        ViewerFilter onlyUnusedAndMissingKeysFilter = new OnlyUnsuedAndMissingKey();
+        ViewerFilter[] filters = {onlyUnusedAndMissingKeysFilter};
+        treeViewer.setFilters(filters);
 
 //        IKeyBindingService service = editor.getSite().getKeyBindingService();
 //        service.setScopes(new String[]{"org.eclilpse.babel.editor.editor.tree"});
@@ -88,6 +96,54 @@ public class KeyTreeContributor {
         treeViewer.expandAll();
     }
 
+    private class OnlyUnsuedAndMissingKey extends ViewerFilter implements
+        IKeyTreeModel.IKeyTreeNodeLeafFilter {
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer,
+         *      java.lang.Object, java.lang.Object)
+         */
+        public boolean select(Viewer viewer, Object parentElement,
+                Object element) {
+        	if (editor.isShowOnlyUnusedAndMissingKeys() == IMessagesEditorChangeListener.SHOW_ALL
+        			|| !(element instanceof KeyTreeNode)) {
+        		//no filtering. the element is displayed by default.
+        		return true;
+        	}
+        	if (editor.getI18NPage() != null && editor.getI18NPage().isKeyTreeVisible()) {
+        		return editor.getKeyTreeModel().isBranchFiltered(this, (KeyTreeNode)element);
+        	} else {
+        		return isFilteredLeaf((KeyTreeNode)element);
+        	}
+        }
+        
+        /**
+    	 * @param node
+    	 * @return true if this node should be in the filter. Does not navigate the tree
+    	 * of KeyTreeNode. false unless the node is a missing or unused key.
+    	 */
+    	public boolean isFilteredLeaf(KeyTreeNode node) {
+    		MessagesEditorMarkers markers = KeyTreeContributor.this.editor.getMarkers();
+    		String key = node.getMessageKey();
+    		boolean missingOrUnused = markers.isMissingOrUnusedKey(key);
+    		if (!missingOrUnused) {
+    			return false;
+    		}
+    		switch (editor.isShowOnlyUnusedAndMissingKeys()) {
+    		case IMessagesEditorChangeListener.SHOW_ONLY_MISSING_AND_UNUSED:
+    			return missingOrUnused;
+    		case IMessagesEditorChangeListener.SHOW_ONLY_MISSING:
+    			return !markers.isUnusedKey(key, missingOrUnused);
+    		case IMessagesEditorChangeListener.SHOW_ONLY_UNUSED:
+    			return markers.isUnusedKey(key, missingOrUnused);
+    		default:
+    			return false;
+    		}
+    	}
+        
+    }
 
 
     /**
@@ -187,6 +243,10 @@ public class KeyTreeContributor {
                 oldModel.removeKeyTreeModelListener(keyTreeListener);
                 newModel.addKeyTreeModelListener(keyTreeListener);
                 treeViewer.setInput(newModel);
+                treeViewer.refresh();
+            }
+        	public void showOnlyUnusedAndMissingChanged(int hideEverythingElse) {
+        		treeViewer.refresh();
             }
         });
     }

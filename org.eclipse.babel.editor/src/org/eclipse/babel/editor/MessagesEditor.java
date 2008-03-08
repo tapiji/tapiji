@@ -99,7 +99,8 @@ public class MessagesEditor extends MultiPageEditorPart
      */
     public void init(IEditorSite site, IEditorInput editorInput)
         throws PartInitException {
-        if (editorInput instanceof IFileEditorInput) {
+    	
+    	if (editorInput instanceof IFileEditorInput) {
             IFile file = ((IFileEditorInput) editorInput).getFile();
             if (MsgEditorPreferences.getInstance().isBuilderSetupAutomatically()) {
 	            IProject p = file.getProject();
@@ -395,6 +396,24 @@ public class MessagesEditor extends MultiPageEditorPart
     public I18NPage getI18NPage() {
         return i18nPage;
     }
+    /** one of the SHOW_* constants defined in the {@link IMessagesEditorChangeListener} */    
+    private int showOnlyMissingAndUnusedKeys = IMessagesEditorChangeListener.SHOW_ALL;
+    /**
+     * @return true when only unused and missing keys should be displayed. flase by default.
+     */
+    public int isShowOnlyUnusedAndMissingKeys() {
+        return showOnlyMissingAndUnusedKeys;
+    }
+    
+    public void setShowOnlyUnusedMissingKeys(int showFlag) {
+        showOnlyMissingAndUnusedKeys = showFlag;
+        for (Iterator iter = getChangeListeners().iterator(); iter.hasNext();) {
+            ((IMessagesEditorChangeListener) iter.next())
+            	.showOnlyUnusedAndMissingChanged(showFlag);
+        }
+    }
+    
+
 
     public Object getAdapter(Class adapter) {
         Object obj = super.getAdapter(adapter);

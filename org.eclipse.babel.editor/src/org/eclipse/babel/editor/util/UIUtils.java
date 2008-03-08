@@ -92,8 +92,21 @@ public final class UIUtils {
     public static final String IMAGE_COLLAPSE_ALL =
             "collapseall.png";  //$NON-NLS-1$
 
+    
+    public static final String IMAGE_KEY =
+	    	"keyDefault.png";  //$NON-NLS-1$
     public static final String IMAGE_INCOMPLETE_ENTRIES =
-    	    "incomplete.gif";  //$NON-NLS-1$
+    	"incomplete.gif";  //$NON-NLS-1$
+    public static final String IMAGE_EMPTY =
+    		"empty.gif";  //$NON-NLS-1$
+    public static final String IMAGE_MISSING_TRANSLATION =
+			"missing_translation.png";  //$NON-NLS-1$
+    public static final String IMAGE_UNUSED_TRANSLATION =
+			"unused_translation.png";  //$NON-NLS-1$
+    public static final String IMAGE_UNUSED_AND_MISSING_TRANSLATIONS =
+			"unused_and_missing_translations.png";  //$NON-NLS-1$
+    public static final String IMAGE_WARNED_TRANSLATION =
+			"warned_translation.png";  //$NON-NLS-1$
     
     /** Image registry. */
     private static final ImageRegistry imageRegistry =

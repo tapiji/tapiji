@@ -34,7 +34,7 @@ public class FlatModelAction extends AbstractTreeAction {
                 UIUtils.getImageDescriptor(UIUtils.IMAGE_LAYOUT_FLAT));
         setDisabledImageDescriptor(
                 UIUtils.getImageDescriptor(UIUtils.IMAGE_LAYOUT_FLAT));
-        setToolTipText("TODO put something here"); //TODO put tooltip
+        setToolTipText("Display in a list"); //TODO put tooltip
     }
 
     /**

@@ -115,4 +115,28 @@ public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
     public void setComparator(Comparator comparator) {
         this.comparator = comparator;
     }
+    
+    /**
+     * Depth first for the first leaf node that is not filtered.
+     * It makes the entire branch not not filtered
+     * 
+     * @param filter The leaf filter.
+     * @param node
+     * @return true if this node or one of its descendant is in the filter (ie is displayed)
+     */
+    public boolean isBranchFiltered(IKeyTreeNodeLeafFilter filter, KeyTreeNode node) {
+    	if (!node.hasChildren()) {
+    		return filter.isFilteredLeaf(node);
+    	} else {
+    		//depth first:
+    		for (Iterator it = node.getChildrenInternal().iterator(); it.hasNext();) {
+    			if (isBranchFiltered(filter, (KeyTreeNode)it.next())) {
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
+    
+    
 }

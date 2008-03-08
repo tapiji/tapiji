@@ -20,10 +20,13 @@ import org.eclipse.babel.core.message.MessagesBundleGroup;
  */
 public class MissingValueCheck implements IMessageCheck {
 
+	/** The singleton */
+	public static MissingValueCheck MISSING_KEY = new MissingValueCheck();
+	
     /**
      * Constructor.
      */
-    public MissingValueCheck() {
+    private MissingValueCheck() {
         super();
     }
 

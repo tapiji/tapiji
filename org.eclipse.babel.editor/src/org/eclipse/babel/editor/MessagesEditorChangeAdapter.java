@@ -31,6 +31,12 @@ public class MessagesEditorChangeAdapter implements IMessagesEditorChangeListene
     public void keyTreeVisibleChanged(boolean visible) {
         // do nothing
     }
+    /**
+     * @see org.eclipse.babel.editor.IMessagesEditorChangeListener#keyTreeVisibleChanged(boolean)
+     */
+    public void showOnlyUnusedAndMissingChanged(int showFilterFlag) {
+        // do nothing
+    }
 
     /**
      * @see org.eclipse.babel.editor.IMessagesEditorChangeListener#selectedKeyChanged(java.lang.String, java.lang.String)

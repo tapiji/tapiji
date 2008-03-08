@@ -109,7 +109,6 @@ public class MessagesBundleGroupOutline extends ContentOutlinePage {
         toolBarMgr.add(new Separator());
         toolBarMgr.add(new ExpandAllAction(editor, getTreeViewer()));
         toolBarMgr.add(new CollapseAllAction(editor, getTreeViewer()));
-
 	}
 //
 //	

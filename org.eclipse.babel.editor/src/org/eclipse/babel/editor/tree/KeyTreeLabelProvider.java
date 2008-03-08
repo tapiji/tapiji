@@ -10,17 +10,26 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.tree;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.tree.IKeyTreeModel;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.MessagesEditorMarkers;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
+import org.eclipse.babel.editor.resource.validator.ValidationFailureEvent;
 import org.eclipse.babel.editor.util.OverlayImageIcon;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.IDecorationContext;
 import org.eclipse.jface.viewers.IFontProvider;
+import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.LabelDecorator;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -61,35 +70,40 @@ public class KeyTreeLabelProvider
 	 * @see ILabelProvider#getImage(Object)
 	 */
 	public Image getImage(Object element) {
-        KeyTreeNode node = (KeyTreeNode) element;
-        String key = node.getMessageKey();
-
-        int iconFlags = 0;
-
-        // Figure out background icon
-        if (messagesBundleGroup.isMessageKey(key)) {
-            //TODO create check (or else)
-//            if (!noInactiveKeyCheck.checkKey(messagesBundleGroup, node.getPath())) {
-//                iconFlags += KEY_COMMENTED;
-//            } else {
-                iconFlags += KEY_DEFAULT;
-                
-//            }
-        } else {
-            iconFlags += KEY_VIRTUAL;
-        }
-        
-        // Maybe add warning icon
-        //TODO implement preferences here
-//        if (MsgEditorPreferences.getReportMissingValues()) {
-        if (editor.getMarkers().isMarked(key)) {
-            iconFlags += BADGE_WARNING;
-        } else if (isOneChildrenMarked(node)) {
-            iconFlags += BADGE_WARNING_GREY;
-        }
-//        }
-        return generateImage(iconFlags);
+		if (element instanceof KeyTreeNode) {
+			KeyTreeNode node = (KeyTreeNode)element;
+			Collection c = editor.getMarkers().getFailedChecks(node.getMessageKey());
+			if (c == null || c.isEmpty()) {
+				return UIUtils.getImage(UIUtils.IMAGE_KEY);
+			}
+			boolean isMissingOrUnused = editor.getMarkers().isMissingOrUnusedKey(node.getMessageKey());
+			if (isMissingOrUnused) {
+				if (editor.getMarkers().isUnusedKey(node.getMessageKey(), isMissingOrUnused)) {
+					return UIUtils.getImage(UIUtils.IMAGE_UNUSED_TRANSLATION);
+				} else {
+					return UIUtils.getImage(UIUtils.IMAGE_MISSING_TRANSLATION);
+				}
+			} else {
+				return UIUtils.getImage(UIUtils.IMAGE_WARNED_TRANSLATION);
+			}
+		} else {
+/*	        // Figure out background icon
+	        if (messagesBundleGroup.isMessageKey(key)) {
+	            //TODO create check (or else)
+//	            if (!noInactiveKeyCheck.checkKey(messagesBundleGroup, node.getPath())) {
+//	                iconFlags += KEY_COMMENTED;
+//	            } else {
+	                iconFlags += KEY_DEFAULT;
+	                
+//	            }
+	        } else {
+	            iconFlags += KEY_VIRTUAL;
+	        }*/
+			return UIUtils.getImage(UIUtils.IMAGE_KEY);
+		}
+		
 	}
+
 
 	/**
 	 * @see ILabelProvider#getText(Object)
@@ -195,5 +209,6 @@ public class KeyTreeLabelProvider
         }
         return false;
     }
+    
 
 }

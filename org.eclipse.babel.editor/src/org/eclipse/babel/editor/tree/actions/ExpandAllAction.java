@@ -30,7 +30,7 @@ public class ExpandAllAction extends AbstractTreeAction {
         setText(MessagesEditorPlugin.getString("key.expandAll")); //$NON-NLS-1$
         setImageDescriptor(
                 UIUtils.getImageDescriptor(UIUtils.IMAGE_EXPAND_ALL));
-        setToolTipText("TODO put something here"); //TODO put tooltip
+        setToolTipText("Expand All"); //TODO put tooltip
     }
 
     /**

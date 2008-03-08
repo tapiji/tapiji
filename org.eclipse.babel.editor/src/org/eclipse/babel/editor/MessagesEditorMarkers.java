@@ -11,19 +11,22 @@
 package org.eclipse.babel.editor;
 
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Observable;
 
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.MessagesBundleGroupAdapter;
-import org.eclipse.babel.core.util.BabelUtils;
+import org.eclipse.babel.core.message.checks.MissingValueCheck;
 import org.eclipse.babel.editor.resource.validator.IValidationMarkerStrategy;
 import org.eclipse.babel.editor.resource.validator.MessagesBundleGroupValidator;
 import org.eclipse.babel.editor.resource.validator.ValidationFailureEvent;
+import org.eclipse.babel.editor.util.UIUtils;
 
 
 /**
@@ -33,9 +36,15 @@ import org.eclipse.babel.editor.resource.validator.ValidationFailureEvent;
 public class MessagesEditorMarkers
         extends Observable implements IValidationMarkerStrategy {
 
-    private final Collection validationEvents = new ArrayList();
-    private final Collection failedKeys = new ArrayList();
+//    private final Collection validationEvents = new ArrayList();
     private final MessagesBundleGroup messagesBundleGroup;
+    
+   // private Map<String,Set<ValidationFailureEvent>> markersIndex = new HashMap();
+    /** index is the name of the key. value is the collection of markers on that key */
+    private Map markersIndex = new HashMap();
+    /** index is the concat of the locale and the key.
+     * value is the collection of markers for that key and that locale */
+    private Map localizedMarkersIndex = new HashMap();
     
     /**
      * @param messagesBundleGroup
@@ -64,62 +73,100 @@ public class MessagesEditorMarkers
             }
         });
     }
+    
+    private String hash(Locale locale, String key) {
+    	//the '=' is hack to make sure no local=key can ever conflict
+    	//with another local=key: in other words
+        //it makes a hash of the combination (key+locale).
+    	if (locale == null) {
+    		locale = UIUtils.ROOT_LOCALE;
+    	}
+    	return locale + "=" + key;
+    }
+
 
     /**
      * @see org.eclipse.babel.editor.resource.validator.IValidationMarkerStrategy#markFailed(org.eclipse.core.resources.IResource, org.eclipse.babel.core.bundle.checks.IBundleEntryCheck)
      */
     public void markFailed(ValidationFailureEvent event) {
-        validationEvents.add(event);
-        failedKeys.add(event.getKey());
-        System.out.println("CREATE EDITOR MARKER");
+        Collection markersForKey = (Collection) markersIndex.get(event.getKey());
+        if (markersForKey == null) {
+        	markersForKey = new HashSet();
+        	markersIndex.put(event.getKey(), markersForKey);
+        }
+        markersForKey.add(event);
+        
+        String localizedKey = hash(event.getLocale(), event.getKey());
+        markersForKey = (Collection) localizedMarkersIndex.get(localizedKey);
+        if (markersForKey == null) {
+        	markersForKey = new HashSet();
+        	localizedMarkersIndex.put(localizedKey, markersForKey);
+        }
+        markersForKey.add(event);
+        
+        //System.out.println("CREATE EDITOR MARKER");
         setChanged();
         notifyObservers(this);
     }
-
+    
     public void clear() {
-        validationEvents.clear();
-        failedKeys.clear();
+        markersIndex.clear();
+        localizedMarkersIndex.clear();
         setChanged();
         notifyObservers(this);
     }
 
     public boolean isMarked(String key)  {
-        return failedKeys.contains(key);
+    	return markersIndex.containsKey(key);
     }
 
-    public Collection getFailedChecks(final String key) {
-        return getFailedChecks(new IEventFilter() {
-            public boolean filter(ValidationFailureEvent event) {
-                return BabelUtils.equals(event.getKey(), key);
-            }
-        });
+    public Collection getFailedChecks(String key) {
+    	return (Collection)markersIndex.get(key);
     }
     public Collection getFailedChecks(final String key, final Locale locale) {
-        return getFailedChecks(new IEventFilter() {
-            public boolean filter(ValidationFailureEvent event) {
-                return BabelUtils.equals(event.getKey(), key)
-                        && BabelUtils.equals(locale, event.getLocale());
-            }
-        });
+    	return (Collection)localizedMarkersIndex.get(hash(locale, key));
     }
-    
-    
-    private Collection getFailedChecks(IEventFilter filter) {
-        Collection checks = new ArrayList();
-        for (Iterator iter = validationEvents.iterator(); iter.hasNext();) {
-            ValidationFailureEvent event = (ValidationFailureEvent) iter.next();
-            if (filter.filter(event)) {
-                checks.add(event.getCheck());
-            }
-        }
-        return checks;
-    }
-    private interface IEventFilter {
-        boolean filter(ValidationFailureEvent event);
-    }
-    
+        
     private void validate() {
         //TODO in a UI thread
         MessagesBundleGroupValidator.validate(messagesBundleGroup, this);
     }
+    
+    /**
+     * @param key
+     * @return true when the key has a missing or unused issue
+     */
+    public boolean isMissingOrUnusedKey(String key) {
+    	Collection markers = getFailedChecks(key);
+    	return markers != null && markersContainMissing(markers);
+    }
+    
+    /**
+     * @param key
+     * @param isMissingOrUnused true when it has been assesed already
+     * that it is missing or unused
+     * @return true when the key is unused
+     */
+    public boolean isUnusedKey(String key, boolean isMissingOrUnused) {
+    	if (!isMissingOrUnused) {
+    		return false;
+    	}
+    	Collection markers = getFailedChecks(key, UIUtils.ROOT_LOCALE);
+    	//if we get a missing on the root locale, it means the
+    	//that some localized resources are referring to a key that is not in
+    	//the default locale anymore: in other words, assuming the
+    	//the code is up to date with the default properties
+    	//file, the key is now unused.
+    	return markers != null && markersContainMissing(markers);
+    }
+    
+    private boolean markersContainMissing(Collection markers) {
+    	for (Iterator it = markers.iterator(); it.hasNext(); ) {
+    		if (((ValidationFailureEvent) it.next()).getCheck() == MissingValueCheck.MISSING_KEY) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
 }

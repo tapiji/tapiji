@@ -14,7 +14,6 @@ import java.util.Locale;
 
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.checks.DuplicateValueCheck;
-import org.eclipse.babel.core.message.checks.IMessageCheck;
 import org.eclipse.babel.core.message.checks.MissingValueCheck;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 
@@ -23,13 +22,7 @@ import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
  * @author Pascal Essiembre
  *
  */
-public class MessagesBundleGroupValidator {
-    
-
-    
-    private static IMessageCheck missingCheck = new MissingValueCheck();
-    //TODO have above react to preferences
-    
+public class MessagesBundleGroupValidator {    
     
     //TODO Re-think... ??
 
@@ -57,11 +50,12 @@ public class MessagesBundleGroupValidator {
     	for (int i = 0; i < keys.length; i++) {
 			String key = keys[i];
             if (MsgEditorPreferences.getInstance().getReportMissingValues()) {
-	            if (missingCheck.checkKey(
+	            if (MissingValueCheck.MISSING_KEY.checkKey(
 	                    messagesBundleGroup,
 	                    messagesBundleGroup.getMessage(key, locale))) {
 	                markerStrategy.markFailed(new ValidationFailureEvent(
-	                        messagesBundleGroup, locale, key, missingCheck));
+	                        messagesBundleGroup, locale, key,
+	                        MissingValueCheck.MISSING_KEY));
 	            }
             }
             if (duplicateCheck != null) {

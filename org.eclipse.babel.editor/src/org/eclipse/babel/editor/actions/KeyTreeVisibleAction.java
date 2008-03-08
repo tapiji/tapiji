@@ -32,8 +32,6 @@ public class KeyTreeVisibleAction extends Action {
 //        setText();
         setToolTipText("Show/hide the key tree");
         setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_VIEW_LEFT));
-        
-        
     }
 
     //TODO RBEditor hold such an action registry.  Then move this method to constructor

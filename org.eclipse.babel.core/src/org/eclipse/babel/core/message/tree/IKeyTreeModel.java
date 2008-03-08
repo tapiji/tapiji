@@ -85,4 +85,23 @@ public interface IKeyTreeModel {
      * @return messages bundle group
      */
     MessagesBundleGroup getMessagesBundleGroup();
+    
+    /**
+     * Depth first for the first leaf node that is not filtered.
+     * It makes the entire branch not not filtered
+     * 
+     * @param filter The leaf filter.
+     * @param node
+     * @return false if this node or one of its descendant is not filtered
+     */
+    public boolean isBranchFiltered(IKeyTreeNodeLeafFilter filter, KeyTreeNode node);
+    
+    interface IKeyTreeNodeLeafFilter {
+    	/**
+    	 * @param leafNode A leaf node. Must not be called if the node has children
+    	 * @return true if this node should be filtered.
+    	 */
+    	boolean isFilteredLeaf(KeyTreeNode leafNode);
+    }
+    
 }
