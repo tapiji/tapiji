@@ -12,6 +12,7 @@ package org.eclipse.babel.editor.resource;
 
 import java.util.Locale;
 
+import org.eclipse.babel.core.message.AbstractIFileChangeListener;
 import org.eclipse.babel.core.message.resource.AbstractPropertiesResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
@@ -34,13 +35,13 @@ import org.eclipse.ui.editors.text.TextEditor;
  * @author Pascal Essiembre
  *
  */
-public class EclipsePropertiesEditorResource extends AbstractPropertiesResource{
+public class EclipsePropertiesEditorResource extends AbstractPropertiesResource {
 
     private TextEditor textEditor;
     /** label of the location of the resource edited here.
      * When null, try to locate the resource and use it to return that label.  */
     private String _resourceLocationLabel;
-    
+            
     /**
      * Constructor.
      * @param locale the resource locale
@@ -56,17 +57,18 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource{
         super(locale, serializer, deserializer);
         this.textEditor = textEditor;
 
-        
-        IResourceChangeListener rcl = new IResourceChangeListener() {
-        public void resourceChanged(IResourceChangeEvent event) {
-            IResource resource = event.getResource();
-            System.out.println("RESOURCE CHANGED:" + resource);
-            if (resource != null && resource.getFileExtension().equals("escript")) {
-               // run the compiler
-            }
-         }
-      };
-      ResourcesPlugin.getWorkspace().addResourceChangeListener(rcl);        
+        //FIXME: [hugues] this should happen only once at the plugin level?
+        //for now it does nothing. Remove it all?
+//        IResourceChangeListener rcl = new IResourceChangeListener() {
+//        	public void resourceChanged(IResourceChangeEvent event) {
+//        		IResource resource = event.getResource();
+//        		System.out.println("RESOURCE CHANGED:" + resource);
+//        		if (resource != null && resource.getFileExtension().equals("escript")) {
+//        			// run the compiler
+//        		}
+//        	}
+//        };
+//        ResourcesPlugin.getWorkspace().addResourceChangeListener(rcl);        
         
         
         IDocument document = textEditor.getDocumentProvider().getDocument(
@@ -75,7 +77,7 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource{
         document.addDocumentListener(new IDocumentListener() {
             public void documentAboutToBeChanged(DocumentEvent event) {
                 //do nothing
-                System.out.println("DOCUMENT ABOUT to CHANG:");
+                System.out.println("DOCUMENT ABOUT to CHANGE:");
             }
             public void documentChanged(DocumentEvent event) {
                 System.out.println("DOCUMENT CHANGED:");
@@ -172,13 +174,14 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource{
     public void setResourceLocationLabel(String resourceLocationLabel) {
     	_resourceLocationLabel = resourceLocationLabel;
     }
-    
+        
     /**
-     * Checks whether this source editor is read-only.
-     * @return <code>true</code> if read-only.
+     * Called before this object will be discarded.
+     * Nothing to do: we were not listening to changes to this file ourselves.
      */
-    public boolean isReadOnly() {
-        //TODO needed?
-        return textEditor.isEditorInputReadOnly();
+    public void dispose() {
+    	//nothing to do.
     }
+
+    
 }

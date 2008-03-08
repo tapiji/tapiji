@@ -31,6 +31,7 @@ import org.eclipse.babel.core.message.resource.PropertiesIFileResource;
 import org.eclipse.babel.core.message.resource.PropertiesReadOnlyResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.resource.EclipsePropertiesEditorResource;
 import org.eclipse.babel.editor.util.UIUtils;
@@ -200,7 +201,8 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
 					return new MessagesBundle(new PropertiesIFileResource(
 								UIUtils.ROOT_LOCALE, 
                                 new PropertiesSerializer(prefs),
-                                new PropertiesDeserializer(prefs), file));
+                                new PropertiesDeserializer(prefs), file,
+                                MessagesEditorPlugin.getDefault()));
 				} else {
 					//during the build if the file does not exist. skip.
 					return null;

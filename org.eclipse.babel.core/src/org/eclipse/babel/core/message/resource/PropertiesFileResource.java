@@ -149,4 +149,12 @@ public class PropertiesFileResource extends AbstractPropertiesResource {
             }
         }
     }
+    
+    /**
+     * Called before this object will be discarded.
+     * Nothing to do: we were not listening to changes to this file.
+     */
+    public void dispose() {
+    	//nothing to do.
+    }
 }

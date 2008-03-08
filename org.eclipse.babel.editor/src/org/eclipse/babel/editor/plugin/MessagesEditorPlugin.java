@@ -13,12 +13,22 @@ package org.eclipse.babel.editor.plugin;
 import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.util.Set;
 
+import org.eclipse.babel.core.message.AbstractIFileChangeListener;
+import org.eclipse.babel.core.message.AbstractIFileChangeListener.IFileChangeListenerRegistry;
 import org.eclipse.babel.editor.builder.ToggleNatureAction;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -28,7 +38,7 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plug-in life cycle
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
-public class MessagesEditorPlugin extends AbstractUIPlugin {
+public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChangeListenerRegistry {
 
 	//TODO move somewhere more appropriate
     public static final String MARKER_TYPE =
@@ -44,10 +54,21 @@ public class MessagesEditorPlugin extends AbstractUIPlugin {
 	//TODO Use Eclipse MessagesBundle instead.
 	private ResourceBundle resourceBundle;
 	
+	//The resource change litener for the entire plugin.
+	//objects interested in changes in the workspace resources must
+	//subscribe to this listener by calling subscribe/unsubscribe on the plugin.
+	private IResourceChangeListener resourceChangeListener;
+	
+	//The map of resource change subscribers.
+	//The key is the full path of the resource listened. The value as set of SimpleResourceChangeListners
+	//private Map<String,Set<SimpleResourceChangeListners>> resourceChangeSubscribers;
+	private Map resourceChangeSubscribers;
+	
 	/**
 	 * The constructor
 	 */
 	public MessagesEditorPlugin() {
+		resourceChangeSubscribers = new HashMap();
 	}
 
 	/**
@@ -75,6 +96,24 @@ public class MessagesEditorPlugin extends AbstractUIPlugin {
         } catch (IOException x) {
             resourceBundle = null;
         }
+
+        //the unique file change listener
+        resourceChangeListener = new IResourceChangeListener() {
+        	public void resourceChanged(IResourceChangeEvent event) {
+        		IResource resource = event.getResource();
+        		if (resource != null) {
+        			String fullpath = resource.getFullPath().toString();
+        			Set listeners = (Set)resourceChangeSubscribers.get(fullpath);
+        			if (listeners != null) {
+        				Object[] larray = listeners.toArray();//avoid concurrency issues. kindof.
+        				for (int i = 0; i < larray.length; i++) {
+        					((AbstractIFileChangeListener)larray[i]).listenedFileChanged(event);
+        				}
+        			}
+        		}
+        	}
+        };
+        ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener);
 	}
 
 	/**
@@ -83,9 +122,41 @@ public class MessagesEditorPlugin extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceChangeListener);
 		super.stop(context);
 	}
-
+	
+	/**
+	 * @param rcl Adds a subscriber to a resource change event.
+	 */
+	public void subscribe(AbstractIFileChangeListener fileChangeListener) {
+		synchronized (resourceChangeListener) {
+			String channel = fileChangeListener.getListenedFileFullPath();
+			Set channelListeners = (Set)resourceChangeSubscribers.get(channel);
+			if (channelListeners == null) {
+				channelListeners = new HashSet();
+				resourceChangeSubscribers.put(channel, channelListeners);
+			}
+			channelListeners.add(fileChangeListener);
+		}
+	}
+	
+	/**
+	 * @param rcl Removes a subscriber to a resource change event.
+	 */
+	public void unsubscribe(AbstractIFileChangeListener fileChangeListener) {
+		synchronized (resourceChangeListener) {
+			String channel = fileChangeListener.getListenedFileFullPath();
+			Set channelListeners = (Set)resourceChangeSubscribers.get(channel);
+			if (channelListeners != null
+					&& channelListeners.remove(fileChangeListener)
+					&& channelListeners.isEmpty()) {
+				//nobody left listening to this file.
+				resourceChangeSubscribers.remove(channel);
+			}
+		}
+	}
+	
 	/**
 	 * Returns the shared instance
 	 *

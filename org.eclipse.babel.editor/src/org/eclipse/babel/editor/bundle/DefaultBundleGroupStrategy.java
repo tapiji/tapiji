@@ -22,6 +22,7 @@ import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy;
 import org.eclipse.babel.core.util.BabelUtils;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.resource.EclipsePropertiesEditorResource;
 import org.eclipse.babel.editor.util.UIUtils;
@@ -156,11 +157,12 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
             //shared between strategies
             IMessagesResource messagesResource;
             if (site == null) {
+            	//site is null during the build.
                 messagesResource = new PropertiesIFileResource(
                         locale,
                         new PropertiesSerializer(prefs),
                         new PropertiesDeserializer(prefs),
-                        (IFile) resource);
+                        (IFile) resource, MessagesEditorPlugin.getDefault());
             } else {
                 messagesResource = new EclipsePropertiesEditorResource(
                         locale,
@@ -218,4 +220,5 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
     protected String getBaseName() {
     	return baseName;
     }
+        
 }

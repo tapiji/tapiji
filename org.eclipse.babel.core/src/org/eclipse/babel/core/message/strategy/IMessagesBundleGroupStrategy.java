@@ -57,5 +57,5 @@ public interface IMessagesBundleGroupStrategy {
      * @throws MessageException problem creating a new messages bundle
      */
     MessagesBundle createMessagesBundle(Locale locale) throws MessageException;
-    
+        
 }

@@ -69,6 +69,25 @@ public class MessagesBundleGroup extends AbstractMessageModel {
     }
     
     /**
+     * Called before this object will be discarded.
+     * Disposes the underlying MessageBundles
+     */
+    public void dispose() {
+    	for (Iterator iter = messagesBundleIterator(); iter.hasNext();) {
+    		MessagesBundle mb = (MessagesBundle) iter.next();
+    		try {
+    			mb.dispose();
+    		} catch (Throwable t) {
+    			//FIXME: remove debug:
+    			System.err.println("Error disposing message-bundle " +
+    					mb.getResource().getResourceLocationLabel());
+    			//disregard crashes: this is a best effort to dispose things.
+    		}
+    	}
+    }
+
+    
+    /**
      * Gets the messages bundle matching given locale.
      * @param locale locale of bundle to retreive
      * @return a bundle

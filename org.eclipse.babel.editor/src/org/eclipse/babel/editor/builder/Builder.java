@@ -10,14 +10,17 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.builder;
 
+//import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+//import org.apache.lucene.index.CorruptIndexException;
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
+//import org.eclipse.babel.editor.builder.indexer.Indexer;
 import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.resource.validator.FileMarkerStrategy;
@@ -99,6 +102,9 @@ public class Builder extends IncrementalProjectBuilder {
      * </p>
      */
     private Map _alreadBuiltMessageBundle;
+    
+//    /** one indexer per project we open and close it at the beginning and the end of each build. */
+//    private Indexer _indexer = new Indexer();
       
 	/**
 	 * @see org.eclipse.core.resources.IncrementalProjectBuilder#build(
@@ -120,9 +126,40 @@ public class Builder extends IncrementalProjectBuilder {
 				}
 			}
 		} finally {
-			finishBuild();
-			_resourcesToValidate = null;
-			_alreadBuiltMessageBundle = null;
+			try {
+				finishBuild();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				//must dispose the message bundles:
+				if (_alreadBuiltMessageBundle != null) {
+					for (Iterator it = _alreadBuiltMessageBundle.values().iterator();
+						 	it.hasNext(); ) {
+						MessagesBundleGroup msgGrp = (MessagesBundleGroup)it.next();
+						try {
+							msgGrp.dispose();
+						} catch (Throwable t) {
+							//FIXME: remove this debugging:
+							System.err.println(
+									"error disposing message-bundle-group "
+									+ msgGrp.getName());
+							//disregard crashes: we are doing our best effort to dispose things.
+						}
+					}
+					_alreadBuiltMessageBundle = null;
+					_resourcesToValidate = null;
+				}
+//				if (_indexer != null) {
+//					try {
+//						_indexer.close(true);
+//						_indexer.clear();
+//					} catch (CorruptIndexException e) {
+//						e.printStackTrace();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//				}
+			}
 		}
 		return null;
 	}
@@ -213,7 +250,8 @@ public class Builder extends IncrementalProjectBuilder {
 					//the group because the locale was filtered.
 					try {
 				//		System.out.println("Validate " + resource); //$NON-NLS-1$
-						ResourceValidator.validate(resource, markerStrategy, msgBundleGrp);
+						ResourceValidator.validate(resource, markerStrategy,
+													msgBundleGrp);//, _indexer);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -226,7 +264,7 @@ public class Builder extends IncrementalProjectBuilder {
 
 	private void deleteMarkers(IFile file) {
 		try {
-            System.out.println("Builder: deleteMarkers"); //$NON-NLS-1$
+//            System.out.println("Builder: deleteMarkers"); //$NON-NLS-1$
 			file.deleteMarkers(MessagesEditorPlugin.MARKER_TYPE, false, IResource.DEPTH_ZERO);
 		} catch (CoreException ce) {
 		}
@@ -234,14 +272,14 @@ public class Builder extends IncrementalProjectBuilder {
 
 	protected void fullBuild(final IProgressMonitor monitor)
 			throws CoreException {
-        System.out.println("Builder: fullBuild"); //$NON-NLS-1$
-		getProject().accept(new SampleResourceVisitor());
+//        System.out.println("Builder: fullBuild"); //$NON-NLS-1$
+        getProject().accept(new SampleResourceVisitor());
 	}
 
 	protected void incrementalBuild(IResourceDelta delta,
 			IProgressMonitor monitor) throws CoreException {
-        System.out.println("Builder: incrementalBuild"); //$NON-NLS-1$
-		delta.accept(new SampleDeltaVisitor());
+//        System.out.println("Builder: incrementalBuild"); //$NON-NLS-1$
+        delta.accept(new SampleDeltaVisitor());
 	}
 	
 	protected void clean(IProgressMonitor monitor) throws CoreException {

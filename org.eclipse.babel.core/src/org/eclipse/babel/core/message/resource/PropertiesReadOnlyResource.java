@@ -83,12 +83,12 @@ public class PropertiesReadOnlyResource extends AbstractPropertiesResource{
     public String getResourceLocationLabel() {
     	return resourceLocationLabel;
     }
-    
+        
     /**
-     * Checks whether this resource can have its content set.
-     * @return <code>true</code> always here.
+     * Called before this object will be discarded.
+     * Nothing to do: we were not listening to changes to this object.
      */
-    public boolean isReadOnly() {
-    	return true;
+    public void dispose() {
+    	//nothing to do.
     }
 }

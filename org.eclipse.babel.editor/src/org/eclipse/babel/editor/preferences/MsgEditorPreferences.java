@@ -14,6 +14,7 @@ import java.util.StringTokenizer;
 
 import org.eclipse.babel.core.message.resource.ser.IPropertiesDeserializerConfig;
 import org.eclipse.babel.core.message.resource.ser.IPropertiesSerializerConfig;
+import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.builder.Builder;
 import org.eclipse.babel.editor.builder.ToggleNatureAction;
@@ -185,6 +186,14 @@ public final class MsgEditorPreferences
      * or when a new project is added. */
     public static final String ADD_MSG_EDITOR_BUILDER_TO_JAVA_PROJECTS =
     	"addMsgEditorBuilderToJavaProjects";
+    
+    /** holds what filter is activated. for the properties displayed in the editor. */
+    public static final String PROPERTIES_DISPLAYED_FILTER = "propertiesFilter";
+    
+    /** true to enable the indexer false otherwise.
+     * the indexer is used to generate list of suggestions in the translations.
+     * this is currently experimental. */
+    public static final String ENABLE_PROPERTIES_INDEXER = "enablePropertiesIndexer";
     	    
     /** MsgEditorPreferences. */
     private static final Preferences PREFS = 
@@ -354,6 +363,22 @@ public final class MsgEditorPreferences
      */
     public int getWrapLineLength() {
         return PREFS.getInt(WRAP_LINE_LENGTH);
+    }
+
+    /**
+     * @return the filter to apply on the displayed properties.
+     * One of the {@link IMessagesEditorChangeListener}.SHOW_*
+     * Byt default: show all.
+     */
+    public int getPropertiesFilter() {
+        return PREFS.getInt(PROPERTIES_DISPLAYED_FILTER);
+    }
+    /**
+     * @param filter The filter to apply on the displayed properties.
+     * One of the {@link IMessagesEditorChangeListener}.SHOW_*
+     */
+    public void setPropertiesFilter(int filter) {
+        PREFS.setValue(PROPERTIES_DISPLAYED_FILTER, filter);
     }
 
     /**

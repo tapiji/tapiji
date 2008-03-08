@@ -72,4 +72,5 @@ public abstract class AbstractPropertiesResource
      * @param text formated text
      */
     protected abstract void setText(String text);
+    
 }

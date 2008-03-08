@@ -80,6 +80,13 @@ public class MessagesBundle extends AbstractMessageModel
     }
 
     /**
+     * Called before this object will be discarded.
+     */
+    public void dispose() {
+    	
+    }
+    
+    /**
      * Gets the underlying messages resource implementation.
      * @return
      */

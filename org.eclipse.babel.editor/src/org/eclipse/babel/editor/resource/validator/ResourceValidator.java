@@ -14,7 +14,6 @@ import java.util.Locale;
 
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
-import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
 import org.eclipse.core.resources.IFile;
 
 
@@ -24,16 +23,16 @@ import org.eclipse.core.resources.IFile;
  */
 public class ResourceValidator {
     
-    public static void validate(
-            IFile file, IValidationMarkerStrategy markerStrategy) {
-        //TODO check if there is a matching EclipsePropertiesEditorResource already open.
-        //else, create MessagesBundle from PropertiesIFileResource
-        
-        //TODO use BundleGroupRegistry (LRUMap)
-        MessagesBundleGroup messagesBundleGroup = MessagesBundleGroupFactory.createBundleGroup(
-                null, file);
-        validate(file, markerStrategy, messagesBundleGroup);
-    }
+//    public static void validate(
+//            IFile file, IValidationMarkerStrategy markerStrategy) {
+//        //TODO check if there is a matching EclipsePropertiesEditorResource already open.
+//        //else, create MessagesBundle from PropertiesIFileResource
+//        
+//        //TODO use BundleGroupRegistry (LRUMap)
+//        MessagesBundleGroup messagesBundleGroup = MessagesBundleGroupFactory.createBundleGroup(
+//                null, file);
+//        validate(file, markerStrategy, messagesBundleGroup);
+//    }
     
     /**
      * @param file
@@ -42,7 +41,8 @@ public class ResourceValidator {
      */
     public static void validate(
             IFile file, IValidationMarkerStrategy markerStrategy,
-            MessagesBundleGroup alreadyBuiltMessageBundle) {
+            MessagesBundleGroup alreadyBuiltMessageBundle/*,
+            Indexer indexer*/) {
         //TODO check if there is a matching EclipsePropertiesEditorResource already open.
         //else, create MessagesBundle from PropertiesIFileResource
     	MessagesBundle messagesBundle = alreadyBuiltMessageBundle.getMessagesBundle(file);
@@ -50,7 +50,7 @@ public class ResourceValidator {
             return;
         }
         Locale locale = messagesBundle.getLocale();
-        MessagesBundleGroupValidator.validate(alreadyBuiltMessageBundle, locale, markerStrategy);
+        MessagesBundleGroupValidator.validate(alreadyBuiltMessageBundle, locale, markerStrategy/*, indexer*/);
     }
     
 

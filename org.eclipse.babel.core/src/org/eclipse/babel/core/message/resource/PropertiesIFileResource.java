@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 
+import org.eclipse.babel.core.message.AbstractIFileChangeListener;
+import org.eclipse.babel.core.message.AbstractIFileChangeListener.IFileChangeListenerRegistry;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.core.resources.IFile;
@@ -32,9 +34,12 @@ import org.eclipse.core.runtime.CoreException;
  * @author Pascal Essiembre
  * @see PropertiesFileResource
  */
-public class PropertiesIFileResource extends AbstractPropertiesResource{
+public class PropertiesIFileResource extends AbstractPropertiesResource {
 
     private final IFile file;
+    
+    private final AbstractIFileChangeListener fileListener;
+    private final IFileChangeListenerRegistry listenerRegistry;
     
     /**
      * Constructor.
@@ -42,22 +47,42 @@ public class PropertiesIFileResource extends AbstractPropertiesResource{
      * @param serializer resource serializer
      * @param deserializer resource deserializer
      * @param file the underlying {@link IFile}
+     * @param listenerRegistry It is the MessageEditorPlugin. 
+     * Or null if we don't care for file changes.
+     * We could replace it by an activator in this plugin.
      */
     public PropertiesIFileResource(
             Locale locale,
             PropertiesSerializer serializer,
             PropertiesDeserializer deserializer,
-            final IFile file) {
+            IFile file, IFileChangeListenerRegistry listenerRegistry) {
         super(locale, serializer, deserializer);
         this.file = file;
-        file.getWorkspace().addResourceChangeListener(
-                new IResourceChangeListener() {
-                    public void resourceChanged(IResourceChangeEvent event) {
-                        if (event.getResource().equals(file)) {
-                            fireResourceChange(PropertiesIFileResource.this);
-                        }
-                    }
-                });
+        this.listenerRegistry = listenerRegistry;
+        
+        //[hugues] FIXME: this object is built at the beginning
+        //of a build (no message editor)
+        //it is disposed of at the end of the build.
+        //during a build files are not changed.
+        //so it is I believe never called.
+        if (this.listenerRegistry != null) {
+	        IResourceChangeListener rcl =
+	            new IResourceChangeListener() {
+	                public void resourceChanged(IResourceChangeEvent event) {
+	                    //no need to check: it is always the case as this
+	                	//is subscribed for a particular file.
+//	                    if (event.getResource() != null
+//	                       		&& PropertiesIFileResource.this.file.equals(event.getResource())) {
+	                        fireResourceChange(PropertiesIFileResource.this);
+//	                    }
+	                }
+             	};
+	    	 fileListener = AbstractIFileChangeListener
+	        		.wrapResourceChangeListener(rcl, file);
+	    	 this.listenerRegistry.subscribe(fileListener);
+        } else {
+        	fileListener = null;
+        }
     }
 
     /**
@@ -112,11 +137,14 @@ public class PropertiesIFileResource extends AbstractPropertiesResource{
     }
     
     /**
-     * Checks whether this source editor is read-only.
-     * @return <code>true</code> if read-only.
+     * Called before this object will be discarded.
+     * If this object was listening to file changes: then unsubscribe it.
      */
-    public boolean isReadOnly() {
-        //TODO needed?
-        return file.isReadOnly();
+    public void dispose() {
+    	if (this.listenerRegistry != null) {
+    		this.listenerRegistry.unsubscribe(this.fileListener);
+    	}
     }
+
+    
 }

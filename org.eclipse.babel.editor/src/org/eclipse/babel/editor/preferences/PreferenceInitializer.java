@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.preferences;
 
+import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
@@ -43,6 +44,8 @@ public class PreferenceInitializer extends
         prefs.setDefault(MsgEditorPreferences.SUPPORT_FRAGMENTS, true);
         prefs.setDefault(MsgEditorPreferences.NL_SUPPORT_ENABLED, true);
         prefs.setDefault(MsgEditorPreferences.LOADING_ONLY_FRAGMENT_RESOURCES, false);
+        prefs.setDefault(MsgEditorPreferences.PROPERTIES_DISPLAYED_FILTER,
+        		 IMessagesEditorChangeListener.SHOW_ALL);
         
         //Formatting
         prefs.setDefault(MsgEditorPreferences.UNICODE_ESCAPE_ENABLED, true);

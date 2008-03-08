@@ -58,4 +58,10 @@ public interface IMessagesResource {
      * @return The resource location label. or null if unknown.
      */
     String getResourceLocationLabel();
+    
+    /**
+     * Called when the group it belongs to is disposed.
+     */
+    void dispose();
+    
 }
