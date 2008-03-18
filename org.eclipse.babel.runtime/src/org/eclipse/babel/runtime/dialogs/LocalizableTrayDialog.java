@@ -114,7 +114,7 @@ public class LocalizableTrayDialog extends TrayDialog {
 	private ToolBar createLocalizationImageButton(Composite parent, Image image) {
         ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.NO_FOCUS);
         ((GridLayout) parent.getLayout()).numColumns++;
-		toolBar.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
+		toolBar.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, false, false));
 		final Cursor cursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
 		toolBar.setCursor(cursor);
 		toolBar.addDisposeListener(new DisposeListener() {
@@ -151,7 +151,7 @@ public class LocalizableTrayDialog extends TrayDialog {
 	private Link createLocalizationLink(Composite parent) {
 		Link link = new Link(parent, SWT.WRAP | SWT.NO_FOCUS);
         ((GridLayout) parent.getLayout()).numColumns++;
-		link.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
+		link.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, false, false));
 		link.setText("<a>"+IDialogConstants.HELP_LABEL+"</a>"); //$NON-NLS-1$ //$NON-NLS-2$
 		link.setToolTipText(IDialogConstants.HELP_LABEL);
 		link.addSelectionListener(new SelectionAdapter() {
