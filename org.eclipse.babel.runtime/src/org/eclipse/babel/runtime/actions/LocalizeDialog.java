@@ -191,7 +191,10 @@ public class LocalizeDialog extends LocalizableTrayDialog {
 			}
 
 			Control tv = new TranslatableTreeComposite(composite, new TextInputContentProvider(), texts, languageSet, updatedBundles);
-			tv.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
+			GridData treeLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+			treeLayoutData.heightHint = 400;
+			tv.setLayoutData(treeLayoutData);
+			
 		} else {
 			/*
 			 * The active part (editor/view/dialog) has not been instrumented
