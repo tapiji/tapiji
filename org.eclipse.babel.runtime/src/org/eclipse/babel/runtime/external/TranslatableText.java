@@ -95,7 +95,7 @@ public class TranslatableText implements ITranslatableText {
 	 */
 	public void revertLocalizedText(Locale locale, Set<TranslatableResourceBundle> updatedBundles) {
 		TranslatableResourceBundle rb = resourceBundle;
-		while (rb != null && !rb.getLocale().equals(locale)) {
+		while (rb != null && !rb.getMyLocale().equals(locale)) {
 			rb = rb.getParent();
 		}
 		
