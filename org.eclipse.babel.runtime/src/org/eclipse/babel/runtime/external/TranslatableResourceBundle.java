@@ -181,7 +181,7 @@ public class TranslatableResourceBundle extends ResourceBundle {
 		TranslatableResourceBundle lastBundle = null;
 		for (int i = variants.length-1; i >= 0; i--) {
 			TranslatableResourceFile variantResources = TranslatableResourceFile.get(osgiBundle, loader, variants[i]);
-			TranslatableResourceBundle resourceBundle = new TranslatableResourceBundle("description", variantResources, locales.get(i), osgiBundle);
+			TranslatableResourceBundle resourceBundle = new TranslatableResourceBundle(bundleResourceFile, variantResources, locales.get(i), osgiBundle);
 			resourceBundle.setParent(lastBundle);
 			lastBundle = resourceBundle;
 		}
