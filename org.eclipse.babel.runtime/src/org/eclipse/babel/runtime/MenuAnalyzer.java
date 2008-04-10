@@ -91,10 +91,10 @@ public class MenuAnalyzer {
 		if (item instanceof MenuManager) {
 			MenuManager menuManager = (MenuManager)item;
 
-			System.out.print("\n children of " + item.toString() + "are:\n\n");
-			for (IContributionItem contributionItem: menuManager.getItems()) {
-				System.out.println(contributionItem.toString());
-			}
+//			System.out.print("\n children of " + item.toString() + "are:\n\n");
+//			for (IContributionItem contributionItem: menuManager.getItems()) {
+//				System.out.println(contributionItem.toString());
+//			}
 			
 			for (IContributionItem contributionItem: menuManager.getItems()) {
 
@@ -145,9 +145,6 @@ public class MenuAnalyzer {
 						// mode but is never null when running the plug-in by starting a new JVM
 						// from within the IDE.
 						if (localId != null) { // needed???
-						if (localId.equals("find")) {
-							System.out.println("here");
-						}
 						// Does this line find anything????
 						localizableText = extractFromPluginXml("org.eclipse.ui.actionSets", "actionSet", "action", localId, "label", false);
 						if (localizableText != null) {
@@ -289,10 +286,7 @@ public class MenuAnalyzer {
 					}
 				
 					if (localizableText != null) {
-						System.out.print("\n " + contributionItem.toString() + " resulted in " + localizableText.getLocalizedText(Locale.getDefault()) + "\n");
-						if (localizableText.getLocalizedText(Locale.getDefault()).indexOf("ConfigurationElementHandle") > 1) {
-							System.out.println("undo");
-						}
+//						System.out.print("\n " + contributionItem.toString() + " resulted in " + localizableText.getLocalizedText(Locale.getDefault()) + "\n");
 						TranslatableMenuItem childItem = createTranslatableMenu(contributionItem, localizableText);
 						translatableMenuItem.add(childItem);
 					}
@@ -465,7 +459,10 @@ public class MenuAnalyzer {
 		for (IConfigurationElement element: Platform.getExtensionRegistry().getConfigurationElementsFor(extensionPointId)) {
 			if ((element.getName().equals(elementName))) {
 				String thisId = element.getAttribute("id");
-				boolean idMatches = (localMatchOnly ? (thisId.endsWith("." + id)) : thisId.equals(id));
+				// FIXME: If there is no id then we need to do something more sophisticated to find the element
+				// from which this menu item came.  See bug 226380.  As an interim solution, we ignore if there
+				// is no id which means the menu item will not be translatable.
+				boolean idMatches = (thisId != null) && (localMatchOnly ? (thisId.endsWith("." + id)) : thisId.equals(id));
 				if (idMatches) {
 					String contributorName = element.getDeclaringExtension().getContributor().getName();
 					Bundle bundle = InternalPlatform.getDefault().getBundle(contributorName);

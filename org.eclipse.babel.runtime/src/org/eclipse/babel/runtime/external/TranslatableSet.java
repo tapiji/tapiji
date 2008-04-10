@@ -79,9 +79,6 @@ public class TranslatableSet implements ITranslatableSet {
 	}
 
 	public void associate(final Button button, ITranslatableText localizableText) {
-		if (localizableText.getLocalizedText().equals("adde....")) {
-			System.out.println("here");
-		}
 		associate(button, new TranslatableTextInput(localizableText) {
 			@Override
 			public void updateControl(String text) {
