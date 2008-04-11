@@ -132,7 +132,7 @@ public abstract class TranslatableNLS {
 			load(bundleName, clazz, osgiBundle);
 			return;
 		}
-		AccessController.doPrivileged(new PrivilegedAction() {
+		AccessController.doPrivileged(new PrivilegedAction<Object>() {
 			public Object run() {
 				load(bundleName, clazz, osgiBundle);
 				return null;
@@ -188,7 +188,7 @@ public abstract class TranslatableNLS {
 		return variants;
 	}
 
-	private static void computeMissingMessages(String bundleName, Class clazz, Map fieldMap, Field[] fieldArray, boolean isAccessible) {
+	private static void computeMissingMessages(String bundleName, Class clazz, Map<String, Object> fieldMap, Field[] fieldArray, boolean isAccessible) {
 		// iterate over the fields in the class to make sure that there aren't any empty ones
 		final int MOD_EXPECTED = Modifier.PUBLIC | Modifier.STATIC;
 		final int MOD_MASK = MOD_EXPECTED | Modifier.FINAL;
@@ -230,7 +230,7 @@ public abstract class TranslatableNLS {
 
 		//build a map of field names to Field objects
 		final int len = fieldArray.length;
-		Map<Object, Object> fields = new HashMap<Object, Object>(len * 2);
+		Map<String, Object> fields = new HashMap<String, Object>(len * 2);
 		for (int i = 0; i < len; i++)
 			fields.put(fieldArray[i].getName(), fieldArray[i]);
 
@@ -314,10 +314,10 @@ public abstract class TranslatableNLS {
 		private static final long serialVersionUID = 1L;
 
 		private final String bundleName;
-		private final Map<Object, Object> fields;
+		private final Map<String, Object> fields;
 		private final boolean isAccessible;
 
-		public MessagesProperties(Map<Object, Object> fieldMap, String bundleName, boolean isAccessible) {
+		public MessagesProperties(Map<String, Object> fieldMap, String bundleName, boolean isAccessible) {
 			super();
 			this.fields = fieldMap;
 			this.bundleName = bundleName;
@@ -327,7 +327,7 @@ public abstract class TranslatableNLS {
 		/* (non-Javadoc)
 		 * @see java.util.Hashtable#put(java.lang.Object, java.lang.Object)
 		 */
-		public synchronized Object put(Object key, Object value) {
+		public synchronized Object put(String key, Object value) {
 			Object fieldObject = fields.put(key, ASSIGNED);
 			// if already assigned, there is nothing to do
 			if (fieldObject == ASSIGNED)

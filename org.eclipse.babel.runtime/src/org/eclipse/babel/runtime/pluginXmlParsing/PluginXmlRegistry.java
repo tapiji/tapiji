@@ -28,9 +28,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.eclipse.babel.runtime.external.ITranslatableText;
-import org.eclipse.babel.runtime.external.TranslatableText;
 import org.eclipse.babel.runtime.external.NonTranslatableText;
 import org.eclipse.babel.runtime.external.TranslatableResourceBundle;
+import org.eclipse.babel.runtime.external.TranslatableText;
 import org.eclipse.core.internal.registry.osgi.EclipseBundleListener;
 import org.eclipse.core.internal.runtime.Activator;
 import org.eclipse.core.internal.runtime.DevClassPathHelper;
@@ -189,7 +189,7 @@ public class PluginXmlRegistry {
 // These methods are copied from ManifestLocalization in the OSGi project.
 
 	private String[] buildNLVariants(String nl) {
-		ArrayList result = new ArrayList();
+		ArrayList<String> result = new ArrayList<String>();
 		int lastSeparator;
 		while ((lastSeparator = nl.lastIndexOf('_')) != -1) {
 			result.add(nl);
@@ -205,16 +205,16 @@ public class PluginXmlRegistry {
 
 
 	private static ClassLoader createTempClassloader(Bundle b) {
-		ArrayList classpath = new ArrayList();
+		ArrayList<URL> classpath = new ArrayList<URL>();
 		addClasspathEntries(b, classpath);
 		addBundleRoot(b, classpath);
 		addDevEntries(b, classpath);
 		addFragments(b, classpath);
 		URL[] urls = new URL[classpath.size()];
-		return new URLClassLoader((URL[]) classpath.toArray(urls));
+		return new URLClassLoader(classpath.toArray(urls));
 	}
 
-	private static void addFragments(Bundle host, ArrayList classpath) {
+	private static void addFragments(Bundle host, ArrayList<URL> classpath) {
 		Activator activator = Activator.getDefault();
 		if (activator == null)
 			return;
@@ -228,7 +228,7 @@ public class PluginXmlRegistry {
 		}
 	}
 
-	private static void addClasspathEntries(Bundle b, ArrayList classpath) {
+	private static void addClasspathEntries(Bundle b, ArrayList<URL> classpath) {
 		ManifestElement[] classpathElements;
 		try {
 			classpathElements = ManifestElement.parseHeader(Constants.BUNDLE_CLASSPATH, (String) b.getHeaders("").get(Constants.BUNDLE_CLASSPATH)); //$NON-NLS-1$
@@ -244,11 +244,11 @@ public class PluginXmlRegistry {
 		}
 	}
 
-	private static void addBundleRoot(Bundle b, ArrayList classpath) {
+	private static void addBundleRoot(Bundle b, ArrayList<URL> classpath) {
 		classpath.add(b.getEntry("/")); //$NON-NLS-1$
 	}
 
-	private static void addDevEntries(Bundle b, ArrayList classpath) {
+	private static void addDevEntries(Bundle b, ArrayList<URL> classpath) {
 		if (!DevClassPathHelper.inDevelopmentMode())
 			return;
 

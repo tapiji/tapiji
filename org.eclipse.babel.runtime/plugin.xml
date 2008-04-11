@@ -35,6 +35,16 @@
                   commandId="org.eclipse.babel.runtime.localizeAction">
             </command>
       </menuContribution>
+      <menuContribution
+            locationURI="org.eclipse.babel.runtime.menuContribution1">
+         <menu
+               label="label">
+            <command
+                  commandId="org.eclipse.babel.runtime.command1"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
 
    </extension>
 </plugin>

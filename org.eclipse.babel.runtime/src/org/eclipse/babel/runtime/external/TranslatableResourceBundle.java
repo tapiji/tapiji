@@ -200,7 +200,7 @@ public class TranslatableResourceBundle extends ResourceBundle {
 		if (nlSuffixes == null) {
 			//build list of suffixes for loading resource bundles
 			String nl = Locale.getDefault().toString();
-			ArrayList result = new ArrayList(4);
+			ArrayList<String> result = new ArrayList<String>(4);
 			int lastSeparator;
 			while (true) {
 				result.add('_' + nl + EXTENSION);

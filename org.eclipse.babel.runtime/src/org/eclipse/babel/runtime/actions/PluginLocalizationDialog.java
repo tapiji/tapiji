@@ -94,17 +94,20 @@ public class PluginLocalizationDialog extends LocalizableTrayDialog {
 		c.setLayout(new GridLayout());
 
 		final Properties p = new Properties();
-		Enumeration e = bundle.findEntries("", "plugin.properties", false); //$NON-NLS-1$ //$NON-NLS-2$
-		while (e.hasMoreElements()) {
-			URL url = (URL)e.nextElement();
-			try {
-				InputStream is = url.openStream();
-				p.load(is);
-				is.close();
-			} catch (IOException ex) {
-				throw new RuntimeException("", ex); //$NON-NLS-1$
+		Enumeration<?> e = bundle.findEntries("", "plugin.properties", false); //$NON-NLS-1$ //$NON-NLS-2$
+		// e will be null if there is no plugin.properties in the plug-in.
+		if (e != null) {
+			while (e.hasMoreElements()) {
+				URL url = (URL)e.nextElement();
+				try {
+					InputStream is = url.openStream();
+					p.load(is);
+					is.close();
+				} catch (IOException ex) {
+					throw new RuntimeException("", ex); //$NON-NLS-1$
+				}
+				break;
 			}
-			break;
 		}
 
 		ITranslatableText[] texts = new ITranslatableText[p.size()];

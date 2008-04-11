@@ -16,9 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -57,17 +55,6 @@ import org.xml.sax.SAXException;
 public class MenuAnalyzer {
 
 	private LocalizableMenuSet textSet = new LocalizableMenuSet();
-
-	private Comparator actionComparator = new Comparator() {
-		public int compare(Object o1, Object o2) {
-			// Ideally we should be using the ICU collator for this comparison.
-			// However, this is really not important enough to require everyone
-			// to include such a large plug-in.
-			IViewDescriptor a1 = (IViewDescriptor) o1;
-			IViewDescriptor a2 = (IViewDescriptor) o2;
-			return a1.getLabel().compareToIgnoreCase(a2.getLabel());
-		}
-	};
 
 	public MenuAnalyzer() {
 		
@@ -321,8 +308,7 @@ public class MenuAnalyzer {
 		IViewRegistry reg = WorkbenchPlugin.getDefault().getViewRegistry();
 
 		List<IViewDescriptor> actions = new ArrayList<IViewDescriptor>(viewIds.size());
-		for (Iterator i = viewIds.iterator(); i.hasNext();) {
-			String id = (String) i.next();
+		for (String id : viewIds) {
 			if (id.equals(IIntroConstants.INTRO_VIEW_ID)) {
 				continue;
 			}
@@ -356,22 +342,19 @@ public class MenuAnalyzer {
 
 		}
 
-		Comparator actionComparator = new Comparator() {
-			public int compare(Object o1, Object o2) {
+		Comparator<IViewDescriptor> actionComparator = new Comparator<IViewDescriptor>() {
+			public int compare(IViewDescriptor view1, IViewDescriptor view2) {
 				// Ideally we should be using the ICU collator for this comparison.
 				// However, this is really not important enough to require everyone
 				// to include such a large plug-in.
-				IViewDescriptor a1 = (IViewDescriptor) o1;
-				IViewDescriptor a2 = (IViewDescriptor) o2;
-				return a1.getLabel().compareToIgnoreCase(a2.getLabel());
+				return view1.getLabel().compareToIgnoreCase(view2.getLabel());
 			}
 		};
 
+
 		Collections.sort(actions, actionComparator);
 
-		for (Iterator i = actions.iterator(); i.hasNext();) {
-			IViewDescriptor action = (IViewDescriptor) i.next();
-
+		for (IViewDescriptor action: actions) {
 			ITranslatableText localizableText = extractFromPluginXml("org.eclipse.ui.views", "view", action.getId(), "name", false);
 			parentItem.add(new TranslatableMenuItem(localizableText));
 		}
@@ -428,7 +411,10 @@ public class MenuAnalyzer {
 			if (element.getName().equals(elementName)) {
 				for (IConfigurationElement subElement: element.getChildren(subElementName)) {
 					String thisId = subElement.getAttribute("id");
-					boolean idMatches = (localMatchOnly ? (thisId.endsWith("." + id)) : thisId.equals(id));
+					// FIXME: If there is no id then we need to do something more sophisticated to find the element
+					// from which this menu item came.  See bug 226380.  As an interim solution, we ignore if there
+					// is no id which means the menu item will not be translatable.
+					boolean idMatches = (thisId != null) && (localMatchOnly ? (thisId.endsWith("." + id)) : thisId.equals(id));
 					if (idMatches) {
 						String contributorName = element.getDeclaringExtension().getContributor().getName();
 						Bundle bundle = InternalPlatform.getDefault().getBundle(contributorName);
