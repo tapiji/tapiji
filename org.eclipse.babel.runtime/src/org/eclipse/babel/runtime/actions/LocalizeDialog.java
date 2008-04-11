@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Nigel Westbury - initial API and implementation
+ *    Remy Chi Jian Suen - Bug 226500 'Translate' button throws NPE if nothing is selected in the table
  *******************************************************************************/
 
 package org.eclipse.babel.runtime.actions;
@@ -299,6 +300,7 @@ public class LocalizeDialog extends LocalizableTrayDialog {
 
 		translatePluginButton = new Button(container, SWT.PUSH);
 		languageSet.associate(translatePluginButton, Messages.LocalizeDialog_Command_Translate);
+		translatePluginButton.setEnabled(false);
 		translatePluginButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				IStructuredSelection selection = (IStructuredSelection)pluginTableViewer.getSelection();
