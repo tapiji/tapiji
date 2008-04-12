@@ -54,12 +54,27 @@ public class TranslatableSet implements ITranslatableSet {
 		return result;
 	}
 
+	/**
+	 * This method is called whenever any text in this set has been changed.
+	 * 
+	 * The default implementation does nothing.  This method should
+	 * be overwritten to re-layout and re-size as appropriate given
+	 * the changes in the text lengths.
+	 */
 	public void layout() {
 		// This default implementation does nothing.
-		// Override this method to re-calculate layouts that may
-		// be affected by changes to the text values in this set.
 	}
-	
+
+	/**
+	 * This is the generic method that 'associates' text with a control.
+	 * This method (or one of the more specific overloads of this method)
+	 * should be called whenever text is to be set in some way (as the label,
+	 * tool-tip, etc) into a control.  By calling this method, the control will
+	 * automatically be updated whenever the text changes.
+	 * 
+	 * The <code>updateControl(String)</code> method of the <code>textInput</code> parameter will be called when this
+	 * method is called and also whenever changes occur in the text.
+	 */
 	public void associate(Object controlKey, TranslatableTextInput textInput) {
 		textInput.getLocalizedTextObject().validateLocale(locale);
 		
@@ -69,6 +84,13 @@ public class TranslatableSet implements ITranslatableSet {
 		localizableTextCollection.put(controlKey, textInput);
 	}
 
+	/**
+	 * 'Associates' the given label with the given text.
+	 * 
+	 * This method should be called instead of calling <code>setText</code>
+	 * on the label control.  By using this method, the text shown in the label
+	 * will be updated immediately when the given text is changed.
+	 */
 	public void associate(final Label label, ITranslatableText localizableText) {
 		associate(label, new TranslatableTextInput(localizableText) {
 			@Override
@@ -78,6 +100,13 @@ public class TranslatableSet implements ITranslatableSet {
 		}); 
 	}
 
+	/**
+	 * 'Associates' the given button with the given text.
+	 * 
+	 * This method should be called instead of calling <code>setText</code>
+	 * on the button control.  By using this method, the text shown in the button
+	 * will be updated immediately when the given text is changed.
+	 */
 	public void associate(final Button button, ITranslatableText localizableText) {
 		associate(button, new TranslatableTextInput(localizableText) {
 			@Override
@@ -87,6 +116,13 @@ public class TranslatableSet implements ITranslatableSet {
 		}); 
 	}
 
+	/**
+	 * 'Associates' the tooltip of the given button with the given text.
+	 * 
+	 * This method should be called instead of calling <code>setToolTipText</code>
+	 * on the button control.  By using this method, the tool-tip shown for the button
+	 * will be updated immediately when the given text is changed.
+	 */
 	public void associateToolTip(final Button button, ITranslatableText localizableText) {
 		associate(new ToolTipKey(button), new TranslatableTextInput(localizableText) {
 			@Override
@@ -96,6 +132,13 @@ public class TranslatableSet implements ITranslatableSet {
 		}); 
 	}
 
+	/**
+	 * 'Associates' the given button with the given item.
+	 * 
+	 * This method should be called instead of calling <code>setText</code>
+	 * on the item.  By using this method, the text shown for the item
+	 * will be updated immediately when the given text is changed.
+	 */
 	public void associate(final Item item, ITranslatableText localizableText) {
 		associate(item, new TranslatableTextInput(localizableText) {
 			@Override
@@ -105,6 +148,13 @@ public class TranslatableSet implements ITranslatableSet {
 		}); 
 	}
 
+	/**
+	 * 'Associates' the title of the given shell with the given text.
+	 * 
+	 * This method should be called instead of calling <code>setText</code>
+	 * on the shell.  By using this method, the text shown as the title of the shell
+	 * will be updated immediately when the given text is changed.
+	 */
 	public void associate(final Shell shell, ITranslatableText localizableText) {
 		associate(shell, new TranslatableTextInput(localizableText) {
 			@Override
@@ -114,6 +164,13 @@ public class TranslatableSet implements ITranslatableSet {
 		}); 
 	}
 
+	/**
+	 * 'Associates' the text on the given tab with the given text.
+	 * 
+	 * This method should be called instead of calling <code>setText</code>
+	 * on the tab item.  By using this method, the text shown on the tab
+	 * will be updated immediately when the given text is changed.
+	 */
 	public void associate(final TabItem tabItem, ITranslatableText localizableText) {
 		associate(tabItem, new TranslatableTextInput(localizableText) {
 			@Override
@@ -123,6 +180,13 @@ public class TranslatableSet implements ITranslatableSet {
 		}); 
 	}
 
+	/**
+	 * 'Associates' the title of the given form with the given text.
+	 * 
+	 * This method should be called instead of calling <code>setText</code>
+	 * on the form.  By using this method, the text shown as the title of the form
+	 * will be updated immediately when the given text is changed.
+	 */
 	public void associate(final ScrolledForm form, ITranslatableText localizableText) {
 		associate(form, new TranslatableTextInput(localizableText) {
 			@Override
@@ -132,6 +196,13 @@ public class TranslatableSet implements ITranslatableSet {
 		}); 
 	}
 
+	/**
+	 * 'Associates' the title of the given section with the given text.
+	 * 
+	 * This method should be called instead of calling <code>setText</code>
+	 * on the section.  By using this method, the text shown as the title of the section
+	 * will be updated immediately when the given text is changed.
+	 */
 	public void associate(final Section section, ITranslatableText localizableText) {
 		associate(section, new TranslatableTextInput(localizableText) {
 			@Override
@@ -141,6 +212,13 @@ public class TranslatableSet implements ITranslatableSet {
 		}); 
 	}
 
+	/**
+	 * 'Associates' the description of the given section with the given text.
+	 * 
+	 * This method should be called instead of calling <code>setDescription</code>
+	 * on the section.  By using this method, the text shown as the description for the section
+	 * will be updated immediately when the given text is changed.
+	 */
 	public void associateDescription(final Section section, ITranslatableText localizableText) {
 		associate(new DescriptionKey(section), new TranslatableTextInput(localizableText) {
 			@Override
@@ -150,6 +228,13 @@ public class TranslatableSet implements ITranslatableSet {
 		}); 
 	}
 
+	/**
+	 * 'Associates' the given hyper-link with the given text.
+	 * 
+	 * This method should be called instead of calling <code>setText</code>
+	 * on the hyper-link.  By using this method, the text shown in the hyper-link
+	 * will be updated immediately when the given text is changed.
+	 */
 	public void associate(final Hyperlink link, ITranslatableText localizableText) {
 		associate(link, new TranslatableTextInput(localizableText) {
 			@Override
@@ -193,13 +278,13 @@ public class TranslatableSet implements ITranslatableSet {
 	/**
 	 * This method should be used to register translatable text that does
 	 * not appear directly in the part/dialog.  For example, text that appears
-	 * in a tooltip.  This method should be used only if the tooltip is built each
-	 * time, such as a tooltip in a table.
+	 * in a tool-tip.  This method should be used only if the tool-tip is built each
+	 * time, such as a tool-tip in a table.
 	 * 
-	 * Although every cell in a column has a different tooltip, they all have tooltips
-	 * built in the same way from the same templates.  Therefore the tooltips for a column
+	 * Although every cell in a column has a different tool-tip, they all have tool-tips
+	 * built in the same way from the same templates.  Therefore the tool-tips for a column
 	 * should appear just once.  However, we update the sample data so that the user
-	 * always sees the last toolip shown.
+	 * always sees the last tool-tip shown.
 	 *  
 	 * @param localizableText
 	 */
@@ -217,7 +302,7 @@ public class TranslatableSet implements ITranslatableSet {
 	 * for a control.  Normally the control itself is used as the key.
 	 * However that would cause a conflict with the primary text for
 	 * the control, hence the need to use this wrapper as a key for
-	 * the tooltip.
+	 * the tool-tip.
 	 */
 	class ToolTipKey {
 		private Object control;
