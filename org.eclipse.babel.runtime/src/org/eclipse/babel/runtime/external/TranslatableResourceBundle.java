@@ -123,6 +123,15 @@ public class TranslatableResourceBundle extends ResourceBundle {
 		variantResources.revertString(key);
 	}
 
+	/**
+	 * @return true if the text for the given key has been modified,
+	 * 		false if the current text is the same as the text in the
+	 * 		properties file
+	 */
+	public boolean isDirty(String key) {
+		return variantResources.isDirty(key);
+	}
+
 	public TranslatableResourceBundle getParent() {
 		return (TranslatableResourceBundle)parent;
 	}

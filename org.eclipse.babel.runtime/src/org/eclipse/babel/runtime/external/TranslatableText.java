@@ -106,4 +106,17 @@ public class TranslatableText implements ITranslatableText {
 		rb.revertString(key);
 		updatedBundles.add(rb);		
 	}
+
+	public boolean isDirty(Locale locale) {
+		TranslatableResourceBundle rb = resourceBundle;
+		while (rb != null && !rb.getMyLocale().equals(locale)) {
+			rb = rb.getParent();
+		}
+		
+		if (rb == null) { 
+			throw new RuntimeException();
+		}
+		
+		return rb.isDirty(key);
+	}
 }

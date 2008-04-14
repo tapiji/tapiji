@@ -230,6 +230,15 @@ public class TranslatableResourceFile {
 		updatedProperties.remove(key);
 	}
 
+	/**
+	 * @return true if the text for the given key has been modified,
+	 * 		false if the current text is the same as the text in the
+	 * 		properties file
+	 */
+	public boolean isDirty(String key) {
+		return updatedProperties.containsKey(key);
+	}
+
 	private boolean equals(String text1, String text2) {
 		return (text1 == null) 
 		? (text2 == null)
