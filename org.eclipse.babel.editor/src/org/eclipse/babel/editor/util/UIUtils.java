@@ -77,14 +77,14 @@ public final class UIUtils {
     /** Name of add icon. */
     public static final String IMAGE_ADD = "add.png";  //$NON-NLS-1$
     /** Name of edit icon. */
-    public static final String IMAGE_RENAME = "rename.png";  //$NON-NLS-1$
+    public static final String IMAGE_RENAME = "rename.gif";  //$NON-NLS-1$
     /** Name of "view left" icon. */
-    public static final String IMAGE_VIEW_LEFT = "viewLeft.png";  //$NON-NLS-1$
+    public static final String IMAGE_VIEW_LEFT = "viewLeft.gif";  //$NON-NLS-1$
     /** Name of locale icon. */
-    public static final String IMAGE_LOCALE = "locale.png";  //$NON-NLS-1$
+    public static final String IMAGE_LOCALE = "locale.gif";  //$NON-NLS-1$
     /** Name of new locale icon. */
     public static final String IMAGE_NEW_LOCALE =
-            "newLocale.png";  //$NON-NLS-1$
+            "newLocale.gif";  //$NON-NLS-1$
     /** Name of expand all icon. */
     public static final String IMAGE_EXPAND_ALL =
             "expandall.png";  //$NON-NLS-1$
@@ -144,8 +144,8 @@ public final class UIUtils {
                 if (ROOT_LOCALE.equals(o2)) {
                     return 1;
                 }
-                String name1 = "";
-                String name2 = "";
+                String name1 = ""; //$NON-NLS-1$
+                String name2 = ""; //$NON-NLS-1$
                 if (l1 != null) {
                     name1 = l1.getDisplayName();
                 }
