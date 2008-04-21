@@ -25,6 +25,7 @@ import org.eclipse.babel.core.util.BabelUtils;
  * JavaBean specifications</a>.
  *
  * @author Pascal Essiembre (pascal@essiembre.com)
+ * @author Karsten Lentzsch (karsten@jgoodies.com)
  */
 public abstract class AbstractMessageModel implements Serializable {
     /** Handles <code>PropertyChangeListeners</code>. */
