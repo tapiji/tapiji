@@ -111,9 +111,9 @@
                class="org.eclipse.babel.editor.builder.ToggleNatureActionAdd"
                enablesFor="1"
                id="com.essiembre.rbe.eclipse.addNatureAction"
-               label="Unable i18n properties validator"
+               label="%addNatureAction.label"
                menubarPath="additions"
-               tooltip="Setup the i18n validator builder"/>
+               tooltip="%addNatureAction.tooltip"/>
       </objectContribution>
       <objectContribution
             adaptable="true"
@@ -133,9 +133,9 @@
                class="org.eclipse.babel.editor.builder.ToggleNatureActionRemove"
                enablesFor="1"
                id="com.essiembre.rbe.eclipse.removeNatureAction"
-               label="Disable i18n properties validator"
+               label="%removeNatureAction.label"
                menubarPath="additions"
-               tooltip="Remove the i18n validator builder"/>
+               tooltip="%removeNatureAction.tooltip"/>
       </objectContribution>
  </extension>
  <extension
