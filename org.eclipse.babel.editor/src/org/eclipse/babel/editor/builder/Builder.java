@@ -17,10 +17,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-//import org.apache.lucene.index.CorruptIndexException;
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
-//import org.eclipse.babel.editor.builder.indexer.Indexer;
 import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.resource.validator.FileMarkerStrategy;

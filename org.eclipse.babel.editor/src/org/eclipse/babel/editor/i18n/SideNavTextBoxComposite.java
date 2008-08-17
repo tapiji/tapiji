@@ -10,6 +10,11 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
+import org.eclipse.babel.core.message.tree.KeyTreeNode;
+import org.eclipse.babel.core.message.tree.visitor.NodePathRegexVisitor;
+import org.eclipse.babel.editor.MessagesEditor;
+import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
+import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -22,13 +27,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-
-
-import org.eclipse.babel.core.message.tree.KeyTreeNode;
-import org.eclipse.babel.core.message.tree.visitor.NodePathRegexVisitor;
-import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
-import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 
 /**
  * Tree for displaying and navigating through resource bundle keys.

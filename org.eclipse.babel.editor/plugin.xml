@@ -161,4 +161,44 @@
        </description>
     </wizard>
  </extension>
+
+
+
+   <extension
+         point="org.eclipse.ui.elementFactories">
+      <factory
+            class="org.eclipse.pde.nls.internal.ui.editor.LocalizationEditorInputFactory"
+            id="org.eclipse.pde.nls.ui.LocalizationEditorInputFactory"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.pde.nls.internal.ui.editor.LocalizationEditor"
+            icon="icons/obj16/nls_editor.gif"
+            id="org.eclipse.pde.nls.ui.LocalizationEditor"
+            name="%localizationEditorName"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.eclipse.pde.nls.internal.ui.OpenLocalizationEditorHandler"
+            id="org.eclipse.pde.nls.ui.OpenLocalizationEditor"
+            name="%command_openLocalizationEditor_name">
+      </command>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:edit?after=additions">
+         <command
+               commandId="org.eclipse.pde.nls.ui.OpenLocalizationEditor"
+               mnemonic="%command_openLocalizationEditor_mnemonic"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+
 </plugin>

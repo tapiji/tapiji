@@ -12,8 +12,6 @@ package org.eclipse.babel.editor.i18n.actions;
 
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.MessagesBundleGroup;
-import org.eclipse.babel.core.message.checks.DuplicateValueCheck;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;

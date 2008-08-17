@@ -30,7 +30,12 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.pde.nls.internal.ui.model.ResourceBundleModel;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -64,6 +69,8 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChang
 	//private Map<String,Set<SimpleResourceChangeListners>> resourceChangeSubscribers;
 	private Map resourceChangeSubscribers;
 	
+	private ResourceBundleModel model;
+
 	/**
 	 * The constructor
 	 */
@@ -228,4 +235,65 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChang
 	protected ResourceBundle getResourceBundle() {
 		return resourceBundle;
 	}
+	
+	// Stefan's activator methods:
+	
+	/**
+	 * Returns an image descriptor for the given icon filename.
+	 * 
+	 * @param filename the icon filename relative to the icons path
+	 * @return the image descriptor
+	 */
+	public static ImageDescriptor getImageDescriptor(String filename) {
+		String iconPath = "icons/"; //$NON-NLS-1$
+		return imageDescriptorFromPlugin(PLUGIN_ID, iconPath + filename);
+	}
+
+	public static ResourceBundleModel getModel(IProgressMonitor monitor) {
+		if (plugin.model == null) {
+			plugin.model = new ResourceBundleModel(monitor);
+		}
+		return plugin.model;
+	}
+
+	public static void disposeModel() {
+		if (plugin != null) {
+			plugin.model = null;
+		}
+	}
+
+	// Logging
+
+	/**
+	 * Adds the given exception to the log.
+	 * 
+	 * @param e the exception to log
+	 * @return the logged status
+	 */
+	public static IStatus log(Throwable e) {
+		return log(new Status(IStatus.ERROR, PLUGIN_ID, 0, "Internal error.", e));
+	}
+
+	/**
+	 * Adds the given exception to the log.
+	 * 
+	 * @param exception the exception to log
+	 * @return the logged status
+	 */
+	public static IStatus log(String message, Throwable exception) {
+		return log(new Status(IStatus.ERROR, PLUGIN_ID, -1, message, exception));
+	}
+
+	/**
+	 * Adds the given <code>IStatus</code> to the log.
+	 * 
+	 * @param status the status to log
+	 * @return the logged status
+	 */
+	public static IStatus log(IStatus status) {
+		getDefault().getLog().log(status);
+		return status;
+	}
+
+	
 }
