@@ -10,8 +10,8 @@
  *******************************************************************************/
 package org.eclipse.nls.ui.tests;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.Properties;
 
 import junit.framework.TestCase;
@@ -58,7 +58,7 @@ public class PropertiesTest extends TestCase {
 
 	private Properties readProperties(String input) throws IOException {
 		Properties properties = new Properties();
-		properties.load(new StringReader(input));
+		properties.load(new ByteArrayInputStream(input.getBytes()));
 		return properties;
 	}
 
