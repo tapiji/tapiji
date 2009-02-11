@@ -32,7 +32,7 @@ public class ValidationFailureEvent {
      * @param locale
      * @param key
      * @param resource
-     * @param check
+     * @param check not null
      */
     /*default*/ ValidationFailureEvent(
             final MessagesBundleGroup messagesBundleGroup,
@@ -54,7 +54,7 @@ public class ValidationFailureEvent {
         return messagesBundleGroup;
     }
     /**
-     * @return the check
+     * @return the check, never null
      */
     public IMessageCheck getCheck() {
         return check;

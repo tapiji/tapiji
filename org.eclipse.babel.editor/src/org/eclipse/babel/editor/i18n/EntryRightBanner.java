@@ -109,11 +109,9 @@ public class EntryRightBanner extends Composite {
                     toolBarMgr.removeAll();
                     actionByMarkerIds.clear();
                     String key = editor.getSelectedKey();
-                    Collection checks = editor.getMarkers().getFailedChecks(
+                    Collection<IMessageCheck> checks = editor.getMarkers().getFailedChecks(
                             key, locale);
-                    for (Iterator iter = checks.iterator(); iter.hasNext();) {
-                        IMessageCheck check =
-                                (IMessageCheck) iter.next();
+                    for (IMessageCheck check : checks) {
                         Action action = getCheckAction(key, check);
                         if (action != null) {
                             toolBarMgr.add(action);

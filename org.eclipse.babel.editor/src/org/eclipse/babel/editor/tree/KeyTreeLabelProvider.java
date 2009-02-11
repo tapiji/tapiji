@@ -13,6 +13,7 @@ package org.eclipse.babel.editor.tree;
 import java.util.Collection;
 
 import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.checks.IMessageCheck;
 import org.eclipse.babel.core.message.tree.IKeyTreeModel;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
 import org.eclipse.babel.editor.MessagesEditor;
@@ -65,7 +66,7 @@ public class KeyTreeLabelProvider
 	public Image getImage(Object element) {
 		if (element instanceof KeyTreeNode) {
 			KeyTreeNode node = (KeyTreeNode)element;
-			Collection c = editor.getMarkers().getFailedChecks(node.getMessageKey());
+			Collection<IMessageCheck> c = editor.getMarkers().getFailedChecks(node.getMessageKey());
 			if (c == null || c.isEmpty()) {
 				return UIUtils.getImage(UIUtils.IMAGE_KEY);
 			}

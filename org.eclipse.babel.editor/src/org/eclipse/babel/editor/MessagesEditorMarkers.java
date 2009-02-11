@@ -22,6 +22,7 @@ import java.util.Observable;
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.MessagesBundleGroupAdapter;
+import org.eclipse.babel.core.message.checks.IMessageCheck;
 import org.eclipse.babel.core.message.checks.MissingValueCheck;
 import org.eclipse.babel.editor.resource.validator.IValidationMarkerStrategy;
 import org.eclipse.babel.editor.resource.validator.MessagesBundleGroupValidator;
@@ -41,10 +42,10 @@ public class MessagesEditorMarkers
     
    // private Map<String,Set<ValidationFailureEvent>> markersIndex = new HashMap();
     /** index is the name of the key. value is the collection of markers on that key */
-    private Map markersIndex = new HashMap();
+    private Map<String, Collection<IMessageCheck>> markersIndex = new HashMap<String, Collection<IMessageCheck>>();
     /** index is the concat of the locale and the key.
      * value is the collection of markers for that key and that locale */
-    private Map localizedMarkersIndex = new HashMap();
+    private Map<String, Collection<IMessageCheck>> localizedMarkersIndex = new HashMap<String, Collection<IMessageCheck>>();
     
     /**
      * @param messagesBundleGroup
@@ -89,20 +90,20 @@ public class MessagesEditorMarkers
      * @see org.eclipse.babel.editor.resource.validator.IValidationMarkerStrategy#markFailed(org.eclipse.core.resources.IResource, org.eclipse.babel.core.bundle.checks.IBundleEntryCheck)
      */
     public void markFailed(ValidationFailureEvent event) {
-        Collection markersForKey = (Collection) markersIndex.get(event.getKey());
+        Collection<IMessageCheck> markersForKey = markersIndex.get(event.getKey());
         if (markersForKey == null) {
-        	markersForKey = new HashSet();
+        	markersForKey = new HashSet<IMessageCheck>();
         	markersIndex.put(event.getKey(), markersForKey);
         }
-        markersForKey.add(event);
+        markersForKey.add(event.getCheck());
         
         String localizedKey = hash(event.getLocale(), event.getKey());
-        markersForKey = (Collection) localizedMarkersIndex.get(localizedKey);
+        markersForKey = localizedMarkersIndex.get(localizedKey);
         if (markersForKey == null) {
-        	markersForKey = new HashSet();
+        	markersForKey = new HashSet<IMessageCheck>();
         	localizedMarkersIndex.put(localizedKey, markersForKey);
         }
-        markersForKey.add(event);
+        markersForKey.add(event.getCheck());
         
         //System.out.println("CREATE EDITOR MARKER");
         setChanged();
@@ -120,11 +121,11 @@ public class MessagesEditorMarkers
     	return markersIndex.containsKey(key);
     }
 
-    public Collection getFailedChecks(String key) {
-    	return (Collection)markersIndex.get(key);
+    public Collection<IMessageCheck> getFailedChecks(String key) {
+    	return markersIndex.get(key);
     }
-    public Collection getFailedChecks(final String key, final Locale locale) {
-    	return (Collection)localizedMarkersIndex.get(hash(locale, key));
+    public Collection<IMessageCheck> getFailedChecks(final String key, final Locale locale) {
+    	return localizedMarkersIndex.get(hash(locale, key));
     }
         
     private void validate() {
@@ -137,7 +138,7 @@ public class MessagesEditorMarkers
      * @return true when the key has a missing or unused issue
      */
     public boolean isMissingOrUnusedKey(String key) {
-    	Collection markers = getFailedChecks(key);
+    	Collection<IMessageCheck> markers = getFailedChecks(key);
     	return markers != null && markersContainMissing(markers);
     }
     
@@ -151,7 +152,7 @@ public class MessagesEditorMarkers
     	if (!isMissingOrUnused) {
     		return false;
     	}
-    	Collection markers = getFailedChecks(key, UIUtils.ROOT_LOCALE);
+    	Collection<IMessageCheck> markers = getFailedChecks(key, UIUtils.ROOT_LOCALE);
     	//if we get a missing on the root locale, it means the
     	//that some localized resources are referring to a key that is not in
     	//the default locale anymore: in other words, assuming the
@@ -160,9 +161,9 @@ public class MessagesEditorMarkers
     	return markers != null && markersContainMissing(markers);
     }
     
-    private boolean markersContainMissing(Collection markers) {
-    	for (Iterator it = markers.iterator(); it.hasNext(); ) {
-    		if (((ValidationFailureEvent) it.next()).getCheck() == MissingValueCheck.MISSING_KEY) {
+    private boolean markersContainMissing(Collection<IMessageCheck> markers) {
+    	for (IMessageCheck marker : markers) {
+    		if (marker == MissingValueCheck.MISSING_KEY) {
     			return true;
     		}
     	}
