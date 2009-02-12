@@ -13,7 +13,6 @@ package org.eclipse.babel.core.message.checks.proximity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Compares two strings (case insensitive) and returns a proximity level
@@ -53,9 +52,9 @@ public class WordCountAnalyzer implements IProximityAnalyzer {
             return 0;
         }
         
-        Collection str1 = new ArrayList(
+        Collection<String> str1 = new ArrayList<String>(
                 Arrays.asList(obj1.toString().split(WORD_SPLIT_PATTERN)));
-        Collection str2 = new ArrayList(
+        Collection<String> str2 = new ArrayList<String>(
                 Arrays.asList(obj2.toString().split(WORD_SPLIT_PATTERN)));
         
         int maxWords = Math.max(str1.size(), str2.size());
@@ -64,8 +63,7 @@ public class WordCountAnalyzer implements IProximityAnalyzer {
         }
         
         int matchedWords = 0;
-        for (Iterator iter = str1.iterator(); iter.hasNext();) {
-            String str = (String) iter.next();
+        for (String str : str1) {
             if (str2.remove(str)) {
                 matchedWords++;
             }

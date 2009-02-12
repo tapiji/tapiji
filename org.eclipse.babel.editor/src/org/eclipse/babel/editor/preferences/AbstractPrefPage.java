@@ -38,7 +38,7 @@ public abstract class AbstractPrefPage extends PreferencePage implements
     protected final int indentPixels = 20;
     
     /** Controls with errors in them. */
-    protected final Map errors = new HashMap();
+    protected final Map<Text,String> errors = new HashMap<Text,String>();
     
     /**
      * Constructor.
@@ -156,8 +156,7 @@ public abstract class AbstractPrefPage extends PreferencePage implements
                     setErrorMessage(null);
                     setValid(true);
                 } else {
-                    setErrorMessage(
-                            (String) errors.values().iterator().next());
+                    setErrorMessage(errors.values().iterator().next());
                 }
             } else {
                 errors.put(text, errMsg);

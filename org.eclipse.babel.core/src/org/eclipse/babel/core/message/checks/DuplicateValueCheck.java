@@ -43,7 +43,7 @@ public class DuplicateValueCheck implements IMessageCheck {
 
     public boolean checkKey(
             MessagesBundleGroup messagesBundleGroup, Message message) {
-        Collection keys = new ArrayList();
+        Collection<String> keys = new ArrayList<String>();
         if (message != null) {
             MessagesBundle messagesBundle =
             		messagesBundleGroup.getMessagesBundle(message.getLocale());
@@ -61,7 +61,7 @@ public class DuplicateValueCheck implements IMessageCheck {
             }
         }
 
-        duplicateKeys = (String[]) keys.toArray(new String[]{});
+        duplicateKeys = keys.toArray(new String[]{});
         return !keys.isEmpty();
     }
     

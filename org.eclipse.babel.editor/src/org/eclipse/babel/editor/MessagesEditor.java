@@ -13,7 +13,6 @@ package org.eclipse.babel.editor;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -64,15 +63,15 @@ public class MessagesEditor extends MultiPageEditorPart
        "org.eclilpse.babel.editor.editor.MessagesEditor"; //$NON-NLS-1$
 
     private String selectedKey;
-    private List changeListeners = new ArrayList(2);
+    private List<IMessagesEditorChangeListener> changeListeners = new ArrayList<IMessagesEditorChangeListener>(2);
     
     /** MessagesBundle group. */
     private MessagesBundleGroup messagesBundleGroup;
 
     /** Page with key tree and text fields for all locales. */
     private I18NPage i18nPage;
-    private final List localesIndex = new ArrayList();
-    private final List textEditorsIndex = new ArrayList();
+    private final List<Locale> localesIndex = new ArrayList<Locale>();
+    private final List<ITextEditor> textEditorsIndex = new ArrayList<ITextEditor>();
     
     private MessagesBundleGroupOutline outline;
     
@@ -197,8 +196,7 @@ public class MessagesEditor extends MultiPageEditorPart
      * Saves the multi-page editor's document.
      */
     public void doSave(IProgressMonitor monitor) {
-        for (Iterator iter = textEditorsIndex.iterator(); iter.hasNext();) {
-            ITextEditor textEditor = (ITextEditor) iter.next();
+        for (ITextEditor textEditor : textEditorsIndex) {
             textEditor.doSave(monitor);
         }
 //        i18nPage.refreshEditorOnChanges();
@@ -321,13 +319,11 @@ public class MessagesEditor extends MultiPageEditorPart
      * @see org.eclipse.ui.IWorkbenchPart#dispose()
      */
     public void dispose() {
-        for (Iterator iter = changeListeners.iterator(); iter.hasNext();) {
-            IMessagesEditorChangeListener listener = (IMessagesEditorChangeListener) iter.next();
+        for (IMessagesEditorChangeListener listener : changeListeners) {
             listener.editorDisposed();
         }
         i18nPage.dispose();
-        for (Iterator iter = textEditorsIndex.iterator(); iter.hasNext();) {
-            ITextEditor textEditor = (ITextEditor) iter.next();
+        for (ITextEditor textEditor : textEditorsIndex) {
             textEditor.dispose();
         }
     }
@@ -348,8 +344,7 @@ public class MessagesEditor extends MultiPageEditorPart
                 || (!selectedKey.equals(activeKey))) {
             String oldKey = this.selectedKey;
             this.selectedKey = activeKey;
-            for (Iterator iter = changeListeners.iterator(); iter.hasNext();) {
-                IMessagesEditorChangeListener listener = (IMessagesEditorChangeListener) iter.next();
+            for (IMessagesEditorChangeListener listener : changeListeners) {
                 listener.selectedKeyChanged(oldKey, activeKey);
             }
         }
@@ -358,10 +353,12 @@ public class MessagesEditor extends MultiPageEditorPart
     public void addChangeListener(IMessagesEditorChangeListener listener) {
         changeListeners.add(0, listener);
     }
+    
     public void removeChangeListener(IMessagesEditorChangeListener listener) {
         changeListeners.remove(listener);
     }
-    public Collection getChangeListeners() {
+    
+    public Collection<IMessagesEditorChangeListener> getChangeListeners() {
         return changeListeners;
     }
     
@@ -388,9 +385,8 @@ public class MessagesEditor extends MultiPageEditorPart
                 || (!keyTreeModel.equals(newKeyTreeModel))) {
             IKeyTreeModel oldModel = this.keyTreeModel;
             this.keyTreeModel = newKeyTreeModel;
-            for (Iterator iter = changeListeners.iterator(); iter.hasNext();) {
-                ((IMessagesEditorChangeListener) iter.next()).keyTreeModelChanged(
-                        oldModel, newKeyTreeModel);
+            for (IMessagesEditorChangeListener listener : changeListeners) {
+            	listener.keyTreeModelChanged(oldModel, newKeyTreeModel);
             }
         }
     }
@@ -398,6 +394,7 @@ public class MessagesEditor extends MultiPageEditorPart
     public I18NPage getI18NPage() {
         return i18nPage;
     }
+    
     /** one of the SHOW_* constants defined in the {@link IMessagesEditorChangeListener} */    
     private int showOnlyMissingAndUnusedKeys = IMessagesEditorChangeListener.SHOW_ALL;
     /**
@@ -409,13 +406,10 @@ public class MessagesEditor extends MultiPageEditorPart
     
     public void setShowOnlyUnusedMissingKeys(int showFlag) {
         showOnlyMissingAndUnusedKeys = showFlag;
-        for (Iterator iter = getChangeListeners().iterator(); iter.hasNext();) {
-            ((IMessagesEditorChangeListener) iter.next())
-            	.showOnlyUnusedAndMissingChanged(showFlag);
+        for (IMessagesEditorChangeListener listener : getChangeListeners()) {
+        	listener.showOnlyUnusedAndMissingChanged(showFlag);
         }
     }
-    
-
 
     public Object getAdapter(Class adapter) {
         Object obj = super.getAdapter(adapter);
@@ -426,10 +420,9 @@ public class MessagesEditor extends MultiPageEditorPart
         }
         return (obj);
     }
-    
 
     public ITextEditor getTextEditor(Locale locale) {
         int index = localesIndex.indexOf(locale);
-        return (ITextEditor) textEditorsIndex.get(index);
+        return textEditorsIndex.get(index);
     }
 }

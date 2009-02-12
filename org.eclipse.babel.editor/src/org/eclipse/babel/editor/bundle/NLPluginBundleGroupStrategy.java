@@ -13,7 +13,6 @@ package org.eclipse.babel.editor.bundle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -53,8 +52,8 @@ import org.eclipse.ui.IEditorSite;
  */
 public class NLPluginBundleGroupStrategy extends DefaultBundleGroupStrategy {
 	
-	private static Set ISO_LANG_CODES = new HashSet();
-	private static Set ISO_COUNTRY_CODES = new HashSet();
+	private static Set<String> ISO_LANG_CODES = new HashSet<String>();
+	private static Set<String> ISO_COUNTRY_CODES = new HashSet<String>();
 	static {
 		String[] isos = Locale.getISOLanguages();
 		for (int i = 0; i < isos.length; i++) {
@@ -106,8 +105,8 @@ public class NLPluginBundleGroupStrategy extends DefaultBundleGroupStrategy {
      * @see org.eclipse.babel.core.bundle.IBundleGroupStrategy#loadBundles()
      */
     public MessagesBundle[] loadMessagesBundles() {
-        final Collection bundles = new ArrayList();
-    	Collection nlFolders = nlFolder != null ? new ArrayList() : null;
+        final Collection<MessagesBundle> bundles = new ArrayList<MessagesBundle>();
+    	Collection<IFolder> nlFolders = nlFolder != null ? new ArrayList<IFolder>() : null;
     	if (associatedFragmentProjects != null) {
     		IPath basePath = null;
     		//true when the file opened is located in a source folder.
@@ -137,12 +136,12 @@ public class NLPluginBundleGroupStrategy extends DefaultBundleGroupStrategy {
     		for (int i = 0; i < associatedFragmentProjects.length; i++) {
     			IProject frag = associatedFragmentProjects[i];
     			if (fileIsInsideClasses) {
-	    			Collection srcPathes = NLFragmentBundleGroupStrategy.getSourceFolderPathes(frag);
+	    			Collection<String> srcPathes = NLFragmentBundleGroupStrategy.getSourceFolderPathes(frag);
 	    			if (srcPathes != null) {
 	    				//for each source folder, collect the resources we can find
 	    				//with the suffix scheme:
-	    				for (Iterator it = srcPathes.iterator(); it.hasNext();) {
-		    				IPath container = new Path((String)it.next()).append(basePath);
+	    				for (String srcPath : srcPathes) {
+		    				IPath container = new Path(srcPath).append(basePath);
 		    				super.collectBundlesInContainer(getContainer(frag, basePath), bundles);
 	    				}
 	    			}
@@ -152,7 +151,7 @@ public class NLPluginBundleGroupStrategy extends DefaultBundleGroupStrategy {
 	    			IFolder nl = frag.getFolder("nl");
 	    			if (nl != null && nl.exists()) {
 	    				if (nlFolders == null) {
-	    					nlFolders = new ArrayList();
+	    					nlFolders = new ArrayList<IFolder>();
 	    				}
 	    				nlFolders.add(nl);
 	    			}
@@ -170,7 +169,7 @@ public class NLPluginBundleGroupStrategy extends DefaultBundleGroupStrategy {
     	
         if (nlFolders == null) {
         	collectBundlesInContainer(getOpenedFile().getParent(), bundles);
-            return (MessagesBundle[]) bundles.toArray(EMPTY_BUNDLES);
+            return bundles.toArray(EMPTY_BUNDLES);
         }
         if (nlFolder != null) {
         	nlFolders.add(nlFolder);
@@ -197,8 +196,8 @@ public class NLPluginBundleGroupStrategy extends DefaultBundleGroupStrategy {
             if (UIUtils.isDisplayed(locale)) {
             	bundles.add(createBundle(locale, getOpenedFile()));
             }
-            for (Iterator it = nlFolders.iterator(); it.hasNext();) {
-            	((IFolder)it.next()).accept(visitor);
+            for (IFolder nlFolder : nlFolders) {
+            	nlFolder.accept(visitor);
             }
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -206,8 +205,7 @@ public class NLPluginBundleGroupStrategy extends DefaultBundleGroupStrategy {
 		//also look for files based on the suffix mechanism
 		//if we have located the root locale file:
 		IContainer container = null;
-		for (Iterator it = bundles.iterator(); it.hasNext();) {
-			MessagesBundle mb = (MessagesBundle)it.next();
+		for (MessagesBundle mb : bundles) {
 			if (mb.getLocale() == null || mb.getLocale().equals(UIUtils.ROOT_LOCALE)) {
 				Object src  = mb.getResource().getSource();
 				if (src instanceof IFile) {
@@ -219,7 +217,7 @@ public class NLPluginBundleGroupStrategy extends DefaultBundleGroupStrategy {
 		if (container != null) {
 			super.collectBundlesInContainer(container, bundles);
 		}
-        return (MessagesBundle[]) bundles.toArray(EMPTY_BUNDLES);
+        return bundles.toArray(EMPTY_BUNDLES);
     }
     
     private static final IContainer getContainer(IProject proj, IPath containerPath) {
@@ -235,15 +233,13 @@ public class NLPluginBundleGroupStrategy extends DefaultBundleGroupStrategy {
      * returns the same path minus the source folder.
      */
     protected IPath removePathToSourceFolder(IPath baseContainerPath) {
-    	Collection srcPathes = NLFragmentBundleGroupStrategy.getSourceFolderPathes(
+    	Collection<String> srcPathes = NLFragmentBundleGroupStrategy.getSourceFolderPathes(
     	        				getOpenedFile().getProject());
     	if (srcPathes == null) {
     		return baseContainerPath;
     	}
     	String projRelativePathStr = baseContainerPath.toString();
-    	Iterator iter = srcPathes.iterator();
-        while(iter.hasNext()) {
-            String srcPath = (String) iter.next();
+	    for (String srcPath : srcPathes) {
     		if (projRelativePathStr.startsWith(srcPath)) {
     			return new Path(projRelativePathStr.substring(srcPath.length()));
     		}

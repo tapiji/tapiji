@@ -28,7 +28,7 @@ public class FlatKeyTreeModel extends AbstractKeyTreeModel {
     private MessagesBundleGroup messagesBundleGroup;
     
     // Cached elements
-    private final Map nodes = new TreeMap();
+    private final Map<String,KeyTreeNode> nodes = new TreeMap<String,KeyTreeNode>();
     
     /**
      * Constructor.
@@ -46,7 +46,7 @@ public class FlatKeyTreeModel extends AbstractKeyTreeModel {
                 fireNodeAdded(node);
             }
             public void keyRemoved(String key) {
-                KeyTreeNode node = (KeyTreeNode) nodes.get(key);
+                KeyTreeNode node = nodes.get(key);
                 fireNodeRemoved(node);
             }
         });
@@ -57,7 +57,7 @@ public class FlatKeyTreeModel extends AbstractKeyTreeModel {
      */
     public KeyTreeNode[] getRootNodes() {
         KeyTreeNode[] rootNodes =
-                (KeyTreeNode[]) nodes.values().toArray(EMPTY_NODES);
+                nodes.values().toArray(EMPTY_NODES);
         if (getComparator() != null) {
             Arrays.sort(rootNodes, getComparator());
         }

@@ -67,7 +67,7 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChang
 	//The map of resource change subscribers.
 	//The key is the full path of the resource listened. The value as set of SimpleResourceChangeListners
 	//private Map<String,Set<SimpleResourceChangeListners>> resourceChangeSubscribers;
-	private Map resourceChangeSubscribers;
+	private Map<String,Set<AbstractIFileChangeListener>> resourceChangeSubscribers;
 	
 	private ResourceBundleModel model;
 
@@ -75,7 +75,7 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChang
 	 * The constructor
 	 */
 	public MessagesEditorPlugin() {
-		resourceChangeSubscribers = new HashMap();
+		resourceChangeSubscribers = new HashMap<String,Set<AbstractIFileChangeListener>>();
 	}
 
 	/**
@@ -110,11 +110,11 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChang
         		IResource resource = event.getResource();
         		if (resource != null) {
         			String fullpath = resource.getFullPath().toString();
-        			Set listeners = (Set)resourceChangeSubscribers.get(fullpath);
+        			Set<AbstractIFileChangeListener> listeners = resourceChangeSubscribers.get(fullpath);
         			if (listeners != null) {
-        				Object[] larray = listeners.toArray();//avoid concurrency issues. kindof.
+        				AbstractIFileChangeListener[] larray = listeners.toArray(new AbstractIFileChangeListener[0]);//avoid concurrency issues. kindof.
         				for (int i = 0; i < larray.length; i++) {
-        					((AbstractIFileChangeListener)larray[i]).listenedFileChanged(event);
+        					larray[i].listenedFileChanged(event);
         				}
         			}
         		}
@@ -139,9 +139,9 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChang
 	public void subscribe(AbstractIFileChangeListener fileChangeListener) {
 		synchronized (resourceChangeListener) {
 			String channel = fileChangeListener.getListenedFileFullPath();
-			Set channelListeners = (Set)resourceChangeSubscribers.get(channel);
+			Set<AbstractIFileChangeListener> channelListeners = resourceChangeSubscribers.get(channel);
 			if (channelListeners == null) {
-				channelListeners = new HashSet();
+				channelListeners = new HashSet<AbstractIFileChangeListener>();
 				resourceChangeSubscribers.put(channel, channelListeners);
 			}
 			channelListeners.add(fileChangeListener);
@@ -154,7 +154,7 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChang
 	public void unsubscribe(AbstractIFileChangeListener fileChangeListener) {
 		synchronized (resourceChangeListener) {
 			String channel = fileChangeListener.getListenedFileFullPath();
-			Set channelListeners = (Set)resourceChangeSubscribers.get(channel);
+			Set<AbstractIFileChangeListener> channelListeners = resourceChangeSubscribers.get(channel);
 			if (channelListeners != null
 					&& channelListeners.remove(fileChangeListener)
 					&& channelListeners.isEmpty()) {

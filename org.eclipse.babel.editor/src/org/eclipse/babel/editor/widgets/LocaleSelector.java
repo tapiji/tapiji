@@ -60,11 +60,11 @@ public class LocaleSelector extends Composite {
 
         // Init available locales
         availableLocales = Locale.getAvailableLocales();
-        Arrays.sort(availableLocales, new Comparator() {
-            public int compare(Object locale1, Object locale2) {
+        Arrays.sort(availableLocales, new Comparator<Locale>() {
+            public int compare(Locale locale1, Locale locale2) {
                 return Collator.getInstance().compare(
-                        ((Locale) locale1).getDisplayName(),
-                        ((Locale) locale2).getDisplayName());
+                        locale1.getDisplayName(),
+                        locale2.getDisplayName());
             }
         });
         

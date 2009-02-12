@@ -99,13 +99,13 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
      *          #loadMessagesBundles()
      */
     public MessagesBundle[] loadMessagesBundles() throws MessageException {
-        Collection bundles = new ArrayList();
+        Collection<MessagesBundle> bundles = new ArrayList<MessagesBundle>();
         collectBundlesInContainer(file.getParent(), bundles);
-        return (MessagesBundle[]) bundles.toArray(EMPTY_BUNDLES);
+        return bundles.toArray(EMPTY_BUNDLES);
     }
     
     protected void collectBundlesInContainer(IContainer container,
-    		Collection bundlesCollector) throws MessageException {
+    		Collection<MessagesBundle> bundlesCollector) throws MessageException {
     	if (!container.exists()) {
     		return;
     	}

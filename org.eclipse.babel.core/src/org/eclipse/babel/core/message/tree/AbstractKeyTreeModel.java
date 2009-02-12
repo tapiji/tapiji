@@ -13,7 +13,6 @@ package org.eclipse.babel.core.message.tree;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -27,7 +26,7 @@ import org.eclipse.babel.core.message.tree.visitor.IKeyTreeVisitor;
  */
 public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
 
-    private List listeners = new ArrayList();
+    private List<IKeyTreeModelListener> listeners = new ArrayList<IKeyTreeModelListener>();
     private Comparator comparator;
     
     protected static final KeyTreeNode[] EMPTY_NODES = new KeyTreeNode[]{};
@@ -56,8 +55,8 @@ public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
      * @param node added node
      */
     protected void fireNodeAdded(KeyTreeNode node)  {
-        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
-            ((IKeyTreeModelListener) iter.next()).nodeAdded(node);
+        for (IKeyTreeModelListener listener : listeners) {
+            listener.nodeAdded(node);
         }
     }
     /**
@@ -65,8 +64,8 @@ public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
      * @param node removed node
      */
     protected void fireNodeRemoved(KeyTreeNode node)  {
-        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
-            ((IKeyTreeModelListener) iter.next()).nodeRemoved(node);
+    	for (IKeyTreeModelListener listener : listeners) {
+            listener.nodeRemoved(node);
         }
     }
 
@@ -75,14 +74,13 @@ public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
      *              org.eclipse.babel.core.message.tree.KeyTreeNode)
      */
     public KeyTreeNode[] getBranch(KeyTreeNode parentNode) {
-        Set childNodes = new TreeSet();
+        Set<KeyTreeNode> childNodes = new TreeSet<KeyTreeNode>();
         childNodes.add(parentNode);
-        KeyTreeNode[] nodes = getChildren(parentNode);
-        for (int i = 0; i < nodes.length; i++) {
+        for (KeyTreeNode childNode : getChildren(parentNode)) {
             childNodes.addAll(
-                    Arrays.asList(getBranch(nodes[i])));
+                    Arrays.asList(getBranch(childNode)));
         }
-        return (KeyTreeNode[]) childNodes.toArray(EMPTY_NODES);
+        return childNodes.toArray(EMPTY_NODES);
     }
 
     /**
@@ -129,8 +127,8 @@ public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
     		return filter.isFilteredLeaf(node);
     	} else {
     		//depth first:
-    		for (Iterator it = node.getChildrenInternal().iterator(); it.hasNext();) {
-    			if (isBranchFiltered(filter, (KeyTreeNode)it.next())) {
+    		for (KeyTreeNode childNode : node.getChildrenInternal()) {
+    			if (isBranchFiltered(filter, childNode)) {
     				return true;
     			}
     		}

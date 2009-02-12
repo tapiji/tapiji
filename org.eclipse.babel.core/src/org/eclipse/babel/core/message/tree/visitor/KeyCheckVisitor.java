@@ -29,8 +29,8 @@ public class KeyCheckVisitor implements IKeyTreeVisitor {
     private IKeyCheck keyCheck;
     private final MessagesBundleGroup messagesBundleGroup;
     
-    private final Collection passedNodes = new ArrayList();
-    private final Collection failedNodes = new ArrayList();
+    private final Collection<KeyTreeNode> passedNodes = new ArrayList<KeyTreeNode>();
+    private final Collection<KeyTreeNode> failedNodes = new ArrayList<KeyTreeNode>();
     
     /**
      * Constructor.
@@ -70,14 +70,14 @@ public class KeyCheckVisitor implements IKeyTreeVisitor {
      * @return all successful nodes
      */
     public KeyTreeNode[] getPassedNodes() {
-        return (KeyTreeNode[]) passedNodes.toArray(EMPTY_NODES);
+        return passedNodes.toArray(EMPTY_NODES);
     }
     /**
      * Gets all nodes that returned false upon invoking a {@link IKeyCheck}.
      * @return all failing nodes
      */
     public KeyTreeNode[] getFailedNodes() {
-        return (KeyTreeNode[]) failedNodes.toArray(EMPTY_NODES);
+        return failedNodes.toArray(EMPTY_NODES);
     }
     
     /**

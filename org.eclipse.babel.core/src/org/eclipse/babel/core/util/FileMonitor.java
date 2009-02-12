@@ -24,7 +24,7 @@ public class FileMonitor {
     private static final FileMonitor instance = new FileMonitor();
 
     private Timer timer;
-    private Hashtable timerEntries;
+    private Hashtable<String,FileMonitorTask> timerEntries;
 
     /**
      * Gets the file monitor instance.
@@ -40,7 +40,7 @@ public class FileMonitor {
     private FileMonitor() { 
         // Create timer, run timer thread as daemon.
     	timer = new Timer(true);
-    	timerEntries = new Hashtable();
+    	timerEntries = new Hashtable<String,FileMonitorTask>();
     }
     
     /**
@@ -85,7 +85,7 @@ public class FileMonitor {
      */
     public void removeFileChangeListener(
     		FileChangeListener listener, File file) {
-        FileMonitorTask task = (FileMonitorTask) timerEntries.remove(
+        FileMonitorTask task = timerEntries.remove(
                 file.toString() + listener.hashCode());
 	    if (task != null) {
 	        task.cancel();

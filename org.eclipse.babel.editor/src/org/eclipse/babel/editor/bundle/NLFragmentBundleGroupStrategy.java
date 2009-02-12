@@ -21,7 +21,6 @@ import java.io.Reader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -326,12 +325,10 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
      */
     protected boolean resourceBundleIsInsideClasses() {
     	IProject thisProj = getOpenedFile().getProject();
-    	Collection srcs = getSourceFolderPathes(thisProj);
+    	Collection<String> srcs = getSourceFolderPathes(thisProj);
     	String thisPath = getOpenedFile().getProjectRelativePath().toString();
     	if (srcs != null) {
-    	    Iterator iter = srcs.iterator();
-    		while(iter.hasNext()) {
-    		    String srcPath = (String) iter.next();
+    	    for (String srcPath : srcs) {
     			if (thisPath.startsWith(srcPath)) {
     				return true;
     			}
@@ -372,11 +369,9 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
     	}
     	
     	//second look into the source folders.
-    	Collection srcPathes = getSourceFolderPathes(hostPluginProject);
+    	Collection<String> srcPathes = getSourceFolderPathes(hostPluginProject);
     	if (srcPathes != null) {
-        	Iterator iter = srcPathes.iterator();
-        	while(iter.hasNext()) {
-        		String srcPath = (String) iter.next();
+        	for (String srcPath : srcPathes) {
         		IFolder srcFolder = hostPluginProject.getFolder(
         		        new Path(srcPath));
         		if (srcFolder.exists()) {
@@ -401,12 +396,10 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
     private String[] getJarredPropertiesAndResourceLocationLabel(
             IProject hostPluginProject, IPath propertiesBasePath) {
     	//third look into the jars:
-    	Collection libPathes = getLibPathes(hostPluginProject);
+    	Collection<String> libPathes = getLibPathes(hostPluginProject);
     	if (libPathes != null) {
         	String entryName = propertiesBasePath.toString();
-        	Iterator iter = libPathes.iterator();
-        	while(iter.hasNext()) {
-        		String libPath = (String) iter.next();
+        	for (String libPath : libPathes) {
         		if (libPath.endsWith(".jar")) {
         			IFile jar = hostPluginProject.getFile(new Path(libPath));
         			if (jar.exists()) {
@@ -451,7 +444,7 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
      * @return The pathes of the source folders extracted from 
      *          the .classpath file
      */
-    protected static Collection getSourceFolderPathes(IProject proj) {
+    protected static Collection<String> getSourceFolderPathes(IProject proj) {
     	return getClasspathEntryPathes(proj, "src"); //$NON-NLS-1$
     }
     /**
@@ -461,16 +454,16 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
      * @return The pathes of the source folders extracted from the
      *           .classpath file
      */
-    protected Collection getLibPathes(IProject proj) {
+    protected Collection<String> getLibPathes(IProject proj) {
     	return getClasspathEntryPathes(proj, "lib"); //$NON-NLS-1$
     }
-    protected static Collection getClasspathEntryPathes(
+    protected static Collection<String> getClasspathEntryPathes(
             IProject proj, String classpathentryKind) {
     	IFile classpathRes = proj.getFile(".classpath");
     	if (!classpathRes.exists()) {
     		return null;
     	}
-    	Collection res = new ArrayList();
+    	Collection<String> res = new ArrayList<String>();
     	
     	//<classpathentry kind="src" path="src"/>
 		InputStream in = null;

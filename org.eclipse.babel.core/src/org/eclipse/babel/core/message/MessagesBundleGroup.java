@@ -43,8 +43,8 @@ public class MessagesBundleGroup extends AbstractMessageModel {
     /** For serialization. */
     private static final long serialVersionUID = -1977849534191384324L;
     /** Bundles forming the group (key=Locale; value=MessagesBundle). */
-    private final Map localeBundles = new HashMap();
-    private final Set keys = new TreeSet(); 
+    private final Map<Locale,MessagesBundle> localeBundles = new HashMap<Locale,MessagesBundle>();
+    private final Set<String> keys = new TreeSet<String>(); 
     private final IMessagesBundleListener messagesBundleListener =
             new MessagesBundleListener();
     
@@ -93,7 +93,7 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      * @return a bundle
      */
     public MessagesBundle getMessagesBundle(Locale locale) {
-        return (MessagesBundle) localeBundles.get(locale);
+        return localeBundles.get(locale);
     }
 
     /**
@@ -128,7 +128,7 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      * Gets all locales making up this messages bundle group.
      */
     public Locale[] getLocales() {
-        return (Locale[]) localeBundles.keySet().toArray(EMPTY_LOCALES);
+        return localeBundles.keySet().toArray(EMPTY_LOCALES);
     }
 
     /**
@@ -137,15 +137,15 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      * @return messages
      */
     public Message[] getMessages(String key) {
-        List messages = new ArrayList();
-        for (Iterator iter = messagesBundleIterator(); iter.hasNext();) {
-            MessagesBundle messagesBundle = (MessagesBundle) iter.next();
+        List<Message> messages = new ArrayList<Message>();
+        for (Iterator<MessagesBundle> iter = messagesBundleIterator(); iter.hasNext();) {
+            MessagesBundle messagesBundle = iter.next();
             Message message = messagesBundle.getMessage(key);
             if (message != null) {
                 messages.add(message);
             }
         }
-        return (Message[]) messages.toArray(EMPTY_MESSAGES);
+        return messages.toArray(EMPTY_MESSAGES);
     }
 
     /**
@@ -209,9 +209,9 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      * @param key message key
      */
     public void addMessages(String key) {
-        for (Iterator iter = localeBundles.values().iterator();
+        for (Iterator<MessagesBundle> iter = localeBundles.values().iterator();
                 iter.hasNext();) {
-            ((MessagesBundle) iter.next()).addMessage(key);
+            iter.next().addMessage(key);
         }
     }
     /**
@@ -220,9 +220,9 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      * @param targetKey the new message name
      */
     public void renameMessageKeys(String sourceKey, String targetKey) {
-        for (Iterator iter = localeBundles.values().iterator();
+        for (Iterator<MessagesBundle> iter = localeBundles.values().iterator();
                 iter.hasNext();) {
-            ((MessagesBundle) iter.next()).renameMessageKey(
+            iter.next().renameMessageKey(
             		sourceKey, targetKey);
         }
     }    
@@ -232,9 +232,9 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      * @param key key of messages to remove
      */
     public void removeMessages(String key) {
-        for (Iterator iter = localeBundles.values().iterator();
+        for (Iterator<MessagesBundle> iter = localeBundles.values().iterator();
                 iter.hasNext();) {
-            ((MessagesBundle) iter.next()).removeMessage(key);
+            iter.next().removeMessage(key);
         }
     }
     
@@ -243,9 +243,9 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      * @param key key of messages
      */
     public void setMessagesActive(String key, boolean active) {
-        for (Iterator iter = localeBundles.values().iterator();
+        for (Iterator<MessagesBundle> iter = localeBundles.values().iterator();
                 iter.hasNext();) {
-            Message entry = ((MessagesBundle) iter.next()).getMessage(key);
+            Message entry = iter.next().getMessage(key);
             if (entry != null) {
                 entry.setActive(active);
             }
@@ -263,9 +263,9 @@ public class MessagesBundleGroup extends AbstractMessageModel {
         if (sourceKey.equals(targetKey)) {
             return;
         }
-        for (Iterator iter = localeBundles.values().iterator();
+        for (Iterator<MessagesBundle> iter = localeBundles.values().iterator();
                 iter.hasNext();) {
-            ((MessagesBundle) iter.next()).duplicateMessage(
+            iter.next().duplicateMessage(
             		sourceKey, targetKey);
         }
     }
@@ -274,7 +274,7 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      * Returns an iterator that iterates through all bundles in this group.
      * @return iterator.
      */
-    public Iterator messagesBundleIterator() {
+    public Iterator<MessagesBundle> messagesBundleIterator() {
         return localeBundles.values().iterator();
     }
     
@@ -283,7 +283,7 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      * @return all keys from all messages bundles
      */
     public String[] getMessageKeys() {
-        return (String[]) keys.toArray(BabelUtils.EMPTY_STRINGS);
+        return keys.toArray(BabelUtils.EMPTY_STRINGS);
     }
     
     /**
@@ -325,7 +325,7 @@ public class MessagesBundleGroup extends AbstractMessageModel {
     public final synchronized IMessagesBundleGroupListener[] 
                 getMessagesBundleGroupListeners() {
         //TODO find more efficient way to avoid class cast.
-        return (IMessagesBundleGroupListener[]) Arrays.asList(
+        return Arrays.asList(
                 getPropertyChangeListeners()).toArray(
                         EMPTY_GROUP_LISTENERS);
     }

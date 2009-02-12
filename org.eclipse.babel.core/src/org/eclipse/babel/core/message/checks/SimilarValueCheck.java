@@ -45,7 +45,7 @@ public class SimilarValueCheck implements IMessageCheck {
      */
     public boolean checkKey(
             MessagesBundleGroup messagesBundleGroup, Message message) {
-        Collection keys = new ArrayList();
+        Collection<String> keys = new ArrayList<String>();
         if (message != null) {
             //TODO have case as preference
             String value1 = message.getValue().toLowerCase();
@@ -69,7 +69,7 @@ public class SimilarValueCheck implements IMessageCheck {
                 keys.add(message.getKey());
             }
         }
-        similarKeys = (String[]) keys.toArray(new String[]{});
+        similarKeys = keys.toArray(new String[]{});
         return !keys.isEmpty();
     }
     

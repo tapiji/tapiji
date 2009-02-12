@@ -76,25 +76,25 @@ public final class BabelUtils {
         }
         StringTokenizer tokens = 
             new StringTokenizer(localeString, "_"); //$NON-NLS-1$
-        List localeSections = new ArrayList();
+        List<String> localeSections = new ArrayList<String>();
         while (tokens.hasMoreTokens()) {
             localeSections.add(tokens.nextToken());
         }
         Locale locale = null;
         switch (localeSections.size()) {
         case 1:
-            locale = new Locale((String) localeSections.get(0));
+            locale = new Locale(localeSections.get(0));
             break;
         case 2:
             locale = new Locale(
-                    (String) localeSections.get(0),
-                    (String) localeSections.get(1));
+                    localeSections.get(0),
+                    localeSections.get(1));
             break;
         case 3:
             locale = new Locale(
-                    (String) localeSections.get(0),
-                    (String) localeSections.get(1),
-                    (String) localeSections.get(2));
+                    localeSections.get(0),
+                    localeSections.get(1),
+                    localeSections.get(2));
             break;
         default:
             break;

@@ -101,7 +101,7 @@ public class PropertiesFileGroupStrategy implements IMessagesBundleGroupStrategy
         if (parentDir != null) {
             resources = parentDir.listFiles();
         }
-        Collection bundles = new ArrayList();
+        Collection<MessagesBundle> bundles = new ArrayList<MessagesBundle>();
         if (resources != null) {
             for (int i = 0; i < resources.length; i++) {
                 File resource = resources[i];
@@ -116,8 +116,7 @@ public class PropertiesFileGroupStrategy implements IMessagesBundleGroupStrategy
                 }
             }
         }
-        return (MessagesBundle[]) bundles.toArray(EMPTY_MESSAGES);
-
+        return bundles.toArray(EMPTY_MESSAGES);
     }
 
     /**

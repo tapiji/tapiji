@@ -23,7 +23,7 @@ import org.eclipse.babel.core.message.tree.KeyTreeNode;
 public class NodePathRegexVisitor implements IKeyTreeVisitor {
 
     /** Holder for matching keys. */
-    private List nodes = new ArrayList();
+    private List<KeyTreeNode> nodes = new ArrayList<KeyTreeNode>();
     private final String regex;
     
     /**
@@ -48,7 +48,7 @@ public class NodePathRegexVisitor implements IKeyTreeVisitor {
      * Gets matching key tree nodes.
      * @return matching key tree nodes
      */
-    public List getKeyTreeNodes() {
+    public List<KeyTreeNode> getKeyTreeNodes() {
         return nodes;
     }
 
@@ -56,10 +56,10 @@ public class NodePathRegexVisitor implements IKeyTreeVisitor {
      * Gets matching key tree node paths.
      * @return matching key tree node paths
      */
-    public List getKeyTreeNodePaths() {
-        List paths = new ArrayList(nodes.size());
-        for (Iterator iter = nodes.iterator(); iter.hasNext();) {
-            paths.add(((KeyTreeNode) iter.next()).getMessageKey());
+    public List<String> getKeyTreeNodePaths() {
+        List<String> paths = new ArrayList<String>(nodes.size());
+        for (KeyTreeNode node : nodes) {
+            paths.add(node.getMessageKey());
         }
         return paths;
     }
@@ -71,7 +71,7 @@ public class NodePathRegexVisitor implements IKeyTreeVisitor {
      */
     public KeyTreeNode getKeyTreeNode() {
         if (nodes.size() > 0) {
-            return (KeyTreeNode) nodes.get(0);
+            return nodes.get(0);
         }
         return null;
     }

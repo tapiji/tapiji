@@ -39,8 +39,8 @@ public class MessagesBundle extends AbstractMessageModel
 
     private static final IMessagesBundleListener[] EMPTY_MSG_BUNDLE_LISTENERS =
         new IMessagesBundleListener[] {};
-    private final Collection orderedKeys = new ArrayList();
-    private final Map keyedMessages = new HashMap();
+    private final Collection<String> orderedKeys = new ArrayList<String>();
+    private final Map<String, Message> keyedMessages = new HashMap<String, Message>();
 
     private final IMessagesResource resource;
     
@@ -152,8 +152,7 @@ public class MessagesBundle extends AbstractMessageModel
             fireMessageAdded(message);
         } else {
             // Entry already exists, update it.
-            Message matchingEntry =
-                    (Message) keyedMessages.get(message.getKey());
+            Message matchingEntry = keyedMessages.get(message.getKey());
             matchingEntry.copyFrom(message);
         }
     }
@@ -164,7 +163,7 @@ public class MessagesBundle extends AbstractMessageModel
     public void removeMessage(String messageKey) {
         int oldCount = getMessagesCount();
         orderedKeys.remove(messageKey);
-        Message message = (Message) keyedMessages.get(messageKey);
+        Message message = keyedMessages.get(messageKey);
         if (message != null) {
             message.removePropertyChangeListener(messageListener);
             keyedMessages.remove(messageKey);
@@ -227,7 +226,7 @@ public class MessagesBundle extends AbstractMessageModel
      * @return a message
      */
     public Message getMessage(String key) {
-        return (Message) keyedMessages.get(key);
+        return keyedMessages.get(key);
     }
 
     /**
@@ -243,7 +242,7 @@ public class MessagesBundle extends AbstractMessageModel
      * @return message keys
      */
     public String[] getKeys() {
-        return (String[]) orderedKeys.toArray(BabelUtils.EMPTY_STRINGS);
+        return orderedKeys.toArray(BabelUtils.EMPTY_STRINGS);
     }
     
     /**
@@ -309,7 +308,7 @@ public class MessagesBundle extends AbstractMessageModel
     public final synchronized IMessagesBundleListener[] 
                 getMessagesBundleListeners() {
         //TODO find more efficient way to avoid class cast.
-        return (IMessagesBundleListener[]) Arrays.asList(
+        return Arrays.asList(
                 getPropertyChangeListeners()).toArray(
                         EMPTY_MSG_BUNDLE_LISTENERS);
     }

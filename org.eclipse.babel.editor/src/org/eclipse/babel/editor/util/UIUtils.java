@@ -133,15 +133,13 @@ public final class UIUtils {
      * @param locales
      */
     public static final void sortLocales(Locale[] locales) {
-        List localesList = new ArrayList(Arrays.asList(locales));
-        Comparator comp = new Comparator() {
-            public int compare(Object o1, Object o2) {
-                Locale l1 = (Locale) o1;
-                Locale l2 = (Locale) o2;
-                if (ROOT_LOCALE.equals(o1)) {
+        List<Locale> localesList = new ArrayList<Locale>(Arrays.asList(locales));
+        Comparator<Locale> comp = new Comparator<Locale>() {
+            public int compare(Locale l1, Locale l2) {
+                if (ROOT_LOCALE.equals(l1)) {
                     return -1;
                 }
-                if (ROOT_LOCALE.equals(o2)) {
+                if (ROOT_LOCALE.equals(l2)) {
                     return 1;
                 }
                 String name1 = ""; //$NON-NLS-1$
@@ -157,7 +155,7 @@ public final class UIUtils {
         };
         Collections.sort(localesList, comp);
         for (int i = 0; i < locales.length; i++) {
-        	locales[i] = (Locale) localesList.get(i);
+        	locales[i] = localesList.get(i);
         }
     }
     
@@ -193,9 +191,9 @@ public final class UIUtils {
     public static Locale[] filterLocales(Locale[] locales) {
     	StringMatcher[] patterns = 
     		MsgEditorPreferences.getInstance().getFilterLocalesStringMatchers();
-    	Set already = new HashSet();
+    	Set<Locale> already = new HashSet<Locale>();
     	//first look for the root locale:
-    	ArrayList result = new ArrayList();
+    	ArrayList<Locale> result = new ArrayList<Locale>();
     	for (int j = 0; j < locales.length; j++) {
     		Locale loc = locales[j];
     		if (ROOT_LOCALE.equals(loc) || loc == null) {
@@ -226,7 +224,7 @@ public final class UIUtils {
     	}
     	Locale[] filtered = new Locale[result.size()];
         for (int k = 0; k < filtered.length; k++) {
-        	filtered[k] = (Locale) result.get(k);
+        	filtered[k] = result.get(k);
         }
     	return filtered;
     }

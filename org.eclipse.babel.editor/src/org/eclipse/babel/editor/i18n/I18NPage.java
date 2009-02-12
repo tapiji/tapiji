@@ -41,7 +41,7 @@ public class I18NPage extends ScrolledComposite {
     private final MessagesEditor editor;
     private final SideNavComposite keysComposite;
     private final Composite valuesComposite;
-    private final Map entryComposites = new HashMap(); 
+    private final Map<Locale,I18NEntry> entryComposites = new HashMap<Locale,I18NEntry>(); 
     
 //    private Composite parent;
     private boolean keyTreeVisible = true;
@@ -163,11 +163,10 @@ public class I18NPage extends ScrolledComposite {
     }
     
     public void selectLocale(Locale locale) {
-        Collection locales = entryComposites.keySet();
-        for (Iterator iter = locales.iterator(); iter.hasNext();) {
-            Locale entryLocale = (Locale) iter.next();
+        Collection<Locale> locales = entryComposites.keySet();
+        for (Locale entryLocale : locales) {
             I18NEntry entry =
-                    (I18NEntry) entryComposites.get(entryLocale);
+                    entryComposites.get(entryLocale);
 
             //TODO add equivalent method on entry composite
 //            Text textBox = entry.getTextBox();

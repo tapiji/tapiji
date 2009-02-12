@@ -54,9 +54,9 @@ public class PropertiesDeserializer {
      */
     public void deserialize(MessagesBundle messagesBundle, String properties) {
         Locale locale = messagesBundle.getLocale();
-        Collection oldKeys =
-        		new ArrayList(Arrays.asList(messagesBundle.getKeys()));
-        Collection newKeys = new ArrayList();
+        Collection<String> oldKeys =
+        		new ArrayList<String>(Arrays.asList(messagesBundle.getKeys()));
+        Collection<String> newKeys = new ArrayList<String>();
         
         String[] lines = properties.split("\r\n|\r|\n"); //$NON-NLS-1$
         
@@ -148,7 +148,7 @@ public class PropertiesDeserializer {
         }
         oldKeys.removeAll(newKeys);
         messagesBundle.removeMessages(
-        		(String[]) oldKeys.toArray(BabelUtils.EMPTY_STRINGS)); 
+        		oldKeys.toArray(BabelUtils.EMPTY_STRINGS)); 
         messagesBundle.setComment(fileComment.toString());
     }
     

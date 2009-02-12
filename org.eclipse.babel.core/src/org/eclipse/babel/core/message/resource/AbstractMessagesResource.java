@@ -24,7 +24,7 @@ import java.util.Locale;
 public abstract class AbstractMessagesResource implements IMessagesResource {
 
     private Locale locale;
-    private List listeners = new ArrayList();
+    private List<IMessagesResourceChangeListener> listeners = new ArrayList<IMessagesResourceChangeListener>();
     
     /**
      * Constructor.
@@ -68,9 +68,8 @@ public abstract class AbstractMessagesResource implements IMessagesResource {
      * @param resource {@link IMessagesResource}
      */
     protected void fireResourceChange(IMessagesResource resource)  {
-        for (Iterator iter = listeners.iterator(); iter.hasNext();) {
-            ((IMessagesResourceChangeListener) iter.next()).resourceChanged(
-                    resource);
+        for (IMessagesResourceChangeListener listener : listeners) {
+            listener.resourceChanged(resource);
         }
     }
 }

@@ -29,7 +29,7 @@ public class KeyTreeNode implements Comparable {
     private final KeyTreeNode parent;
     private final String name;
     private String messageKey;
-    private final Map children = new TreeMap();
+    private final Map<String, KeyTreeNode> children = new TreeMap<String, KeyTreeNode>();
     
     /**
      * Constructor.
@@ -77,29 +77,29 @@ public class KeyTreeNode implements Comparable {
      * @return all notes from root to this node
      */
     /*default*/ KeyTreeNode[] getPath() {
-        List nodes = new ArrayList();
+        List<KeyTreeNode> nodes = new ArrayList<KeyTreeNode>();
         KeyTreeNode node = this;
         while (node != null && node.getName() != null) {
             nodes.add(0, node);
             node = node.getParent();
         }
-        return (KeyTreeNode[]) nodes.toArray(EMPTY_KEY_TREE_NODES);
+        return nodes.toArray(EMPTY_KEY_TREE_NODES);
     }
 
     /*default*/ KeyTreeNode[] getChildren() {
-        return (KeyTreeNode[]) children.values().toArray(EMPTY_KEY_TREE_NODES);
+        return children.values().toArray(EMPTY_KEY_TREE_NODES);
     }
     /*default*/ boolean hasChildren() {
         return !children.isEmpty();
     }
     /*default*/ KeyTreeNode getChild(String childName) {
-        return (KeyTreeNode) children.get(childName);
+        return children.get(childName);
     }
     
     /**
      * @return the children without creating a new object
      */
-    Collection getChildrenInternal() {
+    Collection<KeyTreeNode> getChildrenInternal() {
     	return children.values();
     }
     
