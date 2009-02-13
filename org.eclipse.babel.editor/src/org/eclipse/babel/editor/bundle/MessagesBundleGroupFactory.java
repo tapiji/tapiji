@@ -226,7 +226,7 @@ public final class MessagesBundleGroupFactory {
     	if (thisProject == null) {
     		return null;
     	}
-    	Collection projs = null;
+    	Collection<IProject> projs = null;
     	String bundleId = getBundleId(openedFile);
 		try {
 			 //now look in the workspace for the host-plugin as a 
@@ -240,9 +240,9 @@ public final class MessagesBundleGroupFactory {
 					 String hostId = getHostPluginId(childRes);
 					 if (bundleId.equals(hostId)) {
 						 if (projs == null) {
-							 projs = new ArrayList();
+							 projs = new ArrayList<IProject>();
 						 }
-						 projs.add(childRes);
+						 projs.add((IProject)childRes);
 					 }
 				 }
 			 }
@@ -250,7 +250,7 @@ public final class MessagesBundleGroupFactory {
 			 
 		 }
 		 return projs == null ? null
-				: (IProject[]) projs.toArray(EMPTY_PROJECTS);
+				: projs.toArray(EMPTY_PROJECTS);
     }
     
     

@@ -22,7 +22,7 @@ import org.eclipse.babel.core.util.BabelUtils;
  * Key tree node.
  * @author Pascal Essiembre
  */
-public class KeyTreeNode implements Comparable {
+public class KeyTreeNode implements Comparable<KeyTreeNode> {
 
     public static final KeyTreeNode[] EMPTY_KEY_TREE_NODES =
             new KeyTreeNode[] {};
@@ -106,8 +106,7 @@ public class KeyTreeNode implements Comparable {
     /**
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
-    public int compareTo(Object o) {
-        KeyTreeNode node = (KeyTreeNode) o;
+    public int compareTo(KeyTreeNode node) {
         if (parent == null && node.parent != null) {
             return -1;
         }

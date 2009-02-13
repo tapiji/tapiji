@@ -99,7 +99,7 @@ public class Builder extends IncrementalProjectBuilder {
      * The key is a resource that belongs to that message bundle.
      * </p>
      */
-    private Map _alreadBuiltMessageBundle;
+    private Map<IFile,MessagesBundleGroup> _alreadBuiltMessageBundle;
     
 //    /** one indexer per project we open and close it at the beginning and the end of each build. */
 //    private Indexer _indexer = new Indexer();
@@ -131,9 +131,7 @@ public class Builder extends IncrementalProjectBuilder {
 			} finally {
 				//must dispose the message bundles:
 				if (_alreadBuiltMessageBundle != null) {
-					for (Iterator it = _alreadBuiltMessageBundle.values().iterator();
-						 	it.hasNext(); ) {
-						MessagesBundleGroup msgGrp = (MessagesBundleGroup)it.next();
+					for (MessagesBundleGroup msgGrp : _alreadBuiltMessageBundle.values()) {
 						try {
 							msgGrp.dispose();
 						} catch (Throwable t) {
@@ -178,10 +176,10 @@ public class Builder extends IncrementalProjectBuilder {
             deleteMarkers(file);
             MessagesBundleGroup msgBundleGrp = null;
             if (_alreadBuiltMessageBundle == null) {
-            	_alreadBuiltMessageBundle = new HashMap();
+            	_alreadBuiltMessageBundle = new HashMap<IFile,MessagesBundleGroup>();
             	_resourcesToValidate = new HashSet();
             } else {
-            	msgBundleGrp = (MessagesBundleGroup)_alreadBuiltMessageBundle.get(file);
+            	msgBundleGrp = _alreadBuiltMessageBundle.get(file);
             }
             if (msgBundleGrp == null) {
             	msgBundleGrp = MessagesBundleGroupFactory.createBundleGroup(null, file);
@@ -191,13 +189,11 @@ public class Builder extends IncrementalProjectBuilder {
             		//cheaper than creating a group for each on of those
             		//files.
             		boolean validateEntireGroup = false;
-            		for (Iterator it = msgBundleGrp.messagesBundleIterator();
-            					it.hasNext();) {
-            			MessagesBundle msgBundle = (MessagesBundle)it.next();
+                	for (MessagesBundle msgBundle : msgBundleGrp.getMessagesBundles()) {
             			Object src = msgBundle.getResource().getSource();
             			//System.err.println(src + " -> " + msgBundleGrp);
             			if (src instanceof IFile) {//when it is a read-only thing we don't index it.
-	            			_alreadBuiltMessageBundle.put(src, msgBundleGrp);
+	            			_alreadBuiltMessageBundle.put((IFile)src, msgBundleGrp);
 	            			if (!validateEntireGroup && src == resource) {
 	            				if (msgBundle.getLocale() == null
 	            						|| msgBundle.getLocale().equals(UIUtils.ROOT_LOCALE)) {
@@ -216,9 +212,7 @@ public class Builder extends IncrementalProjectBuilder {
             			}
             		}
             		if (validateEntireGroup) {
-                   		for (Iterator it = msgBundleGrp.messagesBundleIterator();
-			    					it.hasNext();) {
-			    			MessagesBundle msgBundle = (MessagesBundle)it.next();
+                    	for (MessagesBundle msgBundle : msgBundleGrp.getMessagesBundles()) {
 			    			Object src = msgBundle.getResource().getSource();
 			    			_resourcesToValidate.add(src);
                    		}
@@ -241,7 +235,7 @@ public class Builder extends IncrementalProjectBuilder {
 			for (Iterator it = _resourcesToValidate.iterator(); it.hasNext();) {
 				IFile resource = (IFile)it.next();
 				MessagesBundleGroup msgBundleGrp =
-					(MessagesBundleGroup)_alreadBuiltMessageBundle.get(resource);
+					_alreadBuiltMessageBundle.get(resource);
 				
 				if (msgBundleGrp != null) {
 					//when null it is probably because it was skipped from

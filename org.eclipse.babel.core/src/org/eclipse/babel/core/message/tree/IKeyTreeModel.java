@@ -58,7 +58,7 @@ public interface IKeyTreeModel {
      * Sets the node comparator for sorting sibling nodes.
      * @param comparator node comparator
      */
-    void setComparator(Comparator comparator);
+    void setComparator(Comparator<KeyTreeNode> comparator);
     
     //TODO KeyTreeNode[] getPath(KeyTreeNode node)
     

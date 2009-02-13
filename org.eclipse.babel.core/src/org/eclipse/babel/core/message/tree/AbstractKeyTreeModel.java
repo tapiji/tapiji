@@ -27,7 +27,7 @@ import org.eclipse.babel.core.message.tree.visitor.IKeyTreeVisitor;
 public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
 
     private List<IKeyTreeModelListener> listeners = new ArrayList<IKeyTreeModelListener>();
-    private Comparator comparator;
+    private Comparator<KeyTreeNode> comparator;
     
     protected static final KeyTreeNode[] EMPTY_NODES = new KeyTreeNode[]{};
 
@@ -102,7 +102,7 @@ public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
      * Gets the comparator.
      * @return the comparator
      */
-    public Comparator getComparator() {
+    public Comparator<KeyTreeNode> getComparator() {
         return comparator;
     }
 
@@ -110,7 +110,7 @@ public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
      * Sets the comparator.
      * @param comparator the comparator to set
      */
-    public void setComparator(Comparator comparator) {
+    public void setComparator(Comparator<KeyTreeNode> comparator) {
         this.comparator = comparator;
     }
     

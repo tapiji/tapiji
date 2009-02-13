@@ -13,6 +13,7 @@ package org.eclipse.babel.core.message;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -73,8 +74,7 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      * Disposes the underlying MessageBundles
      */
     public void dispose() {
-    	for (Iterator iter = messagesBundleIterator(); iter.hasNext();) {
-    		MessagesBundle mb = (MessagesBundle) iter.next();
+    	for (MessagesBundle mb : getMessagesBundles()) {
     		try {
     			mb.dispose();
     		} catch (Throwable t) {
@@ -106,8 +106,7 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      * @see IMessagesResource
      */
     public MessagesBundle getMessagesBundle(Object source) {
-        for (Iterator iter = messagesBundleIterator(); iter.hasNext();) {
-            MessagesBundle messagesBundle = (MessagesBundle) iter.next();
+    	for (MessagesBundle messagesBundle : getMessagesBundles()) {
             if (equals(source, messagesBundle.getResource().getSource())) {
                 return messagesBundle;
             }
@@ -138,8 +137,7 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      */
     public Message[] getMessages(String key) {
         List<Message> messages = new ArrayList<Message>();
-        for (Iterator<MessagesBundle> iter = messagesBundleIterator(); iter.hasNext();) {
-            MessagesBundle messagesBundle = iter.next();
+    	for (MessagesBundle messagesBundle : getMessagesBundles()) {
             Message message = messagesBundle.getMessage(key);
             if (message != null) {
                 messages.add(message);
@@ -271,11 +269,11 @@ public class MessagesBundleGroup extends AbstractMessageModel {
     }
     
     /**
-     * Returns an iterator that iterates through all bundles in this group.
-     * @return iterator.
+     * Returns a collection of all bundles in this group.
+     * @return the bundles in this group
      */
-    public Iterator<MessagesBundle> messagesBundleIterator() {
-        return localeBundles.values().iterator();
+    public Collection<MessagesBundle> getMessagesBundles() {
+        return localeBundles.values();
     }
     
     /**
