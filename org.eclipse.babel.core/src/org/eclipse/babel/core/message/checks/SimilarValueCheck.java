@@ -12,7 +12,6 @@ package org.eclipse.babel.core.message.checks;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.eclipse.babel.core.message.Message;
 import org.eclipse.babel.core.message.MessagesBundle;
@@ -51,9 +50,7 @@ public class SimilarValueCheck implements IMessageCheck {
             String value1 = message.getValue().toLowerCase();
             MessagesBundle messagesBundle =
             		messagesBundleGroup.getMessagesBundle(message.getLocale());
-            for (Iterator iter = messagesBundle.messageIterator();
-            		iter.hasNext();) {
-                Message similarEntry = (Message) iter.next();
+            for (Message similarEntry : messagesBundle.getMessages()) {
                 if (!message.getKey().equals(similarEntry.getKey())) {
                     String value2 = similarEntry.getValue().toLowerCase();
                     //TODO have preference to report identical as similar

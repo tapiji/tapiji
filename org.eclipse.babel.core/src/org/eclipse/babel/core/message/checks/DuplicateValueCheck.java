@@ -12,7 +12,6 @@ package org.eclipse.babel.core.message.checks;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.eclipse.babel.core.message.Message;
 import org.eclipse.babel.core.message.MessagesBundle;
@@ -47,9 +46,7 @@ public class DuplicateValueCheck implements IMessageCheck {
         if (message != null) {
             MessagesBundle messagesBundle =
             		messagesBundleGroup.getMessagesBundle(message.getLocale());
-            for (Iterator iter = messagesBundle.messageIterator();
-            		iter.hasNext();) {
-                Message duplicateEntry = (Message) iter.next();
+            for (Message duplicateEntry : messagesBundle.getMessages()) {
                 if (!message.getKey().equals(duplicateEntry.getKey())
                             && BabelUtils.equals(message.getValue(),
                                     duplicateEntry.getValue())) {

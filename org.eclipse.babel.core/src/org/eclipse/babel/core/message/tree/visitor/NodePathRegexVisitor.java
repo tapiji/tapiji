@@ -11,7 +11,6 @@
 package org.eclipse.babel.core.message.tree.visitor;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.babel.core.message.tree.KeyTreeNode;

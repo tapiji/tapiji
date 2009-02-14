@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -246,11 +245,11 @@ public class MessagesBundle extends AbstractMessageModel
     }
     
     /**
-     * Iterates through the <code>Message</code> objects in this bundle.
-     * @return an iterator
+     * Obtains the set of <code>Message</code> objects in this bundle.
+     * @return a collection of <code>Message</code> objects in this bundle
      */
-    public Iterator messageIterator() {
-        return keyedMessages.values().iterator();
+    public Collection<Message> getMessages() {
+        return keyedMessages.values();
     }
 
     /**
@@ -260,8 +259,8 @@ public class MessagesBundle extends AbstractMessageModel
         String str = "MessagesBundle=[[locale=" + getLocale() //$NON-NLS-1$
                    + "][comment=" + comment //$NON-NLS-1$
                    + "][entries="; //$NON-NLS-1$
-        for (Iterator iter = messageIterator(); iter.hasNext();) {
-            str += iter.next().toString();
+        for (Message message : getMessages()) {
+            str += message.toString();
         }
         str += "]]"; //$NON-NLS-1$
         return str;

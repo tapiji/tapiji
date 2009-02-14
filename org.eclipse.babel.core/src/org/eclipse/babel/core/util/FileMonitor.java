@@ -10,9 +10,12 @@
  ******************************************************************************/
 package org.eclipse.babel.core.util;
 
-import java.util.*;
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URL;
+import java.util.Hashtable;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**

@@ -12,7 +12,6 @@ package org.eclipse.babel.editor.i18n;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -111,9 +110,8 @@ public class I18NPage extends ScrolledComposite {
         } else {
             sashForm.setMaximizedControl(valuesComposite);
         }
-        for (Iterator iter = editor.getChangeListeners().iterator();
-                iter.hasNext();) {
-            ((IMessagesEditorChangeListener) iter.next()).keyTreeVisibleChanged(visible);
+        for (IMessagesEditorChangeListener listener : editor.getChangeListeners()) {
+        	listener.keyTreeVisibleChanged(visible);
         }
     }
     

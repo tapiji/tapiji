@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -207,20 +206,19 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      * @param key message key
      */
     public void addMessages(String key) {
-        for (Iterator<MessagesBundle> iter = localeBundles.values().iterator();
-                iter.hasNext();) {
-            iter.next().addMessage(key);
+        for (MessagesBundle msgBundle : localeBundles.values()) {
+           	msgBundle.addMessage(key);
         }
     }
+
     /**
      * Renames a key in all messages bundles forming this group.
      * @param sourceKey the message key to rename
      * @param targetKey the new message name
      */
     public void renameMessageKeys(String sourceKey, String targetKey) {
-        for (Iterator<MessagesBundle> iter = localeBundles.values().iterator();
-                iter.hasNext();) {
-            iter.next().renameMessageKey(
+        for (MessagesBundle msgBundle : localeBundles.values()) {
+        	msgBundle.renameMessageKey(
             		sourceKey, targetKey);
         }
     }    
@@ -230,9 +228,8 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      * @param key key of messages to remove
      */
     public void removeMessages(String key) {
-        for (Iterator<MessagesBundle> iter = localeBundles.values().iterator();
-                iter.hasNext();) {
-            iter.next().removeMessage(key);
+        for (MessagesBundle msgBundle : localeBundles.values()) {
+        	msgBundle.removeMessage(key);
         }
     }
     
@@ -241,9 +238,8 @@ public class MessagesBundleGroup extends AbstractMessageModel {
      * @param key key of messages
      */
     public void setMessagesActive(String key, boolean active) {
-        for (Iterator<MessagesBundle> iter = localeBundles.values().iterator();
-                iter.hasNext();) {
-            Message entry = iter.next().getMessage(key);
+        for (MessagesBundle msgBundle : localeBundles.values()) {
+            Message entry = msgBundle.getMessage(key);
             if (entry != null) {
                 entry.setActive(active);
             }
@@ -261,9 +257,8 @@ public class MessagesBundleGroup extends AbstractMessageModel {
         if (sourceKey.equals(targetKey)) {
             return;
         }
-        for (Iterator<MessagesBundle> iter = localeBundles.values().iterator();
-                iter.hasNext();) {
-            iter.next().duplicateMessage(
+        for (MessagesBundle msgBundle : localeBundles.values()) {
+        	msgBundle.duplicateMessage(
             		sourceKey, targetKey);
         }
     }
