@@ -143,8 +143,8 @@ public class MessagesEditorContributor
     public void contributeToMenu(IMenuManager manager) {
 //        System.out.println("active editor part:" +activeEditorPart);
 //        System.out.println("menu editor:" + rbEditor);
-		resourceBundleMenu = new MenuManager("&ResourceBundle Editor", resourceBundleMenuID);
-		manager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, resourceBundleMenu);
+		resourceBundleMenu = new MenuManager("&Messages", resourceBundleMenuID);
+		manager.prependToGroup(IWorkbenchActionConstants.M_EDIT, resourceBundleMenu);
 		resourceBundleMenu.add(toggleKeyTreeAction);
 		resourceBundleMenu.add(newLocaleAction);
 		
