@@ -10,17 +10,20 @@
  *******************************************************************************/
 package org.eclipse.pde.nls.internal.ui.dialogs;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import org.eclipse.babel.core.message.Message;
+import org.eclipse.babel.core.message.MessagesBundle;
+import org.eclipse.babel.core.message.resource.IMessagesResource;
+import org.eclipse.babel.core.message.resource.PropertiesIFileResource;
+import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
+import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
+import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -30,7 +33,6 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.window.Window;
 import org.eclipse.pde.nls.internal.ui.model.ResourceBundle;
 import org.eclipse.pde.nls.internal.ui.model.ResourceBundleKey;
-import org.eclipse.pde.nls.internal.ui.parser.RawBundle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -229,23 +231,40 @@ public class EditResourceBundleEntriesDialog extends Dialog {
 			if (hasChanged) {
 				try {
 					Object resource = field.bundle.getUnderlyingResource();
-					InputStream inputStream;
 					if (resource instanceof IFile) {
-						IFile file = (IFile) resource;
-						inputStream = file.getContents();
-						RawBundle rawBundle;
-						try {
-							rawBundle = RawBundle.createFrom(inputStream);
-							rawBundle.put(key, value);
-						} catch (Exception e) {
-							openError("Value could not be saved: " + value, e);
-							return;
-						}
-						StringWriter stringWriter = new StringWriter();
-						rawBundle.writeTo(stringWriter);
-						byte[] bytes = stringWriter.toString().getBytes("ISO-8859-1"); //$NON-NLS-1$
-						ByteArrayInputStream newContents = new ByteArrayInputStream(bytes);
-						file.setContents(newContents, false, false, new NullProgressMonitor());
+			            MsgEditorPreferences prefs = MsgEditorPreferences.getInstance();
+
+		                IMessagesResource messagesResource = new PropertiesIFileResource(
+		                        field.locale,
+		                        new PropertiesSerializer(prefs),
+		                        new PropertiesDeserializer(prefs),
+		                        (IFile) resource, MessagesEditorPlugin.getDefault());
+		                MessagesBundle bundle = new MessagesBundle(messagesResource);
+
+		                Message message = new Message(key, field.locale);
+		                message.setText(value);
+						bundle.addMessage(message);
+
+						// This commented out code is how the update was done before this code was merged
+						// into the Babel Message Editor.  This code should be removed.
+						
+//						InputStream inputStream;
+//						IFile file = (IFile) resource;
+//						
+//						inputStream = file.getContents();
+//						RawBundle rawBundle;
+//						try {
+//							rawBundle = RawBundle.createFrom(inputStream);
+//							rawBundle.put(key, value);
+//						} catch (Exception e) {
+//							openError("Value could not be saved: " + value, e);
+//							return;
+//						}
+//						StringWriter stringWriter = new StringWriter();
+//						rawBundle.writeTo(stringWriter);
+//						byte[] bytes = stringWriter.toString().getBytes("ISO-8859-1"); //$NON-NLS-1$
+//						ByteArrayInputStream newContents = new ByteArrayInputStream(bytes);
+//						file.setContents(newContents, false, false, new NullProgressMonitor());
 					} else {
 						// Unexpected type of resource
 						throw new RuntimeException("Not yet implemented."); //$NON-NLS-1$
