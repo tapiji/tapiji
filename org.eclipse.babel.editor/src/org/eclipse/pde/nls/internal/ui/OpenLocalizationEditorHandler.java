@@ -18,7 +18,7 @@ import org.eclipse.pde.nls.internal.ui.editor.LocalizationEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.handlers.HandlerUtil;
 
 public class OpenLocalizationEditorHandler extends AbstractHandler {
 
@@ -30,7 +30,7 @@ public class OpenLocalizationEditorHandler extends AbstractHandler {
 	 */
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		try {
-			IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
 			IWorkbenchPage page = window.getActivePage();
 			page.openEditor(new LocalizationEditorInput(), LocalizationEditor.ID);
 		} catch (PartInitException e) {
