@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 
 /**
- * A <code>ResourceBundleGroup</code> represents a group of resource bundles
+ * A <code>ResourceBundleFamily</code> represents a group of resource bundles
  * that belong together. Member resource bundles may reside in the same project as the
  * default resource bundle, or in case of a plugin project, in a separate fragment
  * project.
