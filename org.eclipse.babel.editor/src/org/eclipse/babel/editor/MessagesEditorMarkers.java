@@ -110,7 +110,6 @@ public class MessagesEditorMarkers
         
         //System.out.println("CREATE EDITOR MARKER");
         setChanged();
-        notifyObservers(this);
     }
     
     public void clear() {
