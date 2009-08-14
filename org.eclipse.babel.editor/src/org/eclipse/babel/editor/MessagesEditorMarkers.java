@@ -140,7 +140,21 @@ public class MessagesEditorMarkers
         
     private void validate() {
         //TODO in a UI thread
-        MessagesBundleGroupValidator.validate(messagesBundleGroup, this);
+        Locale[] locales = messagesBundleGroup.getLocales();
+		for (int i = 0; i < locales.length; i++) {
+		    Locale locale = locales[i];
+		    MessagesBundleGroupValidator.validate(messagesBundleGroup, locale, this);
+		}
+    	
+		/*
+		 * If anything has changed in this observable, notify the observers.
+		 * 
+		 * Something will have changed if, for example, multiple keys have the
+		 * same text. Note that notifyObservers will in fact do nothing if
+		 * nothing in the above call to 'validate' resulted in a call to
+		 * setChange.
+		 */
+    	notifyObservers(null);
     }
     
     /**

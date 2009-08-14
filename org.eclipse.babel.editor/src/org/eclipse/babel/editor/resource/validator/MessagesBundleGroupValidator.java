@@ -15,7 +15,6 @@ import java.util.Locale;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.checks.DuplicateValueCheck;
 import org.eclipse.babel.core.message.checks.MissingValueCheck;
-import org.eclipse.babel.editor.MessagesEditorMarkers;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 
 
@@ -27,15 +26,6 @@ public class MessagesBundleGroupValidator {
     
     //TODO Re-think... ??
 
-    public static void validate(
-            MessagesBundleGroup messagesBundleGroup, IValidationMarkerStrategy markerStrategy) {
-        Locale[] locales = messagesBundleGroup.getLocales();
-        for (int i = 0; i < locales.length; i++) {
-            Locale locale = locales[i];
-            validate(messagesBundleGroup, locale, markerStrategy);
-        }
-    }
-    
     public static void validate(
             MessagesBundleGroup messagesBundleGroup,
             Locale locale,
@@ -74,21 +64,6 @@ public class MessagesBundleGroupValidator {
             	}
             }
         }
-    	
-		/*
-		 * KLUDGE to fix 286365: The notification system could do with some clean-up.
-		 * 
-		 * The MessagesEditorMarkers is an observable object. If it
-		 * finds anything that indicates that markers are required (e.g. if
-		 * multiple keys have the same text) then it marks itself as 'changed'.
-		 * It does not notify the observers because that would not be very
-		 * efficient. We must therefore notify the observers here (noting that
-		 * notifyObservers will in fact do nothing if none of the above calls to
-		 * markFailed in fact set the observable as having changed).
-		 */
-    	if (markerStrategy instanceof MessagesEditorMarkers) {
-    		((MessagesEditorMarkers)markerStrategy).notifyObservers(null);
-    	}
     }
     
 }

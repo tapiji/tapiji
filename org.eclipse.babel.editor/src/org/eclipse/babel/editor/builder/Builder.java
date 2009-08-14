@@ -14,6 +14,7 @@ package org.eclipse.babel.editor.builder;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.resource.validator.FileMarkerStrategy;
 import org.eclipse.babel.editor.resource.validator.IValidationMarkerStrategy;
-import org.eclipse.babel.editor.resource.validator.ResourceValidator;
+import org.eclipse.babel.editor.resource.validator.MessagesBundleGroupValidator;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -242,8 +243,13 @@ public class Builder extends IncrementalProjectBuilder {
 					//the group because the locale was filtered.
 					try {
 				//		System.out.println("Validate " + resource); //$NON-NLS-1$
-						ResourceValidator.validate(resource, markerStrategy,
-													msgBundleGrp);//, _indexer);
+						//TODO check if there is a matching EclipsePropertiesEditorResource already open.
+						//else, create MessagesBundle from PropertiesIFileResource
+						MessagesBundle messagesBundle = msgBundleGrp.getMessagesBundle(resource);
+						if (messagesBundle != null) {
+							Locale locale = messagesBundle.getLocale();
+							MessagesBundleGroupValidator.validate(msgBundleGrp, locale, markerStrategy);
+						}//, _indexer);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
