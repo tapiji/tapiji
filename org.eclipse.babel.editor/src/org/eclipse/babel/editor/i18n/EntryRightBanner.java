@@ -110,14 +110,16 @@ public class EntryRightBanner extends Composite {
                     String key = editor.getSelectedKey();
                     Collection<IMessageCheck> checks = editor.getMarkers().getFailedChecks(
                             key, locale);
-                    for (IMessageCheck check : checks) {
-                        Action action = getCheckAction(key, check);
-                        if (action != null) {
-                            toolBarMgr.add(action);
-                            toolBarMgr.update(true);
-                            getParent().layout(true, true);
-                            isMarked = true;
-                        }
+                    if (checks != null) {
+                    	for (IMessageCheck check : checks) {
+                    		Action action = getCheckAction(key, check);
+                    		if (action != null) {
+                    			toolBarMgr.add(action);
+                    			toolBarMgr.update(true);
+                    			getParent().layout(true, true);
+                    			isMarked = true;
+                    		}
+                    	}
                     }
                     toolBarMgr.update(true);
                     getParent().layout(true, true);

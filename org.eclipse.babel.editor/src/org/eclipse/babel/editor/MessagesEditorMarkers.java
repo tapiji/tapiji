@@ -42,9 +42,13 @@ public class MessagesEditorMarkers
    // private Map<String,Set<ValidationFailureEvent>> markersIndex = new HashMap();
     /** index is the name of the key. value is the collection of markers on that key */
     private Map<String, Collection<IMessageCheck>> markersIndex = new HashMap<String, Collection<IMessageCheck>>();
-    /** index is the concat of the locale and the key.
-     * value is the collection of markers for that key and that locale */
-    private Map<String, Collection<IMessageCheck>> localizedMarkersIndex = new HashMap<String, Collection<IMessageCheck>>();
+    
+	/**
+	 * Maps a localized key (a locale and key pair) to the collection of markers
+	 * for that key and that locale. If no there are no markers for the key and
+	 * locale then there will be no entry in the map.
+	 */
+    private Map<String, Collection<IMessageCheck>> localizedMarkersMap = new HashMap<String, Collection<IMessageCheck>>();
     
     /**
      * @param messagesBundleGroup
@@ -74,7 +78,7 @@ public class MessagesEditorMarkers
         });
     }
     
-    private String hash(Locale locale, String key) {
+    private String buildLocalizedKey(Locale locale, String key) {
     	//the '=' is hack to make sure no local=key can ever conflict
     	//with another local=key: in other words
         //it makes a hash of the combination (key+locale).
@@ -96,11 +100,11 @@ public class MessagesEditorMarkers
         }
         markersForKey.add(event.getCheck());
         
-        String localizedKey = hash(event.getLocale(), event.getKey());
-        markersForKey = localizedMarkersIndex.get(localizedKey);
+        String localizedKey = buildLocalizedKey(event.getLocale(), event.getKey());
+        markersForKey = localizedMarkersMap.get(localizedKey);
         if (markersForKey == null) {
         	markersForKey = new HashSet<IMessageCheck>();
-        	localizedMarkersIndex.put(localizedKey, markersForKey);
+        	localizedMarkersMap.put(localizedKey, markersForKey);
         }
         markersForKey.add(event.getCheck());
         
@@ -111,7 +115,7 @@ public class MessagesEditorMarkers
     
     public void clear() {
         markersIndex.clear();
-        localizedMarkersIndex.clear();
+        localizedMarkersMap.clear();
         setChanged();
         notifyObservers(this);
     }
@@ -123,8 +127,16 @@ public class MessagesEditorMarkers
     public Collection<IMessageCheck> getFailedChecks(String key) {
     	return markersIndex.get(key);
     }
+    
+    /**
+     * 
+     * @param key
+     * @param locale
+     * @return the collection of markers for the locale and key; the return value may be
+     * 		null if there are no markers
+     */
     public Collection<IMessageCheck> getFailedChecks(final String key, final Locale locale) {
-    	return localizedMarkersIndex.get(hash(locale, key));
+    	return localizedMarkersMap.get(buildLocalizedKey(locale, key));
     }
         
     private void validate() {
