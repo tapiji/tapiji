@@ -19,16 +19,34 @@ import java.util.TreeMap;
 import org.eclipse.babel.core.util.BabelUtils;
 
 /**
- * Key tree node.
+ * Class representing a node in the tree of keys.
+ *
  * @author Pascal Essiembre
  */
 public class KeyTreeNode implements Comparable<KeyTreeNode> {
 
     public static final KeyTreeNode[] EMPTY_KEY_TREE_NODES =
             new KeyTreeNode[] {};
+    
+    /**
+     * the parent node, if any, which will have a <code>messageKey</code> field
+     * the same as this object but with the last component (following the
+     * last period) removed
+     */
     private final KeyTreeNode parent;
+    
+    /**
+     * the name, being the part of the full key that follows the last period
+     */
     private final String name;
+    
+    /**
+     * the full key, being a sequence of names separated by periods with the
+     * last name being the name given by the <code>name</code> field of this
+     * object 
+     */
     private String messageKey;
+    
     private final Map<String, KeyTreeNode> children = new TreeMap<String, KeyTreeNode>();
     
     /**
@@ -49,24 +67,25 @@ public class KeyTreeNode implements Comparable<KeyTreeNode> {
     }
 
     /**
-     * Gets the node name.
-     * @return Returns the name.
+     * @return the name, being the part of the full key that follows the last period
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Gets the node parent.
-     * @return Returns the parent.
+     * @return the parent node, if any, which will have a <code>messageKey</code> field
+     * the same as this object but with the last component (following the
+     * last period) removed
      */
     public KeyTreeNode getParent() {
         return parent;
     }
 
     /**
-     * Gets the message key represented by this node.
-     * @return message key
+     * @return the full key, being a sequence of names separated by periods with the
+     * last name being the name given by the <code>name</code> field of this
+     * object 
      */
     public String getMessageKey() {
         return messageKey;
