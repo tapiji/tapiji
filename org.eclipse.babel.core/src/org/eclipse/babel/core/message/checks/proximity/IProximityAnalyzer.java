@@ -21,9 +21,10 @@ package org.eclipse.babel.core.message.checks.proximity;
 public interface IProximityAnalyzer {
     /**
      * Analyses two objects and return the proximity level.
-     * @param obj1 first object to analyse
-     * @param obj2 second object to analyse
+     * 
+     * @param str1 first object to analyse (cannot be null)
+     * @param str2 second object to analyse (cannot be null)
      * @return proximity level
      */
-    double analyse(Object obj1, Object obj2);
+    double analyse(String str1, String str2);
 }

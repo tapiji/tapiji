@@ -47,15 +47,11 @@ public class WordCountAnalyzer implements IProximityAnalyzer {
      * @see com.essiembre.eclipse.rbe.model.utils.IProximityAnalyzer
      *         #analyse(java.lang.Object, java.lang.Object)
      */
-    public double analyse(Object obj1, Object obj2) {
-        if (obj2 == null || obj2 == null) {
-            return 0;
-        }
-        
+    public double analyse(String words1, String words2) {
         Collection<String> str1 = new ArrayList<String>(
-                Arrays.asList(obj1.toString().split(WORD_SPLIT_PATTERN)));
+                Arrays.asList(words1.split(WORD_SPLIT_PATTERN)));
         Collection<String> str2 = new ArrayList<String>(
-                Arrays.asList(obj2.toString().split(WORD_SPLIT_PATTERN)));
+                Arrays.asList(words2.split(WORD_SPLIT_PATTERN)));
         
         int maxWords = Math.max(str1.size(), str2.size());
         if (maxWords == 0) {

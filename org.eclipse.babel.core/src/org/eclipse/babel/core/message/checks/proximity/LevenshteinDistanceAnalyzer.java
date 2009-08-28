@@ -44,13 +44,7 @@ public class LevenshteinDistanceAnalyzer implements IProximityAnalyzer {
      * @see com.essiembre.eclipse.rbe.model.utils.IProximityAnalyzer
      *      #analyse(java.lang.Object, java.lang.Object)
      */
-   public double analyse(Object obj1, Object obj2) {
-        if (obj2 == null || obj2 == null) {
-            return 0;
-        }
-
-        String str1 = obj1.toString();
-        String str2 = obj2.toString();
+   public double analyse(String str1, String str2) {
         int maxLength = Math.max(str1.length(), str2.length());
         double distance = distance(str1, str2);
 
