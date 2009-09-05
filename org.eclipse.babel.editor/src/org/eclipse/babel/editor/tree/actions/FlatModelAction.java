@@ -10,9 +10,10 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.tree.actions;
 
-import org.eclipse.babel.core.message.tree.FlatKeyTreeModel;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
+import org.eclipse.babel.editor.tree.KeyTreeContentProvider;
+import org.eclipse.babel.editor.tree.TreeType;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -41,6 +42,7 @@ public class FlatModelAction extends AbstractTreeAction {
      * @see org.eclipse.jface.action.Action#run()
      */
     public void run() {
-        editor.setKeyTreeModel(new FlatKeyTreeModel(editor.getBundleGroup()));
+    	KeyTreeContentProvider contentProvider = (KeyTreeContentProvider)treeViewer.getContentProvider();
+    	contentProvider.setTreeType(TreeType.Flat);
     }
 }

@@ -49,15 +49,28 @@ public class KeyTreeLabelProvider
     private MessagesEditor editor;
     private MessagesBundleGroup messagesBundleGroup;
 
+    /**
+     * This label provider keeps a reference to the content provider.
+     * This is only because the way the nodes are labeled depends on whether
+     * the node is being displayed in a tree or a flat structure.
+     * <P>
+     * This label provider does not have to listen to changes in the tree/flat
+     * selection because such a change would cause the content provider to do
+     * a full refresh anyway.
+     */
+    private KeyTreeContentProvider contentProvider;
+
 	/**
      * 
      */
     public KeyTreeLabelProvider(
             MessagesEditor editor,
-            IKeyTreeModel treeModel) {
+            IKeyTreeModel treeModel,
+            KeyTreeContentProvider contentProvider) {
         super();
         this.editor = editor;
         this.messagesBundleGroup = editor.getBundleGroup();
+        this.contentProvider = contentProvider; 
     }
 
     /**
@@ -103,7 +116,20 @@ public class KeyTreeLabelProvider
 	 * @see ILabelProvider#getText(Object)
 	 */
 	public String getText(Object element) {
-        return ((KeyTreeNode) element).getName(); 
+		/*
+		 * We look to the content provider to see if the node is being
+		 * displayed in flat or tree mode.
+		 */
+        KeyTreeNode node = (KeyTreeNode) element;
+        switch (contentProvider.getTreeType()) {
+        case Tree:
+			return node.getName(); 
+        case Flat:
+    		return node.getMessageKey();
+    	default:
+    		// Should not happen
+    		return "error";
+        }
 	}
 
     /**

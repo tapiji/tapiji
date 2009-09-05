@@ -10,9 +10,15 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.tree;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.eclipse.babel.core.message.tree.DefaultKeyTreeModel;
 import org.eclipse.babel.core.message.tree.IKeyTreeModel;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 
 
@@ -22,14 +28,16 @@ import org.eclipse.jface.viewers.Viewer;
  */
 public class KeyTreeContentProvider implements ITreeContentProvider {
 
-    private IKeyTreeModel keyTreeModel;
-//    private TreeViewer treeViewer;
+    private DefaultKeyTreeModel keyTreeModel;
+    private Viewer viewer; 
+    private TreeType treeType;
     
     /**
+     * @param treeType 
      * 
      */
-    public KeyTreeContentProvider() {
-        super();
+    public KeyTreeContentProvider(TreeType treeType) {
+        this.treeType = treeType;
     }
 
     /**
@@ -37,7 +45,16 @@ public class KeyTreeContentProvider implements ITreeContentProvider {
      *              java.lang.Object)
      */
     public Object[] getChildren(Object parentElement) {
-        return keyTreeModel.getChildren((KeyTreeNode) parentElement);
+        KeyTreeNode parentNode = (KeyTreeNode) parentElement;
+        switch (treeType) {
+        case Tree:
+    		return keyTreeModel.getChildren(parentNode);
+        case Flat:
+    		return new KeyTreeNode[0];
+    	default:
+    		// Should not happen
+    		return new KeyTreeNode[0];
+        }
     }
 
     /**
@@ -45,7 +62,16 @@ public class KeyTreeContentProvider implements ITreeContentProvider {
      *              getParent(java.lang.Object)
      */
     public Object getParent(Object element) {
-        return keyTreeModel.getParent((KeyTreeNode) element);
+        KeyTreeNode node = (KeyTreeNode) element;
+        switch (treeType) {
+        case Tree:
+    		return keyTreeModel.getParent(node);
+        case Flat:
+    		return keyTreeModel;
+    	default:
+    		// Should not happen
+    		return null;
+        }
     }
 
     /**
@@ -53,7 +79,15 @@ public class KeyTreeContentProvider implements ITreeContentProvider {
      *              hasChildren(java.lang.Object)
      */
     public boolean hasChildren(Object element) {
-        return keyTreeModel.getChildren((KeyTreeNode) element).length > 0;
+        switch (treeType) {
+        case Tree:
+            return keyTreeModel.getChildren((KeyTreeNode) element).length > 0;
+        case Flat:
+    		return false;
+    	default:
+    		// Should not happen
+    		return false;
+        }
     }
 
     /**
@@ -61,7 +95,20 @@ public class KeyTreeContentProvider implements ITreeContentProvider {
      *              getElements(java.lang.Object)
      */
     public Object[] getElements(Object inputElement) {
-        return keyTreeModel.getRootNodes();
+        switch (treeType) {
+        case Tree:
+            return keyTreeModel.getRootNodes();
+        case Flat:
+//        	List<KeyTreeNode> results = new ArrayList<KeyTreeNode>();
+//        	for (KeyTreeNode rootNode : keyTreeModel.getRootNodes()) {
+//        		results.addAll(Arrays.asList(keyTreeModel.getBranch(rootNode)));
+//        	}
+//    		return keyTreeModel.getBranch(keyTreeModel.getRootNode()); // results.toArray();
+    		return keyTreeModel.getRootNode().getDescendants().toArray();
+    	default:
+    		// Should not happen
+    		return new KeyTreeNode[0];
+        }
     }
 
     /**
@@ -75,9 +122,18 @@ public class KeyTreeContentProvider implements ITreeContentProvider {
      *              java.lang.Object, java.lang.Object)
      */
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-//        this.treeViewer = (TreeViewer) viewer;
-        this.keyTreeModel = (IKeyTreeModel) newInput;
+        this.viewer = (TreeViewer) viewer;
+        this.keyTreeModel = (DefaultKeyTreeModel) newInput;
     }
 
+	public TreeType getTreeType() {
+		return treeType;
+	}
 
+	public void setTreeType(TreeType treeType) {
+		if (this.treeType != treeType) {
+			this.treeType = treeType;
+			viewer.refresh();
+		}
+	}
 }

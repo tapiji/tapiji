@@ -10,9 +10,10 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.tree.actions;
 
-import org.eclipse.babel.core.message.tree.DefaultKeyTreeModel;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
+import org.eclipse.babel.editor.tree.KeyTreeContentProvider;
+import org.eclipse.babel.editor.tree.TreeType;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -40,7 +41,7 @@ public class TreeModelAction extends AbstractTreeAction {
      * @see org.eclipse.jface.action.Action#run()
      */
     public void run() {
-        //TODO see model to tree viewer, not editor...
-        editor.setKeyTreeModel(new DefaultKeyTreeModel(editor.getBundleGroup()));
+    	KeyTreeContentProvider contentProvider = (KeyTreeContentProvider)treeViewer.getContentProvider();
+    	contentProvider.setTreeType(TreeType.Tree);
     }
 }

@@ -28,6 +28,7 @@ import org.eclipse.babel.editor.i18n.I18NPage;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.resource.EclipsePropertiesEditorResource;
+import org.eclipse.babel.editor.tree.TreeType;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.editor.views.MessagesBundleGroupOutline;
 import org.eclipse.core.resources.IFile;

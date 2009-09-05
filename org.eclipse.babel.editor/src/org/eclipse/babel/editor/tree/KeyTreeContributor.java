@@ -48,11 +48,9 @@ import org.eclipse.swt.widgets.Tree;
  */
 public class KeyTreeContributor {
 
-    //TODO consider keeping instance of this in MessagesEditor
-    // and having class variables for the actions.
-
-    private MessagesEditor editor;
+	private MessagesEditor editor;
     private IKeyTreeModel treeModel;
+    private TreeType treeType;
     
     /**
      * 
@@ -61,6 +59,7 @@ public class KeyTreeContributor {
         super();
         this.editor = editor;
         this.treeModel = new DefaultKeyTreeModel(editor.getBundleGroup());
+        this.treeType = TreeType.Tree;
     }
 
 
@@ -70,8 +69,9 @@ public class KeyTreeContributor {
      */
     public void contribute(final TreeViewer treeViewer) {
         
-        treeViewer.setContentProvider(new KeyTreeContentProvider());
-        treeViewer.setLabelProvider(new KeyTreeLabelProvider(editor, treeModel));
+        KeyTreeContentProvider contentProvider = new KeyTreeContentProvider(treeType);
+		treeViewer.setContentProvider(contentProvider);
+        treeViewer.setLabelProvider(new KeyTreeLabelProvider(editor, treeModel, contentProvider));
         treeViewer.setUseHashlookup(true);
         
         ViewerFilter onlyUnusedAndMissingKeysFilter = new OnlyUnsuedAndMissingKey();
@@ -278,7 +278,6 @@ public class KeyTreeContributor {
                         (ITreeContentProvider) treeViewer.getContentProvider();
                 KeyTreeNode node = findKeyTreeNode(
                         provider, provider.getElements(null), newKey);
-                System.out.println("editor key/hash:" + node.getMessageKey() + "/" + node.hashCode());
                 
 //                String[] test = newKey.split("\\.");
 //                treeViewer.setSelection(new StructuredSelection(test), true);

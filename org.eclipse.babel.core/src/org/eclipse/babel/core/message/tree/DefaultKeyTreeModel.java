@@ -87,6 +87,10 @@ public class DefaultKeyTreeModel extends AbstractKeyTreeModel {
         return getChildren(rootNode);
     }
 
+    public KeyTreeNode getRootNode() {
+    	return rootNode;
+    }
+    
     /**
      * @see org.eclipse.babel.core.message.tree.IKeyTreeModel#
      * 		getChildren(org.eclipse.babel.core.message.tree.KeyTreeNode)

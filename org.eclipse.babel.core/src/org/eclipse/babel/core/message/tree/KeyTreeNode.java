@@ -163,5 +163,14 @@ public class KeyTreeNode implements Comparable<KeyTreeNode> {
         children.remove(childNode.getName());
         //TODO remove parent on child node?
     }
+
+	public Collection<KeyTreeNode> getDescendants() {
+		Collection<KeyTreeNode> descendants = new ArrayList<KeyTreeNode>();
+		for (KeyTreeNode child : children.values()) {
+			descendants.add(child);
+			descendants.addAll(child.getDescendants());
+		}
+		return descendants;
+	}
     
 }
