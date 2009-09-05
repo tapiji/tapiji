@@ -80,9 +80,10 @@ public class DefaultKeyTreeModel extends AbstractKeyTreeModel {
         this.delimiter = delimiter;
     }
     
-    /**
-     * @see org.eclipse.babel.core.message.tree.IKeyTreeModel#getRootNodes()
-     */
+	/**
+	 * Gets the key tree root nodes.
+	 * @return key tree root nodes
+	 */
     public KeyTreeNode[] getRootNodes() {
         return getChildren(rootNode);
     }
@@ -92,8 +93,9 @@ public class DefaultKeyTreeModel extends AbstractKeyTreeModel {
     }
     
     /**
-     * @see org.eclipse.babel.core.message.tree.IKeyTreeModel#
-     * 		getChildren(org.eclipse.babel.core.message.tree.KeyTreeNode)
+     * Gets the child nodes of a given key tree node.
+     * @param node the node from which to get children
+     * @return child nodes
      */
     public KeyTreeNode[] getChildren(KeyTreeNode node) {
         KeyTreeNode[] nodes = node.getChildren();
@@ -104,16 +106,17 @@ public class DefaultKeyTreeModel extends AbstractKeyTreeModel {
     }
 
     /**
-     * @see org.eclipse.babel.core.message.tree.IKeyTreeModel#
-     *              getParent(org.eclipse.babel.core.message.tree.KeyTreeNode)
+     * Gets the parent node of the given node.
+     * @param node node from which to get parent
+     * @return parent node
      */
     public KeyTreeNode getParent(KeyTreeNode node) {
         return node.getParent();
     }
     
     /**
-     * @see org.eclipse.babel.core.message.tree.IKeyTreeModel
-     *      #getMessagesBundleGroup()
+     * Gets the messages bundle group that this key tree represents.
+     * @return messages bundle group
      */
     public MessagesBundleGroup getMessagesBundleGroup() {
         //TODO consider moving this method (and part of constructor) to super

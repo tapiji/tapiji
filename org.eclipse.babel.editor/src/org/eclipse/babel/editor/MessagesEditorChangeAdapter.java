@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor;
 
-import org.eclipse.babel.core.message.tree.IKeyTreeModel;
+import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
 
 /**
  * @author Pascal Essiembre
@@ -48,7 +48,7 @@ public class MessagesEditorChangeAdapter implements IMessagesEditorChangeListene
     /* (non-Javadoc)
      * @see org.eclilpse.babel.editor.editor.IMessagesEditorChangeListener#keyTreeModelChanged(org.eclipse.babel.core.message.tree.IKeyTreeModel, org.eclipse.babel.core.message.tree.IKeyTreeModel)
      */
-    public void keyTreeModelChanged(IKeyTreeModel oldModel, IKeyTreeModel newModel) {
+    public void keyTreeModelChanged(AbstractKeyTreeModel oldModel, AbstractKeyTreeModel newModel) {
         // do nothing
     }
     

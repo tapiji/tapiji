@@ -14,7 +14,7 @@ import java.util.Collection;
 
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.checks.IMessageCheck;
-import org.eclipse.babel.core.message.tree.IKeyTreeModel;
+import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.MessagesEditorMarkers;
@@ -65,7 +65,7 @@ public class KeyTreeLabelProvider
      */
     public KeyTreeLabelProvider(
             MessagesEditor editor,
-            IKeyTreeModel treeModel,
+            AbstractKeyTreeModel treeModel,
             KeyTreeContentProvider contentProvider) {
         super();
         this.editor = editor;

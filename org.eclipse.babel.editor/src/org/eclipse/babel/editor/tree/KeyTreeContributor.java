@@ -13,8 +13,8 @@ package org.eclipse.babel.editor.tree;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
 import org.eclipse.babel.core.message.tree.DefaultKeyTreeModel;
-import org.eclipse.babel.core.message.tree.IKeyTreeModel;
 import org.eclipse.babel.core.message.tree.IKeyTreeModelListener;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
@@ -49,7 +49,7 @@ import org.eclipse.swt.widgets.Tree;
 public class KeyTreeContributor {
 
 	private MessagesEditor editor;
-    private IKeyTreeModel treeModel;
+    private AbstractKeyTreeModel treeModel;
     private TreeType treeType;
     
     /**
@@ -97,7 +97,7 @@ public class KeyTreeContributor {
     }
 
     private class OnlyUnsuedAndMissingKey extends ViewerFilter implements
-        IKeyTreeModel.IKeyTreeNodeLeafFilter {
+    AbstractKeyTreeModel.IKeyTreeNodeLeafFilter {
 
         /*
          * (non-Javadoc)
@@ -239,7 +239,7 @@ public class KeyTreeContributor {
         };
         treeModel.addKeyTreeModelListener(keyTreeListener);
         editor.addChangeListener(new MessagesEditorChangeAdapter() {
-            public void keyTreeModelChanged(IKeyTreeModel oldModel, IKeyTreeModel newModel) {
+            public void keyTreeModelChanged(AbstractKeyTreeModel oldModel, AbstractKeyTreeModel newModel) {
                 oldModel.removeKeyTreeModelListener(keyTreeListener);
                 newModel.addKeyTreeModelListener(keyTreeListener);
                 treeViewer.setInput(newModel);

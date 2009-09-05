@@ -10,12 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.tree;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.eclipse.babel.core.message.tree.DefaultKeyTreeModel;
-import org.eclipse.babel.core.message.tree.IKeyTreeModel;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;

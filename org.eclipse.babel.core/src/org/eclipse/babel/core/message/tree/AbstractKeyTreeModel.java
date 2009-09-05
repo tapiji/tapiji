@@ -17,34 +17,34 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.tree.visitor.IKeyTreeVisitor;
 
 
 /**
- * Base key tree model implementation.
+ * Hierarchical representation of all keys making up a 
+ * {@link MessagesBundleGroup}.
+
  * @author Pascal Essiembre
  */
-public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
+public abstract class AbstractKeyTreeModel {
 
     private List<IKeyTreeModelListener> listeners = new ArrayList<IKeyTreeModelListener>();
     private Comparator<KeyTreeNode> comparator;
     
     protected static final KeyTreeNode[] EMPTY_NODES = new KeyTreeNode[]{};
 
-
     /**
-     * @see org.eclipse.babel.core.message.tree.IKeyTreeModel
-     *      #addKeyTreeModelListener(
-     *              org.eclipse.babel.core.message.tree.IKeyTreeModelListener)
+     * Adds a key tree model listener.
+     * @param listener key tree model listener
      */
     public void addKeyTreeModelListener(IKeyTreeModelListener listener) {
         listeners.add(0, listener);
     }
 
     /**
-     * @see org.eclipse.babel.core.message.tree.IKeyTreeModel#
-     *        removeKeyTreeModelListener(
-     *                org.eclipse.babel.core.message.tree.IKeyTreeModelListener)
+     * Removes a key tree model listener.
+     * @param listener key tree model listener
      */
     public void removeKeyTreeModelListener(IKeyTreeModelListener listener) {
         listeners.remove(listener);
@@ -70,8 +70,11 @@ public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
     }
 
     /**
-     * @see org.eclipse.babel.core.message.tree.IKeyTreeModel#getBranch(
-     *              org.eclipse.babel.core.message.tree.KeyTreeNode)
+     * Gets all nodes on a branch, starting (and including) with parent node.
+     * This has the same effect of calling <code>getChildren(KeyTreeNode)</code>
+     * recursively on all children.
+     * @param parentNode root of a branch
+     * @return all nodes on a branch
      */
     public KeyTreeNode[] getBranch(KeyTreeNode parentNode) {
         Set<KeyTreeNode> childNodes = new TreeSet<KeyTreeNode>();
@@ -84,9 +87,11 @@ public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
     }
 
     /**
-     * @see org.eclipse.babel.core.message.tree.IKeyTreeModel#accept(
-     *              org.eclipse.babel.core.message.tree.visitor.IKeyTreeVisitor,
-     *              org.eclipse.babel.core.message.tree.KeyTreeNode)
+     * Accepts the visitor, visiting the given node argument, along with all
+     * its children.  Passing a <code>null</code> node will
+     * walk the entire tree.
+     * @param visitor the object to visit
+     * @param node the starting key tree node
      */
     public void accept(IKeyTreeVisitor visitor, KeyTreeNode node) {
         if (node != null) {
@@ -98,7 +103,9 @@ public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
         }
     }
 
-    /**
+    public abstract KeyTreeNode[] getChildren(KeyTreeNode node);
+
+	/**
      * Gets the comparator.
      * @return the comparator
      */
@@ -107,8 +114,8 @@ public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
     }
 
     /**
-     * Sets the comparator.
-     * @param comparator the comparator to set
+     * Sets the node comparator for sorting sibling nodes.
+     * @param comparator node comparator
      */
     public void setComparator(Comparator<KeyTreeNode> comparator) {
         this.comparator = comparator;
@@ -136,5 +143,14 @@ public abstract class AbstractKeyTreeModel implements IKeyTreeModel {
     	return false;
     }
     
+    
+    
+    public interface IKeyTreeNodeLeafFilter {
+    	/**
+    	 * @param leafNode A leaf node. Must not be called if the node has children
+    	 * @return true if this node should be filtered.
+    	 */
+    	boolean isFilteredLeaf(KeyTreeNode leafNode);
+    }
     
 }

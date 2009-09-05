@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor;
 
-import org.eclipse.babel.core.message.tree.IKeyTreeModel;
+import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
 
 
 
@@ -31,7 +31,7 @@ public interface IMessagesEditorChangeListener {
     
     void selectedKeyChanged(String oldKey, String newKey);
     
-    void keyTreeModelChanged(IKeyTreeModel oldModel, IKeyTreeModel newModel);
+    void keyTreeModelChanged(AbstractKeyTreeModel oldModel, AbstractKeyTreeModel newModel);
     
     void editorDisposed();
 }

@@ -11,7 +11,7 @@
 package org.eclipse.babel.editor.tree.actions;
 
 import org.eclipse.babel.core.message.MessagesBundleGroup;
-import org.eclipse.babel.core.message.tree.IKeyTreeModel;
+import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.jface.action.Action;
@@ -57,7 +57,7 @@ public abstract class AbstractTreeAction extends Action {
         return (KeyTreeNode) selection.getFirstElement();
     }
     protected KeyTreeNode[] getBranchNodes(KeyTreeNode node) {
-        return ((IKeyTreeModel) treeViewer.getInput()).getBranch(node);
+        return ((AbstractKeyTreeModel) treeViewer.getInput()).getBranch(node);
 //        
 //        Set childNodes = new TreeSet();
 //        childNodes.add(node);

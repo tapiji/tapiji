@@ -20,15 +20,14 @@ import org.eclipse.babel.core.message.MessageException;
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
+import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
 import org.eclipse.babel.core.message.tree.DefaultKeyTreeModel;
-import org.eclipse.babel.core.message.tree.IKeyTreeModel;
 import org.eclipse.babel.editor.builder.ToggleNatureAction;
 import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
 import org.eclipse.babel.editor.i18n.I18NPage;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.resource.EclipsePropertiesEditorResource;
-import org.eclipse.babel.editor.tree.TreeType;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.editor.views.MessagesBundleGroupOutline;
 import org.eclipse.core.resources.IFile;
@@ -79,7 +78,7 @@ public class MessagesEditor extends MultiPageEditorPart
     private MessagesEditorMarkers markers;
     
     
-    private IKeyTreeModel keyTreeModel;
+    private AbstractKeyTreeModel keyTreeModel;
     
     /**
      * Creates a multi-page editor example.
@@ -342,7 +341,7 @@ public class MessagesEditor extends MultiPageEditorPart
     public void setSelectedKey(String activeKey) {
         if ((selectedKey == null && activeKey != null)
                 || (selectedKey != null && activeKey == null)
-                || (!selectedKey.equals(activeKey))) {
+                || (selectedKey != null && !selectedKey.equals(activeKey))) {
             String oldKey = this.selectedKey;
             this.selectedKey = activeKey;
             for (IMessagesEditorChangeListener listener : changeListeners) {
@@ -373,18 +372,18 @@ public class MessagesEditor extends MultiPageEditorPart
     /**
      * @return Returns the keyTreeModel.
      */
-    public IKeyTreeModel getKeyTreeModel() {
+    public AbstractKeyTreeModel getKeyTreeModel() {
         return keyTreeModel;
     }
 
     /**
      * @param keyTreeModel The keyTreeModel to set.
      */
-    public void setKeyTreeModel(IKeyTreeModel newKeyTreeModel) {
+    public void setKeyTreeModel(AbstractKeyTreeModel newKeyTreeModel) {
         if ((this.keyTreeModel == null && newKeyTreeModel != null)
                 || (keyTreeModel != null && newKeyTreeModel == null)
                 || (!keyTreeModel.equals(newKeyTreeModel))) {
-            IKeyTreeModel oldModel = this.keyTreeModel;
+        	AbstractKeyTreeModel oldModel = this.keyTreeModel;
             this.keyTreeModel = newKeyTreeModel;
             for (IMessagesEditorChangeListener listener : changeListeners) {
             	listener.keyTreeModelChanged(oldModel, newKeyTreeModel);
