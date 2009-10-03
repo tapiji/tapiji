@@ -54,27 +54,23 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.osgi.framework.Bundle;
 
 /**
- * This strategy is used when a resource bundle that belongs to Plugin-Fragment 
+ * This strategy is used when a resource bundle that belongs to a plug-in fragment
  * project is loaded.
  * <p>
- * This class loads resource bundles following the default strategy.
- * If no root locale resource is found, it tries to locate that resource
- * inside the host-plugin of the fragment. The host plugin is searched inside
- * the workspace
- * first and if not found inside the eclipse-platform being run.
- * </p>
+ * This class loads resource bundles following the default strategy. If no root
+ * locale resource is found, it tries to locate that resource inside the
+ * host plug-in of the fragment. The host plug-in is searched inside the workspace
+ * first and if not found inside the Eclipse platform being run.
  * <p>
- * This is useful for the developement of i18n packages for eclipse plugin:
- * The best practice is to define the root locale messages inside the plugin
- * itself and to define the other locales in a fragment that host that plugin.
- * <br/>Thanks to this strategy the root locale can be used by the user when
- *  he edits
+ * This is useful for the development of i18n packages for eclipse plug-ins: The
+ * best practice is to define the root locale messages inside the plug-in itself
+ * and to define the other locales in a fragment that host that plug-in. Thanks
+ * to this strategy the root locale can be used by the user when the user edits
  * the messages defined in the fragment alone.
- * <p>
- * See Bug #214521.
- * </p>
+ * 
  * @author Pascal Essiembre
  * @author Hugues Malphettes
+ * @see <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=214521">Bug 214521 - in the resource bundle editor take into account the resources of the "Host-Plugin" when opened bundle is in a plugin-fragment</a>
  */
 public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
 

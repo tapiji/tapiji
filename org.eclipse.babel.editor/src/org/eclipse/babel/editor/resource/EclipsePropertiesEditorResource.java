@@ -19,6 +19,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -130,9 +131,18 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource 
      * @see org.eclipse.babel.core.bundle.resource.TextResource#setText(
      *              java.lang.String)
      */
-    public void setText(String content) {
-        textEditor.getDocumentProvider().getDocument(
-                textEditor.getEditorInput()).set(content);
+    public void setText(final String content) {
+    	/*
+    	 * We may come in from an event from another thread, so ensure
+    	 * we are on the UI thread.  This may not be the best place to do
+    	 * this???
+    	 */
+    	Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+		        textEditor.getDocumentProvider().getDocument(
+		                textEditor.getEditorInput()).set(content);
+			}
+		});
     }
 
     /**

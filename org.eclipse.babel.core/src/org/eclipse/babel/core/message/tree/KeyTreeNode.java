@@ -48,6 +48,8 @@ public class KeyTreeNode implements Comparable<KeyTreeNode> {
     private String messageKey;
     
     private final Map<String, KeyTreeNode> children = new TreeMap<String, KeyTreeNode>();
+
+	private boolean usedAsKey = false;
     
     /**
      * Constructor.
@@ -105,13 +107,13 @@ public class KeyTreeNode implements Comparable<KeyTreeNode> {
         return nodes.toArray(EMPTY_KEY_TREE_NODES);
     }
 
-    /*default*/ KeyTreeNode[] getChildren() {
+    public KeyTreeNode[] getChildren() {
         return children.values().toArray(EMPTY_KEY_TREE_NODES);
     }
     /*default*/ boolean hasChildren() {
         return !children.isEmpty();
     }
-    /*default*/ KeyTreeNode getChild(String childName) {
+    public KeyTreeNode getChild(String childName) {
         return children.get(childName);
     }
     
@@ -126,6 +128,8 @@ public class KeyTreeNode implements Comparable<KeyTreeNode> {
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     public int compareTo(KeyTreeNode node) {
+    	// TODO this is wrong.  For example, menu.label and textbox.label are indicated as equal,
+    	// which means they overwrite each other in the tree set!!!
         if (parent == null && node.parent != null) {
             return -1;
         }
@@ -164,6 +168,16 @@ public class KeyTreeNode implements Comparable<KeyTreeNode> {
         //TODO remove parent on child node?
     }
 
+    // TODO: remove this, or simplify it using method getDescendants
+	public Collection<KeyTreeNode> getBranch() {
+        Collection<KeyTreeNode> childNodes = new ArrayList<KeyTreeNode>();
+        childNodes.add(this);
+        for (KeyTreeNode childNode : this.getChildren()) {
+            childNodes.addAll(childNode.getBranch());
+        }
+        return childNodes;
+	}
+
 	public Collection<KeyTreeNode> getDescendants() {
 		Collection<KeyTreeNode> descendants = new ArrayList<KeyTreeNode>();
 		for (KeyTreeNode child : children.values()) {
@@ -171,6 +185,27 @@ public class KeyTreeNode implements Comparable<KeyTreeNode> {
 			descendants.addAll(child.getDescendants());
 		}
 		return descendants;
+	}
+
+	/**
+	 * Marks this node as representing an actual key.
+	 * <P>
+	 * For example, if the bundle contains two keys:
+	 * <UL>
+	 * <LI>foo.bar</LI>
+	 * <LI>foo.bar.tooltip</LI>
+	 * </UL>
+	 * This will create three nodes, foo, which has a child
+	 * node called bar, which has a child node called tooltip.
+	 * However foo is not an actual key but is only a parent node.
+	 * foo.bar is an actual key even though it is also a parent node.
+	 */
+	public void setUsedAsKey() {
+		usedAsKey = true;
+	}
+
+	public boolean isUsedAsKey() {
+		return usedAsKey;
 	}
     
 }

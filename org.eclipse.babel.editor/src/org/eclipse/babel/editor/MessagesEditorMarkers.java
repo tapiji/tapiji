@@ -27,6 +27,7 @@ import org.eclipse.babel.editor.resource.validator.IValidationMarkerStrategy;
 import org.eclipse.babel.editor.resource.validator.MessagesBundleGroupValidator;
 import org.eclipse.babel.editor.resource.validator.ValidationFailureEvent;
 import org.eclipse.babel.editor.util.UIUtils;
+import org.eclipse.swt.widgets.Display;
 
 
 /**
@@ -66,7 +67,11 @@ public class MessagesEditorMarkers
             public void messagesBundleChanged(
                     MessagesBundle messagesBundle,
                     PropertyChangeEvent changeEvent) {
-                resetMarkers();
+            	Display.getDefault().asyncExec(new Runnable(){
+					public void run() {
+		                resetMarkers();
+					}
+				});
             }
             public void propertyChange(PropertyChangeEvent evt) {
                 resetMarkers();

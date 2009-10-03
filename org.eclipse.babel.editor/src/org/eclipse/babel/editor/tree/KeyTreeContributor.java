@@ -14,7 +14,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
-import org.eclipse.babel.core.message.tree.DefaultKeyTreeModel;
 import org.eclipse.babel.core.message.tree.IKeyTreeModelListener;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
@@ -39,6 +38,7 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 
@@ -58,7 +58,7 @@ public class KeyTreeContributor {
     public KeyTreeContributor(final MessagesEditor editor) {
         super();
         this.editor = editor;
-        this.treeModel = new DefaultKeyTreeModel(editor.getBundleGroup());
+        this.treeModel = new AbstractKeyTreeModel(editor.getBundleGroup());
         this.treeType = TreeType.Tree;
     }
 
@@ -153,7 +153,11 @@ public class KeyTreeContributor {
     private void contributeMarkers(final TreeViewer treeViewer) {
         editor.getMarkers().addObserver(new Observer() {
             public void update(Observable o, Object arg) {
-                treeViewer.refresh();
+            	Display.getDefault().asyncExec(new Runnable(){
+					public void run() {
+		                treeViewer.refresh();
+					}
+				});
             }
         });
 //      editor.addChangeListener(new MessagesEditorChangeAdapter() {
@@ -228,13 +232,21 @@ public class KeyTreeContributor {
         final IKeyTreeModelListener keyTreeListener = new IKeyTreeModelListener() {
             //TODO be smarter about refreshes.
             public void nodeAdded(KeyTreeNode node) {
-                treeViewer.refresh(true);
+            	Display.getDefault().asyncExec(new Runnable(){
+					public void run() {
+		                treeViewer.refresh(true);
+					}
+				});
             };
 //            public void nodeChanged(KeyTreeNode node) {
 //                treeViewer.refresh(true);
 //            };
             public void nodeRemoved(KeyTreeNode node) {
-                treeViewer.refresh(true);
+            	Display.getDefault().asyncExec(new Runnable(){
+					public void run() {
+		                treeViewer.refresh(true);
+					}
+				});
             };
         };
         treeModel.addKeyTreeModelListener(keyTreeListener);

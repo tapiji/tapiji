@@ -10,8 +10,12 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.tree;
 
-import org.eclipse.babel.core.message.tree.DefaultKeyTreeModel;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
+import org.eclipse.babel.core.message.tree.visitor.IKeyTreeVisitor;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -23,7 +27,7 @@ import org.eclipse.jface.viewers.Viewer;
  */
 public class KeyTreeContentProvider implements ITreeContentProvider {
 
-    private DefaultKeyTreeModel keyTreeModel;
+    private AbstractKeyTreeModel keyTreeModel;
     private Viewer viewer; 
     private TreeType treeType;
     
@@ -90,17 +94,21 @@ public class KeyTreeContentProvider implements ITreeContentProvider {
      *              getElements(java.lang.Object)
      */
     public Object[] getElements(Object inputElement) {
-        switch (treeType) {
+		switch (treeType) {
         case Tree:
             return keyTreeModel.getRootNodes();
         case Flat:
-//        	List<KeyTreeNode> results = new ArrayList<KeyTreeNode>();
-//        	for (KeyTreeNode rootNode : keyTreeModel.getRootNodes()) {
-//        		results.addAll(Arrays.asList(keyTreeModel.getBranch(rootNode)));
-//        	}
-//    		return keyTreeModel.getBranch(keyTreeModel.getRootNode()); // results.toArray();
-    		return keyTreeModel.getRootNode().getDescendants().toArray();
-    	default:
+        	final Collection<KeyTreeNode> actualKeys = new ArrayList<KeyTreeNode>();
+        	IKeyTreeVisitor visitor = new IKeyTreeVisitor() {
+        		public void visitKeyTreeNode(KeyTreeNode node) {
+        			if (node.isUsedAsKey()) {
+        				actualKeys.add(node);
+        			}
+        		}
+        	};
+        	keyTreeModel.accept(visitor, keyTreeModel.getRootNode());
+        	return actualKeys.toArray(); 
+        default:
     		// Should not happen
     		return new KeyTreeNode[0];
         }
@@ -118,7 +126,7 @@ public class KeyTreeContentProvider implements ITreeContentProvider {
      */
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
         this.viewer = (TreeViewer) viewer;
-        this.keyTreeModel = (DefaultKeyTreeModel) newInput;
+        this.keyTreeModel = (AbstractKeyTreeModel) newInput;
     }
 
 	public TreeType getTreeType() {

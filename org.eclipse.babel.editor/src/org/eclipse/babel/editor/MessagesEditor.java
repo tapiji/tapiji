@@ -21,7 +21,6 @@ import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
-import org.eclipse.babel.core.message.tree.DefaultKeyTreeModel;
 import org.eclipse.babel.editor.builder.ToggleNatureAction;
 import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
 import org.eclipse.babel.editor.i18n.I18NPage;
@@ -121,7 +120,7 @@ public class MessagesEditor extends MultiPageEditorPart
             closeIfAreadyOpen(site, file);
             super.init(site, editorInput);
             //TODO figure out model to use based on preferences
-            keyTreeModel = new DefaultKeyTreeModel(messagesBundleGroup);
+            keyTreeModel = new AbstractKeyTreeModel(messagesBundleGroup);
 //            markerManager = new RBEMarkerManager(this);
         } else {
             throw new PartInitException(

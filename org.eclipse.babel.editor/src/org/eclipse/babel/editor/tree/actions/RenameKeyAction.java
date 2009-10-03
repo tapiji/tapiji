@@ -10,15 +10,15 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.tree.actions;
 
-import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
+import org.eclipse.babel.editor.refactoring.RenameKeyProcessor;
+import org.eclipse.babel.editor.refactoring.RenameKeyWizard;
 import org.eclipse.babel.editor.util.UIUtils;
-import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.window.Window;
+import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
+import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
 
 /**
  * @author Pascal Essiembre
@@ -42,47 +42,16 @@ public class RenameKeyAction extends AbstractTreeAction {
      */
     public void run() {
         KeyTreeNode node = getNodeSelection();
-        String key = node.getMessageKey();
-        String msgHead = null;
-        String msgBody = null;
-        if (getContentProvider().hasChildren(node)) {
-            msgHead = MessagesEditorPlugin.getString(
-                    "dialog.rename.head.multiple"); //$NON-NLS-1$
-            msgBody = MessagesEditorPlugin.getString(
-                    "dialog.rename.body.multiple", //$NON-NLS-1$
-                    key);
-        } else {
-            msgHead = MessagesEditorPlugin.getString(
-                    "dialog.rename.head.single"); //$NON-NLS-1$
-            msgBody = MessagesEditorPlugin.getString(
-                    "dialog.rename.body.single", key); //$NON-NLS-1$
-        }
+
         // Rename single item
-        InputDialog dialog = new InputDialog(
-                getShell(), msgHead, msgBody, key,  new IInputValidator() {
-                    public String isValid(String newText) {
-                        if (getBundleGroup().isMessageKey(newText)) {
-                            return  MessagesEditorPlugin.getString(
-                                    "dialog.error.exists");
-                        }
-                        return null;
-                    }
-                });
-        dialog.open();
-        if (dialog.getReturnCode() == Window.OK ) {
-            String inputKey = dialog.getValue();
-            MessagesBundleGroup messagesBundleGroup = getBundleGroup();
-            KeyTreeNode[] branchNodes = getBranchNodes(node);
-            for (int i = 0; i < branchNodes.length; i++) {
-                KeyTreeNode branchNode = branchNodes[i];
-                String oldKey = branchNode.getMessageKey();
-                if (oldKey.startsWith(key)) {
-                    String newKey = inputKey + oldKey.substring(key.length());
-                    messagesBundleGroup.renameMessageKeys(oldKey, newKey);
-                }
-            }
-        }
+		RenameKeyProcessor refactoring = new RenameKeyProcessor(node, getBundleGroup());
+		
+		RefactoringWizard wizard = new RenameKeyWizard(node, refactoring);
+		try {
+			RefactoringWizardOpenOperation operation= new RefactoringWizardOpenOperation(wizard);
+			operation.run(getShell(), "Introduce Indirection");
+		} catch (InterruptedException exception) {
+			// Do nothing
+		}
     }
-    
-    
 }
