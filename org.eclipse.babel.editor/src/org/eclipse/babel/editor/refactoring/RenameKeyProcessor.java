@@ -136,6 +136,9 @@ public class RenameKeyProcessor extends RenameProcessor {
 	public RefactoringStatus validateNewElementName(String newName) {
 		Assert.isNotNull(newName);
 
+		if (newName.length() == 0) {
+        	return RefactoringStatus.createFatalErrorStatus("New name for key must be entered");
+		}
 		if (newName.startsWith(".")) {
         	return RefactoringStatus.createFatalErrorStatus("Key cannot start with a '.'");
 		}
