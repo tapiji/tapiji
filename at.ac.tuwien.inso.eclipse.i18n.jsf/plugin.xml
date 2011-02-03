@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.wst.sse.ui.editorConfiguration">
+      <documentationTextHover
+            class="ui.JSFELMessageHover"
+            target="org.eclipse.jst.jsp.SCRIPT.JSP_EL2">
+      </documentationTextHover>
+      <provisionalConfiguration
+            class="ui.autocompletion.jsf.BundleNameProposal"
+            target="org.eclipse.jst.jsp.JSP_DIRECTIVE"
+            type="contentassistprocessor">
+      </provisionalConfiguration>
+      <provisionalConfiguration
+            class="ui.autocompletion.jsf.MessageCompletionProposal"
+            target="org.eclipse.jst.jsp.SCRIPT.JSP_EL2"
+            type="contentassistprocessor">
+      </provisionalConfiguration>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.markerResolution">
+      <markerResolutionGenerator
+            class="at.ac.tuwien.inso.eclipse.i18n.builder.JSFViolationResolutionGenerator"
+            markerType="org.eclipse.jst.jsf.ui.JSPSemanticsValidatorMarker">
+      </markerResolutionGenerator>
+   </extension>
+   <extension
+         point="org.eclipse.wst.sse.ui.sourcevalidation">
+      <validator
+            class="validator.JSFInternationalizationValidator"
+            id="validator.JSFInternationalizationValidator"
+            scope="total">
+         <contentTypeIdentifier
+               id="org.eclipse.jst.jsp.core.jspsource">
+            <partitionType
+                  id="org.eclipse.jst.jsp.JSP_DIRECTIVE">
+            </partitionType>
+         </contentTypeIdentifier>
+      </validator>
+   </extension>
+   <extension
+         point="at.ac.tuwien.inso.eclipse.i18n.builderExtension">
+      <i18nResourceAuditor
+            class="auditor.JSFResourceAuditor">
+      </i18nResourceAuditor>
+   </extension>
+
+</plugin>
