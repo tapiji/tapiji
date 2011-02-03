@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: TapiJI Tools
+Bundle-SymbolicName: at.ac.tuwien.inso.eclipse.i18n;singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Bundle-Activator: at.ac.tuwien.inso.eclipse.i18n.Activator
+Bundle-Vendor: Vienna University of Technology
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jdt.ui;bundle-version="3.5.2",
+ org.eclipse.ui.ide,
+ org.eclipse.jdt.core;bundle-version="3.5.2",
+ org.eclipse.core.resources,
+ org.eclipse.jface.text;bundle-version="3.5.2",
+ com.essiembre.eclipse.i18n.resourcebundle;bundle-version="0.7.7",
+ at.ac.tuwien.inso.eclipse.rbe;bundle-version="0.0.1"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.core.filebuffers,
+ org.eclipse.core.resources,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.core.dom,
+ org.eclipse.jface.text,
+ org.eclipse.jface.text.contentassist,
+ org.eclipse.ui.ide
+Export-Package: at.ac.tuwien.inso.eclipse.i18n.builder,
+ at.ac.tuwien.inso.eclipse.i18n.builder.quickfix,
+ at.ac.tuwien.inso.eclipse.i18n.extensions,
+ at.ac.tuwien.inso.eclipse.i18n.model.manager,
+ at.ac.tuwien.inso.eclipse.i18n.ui.dialogs,
+ at.ac.tuwien.inso.eclipse.i18n.util

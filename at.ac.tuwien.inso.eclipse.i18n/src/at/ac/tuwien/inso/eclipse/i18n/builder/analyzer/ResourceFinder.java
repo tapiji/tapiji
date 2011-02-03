@@ -1,0 +1,46 @@
+package at.ac.tuwien.inso.eclipse.i18n.builder.analyzer;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.runtime.CoreException;
+
+import at.ac.tuwien.inso.eclipse.i18n.builder.StringLiteralAuditor;
+
+public class ResourceFinder implements IResourceVisitor,
+		IResourceDeltaVisitor {
+
+	List<IResource> javaResources = null;
+	Set<String> supportedExtensions = null;
+
+	public ResourceFinder(Set<String> ext) {
+		javaResources = new ArrayList<IResource>();
+		supportedExtensions = ext;
+	}
+
+	@Override
+	public boolean visit(IResource resource) throws CoreException {
+		if (StringLiteralAuditor.isResourceAuditable(resource, supportedExtensions)) {
+			System.out.println("audit necessary for " + resource.getName());
+			javaResources.add(resource);
+			return false;
+		} else
+			return true;
+	}
+
+	public List<IResource> getResources() {
+		return javaResources;
+	}
+
+	@Override
+	public boolean visit(IResourceDelta delta) throws CoreException {
+		visit (delta.getResource());
+		return true;
+	}
+
+}
