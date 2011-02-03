@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ResourceBundleEditorAPI
+Bundle-SymbolicName: at.ac.tuwien.inso.eclipse.rbe
+Bundle-Version: 0.0.1.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: at.ac.tuwien.inso.eclipse.rbe.model.analyze,
+ at.ac.tuwien.inso.eclipse.rbe.model.bundle,
+ at.ac.tuwien.inso.eclipse.rbe.model.tree,
+ at.ac.tuwien.inso.eclipse.rbe.model.tree.updater,
+ at.ac.tuwien.inso.eclipse.rbe.ui.wizards
