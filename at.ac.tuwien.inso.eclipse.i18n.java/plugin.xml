@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="at.ac.tuwien.inso.eclipse.i18n.builderExtension">
+      <i18nResourceAuditor
+            class="auditor.JavaResourceAuditor">
+      </i18nResourceAuditor>
+   </extension>
+   <extension
+         point="org.eclipse.jdt.ui.javaEditorTextHovers">
+      <hover
+            activate="true"
+            class="ui.ConstantStringHover"
+            description="hovers constant strings"
+            id="at.ac.tuwien.inso.eclipse.i18n.ui.ConstantStringHover"
+            label="Constant Strings">
+      </hover>
+   </extension>
+   <extension
+         id="at.ac.tuwien.inso.eclipse.i18n.jdt.ui.MessageCompletionProcessor"
+         name="at.ac.tuwien.inso.eclipse.i18n.jdt.ui.MessageCompletionProcessor"
+         point="org.eclipse.jdt.ui.javaCompletionProposalComputer">
+      <javaCompletionProposalComputer
+            activate="true"
+            categoryId="org.eclipse.jdt.ui.defaultProposalCategory"
+            class="ui.MessageCompletionProposalComputer">
+         <partition
+               type="__java_string">
+         </partition>
+         <partition
+               type="__dftl_partition_content_type">
+         </partition>
+      </javaCompletionProposalComputer>
+         
+   </extension>
+</plugin>
