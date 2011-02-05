@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="at.ac.tuwien.inso.eclpise.i18n"
+      id="at.ac.tuwien.inso.eclpise.i18n.feature"
       label="Internationalization Feature"
       version="0.0.1.qualifier"
       provider-name="Vienna University of Technology"
