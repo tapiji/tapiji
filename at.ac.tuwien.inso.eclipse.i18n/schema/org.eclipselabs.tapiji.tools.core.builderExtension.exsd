@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipselabs.tapiji.tools.core" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="org.eclipselabs.tapiji.tools.core" id="builderExtension" name="BuilderExtension"/>
+      </appinfo>
+      <documentation>
+         The TapiJI core plug-in does not contribute any coding assistances into the source code editor. Analogically, it does not provide logic for finding Internationalization problems within sources resources. Moreover, it offers a platform for contributing source code analysis and problem resolution proposals for Internationalization problems in a uniform way. For this purpose, the TapiJI core plug-in provides the extension point org.eclipselabs.tapiji.tools.core.builderExtension that allows other plug-ins to register Internationalization related coding assistances. This concept realizes a loose coupling between basic Internationalization functionality and coding dialect specific help. Once the TapiJI core plug-in is installed, it allows an arbitrary number of extensions to provide their own assistances based on the TapiJI Tools suite.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="i18nResourceAuditor"/>
+         </choice>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="i18nResourceAuditor">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.eclipselabs.tapiji.tools.core.extensions.I18nResourceAuditor:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         0.0.1
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         The following example demonstrates registration of Java Programming dialect specific Internationalization assistance.
+
+&lt;pre&gt;
+&lt;extension point=&quot;org.eclipselabs.tapiji.tools.core.builderExtension&quot;&gt;
+    &lt;i18nResourceAuditor
+        class=&quot;auditor.JavaResourceAuditor&quot;&gt;
+    &lt;/i18nResourceAuditor&gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         Extending plug-ins need to extend the abstract class &lt;strong&gt;org.eclipselabs.tapiji.tools.core.extensions.I18nResourceAuditor&lt;/strong&gt;.
+
+&lt;pre&gt;
+package org.eclipselabs.tapiji.tools.core.extensions;
+
+import java.util.List;
+
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.ui.IMarkerResolution;
+
+/**
+ * Auditor class for finding I18N problems within source code resources. The
+ * objects audit method is called for a particular resource. Found errors are
+ * stored within the object&apos;s internal data structure and can be queried with
+ * the help of problem categorized getter methods.
+ */
+public abstract class I18nResourceAuditor {
+    /**
+     * Audits a project resource for I18N problems. This method is triggered
+     * during the project&apos;s build process.
+     * 
+     * @param resource
+     *            The project resource
+     */
+    public abstract void audit(IResource resource);
+
+    /**
+     * Returns a list of supported file endings.
+     * 
+     * @return The supported file endings
+     */
+    public abstract String[] getFileEndings();
+
+    /**
+     * Returns the list of found need-to-translate string literals. Each list
+     * entry describes the textual position on which this type of error has been
+     * detected.
+     * 
+     * @return The list of need-to-translate string literal positions
+     */
+    public abstract List&lt;ILocation&gt; getConstantStringLiterals();
+
+    /**
+     * Returns the list of broken Resource-Bundle references. Each list entry
+     * describes the textual position on which this type of error has been
+     * detected.
+     * 
+     * @return The list of positions of broken Resource-Bundle references
+     */
+    public abstract List&lt;ILocation&gt; getBrokenResourceReferences();
+
+    /**
+     * Returns the list of broken references to Resource-Bundle entries. Each
+     * list entry describes the textual position on which this type of error has
+     * been detected
+     * 
+     * @return The list of positions of broken references to locale-sensitive
+     *         resources
+     */
+    public abstract List&lt;ILocation&gt; getBrokenBundleReferences();
+
+    /**
+     * Returns a characterizing identifier of the implemented auditing
+     * functionality. The specified identifier is used for discriminating
+     * registered builder extensions.
+     * 
+     * @return The String id of the implemented auditing functionality
+     */
+    public abstract String getContextId();
+
+    /**
+     * Returns a list of quick fixes of a reported Internationalization problem.
+     * 
+     * @param marker
+     *            The warning marker of the Internationalization problem
+     * @param cause
+     *            The problem type
+     * @return The list of marker resolution proposals
+     */
+    public abstract List&lt;IMarkerResolution&gt; getMarkerResolutions(
+            IMarker marker);
+
+    /**
+     * Checks if the provided resource auditor is responsible for a particular
+     * resource.
+     * 
+     * @param resource
+     *            The resource reference
+     * @return True if the resource auditor is responsible for the referenced
+     *         resource
+     */
+    public boolean isResourceOfType(IResource resource) {
+        for (String ending : getFileEndings()) {
+            if (resource.getFileExtension().equalsIgnoreCase(ending))
+                return true;
+        }
+        return false;
+    }
+}
+
+&lt;/pre&gt;
+
+
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         &lt;ul&gt;
+	&lt;li&gt;Java Internationalization help: &lt;span style=&quot;font-family:monospace&quot;&gt;org.eclipselabs.tapiji.tools.java&lt;/span&gt;&lt;/li&gt;
+	&lt;li&gt;JSF Internaization help: &lt;span style=&quot;font-family:monospace&quot;&gt;org.eclipselabs.tapiji.tools.jsf&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="copyright"/>
+      </appinfo>
+      <documentation>
+         Copyright (c) 2011 Stefan Strobl and Martin Reiterer 2011. All rights reserved.
+      </documentation>
+   </annotation>
+
+</schema>
