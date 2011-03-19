@@ -1,10 +1,11 @@
-package at.ac.tuwien.inso.eclipse.rbe.model.tree;
+package org.eclipselabs.tapiji.translator.rbe.model.tree;
 
 import java.util.Map;
 import java.util.Set;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundleGroup;
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.updater.IKeyTreeUpdater;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleGroup;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.updater.IKeyTreeUpdater;
+
 
 public interface IKeyTree {
 

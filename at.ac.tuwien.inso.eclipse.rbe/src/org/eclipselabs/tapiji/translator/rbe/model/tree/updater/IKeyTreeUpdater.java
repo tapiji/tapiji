@@ -1,6 +1,6 @@
-package at.ac.tuwien.inso.eclipse.rbe.model.tree.updater;
+package org.eclipselabs.tapiji.translator.rbe.model.tree.updater;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.IKeyTree;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTree;
 
 public interface IKeyTreeUpdater {
 

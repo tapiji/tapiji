@@ -1,4 +1,4 @@
-package at.ac.tuwien.inso.eclipse.rbe.model.tree;
+package org.eclipselabs.tapiji.translator.rbe.model.tree;
 
 import java.util.Collection;
 import java.util.Locale;

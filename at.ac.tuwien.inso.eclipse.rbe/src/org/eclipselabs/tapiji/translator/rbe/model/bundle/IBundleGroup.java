@@ -1,4 +1,4 @@
-package at.ac.tuwien.inso.eclipse.rbe.model.bundle;
+package org.eclipselabs.tapiji.translator.rbe.model.bundle;
 
 import java.util.Collection;
 import java.util.Iterator;

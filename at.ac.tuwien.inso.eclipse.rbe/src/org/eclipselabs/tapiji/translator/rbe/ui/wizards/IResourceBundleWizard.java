@@ -1,4 +1,4 @@
-package at.ac.tuwien.inso.eclipse.rbe.ui.wizards;
+package org.eclipselabs.tapiji.translator.rbe.ui.wizards;
 
 public interface IResourceBundleWizard {
 
