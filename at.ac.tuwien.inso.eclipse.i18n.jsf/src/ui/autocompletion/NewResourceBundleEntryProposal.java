@@ -10,9 +10,9 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipselabs.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
 
-import at.ac.tuwien.inso.eclipse.i18n.model.manager.ResourceBundleManager;
-import at.ac.tuwien.inso.eclipse.i18n.ui.dialogs.CreateResourceBundleEntryDialog;
 
 public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 

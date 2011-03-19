@@ -19,11 +19,11 @@ import org.eclipse.jst.jsf.context.resolver.structureddocument.internal.ITextReg
 import org.eclipse.jst.jsf.context.structureddocument.IStructuredDocumentContext;
 import org.eclipse.jst.jsf.context.structureddocument.IStructuredDocumentContextFactory;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
+import org.eclipselabs.tapiji.tools.core.builder.InternationalizationNature;
+import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
-import at.ac.tuwien.inso.eclipse.i18n.builder.InternationalizationNature;
-import at.ac.tuwien.inso.eclipse.i18n.model.manager.ResourceBundleManager;
 
 public class BundleNameProposal implements IContentAssistProcessor {
 

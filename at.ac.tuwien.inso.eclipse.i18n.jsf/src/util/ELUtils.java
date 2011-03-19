@@ -1,8 +1,8 @@
 package util;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 
-import at.ac.tuwien.inso.eclipse.i18n.model.manager.ResourceBundleManager;
 
 public class ELUtils {
 	

@@ -13,10 +13,10 @@ import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidationContext;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
+import org.eclipselabs.tapiji.tools.core.extensions.IMarkerConstants;
+import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipselabs.tapiji.tools.core.util.EditorUtils;
 
-import at.ac.tuwien.inso.eclipse.i18n.extensions.IMarkerConstants;
-import at.ac.tuwien.inso.eclipse.i18n.model.manager.ResourceBundleManager;
-import at.ac.tuwien.inso.eclipse.i18n.util.EditorUtils;
 import auditor.JSFResourceBundleDetector;
 import auditor.model.SLLocation;
 

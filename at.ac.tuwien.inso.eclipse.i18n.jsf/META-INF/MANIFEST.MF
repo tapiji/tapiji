@@ -1,20 +1,20 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JsfBuilderExtension
-Bundle-SymbolicName: at.ac.tuwien.inso.eclipse.i18n.jsf;singleton:=true
+Bundle-SymbolicName: org.eclipselabs.tapiji.tools.jsf;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: at.ac.tuwien.inso.eclipse.i18n;bundle-version="0.0.1",
- org.eclipse.core.resources;bundle-version="3.6.0",
+Require-Bundle: org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.jface,
- at.ac.tuwien.inso.eclipse.rbe;bundle-version="0.0.1",
+ org.eclipselabs.tapiji.translator.rbe;bundle-version="0.0.1",
  org.eclipse.jface.text,
  org.eclipse.jdt.core;bundle-version="3.6.0",
  org.eclipse.jdt.ui;bundle-version="3.6.0",
  org.eclipse.jst.jsf.common;bundle-version="1.2.0",
  org.eclipse.jst.jsp.core;bundle-version="1.2.300",
  org.eclipse.wst.sse.ui,
- org.eclipse.core.runtime;bundle-version="3.6.0"
+ org.eclipse.core.runtime;bundle-version="3.6.0",
+ org.eclipselabs.tapiji.tools.core;bundle-version="0.0.1"
 Import-Package: org.eclipse.core.filebuffers,
  org.eclipse.core.runtime,
  org.eclipse.jdt.core,

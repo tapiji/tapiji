@@ -8,17 +8,17 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IMarkerResolution;
+import org.eclipselabs.tapiji.tools.core.builder.quickfix.CreateResourceBundle;
+import org.eclipselabs.tapiji.tools.core.builder.quickfix.CreateResourceBundleEntry;
+import org.eclipselabs.tapiji.tools.core.builder.quickfix.IncludeResource;
+import org.eclipselabs.tapiji.tools.core.extensions.I18nResourceAuditor;
+import org.eclipselabs.tapiji.tools.core.extensions.ILocation;
+import org.eclipselabs.tapiji.tools.core.extensions.IMarkerConstants;
+import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 
 import quickfix.ExportToResourceBundleResolution;
 import quickfix.ReplaceResourceBundleDefReference;
 import quickfix.ReplaceResourceBundleReference;
-import at.ac.tuwien.inso.eclipse.i18n.builder.quickfix.CreateResourceBundle;
-import at.ac.tuwien.inso.eclipse.i18n.builder.quickfix.CreateResourceBundleEntry;
-import at.ac.tuwien.inso.eclipse.i18n.builder.quickfix.IncludeResource;
-import at.ac.tuwien.inso.eclipse.i18n.extensions.I18nResourceAuditor;
-import at.ac.tuwien.inso.eclipse.i18n.extensions.ILocation;
-import at.ac.tuwien.inso.eclipse.i18n.extensions.IMarkerConstants;
-import at.ac.tuwien.inso.eclipse.i18n.model.manager.ResourceBundleManager;
 
 public class JSFResourceAuditor extends I18nResourceAuditor {
 
@@ -29,8 +29,6 @@ public class JSFResourceAuditor extends I18nResourceAuditor {
 	public void audit(IResource resource) {	
 		parse (resource);
 	}
-
-	
 	
 	private void parse (IResource resource) {
 
@@ -57,9 +55,9 @@ public class JSFResourceAuditor extends I18nResourceAuditor {
 	}
 
 	@Override
-	public List<IMarkerResolution> getMarkerResolutions(IMarker marker,
-			int cause) {
+	public List<IMarkerResolution> getMarkerResolutions(IMarker marker) {
 		List<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
+		int cause = marker.getAttribute("cause", -1);
 		
 		switch (cause) {
 			case IMarkerConstants.CAUSE_CONSTANT_LITERAL:

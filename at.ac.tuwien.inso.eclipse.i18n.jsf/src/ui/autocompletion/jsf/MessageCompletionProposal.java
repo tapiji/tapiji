@@ -16,11 +16,11 @@ import org.eclipse.jst.jsf.context.resolver.structureddocument.IStructuredDocume
 import org.eclipse.jst.jsf.context.resolver.structureddocument.IWorkspaceContextResolver;
 import org.eclipse.jst.jsf.context.structureddocument.IStructuredDocumentContext;
 import org.eclipse.jst.jsf.context.structureddocument.IStructuredDocumentContextFactory;
+import org.eclipselabs.tapiji.tools.core.builder.InternationalizationNature;
+import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 
 import ui.autocompletion.NewResourceBundleEntryProposal;
 
-import at.ac.tuwien.inso.eclipse.i18n.builder.InternationalizationNature;
-import at.ac.tuwien.inso.eclipse.i18n.model.manager.ResourceBundleManager;
 import auditor.JSFResourceBundleDetector;
 
 public class MessageCompletionProposal implements IContentAssistProcessor  {

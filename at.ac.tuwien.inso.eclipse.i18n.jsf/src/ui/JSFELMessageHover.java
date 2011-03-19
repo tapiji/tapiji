@@ -11,9 +11,9 @@ import org.eclipse.jst.jsf.context.resolver.structureddocument.internal.ITextReg
 import org.eclipse.jst.jsf.context.structureddocument.IStructuredDocumentContext;
 import org.eclipse.jst.jsf.context.structureddocument.IStructuredDocumentContextFactory;
 import org.eclipse.jst.jsp.core.internal.regions.DOMJSPRegionContexts;
+import org.eclipselabs.tapiji.tools.core.builder.InternationalizationNature;
 
 import util.ELUtils;
-import at.ac.tuwien.inso.eclipse.i18n.builder.InternationalizationNature;
 import auditor.JSFResourceBundleDetector;
 
 /**
