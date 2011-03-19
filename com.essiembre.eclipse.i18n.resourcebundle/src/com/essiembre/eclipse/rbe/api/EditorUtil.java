@@ -3,8 +3,7 @@ package com.essiembre.eclipse.rbe.api;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPage;
-
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.IKeyTreeItem;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTreeItem;
 
 import com.essiembre.eclipse.rbe.ui.editor.ResourceBundleEditor;
 import com.essiembre.eclipse.rbe.ui.editor.i18n.I18nPage;

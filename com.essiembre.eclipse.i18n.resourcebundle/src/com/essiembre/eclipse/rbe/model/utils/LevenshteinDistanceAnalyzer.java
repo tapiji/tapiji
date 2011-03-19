@@ -20,7 +20,7 @@
  */
 package com.essiembre.eclipse.rbe.model.utils;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.analyze.ILevenshteinDistanceAnalyzer;
+import org.eclipselabs.tapiji.translator.rbe.model.analyze.ILevenshteinDistanceAnalyzer;
 
 
 /**

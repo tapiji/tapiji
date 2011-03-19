@@ -23,7 +23,7 @@ package com.essiembre.eclipse.rbe.model.tree.visitors;
 import java.util.Collection;
 import java.util.Iterator;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundleGroup;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleGroup;
 
 import com.essiembre.eclipse.rbe.model.bundle.BundleEntry;
 import com.essiembre.eclipse.rbe.model.tree.KeyTreeItem;

@@ -29,7 +29,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.IKeyTreeItem;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTreeItem;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
 import com.essiembre.eclipse.rbe.model.tree.KeyTreeItem;

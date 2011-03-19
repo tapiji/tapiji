@@ -22,7 +22,7 @@ package com.essiembre.eclipse.rbe.model.tree.updater;
 
 import java.util.Map;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.IKeyTree;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTree;
 
 import com.essiembre.eclipse.rbe.model.tree.KeyTreeItem;
 

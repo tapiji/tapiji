@@ -49,8 +49,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
-
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.IKeyTree;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTree;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
 import com.essiembre.eclipse.rbe.model.tree.KeyTree;

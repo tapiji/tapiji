@@ -47,8 +47,7 @@ import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-
-import at.ac.tuwien.inso.eclipse.rbe.ui.wizards.IResourceBundleWizard;
+import org.eclipselabs.tapiji.translator.rbe.ui.wizards.IResourceBundleWizard;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
 import com.essiembre.eclipse.rbe.api.PropertiesGenerator;

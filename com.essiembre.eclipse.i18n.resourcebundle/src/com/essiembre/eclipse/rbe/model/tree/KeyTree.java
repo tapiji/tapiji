@@ -28,10 +28,9 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.jface.viewers.ViewerFilter;
-
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundleGroup;
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.IKeyTree;
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.updater.IKeyTreeUpdater;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleGroup;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTree;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.updater.IKeyTreeUpdater;
 
 import com.essiembre.eclipse.rbe.model.DeltaEvent;
 import com.essiembre.eclipse.rbe.model.IDeltaListener;

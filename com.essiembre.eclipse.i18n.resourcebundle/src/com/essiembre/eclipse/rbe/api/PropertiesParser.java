@@ -20,7 +20,7 @@
  */
 package com.essiembre.eclipse.rbe.api;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundle;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundle;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
 import com.essiembre.eclipse.rbe.model.bundle.Bundle;

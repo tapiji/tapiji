@@ -22,8 +22,8 @@ package com.essiembre.eclipse.rbe.api;
 
 import java.util.Iterator;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundle;
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundleEntry;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundle;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleEntry;
 
 import com.essiembre.eclipse.rbe.model.workbench.RBEPreferences;
 

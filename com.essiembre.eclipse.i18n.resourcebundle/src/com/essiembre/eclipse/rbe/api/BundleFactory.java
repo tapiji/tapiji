@@ -20,11 +20,12 @@
  */
 package com.essiembre.eclipse.rbe.api;
 
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleEntry;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleGroup;
+
 import com.essiembre.eclipse.rbe.model.bundle.BundleEntry;
 import com.essiembre.eclipse.rbe.model.bundle.BundleGroup;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundleEntry;
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundleGroup;
 
 public class BundleFactory {
 	

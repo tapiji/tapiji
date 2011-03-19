@@ -1,4 +1,5 @@
 /*
+
  * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
  * 
  * This file is part of Essiembre ResourceBundle Editor.
@@ -39,8 +40,7 @@ import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundleGroup;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleGroup;
 
 import com.essiembre.eclipse.rbe.RBEPlugin;
 import com.essiembre.eclipse.rbe.model.tree.KeyTree;

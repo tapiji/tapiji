@@ -20,8 +20,8 @@
  */
 package com.essiembre.eclipse.rbe.model.tree;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.IKeyTree;
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.IKeyTreeItem;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTree;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTreeItem;
 
 /**
  * Convenience implementation of <code>IKeyTreeVisitor</code> allowing 

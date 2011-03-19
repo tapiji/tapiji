@@ -20,9 +20,9 @@
  */
 package com.essiembre.eclipse.rbe.model.bundle;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundle;
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundleEntry;
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundleGroup;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundle;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleEntry;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleGroup;
 
 /**
  * Convenience implementation of <code>IBundleVisitor</code> allowing to 

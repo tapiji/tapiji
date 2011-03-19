@@ -27,11 +27,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTree;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.IValuedKeyTreeItem;
+
 import com.essiembre.eclipse.rbe.model.tree.KeyTreeItem;
-
-
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.IKeyTree;
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.IValuedKeyTreeItem;
 
 public class ValuedKeyTreeItem extends KeyTreeItem implements IValuedKeyTreeItem {
 

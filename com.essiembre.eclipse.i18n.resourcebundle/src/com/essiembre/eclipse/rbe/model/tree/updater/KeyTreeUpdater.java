@@ -22,8 +22,8 @@ package com.essiembre.eclipse.rbe.model.tree.updater;
 
 import java.util.Map;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.IKeyTree;
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.updater.IKeyTreeUpdater;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTree;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.updater.IKeyTreeUpdater;
 
 import com.essiembre.eclipse.rbe.model.tree.KeyTree;
 import com.essiembre.eclipse.rbe.model.tree.KeyTreeItem;

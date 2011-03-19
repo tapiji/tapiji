@@ -30,9 +30,9 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundle;
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundleEntry;
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundleGroup;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundle;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleEntry;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleGroup;
 
 import com.essiembre.eclipse.rbe.model.Model;
 

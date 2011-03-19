@@ -24,8 +24,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.IKeyTree;
-import at.ac.tuwien.inso.eclipse.rbe.model.tree.IKeyTreeItem;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTree;
+import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTreeItem;
 
 /**
  * Leaf (tree) representation of one or several resource bundle entries sharing

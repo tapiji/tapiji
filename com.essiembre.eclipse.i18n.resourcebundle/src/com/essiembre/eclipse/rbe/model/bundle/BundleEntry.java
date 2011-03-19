@@ -22,8 +22,8 @@ package com.essiembre.eclipse.rbe.model.bundle;
 
 import java.util.Locale;
 
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundle;
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundleEntry;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundle;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleEntry;
 
 /**
  * Represents an entry in a properties file.
