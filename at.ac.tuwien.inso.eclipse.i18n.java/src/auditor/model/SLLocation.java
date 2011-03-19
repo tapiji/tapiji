@@ -3,8 +3,8 @@ package auditor.model;
 import java.io.Serializable;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipselabs.tapiji.tools.core.extensions.ILocation;
 
-import at.ac.tuwien.inso.eclipse.i18n.extensions.ILocation;
 
 public class SLLocation implements Serializable, ILocation {
 	
@@ -13,7 +13,7 @@ public class SLLocation implements Serializable, ILocation {
 	private int startPos = -1;
 	private int endPos = -1;
 	private String literal;
-	private Object data;
+	private Serializable data;
 	
 	public SLLocation(IFile file, int startPos, int endPos, String literal) {
 		super();
@@ -43,10 +43,10 @@ public class SLLocation implements Serializable, ILocation {
 	public String getLiteral() {
 		return literal;
 	}
-	public Object getData () {
+	public Serializable getData () {
 		return data;
 	}
-	public void setData (Object data) {
+	public void setData (Serializable data) {
 		this.data = data;
 	}
 	

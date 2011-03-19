@@ -14,17 +14,17 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.ui.SharedASTProvider;
 import org.eclipse.ui.IMarkerResolution;
+import org.eclipselabs.tapiji.tools.core.builder.quickfix.CreateResourceBundle;
+import org.eclipselabs.tapiji.tools.core.builder.quickfix.CreateResourceBundleEntry;
+import org.eclipselabs.tapiji.tools.core.builder.quickfix.IncludeResource;
+import org.eclipselabs.tapiji.tools.core.extensions.I18nResourceAuditor;
+import org.eclipselabs.tapiji.tools.core.extensions.ILocation;
+import org.eclipselabs.tapiji.tools.core.extensions.IMarkerConstants;
+import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 
 import quickfix.ExportToResourceBundleResolution;
 import quickfix.ReplaceResourceBundleDefReference;
 import quickfix.ReplaceResourceBundleReference;
-import at.ac.tuwien.inso.eclipse.i18n.builder.quickfix.CreateResourceBundle;
-import at.ac.tuwien.inso.eclipse.i18n.builder.quickfix.CreateResourceBundleEntry;
-import at.ac.tuwien.inso.eclipse.i18n.builder.quickfix.IncludeResource;
-import at.ac.tuwien.inso.eclipse.i18n.extensions.I18nResourceAuditor;
-import at.ac.tuwien.inso.eclipse.i18n.extensions.ILocation;
-import at.ac.tuwien.inso.eclipse.i18n.extensions.IMarkerConstants;
-import at.ac.tuwien.inso.eclipse.i18n.model.manager.ResourceBundleManager;
 import auditor.model.SLLocation;
 
 public class JavaResourceAuditor extends I18nResourceAuditor {
@@ -98,10 +98,10 @@ public class JavaResourceAuditor extends I18nResourceAuditor {
 	}
 
 	@Override
-	public List<IMarkerResolution> getMarkerResolutions(IMarker marker,
-			int cause) {
+	public List<IMarkerResolution> getMarkerResolutions(IMarker marker) {
 		List<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
-		
+		int cause = marker.getAttribute("cause", -1);
+
 		switch (marker.getAttribute("cause", -1)) {
 			case IMarkerConstants.CAUSE_CONSTANT_LITERAL:
 				resolutions.add(new ExportToResourceBundleResolution());

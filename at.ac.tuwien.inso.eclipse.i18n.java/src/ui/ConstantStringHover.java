@@ -9,8 +9,8 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.ui.IEditorPart;
+import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 
-import at.ac.tuwien.inso.eclipse.i18n.model.manager.ResourceBundleManager;
 import auditor.ResourceAuditVisitor;
 
 public class ConstantStringHover implements IJavaEditorTextHover {

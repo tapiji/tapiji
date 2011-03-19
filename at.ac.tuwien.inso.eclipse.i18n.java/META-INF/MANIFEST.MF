@@ -1,17 +1,17 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JavaBuilderExtension
-Bundle-SymbolicName: at.ac.tuwien.inso.eclipse.i18n.java;singleton:=true
+Bundle-SymbolicName: org.eclipselabs.tapiji.tools.java;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: at.ac.tuwien.inso.eclipse.i18n;bundle-version="0.0.1",
- org.eclipse.core.resources;bundle-version="3.6.0",
+Require-Bundle: org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.jdt.core;bundle-version="3.6.0",
  org.eclipse.core.runtime;bundle-version="3.6.0",
  org.eclipse.jdt.ui;bundle-version="3.6.0",
- org.eclipse.jface
-Import-Package: at.ac.tuwien.inso.eclipse.rbe.model.bundle,
- at.ac.tuwien.inso.eclipse.rbe.ui.wizards,
+ org.eclipse.jface,
+ org.eclipselabs.tapiji.tools.core;bundle-version="0.0.1"
+Import-Package: org.eclipselabs.tapiji.translator.rbe.model.bundle,
+ org.eclipselabs.tapiji.translator.rbe.ui.wizards,
  org.eclipse.core.filebuffers,
  org.eclipse.jface.dialogs,
  org.eclipse.jface.text,

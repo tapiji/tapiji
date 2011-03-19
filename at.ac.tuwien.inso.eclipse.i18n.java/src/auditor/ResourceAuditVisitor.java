@@ -24,9 +24,9 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
+import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 
 import util.ASTutils;
-import at.ac.tuwien.inso.eclipse.i18n.model.manager.ResourceBundleManager;
 import auditor.model.SLLocation;
 
 /**

@@ -18,15 +18,15 @@ import org.eclipse.jdt.ui.text.java.IJavaCompletionProposalComputer;
 import org.eclipse.jdt.ui.text.java.JavaContentAssistInvocationContext;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipselabs.tapiji.tools.core.builder.InternationalizationNature;
+import org.eclipselabs.tapiji.tools.core.builder.quickfix.CreateResourceBundle;
+import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleGroup;
 
 import ui.autocompletion.InsertResourceBundleReferenceProposal;
 import ui.autocompletion.MessageCompletionProposal;
 import ui.autocompletion.NewResourceBundleEntryProposal;
 import ui.autocompletion.NoActionProposal;
-import at.ac.tuwien.inso.eclipse.i18n.builder.InternationalizationNature;
-import at.ac.tuwien.inso.eclipse.i18n.builder.quickfix.CreateResourceBundle;
-import at.ac.tuwien.inso.eclipse.i18n.model.manager.ResourceBundleManager;
-import at.ac.tuwien.inso.eclipse.rbe.model.bundle.IBundleGroup;
 import auditor.ResourceAuditVisitor;
 
 public class MessageCompletionProposalComputer implements

@@ -14,9 +14,9 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMarkerResolution2;
+import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipselabs.tapiji.tools.core.ui.dialogs.InsertResourceBundleReferenceDialog;
 
-import at.ac.tuwien.inso.eclipse.i18n.model.manager.ResourceBundleManager;
-import at.ac.tuwien.inso.eclipse.i18n.ui.dialogs.InsertResourceBundleReferenceDialog;
 
 public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 

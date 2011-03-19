@@ -5,8 +5,8 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipselabs.tapiji.tools.core.util.ImageUtils;
 
-import at.ac.tuwien.inso.eclipse.i18n.util.ImageUtils;
 
 public class MessageCompletionProposal implements IJavaCompletionProposal {
 

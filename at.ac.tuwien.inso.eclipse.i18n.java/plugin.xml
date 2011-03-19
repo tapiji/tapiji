@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="at.ac.tuwien.inso.eclipse.i18n.builderExtension">
+         point="org.eclipselabs.tapiji.tools.core.builderExtension">
       <i18nResourceAuditor
             class="auditor.JavaResourceAuditor">
       </i18nResourceAuditor>
@@ -13,13 +13,13 @@
             activate="true"
             class="ui.ConstantStringHover"
             description="hovers constant strings"
-            id="at.ac.tuwien.inso.eclipse.i18n.ui.ConstantStringHover"
+            id="org.eclipselabs.tapiji.tools.java.ui.ConstantStringHover"
             label="Constant Strings">
       </hover>
    </extension>
    <extension
-         id="at.ac.tuwien.inso.eclipse.i18n.jdt.ui.MessageCompletionProcessor"
-         name="at.ac.tuwien.inso.eclipse.i18n.jdt.ui.MessageCompletionProcessor"
+         id="org.eclipselabs.tapiji.tools.java.ui.MessageCompletionProcessor"
+         name="org.eclipselabs.tapiji.tools.java.ui.MessageCompletionProcessor"
          point="org.eclipse.jdt.ui.javaCompletionProposalComputer">
       <javaCompletionProposalComputer
             activate="true"
