@@ -7,7 +7,7 @@
          point="org.eclipse.core.runtime.applications">
       <application>
          <run
-               class="at.ac.tuwien.inso.eclipse.tapiji.Application">
+               class="org.eclipselabs.tapiji.translator.Application">
          </run>
       </application>
    </extension>
@@ -15,8 +15,8 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             name="Perspective"
-            class="at.ac.tuwien.inso.eclipse.tapiji.Perspective"
-            id="at.ac.tuwien.inso.eclipse.tapiji.perspective">
+            class="org.eclipselabs.tapiji.translator.Perspective"
+            id="org.eclipselabs.tapiji.translator.perspective">
       </perspective>
    </extension>
    <extension
@@ -29,11 +29,11 @@
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            application="at.ac.tuwien.inso.eclipse.tapiji.application"
+            application="org.eclipselabs.tapiji.application"
             name="TapiJI Translator">
          <property
                name="windowImages"
-               value="platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_16.png,platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_32.png,platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_48.png,platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_64.png,platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_128.png">
+               value="platform:/plugin/org.eclipselabs.tapiji.tools.core/icons/TapiJI_16.png,platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_32.png,platform:/plugin/org.eclipselabs.tapiji.tools.core/icons/TapiJI_48.png,platform:/plugin/org.eclipselabs.tapiji.tools.core/icons/TapiJI_64.png,platform:/plugin/org.eclipselabs.tapiji.tools.core/icons/TapiJI_128.png">
          </property>
          <property
                name="appName"
@@ -41,7 +41,7 @@
          </property>
          <property
                name="aboutImage"
-               value="platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_128.png">
+               value="platform:/plugin/org.eclipselabs.tapiji.tools.core/icons/TapiJI_128.png">
          </property>
          <property
                name="aboutText"
@@ -58,22 +58,22 @@
       <command
             categoryId="org.eclipse.ui.category.file"
             description="Open Resource-Bundle ..."
-            id="at.ac.tuwien.inso.eclipse.tapiji.Translator.fileOpen"
+            id="org.eclipselabs.tapiji.translator.fileOpen"
             name="FileOpen">
       </command>
       <command
-            id="at.ac.tuwien.inso.eclipse.tapiji.Translator.fileOpenGlossary"
+            id="org.eclipselabs.tapiji.translator.fileOpenGlossary"
             name="Open Glossary ...">
       </command>
       <command
-            id="at.ac.tuwien.inso.eclipse.tapiji.Translator.fileNewGlossary"
+            id="org.eclipselabs.tapiji.translator.fileNewGlossary"
             name="New Glossary ...">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="at.ac.tuwien.inso.eclipse.tapiji.Translator.fileOpen"
+            commandId="org.eclipselabs.tapiji.translator.fileOpen"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+O">
@@ -90,10 +90,10 @@
 	      <actionSet
 	            label="File Action Set"
 	            visible="true"
-	            id="at.ac.tuwien.inso.eclipse.tapiji.translator.fileActionSet">
+	            id="org.eclipselabs.tapiji.translator.fileActionSet">
           <action
-                class="at.ac.tuwien.inso.eclipse.tapiji.actions.OpenGlossaryAction"
-                definitionId="at.ac.tuwien.inso.eclipse.tapiji.Translator.fileOpenGlossary"
+                class="org.eclipselabs.tapiji.translator.actions.OpenGlossaryAction"
+                definitionId="org.eclipselabs.tapiji.translator.fileOpenGlossary"
                 icon="icons/OpenGlossary5.png"
                 id="OpenGlossaryAction"
                 label="Open Glossary ..."
@@ -104,8 +104,8 @@
                 tooltip="Opens a Glossary definition">
           </action>
 	          <action
-	                class="at.ac.tuwien.inso.eclipse.tapiji.actions.NewGlossaryAction"
-	                definitionId="at.ac.tuwien.inso.eclipse.tapiji.Translator.fileNewGlossary"
+	                class="org.eclipselabs.tapiji.translator.actions.NewGlossaryAction"
+	                definitionId="org.eclipselabs.tapiji.translator.fileNewGlossary"
 	                icon="icons/NewGlossary.png"
 	                id="NewGlossaryAction"
 	                label="New Glossary ..."
@@ -116,8 +116,8 @@
 	                tooltip="Creates a new Glossary file">
 	          </action>
            <action
-                 class="at.ac.tuwien.inso.eclipse.tapiji.actions.FileOpenAction"
-                 definitionId="at.ac.tuwien.inso.eclipse.tapiji.Translator.fileOpen"
+                 class="org.eclipselabs.tapiji.translator.actions.FileOpenAction"
+                 definitionId="org.eclipselabs.tapiji.translator.fileOpen"
                  icon="icons/OpenRB.png"
                  id="FileOpenAction"
                  label="Open Resource-Bundle ..."
@@ -132,86 +132,34 @@
   <extension
         point="org.eclipse.ui.views">
      <category
-           id="at.ac.tuwien.inso.eclipse.tapiji.glossary"
+           id="org.eclipselabs.tapiji.translator.glossary"
            name="Internationalization">
      </category>
      <view
-           category="at.ac.tuwien.inso.eclipse.tapiji.glossary"
-           class="at.ac.tuwien.inso.eclipse.tapiji.views.GlossaryView"
+           category="org.eclipselabs.tapiji.translator.glossary"
+           class="org.eclipselabs.tapiji.translator.views.GlossaryView"
            icon="icons/sample.gif"
-           id="at.ac.tuwien.inso.eclipse.tapiji.views.GlossaryView"
+           id="org.eclipselabs.tapiji.translator.views.GlossaryView"
            name="Glossary">
      </view>
   </extension>
   <extension
-        id="tapiji_translator"
+        id="app"
         point="org.eclipse.core.runtime.products">
      <product
-           application="at.ac.tuwien.inso.eclipse.tapiji_translator.application"
+           application="org.eclipselabs.tapiji.translator.application"
            name="TapiJI Translator">
         <property
               name="windowImages"
-              value="platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_16.png,platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_32.png,platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_48.png,platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_64.png,platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_128.png">
+              value="icons/TapiJI_16.png,icons/TapiJI_32.png,icons/TapiJI_48.png,icons/TapiJI_64.png,icons/TapiJI_128.png">
         </property>
         <property
               name="aboutText"
               value="TapiJI - Translator &#x0A;Version 1.0.0&#x0A;by Stefan Strobl &amp; Martin Reiterer">
-        </property>
-        <property
-              name="aboutImage"
-              value="platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_128.png">
-        </property>
-        <property
-              name="appName"
-              value="TapiJI Translator">
-        </property>
-     </product>
-  </extension>
-  <extension
-        id="application"
-        point="org.eclipse.core.runtime.products">
-     <product
-           application="at.ac.tuwien.inso.eclipse.deploy.application"
-           name="TapiJI Translator">
-        <property
-              name="windowImages"
-              value="platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_16.png,platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_32.png,platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_48.png,platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_64.png,platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_128.png">
-        </property>
-        <property
-              name="aboutText"
-              value="TapiJI - Translator &#x0A;Version 1.0.0&#x0A;by Stefan Strobl &amp; Martin Reiterer">
-        </property>
-        <property
-              name="aboutImage"
-              value="platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_128.png">
-        </property>
-        <property
-              name="appName"
-              value="TapiJI Translator">
-        </property>
-     </product>
-  </extension>
-  <extension
-        id="product1"
-        point="org.eclipse.core.runtime.products">
-     <product
-           application="at.ac.tuwien.inso.eclipse.tapiji_translator.application"
-           name="TapiJI Translator">
-        <property
-              name="appName"
-              value="TapiJI Translator">
         </property>
         <property
               name="aboutImage"
               value="icons/TapiJI_128.png">
-        </property>
-        <property
-              name="aboutText"
-              value="TapiJI - Translator &#x0A;Version 1.0.0&#x0A;by Stefan Strobl &amp; Martin Reiterer">
-        </property>
-        <property
-              name="windowImages"
-              value="icons/TapiJI_16.png,icons/TapiJI_32.png,icons/TapiJI_48.png,icons/TapiJI_64.png,icons/TapiJI_128.png">
         </property>
      </product>
   </extension>

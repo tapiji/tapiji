@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: TapiJI Translator
-Bundle-SymbolicName: at.ac.tuwien.inso.eclipse.tapiji_translator;singleton:=true
+Bundle-SymbolicName: org.eclipselabs.tapiji.translator;singleton:=true
 Bundle-Version: 0.0.1.qualifier
-Bundle-Activator: at.ac.tuwien.inso.eclipse.tapiji.Activator
+Bundle-Activator: org.eclipselabs.tapiji.translator.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.filesystem;bundle-version="1.3.0",
@@ -12,8 +12,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide;bundle-version="3.6.0",
  org.junit,
  com.essiembre.eclipse.i18n.resourcebundle;bundle-version="0.7.7",
- at.ac.tuwien.inso.eclipse.rbe;bundle-version="0.0.1"
+ org.eclipselabs.tapiji.translator.rbe;bundle-version="0.0.1"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: at.ac.tuwien.inso.eclipse.rbe.model.bundle
+Import-Package: org.eclipselabs.tapiji.translator.rbe.model.bundle
 Bundle-Vendor: Vienna University of Technology
