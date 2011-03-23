@@ -41,6 +41,7 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 	private List<SLLocation> brokenRBReferences;
 	private SortedMap<Long, IRegion> rbDefReferences = new TreeMap<Long, IRegion>();
 	private SortedMap<Long, IRegion> keyPositions = new TreeMap<Long, IRegion>();
+	private Map<IRegion, String> bundleKeys = new HashMap<IRegion, String>();
 	private Map<IRegion, String> bundleReferences = new HashMap<IRegion, String>();
 	private IFile file;
 	private Map<IVariableBinding, VariableDeclarationFragment> variableBindingManagers = new HashMap<IVariableBinding, VariableDeclarationFragment>();
@@ -114,6 +115,7 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 					// store position of resource-bundle access
 					keyPositions.put(Long.valueOf(stringLiteral
 							.getStartPosition()), region);
+					bundleKeys.put(region, stringLiteral.getLiteralValue());
 					bundleReferences.put(region, rbName.getLiteral());
 					return false;
 				} else if (ASTutils.isMatchingMethodParamDesc(methodInvocation,
@@ -179,6 +181,13 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 		}
 
 		return reg;
+	}
+	
+	public String getKeyAt(IRegion region) {
+		if (bundleKeys.containsKey(region))
+			return bundleKeys.get(region);
+		else
+			return "";
 	}
 
 	public String getBundleReference(IRegion region) {

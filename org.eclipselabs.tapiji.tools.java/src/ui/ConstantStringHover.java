@@ -64,17 +64,14 @@ public class ConstantStringHover implements IJavaEditorTextHover {
 		if (hoverRegion == null)
 			return null;
 
-		try {
-			String hoverText = manager.getKeyHoverString(csf.getBundleReference(hoverRegion), textViewer.getDocument().get(
-					hoverRegion.getOffset()+1, hoverRegion.getLength()-2));
-			if (hoverText == null || hoverText.equals(""))
-				return null;
-			else 
-				return hoverText;
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
-		return null;
+		String bundleName = csf.getBundleReference(hoverRegion);
+		String key = csf.getKeyAt(hoverRegion);
+		
+		String hoverText = manager.getKeyHoverString(bundleName, key);
+		if (hoverText == null || hoverText.equals(""))
+			return null;
+		else 
+			return hoverText;
 	}
 
 	@Override
