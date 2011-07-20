@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipselabs.tapiji.tools.core.ui.dialogs.InsertResourceBundleReferenceDialog;
+import org.eclipselabs.tapiji.tools.core.ui.dialogs.ResourceBundleEntrySelectionDialog;
 
 import util.ASTutils;
 
@@ -36,7 +36,7 @@ public class InsertResourceBundleReferenceProposal implements IJavaCompletionPro
 	
 	@Override
 	public void apply(IDocument document) {
-		InsertResourceBundleReferenceDialog dialog = new InsertResourceBundleReferenceDialog(
+		ResourceBundleEntrySelectionDialog dialog = new ResourceBundleEntrySelectionDialog(
 				Display.getDefault().getActiveShell(),
 				manager, "");
 		if (dialog.open() != InputDialog.OK)

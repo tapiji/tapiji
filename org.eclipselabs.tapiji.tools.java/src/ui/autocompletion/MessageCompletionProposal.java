@@ -34,7 +34,7 @@ public class MessageCompletionProposal implements IJavaCompletionProposal {
 	@Override
 	public String getAdditionalProposalInfo() {
 		// TODO Auto-generated method stub
-		return "Inserts the property key '" + content + "' of the resource-bundle 'at.test.messages'";
+		return null;//"Inserts the property key '" + content + "' of the resource-bundle 'at.test.messages'";
 	}
 
 	@Override

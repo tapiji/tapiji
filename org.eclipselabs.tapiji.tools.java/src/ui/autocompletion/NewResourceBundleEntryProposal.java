@@ -68,10 +68,11 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 
 	@Override
 	public String getAdditionalProposalInfo() {
-		// TODO Auto-generated method stub
-		return "Creates a new string literal within one of the" +
-				" project's resource bundles. This action results " + 
-				"in a reference to the localized string literal!";
+		if (value != null && value.length() > 0) {
+			return "Exports the focused string literal into a Java Resource-Bundle. This action results " + 
+					"in a Resource-Bundle reference!";
+		} else
+			return "";
 	}
 
 	@Override

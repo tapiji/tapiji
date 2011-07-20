@@ -19,10 +19,10 @@ import org.eclipse.jdt.ui.text.java.JavaContentAssistInvocationContext;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipselabs.tapiji.tools.core.builder.InternationalizationNature;
-import org.eclipselabs.tapiji.tools.core.builder.quickfix.CreateResourceBundle;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleGroup;
 
+import ui.autocompletion.CreateResourceBundleProposal;
 import ui.autocompletion.InsertResourceBundleReferenceProposal;
 import ui.autocompletion.MessageCompletionProposal;
 import ui.autocompletion.NewResourceBundleEntryProposal;
@@ -124,7 +124,7 @@ public class MessageCompletionProposalComputer implements
 		}
 		
 		if (!hit && stringLiteralStart.trim().length() > 0)
-			completions.add(new CreateResourceBundle(stringLiteralStart, resource, posStart, posStart + stringLiteralStart.length()));
+			completions.add(new CreateResourceBundleProposal(stringLiteralStart, resource, posStart, posStart + stringLiteralStart.length()));
 		
 		return completions;
 	}

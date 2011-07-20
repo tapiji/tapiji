@@ -34,7 +34,7 @@ public class ExportToResourceBundleResolution implements IMarkerResolution2 {
 
 	@Override
 	public String getLabel() {
-		return "Export to resource bundle";
+		return "Export to Resource-Bundle";
 	}
 
 	@Override

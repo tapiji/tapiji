@@ -15,7 +15,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMarkerResolution2;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipselabs.tapiji.tools.core.ui.dialogs.InsertResourceBundleReferenceDialog;
+import org.eclipselabs.tapiji.tools.core.ui.dialogs.ResourceBundleEntrySelectionDialog;
 
 
 public class ReplaceResourceBundleReference implements IMarkerResolution2 {
@@ -58,7 +58,7 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 			ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(path);
 			IDocument document = textFileBuffer.getDocument(); 
 		
-			InsertResourceBundleReferenceDialog dialog = new InsertResourceBundleReferenceDialog(
+			ResourceBundleEntrySelectionDialog dialog = new ResourceBundleEntrySelectionDialog(
 					Display.getDefault().getActiveShell(),
 					ResourceBundleManager.getManager(resource.getProject()),
 					bundleId);
