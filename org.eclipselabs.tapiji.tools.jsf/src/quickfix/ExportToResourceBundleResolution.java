@@ -35,7 +35,7 @@ public class ExportToResourceBundleResolution implements IMarkerResolution2 {
 
 	@Override
 	public String getLabel() {
-		return "Export to resource bundle";
+		return "Export to Resource-Bundle";
 	}
 
 	@Override
@@ -79,8 +79,8 @@ public class ExportToResourceBundleResolution implements IMarkerResolution2 {
 				int quoteSingleIdx = document.get().substring(0, startPos).lastIndexOf ("'");
 				String quoteSign = quoteDblIdx < quoteSingleIdx ? "\"" : "'";
 				
-				document.replace(startPos, endPos, bundleVar + "[" + quoteSign +
-						key + quoteSign + "]");
+				document.replace(startPos, endPos, "#{" + bundleVar + "[" + quoteSign +
+						key + quoteSign + "]}");
 			} else {
 				document.replace(startPos, endPos, "#{" + bundleVar + "." + key +"}");
 			}

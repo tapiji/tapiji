@@ -21,7 +21,7 @@
    <extension
          point="org.eclipse.ui.ide.markerResolution">
       <markerResolutionGenerator
-            class="org.eclipselabs.tapiji.tools.jsf.builder.JSFViolationResolutionGenerator"
+            class="quickfix.JSFViolationResolutionGenerator"
             markerType="org.eclipse.jst.jsf.ui.JSPSemanticsValidatorMarker">
       </markerResolutionGenerator>
    </extension>

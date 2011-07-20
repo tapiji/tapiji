@@ -59,7 +59,7 @@ public class MessageCompletionProposal implements IContentAssistProcessor  {
 			int length = key.length();
 			
 			proposals.add(new NewResourceBundleEntryProposal(resource, key, startpos, length, ResourceBundleManager.getManager(project)
-					, bundleId));
+					, bundleId, true));
 		}
 		
 		return proposals.toArray(new ICompletionProposal[proposals.size()]);

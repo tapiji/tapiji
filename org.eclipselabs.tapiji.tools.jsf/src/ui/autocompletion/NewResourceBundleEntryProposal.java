@@ -23,15 +23,17 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 	private IResource resource;
 	private String bundleName;
 	private String reference;
+	private boolean isKey;
 
 	public NewResourceBundleEntryProposal(IResource resource, String str, int startPos, int endPos, 
-			ResourceBundleManager manager, String bundleName) {
+			ResourceBundleManager manager, String bundleName, boolean isKey) {
 		this.startPos = startPos;
 		this.endPos = endPos;
 		this.manager = manager;
 		this.value = str;
 		this.resource = resource;
 		this.bundleName = bundleName;
+		this.isKey = isKey;
 	}
 
 	@Override
@@ -39,8 +41,8 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 		CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
 				Display.getDefault().getActiveShell(),
 				manager,
-				"",
-				value,
+				isKey ? value : "",
+				!isKey ? value : "",
 				bundleName == null ? "" : bundleName,
 				"");
 		if (dialog.open() != InputDialog.OK)
@@ -76,11 +78,16 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 	@Override
 	public String getDisplayString() {
 		String displayStr = "";
+		
 		displayStr = "Create a new localized string literal";
 		
-		if (value != null && value.length() > 0)
-			displayStr += " for '" + value + "'";
-		
+		if (this.isKey) {
+			if (value != null && value.length() > 0)
+				displayStr += " with the key '" + value + "'";
+		} else {
+			if (value != null && value.length() > 0)
+				displayStr += " for '" + value + "'";
+		}
 		return displayStr;
 	}
 

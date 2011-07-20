@@ -15,7 +15,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMarkerResolution2;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipselabs.tapiji.tools.core.ui.dialogs.InsertResourceBundleReferenceDialog;
+import org.eclipselabs.tapiji.tools.core.ui.dialogs.ResourceBundleEntrySelectionDialog;
 
 import auditor.JSFResourceBundleDetector;
 
@@ -23,7 +23,7 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 
 	private String key;
 	private String bundleId;
-	
+
 	public ReplaceResourceBundleReference(String key, String bundleId) {
 		this.key = key;
 		this.bundleId = bundleId;
@@ -52,37 +52,43 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 		int startPos = marker.getAttribute(IMarker.CHAR_START, 0);
 		int endPos = marker.getAttribute(IMarker.CHAR_END, 0) - startPos;
 		IResource resource = marker.getResource();
-		
-		ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager(); 
-		IPath path = resource.getRawLocation(); 
+
+		ITextFileBufferManager bufferManager = FileBuffers
+				.getTextFileBufferManager();
+		IPath path = resource.getRawLocation();
 		try {
-			bufferManager.connect(path, null); 
-			ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(path);
-			IDocument document = textFileBuffer.getDocument(); 
-		
-			InsertResourceBundleReferenceDialog dialog = new InsertResourceBundleReferenceDialog(
+			bufferManager.connect(path, null);
+			ITextFileBuffer textFileBuffer = bufferManager
+					.getTextFileBuffer(path);
+			IDocument document = textFileBuffer.getDocument();
+
+			ResourceBundleEntrySelectionDialog dialog = new ResourceBundleEntrySelectionDialog(
 					Display.getDefault().getActiveShell(),
 					ResourceBundleManager.getManager(resource.getProject()),
 					bundleId);
 			if (dialog.open() != InputDialog.OK)
 				return;
-			
+
 			String key = dialog.getSelectedResource();
 			Locale locale = dialog.getSelectedLocale();
-			
-			String jsfBundleVar = JSFResourceBundleDetector.getBundleVariableName(document.get().substring(startPos, startPos + endPos));
-				
+
+			String jsfBundleVar = JSFResourceBundleDetector
+					.getBundleVariableName(document.get().substring(startPos,
+							startPos + endPos));
+
 			if (key.indexOf(".") >= 0) {
-				int quoteDblIdx = document.get().substring(0, startPos).lastIndexOf("\"");
-				int quoteSingleIdx = document.get().substring(0, startPos).lastIndexOf ("'");
+				int quoteDblIdx = document.get().substring(0, startPos)
+						.lastIndexOf("\"");
+				int quoteSingleIdx = document.get().substring(0, startPos)
+						.lastIndexOf("'");
 				String quoteSign = quoteDblIdx < quoteSingleIdx ? "\"" : "'";
-				
-				document.replace(startPos, endPos, jsfBundleVar + "[" + quoteSign +
-						key + quoteSign + "]");
+
+				document.replace(startPos, endPos, jsfBundleVar + "["
+						+ quoteSign + key + quoteSign + "]");
 			} else {
 				document.replace(startPos, endPos, jsfBundleVar + "." + key);
 			}
-			
+
 			textFileBuffer.commit(null, false);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,7 +97,7 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 				bufferManager.disconnect(path, null);
 			} catch (CoreException e) {
 				e.printStackTrace();
-			} 
+			}
 		}
 	}
 
