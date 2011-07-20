@@ -196,8 +196,8 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 		final Label infoLabel = new Label (group, SWT.NONE | SWT.LEFT);
 		infoLabel.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER, false, false, 1, 1));
 		infoLabel.setText("Specify the key of the new resource as well as the Resource-Bundle in\n" +
-				"which the resource as well as the Resource-Bundle in which the resource\n" +
-				"needs to be added.\n");
+				"which the resource" +
+				"should be added.\n");
 		
 		// Schl�ssel
 		final Label  lblKey = new Label (group, SWT.NONE | SWT.RIGHT);
@@ -246,8 +246,7 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 		final Label infoLabel = new Label (group, SWT.NONE | SWT.LEFT);
 		infoLabel.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER, false, false, 1, 1));
 		infoLabel.setText("Define a default text for the specified resource. Moreover, you need to\n" +
-				"select the locale for which the default text should be defined. This Text\n" +
-				"is required by translation personnel for translating resources.\n");
+				"select the locale for which the default text should be defined.");
 		
 		// Text
 		final Label  lblText = new Label (group, SWT.NONE | SWT.RIGHT);

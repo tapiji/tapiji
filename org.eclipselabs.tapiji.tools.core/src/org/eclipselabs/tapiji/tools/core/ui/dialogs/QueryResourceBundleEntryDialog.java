@@ -29,7 +29,7 @@ import org.eclipselabs.tapiji.tools.core.ui.widgets.listener.IResourceSelectionL
 import org.eclipselabs.tapiji.tools.core.util.LocaleUtils;
 
 
-public class InsertResourceBundleReferenceDialog extends TitleAreaDialog {
+public class QueryResourceBundleEntryDialog extends TitleAreaDialog {
 
 	private static int WIDTH_LEFT_COLUMN = 100;
 	private static int SEARCH_FULLTEXT = 0;
@@ -45,7 +45,6 @@ public class InsertResourceBundleReferenceDialog extends TitleAreaDialog {
 	private Text txtKey;
 	private Button btSearchText;
 	private Button btSearchKey;
-	private Label lblLanguage;
 	private Combo cmbLanguage;
 	private ResourceSelector resourceSelector;
 	private Text txtPreviewText;
@@ -60,7 +59,7 @@ public class InsertResourceBundleReferenceDialog extends TitleAreaDialog {
 	private String selectedKey = "";
 	
 	
-	public InsertResourceBundleReferenceDialog(Shell parentShell, ResourceBundleManager manager, String bundleName) {
+	public QueryResourceBundleEntryDialog(Shell parentShell, ResourceBundleManager manager, String bundleName) {
 		super(parentShell);
 		this.manager = manager;
 		// init available resource bundles

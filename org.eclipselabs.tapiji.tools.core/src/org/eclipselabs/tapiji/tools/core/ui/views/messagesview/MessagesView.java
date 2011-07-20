@@ -275,9 +275,9 @@ public class MessagesView extends ViewPart implements IResourceBundleChangedList
 					
 				};
 				if (locale.getDisplayName().trim().length() > 0)
-					langAction.setText(locale.getDisplayName());
+					langAction.setText(locale.getDisplayName(Locale.US));
 				else
-					langAction.setText("Vorgabe");
+					langAction.setText("Default");
 				langAction.setChecked(visibleLocales.contains(locale));
 				visibleLocaleActions.add(langAction);
 			}

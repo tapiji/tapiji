@@ -28,8 +28,7 @@ import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipselabs.tapiji.tools.core.util.ResourceUtils;
 import org.eclipselabs.tapiji.translator.rbe.ui.wizards.IResourceBundleWizard;
 
-public class CreateResourceBundle implements ICompletionProposal,
-		IMarkerResolution2 {
+public class CreateResourceBundle implements IMarkerResolution2 {
 
 	private IResource resource;
 	private int start;
@@ -67,12 +66,7 @@ public class CreateResourceBundle implements ICompletionProposal,
 		runAction();
 	}
 
-	@Override
-	public void apply(IDocument document) {
-		runAction();
-	}
-	
-	private void runAction () {
+	protected void runAction () {
 		// First see if this is a "new wizard".
 		IWizardDescriptor descriptor = PlatformUI.getWorkbench()
 				.getNewWizardRegistry().findWizard(newBunldeWizard);
@@ -176,26 +170,6 @@ public class CreateResourceBundle implements ICompletionProposal,
 		} catch (CoreException e) {
 			Logger.logError(e);
 		}
-	}
-
-	@Override
-	public String getAdditionalProposalInfo() {
-		return getDescription();
-	}
-
-	@Override
-	public IContextInformation getContextInformation() {
-		return null;
-	}
-
-	@Override
-	public String getDisplayString() {
-		return getLabel();
-	}
-
-	@Override
-	public Point getSelection(IDocument document) {
-		return null;
 	}
 
 }
