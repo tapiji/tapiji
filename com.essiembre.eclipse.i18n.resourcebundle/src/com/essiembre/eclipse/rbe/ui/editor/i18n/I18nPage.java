@@ -401,7 +401,6 @@ public class I18nPage extends ScrolledComposite implements ISelectionProvider {
 		keysComposite.getTreeViewer().addSelectionChangedListener(listener);
 	}
 
-
 	@Override
 	public ISelection getSelection() {
 		return keysComposite.getTreeViewer().getSelection();
