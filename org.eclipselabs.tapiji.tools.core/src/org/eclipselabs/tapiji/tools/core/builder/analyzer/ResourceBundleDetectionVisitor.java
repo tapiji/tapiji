@@ -7,6 +7,7 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipselabs.tapiji.tools.core.Logger;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipselabs.tapiji.tools.core.util.RBFileUtils;
 import org.eclipselabs.tapiji.tools.core.util.ResourceUtils;
 
 
@@ -22,7 +23,7 @@ public class ResourceBundleDetectionVisitor implements IResourceVisitor,
 	@Override
 	public boolean visit(IResource resource) throws CoreException {
 		try {
-			if (ResourceUtils.isResourceBundle(resource)) {
+			if (RBFileUtils.checkIsResourceBundleFile(resource)) {
 				Logger.logInfo("Loading Resource-Bundle file '" + resource.getName() + "'");
  				if (!ResourceBundleManager.isResourceExcluded(resource))
 					manager.addBundleResource(resource);

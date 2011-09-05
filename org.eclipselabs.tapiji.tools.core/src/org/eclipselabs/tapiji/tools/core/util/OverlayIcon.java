@@ -22,34 +22,34 @@ public class OverlayIcon extends CompositeImageDescriptor {
 		this.img = baseImage;
 		this.overlay = overlayImage;
 		this.location = location;
+		this.imgSize = new Point(baseImage.getImageData().width, baseImage.getImageData().height);
 	}
 
 	@Override
 	protected void drawCompositeImage(int width, int height) {
 		drawImage(img.getImageData(), 0, 0);
 		ImageData imageData = overlay.getImageData();
-		
+
 		switch (location) {
-			case TOP_LEFT:
-				drawImage(imageData, 0, 0);
-				break;
-			case TOP_RIGHT:
-				drawImage(imageData, imgSize.x - imageData.width, 0);
-				break;
-			case BOTTOM_LEFT:
-				drawImage(imageData, 0, imgSize.y - imageData.height);
-				break;
-			case BOTTOM_RIGHT:
-				drawImage(imageData, imgSize.x - imageData.width, imgSize.y
-						- imageData.height);
-				break;
+		case TOP_LEFT:
+			drawImage(imageData, 0, 0);
+			break;
+		case TOP_RIGHT:
+			drawImage(imageData, imgSize.x - imageData.width, 0);
+			break;
+		case BOTTOM_LEFT:
+			drawImage(imageData, 0, imgSize.y - imageData.height);
+			break;
+		case BOTTOM_RIGHT:
+			drawImage(imageData, imgSize.x - imageData.width, imgSize.y
+					- imageData.height);
+			break;
 		}
 	}
 
 	@Override
 	protected Point getSize() {
-		return new Point(img.getImageData().width,
-				img.getImageData().height);
+		return new Point(img.getImageData().width, img.getImageData().height);
 	}
 
 }

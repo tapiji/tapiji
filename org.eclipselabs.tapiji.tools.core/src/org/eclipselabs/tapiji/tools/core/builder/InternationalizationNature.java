@@ -89,12 +89,7 @@ public class InternationalizationNature implements IProjectNature {
 	}
 
 	public static boolean supportsNature (IProject project) {
-		try {
-			return project.isOpen() &&
-				   project.hasNature("org.eclipse.jdt.core.javanature");
-		} catch (CoreException e) {
-			return false;
-		}
+		return project.isOpen();
 	}
 	
 	public static boolean hasNature (IProject project) {

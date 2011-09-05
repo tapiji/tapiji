@@ -41,6 +41,7 @@ import org.eclipselabs.tapiji.tools.core.model.ResourceDescriptor;
 import org.eclipselabs.tapiji.tools.core.model.exception.ResourceBundleException;
 import org.eclipselabs.tapiji.tools.core.util.EditorUtils;
 import org.eclipselabs.tapiji.tools.core.util.FileUtils;
+import org.eclipselabs.tapiji.tools.core.util.PDEUtils;
 import org.eclipselabs.tapiji.tools.core.util.ResourceUtils;
 import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundle;
 import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleEntry;
@@ -50,7 +51,7 @@ import com.essiembre.eclipse.rbe.api.BundleFactory;
 import com.essiembre.eclipse.rbe.api.PropertiesGenerator;
 import com.essiembre.eclipse.rbe.api.PropertiesParser;
 
-public class ResourceBundleManager {
+public class ResourceBundleManager{
 
 	/*** CONFIG SECTION ***/
 	private static boolean checkResourceExclusionRoot = false;
@@ -61,6 +62,7 @@ public class ResourceBundleManager {
 	public static final String RESOURCE_BUNDLE_EXTENSION = ".properties";
 	public static final Locale DEFAULT_LOCALE = new Locale("");
 	
+	//project-specific
 	private Map<String, Set<IResource>> resources = 
 		new HashMap<String, Set<IResource>> ();
 	
@@ -75,11 +77,13 @@ public class ResourceBundleManager {
 	private SortedMap<String, IBundleGroup> resourceBundles = 
 		new TreeMap<String, IBundleGroup>();
 	
+	//global
 	private static Set<IResourceDescriptor> excludedResources = new HashSet<IResourceDescriptor> (); 
 	
 	private static Map<String, Set<IResource>> allBundles = 
 		new HashMap<String, Set<IResource>> ();
 	
+	/*Host project*/
 	private IProject project = null;
 	
 	/** State-Serialization Information **/
@@ -99,6 +103,11 @@ public class ResourceBundleManager {
 		// check if persistant state has been loaded
 		if (!state_loaded) 
 			loadManagerState();
+		
+		// set host-project
+		if (PDEUtils.isFragment(project))
+			project =  PDEUtils.getFragmentHost(project);
+		
 		
 		ResourceBundleManager manager = rbmanager.get(project);
 		if (manager == null) {
@@ -266,7 +275,7 @@ public class ResourceBundleManager {
 		String bundleName = getResourceBundleId(resource);
 		Set<IResource> res;
 		
-		if (!resources.containsKey(bundleName))
+		if (!resources.containsKey(bundleName)) 
 			res = new HashSet<IResource> ();
 		else
 			res = resources.get(bundleName);
@@ -364,8 +373,15 @@ public class ResourceBundleManager {
 	}
 	
 	protected void detectResourceBundles () {
-		try {
+		try {		
 			project.accept(new ResourceBundleDetectionVisitor(this));
+			
+			IProject[] fragments = PDEUtils.lookupFragment(project);
+			if (fragments != null){
+				for (IProject p :  fragments){
+					p.accept(new ResourceBundleDetectionVisitor(this));
+				}
+			}
 		} catch (CoreException e) {
 		}
 	}
@@ -689,6 +705,10 @@ public class ResourceBundleManager {
 		for (IProject p : getAllSupportedProjects()) {
 			if (p.getName().equalsIgnoreCase(projectName))
 				return getManager(p);
+			
+			//check if the projectName is a fragment and return the manager for the host
+			if(PDEUtils.isFragment(p))
+				return getManager(PDEUtils.getFragmentHost(p));				
 		}
 		return null;
 	}
@@ -834,5 +854,19 @@ public class ResourceBundleManager {
 	public static void refreshResource(IResource resource) {
 		(new StringLiteralAuditor()).buildProject(null, resource.getProject());
 		(new StringLiteralAuditor()).buildResource(resource, null);
+	}
+
+	public Set<Locale> getProjectProvidedLocales() {
+		Set<Locale> locales = new HashSet<Locale>();
+		for (String bundleId : getResourceBundleNames()) {
+			Object[] bundlelocales = getProvidedLocales(bundleId)
+					.toArray();
+			for (Object l : bundlelocales) {
+				/* TODO check if useful to add the default */
+				if (!locales.contains(l))
+					locales.add((Locale) l);
+			}
+		}
+		return locales;
 	}
 }

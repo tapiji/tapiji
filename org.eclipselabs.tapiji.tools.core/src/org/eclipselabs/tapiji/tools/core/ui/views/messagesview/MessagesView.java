@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -30,6 +33,7 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.progress.UIJob;
 import org.eclipselabs.tapiji.tools.core.Activator;
 import org.eclipselabs.tapiji.tools.core.Logger;
 import org.eclipselabs.tapiji.tools.core.model.IResourceBundleChangedListener;
@@ -363,16 +367,23 @@ public class MessagesView extends ViewPart implements IResourceBundleChangedList
 
 	/*** CONTEXT MENU ***/
 	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
-		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			public void menuAboutToShow(IMenuManager manager) {
-				fillContextMenu(manager);
+		new UIJob("set PopupMenu"){
+			@Override
+			public IStatus runInUIThread(IProgressMonitor monitor) {
+				MenuManager menuMgr = new MenuManager("#PopupMenu");
+				menuMgr.setRemoveAllWhenShown(true);
+				menuMgr.addMenuListener(new IMenuListener() {
+					public void menuAboutToShow(IMenuManager manager) {
+						fillContextMenu(manager);
+					}
+				});
+				Menu menu = menuMgr.createContextMenu(treeViewer.getViewer().getControl());
+				treeViewer.getViewer().getControl().setMenu(menu);
+				getViewSite().registerContextMenu(menuMgr, treeViewer.getViewer());
+				
+				return Status.OK_STATUS;
 			}
-		});
-		Menu menu = menuMgr.createContextMenu(treeViewer.getViewer().getControl());
-		treeViewer.getViewer().getControl().setMenu(menu);
-		getViewSite().registerContextMenu(menuMgr, treeViewer.getViewer());
+		}.schedule();
 	}
 	
 	private void fillContextMenu(IMenuManager manager) {
@@ -483,5 +494,12 @@ public class MessagesView extends ViewPart implements IResourceBundleChangedList
 		} catch (Exception e) {
 			Logger.logError(e);
 		}
+	}
+	
+	@Override
+	public void dispose(){
+		super.dispose();
+		treeViewer.dispose();
+		ResourceBundleManager.getManager(viewState.getSelectedProjectName()).unregisterResourceBundleChangeListener(viewState.getSelectedBundleId(), this);
 	}
 }

@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
-            <element ref="i18nResourceAuditor"/>
+            <element ref="i18nAuditor"/>
          </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,7 +47,7 @@
       </complexType>
    </element>
 
-   <element name="i18nResourceAuditor">
+   <element name="i18nAuditor">
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
@@ -55,7 +55,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="org.eclipselabs.tapiji.tools.core.extensions.I18nResourceAuditor:"/>
+                  <meta.attribute kind="java" basedOn="org.eclipselabs.tapiji.tools.core.extensions.I18nAuditor:"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -195,8 +195,6 @@ public abstract class I18nResourceAuditor {
 }
 
 &lt;/pre&gt;
-
-
       </documentation>
    </annotation>
 
@@ -206,8 +204,8 @@ public abstract class I18nResourceAuditor {
       </appinfo>
       <documentation>
          &lt;ul&gt;
-	&lt;li&gt;Java Internationalization help: &lt;span style=&quot;font-family:monospace&quot;&gt;org.eclipselabs.tapiji.tools.java&lt;/span&gt;&lt;/li&gt;
-	&lt;li&gt;JSF Internaization help: &lt;span style=&quot;font-family:monospace&quot;&gt;org.eclipselabs.tapiji.tools.jsf&lt;/span&gt;&lt;/li&gt;
+ &lt;li&gt;Java Internationalization help: &lt;span style=&quot;font-family:monospace&quot;&gt;org.eclipselabs.tapiji.tools.java&lt;/span&gt;&lt;/li&gt;
+ &lt;li&gt;JSF Internaization help: &lt;span style=&quot;font-family:monospace&quot;&gt;org.eclipselabs.tapiji.tools.jsf&lt;/span&gt;&lt;/li&gt;
 &lt;/ul&gt;
       </documentation>
    </annotation>

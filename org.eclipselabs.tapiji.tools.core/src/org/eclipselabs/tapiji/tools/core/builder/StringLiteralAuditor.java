@@ -26,12 +26,15 @@ import org.eclipselabs.tapiji.tools.core.Logger;
 import org.eclipselabs.tapiji.tools.core.builder.analyzer.RBAuditor;
 import org.eclipselabs.tapiji.tools.core.builder.analyzer.ResourceBundleDetectionVisitor;
 import org.eclipselabs.tapiji.tools.core.builder.analyzer.ResourceFinder;
+import org.eclipselabs.tapiji.tools.core.extensions.I18nAuditor;
+import org.eclipselabs.tapiji.tools.core.extensions.I18nRBAuditor;
 import org.eclipselabs.tapiji.tools.core.extensions.I18nResourceAuditor;
 import org.eclipselabs.tapiji.tools.core.extensions.ILocation;
 import org.eclipselabs.tapiji.tools.core.extensions.IMarkerConstants;
 import org.eclipselabs.tapiji.tools.core.model.exception.NoSuchResourceAuditorException;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipselabs.tapiji.tools.core.util.EditorUtils;
+import org.eclipselabs.tapiji.tools.core.util.RBFileUtils;
 
 
 public class StringLiteralAuditor extends IncrementalProjectBuilder {
@@ -39,11 +42,11 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder {
 	public static final String BUILDER_ID = Activator.PLUGIN_ID
 			+ ".I18NBuilder";
 
-	private static I18nResourceAuditor[] resourceAuditors;
+	private static I18nAuditor[] resourceAuditors;
 	private static Set<String> supportedFileEndings;
 
 	static {
-		List<I18nResourceAuditor> auditors = new ArrayList<I18nResourceAuditor>();
+		List<I18nAuditor> auditors = new ArrayList<I18nAuditor>();
 		supportedFileEndings = new HashSet<String>();
 		
 		// init default auditors
@@ -55,7 +58,7 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder {
 
 		try {
 			for (IConfigurationElement e : config) {
-				I18nResourceAuditor a = (I18nResourceAuditor) e.createExecutableExtension("class");
+				I18nAuditor a = (I18nAuditor) e.createExecutableExtension("class");
 				auditors.add(a);
 				supportedFileEndings.addAll(Arrays.asList(a.getFileEndings()));
 			}
@@ -63,16 +66,15 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder {
 			Logger.logError(ex);
 		}
 
-		resourceAuditors = auditors.toArray(new I18nResourceAuditor[auditors
-				.size()]);
+		resourceAuditors = auditors.toArray(new I18nAuditor[auditors.size()]);
 	}
 
 	public StringLiteralAuditor() {
 	}
 
-	public static I18nResourceAuditor getI18nAuditorByContext(String contextId)
+	public static I18nAuditor getI18nAuditorByContext(String contextId)
 			throws NoSuchResourceAuditorException {
-		for (I18nResourceAuditor auditor : resourceAuditors) {
+		for (I18nAuditor auditor : resourceAuditors) {
 			if (auditor.getContextId().equals(contextId))
 				return auditor;
 		}
@@ -86,7 +88,7 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder {
 	public static boolean isResourceAuditable(IResource resource,
 			Set<String> supportedExtensions) {
 		for (String ext : supportedExtensions) {
-			if (resource.getType() == IResource.FILE && !resource.isDerived()
+			if (resource.getType() == IResource.FILE && !resource.isDerived() && resource.getFileExtension() != null
 					&& (resource.getFileExtension().equalsIgnoreCase(ext))) {
 				return true;
 			}
@@ -104,7 +106,7 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder {
 						if (kind == FULL_BUILD) {
 							fullBuild(monitor);
 						} else {
-							// only perform audit if the resource deta is not empty
+							// only perform audit if the resource delta is not empty
 							IResourceDelta resDelta = getDelta(getProject());
 
 							if (resDelta == null)
@@ -189,7 +191,7 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder {
 			if (ResourceBundleManager.isResourceExcluded(resource))
 				continue;
 
-			for (I18nResourceAuditor ra : resourceAuditors) {
+			for (I18nAuditor ra : resourceAuditors) {
 				try {
 					if (monitor.isCanceled()) {
 						monitor.done();
@@ -208,68 +210,130 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder {
 				monitor.worked(1);
 		}
 		
-		for (I18nResourceAuditor ra : resourceAuditors) {
-			try {
-				for (ILocation problem : ra.getConstantStringLiterals()) {
-					EditorUtils
-							.reportToMarker(
-									EditorUtils
-											.getFormattedMessage(
-													EditorUtils.MESSAGE_NON_LOCALIZED_LITERAL,
-													new String[] { problem
-															.getLiteral() }),
-									problem,
-									IMarkerConstants.CAUSE_CONSTANT_LITERAL,
-									"", (ILocation) problem.getData(),
-									ra.getContextId());
-				}
-		
-				// Report all broken Resource-Bundle references
-				for (ILocation brokenLiteral : ra
-						.getBrokenResourceReferences()) {
-					EditorUtils
-							.reportToMarker(
-									EditorUtils
-											.getFormattedMessage(
-													EditorUtils.MESSAGE_BROKEN_RESOURCE_REFERENCE,
-													new String[] {
-															brokenLiteral
-																	.getLiteral(),
-															((ILocation) brokenLiteral
-																	.getData())
-																	.getLiteral() }),
-									brokenLiteral,
-									IMarkerConstants.CAUSE_BROKEN_REFERENCE,
-									brokenLiteral.getLiteral(),
-									(ILocation) brokenLiteral.getData(),
-									ra.getContextId());
-				}
-		
-				// Report all broken definitions to Resource-Bundle
-				// references
-				for (ILocation brokenLiteral : ra
-						.getBrokenBundleReferences()) {
-					EditorUtils
-							.reportToMarker(
-									EditorUtils
-											.getFormattedMessage(
-													EditorUtils.MESSAGE_BROKEN_RESOURCE_BUNDLE_REFERENCE,
-													new String[] { brokenLiteral
-															.getLiteral() }),
-									brokenLiteral,
-									IMarkerConstants.CAUSE_BROKEN_RB_REFERENCE,
-									brokenLiteral.getLiteral(),
-									(ILocation) brokenLiteral.getData(),
-									ra.getContextId());
-				}
-			} catch (Exception e) {
-				Logger.logError("Exception during reporting of Internationalization errors", e);
+		for (I18nAuditor a : resourceAuditors) {
+			if (a instanceof I18nResourceAuditor){
+				handleI18NAuditorMarkers((I18nResourceAuditor)a);
+			}
+			if (a instanceof I18nRBAuditor){
+				handleI18NAuditorMarkers((I18nRBAuditor)a);
+				((I18nRBAuditor)a).resetProblems();
 			}
 		}
 
 		monitor.done();
 	}
+	
+	private void handleI18NAuditorMarkers(I18nResourceAuditor ra){
+		try {
+			for (ILocation problem : ra.getConstantStringLiterals()) {
+				EditorUtils
+						.reportToMarker(
+								EditorUtils
+										.getFormattedMessage(
+												EditorUtils.MESSAGE_NON_LOCALIZED_LITERAL,
+												new String[] { problem
+														.getLiteral() }),
+								problem,
+								IMarkerConstants.CAUSE_CONSTANT_LITERAL,
+								"", (ILocation) problem.getData(),
+								ra.getContextId());
+			}
+	
+			// Report all broken Resource-Bundle references
+			for (ILocation brokenLiteral : ra
+					.getBrokenResourceReferences()) {
+				EditorUtils
+						.reportToMarker(
+								EditorUtils
+										.getFormattedMessage(
+												EditorUtils.MESSAGE_BROKEN_RESOURCE_REFERENCE,
+												new String[] {
+														brokenLiteral
+																.getLiteral(),
+														((ILocation) brokenLiteral
+																.getData())
+																.getLiteral() }),
+								brokenLiteral,
+								IMarkerConstants.CAUSE_BROKEN_REFERENCE,
+								brokenLiteral.getLiteral(),
+								(ILocation) brokenLiteral.getData(),
+								ra.getContextId());
+			}
+	
+			// Report all broken definitions to Resource-Bundle
+			// references
+			for (ILocation brokenLiteral : ra
+					.getBrokenBundleReferences()) {
+				EditorUtils
+						.reportToMarker(
+								EditorUtils
+										.getFormattedMessage(
+												EditorUtils.MESSAGE_BROKEN_RESOURCE_BUNDLE_REFERENCE,
+												new String[] { brokenLiteral
+														.getLiteral() }),
+								brokenLiteral,
+								IMarkerConstants.CAUSE_BROKEN_RB_REFERENCE,
+								brokenLiteral.getLiteral(),
+								(ILocation) brokenLiteral.getData(),
+								ra.getContextId());
+			}
+		} catch (Exception e) {
+			Logger.logError("Exception during reporting of Internationalization errors", e);
+		}
+	}
+	
+	private void handleI18NAuditorMarkers(I18nRBAuditor ra){
+		try {
+			//Report all unspecified keys
+			for (ILocation problem : ra.getUnspecifiedKeyReferences()) {
+				EditorUtils.reportToRBMarker(
+						EditorUtils.getFormattedMessage(
+								EditorUtils.MESSAGE_UNSPECIFIED_KEYS,
+								new String[] {problem.getLiteral()}),
+						problem,
+						IMarkerConstants.CAUSE_UNSPEZIFIED_KEY,
+						problem.getLiteral(),"",
+						(ILocation) problem.getData(),
+						ra.getContextId());
+			}
+	
+			//Report all same values
+			Map<ILocation,ILocation> sameValues = ra.getSameValuesReferences();			
+			for (ILocation problem : sameValues.keySet()) {
+				EditorUtils.reportToRBMarker(
+						EditorUtils.getFormattedMessage(
+								EditorUtils.MESSAGE_SAME_VALUE, 
+								new String[] {problem.getFile().getName(),
+								sameValues.get(problem).getFile().getName(),
+								problem.getLiteral()}),
+						problem,
+						IMarkerConstants.CAUSE_SAME_VALUE,
+						problem.getLiteral(),
+						sameValues.get(problem).getFile().getName(),
+						(ILocation) problem.getData(),
+						ra.getContextId());
+			}
+			// Report all missing languages
+			for (ILocation problem : ra.getMissingLanguageReferences()) {
+				EditorUtils.reportToRBMarker(
+						EditorUtils.getFormattedMessage(
+								EditorUtils.MESSAGE_MISSING_LANGUAGE, 
+								new String[] {RBFileUtils.getCorrespondingResourceBundleId(problem.getFile()),
+								problem.getLiteral()}),
+						problem,
+						IMarkerConstants.CAUSE_MISSING_LANGUAGE,
+						problem.getLiteral(),"",
+						(ILocation) problem.getData(),
+						ra.getContextId());
+			}
+		} catch (Exception e) {
+			Logger.logError("Exception during reporting of Internationalization errors", e);
+		}
+	}
+	
 
+	
+	@SuppressWarnings("unused")
 	private void setProgress(IProgressMonitor monitor, int progress)
 			throws InterruptedException {
 		monitor.worked(progress);
@@ -332,6 +396,8 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder {
 
 		try {
 			project.deleteMarkers(EditorUtils.MARKER_ID, false,
+					IResource.DEPTH_INFINITE);
+			project.deleteMarkers(EditorUtils.RB_MARKER_ID, false,
 					IResource.DEPTH_INFINITE);
 		} catch (CoreException e1) {
 			Logger.logError(e1);

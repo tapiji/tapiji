@@ -111,6 +111,9 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
 	/*** ACTIONS ***/
 	private Action doubleClickAction;
 	
+	/*** LISTENERS ***/
+	private ISelectionChangedListener selectionChangedListener;
+	
 	
 	public PropertyKeySelectionTree(IViewSite viewSite,
 									IWorkbenchPartSite site,
@@ -143,6 +146,12 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
 		
 		hookDragAndDrop();
 		registerListeners();
+	}
+	
+	@Override
+	public void dispose(){
+		super.dispose();
+		unregisterListeners();
 	}
 	
 	protected void initSorters () {
@@ -471,10 +480,13 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
 	protected void unregisterListeners () {
 		if (manager != null)
 			manager.unregisterResourceBundleChangeListener(resourceBundle, this);
+		
+		treeViewer.removeSelectionChangedListener(selectionChangedListener);
 	}
 	
 	public void addSelectionChangedListener (ISelectionChangedListener listener) {
 		treeViewer.addSelectionChangedListener(listener);
+		selectionChangedListener = listener;
 	}
 	
 	@Override

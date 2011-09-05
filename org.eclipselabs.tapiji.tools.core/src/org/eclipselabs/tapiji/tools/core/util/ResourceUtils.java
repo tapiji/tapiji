@@ -37,8 +37,8 @@ public class ResourceUtils {
 	public static boolean isResourceBundle (IResource res) {
 		boolean result = false;
 		
-		if (res.getType() == IResource.FILE && !res.isDerived() &&
-			res.getFileExtension().equalsIgnoreCase("properties")) {
+		if (res != null && res.getType() == IResource.FILE && !res.isDerived() && res.getFileExtension() != null
+			&& res.getFileExtension().equalsIgnoreCase("properties")) {
 			result = true;
 		}
 		

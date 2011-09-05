@@ -46,7 +46,7 @@
          <run class="org.eclipselabs.tapiji.tools.core.builder.InternationalizationNature" />
       </runtime>
       <builder id="org.eclipselabs.tapiji.tools.core.I18NBuilder" />
-      <requires-nature id="org.eclipse.jdt.core.javanature"/>
+<!--      <requires-nature id="org.eclipse.jdt.core.javanature"/> -->
    </extension>
    
    <extension
@@ -109,10 +109,55 @@
       </attribute>
    </extension>
    <extension
+         id="ResourceBundleAuditMarker"
+         name="Resource-Bundle Audit Marker"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <super
+            type="org.eclipse.core.resources.textmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+      <attribute
+            name="stringLiteral">
+      </attribute>
+      <attribute
+            name="violation">
+      </attribute>
+      <attribute
+            name="context">
+      </attribute>
+      <attribute
+            name="cause">
+      </attribute>
+      <attribute
+            name="key">
+      </attribute>
+      <attribute
+            name="location">
+      </attribute>
+      <attribute
+            name="language">
+      </attribute>
+      <attribute
+            name="bundleLine">
+      </attribute>
+      <attribute
+            name="problemPartner">
+      </attribute>
+   </extension>
+   <extension
          point="org.eclipse.ui.ide.markerResolution">
       <markerResolutionGenerator
             class="org.eclipselabs.tapiji.tools.core.builder.ViolationResolutionGenerator"
             markerType="org.eclipselabs.tapiji.tools.core.StringLiteralAuditMarker">
+      </markerResolutionGenerator>
+      <markerResolutionGenerator
+            class="org.eclipselabs.tapiji.tools.core.builder.ViolationResolutionGenerator"
+            markerType="org.eclipselabs.tapiji.tools.core.ResourceBundleAuditMarker">
       </markerResolutionGenerator>
    </extension>
    <extension
