@@ -45,7 +45,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
-
 import com.essiembre.eclipse.rbe.api.PropertiesGenerator;
 import com.essiembre.eclipse.rbe.api.PropertiesParser;
 import com.essiembre.eclipse.rbe.model.DeltaEvent;
@@ -70,8 +69,8 @@ public class ResourceManager implements IResourceChangeListener {
     private final BundleGroup bundleGroup;
     private final KeyTree keyTree;
     /** key=Locale;value=SourceEditor */
-    /*default*/ final Map sourceEditors = new HashMap();
-    private final Collection locales = new ArrayList();
+    /*default*/ final Map<Locale, SourceEditor> sourceEditors = new HashMap<Locale, SourceEditor>();
+    private final Collection<Locale> locales = new ArrayList<Locale>();
     private Set<IBundleChangeListener> changeListeners = new HashSet<IBundleChangeListener>();
     
     /**
@@ -104,6 +103,7 @@ public class ResourceManager implements IResourceChangeListener {
                 final SourceEditor editor = 
                         (SourceEditor) sourceEditors.get(bundle.getLocale());
                 String editorContent = PropertiesGenerator.generate(bundle);
+                if (editor==null) return;
                 if (!editorContent.equals(editor.getContent()))
                 	editor.setContent(editorContent);
             }
@@ -262,36 +262,43 @@ public class ResourceManager implements IResourceChangeListener {
 	}
 
 	@Override
-	public void resourceChanged(IResourceChangeEvent event) {
+	public void resourceChanged(final IResourceChangeEvent event) {
 		// TODO redraw resource bundle editor
 		
-		event.getSource();
-		event.getType();
-		
-		IResourceDeltaVisitor visitor = new IResourceDeltaVisitor() {
+		final IResourceDeltaVisitor visitor = new IResourceDeltaVisitor() {
 			
 			@Override
-			public boolean visit(IResourceDelta delta) throws CoreException {
+			public boolean visit(IResourceDelta delta) throws CoreException {			
+	            
 				IResource res = delta.getResource();
 				
-				if (res.getType() != IResource.FILE)
+				if (res == null || res.getType() != IResource.FILE)
 					return true;
 				
 				if (!res.getFileExtension().toLowerCase().equals("properties"))
 					return false;
 
-				String regex = "^(.*?)" 
+				
+				String regex = "^(.*?)"
 		            + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" 
 		            + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." 
-		            + "properties" + ")$"; 
+		            + "properties" + ")$";
 		     	String bundleName = res.getName().replaceFirst(regex, "$1");
-				Locale bundleLocale = getLocaleByName (bundleName, res.getName());
-	
-	            bundleGroup.addBundle(
-	                    bundleLocale, PropertiesParser.parse( 
-	                    		convertStreamToString(
-	                    				res.getProject().getFile(res.getProjectRelativePath()).getContents()) ));	
-	            fireBundleChangedEvent(bundleGroup.getBundle(bundleLocale));
+		     	Locale bundleLocale = getLocaleByName (bundleName, res.getName());
+				
+		     	//check if this ResourceManager is responsible for the changed file
+		     	for (SourceEditor se : sourceEditors.values()){
+		     		if(se.getFile().equals(res)){
+		     			bundleGroup.addBundle(
+			                    bundleLocale, PropertiesParser.parse( 
+			                    		convertStreamToString(
+			                    				res.getProject().getFile(res.getProjectRelativePath()).getContents()) ));	
+		     		}
+		     	}
+		     	
+		     	
+		     	
+		     	fireBundleChangedEvent(bundleGroup.getBundle(bundleLocale));
 				return true;
 			}
 		};
@@ -343,6 +350,10 @@ public class ResourceManager implements IResourceChangeListener {
 	
 	public void addBundleChangeListener (IBundleChangeListener listener) {
 		changeListeners.add(listener);
+	}
+
+	public void removeChangeListener() {
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 	}
 
 }

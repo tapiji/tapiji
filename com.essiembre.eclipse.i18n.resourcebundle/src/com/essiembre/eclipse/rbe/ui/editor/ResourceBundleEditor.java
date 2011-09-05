@@ -357,6 +357,7 @@ public class ResourceBundleEditor extends MultiPageEditorPart
         newLocalePage.dispose();
         // unregister SelectionChangedListener
         getSite().getPage().removePostSelectionListener(this);
+        resourceMediator.removeChangeListener();
         super.dispose();
     }
 

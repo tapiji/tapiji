@@ -21,6 +21,8 @@
 package com.essiembre.eclipse.rbe.ui.editor.resources;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -71,22 +73,34 @@ public class FragmentResourceFactory extends NLResourceFactory {
     	/*
     	 * check again and load the fragment
     	 */
-    	final IProject fragment = PDEUtils.lookupFragment(file.getProject());
-        if (fragment == null)
+    	IProject[] fragments = PDEUtils.lookupFragment(file.getProject());
+    	if (fragments == null)
         	throw new CoreException(new Status(IStatus.ERROR, RBEPlugin.ID, 0, "no fragment found", null)); //$NON-NLS-1$
-
+    	else if (fragments.length == 1 && fragments[0].equals(file.getProject())){
+    		//if fragment load all properties-files
+    		fragments = PDEUtils.lookupFragment(PDEUtils.getFragmentHost(fragments[0]));
+    	}
+    	
         /*
          * extract the path to the resource bundle
          */
 		final IPath resourceBundlePath = file.getParent().getProjectRelativePath();
 		final String regex = getPropertiesFileRegEx(file);
-
-		IResource folder = fragment.findMember(resourceBundlePath);
-		// this may be the case if no translations exist to date
-		if (folder == null) {
-			folder = fragment.getFolder(resourceBundlePath);
+		
+		//TODO add audit if fragment has properties-files or change FragmentNLPropertiesFileCreator() to submit all fragments
+    	final IProject fragment = fragments[0];
+    	
+		List<SourceEditor> fragmentEditors = new ArrayList<SourceEditor>();
+		for(IProject f : fragments){
+			IResource folder = f.findMember(resourceBundlePath);
+			// this may be the case if no translations exist to date
+			if (folder == null) {
+				folder = f.getFolder(resourceBundlePath);
+			}
+			
+			// load editors from the same folder as the base file
+			fragmentEditors.addAll(loadFragmentEditors(site, regex, folder));
 		}
-
 
 		 // load editors from the nl-folder, if present
 		nlDir = lookupNLDir(fragment);
@@ -94,9 +108,8 @@ public class FragmentResourceFactory extends NLResourceFactory {
 		if (nlDir != null && nlDir.exists())
 			super.loadEditors(site, nlEditors, file, nlDir);
 
-		// load editors from the same folder as the base file
-    	List fragmentEditors = loadFragmentEditors(site, regex, folder);
-
+			
+    	
 		// Load root file, if exists.
     	IProject hostProject = PDEUtils.getFragmentHost(fragment);
         SourceEditor sourceEditor = null;
@@ -143,17 +156,29 @@ public class FragmentResourceFactory extends NLResourceFactory {
 				IResourceFactory parentFactory = ResourceFactory.createParentFactory(
 						site, hostProject.getFile(file.getProjectRelativePath()), this.getClass());
 				if (parentFactory != null) {
-					SourceEditor[] parentEditors = parentFactory.getSourceEditors();					
+					SourceEditor[] parentEditors = parentFactory.getSourceEditors();
 					for (int i = 0; i < parentEditors.length; i++) {
-						if (parentEditors[i].getLocale() != null) {
-							editors.add(parentEditors[i]);
-						}
+							editors.add(parentEditors[i]);							//edit to load also default-file for fragments
 					}
 				}
 			}
 		}
+		
+		//sort Editors
+		if(editors != null) {
+			Collections.sort(editors, newAscComparator());
+		}
 	}
 
+    protected static Comparator<SourceEditor> newAscComparator() {
+        return new Comparator<SourceEditor>() {
+			@Override
+			public int compare(SourceEditor o1, SourceEditor o2) {
+				return o1.getFile().getName().compareTo(o2.getFile().getName());
+			}
+        };
+      }   
+    
 	private List loadFragmentEditors(IEditorSite site, final String regex,
 			IResource folder) throws CoreException, PartInitException {
 		List fragmentEditors = new ArrayList();

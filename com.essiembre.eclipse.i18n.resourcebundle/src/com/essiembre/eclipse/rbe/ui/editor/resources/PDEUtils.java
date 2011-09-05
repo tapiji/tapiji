@@ -24,6 +24,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -95,21 +97,25 @@ public class PDEUtils {
     	return null;
 	}
 
-    /**
-     * Returns a project containing plugin/fragment of the specified
-     * project. The first project found is returned. If the specified project
-     * itself is a fragment, then this is returned.
+	/**
+     * Returns all project containing plugin/fragment of the specified
+     * project. If the specified project itself is a fragment, then only this is returned.
      *  
      * @param pluginProject the plugin project
-     * @return a project containing a fragment or null if none
+     * @return the all project containing a fragment or null if none
      */
-    public static IProject lookupFragment(IProject pluginProject) {
+    public static IProject[] lookupFragment(IProject pluginProject) {
+    	List<IProject> fragmentIds = new ArrayList<IProject>();
+    	
 		String pluginId = PDEUtils.getPluginId(pluginProject);
 		if (pluginId == null)
 			return null;
 		String fragmentId = getFragmentId(pluginProject, getPluginId(getFragmentHost(pluginProject)));
-		if (fragmentId != null)
-			return pluginProject;
+		if (fragmentId != null){
+			fragmentIds.add(pluginProject);
+			return fragmentIds.toArray(new IProject[0]);
+		}
+		
     	IProject[] projects = pluginProject.getWorkspace().getRoot().getProjects();
     	for (int i = 0; i < projects.length; i++) {
 			IProject project = projects[i];
@@ -117,9 +123,11 @@ public class PDEUtils {
 				continue;
 			if (getFragmentId(project, pluginId) == null)
 				continue;
-			return project;
+			fragmentIds.add(project);
 		}
-    	return null;
+    	
+    	if (fragmentIds.size() > 0) return fragmentIds.toArray(new IProject[0]);
+    	else return null;
     }
 
     /**
