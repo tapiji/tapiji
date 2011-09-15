@@ -7,7 +7,7 @@
             category="org.eclipselabs.tapiji.tools.core"
             class="org.eclipse.ui.navigator.CommonNavigator"
             icon="icons/resourcebundle.gif"
-            id="com.gknsintermetals.eclipse.resourcebundle.manager.ResourceBundleExplorer"
+            id="org.eclipselabs.tapiji.tools.rbmanager.ResourceBundleExplorer"
             name="Resource Bundle Explorer"
             restorable="true">
       </view>
@@ -15,26 +15,27 @@
    <extension
          point="org.eclipse.ui.viewActions">
       <viewContribution
-            id="com.gknsintermetals.eclipse.resourcebundle.manager.viewContribution1"
-            targetID="com.gknsintermetals.eclipse.resourcebundle.manager.ResourceBundleExplorer">
+            id="org.eclipselabs.tapiji.tools.rbmanager.viewContribution1"
+            targetID="org.eclipselabs.tapiji.tools.rbmanager.ResourceBundleExplorer">
          <action
-               class="com.gknsintermetals.eclipse.resourcebundle.manager.viewer.toolbarItems.ToggleFilterActionDelegate"
+               class="org.eclipselabs.tapiji.tools.rbmanager.ui.view.toolbarItems.ToggleFilterActionDelegate"
                icon="icons/warning.gif"
-               id="com.gknsintermetals.eclipse.resourcebundle.manager.activateFilter"
-               label="activate filter"
+               id="org.eclipselabs.tapiji.tools.rbmanager.activateFilter"
+               label="Filter Problematic ResourceBundles"
                state="false"
                style="toggle"
-               toolbarPath="additions">
+               toolbarPath="additions"
+               tooltip="Filters ResourceBundles With Warnings">
          </action>
       </viewContribution>
       <viewContribution
-            id="com.gknsintermetals.eclipse.resourcebundle.manager.viewContribution2"
-            targetID="com.gknsintermetals.eclipse.resourcebundle.manager.ResourceBundleExplorer">
+            id="org.eclipselabs.tapiji.tools.rbmanager.viewContribution2"
+            targetID="org.eclipselabs.tapiji.tools.rbmanager.ResourceBundleExplorer">
          <action
-               class="com.gknsintermetals.eclipse.resourcebundle.manager.viewer.toolbarItems.ExpandAllActionDelegate"
+               class="org.eclipselabs.tapiji.tools.rbmanager.ui.view.toolbarItems.ExpandAllActionDelegate"
                icon="icons/expandall.gif"
-               id="com.gknsintermetals.eclipse.resourcebundle.manager.expandAll"
-               label="expand all"
+               id="org.eclipselabs.tapiji.tools.rbmanager.expandAll"
+               label="Expand All"
                style="push"
                toolbarPath="additions">
          </action>
@@ -43,24 +44,24 @@
    <extension
          point="org.eclipse.ui.navigator.viewer">
       <viewerContentBinding
-            viewerId="com.gknsintermetals.eclipse.resourcebundle.manager.ResourceBundleExplorer">
+            viewerId="org.eclipselabs.tapiji.tools.rbmanager.ResourceBundleExplorer">
          <includes>
             <contentExtension
-                  pattern="com.gknsintermetals.eclipse.resourcebundle.manager.resourcebundleContent">
+                  pattern="org.eclipselabs.tapiji.tools.rbmanager.resourcebundleContent">
             </contentExtension>
             <contentExtension
-                  pattern="com.gknsintermetals.eclipse.resourcebundle.manager.filter.*">
+                  pattern="org.eclipselabs.tapiji.tools.rbmanager.filter.*">
             </contentExtension>
             <contentExtension
                   pattern="org.eclipse.ui.navigator.resources.filters.*">
             </contentExtension>
             <contentExtension
-                  pattern="com.gknsintermetals.eclipse.resourcebundle.manager.linkHelper">
+                  pattern="org.eclipselabs.tapiji.tools.rbmanager.linkHelper">
             </contentExtension>
          </includes>
       </viewerContentBinding>
       <viewerActionBinding
-            viewerId="com.gknsintermetals.eclipse.resourcebundle.manager.ResourceBundleExplorer">
+            viewerId="org.eclipselabs.tapiji.tools.rbmanager.ResourceBundleExplorer">
          <includes>
             <actionExtension
                   pattern="org.eclipse.ui.navigator.resources.*">
@@ -68,12 +69,40 @@
          </includes>
       </viewerActionBinding>
       <viewer
-            viewerId="com.gknsintermetals.eclipse.resourcebundle.manager.viewer1">
-         <popupMenu
-               id="com.gknsintermetals.eclipse.resourcebundle.manager.ResourceBundleExplorer#PopupMenu">
+            viewerId="org.eclipselabs.tapiji.tools.rbmanager.ResourceBundleExplorer">
+         <popupMenu>
             <insertionPoint
-                  name="group.expand"
-                  separator="true">
+                  name="group.new">
+            </insertionPoint>
+            <insertionPoint
+                  name="group.open">
+            </insertionPoint>
+            <insertionPoint
+                  name="group.openWith">
+            </insertionPoint>
+            <insertionPoint
+                  name="group.edit">
+            </insertionPoint>
+            <insertionPoint
+                  name="expand">
+            </insertionPoint>
+            <insertionPoint
+                  name="group.port">
+            </insertionPoint>
+            <insertionPoint
+                  name="group.reorgnize">
+            </insertionPoint>
+            <insertionPoint
+                  name="group.build">
+            </insertionPoint>
+            <insertionPoint
+                  name="group.search">
+            </insertionPoint>
+            <insertionPoint
+                  name="additions">
+            </insertionPoint>
+            <insertionPoint
+                  name="group.properties">
             </insertionPoint>
          </popupMenu>
       </viewer>
@@ -81,10 +110,10 @@
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
       <navigatorContent
-            contentProvider="com.gknsintermetals.eclipse.resourcebundle.manager.viewer.ResourceBundleContentProvider"
+            contentProvider="org.eclipselabs.tapiji.tools.rbmanager.viewer.ResourceBundleContentProvider"
             icon="icons/resourcebundle.gif"
-            id="com.gknsintermetals.eclipse.resourcebundle.manager.resourcebundleContent"
-            labelProvider="com.gknsintermetals.eclipse.resourcebundle.manager.viewer.ResourceBundleLabelProvider"
+            id="org.eclipselabs.tapiji.tools.rbmanager.resourcebundleContent"
+            labelProvider="org.eclipselabs.tapiji.tools.rbmanager.viewer.ResourceBundleLabelProvider"
             name="Resource Bundle Content"
             priority="high">
          <triggerPoints>
@@ -93,7 +122,7 @@
                      value="org.eclipse.core.resources.IWorkspaceRoot">
                </instanceof>
                <instanceof
-                     value="com.gknsintermetals.eclipse.resourcebundle.manager.model.VirtualResourceBundle">
+                     value="org.eclipselabs.tapiji.tools.rbmanager.model.VirtualResourceBundle">
                </instanceof>
                <instanceof
                      value="org.eclipse.core.resources.IContainer">
@@ -109,7 +138,7 @@
                      value="org.eclipse.core.resources.IContainer">
                </instanceof>
                <instanceof
-                     value="com.gknsintermetals.eclipse.resourcebundle.manager.model.VirtualResourceBundle">
+                     value="org.eclipselabs.tapiji.tools.rbmanager.model.VirtualResourceBundle">
                </instanceof>
                <and>
                   <instanceof
@@ -122,16 +151,17 @@
                </and>
             </or></possibleChildren>
          <actionProvider
-               class="com.gknsintermetals.eclipse.resourcebundle.manager.viewer.actions.ActionRBProvider"
-               id="com.gknsintermetals.eclipse.resourcebundle.manager.action.openProvider">
+               class="org.eclipselabs.tapiji.tools.rbmanager.viewer.actions.VirtualRBActionProvider"
+               id="org.eclipselabs.tapiji.tools.rbmanager.action.openProvider">
             <enablement>
                <instanceof
-                     value="com.gknsintermetals.eclipse.resourcebundle.manager.model.VirtualResourceBundle">
+                     value="org.eclipselabs.tapiji.tools.rbmanager.model.VirtualResourceBundle">
                </instanceof>
             </enablement>
          </actionProvider>
          <actionProvider
-               class="com.gknsintermetals.eclipse.resourcebundle.manager.HoverProvider">
+               class="org.eclipselabs.tapiji.tools.rbmanager.viewer.actions.GeneralActionProvider"
+               id="org.eclipselabs.tapiji.tools.rbmanager.action.general">
          </actionProvider>
       </navigatorContent>
    </extension>
@@ -139,16 +169,16 @@
          point="org.eclipse.ui.navigator.navigatorContent">
       <commonFilter
             activeByDefault="false"
-            class="com.gknsintermetals.eclipse.resourcebundle.manager.viewer.filters.ProblematicResourceBundleFilter"
-            id="com.gknsintermetals.eclipse.resourcebundle.manager.filter.ProblematicResourceBundleFiles"
+            class="org.eclipselabs.tapiji.tools.rbmanager.viewer.filters.ProblematicResourceBundleFilter"
+            id="org.eclipselabs.tapiji.tools.rbmanager.filter.ProblematicResourceBundleFiles"
             name="Problematic Resource Bundle Files">
       </commonFilter>
    </extension>
    <extension
          point="org.eclipse.ui.navigator.linkHelper">
       <linkHelper
-            class="com.gknsintermetals.eclipse.resourcebundle.manager.viewer.LinkHelper"
-            id="com.gknsintermetals.eclipse.resourcebundle.manager.linkHelper">
+            class="org.eclipselabs.tapiji.tools.rbmanager.viewer.LinkHelper"
+            id="org.eclipselabs.tapiji.tools.rbmanager.linkHelper">
         <selectionEnablement>
              <instanceof value="org.eclipse.core.resources.IFile"/>
           </selectionEnablement>
@@ -156,15 +186,12 @@
              <instanceof value="org.eclipse.ui.IFileEditorInput"/>
           </editorInputEnablement>
       </linkHelper>
-   </extension> 
+   </extension>
    <extension
          point="org.eclipselabs.tapiji.tools.core.builderExtension">
       <i18nAuditor
-            class="com.gknsintermetals.eclipse.resourcebundle.manager.auditor.ResourceBundleAuditor">
+            class="org.eclipselabs.tapiji.tools.rbmanager.auditor.ResourceBundleAuditor">
       </i18nAuditor>
-   </extension>
-   <extension
-         point="org.eclipse.ui.preferencePages">
    </extension>
 
 </plugin>
