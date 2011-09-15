@@ -130,6 +130,35 @@ public class PDEUtils {
     	else return null;
     }
 
+    public static boolean isFragment(IProject pluginProject){
+    	String pluginId = PDEUtils.getPluginId(pluginProject);
+		if (pluginId == null)
+			return false;
+		String fragmentId = getFragmentId(pluginProject, getPluginId(getFragmentHost(pluginProject)));
+		if (fragmentId != null)
+			return true;
+		else
+			return false;
+    }
+    
+    public static List<IProject> getFragments(IProject hostProject){
+    	List<IProject> fragmentIds = new ArrayList<IProject>();
+    	
+    	String pluginId = PDEUtils.getPluginId(hostProject);
+    	IProject[] projects = hostProject.getWorkspace().getRoot().getProjects();
+    	
+    	for (int i = 0; i < projects.length; i++) {
+			IProject project = projects[i];
+			if (!project.isOpen())
+				continue;
+			if (getFragmentId(project, pluginId) == null)
+				continue;
+			fragmentIds.add(project);
+		}
+    	
+    	return fragmentIds;
+    }
+    
     /**
 	 * Returns the fragment-id of the project if it is a fragment project with
 	 * the specified host plugin id as host. Else null is returned.

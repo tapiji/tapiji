@@ -42,5 +42,7 @@ public interface IBundleGroup {
 	void uncommentKey(String id);
 
 	void renameKey(String oldItemKey, String newItemKey);
+	
+	Set<String> refreshKeys();
 
 }

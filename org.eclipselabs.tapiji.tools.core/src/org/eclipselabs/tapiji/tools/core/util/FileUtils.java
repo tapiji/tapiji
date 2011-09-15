@@ -23,8 +23,9 @@ public class FileUtils {
     protected static String readFileAsString(File filePath) {
     	String content = "";
     	
+    	if (!filePath.exists()) return content;
     	try {
-	        BufferedReader fileReader = new BufferedReader(new FileReader(filePath));
+    		BufferedReader fileReader = new BufferedReader(new FileReader(filePath));
 	        String line = "";
 	        
 	        while ((line = fileReader.readLine()) != null) {

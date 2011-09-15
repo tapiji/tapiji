@@ -3,6 +3,8 @@ package org.eclipselabs.tapiji.tools.core.ui.menus;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -12,10 +14,10 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuAdapter;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -23,13 +25,19 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 import org.eclipselabs.tapiji.tools.core.builder.InternationalizationNature;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipselabs.tapiji.tools.core.ui.dialogs.AddLanguageDialoge;
+import org.eclipselabs.tapiji.tools.core.ui.dialogs.FragmentProjectSelectionDialog;
 import org.eclipselabs.tapiji.tools.core.ui.dialogs.GenerateBundleAccessorDialog;
+import org.eclipselabs.tapiji.tools.core.ui.dialogs.RemoveLanguageDialoge;
+import org.eclipselabs.tapiji.tools.core.util.FragmentProjectUtils;
+import org.eclipselabs.tapiji.tools.core.util.LanguageUtils;
 
 
 public class InternationalizationMenu extends ContributionItem {
@@ -38,6 +46,8 @@ public class InternationalizationMenu extends ContributionItem {
 	
 	private MenuItem mnuToggleInt;
 	private MenuItem excludeResource;
+	private MenuItem addLanguage;
+	private MenuItem removeLanguage;
 	
 	public InternationalizationMenu() {}
 
@@ -72,15 +82,42 @@ public class InternationalizationMenu extends ContributionItem {
 			}
 
 		});
+		
+		new MenuItem(menu, index+2);
+		
+		// Add Language
+		addLanguage = new MenuItem(menu, index);
+		addLanguage.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				runAddLanguage();
+			}
+			
+		});
+		
+		// Remove Language	
+		removeLanguage = new MenuItem(menu, index);
+		removeLanguage.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				runRemoveLanguage();
+			}
+			
+		});
+		
 		menu.addMenuListener(new MenuAdapter () {
 			public void menuShown (MenuEvent e) {
 				updateStateToggleInt (mnuToggleInt);
 				//updateStateGenRBAccessor (generateAccessor);
 				updateStateExclude (excludeResource);
+				updateStateAddLanguage (addLanguage);
+				updateStateRemoveLanguage (removeLanguage);
 			}
 		});
 	}
-	
+
 	protected void runGenRBAccessor () {
 		GenerateBundleAccessorDialog dlg = new GenerateBundleAccessorDialog(Display.getDefault().getActiveShell());
 		if (dlg.open() != InputDialog.OK)
@@ -246,6 +283,67 @@ public class InternationalizationMenu extends ContributionItem {
 		} catch (Exception e) {}
 	}
 
+	protected void updateStateAddLanguage(MenuItem menuItem){
+		Collection<IProject> projects = getSelectedProjects();
+		menuItem.setText("Add Language");
+		menuItem.setEnabled(projects.size() > 0);
+	}
+	
+	protected void runAddLanguage() {	
+		AddLanguageDialoge dialog = new AddLanguageDialoge(new Shell(Display.getCurrent()));
+		if (dialog.open() == InputDialog.OK) {
+			Locale locale = dialog.getSelectedLanguage();
+			
+			Collection<IProject> selectedProjects =  getSelectedProjects();
+			for (IProject project :  selectedProjects){
+				//check if project is fragmentproject and continue working with the hostproject, if host not member of selectedProjects
+				if (FragmentProjectUtils.isFragment(project)){
+					IProject host = FragmentProjectUtils.getFragmentHost(project);
+					if (!selectedProjects.contains(host))
+						project = host;
+					else
+						continue;
+				}
+				
+				List<IProject> fragments = FragmentProjectUtils.getFragments(project);
+				
+				if (!fragments.isEmpty()) {
+					FragmentProjectSelectionDialog fragmentDialog = new FragmentProjectSelectionDialog(
+							Display.getCurrent().getActiveShell(), project,
+							fragments);
+					
+					if (fragmentDialog.open() == InputDialog.OK)
+						project = fragmentDialog.getSelectedProject();
+				}
+				
+				LanguageUtils.addLanguageToProject(project, locale);
+			}
+		}
+	}
+	
+	
+	protected void updateStateRemoveLanguage(MenuItem menuItem) {
+		Collection<IProject> projects = getSelectedProjects();
+		menuItem.setText("Remove Language");
+		menuItem.setEnabled(projects.size() == 1 /*&& more than one common languages contained*/);
+	}
 
+	protected void runRemoveLanguage() {
+		IProject project = getSelectedProjects().iterator().next();
+		RemoveLanguageDialoge dialog = new RemoveLanguageDialoge(project, new Shell(Display.getCurrent()));
+				
+		if (dialog.open() == InputDialog.OK) {
+			Locale locale = dialog.getSelectedLanguage();
+			if (locale != null) {
+				String message = "Do you really want remove all properties-files for "+locale.getDisplayName();
+
+				MessageDialog messageDialog = new MessageDialog(Display.getCurrent().getActiveShell(), "Delete Warning", null,
+						message, MessageDialog.WARNING, new String[] {"Cancel", "Delete" }, 0);
+
+				if (messageDialog.open() == 1)
+					LanguageUtils.removeLanguageFromProject(project, locale);
+			}
+		}
+	}
 	
 }

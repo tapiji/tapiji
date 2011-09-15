@@ -319,7 +319,7 @@ public class BundleGroup extends Model implements IBundleVisitable, IBundleGroup
      * @return <code>List</code> of resource bundle keys.
      */
 //    public Set getKeys() {
-    private Set<String> refreshKeys() {
+    public Set<String> refreshKeys() {
         //Set keys = new TreeSet();
         keys.clear();
         for (Iterator iter = iterator(); iter.hasNext();) {

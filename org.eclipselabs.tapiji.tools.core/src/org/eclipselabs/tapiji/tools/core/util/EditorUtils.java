@@ -27,9 +27,9 @@ public class EditorUtils {
 	public static final String MESSAGE_BROKEN_RESOURCE_REFERENCE = "Cannot find the key ''{0}'' within the resource-bundle ''{1}''";
 	public static final String MESSAGE_BROKEN_RESOURCE_BUNDLE_REFERENCE = "The resource bundle with id ''{0}'' cannot be found";
 	
-	public static final String MESSAGE_UNSPECIFIED_KEYS  = "Missing or unspecified key ''{0}'' has been found";
+	public static final String MESSAGE_UNSPECIFIED_KEYS  = "Missing or unspecified key ''{0}'' has been found in ''{1}''";
 	public static final String MESSAGE_SAME_VALUE  = "''{0}'' and ''{1}'' have the same translation for the key ''{2}''";
-	public static final String MESSAGE_MISSING_LANGUAGE = " ResourceBundle ''{0}'' lacks a translation for ''{1}''";
+	public static final String MESSAGE_MISSING_LANGUAGE = "ResourceBundle ''{0}'' lacks a translation for ''{1}''";
 	
 	/** Editor ids **/
 	public static final String RESOURCE_BUNDLE_EDITOR = "com.essiembre.eclipse.rbe.ui.editor.ResourceBundleEditor";
@@ -121,7 +121,7 @@ public class EditorUtils {
 	 */
 	private static boolean deleteAllAuditRBMarkersFromRB(IResource resource) throws CoreException{
 //		if (resource.findMarkers(RB_MARKER_ID, false, IResource.DEPTH_INFINITE).length > 0)
-			if (RBFileUtils.checkIsResourceBundleFile(resource)){
+			if (RBFileUtils.isResourceBundleFile(resource)){
 				String rbId = RBFileUtils.getCorrespondingResourceBundleId((IFile)resource);
 				if (rbId==null) return true;								//file in no resourcebundle
 				

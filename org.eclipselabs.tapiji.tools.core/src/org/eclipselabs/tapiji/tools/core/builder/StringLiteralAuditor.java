@@ -21,10 +21,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipselabs.tapiji.tools.core.Activator;
 import org.eclipselabs.tapiji.tools.core.Logger;
 import org.eclipselabs.tapiji.tools.core.builder.analyzer.RBAuditor;
-import org.eclipselabs.tapiji.tools.core.builder.analyzer.ResourceBundleDetectionVisitor;
 import org.eclipselabs.tapiji.tools.core.builder.analyzer.ResourceFinder;
 import org.eclipselabs.tapiji.tools.core.extensions.I18nAuditor;
 import org.eclipselabs.tapiji.tools.core.extensions.I18nRBAuditor;
@@ -33,17 +34,20 @@ import org.eclipselabs.tapiji.tools.core.extensions.ILocation;
 import org.eclipselabs.tapiji.tools.core.extensions.IMarkerConstants;
 import org.eclipselabs.tapiji.tools.core.model.exception.NoSuchResourceAuditorException;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipselabs.tapiji.tools.core.model.preferences.TapiJIPreferences;
 import org.eclipselabs.tapiji.tools.core.util.EditorUtils;
 import org.eclipselabs.tapiji.tools.core.util.RBFileUtils;
 
 
-public class StringLiteralAuditor extends IncrementalProjectBuilder {
+public class StringLiteralAuditor extends IncrementalProjectBuilder{
 
 	public static final String BUILDER_ID = Activator.PLUGIN_ID
 			+ ".I18NBuilder";
 
 	private static I18nAuditor[] resourceAuditors;
 	private static Set<String> supportedFileEndings;
+	private static IPropertyChangeListener listner;
+	
 
 	static {
 		List<I18nAuditor> auditors = new ArrayList<I18nAuditor>();
@@ -67,6 +71,9 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder {
 		}
 
 		resourceAuditors = auditors.toArray(new I18nAuditor[auditors.size()]);
+		
+		listner = new BuilderPropertyChangeListener();
+		TapiJIPreferences.addPropertyChangeListener(listner);
 	}
 
 	public StringLiteralAuditor() {
@@ -131,11 +138,6 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder {
 			ResourceFinder csrav = new ResourceFinder(getSupportedFileExt());
 			resDelta.accept(csrav);
 			auditResources(csrav.getResources(), monitor, getProject());
-
-			// check if a resource bundle has been added or deleted
-			// TODO check only ADD and DELETE deltas
-			resDelta.accept(new ResourceBundleDetectionVisitor(
-					ResourceBundleManager.getManager(getProject())));
 		} catch (CoreException e) {
 			Logger.logError(e);
 		}
@@ -156,10 +158,6 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder {
 			ResourceFinder csrav = new ResourceFinder(getSupportedFileExt());
 			proj.accept(csrav);
 			auditResources(csrav.getResources(), monitor, proj);
-
-			// check if a resource bundle has been added or deleted
-			proj.accept(new ResourceBundleDetectionVisitor(
-					ResourceBundleManager.getManager(proj)));
 		} catch (CoreException e) {
 			Logger.logError(e);
 		}
@@ -190,8 +188,16 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder {
 
 			if (ResourceBundleManager.isResourceExcluded(resource))
 				continue;
-
+			
+			if (!resource.exists())
+				continue;
+			
 			for (I18nAuditor ra : resourceAuditors) {
+				if (ra instanceof I18nResourceAuditor && !(TapiJIPreferences.getAuditResource()))
+					continue;
+				if (ra instanceof I18nRBAuditor && !(TapiJIPreferences.getAuditRb()))
+					continue;
+				
 				try {
 					if (monitor.isCanceled()) {
 						monitor.done();
@@ -285,47 +291,51 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder {
 	private void handleI18NAuditorMarkers(I18nRBAuditor ra){
 		try {
 			//Report all unspecified keys
-			for (ILocation problem : ra.getUnspecifiedKeyReferences()) {
-				EditorUtils.reportToRBMarker(
-						EditorUtils.getFormattedMessage(
-								EditorUtils.MESSAGE_UNSPECIFIED_KEYS,
-								new String[] {problem.getLiteral()}),
-						problem,
-						IMarkerConstants.CAUSE_UNSPEZIFIED_KEY,
-						problem.getLiteral(),"",
-						(ILocation) problem.getData(),
-						ra.getContextId());
-			}
+			if (TapiJIPreferences.getAuditMissingValue())
+				for (ILocation problem : ra.getUnspecifiedKeyReferences()) {
+					EditorUtils.reportToRBMarker(
+							EditorUtils.getFormattedMessage(
+									EditorUtils.MESSAGE_UNSPECIFIED_KEYS,
+									new String[] {problem.getLiteral(), problem.getFile().getName()}),
+							problem,
+							IMarkerConstants.CAUSE_UNSPEZIFIED_KEY,
+							problem.getLiteral(),"",
+							(ILocation) problem.getData(),
+							ra.getContextId());
+				}
 	
 			//Report all same values
-			Map<ILocation,ILocation> sameValues = ra.getSameValuesReferences();			
-			for (ILocation problem : sameValues.keySet()) {
-				EditorUtils.reportToRBMarker(
-						EditorUtils.getFormattedMessage(
-								EditorUtils.MESSAGE_SAME_VALUE, 
-								new String[] {problem.getFile().getName(),
-								sameValues.get(problem).getFile().getName(),
-								problem.getLiteral()}),
-						problem,
-						IMarkerConstants.CAUSE_SAME_VALUE,
-						problem.getLiteral(),
-						sameValues.get(problem).getFile().getName(),
-						(ILocation) problem.getData(),
-						ra.getContextId());
+			if(TapiJIPreferences.getAuditSameValue()){
+				Map<ILocation,ILocation> sameValues = ra.getSameValuesReferences();			
+				for (ILocation problem : sameValues.keySet()) {
+					EditorUtils.reportToRBMarker(
+							EditorUtils.getFormattedMessage(
+									EditorUtils.MESSAGE_SAME_VALUE, 
+									new String[] {problem.getFile().getName(),
+									sameValues.get(problem).getFile().getName(),
+									problem.getLiteral()}),
+							problem,
+							IMarkerConstants.CAUSE_SAME_VALUE,
+							problem.getLiteral(),
+							sameValues.get(problem).getFile().getName(),
+							(ILocation) problem.getData(),
+							ra.getContextId());
+				}
 			}
 			// Report all missing languages
-			for (ILocation problem : ra.getMissingLanguageReferences()) {
-				EditorUtils.reportToRBMarker(
-						EditorUtils.getFormattedMessage(
-								EditorUtils.MESSAGE_MISSING_LANGUAGE, 
-								new String[] {RBFileUtils.getCorrespondingResourceBundleId(problem.getFile()),
-								problem.getLiteral()}),
-						problem,
-						IMarkerConstants.CAUSE_MISSING_LANGUAGE,
-						problem.getLiteral(),"",
-						(ILocation) problem.getData(),
-						ra.getContextId());
-			}
+			if (TapiJIPreferences.getAuditMissingLanguage())
+				for (ILocation problem : ra.getMissingLanguageReferences()) {
+					EditorUtils.reportToRBMarker(
+							EditorUtils.getFormattedMessage(
+									EditorUtils.MESSAGE_MISSING_LANGUAGE, 
+									new String[] {RBFileUtils.getCorrespondingResourceBundleId(problem.getFile()),
+									problem.getLiteral()}),
+							problem,
+							IMarkerConstants.CAUSE_MISSING_LANGUAGE,
+							problem.getLiteral(),"",
+							(ILocation) problem.getData(),
+							ra.getContextId());
+				}
 		} catch (Exception e) {
 			Logger.logError("Exception during reporting of Internationalization errors", e);
 		}

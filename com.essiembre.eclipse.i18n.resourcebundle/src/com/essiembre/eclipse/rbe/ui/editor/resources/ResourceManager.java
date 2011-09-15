@@ -72,6 +72,7 @@ public class ResourceManager implements IResourceChangeListener {
     /*default*/ final Map<Locale, SourceEditor> sourceEditors = new HashMap<Locale, SourceEditor>();
     private final Collection<Locale> locales = new ArrayList<Locale>();
     private Set<IBundleChangeListener> changeListeners = new HashSet<IBundleChangeListener>();
+    private IDeltaListener bundleGroupDeltaListner;
     
     /**
      * Constructor.
@@ -95,7 +96,8 @@ public class ResourceManager implements IResourceChangeListener {
             // Add resource change listener to current resource bundle instance
             ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
         }
-        bundleGroup.addListener(new IDeltaListener() {
+        
+        bundleGroupDeltaListner = new IDeltaListener() {
             public void add(DeltaEvent event) {}    // do nothing
             public void remove(DeltaEvent event) {} // do nothing
             public void modify(DeltaEvent event) {
@@ -109,7 +111,8 @@ public class ResourceManager implements IResourceChangeListener {
             }
             public void select(DeltaEvent event) {
             }
-        });
+        };
+        bundleGroup.addListener(bundleGroupDeltaListner);
         
         KeyTreeUpdater treeUpdater = null;
         if (RBEPreferences.getKeyTreeHierarchical()) {
@@ -354,6 +357,7 @@ public class ResourceManager implements IResourceChangeListener {
 
 	public void removeChangeListener() {
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
+		bundleGroup.removeListener(bundleGroupDeltaListner);
 	}
 
 }

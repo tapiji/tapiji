@@ -27,5 +27,6 @@ Export-Package: org.eclipselabs.tapiji.tools.core.builder,
  org.eclipselabs.tapiji.tools.core.builder.quickfix,
  org.eclipselabs.tapiji.tools.core.extensions,
  org.eclipselabs.tapiji.tools.core.model.manager,
+ org.eclipselabs.tapiji.tools.core.model.preferences,
  org.eclipselabs.tapiji.tools.core.ui.dialogs,
  org.eclipselabs.tapiji.tools.core.util

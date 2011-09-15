@@ -23,7 +23,7 @@ public class ResourceBundleDetectionVisitor implements IResourceVisitor,
 	@Override
 	public boolean visit(IResource resource) throws CoreException {
 		try {
-			if (RBFileUtils.checkIsResourceBundleFile(resource)) {
+			if (RBFileUtils.isResourceBundleFile(resource)) {
 				Logger.logInfo("Loading Resource-Bundle file '" + resource.getName() + "'");
  				if (!ResourceBundleManager.isResourceExcluded(resource))
 					manager.addBundleResource(resource);
@@ -38,12 +38,13 @@ public class ResourceBundleDetectionVisitor implements IResourceVisitor,
 	@Override
 	public boolean visit(IResourceDelta delta) throws CoreException {
 		IResource resource = delta.getResource();
-		
-		if (ResourceUtils.isResourceBundle(resource)) {
+
+		if (RBFileUtils.isResourceBundleFile(resource)) {
 			ResourceBundleManager.getManager(resource.getProject()).bundleResourceModified(delta);
 			return false;
-		} else
-			return true;
+		}
+		
+		return true;
 	}
 	
 }

@@ -11,7 +11,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferencePage;
+import org.eclipselabs.tapiji.tools.core.Activator;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipselabs.tapiji.tools.core.model.preferences.CheckItem;
+import org.eclipselabs.tapiji.tools.core.model.preferences.TapiJIPreferences;
 
 
 /**
@@ -26,11 +31,25 @@ public class RBFileUtils extends Action{
 	/**
 	 * Check whether a file is a properties-file/resourcebundle-file
 	 */
-	public static boolean checkIsResourceBundleFile(IResource file) {
-		if (!(file instanceof IFile)) return false;
-		if (file.getName().equals("build.properties")) return false;
-		if (!ResourceUtils.isResourceBundle(file)) return false;
-		return true;
+	public static boolean isResourceBundleFile(IResource file) {
+		boolean isValied = false;
+		
+		if (file != null && file instanceof IFile && !file.isDerived() && 
+				file.getFileExtension()!=null && file.getFileExtension().equalsIgnoreCase("properties")){
+			isValied = true;
+			
+			//Check if file is not in the blacklist
+			IPreferenceStore pref = Activator.getDefault().getPreferenceStore();
+			if (pref != null){
+				List<CheckItem> list = TapiJIPreferences.getNonRbPattern();
+				for (CheckItem item : list){
+					if (item.getChecked() && file.getFullPath().toString().matches(item.getName()))
+						isValied = false;
+				}
+			}
+		}
+		
+		return isValied;
 	}
 	
 	/**
@@ -138,7 +157,7 @@ public class RBFileUtils extends Action{
 		ResourceBundleManager rbmanager =  ResourceBundleManager.getManager(file.getProject());
 		String possibleRBId = null;
 		
-		if (checkIsResourceBundleFile((IFile) file)) {
+		if (isResourceBundleFile((IFile) file)) {
 			possibleRBId = ResourceBundleManager.getResourceBundleId(file);
 
 			for (String rbId : rbmanager.getResourceBundleIdentifiers()){

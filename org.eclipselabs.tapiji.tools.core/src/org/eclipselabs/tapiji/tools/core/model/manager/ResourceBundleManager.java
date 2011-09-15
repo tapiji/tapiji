@@ -17,17 +17,23 @@ import java.util.TreeMap;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.XMLMemento;
 import org.eclipselabs.tapiji.tools.core.Logger;
@@ -41,7 +47,8 @@ import org.eclipselabs.tapiji.tools.core.model.ResourceDescriptor;
 import org.eclipselabs.tapiji.tools.core.model.exception.ResourceBundleException;
 import org.eclipselabs.tapiji.tools.core.util.EditorUtils;
 import org.eclipselabs.tapiji.tools.core.util.FileUtils;
-import org.eclipselabs.tapiji.tools.core.util.PDEUtils;
+import org.eclipselabs.tapiji.tools.core.util.FragmentProjectUtils;
+import org.eclipselabs.tapiji.tools.core.util.RBFileUtils;
 import org.eclipselabs.tapiji.tools.core.util.ResourceUtils;
 import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundle;
 import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleEntry;
@@ -83,6 +90,8 @@ public class ResourceBundleManager{
 	private static Map<String, Set<IResource>> allBundles = 
 		new HashMap<String, Set<IResource>> ();
 	
+	private static IResourceChangeListener changelistner;
+	
 	/*Host project*/
 	private IProject project = null;
 	
@@ -105,8 +114,8 @@ public class ResourceBundleManager{
 			loadManagerState();
 		
 		// set host-project
-		if (PDEUtils.isFragment(project))
-			project =  PDEUtils.getFragmentHost(project);
+		if (FragmentProjectUtils.isFragment(project))
+			project =  FragmentProjectUtils.getFragmentHost(project);
 		
 		
 		ResourceBundleManager manager = rbmanager.get(project);
@@ -120,12 +129,24 @@ public class ResourceBundleManager{
 	}
 	
 	public void loadResourceBundle (String bundleName) {
+		if (resourceBundles.containsKey(bundleName))
+			return;
+		else 
+			changeResourceBundle(bundleName);
+	}
+	
+	public void changeResourceBundle(final String bundleName){
 		if (!resources.containsKey(bundleName))
 			return;
 		
-		for (IResource resource : resources.get(bundleName)) {
-			loadResource (bundleName, resource);
-		}
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				for (IResource resource : resources.get(bundleName)) {
+					loadResource (bundleName, resource);
+				}
+			}
+		});
 	}
 	
 	public Set<Locale> getProvidedLocales (String bundleName) {
@@ -169,6 +190,7 @@ public class ResourceBundleManager{
 			bundle.addBundle(locale, bundleFile);
 			resourceBundles.put(bundleName, bundle);
 		} catch (Exception e) {
+			Logger.logError(e);
 		}
 	}
 	
@@ -210,11 +232,12 @@ public class ResourceBundleManager{
 	protected void unloadResource (String bundleName, IResource resource) {
 		// TODO implement more efficient
 		unloadResourceBundle(bundleName);
-		loadResourceBundle(bundleName);
+//		loadResourceBundle(bundleName);
 	}	
 	
 	public void bundleResourceModified (IResourceDelta delta) {
-		IResource resource = delta.getResource();
+		IResource resource = delta.getResource();			
+		if (resource == null) return;
 		String bundleName = getResourceBundleId(resource);
 		Set<IResource> res;
 		int changeType = -1;
@@ -234,18 +257,22 @@ public class ResourceBundleManager{
 		case IResourceDelta.REMOVED:
 			changeType = ResourceBundleChangedEvent.DELETED;
 			res = resources.get(bundleName);
-			res.remove(resource);
-			resources.put(bundleName, res);
-			allBundles.put(bundleName, new HashSet<IResource>(res));
-			
-			if (resourceBundles.containsKey(bundleName))
-				unloadResource(bundleName, resource);
+			if (res != null && res.contains(resource)) {
+				res.remove(resource);
+				resources.put(bundleName, res);
+				allBundles.put(bundleName, new HashSet<IResource>(res));
+
+				if (resourceBundles.containsKey(bundleName))
+					unloadResource(bundleName, resource);
+			}
 			break;
 		case IResourceDelta.CHANGED:
+			if (delta.getFlags() == IResourceDelta.MARKERS)
+				return;
+			
 			changeType = ResourceBundleChangedEvent.MODIFIED;
 			// TODO implement more efficient
-			unloadResourceBundle(bundleName);
-			loadResourceBundle(bundleName);
+			changeResourceBundle(bundleName);
 			break;
 			default:
 				break;
@@ -376,7 +403,7 @@ public class ResourceBundleManager{
 		try {		
 			project.accept(new ResourceBundleDetectionVisitor(this));
 			
-			IProject[] fragments = PDEUtils.lookupFragment(project);
+			IProject[] fragments = FragmentProjectUtils.lookupFragment(project);
 			if (fragments != null){
 				for (IProject p :  fragments){
 					p.accept(new ResourceBundleDetectionVisitor(this));
@@ -470,7 +497,7 @@ public class ResourceBundleManager{
 		fireResourceExclusionEvent(new ResourceExclusionEvent(changedExclusoins));
 		
 		// Check if the excluded resource represents a resource-bundle
-		if (ResourceUtils.isResourceBundle(res)) {
+		if (RBFileUtils.isResourceBundleFile(res)) {
 			String bundleName = getResourceBundleId(res);
 			Set<IResource> resSet = resources.remove(bundleName);
 			if (resSet != null) {
@@ -574,7 +601,7 @@ public class ResourceBundleManager{
 		(new StringLiteralAuditor()).buildResource(res, null);
 		
 		// Check if the included resource represents a resource-bundle
-		if (ResourceUtils.isResourceBundle(res)) {
+		if (RBFileUtils.isResourceBundleFile(res)) {
 			String bundleName = getResourceBundleId(res);
 			boolean newRB = resources.containsKey(bundleName);
 			
@@ -607,7 +634,7 @@ public class ResourceBundleManager{
 		
 		do {
 			if (excludedResources.contains(new ResourceDescriptor(resource))) {
-				if (ResourceUtils.isResourceBundle(resource)) {
+				if (RBFileUtils.isResourceBundleFile(resource)) {
 					Set<IResource> resources = allBundles.remove(getResourceBundleName(resource));
 					if (resources == null)
 						resources = new HashSet<IResource> ();
@@ -645,6 +672,9 @@ public class ResourceBundleManager{
 		} catch (Exception e) {
 			// do nothing
 		}
+		
+		changelistner = new RBChangeListner();
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(changelistner, IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
 	}
 
 	private static void loadManagerState(XMLMemento memento) {
@@ -707,8 +737,8 @@ public class ResourceBundleManager{
 				return getManager(p);
 			
 			//check if the projectName is a fragment and return the manager for the host
-			if(PDEUtils.isFragment(p))
-				return getManager(PDEUtils.getFragmentHost(p));				
+			if(FragmentProjectUtils.isFragment(p))
+				return getManager(FragmentProjectUtils.getFragmentHost(p));				
 		}
 		return null;
 	}

@@ -196,5 +196,31 @@
          </enablement>
       </decorator>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.eclipselabs.tapiji.tools.core.ui.prefrences.TapiHomePreferencePage"
+            id="org.eclipselabs.tapiji.tools.core.TapiJIGeneralPrefPage"
+            name="TapiJI">
+      </page>
+      <page
+            category="org.eclipselabs.tapiji.tools.core.TapiJIGeneralPrefPage"
+            class="org.eclipselabs.tapiji.tools.core.ui.prefrences.FilePreferencePage"
+            id="org.eclipselabs.tapiji.tools.core.FilePrefPage"
+            name="File Settings">
+      </page>
+      <page
+            category="org.eclipselabs.tapiji.tools.core.TapiJIGeneralPrefPage"
+            class="org.eclipselabs.tapiji.tools.core.ui.prefrences.BuilderPreferencePage"
+            id="org.eclipselabs.tapiji.tools.core.BuilderPrefPage"
+            name="Builder Settings">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipselabs.tapiji.tools.core.model.preferences.TapiJIPreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

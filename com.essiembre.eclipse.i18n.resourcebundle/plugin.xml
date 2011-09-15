@@ -62,9 +62,10 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            name="%editor.rbe"
+            category="org.eclipselabs.tapiji.tools.core.TapiJIGeneralPrefPage"
             class="com.essiembre.eclipse.rbe.ui.preferences.RBEGeneralPrefPage"
-            id="com.essiembre.eclipse.rbe.ui.preferences.RBEGeneralPrefPage">
+            id="com.essiembre.eclipse.rbe.ui.preferences.RBEGeneralPrefPage"
+            name="%editor.rbe">
       </page>
       <page
             class="com.essiembre.eclipse.rbe.ui.preferences.RBEFormattingPrefPage"

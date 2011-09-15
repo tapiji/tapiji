@@ -1,6 +1,12 @@
 package org.eclipselabs.tapiji.tools.core.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 
 
@@ -34,17 +40,6 @@ public class ResourceUtils {
 		return nameProposal;
 	}
 	
-	public static boolean isResourceBundle (IResource res) {
-		boolean result = false;
-		
-		if (res != null && res.getType() == IResource.FILE && !res.isDerived() && res.getFileExtension() != null
-			&& res.getFileExtension().equalsIgnoreCase("properties")) {
-			result = true;
-		}
-		
-		return result;
-	}
-	
 	public static boolean isJavaCompUnit (IResource res) {
 		boolean result = false;
 		
@@ -67,4 +62,37 @@ public class ResourceUtils {
 				
 		return result;
 	}
+	
+	/**
+	 * 
+	 * @param baseFolder
+	 * @param targetProjects Projects with a same structure
+	 * @return List of 
+	 */
+	public static List<IContainer> getCorrespondingFolders(IContainer baseFolder, List<IProject> targetProjects){
+    	List<IContainer> correspondingFolder = new ArrayList<IContainer>();
+    	    	
+    	for(IProject p : targetProjects){
+    		IContainer c = getCorrespondingFolders(baseFolder, p);
+    		if (c.exists()) correspondingFolder.add(c);
+    	}
+    	
+    	return correspondingFolder;
+    }
+
+	/**
+	 * 
+	 * @param baseFolder
+	 * @param targetProject
+	 * @return a Container with the corresponding path as the baseFolder. The Container doesn't must exist.
+	 */
+	public static IContainer getCorrespondingFolders(IContainer baseFolder,	IProject targetProject) {
+		IPath relativ_folder = baseFolder.getFullPath().makeRelativeTo(baseFolder.getProject().getFullPath());
+		
+		if (!relativ_folder.isEmpty()) 
+			return targetProject.getFolder(relativ_folder);
+		else 
+			return targetProject;
+	}
+	
 }
