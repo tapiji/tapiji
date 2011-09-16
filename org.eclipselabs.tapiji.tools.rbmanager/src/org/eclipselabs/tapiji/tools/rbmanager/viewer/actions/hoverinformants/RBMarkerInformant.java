@@ -1,7 +1,6 @@
 package org.eclipselabs.tapiji.tools.rbmanager.viewer.actions.hoverinformants;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;

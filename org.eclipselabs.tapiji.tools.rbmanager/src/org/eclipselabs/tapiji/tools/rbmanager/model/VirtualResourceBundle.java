@@ -1,14 +1,9 @@
 package org.eclipselabs.tapiji.tools.rbmanager.model;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.Collection;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IStorage;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 

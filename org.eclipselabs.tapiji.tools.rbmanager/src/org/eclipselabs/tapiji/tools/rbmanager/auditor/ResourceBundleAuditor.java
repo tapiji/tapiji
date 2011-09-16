@@ -99,7 +99,7 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 	}
 
 	/*
-	 * audit all files of a resourcebundle
+	 * audits all files of a resourcebundle
 	 */
 	public void audit(String rbId, ResourceBundleManager rbmanager) {
 		IBundleGroup bundlegroup = rbmanager.getResourceBundle(rbId);
@@ -128,7 +128,7 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 		}
 		
 		if (TapiJIPreferences.getAuditMissingLanguage()){
-			// check if the resourcebundle supports all project-languages
+			// checks if the resourcebundle supports all project-languages
 			Set<Locale> rbLocales = rbmanager.getProvidedLocales(rbId);
 			Set<Locale> projectLocales = rbmanager.getProjectProvidedLocales();
 			
@@ -137,7 +137,7 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 	}
 
 	/*
-	 * Audit the file if the key is not specified. If the value is null report a
+	 * Audits the file if the key is not specified. If the value is null reports a
 	 * problem.
 	 */
 	private boolean auditUnspecifiedKey(IFile f1, String key,
@@ -151,7 +151,7 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 	}
 
 	/*
-	 * Compare a key in different files and report a problem if the value is the
+	 * Compares a key in different files and reports a problem, if the values are
 	 * same.
 	 */
 	private void auditSameValues(IFile f1, IFile f2, String key,
@@ -175,7 +175,7 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 	}
 
 	/*
-	 * check if the resourcebundle supports all project-languages and report
+	 * Checks if the resourcebundle supports all project-languages and report
 	 * missing languages.
 	 */
 	private void auditMissingLanguage(Set<Locale> rbLocales,
@@ -201,7 +201,7 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 	}
 
 	/*
-	 * Find a position the key is located or missing
+	 * Finds a position where the key is located or missing
 	 */
 	private int calculateKeyLine(String key, IFile file) {
 		int linenumber = 1;

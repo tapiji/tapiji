@@ -22,8 +22,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -89,7 +87,6 @@ public class ResourceBundleContentProvider implements ITreeContentProvider, IRes
 //				}
 //			});
 			
-			// Return all IProjects and add Fragments to the vcManager for highlighting
 			try {
 				IResource[] members = ((IWorkspaceRoot)parentElement).members();
 				
@@ -132,9 +129,6 @@ public class ResourceBundleContentProvider implements ITreeContentProvider, IRes
 		return children != null ? children : new Object[0];
 	}
 	
-	/**
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
-	 */
 	@Override
 	public Object getParent(Object element) {
 		if (element instanceof IContainer) {
@@ -256,8 +250,8 @@ public class ResourceBundleContentProvider implements ITreeContentProvider, IRes
 		}
 	}
 	
-	/**
-	 * @return all Resource Bundles and subcontainers with Resource Bundles in the subtree (except the 'bin' folder) of a Container
+	/*
+	 * Returns all ResourceBundles and sub-containers (with ResourceBundles in their subtree) of a Container
 	 */
 	private Object[] addChildren(IContainer container) throws CoreException{
 		Map<String, Object> children = new HashMap<String,Object>();
@@ -265,7 +259,7 @@ public class ResourceBundleContentProvider implements ITreeContentProvider, IRes
 		VirtualProject p = (VirtualProject) vcManager.getContainer(container.getProject());
 		List<IResource> members = new ArrayList<IResource>(Arrays.asList(container.members()));
 		
-		//find files in the corresponding fragment-projects folder	
+		//finds files in the corresponding fragment-projects folder	
 		if (p.hasFragments()){
 			List<IContainer> folders = ResourceUtils.getCorrespondingFolders(container, p.getFragmets());
 			for (IContainer f : folders)
@@ -308,7 +302,7 @@ public class ResourceBundleContentProvider implements ITreeContentProvider, IRes
 							vcManager.addVContainer((IContainer) r, vContainer);
 						}
 					
-						if (vContainer.getRbCount() != 0)									//Don't show folder with no resourcebundles
+						if (vContainer.getRbCount() != 0)									//Don't show folder without resourcebundles
 							children.put(""+children.size(), r);
 				}
 		}

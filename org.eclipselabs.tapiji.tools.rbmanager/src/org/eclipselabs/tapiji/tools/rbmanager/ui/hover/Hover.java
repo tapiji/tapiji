@@ -35,9 +35,6 @@ public class Hover {
 		hoverShell.setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 		hoverShell.setForeground(display.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
 	}
-		
-////		text = "<body style='overflow:hidden'>" + text + "</body>";
-////		infoText.setText(text);
 
 	
 	private void setHoverLocation(Shell shell, Point position) {

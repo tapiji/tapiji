@@ -1,19 +1,13 @@
 package org.eclipselabs.tapiji.tools.rbmanager.viewer.filters;
 
-import java.util.List;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipselabs.tapiji.tools.core.util.EditorUtils;
 import org.eclipselabs.tapiji.tools.core.util.RBFileUtils;
-import org.eclipselabs.tapiji.tools.core.util.ResourceUtils;
-import org.eclipselabs.tapiji.tools.rbmanager.model.VirtualContentManager;
-import org.eclipselabs.tapiji.tools.rbmanager.model.VirtualProject;
 import org.eclipselabs.tapiji.tools.rbmanager.model.VirtualResourceBundle;
 
 
@@ -21,7 +15,7 @@ import org.eclipselabs.tapiji.tools.rbmanager.model.VirtualResourceBundle;
 public class ProblematicResourceBundleFilter extends ViewerFilter {
 	
 	/**
-	 * Shows only the IContainer and VirtualResourcebundles with all his
+	 * Shows only IContainer and VirtualResourcebundles with all his
 	 * properties-files, which have RB_Marker.
 	 */
 	@Override

@@ -4,14 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IContainer;
-import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 
 
 public class VirtualContentManager {
 	private Map<IContainer, VirtualContainer> containers = new HashMap<IContainer, VirtualContainer>();
 	private Map<String, VirtualResourceBundle> vResourceBundles = new HashMap<String, VirtualResourceBundle>();
 	
-	//TODO ? audit with more eclipse-instances
 	static private VirtualContentManager singelton = null;
 	
 	private VirtualContentManager() {

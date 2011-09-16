@@ -11,7 +11,7 @@ import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.ui.navigator.ILinkHelper;
 
 /*
- * Support 'link with editor'
+ * Allows 'link with editor'
  */
 public class LinkHelper implements ILinkHelper {
 

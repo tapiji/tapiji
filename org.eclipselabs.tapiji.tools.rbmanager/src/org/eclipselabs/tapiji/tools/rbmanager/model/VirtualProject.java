@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import javax.xml.bind.annotation.XmlElementRefs;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipselabs.tapiji.tools.core.util.FragmentProjectUtils;
 
@@ -29,12 +27,6 @@ public class VirtualProject extends VirtualContainer{
 			fragmentProjects = FragmentProjectUtils.getFragments(project);
 	}
 	
-	/**
-	 * 
-	 * @param project
-	 * @param isFragment
-	 * @param countResourceBundles
-	 */
 	public VirtualProject(IProject project, boolean isFragment, boolean countResourceBundles){
 		super(project);
 		this.isFragment = isFragment;

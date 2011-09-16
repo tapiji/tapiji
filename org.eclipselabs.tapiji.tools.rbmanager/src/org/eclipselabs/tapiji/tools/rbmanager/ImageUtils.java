@@ -63,9 +63,8 @@ public class ImageUtils {
 	}
 	
 	/**
-	 * 
 	 * @param baseImage
-	 * @return baseImage with a warning-image
+	 * @return baseImage with a overlay warning-image
 	 */
 	public static Image getImageWithWarning(Image baseImage){
 		String imageWithWarningId = baseImage.toString()+".w";
@@ -80,6 +79,11 @@ public class ImageUtils {
 		return imageWithWarning;
 	}
 	
+	/**
+	 * 
+	 * @param baseImage
+	 * @return baseImage with a overlay fragment-image
+	 */
 	public static Image getImageWithFragment(Image baseImage){
 		String imageWithFragmentId = baseImage.toString()+".f";
 		Image imageWithFragment =  imageRegistry.get(imageWithFragmentId);
@@ -94,7 +98,7 @@ public class ImageUtils {
 	}
 	
 	/**
-	 * @return a Image with the flag of the country or if the country is not specified the standard language of given locale
+	 * @return a Image with a flag of the given country
 	 */
 	public static Image getLocalIcon(Locale locale) {
 		String imageName;

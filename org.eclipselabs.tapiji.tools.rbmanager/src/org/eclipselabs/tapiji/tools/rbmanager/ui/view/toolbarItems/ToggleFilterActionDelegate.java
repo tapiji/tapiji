@@ -15,8 +15,7 @@ import org.eclipselabs.tapiji.tools.rbmanager.RBManagerActivator;
 public class ToggleFilterActionDelegate implements IViewActionDelegate {
 	private INavigatorFilterService filterService;
 	private boolean active;
-	private static final String[] FILTER = {RBManagerActivator.PLUGIN_ID+".filter.ProblematicResourceBundleFiles"};
-//	private String[] rememberFilter;	
+	private static final String[] FILTER = {RBManagerActivator.PLUGIN_ID+".filter.ProblematicResourceBundleFiles"};	
 	
 	@Override
 	public void run(IAction action) {		

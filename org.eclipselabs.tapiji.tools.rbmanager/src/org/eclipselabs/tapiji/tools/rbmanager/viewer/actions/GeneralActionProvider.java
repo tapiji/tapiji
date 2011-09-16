@@ -28,7 +28,7 @@ public class GeneralActionProvider extends CommonActionProvider {
 		//init Expand-Action
 		expandAction = new ExpandAction((CommonViewer) aSite.getStructuredViewer());
 		
-		//activate Hover-Helper
+		//activate View-Hover
 		List<HoverInformant> informants = new ArrayList<HoverInformant>();
 		informants.add(new I18NProjectInformant());
 		informants.add(new RBMarkerInformant());
