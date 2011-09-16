@@ -29,7 +29,7 @@ public class RBFileUtils extends Action{
 	
     
 	/**
-	 * Check whether a file is a properties-file/resourcebundle-file
+	 * Returns true if a file is a ResourceBundle-file
 	 */
 	public static boolean isResourceBundleFile(IResource file) {
 		boolean isValied = false;
@@ -53,7 +53,7 @@ public class RBFileUtils extends Action{
 	}
 	
 	/**
-	 * Checks whether a RB-file has a problemmarker
+	 * Checks whether a RB-file has a problem-marker
 	 */
 	public static boolean hasResourceBundleMarker(IResource r){
 		try {
@@ -99,19 +99,14 @@ public class RBFileUtils extends Action{
 	}
 
 	/**
-	 * @return number of resourcebundles in the subtree 
+	 * @return number of ResourceBundles in the subtree 
 	 */
 	public static int countRecursiveResourceBundle(IContainer container) {		
 		return getSubResourceBundle(container).size();
 	}
 	
-	/**
-	 * 
-	 * @param container
-	 * @return
-	 */
+	
 	private static List<String> getSubResourceBundle(IContainer container){
-		// Slower for not deep folder-structure
 		ResourceBundleManager rbmanager = ResourceBundleManager.getManager(container.getProject());
 		
 		String conatinerId = container.getFullPath().toString();
@@ -128,9 +123,8 @@ public class RBFileUtils extends Action{
 	}
 	
 	/**
-	 * 
 	 * @param container
-	 * @return List with all resourcebundles in this container
+	 * @return Set with all ResourceBundles in this container
 	 */
 	public static Set<String> getResourceBundleIds (IContainer container) {
 		Set<String> resourcebundles = new HashSet<String>();
@@ -150,7 +144,7 @@ public class RBFileUtils extends Action{
 	/**
 	 * 
 	 * @param file
-	 * @return ResourceBundle name or null if no ResourceBundle contains file
+	 * @return ResourceBundle-name or null if no ResourceBundle contains the file
 	 */
 	//TODO integrate in ResourceBundleManager
 	public static String getCorrespondingResourceBundleId (IFile file) {

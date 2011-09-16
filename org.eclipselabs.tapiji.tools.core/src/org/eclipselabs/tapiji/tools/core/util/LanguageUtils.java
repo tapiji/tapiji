@@ -45,9 +45,9 @@ public class LanguageUtils {
     }
 	
 	/**
-	 * Checks if ResourceBundle provides a given locale.
-	 * If the locale is not provided, creates a new properties-file with the resourcebundle-basename
-	 * and given the locale.
+	 * Checks if ResourceBundle provides a given locale. If the locale is not
+	 * provided, creates a new properties-file with the ResourceBundle-basename
+	 * and the index of the given locale.
 	 * @param project
 	 * @param rbId
 	 * @param locale
@@ -56,14 +56,6 @@ public class LanguageUtils {
 		ResourceBundleManager rbManager = ResourceBundleManager.getManager(project);
 		
 		if (rbManager.getProvidedLocales(rbId).contains(locale)) return;
-		
-//		Iterator<IResource> it = rbManager.getResourceBundles(rbId).iterator();
-//		IResource f = null;
-//        while (it.hasNext() && !(f=it.next()).getProject().equals(project))		/*?*/
-//        	/*no statement*/;
-//        
-//		final IResource file = f;
-//		final IContainer c = f.getParent();
         
 		final IResource file = rbManager.getRandomFile(rbId);
 		final IContainer c = ResourceUtils.getCorrespondingFolders(file.getParent(), project);
@@ -95,8 +87,8 @@ public class LanguageUtils {
 	
 	
 	/**
-	 * Adds new properties-file for a given locale for all ResourceBundle of a project.
-	 * If a ResourceBundle just contains the language, happe ns nothing.
+	 * Adds new properties-files for a given locale to all ResourceBundles of a project.
+	 * If a ResourceBundle already contains the language, happens nothing.
 	 * @param project
 	 * @param locale
 	 */
@@ -116,7 +108,8 @@ public class LanguageUtils {
 	}
 	
 	/**
-	 * 
+	 * Removes the properties-file of a given locale from a ResourceBundle, if
+	 * the ResourceBundle provides the locale. 
 	 * @param project
 	 * @param rbId
 	 * @param locale
@@ -142,7 +135,7 @@ public class LanguageUtils {
 	}
 	
 	/**
-	 * 
+	 * Removes all properties-files of a given locale from all ResourceBundles of a project.
 	 * @param rbManager
 	 * @param locale
 	 * @return
