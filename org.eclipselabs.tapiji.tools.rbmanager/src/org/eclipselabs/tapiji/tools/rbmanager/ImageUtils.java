@@ -20,7 +20,7 @@ public class ImageUtils {
 	public static final String FRAGMENT_PROJECT_IMAGE = "fragmentproject.gif";
 	public static final String RESOURCEBUNDLE_IMAGE = "resourcebundle.gif";
 	public static final String DEFAULT_LOCALICON = File.separatorChar+"countries"+File.separatorChar+"_f.gif";
-	public static final String LOCATION_WITHOUT_ICON = File.separatorChar+"countries"+File.separatorChar+"UN.gif";
+	public static final String LOCATION_WITHOUT_ICON = File.separatorChar+"countries"+File.separatorChar+"un.gif";
 
 	
 	/**
@@ -101,7 +101,7 @@ public class ImageUtils {
 		Image image = null;
 		
 		if (!locale.getCountry().equals("")){
-			imageName = File.separatorChar+"countries"+File.separatorChar+ locale.getCountry().toUpperCase() +".gif";
+			imageName = File.separatorChar+"countries"+File.separatorChar+ locale.getCountry().toLowerCase() +".gif";
 			image = getBaseImage(imageName);
 		}else {
 			if (!locale.toString().equals("")){
