@@ -1,7 +1,5 @@
 package org.eclipselabs.tapiji.tools.core.ui.prefrences;
 
-import java.util.prefs.Preferences;
-
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
@@ -51,12 +49,12 @@ public class BuilderPreferencePage extends PreferencePage implements
 		field = createComposite(composite, 0, 0);
 		sourceAuditButton = new Button(field, SWT.CHECK);
 		sourceAuditButton.setSelection(prefs.getBoolean(TapiJIPreferences.AUDIT_RESOURCE));
-		sourceAuditButton.setText("Check source code on String externalization problems");	
+		sourceAuditButton.setText("Check source code for non externalizated Strings");	
 		
 		field = createComposite(composite, 0, 0);
 		rbAuditButton = new Button(field, SWT.CHECK);
 		rbAuditButton.setSelection(prefs.getBoolean(TapiJIPreferences.AUDIT_RB));
-		rbAuditButton.setText("Check ResourceBundles on following incompleteness problems:");		
+		rbAuditButton.setText("Check ResourceBundles on the following problems:");		
 		rbAuditButton.addSelectionListener(new SelectionAdapter() {
 			@Override 
 			public void widgetSelected(SelectionEvent event) {

@@ -131,4 +131,14 @@ public class EditorUtils {
 			}	
 		return true;
 	}
+	
+	public static IMarker[] concatMarkerArray(IMarker[] ms, IMarker[] ms_to_add){
+		IMarker[] old_ms = ms;
+		ms = new IMarker[old_ms.length + ms_to_add.length];
+
+		System.arraycopy(old_ms, 0, ms, 0, old_ms.length);
+		System.arraycopy(ms_to_add, 0, ms, old_ms.length, ms_to_add.length);
+		
+		return ms;
+	}
 }

@@ -95,7 +95,7 @@ public class FilePreferencePage extends PreferencePage implements IWorkbenchPref
 			}
 			@Override
 			public void mouseDown(MouseEvent e) {
-				String pattern = "^.*/<RESOURCEBUNDLE_NAME>"+"((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?"+ "\\.properties$";
+				String pattern = "^.*/<BASENAME>"+"((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?"+ "\\.properties$";
 				CreatePatternDialoge dialog = new CreatePatternDialoge(Display.getDefault().getActiveShell(),pattern);
 				if (dialog.open() == InputDialog.OK) {
 					pattern = dialog.getPattern();

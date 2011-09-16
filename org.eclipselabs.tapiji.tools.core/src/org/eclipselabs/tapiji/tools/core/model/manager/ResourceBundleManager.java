@@ -155,7 +155,7 @@ public class ResourceBundleManager{
 		Set<Locale> locales = new HashSet<Locale>();
 		IBundleGroup group = resourceBundles.get(bundleName);
 		if (group == null) 
-			return null;
+			return locales;
 		
 		Iterator<IBundle> it = group.iterator();
 		
@@ -247,6 +247,8 @@ public class ResourceBundleManager{
 		case IResourceDelta.ADDED:
 			changeType = ResourceBundleChangedEvent.ADDED;
 			res = resources.get(bundleName);
+			if (res == null)
+				return;
 			res.add(resource);
 			resources.put(bundleName, res);
 			allBundles.put(bundleName, new HashSet<IResource>(res));
@@ -541,6 +543,7 @@ public class ResourceBundleManager{
 			try {
 				for (IResource resource : resourceSubTree) {
 					excludeSingleResource (resource);
+					EditorUtils.deleteAuditMarkersForResource(resource);
 					monitor.worked(1);
 				}
 			} catch (Exception e) {
@@ -888,13 +891,16 @@ public class ResourceBundleManager{
 
 	public Set<Locale> getProjectProvidedLocales() {
 		Set<Locale> locales = new HashSet<Locale>();
+		
 		for (String bundleId : getResourceBundleNames()) {
-			Object[] bundlelocales = getProvidedLocales(bundleId)
-					.toArray();
-			for (Object l : bundlelocales) {
-				/* TODO check if useful to add the default */
-				if (!locales.contains(l))
-					locales.add((Locale) l);
+			Set<Locale> rb_l = getProvidedLocales(bundleId);
+			if (!rb_l.isEmpty()){
+				Object[] bundlelocales = rb_l.toArray();
+				for (Object l : bundlelocales) {
+					/* TODO check if useful to add the default */
+					if (!locales.contains(l))
+						locales.add((Locale) l);
+				}
 			}
 		}
 		return locales;

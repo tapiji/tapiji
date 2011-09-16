@@ -1,5 +1,6 @@
 package org.eclipselabs.tapiji.tools.core.ui.menus;
 
+import java.awt.Window;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,11 +14,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jface.action.ContributionItem;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.MenuAdapter;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -285,14 +288,14 @@ public class InternationalizationMenu extends ContributionItem {
 
 	protected void updateStateAddLanguage(MenuItem menuItem){
 		Collection<IProject> projects = getSelectedProjects();
-		menuItem.setText("Add Language");
+		menuItem.setText("Add Language To Project");
 		menuItem.setEnabled(projects.size() > 0);
 	}
 	
 	protected void runAddLanguage() {	
 		AddLanguageDialoge dialog = new AddLanguageDialoge(new Shell(Display.getCurrent()));
 		if (dialog.open() == InputDialog.OK) {
-			Locale locale = dialog.getSelectedLanguage();
+			final Locale locale = dialog.getSelectedLanguage();
 			
 			Collection<IProject> selectedProjects =  getSelectedProjects();
 			for (IProject project :  selectedProjects){
@@ -316,7 +319,15 @@ public class InternationalizationMenu extends ContributionItem {
 						project = fragmentDialog.getSelectedProject();
 				}
 				
-				LanguageUtils.addLanguageToProject(project, locale);
+				final IProject selectedProject = project;
+				BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
+					@Override
+					public void run() {
+						LanguageUtils.addLanguageToProject(selectedProject, locale);
+					}
+					
+				});
+				
 			}
 		}
 	}
@@ -324,24 +335,26 @@ public class InternationalizationMenu extends ContributionItem {
 	
 	protected void updateStateRemoveLanguage(MenuItem menuItem) {
 		Collection<IProject> projects = getSelectedProjects();
-		menuItem.setText("Remove Language");
+		menuItem.setText("Remove Language From Project");
 		menuItem.setEnabled(projects.size() == 1 /*&& more than one common languages contained*/);
 	}
 
 	protected void runRemoveLanguage() {
-		IProject project = getSelectedProjects().iterator().next();
+		final IProject project = getSelectedProjects().iterator().next();
 		RemoveLanguageDialoge dialog = new RemoveLanguageDialoge(project, new Shell(Display.getCurrent()));
 				
+		
 		if (dialog.open() == InputDialog.OK) {
-			Locale locale = dialog.getSelectedLanguage();
-			if (locale != null) {
-				String message = "Do you really want remove all properties-files for "+locale.getDisplayName();
-
-				MessageDialog messageDialog = new MessageDialog(Display.getCurrent().getActiveShell(), "Delete Warning", null,
-						message, MessageDialog.WARNING, new String[] {"Cancel", "Delete" }, 0);
-
-				if (messageDialog.open() == 1)
-					LanguageUtils.removeLanguageFromProject(project, locale);
+			final Locale locale = dialog.getSelectedLanguage();
+			if (locale != null) {				
+				if (MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), "Confirm", "Do you really want remove all properties-files for "+locale.getDisplayName()+"?"))
+					BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
+						@Override
+						public void run() {
+							LanguageUtils.removeLanguageFromProject(project, locale);
+						}
+					});
+					
 			}
 		}
 	}

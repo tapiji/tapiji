@@ -12,7 +12,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferencePage;
 import org.eclipselabs.tapiji.tools.core.Activator;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipselabs.tapiji.tools.core.model.preferences.CheckItem;
@@ -39,12 +38,21 @@ public class RBFileUtils extends Action{
 			isValied = true;
 			
 			//Check if file is not in the blacklist
-			IPreferenceStore pref = Activator.getDefault().getPreferenceStore();
+			IPreferenceStore pref = null;
+			if (Activator.getDefault() != null)
+				pref = Activator.getDefault().getPreferenceStore();
+			
 			if (pref != null){
 				List<CheckItem> list = TapiJIPreferences.getNonRbPattern();
 				for (CheckItem item : list){
-					if (item.getChecked() && file.getFullPath().toString().matches(item.getName()))
+					if (item.getChecked() && file.getFullPath().toString().matches(item.getName())){
 						isValied = false;
+						if (hasResourceBundleMarker(file))
+							try {
+								file.deleteMarkers(EditorUtils.RB_MARKER_ID, true, IResource.DEPTH_INFINITE);
+							} catch (CoreException e) {
+							}
+					}
 				}
 			}
 		}
