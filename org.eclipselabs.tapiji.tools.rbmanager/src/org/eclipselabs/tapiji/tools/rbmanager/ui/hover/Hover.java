@@ -41,9 +41,9 @@ public class Hover {
 		Rectangle displayBounds = shell.getDisplay().getBounds();
 		Rectangle shellBounds = shell.getBounds();
 		shellBounds.x = Math.max(
-				Math.min(position.x, displayBounds.width - shellBounds.width), 0);
+				Math.min(position.x+1, displayBounds.width - shellBounds.width), 0);
 		shellBounds.y = Math.max(
-				Math.min(position.y + 16, displayBounds.height - shellBounds.height), 0);
+				Math.min(position.y + 16, displayBounds.height - (shellBounds.height+1)), 0);
 		shell.setBounds(shellBounds);
 	}
 
@@ -83,9 +83,7 @@ public class Hover {
 					hoverShell.setVisible(false);
 					return;
 				}
-				
 				hoverPosition = control.toDisplay(pt);
-				setHoverLocation(hoverShell, hoverPosition);
 				
 				boolean show = false;
 				Object data =  widget.getData();
@@ -97,7 +95,8 @@ public class Hover {
 				
 				if (show){
 					hoverShell.pack();
-					hoverShell.layout();		
+					hoverShell.layout();
+					setHoverLocation(hoverShell, hoverPosition);
 					hoverShell.setVisible(true);
 				}
 				else hoverShell.setVisible(false);

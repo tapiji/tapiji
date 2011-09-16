@@ -1,11 +1,14 @@
 package org.eclipselabs.tapiji.tools.rbmanager.viewer;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -13,7 +16,10 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.IDescriptionProvider;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipselabs.tapiji.tools.core.util.EditorUtils;
+import org.eclipselabs.tapiji.tools.core.util.FragmentProjectUtils;
 import org.eclipselabs.tapiji.tools.core.util.RBFileUtils;
+import org.eclipselabs.tapiji.tools.core.util.ResourceUtils;
 import org.eclipselabs.tapiji.tools.rbmanager.ImageUtils;
 import org.eclipselabs.tapiji.tools.rbmanager.model.VirtualContainer;
 import org.eclipselabs.tapiji.tools.rbmanager.model.VirtualContentManager;
@@ -41,9 +47,10 @@ public class ResourceBundleLabelProvider extends LabelProvider implements ILabel
 				returnImage = PlatformUI.getWorkbench().getSharedImages().getImage(
 					ISharedImages.IMG_OBJ_PROJECT);
 		}
-		if ((element instanceof IContainer)&&(returnImage ==  null))
+		if ((element instanceof IContainer)&&(returnImage ==  null)){
 			returnImage = PlatformUI.getWorkbench().getSharedImages().getImage(
 					ISharedImages.IMG_OBJ_FOLDER);
+		}
 		if (element instanceof VirtualResourceBundle)
 			returnImage = ImageUtils.getBaseImage(ImageUtils.RESOURCEBUNDLE_IMAGE);
 		if (element instanceof IFile){
@@ -113,9 +120,34 @@ public class ResourceBundleLabelProvider extends LabelProvider implements ILabel
 	}
 	
 	private boolean checkMarkers(Object element){
-		if (element instanceof IResource)
-			if (RBFileUtils.hasResourceBundleMarker((IResource)element)) return true;
-		
+		if (element instanceof IResource){
+			IMarker[] ms = null;				
+			try {
+				if ((ms=((IResource) element).findMarkers(EditorUtils.RB_MARKER_ID, true, IResource.DEPTH_INFINITE)).length > 0)
+					return true;
+			
+				if (element instanceof IContainer){
+					List<IContainer> fragmentContainer = ResourceUtils.getCorrespondingFolders((IContainer) element,
+							FragmentProjectUtils.getFragments(((IContainer) element).getProject()));
+					
+					IMarker[] fragment_ms;
+					for (IContainer c : fragmentContainer){
+						try {
+							if (c.exists()) {
+								fragment_ms = c.findMarkers(EditorUtils.RB_MARKER_ID, false,
+										IResource.DEPTH_INFINITE);
+								ms = EditorUtils.concatMarkerArray(ms, fragment_ms);
+							}
+						} catch (CoreException e) {
+							e.printStackTrace();
+						}
+					}
+					if (ms.length>0)
+						return true;
+				}
+			} catch (CoreException e) {
+			}
+		}
 		if (element instanceof VirtualResourceBundle){
 			ResourceBundleManager rbmanager = ((VirtualResourceBundle)element).getResourceBundleManager();
 			String id = ((VirtualResourceBundle)element).getResourceBundleId();

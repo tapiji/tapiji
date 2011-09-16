@@ -27,10 +27,12 @@ public class VirtualProject extends VirtualContainer{
 			fragmentProjects = FragmentProjectUtils.getFragments(project);
 	}
 	
+	/*
+	 * No fragment search
+	 */
 	public VirtualProject(IProject project, boolean isFragment, boolean countResourceBundles){
-		super(project);
+		super(project, countResourceBundles);
 		this.isFragment = isFragment;
-		if (countResourceBundles) recount();
 	}
 	
 	public Set<Locale> getProvidedLocales(){

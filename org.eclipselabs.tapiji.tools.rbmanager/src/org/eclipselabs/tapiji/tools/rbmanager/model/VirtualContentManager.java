@@ -52,4 +52,9 @@ public class VirtualContentManager {
 	public boolean containsVResourceBundles(String vRbId) {
 		return vResourceBundles.containsKey(vRbId);
 	}
+
+	public void reset() {
+		vResourceBundles.clear();
+		containers.clear();
+	}
 }

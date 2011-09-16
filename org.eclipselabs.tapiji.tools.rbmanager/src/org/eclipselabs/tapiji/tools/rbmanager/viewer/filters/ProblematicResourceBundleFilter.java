@@ -1,13 +1,18 @@
 package org.eclipselabs.tapiji.tools.rbmanager.viewer.filters;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipselabs.tapiji.tools.core.util.EditorUtils;
+import org.eclipselabs.tapiji.tools.core.util.FragmentProjectUtils;
 import org.eclipselabs.tapiji.tools.core.util.RBFileUtils;
+import org.eclipselabs.tapiji.tools.core.util.ResourceUtils;
 import org.eclipselabs.tapiji.tools.rbmanager.model.VirtualResourceBundle;
 
 
@@ -25,17 +30,36 @@ public class ProblematicResourceBundleFilter extends ViewerFilter {
 		} 
 		if (element instanceof VirtualResourceBundle) {
 			for (IResource f : ((VirtualResourceBundle)element).getFiles() ){
-				if (RBFileUtils.hasResourceBundleMarker(f)) return true;
+				if (RBFileUtils.hasResourceBundleMarker(f))
+					return true;
 			}
 		}
 		if (element instanceof IContainer) {
-			try {				
-				if (((IContainer) element).findMarkers(EditorUtils.RB_MARKER_ID, true, IResource.DEPTH_INFINITE).length > 0) return true;
+			try {
+				IMarker[] ms = null;				
+				if ((ms=((IContainer) element).findMarkers(EditorUtils.RB_MARKER_ID, true, IResource.DEPTH_INFINITE)).length > 0)
+					return true;
 				
+				List<IContainer> fragmentContainer = ResourceUtils.getCorrespondingFolders((IContainer) element,
+						FragmentProjectUtils.getFragments(((IContainer) element).getProject()));
+				
+				IMarker[] fragment_ms;
+				for (IContainer c : fragmentContainer){
+					try {
+						if (c.exists()) {
+							fragment_ms = c.findMarkers(EditorUtils.RB_MARKER_ID, false,
+									IResource.DEPTH_INFINITE);
+							ms = EditorUtils.concatMarkerArray(ms, fragment_ms);
+						}
+					} catch (CoreException e) {
+						e.printStackTrace();
+					}
+				}
+				if (ms.length>0)
+					return true;
 				
 			} catch (CoreException e) {	}
 		}
 		return false;
 	}
-
 }

@@ -1,7 +1,10 @@
 package org.eclipselabs.tapiji.tools.rbmanager.model;
 
 import org.eclipse.core.resources.IContainer;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipselabs.tapiji.tools.core.util.RBFileUtils;
 
@@ -13,14 +16,16 @@ public class VirtualContainer {
 	public VirtualContainer(IContainer container1, boolean countResourceBundles){
 		this.container = container1;
 		rbmanager = ResourceBundleManager.getManager(container.getProject());
-		if (countResourceBundles)
-			Display.getDefault().asyncExec(new Runnable() {
+		if (countResourceBundles){
+			rbCount=1;
+			new Job("count ResourceBundles"){
 				@Override
-				public void run() {
-					rbCount = RBFileUtils.countRecursiveResourceBundle(container);
+				protected IStatus run(IProgressMonitor monitor) {
+					recount();
+					return Status.OK_STATUS;
 				}
-			});
-		else rbCount = 0;
+			}.schedule();	
+		}else rbCount = 0;
 	}
 	
 	protected VirtualContainer(IContainer container){
@@ -51,6 +56,6 @@ public class VirtualContainer {
 	}
 	
 	public void recount(){
-		rbCount = RBFileUtils.countRecursiveResourceBundle(container);
+		rbCount = RBFileUtils.countRecursiveResourceBundle(container);	
 	}
 }

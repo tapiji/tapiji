@@ -1,5 +1,6 @@
 package org.eclipselabs.tapiji.tools.rbmanager.viewer.actions.hoverinformants;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
@@ -189,8 +190,10 @@ public class RBMarkerInformant implements HoverInformant {
 		if (data instanceof IResource){
 			IResource res = (IResource) data;
 			try {
-				ms = res.findMarkers(EditorUtils.RB_MARKER_ID, false,
+				if (res.exists())
+					ms = res.findMarkers(EditorUtils.RB_MARKER_ID, false,
 						IResource.DEPTH_INFINITE);
+				else ms = new IMarker[0];
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
@@ -206,7 +209,7 @@ public class RBMarkerInformant implements HoverInformant {
 							fragment_ms = c.findMarkers(EditorUtils.RB_MARKER_ID, false,
 									IResource.DEPTH_INFINITE);
 
-							ms = concatMarkerArray(ms, fragment_ms);
+							ms = EditorUtils.concatMarkerArray(ms, fragment_ms);
 						}
 					} catch (CoreException e) {
 						e.printStackTrace();
@@ -220,18 +223,21 @@ public class RBMarkerInformant implements HoverInformant {
 			
 			ResourceBundleManager rbmanager = vRB.getResourceBundleManager();
 			IMarker[] file_ms;
-			for (IResource r : rbmanager.getResourceBundles(vRB.getResourceBundleId())){
-				try {
-					file_ms = r.findMarkers(EditorUtils.RB_MARKER_ID, false, IResource.DEPTH_INFINITE);
-					if (ms != null) {
-						ms = concatMarkerArray(ms, file_ms);
-					}else{
-						ms = file_ms;
+			
+			Collection<IResource> rBundles = rbmanager.getResourceBundles(vRB.getResourceBundleId());
+			if (!rBundles.isEmpty())
+				for (IResource r : rBundles){
+					try {
+						file_ms = r.findMarkers(EditorUtils.RB_MARKER_ID, false, IResource.DEPTH_INFINITE);
+						if (ms != null) {
+							ms = EditorUtils.concatMarkerArray(ms, file_ms);
+						}else{
+							ms = file_ms;
+						}
+					} catch (CoreException e) {
+						e.printStackTrace();
 					}
-				} catch (CoreException e) {
-					e.printStackTrace();
 				}
-			}
 		}
 		
 		
@@ -259,15 +265,4 @@ public class RBMarkerInformant implements HoverInformant {
 		
 		return "";
 	}
-	
-	private IMarker[] concatMarkerArray(IMarker[] ms, IMarker[] ms_to_add){
-		IMarker[] old_ms = ms;
-		ms = new IMarker[old_ms.length + ms_to_add.length];
-
-		System.arraycopy(old_ms, 0, ms, 0, old_ms.length);
-		System.arraycopy(ms_to_add, 0, ms, old_ms.length, ms_to_add.length);
-		
-		return ms;
-	}
-	
 }

@@ -152,15 +152,14 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 
 	/*
 	 * Compares a key in different files and reports a problem, if the values are
-	 * same.
+	 * same. It doesn't compare the files if one file is the Default-file
 	 */
 	private void auditSameValues(IFile f1, IFile f2, String key,
 			IBundleGroup bundlegroup) {
 		Locale l1 = RBFileUtils.getLocale(f1);
 		Locale l2 = RBFileUtils.getLocale(f2);
 
-		// TODO don't audit the Default-file
-		if (!l2.equals(l1)) {
+		if (!l2.equals(l1) && !(l1.toString().equals("")||l2.toString().equals(""))) {
 			IBundleEntry bundleentry = bundlegroup.getBundleEntry(l2, key);
 
 			if (bundleentry != null)
