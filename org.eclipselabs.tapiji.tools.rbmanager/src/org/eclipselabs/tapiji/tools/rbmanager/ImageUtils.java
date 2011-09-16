@@ -105,7 +105,7 @@ public class ImageUtils {
 			image = getBaseImage(imageName);
 		}else {
 			if (!locale.toString().equals("")){
-				imageName = File.separatorChar+"countries"+File.separatorChar+"l_"+locale.getLanguage().toLowerCase() +".gif";
+				imageName = File.separatorChar+"countries"+File.separatorChar+"l_"+locale.getLanguage().toLowerCase()+".gif";
 				image = getBaseImage(imageName);
 			}else {
 				imageName = DEFAULT_LOCALICON;				//Default locale icon
