@@ -2,7 +2,7 @@
 <feature
       id="org.eclipselabs.tapiji.tools.feature"
       label="Internationalization Feature"
-      version="0.0.1.qualifier"
+      version="0.0.2.qualifier"
       provider-name="Vienna University of Technology"
       plugin="org.eclipselabs.tapiji.tools.feature"
       os="linux,macosx,win32">
@@ -137,27 +137,34 @@ This Agreement is governed by the laws of the State of New York and the intellec
          id="com.essiembre.eclipse.i18n.resourcebundle"
          download-size="0"
          install-size="0"
-         version="0.7.7"/>
+         version="0.7.8"/>
 
    <plugin
          id="org.eclipselabs.tapiji.tools.core"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.0.2.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.eclipselabs.tapiji.tools.java"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.0.2.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.eclipselabs.tapiji.translator.rbe"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.0.2.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipselabs.tapiji.tools.rbmanager"
+         download-size="0"
+         install-size="0"
+         version="0.0.2.qualifier"
          unpack="false"/>
 
 </feature>
