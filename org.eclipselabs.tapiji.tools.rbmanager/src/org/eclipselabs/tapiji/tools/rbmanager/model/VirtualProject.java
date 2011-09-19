@@ -34,12 +34,12 @@ public class VirtualProject extends VirtualContainer{
 	public VirtualProject(final IProject project, boolean isFragment, boolean countResourceBundles){
 		super(project, countResourceBundles);
 		this.isFragment = isFragment;
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				hostProject = FragmentProjectUtils.getFragmentHost(project);
-			}
-		});
+//		Display.getDefault().asyncExec(new Runnable() {
+//			@Override
+//			public void run() {
+//				hostProject = FragmentProjectUtils.getFragmentHost(project);
+//			}
+//		});
 	}
 	
 	public Set<Locale> getProvidedLocales(){
