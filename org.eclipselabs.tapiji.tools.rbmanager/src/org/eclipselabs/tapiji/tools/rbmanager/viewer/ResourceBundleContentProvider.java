@@ -5,11 +5,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -28,6 +30,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.progress.UIJob;
+import org.eclipselabs.tapiji.tools.core.model.IResourceBundleChangedListener;
+import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleChangedEvent;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipselabs.tapiji.tools.core.model.preferences.TapiJIPreferences;
 import org.eclipselabs.tapiji.tools.core.util.FragmentProjectUtils;
@@ -44,14 +48,15 @@ import org.eclipselabs.tapiji.tools.rbmanager.model.VirtualResourceBundle;
  * 
  * 
  */
-public class ResourceBundleContentProvider implements ITreeContentProvider, IResourceChangeListener, IPropertyChangeListener{
+public class ResourceBundleContentProvider implements ITreeContentProvider, IResourceChangeListener, IPropertyChangeListener, IResourceBundleChangedListener{
 	private static final boolean FRAGMENT_PROJECTS_IN_CONTENT = false;
 	private static final boolean SHOW_ONLY_PROJECTS_WITH_RBS = true;
 	private StructuredViewer viewer;
 	private VirtualContentManager vcManager;
 	private UIJob refresh;
 	private IWorkspaceRoot root;
-	
+
+	private List<IProject> listenedProjects;
 	/**
 	 * 
 	 */
@@ -59,6 +64,7 @@ public class ResourceBundleContentProvider implements ITreeContentProvider, IRes
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
 		TapiJIPreferences.addPropertyChangeListener(this);
 		vcManager = VirtualContentManager.getVirtualContentManager();
+		listenedProjects = new LinkedList<IProject>();
 	}
 
 	@Override
@@ -76,40 +82,42 @@ public class ResourceBundleContentProvider implements ITreeContentProvider, IRes
 				IResource[] members = ((IWorkspaceRoot)parentElement).members();
 				
 				List<Object> displayedProjects = new ArrayList<Object>();
-				for (IResource r : members){
-					if (r instanceof IProject)
+				for (IResource r : members)
+					if (r instanceof IProject){
+						IProject p = (IProject) r;
 						if (FragmentProjectUtils.isFragment(r.getProject())) {
-							if (vcManager.getContainer((IContainer) r)==null)
-								vcManager.addVContainer((IContainer) r, new VirtualProject((IProject) r, true,false));
+							if (vcManager.getContainer(p)==null)
+								vcManager.addVContainer(p, new VirtualProject(p, true,false));
 							if (FRAGMENT_PROJECTS_IN_CONTENT) displayedProjects.add(r);
 						} else {
 							if (SHOW_ONLY_PROJECTS_WITH_RBS){
 								VirtualProject vP;
-								if ((vP=(VirtualProject) vcManager.getContainer((IContainer) r))==null){
-									vP = new VirtualProject((IProject) r, false, true);
-									vcManager.addVContainer((IContainer) r, vP);
-								} 
+								if ((vP=(VirtualProject) vcManager.getContainer(p))==null){
+									vP = new VirtualProject(p, false, true);
+									vcManager.addVContainer(p, vP);
+									registerResourceBundleListner(p);
+								}
 								
-								if (vP.getRbCount()>0) displayedProjects.add(r);
+								if (vP.getRbCount()>0) displayedProjects.add(p);
 							}else {
-								displayedProjects.add(r);
+								displayedProjects.add(p);
 							}
 						}
-				}
+					}
 				
 				children = displayedProjects.toArray();
 				return children;
 			} catch (CoreException e) {	}
 		}
 		
-		if (parentElement instanceof IProject) {
-			final IProject iproject = (IProject) parentElement;
-			VirtualContainer vproject = vcManager.getContainer(iproject);
-			if (vproject == null){
-				vproject = new VirtualProject(iproject, true);
-				vcManager.addVContainer(iproject, vproject);
-			}
-		}
+//		if (parentElement instanceof IProject) {
+//			final IProject iproject = (IProject) parentElement;
+//			VirtualContainer vproject = vcManager.getContainer(iproject);
+//			if (vproject == null){
+//				vproject = new VirtualProject(iproject, true);
+//				vcManager.addVContainer(iproject, vproject);
+//			}
+//		}
 		
 		if (parentElement instanceof IContainer) {
 			IContainer container = (IContainer) parentElement;
@@ -129,6 +137,64 @@ public class ResourceBundleContentProvider implements ITreeContentProvider, IRes
 		return children != null ? children : new Object[0];
 	}
 	
+	/*
+	 * Returns all ResourceBundles and sub-containers (with ResourceBundles in their subtree) of a Container
+	 */
+	private Object[] addChildren(IContainer container) throws CoreException{
+		Map<String, Object> children = new HashMap<String,Object>();
+		
+		VirtualProject p = (VirtualProject) vcManager.getContainer(container.getProject());
+		List<IResource> members = new ArrayList<IResource>(Arrays.asList(container.members()));
+		
+		//finds files in the corresponding fragment-projects folder	
+		if (p.hasFragments()){
+			List<IContainer> folders = ResourceUtils.getCorrespondingFolders(container, p.getFragmets());
+			for (IContainer f : folders)
+				for (IResource r : f.members())
+					if (r instanceof IFile)
+						members.add(r);
+		}
+		
+		for(IResource r : members){
+				
+				if (r instanceof IFile) {
+					String resourcebundleId =  RBFileUtils.getCorrespondingResourceBundleId((IFile)r);
+					if( resourcebundleId != null && (!children.containsKey(resourcebundleId))) {
+						VirtualResourceBundle vrb;
+						
+						String vRBId;
+						
+						if (!p.isFragment()) vRBId = r.getProject()+"."+resourcebundleId;
+						else vRBId = p.getHostProject() + "." + resourcebundleId;
+						
+						VirtualResourceBundle vResourceBundle = vcManager.getVResourceBundles(vRBId);
+						if (vResourceBundle == null){
+							String resourcebundleName = ResourceBundleManager.getResourceBundleName(r);
+							vrb = new VirtualResourceBundle(resourcebundleName, resourcebundleId, ResourceBundleManager.getManager(r.getProject()));
+							vcManager.addVResourceBundle(vRBId, vrb);
+							
+						} else vrb = vcManager.getVResourceBundles(vRBId);
+						
+						children.put(resourcebundleId, vrb);
+					}
+				} 
+				if (r instanceof IContainer) 
+					if (!r.isDerived()){			//Don't show the 'bin' folder
+						VirtualContainer vContainer = vcManager.getContainer((IContainer) r);
+						
+						if (vContainer == null){
+							int count = RBFileUtils.countRecursiveResourceBundle((IContainer)r);
+							vContainer = new VirtualContainer(container, count);
+							vcManager.addVContainer((IContainer) r, vContainer);
+						}
+					
+						if (vContainer.getRbCount() != 0)									//Don't show folder without resourcebundles
+							children.put(""+children.size(), r);
+				}
+		}
+		return children.values().toArray();
+	}
+
 	@Override
 	public Object getParent(Object element) {
 		if (element instanceof IContainer) {
@@ -175,6 +241,7 @@ public class ResourceBundleContentProvider implements ITreeContentProvider, IRes
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 		TapiJIPreferences.removePropertyChangeListener(this);
 		vcManager.reset();
+		unregisterAllResourceBundleListner();
 	}
 
 	@Override
@@ -191,11 +258,16 @@ public class ResourceBundleContentProvider implements ITreeContentProvider, IRes
 			public boolean visit(IResourceDelta delta) throws CoreException {
 				final IResource res = delta.getResource();
 				
+				if (!RBFileUtils.isResourceBundleFile(res))
+					return true;
+				
 				switch (delta.getKind()) {
 					case IResourceDelta.REMOVED:
+						recountParenthierarchy(res.getParent());
+						break;
 						//TODO remove unused VirtualResourceBundles and VirtualContainer from vcManager
 					case IResourceDelta.ADDED:
-//						recursiv_upper_count(res);
+						checkListner(res);
 						break;
 					case IResourceDelta.CHANGED:
 						if (delta.getFlags() != IResourceDelta.MARKERS)
@@ -203,18 +275,7 @@ public class ResourceBundleContentProvider implements ITreeContentProvider, IRes
 						break;
 				}
 				
-				if (refresh == null || refresh.getResult() != null) {
-					refresh = new UIJob("refresh viewer") {
-						@Override
-						public IStatus runInUIThread(IProgressMonitor monitor) {							
-							if (viewer != null
-									&& !viewer.getControl().isDisposed())
-								viewer.refresh(res.getProject(),true); // refresh(res);
-							return Status.OK_STATUS;
-						}
-					};
-					refresh.schedule();
-				}
+				refresh(res);
 				
 				return true;
 			}
@@ -228,93 +289,98 @@ public class ResourceBundleContentProvider implements ITreeContentProvider, IRes
 	}
 	
 	@Override
+	public void resourceBundleChanged(ResourceBundleChangedEvent event) {
+		ResourceBundleManager rbmanager = ResourceBundleManager.getManager(event.getProject());
+		
+		switch (event.getType()){
+			case ResourceBundleChangedEvent.ADDED:
+			case ResourceBundleChangedEvent.DELETED:
+				IResource res = rbmanager.getRandomFile(event.getBundle());
+				IContainer hostContainer;
+				
+				if (res == null)
+					try{
+						hostContainer = event.getProject().getFile(event.getBundle()).getParent();
+					}catch (Exception e) {
+						refresh(null);
+						return;
+					}
+				else {
+					VirtualProject vProject = (VirtualProject) vcManager.getContainer((IContainer) res.getProject());
+					if (vProject != null && vProject.isFragment()){
+						IProject hostProject = vProject.getHostProject();
+						hostContainer = ResourceUtils.getCorrespondingFolders(res.getParent(), hostProject);
+					} else
+						hostContainer = res.getParent();
+				}
+				
+				recountParenthierarchy(hostContainer);
+				refresh(null);
+				break;
+		}
+		
+	}
+	
+	@Override
 	public void propertyChange(PropertyChangeEvent event) {
 		if(event.getProperty().equals(TapiJIPreferences.NON_RB_PATTERN)){
 			vcManager.reset();
 			
-			new UIJob("refresh viewer") {
+			refresh(root);
+		}
+	}
+	
+	//TODO problems with remove a hole ResourceBundle
+	private void recountParenthierarchy(IContainer parent) {
+		if (parent.isDerived())
+			return;															//Don't recount the 'bin' folder
+		
+		VirtualContainer vContainer = vcManager.getContainer((IContainer) parent);
+		if (vContainer != null){
+			vContainer.recount();
+		}
+		
+		if ((parent instanceof IFolder))
+			recountParenthierarchy(parent.getParent());
+	}
+	
+	private void refresh(final IResource res) {
+		if (refresh == null || refresh.getResult() != null)
+			refresh = new UIJob("refresh viewer") {
 				@Override
-				public IStatus runInUIThread(IProgressMonitor monitor) {
-					if (viewer != null && !viewer.getControl().isDisposed())
-						viewer.refresh(root);
+				public IStatus runInUIThread(IProgressMonitor monitor) {							
+					if (viewer != null
+							&& !viewer.getControl().isDisposed())
+						if (res != null)
+							viewer.refresh(res.getProject(),true); // refresh(res);
+						else viewer.refresh();
 					return Status.OK_STATUS;
 				}
-			}.schedule();
+			};
+			refresh.schedule();
+	}
+	
+	private void registerResourceBundleListner(IProject p) {
+		listenedProjects.add(p);
+		
+		ResourceBundleManager rbmanager =ResourceBundleManager.getManager(p);
+		for (String rbId : rbmanager.getResourceBundleIdentifiers()){
+			rbmanager.registerResourceBundleChangeListener(rbId, this);
 		}
 	}
 	
-	/*
-	 * Returns all ResourceBundles and sub-containers (with ResourceBundles in their subtree) of a Container
-	 */
-	private Object[] addChildren(IContainer container) throws CoreException{
-		Map<String, Object> children = new HashMap<String,Object>();
-		
-		VirtualProject p = (VirtualProject) vcManager.getContainer(container.getProject());
-		List<IResource> members = new ArrayList<IResource>(Arrays.asList(container.members()));
-		
-		//finds files in the corresponding fragment-projects folder	
-		if (p.hasFragments()){
-			List<IContainer> folders = ResourceUtils.getCorrespondingFolders(container, p.getFragmets());
-			for (IContainer f : folders)
-				for (IResource r : f.members())
-					if (r instanceof IFile)
-						members.add(r);
-		}
-		
-		
-		for(IResource r : members){
-				
-				if (r instanceof IFile) {
-					String resourcebundleId =  RBFileUtils.getCorrespondingResourceBundleId((IFile)r);
-					if( resourcebundleId != null && (!children.containsKey(resourcebundleId))) {
-						VirtualResourceBundle vrb;
-						
-						String vRBId;
-						
-						if (!p.isFragment()) vRBId = r.getProject()+"."+resourcebundleId;
-						else vRBId = p.getHostProject() + "." + resourcebundleId;
-						
-						VirtualResourceBundle vResourceBundle = vcManager.getVResourceBundles(vRBId);
-						if (vResourceBundle == null){
-							String resourcebundleName = ResourceBundleManager.getResourceBundleName(r);
-							vrb = new VirtualResourceBundle(resourcebundleName, resourcebundleId, ResourceBundleManager.getManager(r.getProject()));
-							vcManager.addVResourceBundle(vRBId, vrb);
-							
-						} else vrb = vcManager.getVResourceBundles(vRBId);
-						
-						children.put(resourcebundleId, vrb);
-					}
-				} 
-				if (r instanceof IContainer) 
-					if (!r.getClass().getSimpleName().equals("CompilationUnit")){			//Don't show the 'bin' folder
-						VirtualContainer vContainer = vcManager.getContainer((IContainer) r);
-						
-						if (vContainer == null){
-							int count = RBFileUtils.countRecursiveResourceBundle((IContainer)r);
-							vContainer = new VirtualContainer(container, count);
-							vcManager.addVContainer((IContainer) r, vContainer);
-						}
-					
-						if (vContainer.getRbCount() != 0)									//Don't show folder without resourcebundles
-							children.put(""+children.size(), r);
-				}
-		}
-		return children.values().toArray();
-	}
-	
-
-	private void recursiv_upper_count(IResource res) {
-		if (res instanceof IContainer){
-			while(!(res instanceof IProject)){
-				VirtualContainer vContainer = vcManager.getContainer((IContainer) res);
-				if (vContainer != null)
-					vContainer.recount();
-				res = res.getParent();
+	private void unregisterAllResourceBundleListner() {
+		for( IProject p : listenedProjects){
+			ResourceBundleManager rbmanager = ResourceBundleManager.getManager(p);
+			for (String rbId : rbmanager.getResourceBundleIdentifiers()){
+				rbmanager.unregisterResourceBundleChangeListener(rbId, this);
 			}
-			
-			VirtualContainer vContainer = vcManager.getContainer((IContainer) res);
-			if (vContainer != null)
-				vContainer.recount();
 		}
+	}
+	
+	private void checkListner(IResource res) {
+		ResourceBundleManager rbmanager = ResourceBundleManager.getManager(res.getProject());
+		String rbId = ResourceBundleManager.getResourceBundleId(res);
+		rbmanager.registerResourceBundleChangeListener(rbId, this);
 	}
 }

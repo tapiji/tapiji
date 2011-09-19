@@ -87,7 +87,7 @@ public class ResourceBundleLabelProvider extends LabelProvider implements ILabel
 			
 			VirtualContainer vContainer = vcManager.getContainer(container);
 			if (vContainer != null && vContainer.getRbCount() != 0)
-				text.append("_["+vContainer.getRbCount()+"]");
+				text.append(" ["+vContainer.getRbCount()+"]");
 			
 		}
 		if (element instanceof VirtualResourceBundle){

@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipselabs.tapiji.tools.rbmanager.ImageUtils;
+import org.eclipselabs.tapiji.tools.rbmanager.RBManagerActivator;
 
 
 public class ExpandAction extends Action implements IAction{
@@ -17,7 +18,7 @@ public class ExpandAction extends Action implements IAction{
 		this.viewer= viewer;
 		setText("Expand Node");
 		setToolTipText("expand node");
-		setImageDescriptor(ImageUtils.getImageDescriptor("expand.gif"));
+		setImageDescriptor(RBManagerActivator.getImageDescriptor(ImageUtils.EXPAND));
 	}
 	
 	@Override

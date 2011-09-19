@@ -1,9 +1,7 @@
 package org.eclipselabs.tapiji.tools.rbmanager;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Locale;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -19,30 +17,31 @@ public class ImageUtils {
 	public static final String WARNING_IMAGE = "warning.gif";
 	public static final String FRAGMENT_PROJECT_IMAGE = "fragmentproject.gif";
 	public static final String RESOURCEBUNDLE_IMAGE = "resourcebundle.gif";
+	public static final String EXPAND = "expand.gif";
 	public static final String DEFAULT_LOCALICON = File.separatorChar+"countries"+File.separatorChar+"_f.gif";
 	public static final String LOCATION_WITHOUT_ICON = File.separatorChar+"countries"+File.separatorChar+"un.gif";
 
 	
-	/**
-	 * Return ImageDescriptor
-	 * @param name
-	 * @return
-	 * @throws MalformedURLException 
-	 */
-	public static ImageDescriptor getImageDescriptor(String name){
-		try {
-			URL url = getImageURL(name);
-			return ImageDescriptor.createFromURL(url);
-		} catch (MalformedURLException e) {
-		}
-		return null;
-    }
-	
-	private static URL getImageURL(String name) throws MalformedURLException {
-		String iconPath = "icons" + File.separator;
-		URL installURL = RBManagerActivator.getDefault().getBundle().getEntry(File.separator);
-		return new URL(installURL, iconPath + name);
-	}
+//	/**
+//	 * Return ImageDescriptor
+//	 * @param name
+//	 * @return
+//	 * @throws MalformedURLException 
+//	 */
+//	public static ImageDescriptor getImageDescriptor(String name){
+//		try {
+//			URL url = getImageURL(name);
+//			return ImageDescriptor.createFromURL(url);
+//		} catch (MalformedURLException e) {
+//		}
+//		return null;
+//    }
+//	
+//	private static URL getImageURL(String name) throws MalformedURLException {
+//		String iconPath = "icons" + File.separator;
+//		URL installURL = RBManagerActivator.getDefault().getBundle().getEntry(File.separator);
+//		return new URL(installURL, iconPath + name);
+//	}
 	
 	/**
 	 * @return a Image from the folder 'icons'
@@ -51,7 +50,7 @@ public class ImageUtils {
 	public static Image getBaseImage(String imageName){
 		Image image = imageRegistry.get(imageName);
         if (image == null) {
-        	ImageDescriptor descriptor = getImageDescriptor(imageName);
+        	ImageDescriptor descriptor = RBManagerActivator.getImageDescriptor(imageName);
         	
         	if (descriptor.getImageData() != null){
         		image = descriptor.createImage(false);
@@ -112,12 +111,12 @@ public class ImageUtils {
 				imageName = File.separatorChar+"countries"+File.separatorChar+"l_"+locale.getLanguage().toLowerCase()+".gif";
 				image = getBaseImage(imageName);
 			}else {
-				imageName = DEFAULT_LOCALICON;				//Default locale icon
+				imageName = DEFAULT_LOCALICON.toLowerCase();				//Default locale icon
 				image = getBaseImage(imageName);
 			}
 		}
 		
-		if (image == null) image = getBaseImage(LOCATION_WITHOUT_ICON);
+		if (image == null) image = getBaseImage(LOCATION_WITHOUT_ICON.toLowerCase());
 		return image;
 	}
 

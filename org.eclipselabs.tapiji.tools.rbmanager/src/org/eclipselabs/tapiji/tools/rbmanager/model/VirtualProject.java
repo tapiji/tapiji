@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.swt.widgets.Display;
 import org.eclipselabs.tapiji.tools.core.util.FragmentProjectUtils;
 
 /**
@@ -30,9 +31,15 @@ public class VirtualProject extends VirtualContainer{
 	/*
 	 * No fragment search
 	 */
-	public VirtualProject(IProject project, boolean isFragment, boolean countResourceBundles){
+	public VirtualProject(final IProject project, boolean isFragment, boolean countResourceBundles){
 		super(project, countResourceBundles);
 		this.isFragment = isFragment;
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				hostProject = FragmentProjectUtils.getFragmentHost(project);
+			}
+		});
 	}
 	
 	public Set<Locale> getProvidedLocales(){
