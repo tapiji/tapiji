@@ -47,6 +47,8 @@ public class RBFileUtils extends Action{
 				for (CheckItem item : list){
 					if (item.getChecked() && file.getFullPath().toString().matches(item.getName())){
 						isValied = false;
+						
+						//if properties-file is not RB-file and has ResouceBundleMarker, deletes all ResouceBundleMarker of the file
 						if (hasResourceBundleMarker(file))
 							try {
 								file.deleteMarkers(EditorUtils.RB_MARKER_ID, true, IResource.DEPTH_INFINITE);

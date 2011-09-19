@@ -1,6 +1,5 @@
 package org.eclipselabs.tapiji.tools.core.ui.menus;
 
-import java.awt.Window;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,7 +13,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jface.action.ContributionItem;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -288,8 +286,14 @@ public class InternationalizationMenu extends ContributionItem {
 
 	protected void updateStateAddLanguage(MenuItem menuItem){
 		Collection<IProject> projects = getSelectedProjects();
+		boolean hasResourceBundles=false;
+		for (IProject p : projects){
+			ResourceBundleManager rbmanager = ResourceBundleManager.getManager(p);
+			hasResourceBundles = rbmanager.getResourceBundleIdentifiers().size() > 0 ? true : false;
+		}
+		
 		menuItem.setText("Add Language To Project");
-		menuItem.setEnabled(projects.size() > 0);
+		menuItem.setEnabled(projects.size() > 0 && hasResourceBundles);
 	}
 	
 	protected void runAddLanguage() {	
@@ -335,8 +339,14 @@ public class InternationalizationMenu extends ContributionItem {
 	
 	protected void updateStateRemoveLanguage(MenuItem menuItem) {
 		Collection<IProject> projects = getSelectedProjects();
+		boolean hasResourceBundles=false;
+		if (projects.size() == 1){
+			IProject project = projects.iterator().next();
+			ResourceBundleManager rbmanager = ResourceBundleManager.getManager(project);
+			hasResourceBundles = rbmanager.getResourceBundleIdentifiers().size() > 0 ? true : false;
+		}
 		menuItem.setText("Remove Language From Project");
-		menuItem.setEnabled(projects.size() == 1 /*&& more than one common languages contained*/);
+		menuItem.setEnabled(projects.size() == 1 && hasResourceBundles/*&& more than one common languages contained*/);
 	}
 
 	protected void runRemoveLanguage() {

@@ -3,7 +3,6 @@ package org.eclipselabs.tapiji.tools.core.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
-import java.util.Iterator;
 import java.util.Locale;
 
 import org.eclipse.core.resources.IContainer;
@@ -52,7 +51,7 @@ public class LanguageUtils {
 	 * @param rbId
 	 * @param locale
 	 */
-	public static void addLanguageToResourceBundle(IProject project, String rbId, final Locale locale){
+	public static void addLanguageToResourceBundle(IProject project, final String rbId, final Locale locale){
 		ResourceBundleManager rbManager = ResourceBundleManager.getManager(project);
 		
 		if (rbManager.getProvidedLocales(rbId).contains(locale)) return;
@@ -75,9 +74,9 @@ public class LanguageUtils {
 					
 					createFile(c, newFilename, monitor);
 				} catch (CoreException e) {
-					Logger.logError(e);
+					Logger.logError("File for locale "+locale+" could not be created in ResourceBundle "+rbId,e);
 				} catch (IOException e) {
-					Logger.logError(e);
+					Logger.logError("File for locale "+locale+" could not be created in ResourceBundle "+rbId,e);
 				}
             	monitor.done();
 				return Status.OK_STATUS;
@@ -120,14 +119,16 @@ public class LanguageUtils {
 		if (!rbManager.getProvidedLocales(rbId).contains(locale)) return;
 		
 		final IFile file = rbManager.getResourceBundleFile(rbId, locale);
+		final String filename = file.getName();
 		
 		new Job("remove properties-file") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					deleteFile(file, false, monitor);
+					deleteFile(file, true, monitor);
 				} catch (CoreException e) {
-					Logger.logError(e);
+//					MessageDialog.openError(Display.getCurrent().getActiveShell(), "Confirm", "File could not be deleted");
+					Logger.logError("File could not be deleted",e);
 				}
 				return Status.OK_STATUS;
 			}

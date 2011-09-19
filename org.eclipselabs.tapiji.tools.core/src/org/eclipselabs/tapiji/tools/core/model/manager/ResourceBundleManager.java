@@ -90,7 +90,7 @@ public class ResourceBundleManager{
 	private static Map<String, Set<IResource>> allBundles = 
 		new HashMap<String, Set<IResource>> ();
 	
-	private static IResourceChangeListener changelistner;
+	private static IResourceChangeListener changelistener;
 	
 	/*Host project*/
 	private IProject project = null;
@@ -247,8 +247,10 @@ public class ResourceBundleManager{
 		case IResourceDelta.ADDED:
 			changeType = ResourceBundleChangedEvent.ADDED;
 			res = resources.get(bundleName);
-			if (res == null)
+			if (res == null){
+				addBundleResource(resource);
 				return;
+			}
 			res.add(resource);
 			resources.put(bundleName, res);
 			allBundles.put(bundleName, new HashSet<IResource>(res));
@@ -676,8 +678,8 @@ public class ResourceBundleManager{
 			// do nothing
 		}
 		
-		changelistner = new RBChangeListner();
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(changelistner, IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
+		changelistener = new RBChangeListner();
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(changelistener, IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
 	}
 
 	private static void loadManagerState(XMLMemento memento) {
