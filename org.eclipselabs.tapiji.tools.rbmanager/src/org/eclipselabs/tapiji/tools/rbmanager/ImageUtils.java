@@ -20,28 +20,6 @@ public class ImageUtils {
 	public static final String EXPAND = "expand.gif";
 	public static final String DEFAULT_LOCALICON = File.separatorChar+"countries"+File.separatorChar+"_f.gif";
 	public static final String LOCATION_WITHOUT_ICON = File.separatorChar+"countries"+File.separatorChar+"un.gif";
-
-	
-//	/**
-//	 * Return ImageDescriptor
-//	 * @param name
-//	 * @return
-//	 * @throws MalformedURLException 
-//	 */
-//	public static ImageDescriptor getImageDescriptor(String name){
-//		try {
-//			URL url = getImageURL(name);
-//			return ImageDescriptor.createFromURL(url);
-//		} catch (MalformedURLException e) {
-//		}
-//		return null;
-//    }
-//	
-//	private static URL getImageURL(String name) throws MalformedURLException {
-//		String iconPath = "icons" + File.separator;
-//		URL installURL = RBManagerActivator.getDefault().getBundle().getEntry(File.separator);
-//		return new URL(installURL, iconPath + name);
-//	}
 	
 	/**
 	 * @return a Image from the folder 'icons'

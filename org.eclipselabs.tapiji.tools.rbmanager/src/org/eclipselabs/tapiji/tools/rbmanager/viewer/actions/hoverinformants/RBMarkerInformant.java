@@ -2,6 +2,7 @@ package org.eclipselabs.tapiji.tools.rbmanager.viewer.actions.hoverinformants;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -212,7 +213,6 @@ public class RBMarkerInformant implements HoverInformant {
 							ms = EditorUtils.concatMarkerArray(ms, fragment_ms);
 						}
 					} catch (CoreException e) {
-						e.printStackTrace();
 					}
 				}
 			}
@@ -234,8 +234,7 @@ public class RBMarkerInformant implements HoverInformant {
 						}else{
 							ms = file_ms;
 						}
-					} catch (CoreException e) {
-						e.printStackTrace();
+					} catch (Exception e) {
 					}
 				}
 		}
