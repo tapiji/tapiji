@@ -131,13 +131,15 @@ public class ResourceBundleManager{
 	public void loadResourceBundle (String bundleName) {
 		if (resourceBundles.containsKey(bundleName))
 			return;
-		else 
+		else {
 			changeResourceBundle(bundleName);
+		}
 	}
 	
 	public void changeResourceBundle(final String bundleName){
-		if (!resources.containsKey(bundleName))
+		if (!resources.containsKey(bundleName)){
 			return;
+		}
 		
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
@@ -437,11 +439,12 @@ public class ResourceBundleManager{
 		List<String> returnList = new ArrayList<String>();
 		
 		for (IProject p : getAllSupportedProjects()) {
-			Iterator<String> it = getManager(p).resources.keySet().iterator();
-			while (it.hasNext()) {
-				returnList.add(p.getName() + "/" + it.next());
+			if (!FragmentProjectUtils.isFragment(p)){
+				Iterator<String> it = getManager(p).resources.keySet().iterator();
+				while (it.hasNext()) {
+					returnList.add(p.getName() + "/" + it.next());
+				}
 			}
-
 		}
 		return returnList;	
 	}
@@ -738,12 +741,12 @@ public class ResourceBundleManager{
 
 	public static ResourceBundleManager getManager(String projectName) {
 		for (IProject p : getAllSupportedProjects()) {
-			if (p.getName().equalsIgnoreCase(projectName))
-				return getManager(p);
-			
-			//check if the projectName is a fragment and return the manager for the host
-			if(FragmentProjectUtils.isFragment(p))
-				return getManager(FragmentProjectUtils.getFragmentHost(p));				
+			if (p.getName().equalsIgnoreCase(projectName)){
+				//check if the projectName is a fragment and return the manager for the host
+				if(FragmentProjectUtils.isFragment(p))
+					return getManager(FragmentProjectUtils.getFragmentHost(p));
+				else return getManager(p);
+			}				
 		}
 		return null;
 	}
