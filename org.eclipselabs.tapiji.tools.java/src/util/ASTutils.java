@@ -1,6 +1,7 @@
 package util;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
+import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
@@ -23,6 +25,7 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.LineComment;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
@@ -30,6 +33,7 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
+import org.eclipse.jdt.core.dom.TagElement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
@@ -37,6 +41,7 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import org.eclipse.jdt.ui.SharedASTProvider;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.text.edits.TextEdit;
 
 import auditor.MethodParameterDescriptor;
@@ -111,6 +116,9 @@ public class ASTutils {
 					cu);
 			
 			document.replace(offset, length, reference);
+			
+			// create non-internationalisation-comment
+			createReplaceNonInternationalisationComment(cu, document, offset);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
@@ -118,9 +126,10 @@ public class ASTutils {
 		// TODO retrieve cu in the same way as in createResourceReference 
 		//      the current version does not parse method bodies
 		
-		if (variableName == null)
+		if (variableName == null){
 			ASTutils.createResourceBundleReference(resource, offset, document, resourceBundleId, locale, true, newName, cu);
-		
+//			createReplaceNonInternationalisationComment(cu, document, pos);
+		}
 		return reference;
 	}
 	
@@ -173,6 +182,9 @@ public class ASTutils {
 				endPos --;
 			
 			document.replace(startPos, endPos, reference);
+			
+			// create non-internationalisation-comment
+			createReplaceNonInternationalisationComment(cu, document, startPos);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
@@ -184,7 +196,9 @@ public class ASTutils {
 					SharedASTProvider.WAIT_YES, null);
 			
 			ASTutils.createResourceBundleReference(resource, startPos, document, resourceBundleId, null, true, newName, cu);
+//			createReplaceNonInternationalisationComment(cu, document, pos);
 		}
+		
 		
 		return reference;
 	}
@@ -547,6 +561,7 @@ public class ASTutils {
 				if (meth != null && (meth.getModifiers() & Modifier.STATIC) == Modifier.STATIC)
 					fd.modifiers().addAll(ast.newModifiers(Modifier.STATIC));
 				
+				
 				// rewrite AST
 				ASTRewrite rewriter = ASTRewrite.create(ast);
 				ListRewrite lrw = rewriter.getListRewrite(node, 
@@ -563,12 +578,11 @@ public class ASTutils {
 			} else {
 				
 			}
-		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static int findIndexOfLastField(List bodyDeclarations) {
         for (int i= bodyDeclarations.size() - 1; i >= 0; i--) {
             BodyDeclaration each= (BodyDeclaration)bodyDeclarations.get(i);
@@ -655,6 +669,42 @@ public class ASTutils {
 		
 		return exp;
 	}
+	
+	
+	private static int findNonInternationalisationPosition(CompilationUnit cu, IDocument doc, int offset){
+		LinePreStringsFinder lsfinder = null;
+		try {
+			lsfinder = new LinePreStringsFinder(offset, doc);
+			cu.accept(lsfinder);
+		} catch (BadLocationException e) {
+		}
+		if (lsfinder == null) return 1;
+		
+		List<StringLiteral> strings = lsfinder.getStrings();
+		
+		return strings.size()+1;
+	}
+	
+	private static void createReplaceNonInternationalisationComment(CompilationUnit cu, IDocument doc, int position) {
+		int i = findNonInternationalisationPosition(cu, doc, position);
+				
+		IRegion reg;
+		try {
+			reg = doc.getLineInformationOfOffset(position);
+			doc.replace(reg.getOffset()+reg.getLength(), 0, " //$NON-NLS-"+i+"$");
+		} catch (BadLocationException e1) {
+		}
+	}
+	
+	private static void createASTNonInternationalisationComment(CompilationUnit cu, IDocument doc, ASTNode parent, ASTNode fd, ASTRewrite rewriter, ListRewrite lrw) {	
+		int i = 1;
+		
+//		ListRewrite lrw2 = rewriter.getListRewrite(node, Block.STATEMENTS_PROPERTY);
+		ASTNode placeHolder= rewriter.createStringPlaceholder("//$NON-NLS-"+i+"$", ASTNode.LINE_COMMENT);
+		lrw.insertAfter(placeHolder, fd, null);
+	}
+
+
 	
 	static class PositionalTypeFinder extends ASTVisitor {
 		
@@ -841,6 +891,36 @@ public class ASTutils {
 			return false;
 		}
 	
+	}
+	
+	static class LinePreStringsFinder extends ASTVisitor{
+		private int position;
+		private int line;
+		private List<StringLiteral> strings;
+		private IDocument document;
+		
+		public LinePreStringsFinder(int position, IDocument document) throws BadLocationException{
+			this.document=document;
+			this.position = position;
+			line =  document.getLineOfOffset(position);
+			strings = new ArrayList<StringLiteral>();
+		}
+		
+		public List<StringLiteral> getStrings(){
+			return strings;
+		}
+		
+		@Override
+		public boolean visit (StringLiteral node){
+			try{
+				if (line == document.getLineOfOffset(node.getStartPosition()) && node.getStartPosition() < position){
+					strings.add(node);
+					return true;
+				} 
+			}catch(BadLocationException e){
+			}
+			return true;
+		}
 	}
 	
 }
