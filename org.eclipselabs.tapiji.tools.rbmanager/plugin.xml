@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            category="org.eclipselabs.tapiji.tools.core"
+            category="org.eclipselabs.tapiji"
             class="org.eclipse.ui.navigator.CommonNavigator"
             icon="icons/resourcebundle.gif"
             id="org.eclipselabs.tapiji.tools.rbmanager.ResourceBundleExplorer"

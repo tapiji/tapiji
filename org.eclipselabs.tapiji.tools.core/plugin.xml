@@ -6,13 +6,13 @@
    <extension
          point="org.eclipse.ui.views">
       <category
-            name="Internatinoalization"
-            id="org.eclipselabs.tapiji.tools.core">
+            name="Internationalization"
+            id="org.eclipselabs.tapiji">
       </category>
       <view
             name="Resource-Bundle"
             icon="icons/resourcebundle.gif"
-            category="org.eclipselabs.tapiji.tools.core"
+            category="org.eclipselabs.tapiji"
             class="org.eclipselabs.tapiji.tools.core.ui.views.messagesview.MessagesView"
             id="org.eclipselabs.tapiji.tools.core.views.MessagesView">
       </view>
