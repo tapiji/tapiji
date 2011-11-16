@@ -18,6 +18,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.MenuAdapter;
 import org.eclipse.swt.events.MenuEvent;
@@ -63,7 +64,7 @@ public class InternationalizationMenu extends ContributionItem {
 			return;
 		
 		// Toggle Internatinalization
-		mnuToggleInt = new MenuItem (menu, index);
+		mnuToggleInt = new MenuItem (menu, SWT.PUSH);
 		mnuToggleInt.addSelectionListener(new SelectionAdapter () {
 
 			@Override
@@ -74,7 +75,7 @@ public class InternationalizationMenu extends ContributionItem {
 		});
 		
 		// Exclude Resource
-		excludeResource = new MenuItem (menu, index+1);
+		excludeResource = new MenuItem (menu, SWT.PUSH);
 		excludeResource.addSelectionListener(new SelectionAdapter () {
 
 			@Override
@@ -84,10 +85,10 @@ public class InternationalizationMenu extends ContributionItem {
 
 		});
 		
-		new MenuItem(menu, index+2);
+		new MenuItem(menu, SWT.SEPARATOR);
 		
 		// Add Language
-		addLanguage = new MenuItem(menu, index);
+		addLanguage = new MenuItem(menu, SWT.PUSH);
 		addLanguage.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
@@ -98,7 +99,7 @@ public class InternationalizationMenu extends ContributionItem {
 		});
 		
 		// Remove Language	
-		removeLanguage = new MenuItem(menu, index);
+		removeLanguage = new MenuItem(menu, SWT.PUSH);
 		removeLanguage.addSelectionListener(new SelectionAdapter() {
 			
 			@Override

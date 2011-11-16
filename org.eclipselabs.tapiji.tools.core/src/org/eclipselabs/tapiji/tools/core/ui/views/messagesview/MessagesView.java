@@ -498,8 +498,10 @@ public class MessagesView extends ViewPart implements IResourceBundleChangedList
 	
 	@Override
 	public void dispose(){
-		super.dispose();
-		treeViewer.dispose();
-		ResourceBundleManager.getManager(viewState.getSelectedProjectName()).unregisterResourceBundleChangeListener(viewState.getSelectedBundleId(), this);
+		try {
+			super.dispose();
+			treeViewer.dispose();
+			ResourceBundleManager.getManager(viewState.getSelectedProjectName()).unregisterResourceBundleChangeListener(viewState.getSelectedBundleId(), this);
+		} catch (Exception e) {}
 	}
 }

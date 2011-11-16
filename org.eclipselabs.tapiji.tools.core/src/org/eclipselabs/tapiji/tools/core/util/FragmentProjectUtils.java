@@ -4,34 +4,31 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 
-import com.essiembre.eclipse.rbe.api.PDEUtilsForwarder;
-
-
 public class FragmentProjectUtils{
 	
 	public static String getPluginId(IProject project){
-		return PDEUtilsForwarder.getPluginId(project);
+		return PDEUtils.getPluginId(project);
 	}
 
 	
 	public static IProject[] lookupFragment(IProject pluginProject){
-		return PDEUtilsForwarder.lookupFragment(pluginProject);
+		return PDEUtils.lookupFragment(pluginProject);
 	}
 	
 	public static boolean isFragment(IProject pluginProject){
-		return PDEUtilsForwarder.isFragment(pluginProject);
+		return PDEUtils.isFragment(pluginProject);
 	}
 	
 	public static List<IProject> getFragments(IProject hostProject){
-		return PDEUtilsForwarder.getFragments(hostProject);
+		return PDEUtils.getFragments(hostProject);
 	}
 	 
 	public static String getFragmentId(IProject project, String hostPluginId){
-		return PDEUtilsForwarder.getFragmentId(project, hostPluginId);
+		return PDEUtils.getFragmentId(project, hostPluginId);
 	}
 	
 	public static IProject getFragmentHost(IProject fragment){
-		return PDEUtilsForwarder.getFragmentHost(fragment);
+		return PDEUtils.getFragmentHost(fragment);
 	}
 	
 }

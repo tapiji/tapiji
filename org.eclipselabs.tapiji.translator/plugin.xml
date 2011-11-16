@@ -161,6 +161,10 @@
               name="aboutImage"
               value="icons/TapiJI_128.png">
         </property>
+        <property
+              name="appName"
+              value="TapiJI Translator">
+        </property>
      </product>
   </extension>
 </plugin>

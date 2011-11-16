@@ -10,7 +10,7 @@
    <runtime>
    	  <library name="resourcebundle.jar">
          <export
-               name="com.essiembre.eclipse.rbe.api.*">
+               name="*">
          </export>
       </library>
    </runtime>
@@ -26,7 +26,7 @@
       <import plugin="org.eclipse.jdt.ui" optional="true"/>
       <import plugin="org.eclipse.ui.views"/>
       <import plugin="org.eclipse.jdt.core" version="3.5.2"/>
-      <import plugin="org.eclipselabs.tapiji.translator.rbe" version="0.0.1"/>
+      <import plugin="org.eclipselabs.tapiji.translator.rbe" version="0.0.2"/>
    </requires>
 
    <extension-point id="resourceFactory" name="resourceFactory" schema="schema/resourceFactory.exsd"/>

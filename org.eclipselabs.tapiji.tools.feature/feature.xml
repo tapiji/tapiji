@@ -127,17 +127,14 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <import plugin="org.eclipse.swt"/>
       <import plugin="org.eclipse.text"/>
       <import plugin="org.eclipse.ui.workbench"/>
-      <import plugin="org.eclipse.ui.editors"/>
-      <import plugin="org.eclipse.ui.workbench.texteditor"/>
-      <import plugin="org.eclipse.ui.views"/>
-      <import plugin="org.eclipse.jdt.core" version="3.5.2" match="compatible"/>
+      <import plugin="org.eclipse.ui.ide" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.navigator" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime" version="3.7.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.7.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.editors" version="3.7.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide.application" version="1.0.300" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.views" version="3.6.0" match="greaterOrEqual"/>
    </requires>
-
-   <plugin
-         id="com.essiembre.eclipse.i18n.resourcebundle"
-         download-size="0"
-         install-size="0"
-         version="0.7.8"/>
 
    <plugin
          id="org.eclipselabs.tapiji.tools.core"
@@ -166,5 +163,11 @@ This Agreement is governed by the laws of the State of New York and the intellec
          install-size="0"
          version="0.0.2.qualifier"
          unpack="false"/>
+
+   <plugin
+         id="com.essiembre.eclipse.i18n.resourcebundle"
+         download-size="0"
+         install-size="0"
+         version="0.7.8.qualifier"/>
 
 </feature>

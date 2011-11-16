@@ -149,7 +149,11 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder{
 			resources.add(resource);
 			// TODO: create instance of progressmonitor and hand it over to
 			// auditResources
-			auditResources(resources, monitor, getProject());
+			try {
+				auditResources(resources, monitor, getProject());
+			} catch (Exception e) {
+				Logger.logError(e);
+			}
 		}
 	}
 
