@@ -48,9 +48,13 @@ public class FileUtils {
 
 	public static void saveTextFile(IFile file, String editorContent) 
 		   throws CoreException, OperationCanceledException {
-		// TODO hand over progress monitor
-		file.setContents(new ByteArrayInputStream(editorContent.getBytes()), 
-				false, true, null);
+		try {
+			// TODO hand over progress monitor
+			file.setContents(new ByteArrayInputStream(editorContent.getBytes()), 
+					false, true, null);
+		} catch (Exception e) {
+			
+		}
 	}
 	
 }
