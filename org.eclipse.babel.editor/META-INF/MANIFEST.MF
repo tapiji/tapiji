@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ltk.ui.refactoring,
  org.eclipse.pde.core;bundle-version="3.2.0",
  org.junit;resolution:=optional,
- org.eclipse.babel.core
+ org.eclipse.babel.core;visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %plugin.provider
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
