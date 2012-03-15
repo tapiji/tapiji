@@ -10,12 +10,13 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
+import java.beans.PropertyChangeEvent;
 import java.util.Locale;
 
+import org.eclipse.babel.core.message.IMessagesBundleGroupListener;
 import org.eclipse.babel.core.message.Message;
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
-import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
@@ -35,7 +36,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 
 /**
  * Tree for displaying and navigating through resource bundle keys.
@@ -46,7 +46,7 @@ public class I18NEntry extends Composite {
     private final MessagesEditor editor;
     private final MessagesBundleGroup messagesBundleGroup;
     private final Locale locale;
-    
+
     private boolean expanded = true;
     private NullableText textBox;
     private CBanner banner;
@@ -94,7 +94,11 @@ public class I18NEntry extends Composite {
         
 
         createTextbox();
+        
     }
+
+
+
 
     public MessagesEditor getResourceBundleEditor() {
         return editor;
@@ -237,7 +241,22 @@ public class I18NEntry extends Composite {
         
         editor.addChangeListener(new MessagesEditorChangeAdapter() {
             public void selectedKeyChanged(String oldKey, String newKey) {
-               updateKey(newKey);
+                boolean isKey =
+                        newKey != null && messagesBundleGroup.isMessageKey(newKey);
+                textBox.setEnabled(isKey);
+                if (isKey) {
+                    IMessage entry = messagesBundleGroup.getMessage(
+                            newKey, locale);
+                    if (entry == null || entry.getValue() == null) {
+                        textBox.setText(null);
+//                        commentedCheckbox.setSelection(false);
+                    } else {
+//                        commentedCheckbox.setSelection(bundleEntry.isCommented());
+                        textBox.setText(entry.getValue());
+                    }
+                } else {
+                    textBox.setText(null);
+                }
             }
         });
 
@@ -256,49 +275,6 @@ public class I18NEntry extends Composite {
             }
         }
     }
-    
-	public void updateKey(String key) {
-		boolean isKey = key != null && messagesBundleGroup.isMessageKey(key);
-		textBox.setEnabled(isKey);
-		if (isKey) {
-			RBManager instance = RBManager.getInstance(messagesBundleGroup
-					.getProjectName());
-			IMessagesBundleGroup mbg = instance
-					.getMessagesBundleGroup(messagesBundleGroup
-							.getResourceBundleId());
-			IMessage entry = mbg.getMessage(key, locale);
-			if (entry == null || entry.getValue() == null) {
-				textBox.setText(null);
-				// commentedCheckbox.setSelection(false);
-			} else {
-				// commentedCheckbox.setSelection(bundleEntry.isCommented());
-				textBox.setText(entry.getValue());
-			}
-		} else {
-			textBox.setText(null);
-		}
-	}
-    
-//    private class MessagesEditorListener implements IMessagesEditorListener {
-//    	
-//    	/**
-//    	 * FUCK
-//    	 */
-//    	public void onSave() {
-//    		Display.getDefault().syncExec(new Thread() {
-//    			@Override
-//    			public void run() {
-//    				IMessagesBundle messagesBundle = RBManager.getInstance().
-//    				getMessagesBundleGroup(messagesBundleGroup.getResourceBundleId()).getMessagesBundle(locale);
-//    				StringBuilder sb = new StringBuilder();
-//    				for (IMessage msg : messagesBundle.getMessages()) {
-//    					sb.append(msg.getValue() + "\r\n");
-//    				}
-//    				textBox.setText(sb.toString());
-//    			}
-//    		});
-//    	}
-//    }
 }
 
 

@@ -16,7 +16,7 @@ public class KeyTreeFactory {
     }
     
     public static IValuedKeyTreeNode createKeyTree(IKeyTreeNode parent, String name, String id, IMessagesBundleGroup bundle) {
-    	return new ValuedKeyTreeNode(parent, name, id, bundle);
+        return new ValuedKeyTreeNode(parent, name, id, bundle);
     }
     
 }

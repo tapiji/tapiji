@@ -196,20 +196,4 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
     public void setSelection(ISelection selection) {
         keysComposite.getTreeViewer().setSelection(selection);
     }
-    
-    /**
-     * Update the {@link I18NEntry}s
-     */
-    @Override
-    public boolean setFocus() {
-    	updateActiveKey();
-    	return super.setFocus();
-    }
-    
-    public void updateActiveKey() {
-    	String selectedKey = editor.getSelectedKey();
-    	for (I18NEntry entry : entryComposites.values()) {
-    		entry.updateKey(selectedKey);
-    	}
-    }
 }

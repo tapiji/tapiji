@@ -38,7 +38,6 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
@@ -298,11 +297,9 @@ public class KeyTreeContributor implements IKeyTreeContributor {
     //                String[] test = newKey.split("\\.");
     //                treeViewer.setSelection(new StructuredSelection(test), true);
                     
-					if (node != null) {
-						treeViewer.setSelection(new StructuredSelection(node),
-								true);
-						treeViewer.getTree().showSelection();
-					}
+                    
+                    treeViewer.setSelection(new StructuredSelection(node), true);
+                    treeViewer.getTree().showSelection();
                 }
             }
         });

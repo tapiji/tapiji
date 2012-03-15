@@ -16,6 +16,9 @@ import org.eclipse.babel.core.message.resource.AbstractPropertiesResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
@@ -136,7 +139,6 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource 
     	 */
 //    	Display.getDefault().asyncExec(new Runnable() {
 //			public void run() {
-    	// [alst] muss 2x speichern wenn async exec
 		        textEditor.getDocumentProvider().getDocument(
 		                textEditor.getEditorInput()).set(content);
 //			}

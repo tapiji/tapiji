@@ -2,7 +2,6 @@ package org.eclipse.babel.editor.api;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.ObjectInputStream.GetField;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;

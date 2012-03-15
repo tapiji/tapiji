@@ -19,7 +19,6 @@ import java.util.Locale;
 import org.eclipse.babel.core.message.MessageException;
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
-import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
 import org.eclipse.babel.editor.builder.ToggleNatureAction;
@@ -34,10 +33,15 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -51,6 +55,7 @@ import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 
 /**
  * Multi-page editor for editing resource bundles.
@@ -196,17 +201,42 @@ public class MessagesEditor extends MultiPageEditorPart
      * Saves the multi-page editor's document.
      */
     public void doSave(IProgressMonitor monitor) {
+        System.setProperty("dirty", "true");
+        refreshLocal();
         for (ITextEditor textEditor : textEditorsIndex) {
+//            refreshLocal();
             textEditor.doSave(monitor);
         }
-        try { // TODO [alst] LOL
-			Thread.sleep(200);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	RBManager.getInstance(messagesBundleGroup.getProjectName()).fireEditorSaved();
-//    	i18nPage.updateActiveKey(); // alst grey issue
+        refreshLocal();
+        System.setProperty("dirty", "false");
+    }
+    
+    /**
+     * [alst] PFUI, aber eine bessere Möglichkeit gibts wohl nicht
+     * -> TODO: Locking implementieren
+     */
+    private void refreshLocal() {
+        Display.getDefault().syncExec(new Thread() {
+
+            @Override
+            public void run() {
+                for (IMessagesBundle bundle : messagesBundleGroup.getMessagesBundles()) {
+                    String resourceLocationLabel = ((MessagesBundle) bundle).getResource().getResourceLocationLabel();
+                    IPath path = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+
+                    IFile file = ResourcesPlugin.getWorkspace().getRoot()
+                            .getFileForLocation(new Path(path.toOSString() + resourceLocationLabel));
+                    try {
+                        if (file != null) {
+                            file.refreshLocal(IResource.DEPTH_ZERO, null);
+                        }
+                    } catch (CoreException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
     
     /**
@@ -353,7 +383,7 @@ public class MessagesEditor extends MultiPageEditorPart
             for (IMessagesEditorChangeListener listener : changeListeners) {
                 listener.selectedKeyChanged(oldKey, activeKey);
             }
-        } 
+        }
     }
 
     public void addChangeListener(IMessagesEditorChangeListener listener) {

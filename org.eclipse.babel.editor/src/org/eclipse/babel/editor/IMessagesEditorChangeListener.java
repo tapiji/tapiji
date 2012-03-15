@@ -13,7 +13,7 @@ package org.eclipse.babel.editor;
 import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
 
 
- 
+
 /**
  * @author Pascal Essiembre
  *
