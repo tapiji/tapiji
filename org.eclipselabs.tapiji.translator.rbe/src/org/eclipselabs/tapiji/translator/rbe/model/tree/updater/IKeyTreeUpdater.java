@@ -1,11 +1,11 @@
 package org.eclipselabs.tapiji.translator.rbe.model.tree.updater;
 
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTree;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeContributor;
 
 public interface IKeyTreeUpdater {
 
-	void addKey(IKeyTree keyTree, String key);
+	void addKey(IKeyTreeContributor keyTree, String key);
 
-	void removeKey(IKeyTree keyTree, String key);
+	void removeKey(IKeyTreeContributor keyTree, String key);
 
 }

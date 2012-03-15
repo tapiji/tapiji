@@ -1,15 +1,14 @@
-package org.eclipselabs.tapiji.translator.rbe.model.tree;
+package org.eclipselabs.tapiji.translator.rbe.babel.bundle;
 
-import java.util.Collection;
-import java.util.Set;
 
-public interface IKeyTreeItem {
+
+public interface IKeyTreeNode {
 
     /**
      * Returns the key of the corresponding Resource-Bundle entry.
      * @return The key of the Resource-Bundle entry
      */
-    String getId();
+    String getMessageKey();
 
     /**
      * Returns the set of Resource-Bundle entries of the next deeper 
@@ -17,7 +16,7 @@ public interface IKeyTreeItem {
      * parent.
      * @return The direct child Resource-Bundle entries
      */
-    Set<IKeyTreeItem> getChildren();
+    IKeyTreeNode[] getChildren();
 
     /**
      * The represented Resource-Bundle entry's id without the prefix defined
@@ -31,7 +30,7 @@ public interface IKeyTreeItem {
      * levels that share the represented entry as their common parent.
      * @return All child Resource-Bundle entries
      */
-    Collection<? extends IKeyTreeItem> getNestedChildren();
+//    Collection<? extends IKeyTreeItem> getNestedChildren();
 
     /**
      * Returns whether this Resource-Bundle entry is visible under the 
@@ -39,18 +38,25 @@ public interface IKeyTreeItem {
      * @param filter The filter expression
      * @return True if the filter expression matches the represented Resource-Bundle entry
      */
-    boolean applyFilter(String filter);
+//    boolean applyFilter(String filter);
 
     /**
      * The Resource-Bundle entries parent.
      * @return The parent Resource-Bundle entry
      */
-    Object getParent();
+    IKeyTreeNode getParent();
 
     /**
      * The Resource-Bundles key representation.
      * @return The Resource-Bundle reference, if known
      */
-    IKeyTree getKeyTree();
+    IMessagesBundleGroup getMessagesBundleGroup();
 
+    
+    boolean isUsedAsKey();
+    
+    void setParent(IKeyTreeNode parentNode);
+    
+    void addChild(IKeyTreeNode childNode);
+    
 }
