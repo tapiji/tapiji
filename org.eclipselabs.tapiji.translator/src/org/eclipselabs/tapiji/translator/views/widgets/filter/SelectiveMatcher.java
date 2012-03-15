@@ -1,7 +1,6 @@
 package org.eclipselabs.tapiji.translator.views.widgets.filter;
 
-import java.util.Collection;
-
+import org.eclipse.babel.editor.api.EditorUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -14,11 +13,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipselabs.tapiji.translator.model.Term;
 import org.eclipselabs.tapiji.translator.model.Translation;
-import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleEntry;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTreeItem;
-
-
-import com.essiembre.eclipse.rbe.api.EditorUtil;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
 
 public class SelectiveMatcher extends ViewerFilter 
 						      implements ISelectionListener, ISelectionChangedListener {
@@ -26,13 +22,13 @@ public class SelectiveMatcher extends ViewerFilter
 	protected final StructuredViewer viewer;
 	protected String pattern = "";
 	protected StringMatcher matcher;
-	protected IKeyTreeItem selectedItem;
+	protected IKeyTreeNode selectedItem;
 	protected IWorkbenchPage page;
 	
 	public SelectiveMatcher (StructuredViewer viewer, IWorkbenchPage page) {
 		this.viewer = viewer;
 		if (page.getActiveEditor() != null) {
-			this.selectedItem = EditorUtil.getSelectedKeyTreeItem(page);
+			this.selectedItem = EditorUtil.getSelectedKeyTreeNode(page);
 		}
 		
 		this.page = page;
@@ -60,8 +56,7 @@ public class SelectiveMatcher extends ViewerFilter
 			
 			String locale = translation.id;
 			
-			Collection<IBundleEntry> selection = selectedItem.getKeyTree().getBundleGroup().getBundleEntries(selectedItem.getId());
-			for (IBundleEntry entry : selection) {
+			for (IMessage entry : selectedItem.getMessagesBundleGroup().getMessages(selectedItem.getMessageKey())) {
 				String ev = entry.getValue();
 				String[] subValues = ev.split("[\\s\\p{Punct}]+");
 				for (String v : subValues) {
@@ -84,7 +79,7 @@ public class SelectiveMatcher extends ViewerFilter
 				return;
 			
 			IStructuredSelection sel = (IStructuredSelection) selection;
-			selectedItem = (IKeyTreeItem) sel.iterator().next();
+			selectedItem = (IKeyTreeNode) sel.iterator().next();
 			viewer.refresh();
 		} catch (Exception e) {	}
 	}

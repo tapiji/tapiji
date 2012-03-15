@@ -40,7 +40,7 @@ public class ResourceBundleDetectionVisitor implements IResourceVisitor,
 		IResource resource = delta.getResource();
 
 		if (RBFileUtils.isResourceBundleFile(resource)) {
-			ResourceBundleManager.getManager(resource.getProject()).bundleResourceModified(delta);
+//			ResourceBundleManager.getManager(resource.getProject()).bundleResourceModified(delta);
 			return false;
 		}
 		

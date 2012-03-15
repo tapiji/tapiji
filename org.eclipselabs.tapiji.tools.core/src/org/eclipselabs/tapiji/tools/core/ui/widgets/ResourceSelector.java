@@ -5,9 +5,10 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
+import org.eclipse.babel.editor.api.KeyTreeFactory;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -24,12 +25,11 @@ import org.eclipselabs.tapiji.tools.core.ui.widgets.listener.IResourceSelectionL
 import org.eclipselabs.tapiji.tools.core.ui.widgets.provider.ResKeyTreeContentProvider;
 import org.eclipselabs.tapiji.tools.core.ui.widgets.provider.ResKeyTreeLabelProvider;
 import org.eclipselabs.tapiji.tools.core.ui.widgets.provider.ValueKeyTreeLabelProvider;
-import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleGroup;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTree;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTreeItem;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.updater.IKeyTreeUpdater;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IAbstractKeyTreeModel;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.TreeType;
 
-import com.essiembre.eclipse.rbe.api.KeyTreeFactory;
 
 public class ResourceSelector  extends Composite {
 
@@ -48,7 +48,7 @@ public class ResourceSelector  extends Composite {
 	private Set<IResourceSelectionListener> listeners = new HashSet<IResourceSelectionListener>();
 	
 	// Viewer model
-	private IContentProvider contentProvider;
+	private TreeType treeType = TreeType.Tree;
 	private StyledCellLabelProvider labelProvider;
 	
 	public ResourceSelector(Composite parent, 
@@ -64,6 +64,7 @@ public class ResourceSelector  extends Composite {
 		this.displayMode = displayMode;
 		this.displayLocale = displayLocale;
 		this.showTree = showTree;
+		this.treeType = showTree ? TreeType.Tree : TreeType.Flat;
 		
 		initLayout (this);
 		initViewer (this);
@@ -71,27 +72,40 @@ public class ResourceSelector  extends Composite {
 		updateViewer (true);
 	}
 
-	protected void updateContentProvider (IBundleGroup group) {
+	protected void updateContentProvider (IMessagesBundleGroup group) {
 		// define input of treeviewer
-		IKeyTreeUpdater updater = null;
-		if (!showTree || displayMode == DISPLAY_TEXT)
-			updater = KeyTreeFactory.createFlatKeyTreeUpdater();
-		else
-			updater = KeyTreeFactory.createGroupedKeyTreeUpdater();
-		IKeyTree keyTree = KeyTreeFactory.createKeyTree(group, updater);
-		viewer.setInput(keyTree);
+		if (!showTree || displayMode == DISPLAY_TEXT) {
+			treeType = TreeType.Flat;
+		} 
+		
+		IAbstractKeyTreeModel model = KeyTreeFactory.createModel(manager.getResourceBundle(resourceBundle));
+		((ResKeyTreeContentProvider)viewer.getContentProvider()).setBundleGroup(manager.getResourceBundle(resourceBundle));
+		((ResKeyTreeContentProvider)viewer.getContentProvider()).setTreeType(treeType);
+        if (viewer.getInput() == null) {
+        	viewer.setUseHashlookup(true);
+        }
+		
+//		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
+		org.eclipse.jface.viewers.TreePath[] expandedTreePaths = viewer.getExpandedTreePaths();
+		viewer.setInput(model);
+		viewer.refresh();
+		viewer.setExpandedTreePaths(expandedTreePaths);
 	}
 	
 	protected void updateViewer (boolean updateContent) {
-		IBundleGroup group = manager.getResourceBundle(resourceBundle);
-		
+	    IMessagesBundleGroup group = manager.getResourceBundle(resourceBundle);
+	    
 		if (group == null)
 			return;
 		
 		if (displayMode == DISPLAY_TEXT) {
-			labelProvider = new ValueKeyTreeLabelProvider(group.getBundle(displayLocale));
+			labelProvider = new ValueKeyTreeLabelProvider(group.getMessagesBundle(displayLocale));
+			treeType = TreeType.Flat;
+			((ResKeyTreeContentProvider)viewer.getContentProvider()).setTreeType(treeType);
 		} else {
 			labelProvider = new ResKeyTreeLabelProvider(null);
+			treeType = TreeType.Tree;
+			((ResKeyTreeContentProvider)viewer.getContentProvider()).setTreeType(treeType);
 		}
 		
 		viewer.setLabelProvider(labelProvider);
@@ -122,11 +136,11 @@ public class ResourceSelector  extends Composite {
 				String selectedKey = "";
 				
 				if (selection instanceof IStructuredSelection) {
-					Iterator<IKeyTreeItem> itSel = ((IStructuredSelection) selection).iterator();
+					Iterator<IKeyTreeNode> itSel = ((IStructuredSelection) selection).iterator();
 					if (itSel.hasNext()) {
-						IKeyTreeItem selItem = itSel.next();
-						IBundleGroup group = manager.getResourceBundle(resourceBundle);
-						selectedKey = selItem.getId();
+					    IKeyTreeNode selItem = itSel.next();
+						IMessagesBundleGroup group = manager.getResourceBundle(resourceBundle);
+						selectedKey = selItem.getMessageKey();
 						
 						if (group == null)
 							return;
@@ -134,8 +148,8 @@ public class ResourceSelector  extends Composite {
 						while (itLocales.hasNext()) {
 							Locale l = itLocales.next();
 							try {
-								selectionSummary += (l.getDisplayLanguage().equals("") ? "[default]" : l.getDisplayLanguage()) + ":\n";
-								selectionSummary += "\t" + group.getBundle(l).getEntry(selItem.getId()).getValue() + "\n";
+								selectionSummary += (l == null ? ResourceBundleManager.defaultLocaleTag : l.getDisplayLanguage()) + ":\n";
+								selectionSummary += "\t" + group.getMessagesBundle(l).getMessage(selItem.getMessageKey()).getValue() + "\n";
 							} catch (Exception e) {}
 						}
 					}
@@ -144,6 +158,32 @@ public class ResourceSelector  extends Composite {
 				// construct ResourceSelectionEvent
 				ResourceSelectionEvent e = new ResourceSelectionEvent(selectedKey, selectionSummary);
 				fireSelectionChanged(e);
+			}
+		});
+		
+		// we need this to keep the tree expanded
+        viewer.setComparer(new IElementComparer() {
+			
+			@Override
+			public int hashCode(Object element) {
+				final int prime = 31;
+				int result = 1;
+				result = prime * result
+						+ ((toString() == null) ? 0 : toString().hashCode());
+				return result;
+			}
+			
+			@Override
+			public boolean equals(Object a, Object b) {
+				if (a == b) {
+					return true;
+				} 
+				if (a instanceof IKeyTreeNode && b instanceof IKeyTreeNode) {
+					IKeyTreeNode nodeA = (IKeyTreeNode) a;
+					IKeyTreeNode nodeB = (IKeyTreeNode) b;
+					return nodeA.equals(nodeB);
+				}
+				return false;
 			}
 		});
 	}

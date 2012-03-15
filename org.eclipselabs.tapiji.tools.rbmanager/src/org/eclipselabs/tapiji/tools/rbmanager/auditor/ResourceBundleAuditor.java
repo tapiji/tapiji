@@ -25,8 +25,8 @@ import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipselabs.tapiji.tools.core.model.preferences.TapiJIPreferences;
 import org.eclipselabs.tapiji.tools.core.util.RBFileUtils;
 import org.eclipselabs.tapiji.tools.rbmanager.auditor.quickfix.MissingLanguageResolution;
-import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleEntry;
-import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleGroup;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 
 /**
  * 
@@ -102,9 +102,9 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 	 * audits all files of a resourcebundle
 	 */
 	public void audit(String rbId, ResourceBundleManager rbmanager) {
-		IBundleGroup bundlegroup = rbmanager.getResourceBundle(rbId);
+		IMessagesBundleGroup bundlegroup = rbmanager.getResourceBundle(rbId);
 		Collection<IResource> bundlefile = rbmanager.getResourceBundles(rbId);
-		Set<String> keys = bundlegroup.getKeys();
+		String[] keys = bundlegroup.getMessageKeys();
 
 		
 		for (IResource r : bundlefile) {
@@ -141,8 +141,8 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 	 * problem.
 	 */
 	private boolean auditUnspecifiedKey(IFile f1, String key,
-			IBundleGroup bundlegroup) {
-		if (bundlegroup.getBundleEntry(RBFileUtils.getLocale(f1), key) == null) {
+			IMessagesBundleGroup bundlegroup) {
+		if (bundlegroup.getMessage(key, RBFileUtils.getLocale(f1)) == null) {
 			int pos = calculateKeyLine(key, f1);
 			unspecifiedKeys.add(new RBLocation(f1, pos, pos + 1, key));
 			return true;
@@ -155,16 +155,16 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 	 * same. It doesn't compare the files if one file is the Default-file
 	 */
 	private void auditSameValues(IFile f1, IFile f2, String key,
-			IBundleGroup bundlegroup) {
+			IMessagesBundleGroup bundlegroup) {
 		Locale l1 = RBFileUtils.getLocale(f1);
 		Locale l2 = RBFileUtils.getLocale(f2);
 
 		if (!l2.equals(l1) && !(l1.toString().equals("")||l2.toString().equals(""))) {
-			IBundleEntry bundleentry = bundlegroup.getBundleEntry(l2, key);
+			IMessage message = bundlegroup.getMessage(key, l2);
 
-			if (bundleentry != null)
-				if (bundlegroup.getBundleEntry(l1, key).getValue()
-						.equals(bundleentry.getValue())) {
+			if (message != null)
+				if (bundlegroup.getMessage(key, l1).getValue()
+						.equals(message.getValue())) {
 					int pos1 = calculateKeyLine(key, f1);
 					int pos2 = calculateKeyLine(key, f2);
 					sameValues.put(new RBLocation(f1, pos1, pos1 + 1, key),
@@ -182,15 +182,11 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 			String rbId) {
 		for (Locale pLocale : projectLocales) {
 			if (!rbLocales.contains(pLocale)) {
-				String language;
-				if (!pLocale.toString().equals(""))
-					language = pLocale.toString();
-				else
-					language = "[Default]";
+				String language = pLocale != null ? pLocale.toString() : ResourceBundleManager.defaultLocaleTag;
 
 				// Add Warning to default-file or a random chosen file
 				IResource representative = rbmanager.getResourceBundleFile(
-						rbId, new Locale(""));
+						rbId, null);
 				if (representative == null)
 					representative = rbmanager.getRandomFile(rbId);
 				missingLanguages.add(new RBLocation((IFile) representative, 1,
@@ -205,21 +201,25 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 	private int calculateKeyLine(String key, IFile file) {
 		int linenumber = 1;
 		try {
-			InputStream is = file.getContents();
-			BufferedReader bf = new BufferedReader(new InputStreamReader(is));
-			String line;
-			while ((line = bf.readLine()) != null) {
-				if ((!line.isEmpty()) && (!line.startsWith("#"))
-						&& (line.compareTo(key) > 0))
-					return linenumber;
-				linenumber++;
-			}
+//		    if (!Boolean.valueOf(System.getProperty("dirty"))) {
+//    		    System.setProperty("dirty", "true");
+    		    file.refreshLocal(IFile.DEPTH_ZERO, null);
+    			InputStream is = file.getContents();
+    			BufferedReader bf = new BufferedReader(new InputStreamReader(is));
+    			String line;
+    			while ((line = bf.readLine()) != null) {
+    				if ((!line.isEmpty()) && (!line.startsWith("#"))
+    						&& (line.compareTo(key) > 0))
+    					return linenumber;
+    				linenumber++;
+    			}
+//    			System.setProperty("dirty", "false");
+//		    }
 		} catch (CoreException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		return linenumber;
 	}
 

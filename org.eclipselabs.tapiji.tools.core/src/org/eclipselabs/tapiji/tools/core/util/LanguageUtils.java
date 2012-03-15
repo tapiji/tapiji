@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.StringBufferInputStream;
 import java.util.Locale;
 
+import org.eclipse.babel.editor.api.PropertiesGenerator;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -18,8 +19,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipselabs.tapiji.tools.core.Logger;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
-
-import com.essiembre.eclipse.rbe.api.PropertiesGenerator;
 
 
 public class LanguageUtils {
@@ -64,7 +63,8 @@ public class LanguageUtils {
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					String newFilename = ResourceBundleManager.getResourceBundleName(file);
-					if (locale.getLanguage() != null && !locale.getLanguage().equalsIgnoreCase("[default]") && !locale.getLanguage().equals(""))
+					if (locale.getLanguage() != null && !locale.getLanguage().equalsIgnoreCase(ResourceBundleManager.defaultLocaleTag) 
+					        && !locale.getLanguage().equals(""))
 						newFilename += "_"+locale.getLanguage();
 					if (locale.getCountry() != null && !locale.getCountry().equals(""))
 						newFilename += "_"+locale.getCountry();

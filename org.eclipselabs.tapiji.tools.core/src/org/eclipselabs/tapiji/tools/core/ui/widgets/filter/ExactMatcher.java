@@ -5,7 +5,7 @@ import java.util.Locale;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IValuedKeyTreeItem;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
 
 public class ExactMatcher extends ViewerFilter {
 
@@ -41,13 +41,13 @@ public class ExactMatcher extends ViewerFilter {
 	
 	@Override
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
-		IValuedKeyTreeItem vEle = (IValuedKeyTreeItem) element;
+		IValuedKeyTreeNode vEle = (IValuedKeyTreeNode) element;
 		FilterInfo filterInfo = new FilterInfo();
-		boolean selected = matcher.match(vEle.getId());
+		boolean selected = matcher.match(vEle.getMessageKey());
 		
 		if (selected) {
 			int start = -1;
-			while ((start = vEle.getId().toLowerCase().indexOf(pattern.toLowerCase(), start+1)) >= 0) {
+			while ((start = vEle.getMessageKey().toLowerCase().indexOf(pattern.toLowerCase(), start+1)) >= 0) {
 				filterInfo.addKeyOccurrence(start, pattern.length());
 			}
 			filterInfo.setFoundInKey(selected);

@@ -1,9 +1,9 @@
 package org.eclipselabs.tapiji.translator.views.widgets.provider;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.babel.editor.api.EditorUtil;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -20,13 +20,10 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipselabs.tapiji.translator.model.Term;
 import org.eclipselabs.tapiji.translator.model.Translation;
-import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleEntry;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTreeItem;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
 import org.eclipselabs.tapiji.translator.utils.FontUtils;
 import org.eclipselabs.tapiji.translator.views.widgets.filter.FilterInfo;
-
-
-import com.essiembre.eclipse.rbe.api.EditorUtil;
 
 public class GlossaryLabelProvider extends StyledCellLabelProvider implements
 				ISelectionListener, ISelectionChangedListener {
@@ -34,7 +31,7 @@ public class GlossaryLabelProvider extends StyledCellLabelProvider implements
 	private boolean searchEnabled = false;
 	private int referenceColumn = 0;
 	private List<String> translations;
-	private IKeyTreeItem selectedItem;
+	private IKeyTreeNode selectedItem;
 	
 	/*** COLORS ***/
 	private Color gray = FontUtils.getSystemColor(SWT.COLOR_GRAY);
@@ -56,7 +53,7 @@ public class GlossaryLabelProvider extends StyledCellLabelProvider implements
 		this.referenceColumn = referenceColumn;
 		this.translations = translations;
 		if (page.getActiveEditor() != null) {
-			selectedItem = EditorUtil.getSelectedKeyTreeItem(page);
+			selectedItem = EditorUtil.getSelectedKeyTreeNode(page);
 		}
 	}
 
@@ -127,8 +124,7 @@ public class GlossaryLabelProvider extends StyledCellLabelProvider implements
 
 	private boolean isCrossRefRegion(String cellText) {
 		if (selectedItem != null) {
-			Collection<IBundleEntry> selection = selectedItem.getKeyTree().getBundleGroup().getBundleEntries(selectedItem.getId());
-			for (IBundleEntry entry : selection) {
+			for (IMessage entry : selectedItem.getMessagesBundleGroup().getMessages(selectedItem.getMessageKey())) {
 				String value = entry.getValue();
 				String[] subValues = value.split("[\\s\\p{Punct}]+");
 				for (String v : subValues) {
@@ -158,7 +154,7 @@ public class GlossaryLabelProvider extends StyledCellLabelProvider implements
 				return;
 			
 			IStructuredSelection sel = (IStructuredSelection) selection;
-			selectedItem = (IKeyTreeItem) sel.iterator().next();
+			selectedItem = (IKeyTreeNode) sel.iterator().next();
 			this.getViewer().refresh();
 		} catch (Exception e) {
 			// silent catch

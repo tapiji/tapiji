@@ -14,11 +14,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipselabs.tapiji.tools.core.ui.widgets.filter.FilterInfo;
 import org.eclipselabs.tapiji.tools.core.util.FontUtils;
 import org.eclipselabs.tapiji.tools.core.util.ImageUtils;
-import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleEntry;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTreeItem;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IValuedKeyTreeItem;
-
-import com.essiembre.eclipse.rbe.api.ValuedKeyTreeItem;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
 
 
 public class ResKeyTreeLabelProvider extends KeyTreeLabelProvider {
@@ -42,14 +40,14 @@ public class ResKeyTreeLabelProvider extends KeyTreeLabelProvider {
 	//@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 		if (columnIndex == 0) {
-			IKeyTreeItem kti = (IKeyTreeItem) element;
-			List<IBundleEntry> be = (List<IBundleEntry>) kti.getKeyTree().getBundleGroup().getBundleEntries(kti.getId());
+		    IKeyTreeNode kti = (IKeyTreeNode) element;
+			IMessage[] be = kti.getMessagesBundleGroup().getMessages(kti.getMessageKey());
 			boolean incomplete = false;
 			
-			if (be.size() != kti.getKeyTree().getBundleGroup().getBundleCount()) 
+			if (be.length != kti.getMessagesBundleGroup().getMessagesBundleCount()) 
 				incomplete = true;
 			else {
-				for (IBundleEntry b : be) {
+				for (IMessage b : be) {
 					if (b.getValue() == null || b.getValue().trim().length() == 0) {
 						incomplete = true;
 						break;
@@ -71,7 +69,7 @@ public class ResKeyTreeLabelProvider extends KeyTreeLabelProvider {
 			return super.getText(element);
 		
 		if (columnIndex <= locales.size()) {
-			IValuedKeyTreeItem item = (IValuedKeyTreeItem) element;
+		    IValuedKeyTreeNode item = (IValuedKeyTreeNode) element;
 			String entry = item.getValue(locales.get(columnIndex-1));
 			if (entry != null)
 				return entry;
@@ -94,8 +92,8 @@ public class ResKeyTreeLabelProvider extends KeyTreeLabelProvider {
 	protected boolean isMatchingToPattern (Object element, int columnIndex) {
 		boolean matching = false;
 		
-		if (element instanceof ValuedKeyTreeItem) {
-			ValuedKeyTreeItem vkti = (ValuedKeyTreeItem) element;
+		if (element instanceof IValuedKeyTreeNode) {
+		    IValuedKeyTreeNode vkti = (IValuedKeyTreeNode) element;
 			
 			if (vkti.getInfo() == null)
 				return false;
@@ -113,7 +111,7 @@ public class ResKeyTreeLabelProvider extends KeyTreeLabelProvider {
 	}
 
 	protected boolean isSearchEnabled (Object element) {
-		return (element instanceof ValuedKeyTreeItem && searchEnabled );
+		return (element instanceof IValuedKeyTreeNode && searchEnabled );
 	}
 	
 	@Override
@@ -124,7 +122,7 @@ public class ResKeyTreeLabelProvider extends KeyTreeLabelProvider {
 		if (isSearchEnabled(element)) {
 			if (isMatchingToPattern(element, columnIndex) ) {
 				List<StyleRange> styleRanges = new ArrayList<StyleRange>();
-				FilterInfo filterInfo = (FilterInfo) ((ValuedKeyTreeItem)element).getInfo();
+				FilterInfo filterInfo = (FilterInfo) ((IValuedKeyTreeNode)element).getInfo();
 				
 				if (columnIndex > 0) {
 					for (Region reg : filterInfo.getFoundInLocaleRanges(locales.get(columnIndex-1))) {

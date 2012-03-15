@@ -1,7 +1,6 @@
 package org.eclipselabs.tapiji.tools.core.ui.views.messagesview.dnd;
 
-import java.util.Collection;
-
+import org.eclipse.babel.editor.api.MessagesBundleFactory;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
@@ -13,13 +12,11 @@ import org.eclipselabs.tapiji.tools.core.Logger;
 import org.eclipselabs.tapiji.tools.core.model.exception.ResourceBundleException;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipselabs.tapiji.tools.core.ui.widgets.provider.ResKeyTreeContentProvider;
-import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleEntry;
-import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleGroup;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTree;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTreeItem;
-
-import com.essiembre.eclipse.rbe.api.BundleFactory;
-import com.essiembre.eclipse.rbe.api.ValuedKeyTreeItem;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IAbstractKeyTreeModel;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
 
 public class KeyTreeItemDropTarget extends DropTargetAdapter {
 	private final TreeViewer target;
@@ -34,35 +31,28 @@ public class KeyTreeItemDropTarget extends DropTargetAdapter {
 //			event.detail = DND.DROP_MOVE;
 	}
 	
-	private void addBundleEntry (final String keyPrefix, 
-								 final String key, 
-								 final IKeyTreeItem kti, 
-								 final IBundleGroup bundleGroup, 
+	private void addBundleEntry (final String keyPrefix, // new prefix
+								 final String key, 		// leaf
+								 final String oldKey, // f.q. key
+								 final IMessagesBundleGroup bundleGroup, 
 								 final boolean removeOld) {
 		
  	   try {
- 		  String nKey = keyPrefix + "." + key;
- 			String newKey = nKey;
+ 			String newKey = keyPrefix + "." + key;
+ 			boolean rem = keyPrefix.contains(oldKey) ? false : removeOld;
  			
- 			int i = 1;
- 			while (bundleGroup.containsKey(newKey)) {
- 				newKey = nKey + i;
- 				i++;
+			for (IMessage message : bundleGroup.getMessages(oldKey)) {
+				IMessagesBundle messagesBundle = bundleGroup.getMessagesBundle(message.getLocale());
+				IMessage m = MessagesBundleFactory.createMessage(newKey, message.getLocale());
+				m.setText(message.getValue());
+				m.setComment(message.getComment());
+				messagesBundle.addMessage(m);
+			}
+ 			
+ 			if (rem) {
+ 				bundleGroup.removeMessages(oldKey);
  			}
  			
- 			for (IKeyTreeItem child : kti.getChildren()) {
- 				addBundleEntry (newKey, child.getName(), child, bundleGroup, removeOld);
- 			}
- 			
- 			bundleGroup.addKey(newKey);
- 			for (Object o : bundleGroup.getBundleEntries(kti.getId())) {
- 				IBundleEntry be = (IBundleEntry) o;
- 				bundleGroup.addBundleEntry(be.getBundle().getLocale(), BundleFactory.createBundleEntry(newKey, be.getValue(), be.getComment()));
- 			}
- 			
- 			if (removeOld) {
- 				bundleGroup.removeKey(kti.getId());
- 			}
  	   } catch (Exception e) { Logger.logError(e); }
 
 	}
@@ -76,8 +66,8 @@ public class KeyTreeItemDropTarget extends DropTargetAdapter {
 						String newKeyPrefix = "";
 						
 						if (event.item instanceof TreeItem &&
-							((TreeItem) event.item).getData() instanceof ValuedKeyTreeItem) {
-							newKeyPrefix = ((ValuedKeyTreeItem) ((TreeItem) event.item).getData()).getId();
+							((TreeItem) event.item).getData() instanceof IValuedKeyTreeNode) {
+							newKeyPrefix = ((IValuedKeyTreeNode) ((TreeItem) event.item).getData()).getMessageKey();
 						}
 							
 						String message = (String)event.data;
@@ -87,19 +77,16 @@ public class KeyTreeItemDropTarget extends DropTargetAdapter {
 						String key = keyArr[keyArr.length-1];
 						
 						ResKeyTreeContentProvider contentProvider = (ResKeyTreeContentProvider) target.getContentProvider();
-						IKeyTree keyTree = (IKeyTree) target.getInput();
+						IAbstractKeyTreeModel keyTree = (IAbstractKeyTreeModel) target.getInput();
 						
-						IBundleGroup bundleGroup = contentProvider.getBundle();
+						IMessagesBundleGroup bundleGroup = contentProvider.getBundle();
 						if (!bundleGroup.containsKey(oldKey)) {
 							event.detail = DND.DROP_COPY;
 							return;
 						}
 						
-						Collection<IBundleEntry> entries = bundleGroup.getBundleEntries(key);
-						
 						// Adopt and add new bundle entries
-						IKeyTreeItem okti = keyTree.getKeyTreeItem(oldKey);
-						addBundleEntry (newKeyPrefix, key, okti, bundleGroup, event.detail == DND.DROP_MOVE);
+						addBundleEntry (newKeyPrefix, key, oldKey, bundleGroup, event.detail == DND.DROP_MOVE);
 						
 						// Store changes
 						ResourceBundleManager manager = contentProvider.getManager();

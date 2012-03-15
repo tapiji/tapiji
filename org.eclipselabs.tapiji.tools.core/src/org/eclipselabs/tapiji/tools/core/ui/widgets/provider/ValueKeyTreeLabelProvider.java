@@ -6,17 +6,17 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
-import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundle;
-import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleEntry;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTreeItem;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 
 
 public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
 		ITableColorProvider, ITableFontProvider {
 
-	private IBundle locale;
+	private IMessagesBundle locale;
 
-	public ValueKeyTreeLabelProvider(IBundle iBundle) {
+	public ValueKeyTreeLabelProvider(IMessagesBundle iBundle) {
 		this.locale = iBundle;
 	}
 
@@ -28,8 +28,8 @@ public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
 	//@Override
 	public String getColumnText(Object element, int columnIndex) {
 		try {
-			IKeyTreeItem item = (IKeyTreeItem) element;
-			IBundleEntry entry = locale.getEntry(item.getId());
+		    IKeyTreeNode item = (IKeyTreeNode) element;
+			IMessage entry = locale.getMessage(item.getMessageKey());
 			if (entry != null) {
 				String value = entry.getValue();
 				if (value.length() > 40) 

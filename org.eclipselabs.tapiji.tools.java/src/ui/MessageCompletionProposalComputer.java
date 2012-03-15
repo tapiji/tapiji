@@ -20,7 +20,7 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipselabs.tapiji.tools.core.builder.InternationalizationNature;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleGroup;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 
 import ui.autocompletion.CreateResourceBundleProposal;
 import ui.autocompletion.InsertResourceBundleReferenceProposal;
@@ -164,12 +164,12 @@ public class MessageCompletionProposalComputer implements
 		IRegion region = csav.getKeyAt(new Long(offset));
 		String bundleName = csav.getBundleReference(region);
 		int posStart = offset - stringLiteralStart.length();
-		IBundleGroup bundleGroup = manager.getResourceBundle(bundleName);
+		IMessagesBundleGroup bundleGroup = manager.getResourceBundle(bundleName);
 		
 		if (stringLiteralStart.length() > 0) {
 			boolean hit = false;
 			// If a part of a String has already been entered	
-			for (String key : bundleGroup.getKeys()) {
+			for (String key : bundleGroup.getMessageKeys()) {
 				if (key.toLowerCase().startsWith(stringLiteralStart.toLowerCase())) {
 					if (!key.equals(stringLiteralStart))
 						completions.add(new MessageCompletionProposal(posStart, 
@@ -182,7 +182,7 @@ public class MessageCompletionProposalComputer implements
 				completions.add(new NewResourceBundleEntryProposal(resource, stringLiteralStart, offset - stringLiteralStart.length(),
 						stringLiteralStart.length(), true, manager, bundleName/*, csav.getDefinedResourceBundles(offset)*/));
 		} else {
-			for (String key : bundleGroup.getKeys()) {
+			for (String key : bundleGroup.getMessageKeys()) {
 				completions.add (new MessageCompletionProposal (posStart, stringLiteralStart.length(), key, false));
 			}
 			completions.add(new NewResourceBundleEntryProposal(resource, stringLiteralStart, offset - stringLiteralStart.length(),

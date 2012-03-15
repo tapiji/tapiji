@@ -97,8 +97,12 @@ public class ResourceBundleLabelProvider extends LabelProvider implements ILabel
 			if (RBFileUtils.isResourceBundleFile((IFile)element)){
 				Locale locale = RBFileUtils.getLocale((IFile)element);
 				text.append("     ");
-				if (!locale.toString().equals("")) text.append(locale);
-				else text.append("default");
+				if (locale != null) {
+					text.append(locale);
+				}
+				else {
+					text.append("default");
+				}
 				
 				VirtualProject vproject = (VirtualProject) vcManager.getContainer(((IFile) element).getProject());
 				if (vproject!= null && vproject.isFragment()) text.append("°");

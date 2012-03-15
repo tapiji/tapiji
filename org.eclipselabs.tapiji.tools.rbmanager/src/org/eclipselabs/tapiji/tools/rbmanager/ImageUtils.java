@@ -81,11 +81,11 @@ public class ImageUtils {
 		String imageName;
 		Image image = null;
 		
-		if (!locale.getCountry().equals("")){
+		if (locale != null && !locale.getCountry().equals("")){
 			imageName = File.separatorChar+"countries"+File.separatorChar+ locale.getCountry().toLowerCase() +".gif";
 			image = getBaseImage(imageName);
 		}else {
-			if (!locale.toString().equals("")){
+			if (locale != null){
 				imageName = File.separatorChar+"countries"+File.separatorChar+"l_"+locale.getLanguage().toLowerCase()+".gif";
 				image = getBaseImage(imageName);
 			}else {

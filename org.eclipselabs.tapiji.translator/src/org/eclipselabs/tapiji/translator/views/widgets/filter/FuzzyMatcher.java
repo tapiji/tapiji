@@ -1,13 +1,11 @@
 package org.eclipselabs.tapiji.translator.views.widgets.filter;
 
+import org.eclipse.babel.editor.api.AnalyzerFactory;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipselabs.tapiji.translator.model.Term;
 import org.eclipselabs.tapiji.translator.model.Translation;
 import org.eclipselabs.tapiji.translator.rbe.model.analyze.ILevenshteinDistanceAnalyzer;
-
-
-import com.essiembre.eclipse.rbe.api.AnalyzerFactory;
 
 public class FuzzyMatcher extends ExactMatcher {
 

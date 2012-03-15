@@ -6,9 +6,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipselabs.tapiji.tools.core.model.view.SortInfo;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IValuedKeyTreeItem;
-
-import com.essiembre.eclipse.rbe.api.ValuedKeyTreeItem;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
 
 public class ValuedKeyTreeItemSorter extends ViewerSorter {
 
@@ -40,10 +38,10 @@ public class ValuedKeyTreeItemSorter extends ViewerSorter {
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
 		try {
-			if (!(e1 instanceof IValuedKeyTreeItem && e2 instanceof IValuedKeyTreeItem))
+			if (!(e1 instanceof IValuedKeyTreeNode && e2 instanceof IValuedKeyTreeNode))
 				return super.compare(viewer, e1, e2);
-			ValuedKeyTreeItem comp1 = (ValuedKeyTreeItem) e1;
-			ValuedKeyTreeItem comp2 = (ValuedKeyTreeItem) e2;
+			IValuedKeyTreeNode comp1 = (IValuedKeyTreeNode) e1;
+			IValuedKeyTreeNode comp2 = (IValuedKeyTreeNode) e2;
 			
 			int result = 0;
 			
@@ -51,7 +49,7 @@ public class ValuedKeyTreeItemSorter extends ViewerSorter {
 				return 0;
 			
 			if (sortInfo.getColIdx() == 0)
-				result = comp1.getId().compareTo(comp2.getId());
+				result = comp1.getMessageKey().compareTo(comp2.getMessageKey());
 			else {
 				Locale loc = sortInfo.getVisibleLocales().get(sortInfo.getColIdx()-1);
 				result = (comp1.getValue(loc) == null ? "" : comp1.getValue(loc))

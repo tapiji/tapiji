@@ -79,11 +79,16 @@ public class MessagesViewState {
 		if (memento == null)
 			return;
 		
+		
 		if (memento.getChild(TAG_VISIBLE_LOCALES) != null) {
 			if (visibleLocales == null)
 				visibleLocales = new ArrayList<Locale>();
 			IMemento[] mLocales = memento.getChild(TAG_VISIBLE_LOCALES).getChildren(TAG_LOCALE);
 			for (IMemento mLocale : mLocales) {
+			    if (mLocale.getString(TAG_LOCALE_LANGUAGE) == null && mLocale.getString(TAG_LOCALE_COUNTRY) == null
+			            && mLocale.getString(TAG_LOCALE_VARIANT) == null) {
+			        continue;
+			    }
 				Locale newLocale = new Locale (
 						mLocale.getString(TAG_LOCALE_LANGUAGE),
 						mLocale.getString(TAG_LOCALE_COUNTRY),

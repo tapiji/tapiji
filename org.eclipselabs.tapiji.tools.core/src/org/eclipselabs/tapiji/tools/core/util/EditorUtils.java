@@ -32,7 +32,7 @@ public class EditorUtils {
 	public static final String MESSAGE_MISSING_LANGUAGE = "ResourceBundle ''{0}'' lacks a translation for ''{1}''";
 	
 	/** Editor ids **/
-	public static final String RESOURCE_BUNDLE_EDITOR = "com.essiembre.eclipse.rbe.ui.editor.ResourceBundleEditor";
+	public static final String RESOURCE_BUNDLE_EDITOR = "com.essiembre.rbe.eclipse.editor.ResourceBundleEditor";
 	
 	public static String getFormattedMessage (String pattern, Object[] arguments) {
 		String formattedMessage = "";

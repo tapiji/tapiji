@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileReader;
 
+import org.eclipse.core.internal.resources.ResourceException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -46,14 +47,20 @@ public class FileUtils {
 		return Activator.getDefault().getStateLocation().append("internationalization.xml").toFile();
 	}
 
-	public static void saveTextFile(IFile file, String editorContent) 
+	/**
+	 * Don't use that -> causes {@link ResourceException} -> because File out of sync
+	 * @param file
+	 * @param editorContent
+	 * @throws CoreException
+	 * @throws OperationCanceledException
+	 */
+	public synchronized void saveTextFile(IFile file, String editorContent) 
 		   throws CoreException, OperationCanceledException {
 		try {
-			// TODO hand over progress monitor
 			file.setContents(new ByteArrayInputStream(editorContent.getBytes()), 
 					false, true, null);
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 	}
 	

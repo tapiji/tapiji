@@ -147,7 +147,7 @@ public class QueryResourceBundleEntryDialog extends TitleAreaDialog {
 		for (Locale l : locales) {
 			String displayName = l.getDisplayName();
 			if (displayName.equals(""))
-				displayName = "[default]";
+				displayName = ResourceBundleManager.defaultLocaleTag;
 			cmbLanguage.add(displayName);
 		}
 		

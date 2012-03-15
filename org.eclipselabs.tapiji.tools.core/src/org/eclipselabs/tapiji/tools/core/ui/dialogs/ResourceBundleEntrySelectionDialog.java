@@ -26,7 +26,6 @@ import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipselabs.tapiji.tools.core.ui.widgets.ResourceSelector;
 import org.eclipselabs.tapiji.tools.core.ui.widgets.event.ResourceSelectionEvent;
 import org.eclipselabs.tapiji.tools.core.ui.widgets.listener.IResourceSelectionListener;
-import org.eclipselabs.tapiji.tools.core.util.LocaleUtils;
 
 
 public class ResourceBundleEntrySelectionDialog extends TitleAreaDialog {
@@ -146,7 +145,7 @@ public class ResourceBundleEntrySelectionDialog extends TitleAreaDialog {
 		for (Locale l : locales) {
 			String displayName = l.getDisplayName();
 			if (displayName.equals(""))
-				displayName = "[default]";
+				displayName = ResourceBundleManager.defaultLocaleTag;
 			cmbLanguage.add(displayName);
 		}
 		

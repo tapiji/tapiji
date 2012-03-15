@@ -11,29 +11,23 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
+import org.eclipse.babel.core.message.manager.RBManager;
+import org.eclipse.babel.editor.api.MessagesBundleFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.XMLMemento;
 import org.eclipselabs.tapiji.tools.core.Logger;
@@ -49,17 +43,15 @@ import org.eclipselabs.tapiji.tools.core.util.EditorUtils;
 import org.eclipselabs.tapiji.tools.core.util.FileUtils;
 import org.eclipselabs.tapiji.tools.core.util.FragmentProjectUtils;
 import org.eclipselabs.tapiji.tools.core.util.RBFileUtils;
-import org.eclipselabs.tapiji.tools.core.util.ResourceUtils;
-import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundle;
-import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleEntry;
-import org.eclipselabs.tapiji.translator.rbe.model.bundle.IBundleGroup;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 
-import com.essiembre.eclipse.rbe.api.BundleFactory;
-import com.essiembre.eclipse.rbe.api.PropertiesGenerator;
-import com.essiembre.eclipse.rbe.api.PropertiesParser;
 
-public class ResourceBundleManager{
+public class ResourceBundleManager {
 
+    public static String defaultLocaleTag = "[default]"; // TODO externalize
+    
 	/*** CONFIG SECTION ***/
 	private static boolean checkResourceExclusionRoot = false;
 	
@@ -67,7 +59,6 @@ public class ResourceBundleManager{
 	private static Map<IProject, ResourceBundleManager> rbmanager = new HashMap<IProject, ResourceBundleManager>();
 	
 	public static final String RESOURCE_BUNDLE_EXTENSION = ".properties";
-	public static final Locale DEFAULT_LOCALE = new Locale("");
 	
 	//project-specific
 	private Map<String, Set<IResource>> resources = 
@@ -80,9 +71,6 @@ public class ResourceBundleManager{
 	
 	private List<IResourceExclusionListener> exclusionListeners = 
 		new ArrayList<IResourceExclusionListener> ();
-	
-	private SortedMap<String, IBundleGroup> resourceBundles = 
-		new TreeMap<String, IBundleGroup>();
 	
 	//global
 	private static Set<IResourceDescriptor> excludedResources = new HashSet<IResourceDescriptor> (); 
@@ -106,7 +94,8 @@ public class ResourceBundleManager{
 	private static final String TAB_RES_DESC_BID = "BundleId";
 	
 	// Define private constructor
-	private ResourceBundleManager () {}
+	private ResourceBundleManager () {
+	}
 	
 	public static ResourceBundleManager getManager (IProject project) {
 		// check if persistant state has been loaded
@@ -124,45 +113,20 @@ public class ResourceBundleManager{
 			manager.project = project;
 			manager.detectResourceBundles();
 			rbmanager.put(project, manager);
+			
 		}
 		return manager;
 	}
 	
-	public void loadResourceBundle (String bundleName) {
-		if (resourceBundles.containsKey(bundleName))
-			return;
-		else {
-			changeResourceBundle(bundleName);
-		}
-	}
-	
-	public void changeResourceBundle(final String bundleName){
-		if (!resources.containsKey(bundleName)){
-			return;
-		}
-		
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				for (IResource resource : resources.get(bundleName)) {
-					loadResource (bundleName, resource);
-				}
-			}
-		});
-	}
-	
 	public Set<Locale> getProvidedLocales (String bundleName) {
-		loadResourceBundle(bundleName);
+		RBManager instance = RBManager.getInstance(project);
 		
 		Set<Locale> locales = new HashSet<Locale>();
-		IBundleGroup group = resourceBundles.get(bundleName);
+		IMessagesBundleGroup group = instance.getMessagesBundleGroup(bundleName);
 		if (group == null) 
 			return locales;
 		
-		Iterator<IBundle> it = group.iterator();
-		
-		while (it.hasNext()) {
-			IBundle bundle = it.next();
+		for (IMessagesBundle bundle : group.getMessagesBundles()) {
 			locales.add(bundle.getLocale());
 		}
 		return locales;
@@ -177,27 +141,8 @@ public class ResourceBundleManager{
         return name.replaceFirst(regex, "$1"); //$NON-NLS-1$
     }
 	
-	protected void loadResource (String bundleName, IResource resource) {
-		try {
-			Locale locale = getLocaleByName(bundleName, resource.getName());
-			
-			IBundleGroup bundle = null;
-			if (resourceBundles.containsKey(bundleName)) {
-				bundle = resourceBundles.get(bundleName);
-			} else {
-				bundle = BundleFactory.createBundleGroup();
-			}
-			IBundle bundleFile = PropertiesParser.parse(FileUtils.readFile(resource));
-			//bundleFile.setLocale(locale);
-			bundle.addBundle(locale, bundleFile);
-			resourceBundles.put(bundleName, bundle);
-		} catch (Exception e) {
-			Logger.logError(e);
-		}
-	}
-	
 	protected boolean isResourceBundleLoaded (String bundleName) {
-		return resourceBundles.containsKey(bundleName);
+		return RBManager.getInstance(project).containsMessagesBundleGroup(bundleName);
 	}
 	
 	protected Locale getLocaleByName (String bundleName, String localeID) {
@@ -207,7 +152,7 @@ public class ResourceBundleManager{
 		localeID = localeID.substring(0, localeID.length() - "properties".length() - 1);
 		if (localeID.length() == bundleName.length()) {
 			// default locale
-			locale = new Locale("");
+			return null;
 		} else {
 			localeID = localeID.substring(bundleName.length() + 1);
 			String[] localeTokens = localeID.split("_");
@@ -223,7 +168,7 @@ public class ResourceBundleManager{
 				locale = new Locale(localeTokens[0], localeTokens[1], localeTokens[2]);
 				break;
 				default:
-					locale = DEFAULT_LOCALE;
+					locale = null;
 					break;
 			}
 		}
@@ -237,58 +182,58 @@ public class ResourceBundleManager{
 //		loadResourceBundle(bundleName);
 	}	
 	
-	public void bundleResourceModified (IResourceDelta delta) {
-		IResource resource = delta.getResource();			
-		if (resource == null) return;
-		String bundleName = getResourceBundleId(resource);
-		Set<IResource> res;
-		int changeType = -1;
-		
-		// handle changed event
-		switch (delta.getKind()) {
-		case IResourceDelta.ADDED:
-			changeType = ResourceBundleChangedEvent.ADDED;
-			res = resources.get(bundleName);
-			if (res == null){
-				addBundleResource(resource);
-				return;
-			}
-			res.add(resource);
-			resources.put(bundleName, res);
-			allBundles.put(bundleName, new HashSet<IResource>(res));
-			
-			if (resourceBundles.containsKey(bundleName))
-				loadResource(bundleName, resource);
-			break;
-		case IResourceDelta.REMOVED:
-			changeType = ResourceBundleChangedEvent.DELETED;
-			res = resources.get(bundleName);
-			if (res != null && res.contains(resource)) {
-				res.remove(resource);
-				resources.put(bundleName, res);
-				allBundles.put(bundleName, new HashSet<IResource>(res));
-
-				if (resourceBundles.containsKey(bundleName))
-					unloadResource(bundleName, resource);
-			}
-			break;
-		case IResourceDelta.CHANGED:
-			if (delta.getFlags() == IResourceDelta.MARKERS)
-				return;
-			
-			changeType = ResourceBundleChangedEvent.MODIFIED;
-			// TODO implement more efficient
-			changeResourceBundle(bundleName);
-			break;
-			default:
-				break;
-		}
-		
-		ResourceBundleChangedEvent event = new ResourceBundleChangedEvent (changeType,
-				bundleName, resource.getProject());
-		
-		fireResourceBundleChangedEvent(bundleName, event);
-	}
+//	public void bundleResourceModified (IResourceDelta delta) {
+//		IResource resource = delta.getResource();			
+//		if (resource == null) return;
+//		String bundleName = getResourceBundleId(resource);
+//		Set<IResource> res;
+//		int changeType = -1;
+//		
+//		// handle changed event
+//		switch (delta.getKind()) {
+//		case IResourceDelta.ADDED:
+//			changeType = ResourceBundleChangedEvent.ADDED;
+//			res = resources.get(bundleName);
+//			if (res == null){
+//				addBundleResource(resource);
+//				return;
+//			}
+//			res.add(resource);
+//			resources.put(bundleName, res);
+//			allBundles.put(bundleName, new HashSet<IResource>(res));
+//			
+//			if (resourceBundles.containsKey(bundleName))
+//				loadResource(bundleName, resource);
+//			break;
+//		case IResourceDelta.REMOVED:
+//			changeType = ResourceBundleChangedEvent.DELETED;
+//			res = resources.get(bundleName);
+//			if (res != null && res.contains(resource)) {
+//				res.remove(resource);
+//				resources.put(bundleName, res);
+//				allBundles.put(bundleName, new HashSet<IResource>(res));
+//
+//				if (resourceBundles.containsKey(bundleName))
+//					unloadResource(bundleName, resource);
+//			}
+//			break;
+//		case IResourceDelta.CHANGED:
+//			if (delta.getFlags() == IResourceDelta.MARKERS)
+//				return;
+//			
+//			changeType = ResourceBundleChangedEvent.MODIFIED;
+//			// TODO implement more efficient
+//			changeResourceBundle(bundleName);
+//			break;
+//			default:
+//				break;
+//		}
+//		
+//		ResourceBundleChangedEvent event = new ResourceBundleChangedEvent (changeType,
+//				bundleName, resource.getProject());
+//		
+//		fireResourceBundleChangedEvent(bundleName, event);
+//	}
 	
 	public static String getResourceBundleId (IResource resource) {
 		String packageFragment = "";
@@ -334,16 +279,13 @@ public class ResourceBundleManager{
 	}
 	
 	public void unloadResourceBundle (String name) {
-		IBundleGroup group = resourceBundles.remove(name);
-		
-		if (group != null) {
-			group = null;
-		}
+		RBManager instance = RBManager.getInstance(project);
+		instance.deleteMessagesBundle(name);
 	}
 	
-	public IBundleGroup getResourceBundle (String name) {
-		loadResourceBundle(name);
-		return resourceBundles.get(name);
+	public IMessagesBundleGroup getResourceBundle (String name) {
+		RBManager instance = RBManager.getInstance(project);
+		return instance.getMessagesBundleGroup(name);
 	}
 	
 	public Collection<IResource> getResourceBundles (String bundleName) {
@@ -462,21 +404,21 @@ public class ResourceBundleManager{
 
 	public String getKeyHoverString(String rbName, String key) {
 		try {
-			IBundleGroup bundleGroup = this.resourceBundles.get(rbName);
+			RBManager instance = RBManager.getInstance(project);
+			IMessagesBundleGroup bundleGroup = instance
+					.getMessagesBundleGroup(rbName);
 			if (!bundleGroup.containsKey(key))
 				return null;
-			
+
 			String hoverText = "<html><head></head><body>";
-			
-			for (Iterator<IBundleEntry> it = (Iterator<IBundleEntry>) bundleGroup.getBundleEntries(key).iterator();
-			     it.hasNext();) {
-				IBundleEntry entry = it.next();
-				Locale l = entry.getBundle().getLocale();
-				String value = entry.getValue();
-				hoverText += "<b><i>" + (!(l.getDisplayName().equals("")) ? l.getDisplayName() : "Default") + "</i></b><br/>" +
-				             value.replace("\n", "<br/>") + "<br/><br/>";
+
+			for (IMessage message : bundleGroup.getMessages(key)) {
+				String displayName = message.getLocale() == null ? "Default"
+						: message.getLocale().getDisplayName();
+				String value = message.getValue();
+				hoverText += "<b><i>" + displayName + "</i></b><br/>"
+						+ value.replace("\n", "<br/>") + "<br/><br/>";
 			}
-			
 			return hoverText + "</body></html>";
 		} catch (Exception e) {
 			// silent catch
@@ -485,12 +427,16 @@ public class ResourceBundleManager{
 	}
 	
 	public boolean isKeyBroken (String rbName, String key) {
-		if (!isResourceBundleLoaded(rbName))
-			loadResourceBundle(rbName);
-		
-		if (!resourceBundles.containsKey(rbName))
+		IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(project).getMessagesBundleGroup(rbName);
+		if (messagesBundleGroup == null) {
 			return true;
-		return !this.isResourceExisting(rbName, key);
+		} else {
+			return !messagesBundleGroup.containsKey(key);
+		}
+		
+//		if (!resourceBundles.containsKey(rbName))
+//			return true;
+//		return !this.isResourceExisting(rbName, key);
 	}
 	
 	protected void excludeSingleResource (IResource res) {
@@ -615,7 +561,7 @@ public class ResourceBundleManager{
 			
 			this.addBundleResource(res);
 			this.unloadResourceBundle(bundleName);
-			this.loadResourceBundle(bundleName);
+//			this.loadResourceBundle(bundleName);
 			
 			if (newRB)
 				(new StringLiteralAuditor()).buildProject(null, res.getProject());
@@ -758,7 +704,7 @@ public class ResourceBundleManager{
 		if ( resSet != null ) {
 			for (IResource resource : resSet) {
 				Locale refLoc = getLocaleByName(resourceBundle, resource.getName());
-				if (refLoc.equals(l)) {
+				if (refLoc == null && l == null || (refLoc != null && refLoc.equals(l) || l != null && l.equals(refLoc))) {
 					res = resource.getProject().getFile(resource.getProjectRelativePath());
 					break;
 				}
@@ -792,95 +738,44 @@ public class ResourceBundleManager{
 	}
 
 	public void addResourceBundleEntry(String resourceBundleId, String key,
-									   Locale locale, String message) 
-				throws ResourceBundleException {
-		IBundleGroup bundleGroup = this.getResourceBundle(resourceBundleId);
-        IBundleEntry entry = bundleGroup.getBundleEntry(locale, key);
-        
-        if (entry == null) {
-            String comment = null;
-            bundleGroup.addBundleEntry(locale, BundleFactory.createBundleEntry(key, message, comment));
-
-			String editorContent = PropertiesGenerator.generate(bundleGroup.getBundle(locale));
-			
-			// save editor content to file
-			try {
-				FileUtils.saveTextFile(this.getResourceBundleFile(resourceBundleId, locale),
-									   editorContent);
-//				(new StringLiteralAuditor()).buildProject(null, this.getProject());
-			} catch (CoreException ce) {
-				Logger.logError(ce);
-			} catch (OperationCanceledException oce) {
-				// do nothing
-			}
-        } else {
-        	throw new ResourceBundleException("Resource already exists!");
-        }
-    }
+			Locale locale, String message) throws ResourceBundleException {
+		
+		RBManager instance = RBManager.getInstance(project);
+		IMessagesBundleGroup bundleGroup = instance.getMessagesBundleGroup(resourceBundleId);
+		IMessage entry = bundleGroup.getMessage(key, locale);	
 	
-	public void saveResourceBundle (String resourceBundleId, IBundleGroup newBundleGroup) 
-		throws ResourceBundleException {
-		if (resourceBundles == null || resourceBundleId == null || newBundleGroup == null)
-			return;
-		
-		this.resourceBundles.put(resourceBundleId, newBundleGroup);
-		
-		Iterator<IBundle> it = newBundleGroup.iterator();
-		
-		while (it.hasNext()) {
-			IBundle b = it.next();
-			String editorContent = PropertiesGenerator.generate(newBundleGroup.getBundle(b.getLocale()));
-		
-			// save editor content to file
-			try {
-				FileUtils.saveTextFile(this.getResourceBundleFile(resourceBundleId, b.getLocale()),
-							   editorContent);
-			} catch (CoreException ce) {
-				Logger.logError(ce);
-			} catch (OperationCanceledException oce) {
-			}
-		}
+	      if (entry == null) {
+		      IMessagesBundle messagesBundle = bundleGroup.getMessagesBundle(locale);
+		      IMessage m = MessagesBundleFactory.createMessage(key, locale);
+		      m.setText(message);
+		      messagesBundle.addMessage(m);
+	      }
+      
+		// notify the PropertyKeySelectionTree
+		instance.fireEditorChanged();
 	}
 	
-	public void removeResourceBundleEntry (String resourceBundleId, List<String> keys) 
-		throws ResourceBundleException {
-		
-		if (keys != null && keys.size() > 0) {
-			// iterate all locales and remove resource bundle entry
-	        Set<Locale> locales = getProvidedLocales(resourceBundleId);
-			IBundleGroup bundleGroup = this.getResourceBundle(resourceBundleId);
-	        
-			for (String key : keys) {
-		        if (bundleGroup.isKey(key)) {
-		            bundleGroup.removeKey(key); 
-		        } else {
-		        	throw new ResourceBundleException("Resource '" + key + "' does not exist!");
-		        }
-			}
-	        
-	        Iterator<Locale> itLoc = locales.iterator();
-	        
-	        while (itLoc.hasNext()) {
-	            Locale locale = (Locale) itLoc.next();
-	        	 
-	        	String editorContent = PropertiesGenerator.generate(bundleGroup.getBundle(locale));
-				// save editor content to file
-				try {
-					FileUtils.saveTextFile(this.getResourceBundleFile(resourceBundleId, locale),
-										   editorContent);
-				} catch (CoreException ce) {
-					Logger.logError(ce);
-				} catch (OperationCanceledException oce) {
-					// do nothing
-				}
-	        }
+	public void saveResourceBundle(String resourceBundleId,
+			IMessagesBundleGroup newBundleGroup) throws ResourceBundleException {
+
+//		RBManager.getInstance().
+	}
+	
+	public void removeResourceBundleEntry(String resourceBundleId,
+			List<String> keys) throws ResourceBundleException {
+		RBManager instance = RBManager.getInstance(project);
+		IMessagesBundleGroup messagesBundleGroup = instance.getMessagesBundleGroup(resourceBundleId);
+		for (String key : keys) {
+			messagesBundleGroup.removeMessages(key);
 		}
 		
+		// notify the PropertyKeySelectionTree
+		instance.fireEditorChanged();
 	}
 	
 	public boolean isResourceExisting (String bundleId, String key) {
 		boolean keyExists = false;
-		IBundleGroup bGroup = getResourceBundle(bundleId);
+		IMessagesBundleGroup bGroup = getResourceBundle(bundleId);
 		
 		if (bGroup != null) {
 			keyExists = bGroup.isKey(key);

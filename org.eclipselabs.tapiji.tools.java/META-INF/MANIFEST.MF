@@ -10,9 +10,7 @@ Require-Bundle: org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.jdt.ui;bundle-version="3.6.0",
  org.eclipse.jface,
  org.eclipselabs.tapiji.tools.core;bundle-version="0.0.2"
-Import-Package: org.eclipselabs.tapiji.translator.rbe.model.bundle,
- org.eclipselabs.tapiji.translator.rbe.ui.wizards,
- org.eclipse.core.filebuffers,
+Import-Package: org.eclipse.core.filebuffers,
  org.eclipse.jface.dialogs,
  org.eclipse.jface.text,
  org.eclipse.jface.text.contentassist,
@@ -22,7 +20,9 @@ Import-Package: org.eclipselabs.tapiji.translator.rbe.model.bundle,
  org.eclipse.text.edits,
  org.eclipse.ui,
  org.eclipse.ui.progress,
- org.eclipse.ui.wizards
+ org.eclipse.ui.wizards,
+ org.eclipselabs.tapiji.translator.rbe.babel.bundle,
+ org.eclipselabs.tapiji.translator.rbe.ui.wizards
 Bundle-Vendor: Vienna University of Technology
 
 

@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTreeItem;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
 
 public class MessagesDragSource implements DragSourceListener {
 
@@ -23,10 +23,10 @@ public class MessagesDragSource implements DragSourceListener {
 
 	@Override
 	public void dragSetData(DragSourceEvent event) {
-		IKeyTreeItem selectionObject = (IKeyTreeItem) 
+	    IKeyTreeNode selectionObject = (IKeyTreeNode) 
 			((IStructuredSelection)source.getSelection()).toList().get(0);
 		
-		String key = selectionObject.getId();
+		String key = selectionObject.getMessageKey();
 		
 		// TODO Solve the problem that its not possible to retrieve the editor position of the drop event
 		

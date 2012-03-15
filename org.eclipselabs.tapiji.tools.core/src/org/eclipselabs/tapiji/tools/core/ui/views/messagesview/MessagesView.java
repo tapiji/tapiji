@@ -256,37 +256,40 @@ public class MessagesView extends ViewPart implements IResourceBundleChangedList
 	
 	/*** ACTIONS ***/
 	private void makeVisibleLocalesActions () {
+	    if (viewState.getSelectedProjectName() == null) {
+	        return;
+	    }
+	    
 		visibleLocaleActions = new ArrayList<Action>();
-		try {
-			Set<Locale> locales = ResourceBundleManager.getManager(
-					viewState.getSelectedProjectName()).getProvidedLocales(viewState.getSelectedBundleId());
-			List<Locale> visibleLocales = treeViewer.getVisibleLocales();
-			for (final Locale locale : locales) {
-				Action langAction = new Action () {
+		Set<Locale> locales = ResourceBundleManager.getManager(
+				viewState.getSelectedProjectName()).getProvidedLocales(viewState.getSelectedBundleId());
+		List<Locale> visibleLocales = treeViewer.getVisibleLocales();
+		for (final Locale locale : locales) {
+			Action langAction = new Action () {
 
-					@Override
-					public void run() {
-						super.run();
-						List<Locale> visibleL = treeViewer.getVisibleLocales();
-						if (this.isChecked()) {
-							if (!visibleL.contains(locale))
-								visibleL.add(locale);
-						} else
-							visibleL.remove(locale);
-						viewState.setVisibleLocales(visibleL);
-						redrawTreeViewer();
+				@Override
+				public void run() {
+					super.run();
+					List<Locale> visibleL = treeViewer.getVisibleLocales();
+					if (this.isChecked()) {
+						if (!visibleL.contains(locale)) {
+							visibleL.add(locale);
+						}
+					} else {
+						visibleL.remove(locale);
 					}
-					
-				};
-				if (locale.getDisplayName().trim().length() > 0)
-					langAction.setText(locale.getDisplayName(Locale.US));
-				else
-					langAction.setText("Default");
-				langAction.setChecked(visibleLocales.contains(locale));
-				visibleLocaleActions.add(langAction);
+					viewState.setVisibleLocales(visibleL);
+					redrawTreeViewer();
+				}
+				
+			};
+			if (locale != null && locale.getDisplayName().trim().length() > 0) {
+				langAction.setText(locale.getDisplayName(Locale.US));
+			} else {
+				langAction.setText("Default");
 			}
-		} catch (Exception e) {
-			
+			langAction.setChecked(visibleLocales.contains(locale));
+			visibleLocaleActions.add(langAction);
 		}
 	}
 	
@@ -360,6 +363,9 @@ public class MessagesView extends ViewPart implements IResourceBundleChangedList
 		
 		manager.add(contextDependentMenu);
 		manager.add(new Separator());
+		
+		if (visibleLocaleActions == null) return;
+		
 		for (Action loc : visibleLocaleActions) {
 			manager.add(loc);
 		}

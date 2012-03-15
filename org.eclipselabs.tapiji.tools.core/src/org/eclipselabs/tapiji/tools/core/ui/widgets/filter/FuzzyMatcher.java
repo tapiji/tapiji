@@ -2,12 +2,11 @@ package org.eclipselabs.tapiji.tools.core.ui.widgets.filter;
 
 import java.util.Locale;
 
+import org.eclipse.babel.editor.api.AnalyzerFactory;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
 import org.eclipselabs.tapiji.translator.rbe.model.analyze.ILevenshteinDistanceAnalyzer;
-
-import com.essiembre.eclipse.rbe.api.AnalyzerFactory;
-import com.essiembre.eclipse.rbe.api.ValuedKeyTreeItem;
 
 public class FuzzyMatcher extends ExactMatcher {
 
@@ -32,7 +31,7 @@ public class FuzzyMatcher extends ExactMatcher {
 		boolean exactMatch = super.select(viewer, parentElement, element);
 		boolean match = exactMatch;
 		
-		ValuedKeyTreeItem vkti = (ValuedKeyTreeItem) element;
+		IValuedKeyTreeNode vkti = (IValuedKeyTreeNode) element;
 		FilterInfo filterInfo = (FilterInfo) vkti.getInfo();
 		
 		for (Locale l : vkti.getLocales()) {

@@ -30,7 +30,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipselabs.tapiji.tools.core.Activator;
 import org.eclipselabs.tapiji.tools.core.util.FontUtils;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTreeItem;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
 
 /**
  * Label provider for key tree viewer.
@@ -60,12 +60,13 @@ public class KeyTreeLabelProvider
      * @see ILabelProvider#getImage(Object)
      */
     public Image getImage(Object element) {
-        IKeyTreeItem treeItem = ((IKeyTreeItem) element);
+        IKeyTreeNode treeItem = ((IKeyTreeNode) element);
         
         int iconFlags = 0;
 
         // Figure out background icon
-        if (treeItem.getKeyTree().getBundleGroup().isKey(treeItem.getId())) {
+        if (treeItem.getMessagesBundleGroup() != null &&
+        		treeItem.getMessagesBundleGroup().isKey(treeItem.getMessageKey())) {
             iconFlags += KEY_DEFAULT;
         } else {
             iconFlags += KEY_NOT;
@@ -78,7 +79,7 @@ public class KeyTreeLabelProvider
      * @see ILabelProvider#getText(Object)
      */
     public String getText(Object element) {
-        return ((IKeyTreeItem) element).getName(); 
+        return ((IKeyTreeNode) element).getName(); 
     }
 
     /**
@@ -93,9 +94,9 @@ public class KeyTreeLabelProvider
      * @see org.eclipse.jface.viewers.IFontProvider#getFont(java.lang.Object)
      */
     public Font getFont(Object element) {
-        IKeyTreeItem item = (IKeyTreeItem) element; 
-        if (item.getChildren().size() > 0) {
-            if (item.getKeyTree().getBundleGroup().isKey(item.getId())) {
+        IKeyTreeNode item = (IKeyTreeNode) element; 
+        if (item.getChildren().length > 0 && item.getMessagesBundleGroup() != null) {
+            if (item.getMessagesBundleGroup().isKey(item.getMessageKey())) {
                 return groupFontKey;
             }
             return groupFontNoKey;
@@ -107,7 +108,7 @@ public class KeyTreeLabelProvider
      * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
      */
     public Color getForeground(Object element) {
-        IKeyTreeItem treeItem = (IKeyTreeItem) element;
+        IKeyTreeNode treeItem = (IKeyTreeNode) element;
         return null;
     }
 

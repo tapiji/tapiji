@@ -74,7 +74,8 @@ public class InsertResourceBundleReferenceProposal implements IJavaCompletionPro
 	@Override
 	public Point getSelection(IDocument document) {
 		// TODO Auto-generated method stub
-		return new Point (offset + reference.length(), 0);
+		int referenceLength = reference == null ? 0 : reference.length();
+		return new Point (offset + referenceLength, 0);
 	}
 
 	@Override

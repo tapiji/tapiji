@@ -148,11 +148,11 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 		int index = 0;
 		int iSel = -1;
 		for (Locale l : manager.getProvidedLocales(selectedBundle)) {
-			String displayName = l.getDisplayName();
+			String displayName = l == null ? ResourceBundleManager.defaultLocaleTag : l.getDisplayName();
 			if (displayName.equals(selectedLocale))
 				iSel = index;
 			if (displayName.equals(""))
-				displayName = "[default]";
+				displayName = ResourceBundleManager.defaultLocaleTag;
 			cmbLanguage.add(displayName);
 			if (index == iSel)
 				cmbLanguage.select(iSel);
@@ -312,7 +312,7 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 		boolean keyValidChar = ResourceUtils.isValidResourceKey(selectedKey);
 		boolean rbValid = false;
 		boolean textValid = false;
-		boolean localeValid = false;
+		boolean localeValid = LocaleUtils.containsLocaleByDisplayName(manager.getProvidedLocales(selectedRB), selectedLocale);
 		
 		for (String rbId : this.availableBundles) {
 			if (rbId.equals(selectedRB)) {
@@ -320,9 +320,6 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 				break;
 			}
 		}
-		
-		if (LocaleUtils.getLocaleByDisplayName( manager.getProvidedLocales(selectedRB), selectedLocale) != null) 
-			localeValid = true;
 		
 		if (!manager.isResourceExisting(selectedRB, selectedKey))
 			keyValid = true;

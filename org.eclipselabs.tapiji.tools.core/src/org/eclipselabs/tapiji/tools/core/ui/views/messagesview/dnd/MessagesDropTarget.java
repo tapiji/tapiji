@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipselabs.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IValuedKeyTreeItem;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
 
 public class MessagesDropTarget extends DropTargetAdapter {
 	private final TreeViewer target;
@@ -36,8 +36,8 @@ public class MessagesDropTarget extends DropTargetAdapter {
 			String newKeyPrefix = "";
 			
 			if (event.item instanceof TreeItem &&
-				((TreeItem) event.item).getData() instanceof IValuedKeyTreeItem) {
-				newKeyPrefix = ((IValuedKeyTreeItem) ((TreeItem) event.item).getData()).getId();
+				((TreeItem) event.item).getData() instanceof IValuedKeyTreeNode) {
+				newKeyPrefix = ((IValuedKeyTreeNode) ((TreeItem) event.item).getData()).getMessageKey();
 			}
 				
 			String message = (String)event.data;

@@ -12,7 +12,7 @@ import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipselabs.tapiji.tools.core.Logger;
-import org.eclipselabs.tapiji.translator.rbe.model.tree.IKeyTreeItem;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
 
 public class KeyTreeItemTransfer extends ByteArrayTransfer {
 
@@ -30,7 +30,7 @@ public class KeyTreeItemTransfer extends ByteArrayTransfer {
 		if (!checkType(object)  || !isSupportedType(transferData)) {
 			DND.error(DND.ERROR_INVALID_DATA);
 		}
-		IKeyTreeItem[] terms = (IKeyTreeItem[]) object;
+		IKeyTreeNode[] terms = (IKeyTreeNode[]) object;
 		try {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			ObjectOutputStream oOut = new ObjectOutputStream(out);
@@ -59,12 +59,12 @@ public class KeyTreeItemTransfer extends ByteArrayTransfer {
 			if (buffer == null)
 				return null;
 
-			List<IKeyTreeItem> terms = new ArrayList<IKeyTreeItem>();
+			List<IKeyTreeNode> terms = new ArrayList<IKeyTreeNode>();
 			try {
 				ByteArrayInputStream in = new ByteArrayInputStream(buffer);
 				ObjectInputStream readIn = new ObjectInputStream(in);
 				//while (readIn.available() > 0) {
-				IKeyTreeItem newTerm = (IKeyTreeItem) readIn.readObject();
+				IKeyTreeNode newTerm = (IKeyTreeNode) readIn.readObject();
 					terms.add(newTerm);
 				//}
 				readIn.close();
@@ -72,7 +72,7 @@ public class KeyTreeItemTransfer extends ByteArrayTransfer {
 				Logger.logError(ex);
 				return null;
 			}
-			return terms.toArray(new IKeyTreeItem[terms.size()]);
+			return terms.toArray(new IKeyTreeNode[terms.size()]);
 		}
 
 		return null;
@@ -87,11 +87,11 @@ public class KeyTreeItemTransfer extends ByteArrayTransfer {
 	}
 
 	boolean checkType(Object object) {
-		if (object == null || !(object instanceof IKeyTreeItem[])
-				|| ((IKeyTreeItem[]) object).length == 0) {
+		if (object == null || !(object instanceof IKeyTreeNode[])
+				|| ((IKeyTreeNode[]) object).length == 0) {
 			return false;
 		}
-		IKeyTreeItem[] myTypes = (IKeyTreeItem[]) object;
+		IKeyTreeNode[] myTypes = (IKeyTreeNode[]) object;
 		for (int i = 0; i < myTypes.length; i++) {
 			if (myTypes[i] == null) {
 				return false;

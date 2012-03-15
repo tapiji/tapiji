@@ -3,20 +3,30 @@ package org.eclipselabs.tapiji.tools.core.util;
 import java.util.Locale;
 import java.util.Set;
 
+import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
+
 public class LocaleUtils {
 
 	public static Locale getLocaleByDisplayName (Set<Locale> locales, String displayName) {
-		Locale locale = null;
-		
 		for (Locale l : locales) {
-			if (l.getDisplayName().equals(displayName) || 
-				(l.getDisplayName().trim().length() == 0 && displayName.equals("[default]"))) {
-				locale = l;
-				break;
+		    String name = l == null ? ResourceBundleManager.defaultLocaleTag : l.getDisplayName();
+			if (name.equals(displayName) || (name.trim().length() == 0 && displayName.equals(ResourceBundleManager.defaultLocaleTag))) {
+				return l;
 			}
 		}
 		
-		return locale;
+		return null;
+	}
+	
+	public static boolean containsLocaleByDisplayName(Set<Locale> locales, String displayName) {
+        for (Locale l : locales) {
+            String name = l == null ? ResourceBundleManager.defaultLocaleTag : l.getDisplayName();
+            if (name.equals(displayName) || (name.trim().length() == 0 && displayName.equals(ResourceBundleManager.defaultLocaleTag))) {
+                return true;
+            }
+        }
+        
+        return false;
 	}
 	
 }

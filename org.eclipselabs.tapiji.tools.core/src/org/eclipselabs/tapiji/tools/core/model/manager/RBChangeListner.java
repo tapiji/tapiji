@@ -6,7 +6,6 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipselabs.tapiji.tools.core.builder.analyzer.ResourceBundleDetectionVisitor;
 import org.eclipselabs.tapiji.tools.core.util.RBFileUtils;
 
 public class RBChangeListner implements IResourceChangeListener {
@@ -19,7 +18,7 @@ public class RBChangeListner implements IResourceChangeListener {
 				public boolean visit(IResourceDelta delta) throws CoreException {					
 					IResource resource = delta.getResource();
 					if (RBFileUtils.isResourceBundleFile(resource)) {
-						ResourceBundleManager.getManager(resource.getProject()).bundleResourceModified(delta);
+//						ResourceBundleManager.getManager(resource.getProject()).bundleResourceModified(delta);
 						return false;
 					}
 					return true;

@@ -103,8 +103,8 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 
 	@Override
 	public Point getSelection(IDocument document) {
-		// TODO Auto-generated method stub
-		return new Point (startPos + reference.length()-1, 0);
+		int refLength = reference == null ? 0 : reference.length() -1;
+		return new Point (startPos + refLength, 0);
 	}
 
 	@Override

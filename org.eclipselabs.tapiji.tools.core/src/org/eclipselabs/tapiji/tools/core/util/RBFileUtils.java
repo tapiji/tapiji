@@ -86,7 +86,7 @@ public class RBFileUtils extends Action{
 		
 		Locale locale;
 		if (localeID.length() == baseBundleName.length()) {
-			locale = new Locale("");			//Default locale
+			locale = null;			//Default locale
 		} else {
 			localeID = localeID.substring(baseBundleName.length() + 1);
 			String[] localeTokens = localeID.split("_");
