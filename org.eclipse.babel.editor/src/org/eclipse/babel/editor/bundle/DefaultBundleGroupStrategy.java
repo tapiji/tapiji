@@ -29,7 +29,11 @@ import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -92,6 +96,30 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
      */
     public String createMessagesBundleGroupName() {
         return baseName + "[...]." + file.getFileExtension(); //$NON-NLS-1$
+    }
+    
+    public String createMessagesBundleId() {
+    	return getResourceBundleId(file);
+    }
+    
+    public static String getResourceBundleId (IResource resource) {
+		String packageFragment = "";
+
+		IJavaElement propertyFile = JavaCore.create(resource.getParent());
+		if (propertyFile != null && propertyFile instanceof IPackageFragment)
+			packageFragment = ((IPackageFragment) propertyFile).getElementName();
+		
+		return (packageFragment.length() > 0 ? packageFragment  + "." : "") + 
+				getResourceBundleName(resource);
+	}
+    
+    public static String getResourceBundleName(IResource res) {
+        String name = res.getName();
+    	String regex = "^(.*?)" //$NON-NLS-1$
+                + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" //$NON-NLS-1$
+                + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." //$NON-NLS-1$
+                + res.getFileExtension() + ")$"; //$NON-NLS-1$
+        return name.replaceFirst(regex, "$1"); //$NON-NLS-1$
     }
 
     /**
@@ -214,11 +242,15 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
     	return file;
     }
 
-    /**
+    /** 
      * @return The base name of the resource bundle.
      */
     protected String getBaseName() {
     	return baseName;
+    }
+    
+    public String getProjectName() {
+    	return ResourcesPlugin.getWorkspace().getRoot().getProject(file.getFullPath().segments()[0]).getName();
     }
         
 }
