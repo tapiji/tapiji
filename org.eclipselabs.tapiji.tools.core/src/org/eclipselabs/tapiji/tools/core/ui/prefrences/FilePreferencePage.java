@@ -76,7 +76,7 @@ public class FilePreferencePage extends PreferencePage implements IWorkbenchPref
 			}
 		});
 		
-		List<CheckItem> patternItems = TapiJIPreferences.getNonRbPattern();
+		List<CheckItem> patternItems = TapiJIPreferences.getNonRbPatternAsList();
 		for (CheckItem s : patternItems){
 			s.toTableItem(table);
 		}
