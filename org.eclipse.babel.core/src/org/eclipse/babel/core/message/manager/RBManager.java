@@ -236,7 +236,8 @@ public class RBManager {
 	
 	// experimental 
 	public void addBundleResource(IResource resource) {
-		// create it with MessagesBundleFactory
+		// create it with MessagesBundleFactory or read from resource!
+		
 		
 	}
 }
