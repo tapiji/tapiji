@@ -43,7 +43,7 @@ public class RBFileUtils extends Action{
 				pref = Activator.getDefault().getPreferenceStore();
 			
 			if (pref != null){
-				List<CheckItem> list = TapiJIPreferences.getNonRbPattern();
+				List<CheckItem> list = TapiJIPreferences.getNonRbPatternAsList();
 				for (CheckItem item : list){
 					if (item.getChecked() && file.getFullPath().toString().matches(item.getName())){
 						isValied = false;

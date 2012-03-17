@@ -182,59 +182,6 @@ public class ResourceBundleManager {
 //		loadResourceBundle(bundleName);
 	}	
 	
-//	public void bundleResourceModified (IResourceDelta delta) {
-//		IResource resource = delta.getResource();			
-//		if (resource == null) return;
-//		String bundleName = getResourceBundleId(resource);
-//		Set<IResource> res;
-//		int changeType = -1;
-//		
-//		// handle changed event
-//		switch (delta.getKind()) {
-//		case IResourceDelta.ADDED:
-//			changeType = ResourceBundleChangedEvent.ADDED;
-//			res = resources.get(bundleName);
-//			if (res == null){
-//				addBundleResource(resource);
-//				return;
-//			}
-//			res.add(resource);
-//			resources.put(bundleName, res);
-//			allBundles.put(bundleName, new HashSet<IResource>(res));
-//			
-//			if (resourceBundles.containsKey(bundleName))
-//				loadResource(bundleName, resource);
-//			break;
-//		case IResourceDelta.REMOVED:
-//			changeType = ResourceBundleChangedEvent.DELETED;
-//			res = resources.get(bundleName);
-//			if (res != null && res.contains(resource)) {
-//				res.remove(resource);
-//				resources.put(bundleName, res);
-//				allBundles.put(bundleName, new HashSet<IResource>(res));
-//
-//				if (resourceBundles.containsKey(bundleName))
-//					unloadResource(bundleName, resource);
-//			}
-//			break;
-//		case IResourceDelta.CHANGED:
-//			if (delta.getFlags() == IResourceDelta.MARKERS)
-//				return;
-//			
-//			changeType = ResourceBundleChangedEvent.MODIFIED;
-//			// TODO implement more efficient
-//			changeResourceBundle(bundleName);
-//			break;
-//			default:
-//				break;
-//		}
-//		
-//		ResourceBundleChangedEvent event = new ResourceBundleChangedEvent (changeType,
-//				bundleName, resource.getProject());
-//		
-//		fireResourceBundleChangedEvent(bundleName, event);
-//	}
-	
 	public static String getResourceBundleId (IResource resource) {
 		String packageFragment = "";
 

@@ -1,9 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Babel Core Plug-in
-Bundle-SymbolicName: org.eclipse.babel.core
+Bundle-SymbolicName: org.eclipse.babel.core;singleton:=true
 Bundle-Version: 0.8.0.qualifier
-Export-Package: org.eclipse.babel.core.message,
+Export-Package: org.eclipse.babel.core.configuration,
+ org.eclipse.babel.core.message,
  org.eclipse.babel.core.message.checks,
  org.eclipse.babel.core.message.checks.proximity,
  org.eclipse.babel.core.message.manager,
@@ -16,5 +17,6 @@ Export-Package: org.eclipse.babel.core.message,
 Require-Bundle: org.eclipse.core.databinding,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
- org.eclipselabs.tapiji.translator.rbe;bundle-version="0.0.2";visibility:=reexport
+ org.eclipselabs.tapiji.translator.rbe;bundle-version="0.0.2";visibility:=reexport,
+ org.eclipse.jdt.core;bundle-version="3.6.2"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

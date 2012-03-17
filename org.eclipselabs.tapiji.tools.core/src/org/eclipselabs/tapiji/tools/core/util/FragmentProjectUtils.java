@@ -2,6 +2,7 @@ package org.eclipselabs.tapiji.tools.core.util;
 
 import java.util.List;
 
+import org.eclipse.babel.core.util.PDEUtils;
 import org.eclipse.core.resources.IProject;
 
 public class FragmentProjectUtils{

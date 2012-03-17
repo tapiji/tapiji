@@ -4,11 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.eclipse.babel.core.configuration.IConfiguration;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipselabs.tapiji.tools.core.Activator;
 
-public class TapiJIPreferences {
+public class TapiJIPreferences implements IConfiguration {
 
 	public static final String AUDIT_SAME_VALUE = "auditSameValue";
 	public static final String AUDIT_UNSPEZIFIED_KEY = "auditMissingValue";
@@ -23,33 +24,35 @@ public class TapiJIPreferences {
 	private static final String DELIMITER = ";";
 	private static final String ATTRIBUTE_DELIMITER = ":";
 	
-	
-	public static boolean getAuditSameValue() {
+	public boolean getAuditSameValue() {
 		return PREF.getBoolean(AUDIT_SAME_VALUE);
 	}
 
 
-	public static boolean getAuditMissingValue() {
+	public boolean getAuditMissingValue() {
 		return PREF.getBoolean(AUDIT_UNSPEZIFIED_KEY);
 	}
 
 
-	public static boolean getAuditMissingLanguage() {
+	public boolean getAuditMissingLanguage() {
 		return PREF.getBoolean(AUDIT_MISSING_LANGUAGE);
 	}
 
 
-	public static boolean getAuditRb() {
+	public boolean getAuditRb() {
 		return PREF.getBoolean(AUDIT_RB);
 	}
 
 
-	public static boolean getAuditResource() {
+	public boolean getAuditResource() {
 		return PREF.getBoolean(AUDIT_RESOURCE);
 	}
 
-
-	public static List<CheckItem> getNonRbPattern() {
+	public String getNonRbPattern() {
+		return PREF.getString(NON_RB_PATTERN);
+	}
+	
+	public static List<CheckItem> getNonRbPatternAsList() {
 		return convertStringToList(PREF.getString(NON_RB_PATTERN));
 	}
 

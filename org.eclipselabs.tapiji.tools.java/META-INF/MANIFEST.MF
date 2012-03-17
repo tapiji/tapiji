@@ -9,7 +9,8 @@ Require-Bundle: org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.core.runtime;bundle-version="3.6.0",
  org.eclipse.jdt.ui;bundle-version="3.6.0",
  org.eclipse.jface,
- org.eclipselabs.tapiji.tools.core;bundle-version="0.0.2"
+ org.eclipselabs.tapiji.tools.core;bundle-version="0.0.2",
+ org.eclipselabs.tapiji.tools.core.ui;bundle-version="1.0.0"
 Import-Package: org.eclipse.core.filebuffers,
  org.eclipse.jface.dialogs,
  org.eclipse.jface.text,

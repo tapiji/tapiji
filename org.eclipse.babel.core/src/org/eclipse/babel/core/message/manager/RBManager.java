@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.babel.core.util.PDEUtils;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
@@ -24,7 +26,7 @@ public class RBManager {
 	
 	private List<IMessagesEditorListener> editorListeners;
 	
-//	private IProject project;
+	private IProject project;
 	
 	private RBManager() {
 		resourceBundles = new HashMap<String, IMessagesBundleGroup>();
@@ -164,8 +166,8 @@ public class RBManager {
 		INSTANCE = managerMap.get(project);
 		if (INSTANCE == null) {
 			INSTANCE = new RBManager();
-//			INSTANCE.project = project;
-//			INSTANCE.detectResourceBundles();
+			INSTANCE.project = project;
+			INSTANCE.detectResourceBundles();
 			managerMap.put(project, INSTANCE);
 			
 		}
@@ -217,4 +219,24 @@ public class RBManager {
 		}
 	}
 	
+	
+	protected void detectResourceBundles () {
+		try {		
+			project.accept(new ResourceBundleDetectionVisitor(this));
+			
+			IProject[] fragments = PDEUtils.lookupFragment(project);
+			if (fragments != null){
+				for (IProject p :  fragments){
+					p.accept(new ResourceBundleDetectionVisitor(this));
+				}
+			}
+		} catch (CoreException e) {
+		}
+	}
+	
+	// experimental 
+	public void addBundleResource(IResource resource) {
+		// create it with MessagesBundleFactory
+		
+	}
 }

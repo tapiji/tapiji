@@ -13,6 +13,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.babel.core.configuration.ConfigurationManager;
+import org.eclipse.babel.core.configuration.IConfiguration;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -22,7 +24,6 @@ import org.eclipselabs.tapiji.tools.core.extensions.I18nRBAuditor;
 import org.eclipselabs.tapiji.tools.core.extensions.ILocation;
 import org.eclipselabs.tapiji.tools.core.extensions.IMarkerConstants;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipselabs.tapiji.tools.core.model.preferences.TapiJIPreferences;
 import org.eclipselabs.tapiji.tools.core.util.RBFileUtils;
 import org.eclipselabs.tapiji.tools.rbmanager.auditor.quickfix.MissingLanguageResolution;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
@@ -102,6 +103,7 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 	 * audits all files of a resourcebundle
 	 */
 	public void audit(String rbId, ResourceBundleManager rbmanager) {
+		IConfiguration configuration = ConfigurationManager.getInstance().getConfiguration();
 		IMessagesBundleGroup bundlegroup = rbmanager.getResourceBundle(rbId);
 		Collection<IResource> bundlefile = rbmanager.getResourceBundles(rbId);
 		String[] keys = bundlegroup.getMessageKeys();
@@ -116,9 +118,8 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 				if (auditUnspecifiedKey(f1, key, bundlegroup)){
 					/* do nothing - all just done*/
 				}else {
-					
 					// check if a key has the same value like a key of an other properties-file
-					if (TapiJIPreferences.getAuditSameValue() && bundlefile.size() > 1)
+					if (configuration.getAuditSameValue() && bundlefile.size() > 1)
 						for (IResource r2 : bundlefile) {
 							IFile f2 = (IFile) r2;
 							auditSameValues(f1, f2, key, bundlegroup);
@@ -127,7 +128,7 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 			}
 		}
 		
-		if (TapiJIPreferences.getAuditMissingLanguage()){
+		if (configuration.getAuditMissingLanguage()){
 			// checks if the resourcebundle supports all project-languages
 			Set<Locale> rbLocales = rbmanager.getProvidedLocales(rbId);
 			Set<Locale> projectLocales = rbmanager.getProjectProvidedLocales();

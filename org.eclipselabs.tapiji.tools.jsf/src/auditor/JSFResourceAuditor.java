@@ -9,12 +9,12 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipselabs.tapiji.tools.core.builder.quickfix.CreateResourceBundle;
-import org.eclipselabs.tapiji.tools.core.builder.quickfix.CreateResourceBundleEntry;
 import org.eclipselabs.tapiji.tools.core.builder.quickfix.IncludeResource;
 import org.eclipselabs.tapiji.tools.core.extensions.I18nResourceAuditor;
 import org.eclipselabs.tapiji.tools.core.extensions.ILocation;
 import org.eclipselabs.tapiji.tools.core.extensions.IMarkerConstants;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipselabs.tapiji.tools.core.ui.quickfix.CreateResourceBundleEntry;
 
 import quickfix.ExportToResourceBundleResolution;
 import quickfix.ReplaceResourceBundleDefReference;

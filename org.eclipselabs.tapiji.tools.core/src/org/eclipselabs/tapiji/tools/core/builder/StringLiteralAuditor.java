@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.babel.core.configuration.ConfigurationManager;
+import org.eclipse.babel.core.configuration.IConfiguration;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -21,7 +23,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipselabs.tapiji.tools.core.Activator;
 import org.eclipselabs.tapiji.tools.core.Logger;
@@ -173,6 +174,8 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder{
 
 	private void auditResources(List<IResource> resources,
 			IProgressMonitor monitor, IProject project) {
+		IConfiguration configuration = ConfigurationManager.getInstance().getConfiguration();
+
 		int work = resources.size();
 		int actWork = 0;
 		if (monitor == null) {
@@ -197,9 +200,9 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder{
 				continue;
 			
 			for (I18nAuditor ra : resourceAuditors) {
-				if (ra instanceof I18nResourceAuditor && !(TapiJIPreferences.getAuditResource()))
+				if (ra instanceof I18nResourceAuditor && !(configuration.getAuditResource()))
 					continue;
-				if (ra instanceof I18nRBAuditor && !(TapiJIPreferences.getAuditRb()))
+				if (ra instanceof I18nRBAuditor && !(configuration.getAuditRb()))
 					continue;
 				
 				try {
@@ -293,9 +296,10 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder{
 	}
 	
 	private void handleI18NAuditorMarkers(I18nRBAuditor ra){
+		IConfiguration configuration = ConfigurationManager.getInstance().getConfiguration();
 		try {
 			//Report all unspecified keys
-			if (TapiJIPreferences.getAuditMissingValue())
+			if (configuration.getAuditMissingValue())
 				for (ILocation problem : ra.getUnspecifiedKeyReferences()) {
 					EditorUtils.reportToRBMarker(
 							EditorUtils.getFormattedMessage(
@@ -309,7 +313,7 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder{
 				}
 	
 			//Report all same values
-			if(TapiJIPreferences.getAuditSameValue()){
+			if(configuration.getAuditSameValue()){
 				Map<ILocation,ILocation> sameValues = ra.getSameValuesReferences();			
 				for (ILocation problem : sameValues.keySet()) {
 					EditorUtils.reportToRBMarker(
@@ -327,7 +331,7 @@ public class StringLiteralAuditor extends IncrementalProjectBuilder{
 				}
 			}
 			// Report all missing languages
-			if (TapiJIPreferences.getAuditMissingLanguage())
+			if (configuration.getAuditMissingLanguage())
 				for (ILocation problem : ra.getMissingLanguageReferences()) {
 					EditorUtils.reportToRBMarker(
 							EditorUtils.getFormattedMessage(

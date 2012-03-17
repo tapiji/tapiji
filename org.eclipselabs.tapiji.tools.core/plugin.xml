@@ -3,32 +3,6 @@
 <plugin>
    <extension-point id="org.eclipselabs.tapiji.tools.core.builderExtension" name="BuilderExtension" schema="schema/org.eclipselabs.tapiji.tools.core.builderExtension.exsd"/>
 
-   <extension
-         point="org.eclipse.ui.views">
-      <category
-            name="Internationalization"
-            id="org.eclipselabs.tapiji">
-      </category>
-      <view
-            name="Resource-Bundle"
-            icon="icons/resourcebundle.gif"
-            category="org.eclipselabs.tapiji"
-            class="org.eclipselabs.tapiji.tools.core.ui.views.messagesview.MessagesView"
-            id="org.eclipselabs.tapiji.tools.core.views.MessagesView">
-      </view>
-   </extension>
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="org.eclipse.jdt.ui.JavaPerspective">
-         <view
-               id="org.eclipselabs.tapiji.tools.core.views.MessagesView"
-               ratio="0.5"
-               relationship="right"
-               relative="org.eclipse.ui.views.TaskList">
-         </view>
-      </perspectiveExtension>
-   </extension>
    
    <extension
          id="I18NBuilder"
@@ -49,24 +23,6 @@
 <!--      <requires-nature id="org.eclipse.jdt.core.javanature"/> -->
    </extension>
    
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?before=additions">
-         <menu
-               id="org.eclipselabs.tapiji.tools.core.ui.menus.Internationalization"
-               label="Internationalization"
-               tooltip="Java Internationalization assistance">
-         </menu>
-      </menuContribution>
-      <menuContribution
-            locationURI="popup:org.eclipselabs.tapiji.tools.core.ui.menus.Internationalization?after=additions">
-         <dynamic
-               class="org.eclipselabs.tapiji.tools.core.ui.menus.InternationalizationMenu"
-               id="org.eclipselabs.tapiji.tools.core.ui.menus.ExcludeResource">
-         </dynamic>
-      </menuContribution>
-   </extension>
    <extension
          id="StringLiteralAuditMarker"
          name="String Literal Audit Marker"
@@ -150,77 +106,16 @@
       </attribute>
    </extension>
    <extension
-         point="org.eclipse.ui.ide.markerResolution">
-      <markerResolutionGenerator
-            class="org.eclipselabs.tapiji.tools.core.builder.ViolationResolutionGenerator"
-            markerType="org.eclipselabs.tapiji.tools.core.StringLiteralAuditMarker">
-      </markerResolutionGenerator>
-      <markerResolutionGenerator
-            class="org.eclipselabs.tapiji.tools.core.builder.ViolationResolutionGenerator"
-            markerType="org.eclipselabs.tapiji.tools.core.ResourceBundleAuditMarker">
-      </markerResolutionGenerator>
-   </extension>
-   <extension
-         point="org.eclipse.jdt.ui.javaElementFilters">
-      <filter
-            class="org.eclipselabs.tapiji.tools.core.ui.filters.PropertiesFileFilter"
-            description="Filters only resource bundles"
-            enabled="false"
-            id="ResourceBundleFilter"
-            name="ResourceBundleFilter">
-      </filter>
-   </extension>
-   <extension
-         point="org.eclipse.ui.decorators">
-      <decorator
-            adaptable="true"
-            class="org.eclipselabs.tapiji.tools.core.ui.decorators.ExcludedResource"
-            id="org.eclipselabs.tapiji.tools.core.decorators.ExcludedResource"
-            label="Resource is excluded from Internationalization"
-            lightweight="false"
-            state="true">
-         <enablement>
-            <and>
-               <objectClass
-                     name="org.eclipse.core.resources.IResource">
-               </objectClass>
-               <or>
-                  <objectClass
-                        name="org.eclipse.core.resources.IFolder">
-                  </objectClass>
-                  <objectClass
-                        name="org.eclipse.core.resources.IFile">
-                  </objectClass>
-               </or>
-            </and>
-         </enablement>
-      </decorator>
-   </extension>
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            class="org.eclipselabs.tapiji.tools.core.ui.prefrences.TapiHomePreferencePage"
-            id="org.eclipselabs.tapiji.tools.core.TapiJIGeneralPrefPage"
-            name="TapiJI">
-      </page>
-      <page
-            category="org.eclipselabs.tapiji.tools.core.TapiJIGeneralPrefPage"
-            class="org.eclipselabs.tapiji.tools.core.ui.prefrences.FilePreferencePage"
-            id="org.eclipselabs.tapiji.tools.core.FilePrefPage"
-            name="File Settings">
-      </page>
-      <page
-            category="org.eclipselabs.tapiji.tools.core.TapiJIGeneralPrefPage"
-            class="org.eclipselabs.tapiji.tools.core.ui.prefrences.BuilderPreferencePage"
-            id="org.eclipselabs.tapiji.tools.core.BuilderPrefPage"
-            name="Builder Settings">
-      </page>
-   </extension>
-   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="org.eclipselabs.tapiji.tools.core.model.preferences.TapiJIPreferenceInitializer">
       </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.babel.core.babelConfiguration">
+      <IConfiguration
+            class="org.eclipselabs.tapiji.tools.core.model.preferences.TapiJIPreferences">
+      </IConfiguration>
    </extension>
 
 </plugin>
