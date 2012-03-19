@@ -22,6 +22,7 @@ import org.eclipselabs.tapiji.tools.core.extensions.IMarkerConstants;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipselabs.tapiji.tools.core.ui.quickfix.CreateResourceBundleEntry;
 
+import quickfix.ExcludeResourceFromInternationalization;
 import quickfix.ExportToResourceBundleResolution;
 import quickfix.ReplaceResourceBundleDefReference;
 import quickfix.ReplaceResourceBundleReference;
@@ -105,6 +106,7 @@ public class JavaResourceAuditor extends I18nResourceAuditor {
 		switch (marker.getAttribute("cause", -1)) {
 			case IMarkerConstants.CAUSE_CONSTANT_LITERAL:
 				resolutions.add(new ExportToResourceBundleResolution());
+				resolutions.add(new ExcludeResourceFromInternationalization());
 				break;
 			case IMarkerConstants.CAUSE_BROKEN_REFERENCE:
 				String dataName = marker.getAttribute("bundleName", "");
