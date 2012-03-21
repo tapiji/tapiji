@@ -207,12 +207,12 @@ public class MessagesEditor extends MultiPageEditorPart
             textEditor.doSave(monitor);
         }
         
-//        try {
-//			Thread.sleep(200);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+        try { // [alst] remove in near future
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         RBManager.getInstance(messagesBundleGroup.getProjectName()).fireEditorSaved();
     }

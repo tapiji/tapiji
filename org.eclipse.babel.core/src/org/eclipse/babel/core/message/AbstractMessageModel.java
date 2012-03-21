@@ -95,7 +95,7 @@ public abstract class AbstractMessageModel implements Serializable {
             final String propertyName,
             final Object oldValue,
             final Object newValue) {
-        if (changeSupport == null) {
+        if (changeSupport == null || Boolean.valueOf(System.getProperty("silent"))) {
             return;
         }
         changeSupport.firePropertyChange(propertyName, oldValue, newValue);
@@ -115,7 +115,7 @@ public abstract class AbstractMessageModel implements Serializable {
             final String propertyName,
             final boolean oldValue,
             final boolean newValue) {
-        if (changeSupport == null) {
+        if (changeSupport == null || Boolean.valueOf(System.getProperty("silent"))) {
             return;
         }
         changeSupport.firePropertyChange(propertyName, oldValue, newValue);
@@ -131,7 +131,7 @@ public abstract class AbstractMessageModel implements Serializable {
      */
     protected final void firePropertyChange(
             final PropertyChangeEvent event) {
-        if (changeSupport == null) {
+        if (changeSupport == null || Boolean.valueOf(System.getProperty("silent"))) {
             return;
         }
         changeSupport.firePropertyChange(event);
@@ -187,7 +187,7 @@ public abstract class AbstractMessageModel implements Serializable {
             final String propertyName,
             final int oldValue,
             final int newValue) {
-        if (changeSupport == null) {
+        if (changeSupport == null || Boolean.valueOf(System.getProperty("silent"))) {
             return;
         }
         changeSupport.firePropertyChange(propertyName, oldValue, newValue);

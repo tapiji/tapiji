@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.babel.core.factory.MessagesBundleGroupFactory;
+import org.eclipse.babel.core.message.Message;
 import org.eclipse.babel.core.util.PDEUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -100,26 +101,57 @@ public class RBManager {
 	}
 	
 	private void syncBundles(IMessagesBundleGroup oldBundleGroup, IMessagesBundleGroup newBundleGroup) {
+		List<IMessagesBundle> bundlesToRemove = new ArrayList<IMessagesBundle>();
+		List<IMessage> keysToRemove = new ArrayList<IMessage>();
+		
+		System.setProperty("silent", "true"); // hebelt AbstractMessageModel aus 
+		// sonst müssten wir in setText von EclipsePropertiesEditorResource ein asyncExec zulassen
+		
 		for (IMessagesBundle newBundle : newBundleGroup.getMessagesBundles()) {
 			IMessagesBundle oldBundle = oldBundleGroup.getMessagesBundle(newBundle.getLocale());
 			if (oldBundle == null) { // it's a new one
 				oldBundleGroup.addMessagesBundle(newBundle.getLocale(), newBundle);
 			} else { // check keys
 				for (IMessage newMsg : newBundle.getMessages()) {
-					if (oldBundle.getMessage(newMsg.getKey()) == null) { // remove old entries
-						oldBundle.removeMessage(newMsg.getKey());
+					if (oldBundle.getMessage(newMsg.getKey()) == null) { // new entry, create new message
+						oldBundle.addMessage(new Message(newMsg.getKey(), newMsg.getLocale()));
 					} else { // update old entries
 						IMessage oldMsg = oldBundle.getMessage(newMsg.getKey());
 						if (oldMsg == null) { // it's a new one
 							oldBundle.addMessage(newMsg);
 						} else { // check value
-							oldMsg.setComment(newMsg.getComment(), true);
-							oldMsg.setText(newMsg.getValue(), true); // silent because of illegal thread access (firePropChanged)
+							oldMsg.setComment(newMsg.getComment());
+							oldMsg.setText(newMsg.getValue()); // ?silent because of illegal thread access (firePropChanged)
 						}
 					}
 				}
 			}
 		}
+		
+		// check keys
+		for (IMessagesBundle oldBundle : oldBundleGroup.getMessagesBundles()) {
+			IMessagesBundle newBundle = newBundleGroup.getMessagesBundle(oldBundle.getLocale());
+			if (newBundle == null) { // we have an old one
+				bundlesToRemove.add(oldBundle);
+			} else {
+				for (IMessage oldMsg : oldBundle.getMessages()) {
+					if (newBundle.getMessage(oldMsg.getKey()) == null) {
+						keysToRemove.add(oldMsg);
+					}
+				}
+			}
+		}
+		
+		for (IMessagesBundle bundle : bundlesToRemove) {
+			// TODO remove old Bundles
+		}
+		
+		for (IMessage msg : keysToRemove) {
+			oldBundleGroup.getMessagesBundle(msg.getLocale()).removeMessage(msg.getKey());
+		}
+		
+		System.setProperty("silent", "false");
+		
 	}
 	
 	/**
