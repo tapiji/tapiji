@@ -240,7 +240,9 @@ public class ResKeyTreeContentProvider implements ITreeContentProvider {
     public void setTreeType(TreeType treeType) {
         if (this.treeType != treeType) {
             this.treeType = treeType;
-            viewer.refresh();
+            if (viewer != null) {
+            	viewer.refresh();
+            }
         }
     }
 }

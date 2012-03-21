@@ -19,6 +19,7 @@ import java.util.Locale;
 import org.eclipse.babel.core.message.MessageException;
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
 import org.eclipse.babel.editor.builder.ToggleNatureAction;
@@ -201,42 +202,19 @@ public class MessagesEditor extends MultiPageEditorPart
      * Saves the multi-page editor's document.
      */
     public void doSave(IProgressMonitor monitor) {
-        System.setProperty("dirty", "true");
-        refreshLocal();
+    	
         for (ITextEditor textEditor : textEditorsIndex) {
-//            refreshLocal();
             textEditor.doSave(monitor);
         }
-        refreshLocal();
-        System.setProperty("dirty", "false");
-    }
-    
-    /**
-     * [alst] PFUI, aber eine bessere Möglichkeit gibts wohl nicht
-     * -> TODO: Locking implementieren
-     */
-    private void refreshLocal() {
-        Display.getDefault().syncExec(new Thread() {
-
-            @Override
-            public void run() {
-                for (IMessagesBundle bundle : messagesBundleGroup.getMessagesBundles()) {
-                    String resourceLocationLabel = ((MessagesBundle) bundle).getResource().getResourceLocationLabel();
-                    IPath path = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-
-                    IFile file = ResourcesPlugin.getWorkspace().getRoot()
-                            .getFileForLocation(new Path(path.toOSString() + resourceLocationLabel));
-                    try {
-                        if (file != null) {
-                            file.refreshLocal(IResource.DEPTH_ZERO, null);
-                        }
-                    } catch (CoreException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+        
+//        try {
+//			Thread.sleep(200);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+        
+        RBManager.getInstance(messagesBundleGroup.getProjectName()).fireEditorSaved();
     }
     
     /**

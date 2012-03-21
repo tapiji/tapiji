@@ -298,8 +298,11 @@ public class KeyTreeContributor implements IKeyTreeContributor {
     //                treeViewer.setSelection(new StructuredSelection(test), true);
                     
                     
-                    treeViewer.setSelection(new StructuredSelection(node), true);
-                    treeViewer.getTree().showSelection();
+					if (node != null) {
+						treeViewer.setSelection(new StructuredSelection(node),
+								true);
+						treeViewer.getTree().showSelection();
+					}
                 }
             }
         });

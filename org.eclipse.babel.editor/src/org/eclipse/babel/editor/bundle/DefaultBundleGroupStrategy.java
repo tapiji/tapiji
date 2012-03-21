@@ -188,14 +188,14 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
             	//site is null during the build.
                 messagesResource = new PropertiesIFileResource(
                         locale,
-                        new PropertiesSerializer(prefs),
-                        new PropertiesDeserializer(prefs),
+                        new PropertiesSerializer(prefs.getSerializerConfig()),
+                        new PropertiesDeserializer(prefs.getDeserializerConfig()),
                         (IFile) resource, MessagesEditorPlugin.getDefault());
             } else {
                 messagesResource = new EclipsePropertiesEditorResource(
                         locale,
-                        new PropertiesSerializer(prefs),
-                        new PropertiesDeserializer(prefs),
+                        new PropertiesSerializer(prefs.getSerializerConfig()),
+                        new PropertiesDeserializer(prefs.getDeserializerConfig()),
                         createEditor(resource, locale));
             }
             return new MessagesBundle(messagesResource);

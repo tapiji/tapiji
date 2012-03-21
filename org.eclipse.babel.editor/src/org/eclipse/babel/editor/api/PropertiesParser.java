@@ -15,7 +15,7 @@ import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 public class PropertiesParser {
     
     public static IMessagesBundle parse(Locale locale, IResource resource) {
-        PropertiesDeserializer pd = new PropertiesDeserializer(MsgEditorPreferences.getInstance());
+        PropertiesDeserializer pd = new PropertiesDeserializer(MsgEditorPreferences.getInstance().getDeserializerConfig());
         
         File file = resource.getRawLocation().toFile();
         File ioFile = new File(file.getPath());

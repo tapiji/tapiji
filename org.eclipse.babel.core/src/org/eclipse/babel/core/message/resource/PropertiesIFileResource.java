@@ -116,6 +116,7 @@ public class PropertiesIFileResource extends AbstractPropertiesResource {
         	ByteArrayInputStream is = new ByteArrayInputStream(
         			text.getBytes(charset));
             file.setContents(is, IFile.KEEP_HISTORY, null);
+//            file.refreshLocal(IResource.DEPTH_ZERO, null);
         } catch (Exception e) {
             //TODO handle better
             throw new RuntimeException(

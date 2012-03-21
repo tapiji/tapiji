@@ -67,7 +67,7 @@ public class PreferenceInitializer extends
         prefs.setDefault(MsgEditorPreferences.WRAP_INDENT_LENGTH, 8);
 
         prefs.setDefault(MsgEditorPreferences.NEW_LINE_STYLE, 
-                MsgEditorPreferences.NEW_LINE_UNIX);
+                MsgEditorPreferences.getInstance().getSerializerConfig().NEW_LINE_UNIX);
 
         prefs.setDefault(MsgEditorPreferences.KEEP_EMPTY_FIELDS, false);
         prefs.setDefault(MsgEditorPreferences.SORT_KEYS, true);

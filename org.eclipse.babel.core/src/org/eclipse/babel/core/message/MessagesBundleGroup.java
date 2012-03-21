@@ -24,6 +24,7 @@ import java.util.TreeSet;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy;
+import org.eclipse.babel.core.message.strategy.PropertiesFileGroupStrategy;
 import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
@@ -479,4 +480,10 @@ public class MessagesBundleGroup extends AbstractMessageModel implements IMessag
             }
         }
     }
+
+
+	@Override
+	public boolean hasPropertiesFileGroupStrategy() {
+		return groupStrategy instanceof PropertiesFileGroupStrategy;
+	}
 }

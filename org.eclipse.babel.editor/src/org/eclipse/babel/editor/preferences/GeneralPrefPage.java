@@ -70,7 +70,7 @@ public class GeneralPrefPage extends AbstractPrefPage  {
         new Label(field, SWT.NONE).setText(
                 MessagesEditorPlugin.getString("prefs.groupSep")); //$NON-NLS-1$
         keyGroupSeparator = new Text(field, SWT.BORDER);
-        keyGroupSeparator.setText(prefs.getGroupLevelSeparator());
+        keyGroupSeparator.setText(prefs.getSerializerConfig().getGroupLevelSeparator());
 //                prefs.getString(MsgEditorPreferences.GROUP__LEVEL_SEPARATOR));
         keyGroupSeparator.setTextLimit(2);
         
@@ -91,7 +91,7 @@ public class GeneralPrefPage extends AbstractPrefPage  {
         field = createFieldComposite(composite);
         convertEncodedToUnicode = new Button(field, SWT.CHECK);
         convertEncodedToUnicode.setSelection(
-                prefs.isUnicodeEscapeEnabled());
+                prefs.getSerializerConfig().isUnicodeEscapeEnabled());
 //                prefs.getBoolean(MsgEditorPreferences.CONVERT_ENCODED_TO_UNICODE));
         new Label(field, SWT.NONE).setText(
                 MessagesEditorPlugin.getString("prefs.convertEncoded")); //$NON-NLS-1$

@@ -75,6 +75,9 @@ public class PropertiesFileResource extends AbstractPropertiesResource {
         FileReader inputStream = null;
         StringWriter outputStream = null;
         try {
+        	if (!file.exists()) {
+        		return "";
+        	}
             inputStream = new FileReader(file);
             outputStream = new StringWriter();
             int c;

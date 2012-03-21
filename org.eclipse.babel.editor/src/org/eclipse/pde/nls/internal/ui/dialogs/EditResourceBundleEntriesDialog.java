@@ -236,8 +236,8 @@ public class EditResourceBundleEntriesDialog extends Dialog {
 
 		                IMessagesResource messagesResource = new PropertiesIFileResource(
 		                        field.locale,
-		                        new PropertiesSerializer(prefs),
-		                        new PropertiesDeserializer(prefs),
+		                        new PropertiesSerializer(prefs.getSerializerConfig()),
+		                        new PropertiesDeserializer(prefs.getDeserializerConfig()),
 		                        (IFile) resource, MessagesEditorPlugin.getDefault());
 		                MessagesBundle bundle = new MessagesBundle(messagesResource);
 

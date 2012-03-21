@@ -137,6 +137,7 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource 
     	 * we are on the UI thread.  This may not be the best place to do
     	 * this???
     	 */
+    	// [alst] muss 2x speichern wenn async exec
 //    	Display.getDefault().asyncExec(new Runnable() {
 //			public void run() {
 		        textEditor.getDocumentProvider().getDocument(

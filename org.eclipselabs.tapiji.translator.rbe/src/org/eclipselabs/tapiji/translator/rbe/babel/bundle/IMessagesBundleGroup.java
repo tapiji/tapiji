@@ -32,4 +32,6 @@ public interface IMessagesBundleGroup {
     
     String getResourceBundleId();
     
+    boolean hasPropertiesFileGroupStrategy();
+    
 }
