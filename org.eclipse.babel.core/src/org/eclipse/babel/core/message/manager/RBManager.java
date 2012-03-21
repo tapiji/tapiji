@@ -18,6 +18,10 @@ import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 
+/**
+ * 
+ * @author Alexej Strelzow
+ */
 public class RBManager {
 
 	private static Map<IProject, RBManager> managerMap = new HashMap<IProject, RBManager>();
@@ -37,7 +41,7 @@ public class RBManager {
 	
 	public IMessagesBundleGroup getMessagesBundleGroup(String name) {
 		if (!resourceBundles.containsKey(name)) {
-			System.out.println("ohje");
+			System.out.println("ohje"); // TODO log
 			return null;
 		} else {
 			return resourceBundles.get(name);
@@ -51,13 +55,10 @@ public class RBManager {
 	public void notifyMessagesBundleCreated(IMessagesBundleGroup bundleGroup) {
 		if (resourceBundles.containsKey(bundleGroup.getResourceBundleId())) {
 			IMessagesBundleGroup oldbundleGroup = resourceBundles.get(bundleGroup.getResourceBundleId());
-			if (equalHash(oldbundleGroup, bundleGroup)) {
-				resourceBundles.put(bundleGroup.getResourceBundleId(), bundleGroup); // OK wenn Builder
-//				System.out.println(bundleGroup.getResourceBundleId() + "overridden!");
-			} else {
+			if (!equalHash(oldbundleGroup, bundleGroup)) {
 				// not same -> sync
 				if (oldbundleGroup.hasPropertiesFileGroupStrategy()) {
-//					syncBundles(bundleGroup, oldbundleGroup);
+					syncBundles(bundleGroup, oldbundleGroup); // rethink that line
 					resourceBundles.put(bundleGroup.getResourceBundleId(), bundleGroup);
 				} else {
 					syncBundles(oldbundleGroup, bundleGroup);
@@ -66,7 +67,6 @@ public class RBManager {
 		} else {
 			resourceBundles.put(bundleGroup.getResourceBundleId(), bundleGroup);
 		}
-//		System.out.println("created: " + bundleGroup.hashCode());
 	}
 	
 	/**
@@ -75,17 +75,11 @@ public class RBManager {
 	 */
 	public void notifyMessagesBundleDeleted(IMessagesBundleGroup bundleGroup) {
 		if (resourceBundles.containsKey(bundleGroup.getResourceBundleId())) {
-			
 			if (equalHash(resourceBundles.get(bundleGroup.getResourceBundleId()), bundleGroup)) {
 				resourceBundles.remove(bundleGroup.getResourceBundleId());
 				System.out.println(bundleGroup.getResourceBundleId() + "deleted!");
-			} else {
-				// not same
 			}
-		} else {
-			System.out.println("ohje"); // OK wenn Builder
-		}
-//		System.out.println("removed: " + bundleGroup.hashCode());
+		} 
 	}
 	
 	/**
@@ -166,31 +160,6 @@ public class RBManager {
 		}
 	}
 	
-//	/**
-//	 * Hier darf nur TAPIJI rein
-//	 * @param bundleGroup
-//	 */
-//	public void addMessagesBundleGroup(IMessagesBundleGroup bundleGroup) {
-//		if (resourceBundles.containsKey(bundleGroup.getResourceBundleId())) {
-//			System.out.println("ohje");
-//		} else {
-//			resourceBundles.put(bundleGroup.getResourceBundleId(), bundleGroup);
-//		}
-//	}
-	
-//	/**
-//	 * Hier darf nur TAPIJI rein
-//	 * @param bundleGroup
-//	 */
-//	public void addMessagesBundle(String resourceBundleId, IMessagesBundle bundle) {
-//		if (resourceBundles.containsKey(resourceBundleId)) {
-//			IMessagesBundleGroup messagesBundleGroup = resourceBundles.get(resourceBundleId);
-//			messagesBundleGroup.addMessagesBundle(bundle.getLocale(), bundle);
-//		} else {
-//			System.out.println("ohje");
-//		}
-//	}
-	
 	public boolean containsMessagesBundleGroup(String name) {
 		return resourceBundles.containsKey(name);
 	}
@@ -199,14 +168,14 @@ public class RBManager {
 		// set host-project
 //		if (FragmentProjectUtils.isFragment(project))
 //			project =  FragmentProjectUtils.getFragmentHost(project);
-		// TODO
+		// TODO fragments
 		
 		INSTANCE = managerMap.get(project);
 		if (INSTANCE == null) {
 			INSTANCE = new RBManager();
 			INSTANCE.project = project;
 			managerMap.put(project, INSTANCE);
-//			INSTANCE.detectResourceBundles();
+//			INSTANCE.detectResourceBundles(); // almost there
 			
 		}
 		return INSTANCE;
@@ -272,7 +241,7 @@ public class RBManager {
 		}
 	}
 	
-	// experimental 
+	// passive loading -> see detectResourceBundles
 	public void addBundleResource(IResource resource) {
 		// create it with MessagesBundleFactory or read from resource!
 		// we can optimize that, now we create a bundle group for each bundle
