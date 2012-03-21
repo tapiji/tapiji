@@ -85,7 +85,7 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 				return true;
 			
 			ASTNode parent = stringLiteral.getParent();
-
+			
 			if (parent instanceof MethodInvocation) {
 				MethodInvocation methodInvocation = (MethodInvocation) parent;
 
@@ -136,10 +136,15 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 								.getLiteralValue()));
 					}
 					
-					return false;
+					return false;	
 				}
 			}
-
+			
+			// check if string is followed by a "$NON-NLS$" line comment
+			if (ASTutils.existsNonInternationalisationComment(stringLiteral)) {
+				return false; 
+			}
+			
 			// constant string literal found
 			constants.add(new SLLocation(file,
 					stringLiteral.getStartPosition(), stringLiteral
