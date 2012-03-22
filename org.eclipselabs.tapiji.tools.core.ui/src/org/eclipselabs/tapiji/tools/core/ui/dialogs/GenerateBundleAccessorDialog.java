@@ -4,7 +4,6 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
@@ -55,9 +54,9 @@ public class GenerateBundleAccessorDialog extends TitleAreaDialog {
 		
 		final Label infoLabel = new Label (group, SWT.NONE | SWT.LEFT);
 		infoLabel.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER, false, false, 1, 1));
-		infoLabel.setText("Diese Zeile stellt einen Platzhalter für einen kurzen Infotext dar.\nDiese Zeile stellt einen Platzhalter für einen kurzen Infotext dar.");
+		infoLabel.setText("Diese Zeile stellt einen Platzhalter fï¿½r einen kurzen Infotext dar.\nDiese Zeile stellt einen Platzhalter fï¿½r einen kurzen Infotext dar.");
 		
-		// Schlüssel
+		// Schlï¿½ssel
 		final Label  lblBA = new Label (group, SWT.NONE | SWT.RIGHT);
 		GridData lblBAGrid = new GridData(GridData.END, GridData.CENTER, false, false, 1, 1);
 		lblBAGrid.widthHint = WIDTH_LEFT_COLUMN;
@@ -99,7 +98,7 @@ public class GenerateBundleAccessorDialog extends TitleAreaDialog {
 				
 		final Label infoLabel = new Label (group, SWT.NONE | SWT.LEFT);
 		infoLabel.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER, false, false, 1, 1));
-		infoLabel.setText("Diese Zeile stellt einen Platzhalter für einen kurzen Infotext dar.\nDiese Zeile stellt einen Platzhalter für einen kurzen Infotext dar.");
+		infoLabel.setText("Diese Zeile stellt einen Platzhalter fï¿½r einen kurzen Infotext dar.\nDiese Zeile stellt einen Platzhalter fï¿½r einen kurzen Infotext dar.");
 		
 		// Text
 		final Label  lblText = new Label (group, SWT.NONE | SWT.RIGHT);

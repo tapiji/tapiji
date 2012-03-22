@@ -6,7 +6,6 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator2;
 import org.eclipselabs.tapiji.tools.core.extensions.I18nAuditor;
-import org.eclipselabs.tapiji.tools.core.extensions.I18nResourceAuditor;
 import org.eclipselabs.tapiji.tools.core.model.exception.NoSuchResourceAuditorException;
 
 

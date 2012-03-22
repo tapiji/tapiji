@@ -1,6 +1,5 @@
 package org.eclipselabs.tapiji.translator.views.widgets.dnd;
 
-import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;

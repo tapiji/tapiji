@@ -11,7 +11,6 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipselabs.tapiji.tools.core.Activator;
 import org.eclipselabs.tapiji.tools.core.Logger;
 import org.eclipselabs.tapiji.tools.core.extensions.ILocation;
-import org.eclipselabs.tapiji.tools.core.extensions.IMarkerConstants;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 
 

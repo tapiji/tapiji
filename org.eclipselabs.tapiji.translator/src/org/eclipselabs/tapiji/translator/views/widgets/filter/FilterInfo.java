@@ -3,7 +3,6 @@ package org.eclipselabs.tapiji.translator.views.widgets.filter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.jface.text.Region;

@@ -10,10 +10,8 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
-import java.beans.PropertyChangeEvent;
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.IMessagesBundleGroupListener;
 import org.eclipse.babel.core.message.Message;
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;

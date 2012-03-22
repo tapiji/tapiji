@@ -14,7 +14,6 @@ import java.util.Locale;
 import java.util.Properties;
 
 import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 

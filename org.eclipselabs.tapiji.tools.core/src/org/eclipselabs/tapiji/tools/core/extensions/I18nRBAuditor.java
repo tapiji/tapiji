@@ -3,9 +3,6 @@ package org.eclipselabs.tapiji.tools.core.extensions;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipselabs.tapiji.tools.core.extensions.I18nAuditor;
-import org.eclipselabs.tapiji.tools.core.extensions.ILocation;
-
 /**
  * 
  * 

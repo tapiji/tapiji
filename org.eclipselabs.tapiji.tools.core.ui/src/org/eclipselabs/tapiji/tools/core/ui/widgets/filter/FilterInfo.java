@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 
 public class FilterInfo {

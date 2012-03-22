@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.rbe.babel.bundle;
 
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
 
 /**
  * Objects implementing this interface can act as a visitor to a
