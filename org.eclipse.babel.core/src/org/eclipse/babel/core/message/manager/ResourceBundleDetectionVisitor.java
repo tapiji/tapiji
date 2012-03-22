@@ -23,7 +23,6 @@ public class ResourceBundleDetectionVisitor implements IResourceVisitor,
 		this.manager = manager;
 	}
 
-	@Override
 	public boolean visit(IResource resource) throws CoreException {
 		try {
 			if (isResourceBundleFile(resource)) {
@@ -41,7 +40,6 @@ public class ResourceBundleDetectionVisitor implements IResourceVisitor,
 		}
 	}
 
-	@Override
 	public boolean visit(IResourceDelta delta) throws CoreException {
 		IResource resource = delta.getResource();
 

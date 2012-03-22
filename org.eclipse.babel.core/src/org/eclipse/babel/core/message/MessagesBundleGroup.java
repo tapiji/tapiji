@@ -421,7 +421,6 @@ public class MessagesBundleGroup extends AbstractMessageModel implements IMessag
     	return this.projectName;
     }
 
-
 	/**
      * Class listening for changes in underlying messages bundle and 
      * relays them to the listeners for MessagesBundleGroup.
@@ -481,8 +480,6 @@ public class MessagesBundleGroup extends AbstractMessageModel implements IMessag
         }
     }
 
-
-	@Override
 	public boolean hasPropertiesFileGroupStrategy() {
 		return groupStrategy instanceof PropertiesFileGroupStrategy;
 	}

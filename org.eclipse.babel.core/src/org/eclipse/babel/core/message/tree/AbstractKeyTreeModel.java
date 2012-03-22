@@ -312,8 +312,6 @@ public class AbstractKeyTreeModel implements IAbstractKeyTreeModel {
     	boolean isFilteredLeaf(IKeyTreeNode leafNode);
     }
 
-
-    @Override
     public IKeyTreeNode getChild(String key) {
         return returnNodeWithKey(key, rootNode);
     }
