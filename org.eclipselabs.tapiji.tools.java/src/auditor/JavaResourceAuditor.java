@@ -1,11 +1,9 @@
 package auditor;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -14,13 +12,8 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jdt.ui.SharedASTProvider;
-import org.eclipse.jface.text.Position;
-import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.IMarkerResolution;
-import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 import org.eclipselabs.tapiji.tools.core.builder.quickfix.CreateResourceBundle;
 import org.eclipselabs.tapiji.tools.core.builder.quickfix.IncludeResource;
 import org.eclipselabs.tapiji.tools.core.extensions.I18nResourceAuditor;
@@ -106,34 +99,11 @@ public class JavaResourceAuditor extends I18nResourceAuditor {
     public String getContextId() {
 	return "java";
     }
-
-    private Position findProblemPosition(IAnnotationModel model, IMarker marker) {
-	Iterator iter = model.getAnnotationIterator();
-	while (iter.hasNext()) {
-	    Object curr = iter.next();
-	    if (curr instanceof SimpleMarkerAnnotation) {
-		SimpleMarkerAnnotation annot = (SimpleMarkerAnnotation) curr;
-		if (marker.equals(annot.getMarker())) {
-		    return model.getPosition(annot);
-		}
-	    }
-	}
-	return null;
-    }
-
+    
     @Override
     public List<IMarkerResolution> getMarkerResolutions(IMarker marker) {
 	List<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
 	int cause = marker.getAttribute("cause", -1);
-
-	FileEditorInput input = new FileEditorInput(
-		(IFile) marker.getResource());
-
-	IAnnotationModel model = JavaUI.getDocumentProvider()
-		.getAnnotationModel(input);
-
-	// TODO: check if the marker annotation model was generated
-	System.out.println(findProblemPosition(model, marker).getLength());
 
 	switch (marker.getAttribute("cause", -1)) {
 	case IMarkerConstants.CAUSE_CONSTANT_LITERAL:

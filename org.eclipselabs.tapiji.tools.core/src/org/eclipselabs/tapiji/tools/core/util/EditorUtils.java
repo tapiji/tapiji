@@ -1,13 +1,21 @@
 package org.eclipselabs.tapiji.tools.core.util;
 
 import java.text.MessageFormat;
+import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.texteditor.AbstractMarkerAnnotationModel;
+import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 import org.eclipselabs.tapiji.tools.core.Activator;
 import org.eclipselabs.tapiji.tools.core.Logger;
 import org.eclipselabs.tapiji.tools.core.extensions.ILocation;
@@ -139,5 +147,42 @@ public class EditorUtils {
 		System.arraycopy(ms_to_add, 0, ms, old_ms.length, ms_to_add.length);
 		
 		return ms;
+	}
+	
+	public static void updateMarker(IMarker marker) {
+		FileEditorInput input = new FileEditorInput(
+				(IFile) marker.getResource());		
+		
+		AbstractMarkerAnnotationModel model = (AbstractMarkerAnnotationModel) 
+				getAnnotationModel(marker);
+		IDocument doc = JavaUI.getDocumentProvider().getDocument(input); 
+		
+		try {
+			model.updateMarker(doc, marker, getCurPosition(marker, model));
+		} catch (CoreException e) {
+			Logger.logError(e);
+		}
+	}
+	
+	public static IAnnotationModel getAnnotationModel(IMarker marker) {
+		FileEditorInput input = new FileEditorInput(
+				(IFile) marker.getResource());		
+		
+		return JavaUI.getDocumentProvider().getAnnotationModel(input);
+	}
+	
+	private static Position getCurPosition(IMarker marker, IAnnotationModel model) {
+		Iterator iter = model.getAnnotationIterator();
+		Logger.logInfo("Updates Position!");
+		while (iter.hasNext()) {
+		    Object curr = iter.next();
+		    if (curr instanceof SimpleMarkerAnnotation) {
+				SimpleMarkerAnnotation annot = (SimpleMarkerAnnotation) curr;
+				if (marker.equals(annot.getMarker())) {
+				    return model.getPosition(annot);
+				}
+		    }
+		}
+		return null;
 	}
 }
