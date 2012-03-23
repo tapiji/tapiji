@@ -30,4 +30,5 @@ Export-Package: org.eclipselabs.tapiji.tools.core.ui,
  org.eclipselabs.tapiji.tools.core.ui.widgets.listener,
  org.eclipselabs.tapiji.tools.core.ui.widgets.provider,
  org.eclipselabs.tapiji.tools.core.ui.widgets.sorter
-Import-Package: org.eclipse.core.filebuffers
+Import-Package: org.eclipse.core.filebuffers,
+ org.eclipse.ui.texteditor
