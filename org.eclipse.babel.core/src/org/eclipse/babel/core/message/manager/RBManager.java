@@ -255,8 +255,6 @@ public class RBManager {
 	}
 	
 	public void writeToFile(IMessagesBundleGroup bundleGroup) {
-		// TODO: add Key Funktion
-		// TODO: remove Key Funktion
 		for (IMessagesBundle bundle : bundleGroup.getMessagesBundles()) {
 			writeToFile(bundle);
 		}
