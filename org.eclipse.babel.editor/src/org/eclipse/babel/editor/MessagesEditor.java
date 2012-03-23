@@ -20,7 +20,6 @@ import org.eclipse.babel.core.message.MessageException;
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.manager.RBManager;
-import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
 import org.eclipse.babel.editor.builder.ToggleNatureAction;
 import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
@@ -51,6 +50,7 @@ import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 
 /**
  * Multi-page editor for editing resource bundles.

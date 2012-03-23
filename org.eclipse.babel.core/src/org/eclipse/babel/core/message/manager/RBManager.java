@@ -1,5 +1,6 @@
 package org.eclipse.babel.core.message.manager;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,9 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.babel.core.configuration.ConfigurationManager;
+import org.eclipse.babel.core.configuration.DirtyHack;
 import org.eclipse.babel.core.factory.MessagesBundleGroupFactory;
 import org.eclipse.babel.core.message.Message;
+import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.core.util.PDEUtils;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -98,7 +103,7 @@ public class RBManager {
 		List<IMessagesBundle> bundlesToRemove = new ArrayList<IMessagesBundle>();
 		List<IMessage> keysToRemove = new ArrayList<IMessage>();
 		
-		System.setProperty("silent", "true"); // hebelt AbstractMessageModel aus 
+		DirtyHack.setFireEnabled(false); // hebelt AbstractMessageModel aus 
 		// sonst müssten wir in setText von EclipsePropertiesEditorResource ein asyncExec zulassen
 		
 		for (IMessagesBundle newBundle : newBundleGroup.getMessagesBundles()) {
@@ -144,7 +149,7 @@ public class RBManager {
 			oldBundleGroup.getMessagesBundle(msg.getLocale()).removeMessage(msg.getKey());
 		}
 		
-		System.setProperty("silent", "false");
+		DirtyHack.setFireEnabled(true);
 		
 	}
 	
@@ -247,5 +252,36 @@ public class RBManager {
 		// we can optimize that, now we create a bundle group for each bundle
 		// we should create a bundle group only once!
 		MessagesBundleGroupFactory.createBundleGroup(resource);
+	}
+	
+	public void writeToFile(IMessagesBundleGroup bundleGroup) {
+		// TODO: add Key Funktion
+		// TODO: remove Key Funktion
+		for (IMessagesBundle bundle : bundleGroup.getMessagesBundles()) {
+			writeToFile(bundle);
+		}
+	}
+	
+	public void writeToFile(IMessagesBundle bundle) {
+		DirtyHack.setEditorModificationEnabled(false);
+		
+		PropertiesSerializer ps = new PropertiesSerializer(ConfigurationManager.getInstance().getSerializerConfig());
+		String editorContent = ps.serialize(bundle);
+		IFile file = getFile(bundle);
+		try {
+			file.setContents(new ByteArrayInputStream(editorContent.getBytes()), 
+					false, true, null);
+			file.refreshLocal(IResource.DEPTH_ZERO, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DirtyHack.setEditorModificationEnabled(true);
+		}
+	}
+
+	private IFile getFile(IMessagesBundle bundle) {
+		String location = bundle.getResource().getResourceLocationLabel(); ///TEST/src/messages/Messages_en_IN.properties
+		location = location.substring(project.getName().length() + 1, location.length());
+		return ResourcesPlugin.getWorkspace().getRoot().getProject(project.getName()).getFile(location);
 	}
 }

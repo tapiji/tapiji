@@ -33,4 +33,6 @@ public interface IMessagesBundle {
     void setComment(String comment);
     
     String getComment();
+    
+    IMessagesResource getResource();
 }

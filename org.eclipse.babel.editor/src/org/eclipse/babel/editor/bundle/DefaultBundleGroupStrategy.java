@@ -16,7 +16,6 @@ import java.util.Locale;
 
 import org.eclipse.babel.core.message.MessageException;
 import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.resource.PropertiesIFileResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
@@ -39,6 +38,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 
 
 /**

@@ -12,6 +12,7 @@ package org.eclipse.babel.editor.resource;
 
 import java.util.Locale;
 
+import org.eclipse.babel.core.configuration.DirtyHack;
 import org.eclipse.babel.core.message.resource.AbstractPropertiesResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
@@ -136,8 +137,10 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource 
     	// [alst] muss 2x speichern wenn async exec
 //    	Display.getDefault().asyncExec(new Runnable() {
 //			public void run() {
-		        textEditor.getDocumentProvider().getDocument(
-		                textEditor.getEditorInput()).set(content);
+		if (DirtyHack.isEditorModificationEnabled()) {
+			textEditor.getDocumentProvider()
+					.getDocument(textEditor.getEditorInput()).set(content);
+		}
 //			}
 //		});
     }

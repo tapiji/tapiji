@@ -7,9 +7,11 @@ import java.util.Locale;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.eclipse.babel.core.configuration.DirtyHack;
 import org.eclipse.babel.core.message.manager.IMessagesEditorListener;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.api.KeyTreeFactory;
+import org.eclipse.babel.editor.api.MessagesBundleFactory;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -327,6 +329,8 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
 
                     @Override
                     protected void setValue(Object element, Object value) {
+                    	boolean writeToFile = true;
+                    	
                         if (element instanceof IValuedKeyTreeNode) {
                             IValuedKeyTreeNode vkti = (IValuedKeyTreeNode) element;
                             String activeKey = vkti.getMessageKey();
@@ -342,12 +346,25 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
                                     }
 
                                     IMessagesBundle messagesBundle = bundleGroup.getMessagesBundle(l);
-                                    IMessage message = messagesBundle.getMessage(activeKey);
-                                    if (message != null) {
+
+                                    DirtyHack.setFireEnabled(false);
+                                    
+                                	IMessage message = messagesBundle.getMessage(activeKey);
+                                	if (message == null) {
+                                		IMessage newMessage = MessagesBundleFactory.createMessage(activeKey, l);
+                                		newMessage.setText(String.valueOf(value));
+                                		newMessage.setComment(comment);
+                                		messagesBundle.addMessage(newMessage);
+                                		
+                                	} else {
                                     	message.setText(String.valueOf(value));
                                     	message.setComment(comment);
                                     }
-                                    // TODO: find a better way
+                                	
+                                	RBManager.getInstance(manager.getProject()).writeToFile(messagesBundle);
+                                    
+                                    DirtyHack.setFireEnabled(true);
+                                    
                                     setTreeStructure();
                                     
                                 }

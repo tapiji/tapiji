@@ -8,7 +8,7 @@
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.core.message.resource;
+package org.eclipselabs.tapiji.translator.rbe.babel.bundle;
 
 /**
  * Listener being notified when a {@link IMessagesResource} content changes.

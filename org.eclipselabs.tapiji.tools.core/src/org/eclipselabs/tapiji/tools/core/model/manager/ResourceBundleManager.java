@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.babel.core.configuration.DirtyHack;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.api.MessagesBundleFactory;
 import org.eclipse.core.resources.IFile;
@@ -691,15 +692,22 @@ public class ResourceBundleManager {
 		IMessagesBundleGroup bundleGroup = instance.getMessagesBundleGroup(resourceBundleId);
 		IMessage entry = bundleGroup.getMessage(key, locale);	
 	
-	      if (entry == null) {
-		      IMessagesBundle messagesBundle = bundleGroup.getMessagesBundle(locale);
-		      IMessage m = MessagesBundleFactory.createMessage(key, locale);
-		      m.setText(message);
-		      messagesBundle.addMessage(m);
-	      }
-      
-		// notify the PropertyKeySelectionTree
-		instance.fireEditorChanged();
+		
+		if (entry == null) {
+			DirtyHack.setFireEnabled(false);
+			
+			IMessagesBundle messagesBundle = bundleGroup.getMessagesBundle(locale);
+			IMessage m = MessagesBundleFactory.createMessage(key, locale);
+			m.setText(message);
+			messagesBundle.addMessage(m);
+
+			instance.writeToFile(messagesBundle);
+
+			DirtyHack.setFireEnabled(true);
+
+			// notify the PropertyKeySelectionTree
+			instance.fireEditorChanged();
+		}
 	}
 	
 	public void saveResourceBundle(String resourceBundleId,
@@ -710,11 +718,19 @@ public class ResourceBundleManager {
 	
 	public void removeResourceBundleEntry(String resourceBundleId,
 			List<String> keys) throws ResourceBundleException {
+		
 		RBManager instance = RBManager.getInstance(project);
 		IMessagesBundleGroup messagesBundleGroup = instance.getMessagesBundleGroup(resourceBundleId);
+		
+		DirtyHack.setFireEnabled(false);
+		
 		for (String key : keys) {
 			messagesBundleGroup.removeMessages(key);
 		}
+		
+		instance.writeToFile(messagesBundleGroup);
+		
+		DirtyHack.setFireEnabled(true);
 		
 		// notify the PropertyKeySelectionTree
 		instance.fireEditorChanged();
