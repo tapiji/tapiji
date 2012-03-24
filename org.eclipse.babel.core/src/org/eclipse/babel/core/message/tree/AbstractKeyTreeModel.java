@@ -318,12 +318,13 @@ public class AbstractKeyTreeModel implements IAbstractKeyTreeModel {
     
     private IKeyTreeNode returnNodeWithKey(String key, IKeyTreeNode node) {
         
-        if (!key.equals(node.getMessageKey())) {
+         if (!key.equals(node.getMessageKey())) {
             for (IKeyTreeNode n : node.getChildren()) {
-                if (returnNodeWithKey(key, n) == null) {
+                IKeyTreeNode returnNode = returnNodeWithKey(key, n);
+            	if (returnNode == null) {
                     continue;
                 } else {
-                    return node;
+                    return returnNode;
                 }
             }
         } else {
