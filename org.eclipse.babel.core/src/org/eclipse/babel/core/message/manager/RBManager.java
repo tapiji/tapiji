@@ -81,7 +81,9 @@ public class RBManager {
 				} else if ( (oldHasPropertiesStrategy && newHasPropertiesStrategy)
 							|| (!oldHasPropertiesStrategy && !newHasPropertiesStrategy) ) {
 					
-					syncBundles(oldbundleGroup, bundleGroup);
+//					syncBundles(oldbundleGroup, bundleGroup); do not need that, because we take the new one
+					// and we do that, because otherwise we cache old Text-Editor instances, which we
+					// do not need -> read only phenomenon
 					resourceBundles.put(bundleGroup.getResourceBundleId(), bundleGroup);
 					
 					oldbundleGroup.dispose();
@@ -163,11 +165,14 @@ public class RBManager {
 		}
 		
 		for (IMessagesBundle bundle : bundlesToRemove) {
-			// TODO remove old Bundles
+			oldBundleGroup.removeMessagesBundle(bundle);
 		}
 		
 		for (IMessage msg : keysToRemove) {
-			oldBundleGroup.getMessagesBundle(msg.getLocale()).removeMessage(msg.getKey());
+			IMessagesBundle mb = oldBundleGroup.getMessagesBundle(msg.getLocale());
+			if (mb != null) {
+				mb.removeMessage(msg.getKey());
+			}
 		}
 		
 		DirtyHack.setFireEnabled(true);

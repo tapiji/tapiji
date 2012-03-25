@@ -215,6 +215,31 @@ public class MessagesBundleGroup extends AbstractMessageModel implements IMessag
         
     }
     
+    public void removeMessagesBundle(IMessagesBundle messagesBundle) {
+    	Locale locale = messagesBundle.getLocale();
+    	
+    	if (localeBundles.containsKey(locale)) {
+    		localeBundles.remove(locale);
+    	}
+    	
+    	// which keys should I not remove?
+    	Set<String> keysNotToRemove = new TreeSet<String>();
+    	
+    	for (String key : messagesBundle.getKeys()) {
+    		for (IMessagesBundle bundle : localeBundles.values()) {
+    			if (bundle.getMessage(key) != null) {
+    				keysNotToRemove.add(key);
+    			}
+    		}
+    	}
+    	
+    	// remove keys
+    	for (String keyToRemove : messagesBundle.getKeys()) {
+    		if (!keysNotToRemove.contains(keyToRemove)) { // we can remove
+    			keys.remove(keyToRemove);
+    		}
+    	}
+    }
     
     /**
      * Gets this messages bundle group name.
