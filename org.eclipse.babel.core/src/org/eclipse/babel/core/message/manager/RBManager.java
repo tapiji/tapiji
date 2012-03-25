@@ -82,6 +82,9 @@ public class RBManager {
 							|| (!oldHasPropertiesStrategy && !newHasPropertiesStrategy) ) {
 					
 					syncBundles(oldbundleGroup, bundleGroup);
+					resourceBundles.put(bundleGroup.getResourceBundleId(), bundleGroup);
+					
+					oldbundleGroup.dispose();
 				} else {
 					// in this case our old resource has an EditorSite, but not the new one
 					bundleGroup.dispose();
@@ -189,9 +192,8 @@ public class RBManager {
 	
 	public static RBManager getInstance(IProject project) {
 		// set host-project
-//		if (FragmentProjectUtils.isFragment(project))
-//			project =  FragmentProjectUtils.getFragmentHost(project);
-		// TODO fragments
+		if (PDEUtils.isFragment(project))
+			project =  PDEUtils.getFragmentHost(project);
 		
 		INSTANCE = managerMap.get(project);
 		
@@ -208,7 +210,12 @@ public class RBManager {
 	public static RBManager getInstance(String projectName) {
 		for (IProject project : getAllSupportedProjects()) {
 			if (project.getName().equals(projectName)) {
-				return getInstance(project);
+				//check if the projectName is a fragment and return the manager for the host
+				if(PDEUtils.isFragment(project)) {
+					return getInstance(PDEUtils.getFragmentHost(project));
+				} else {
+					return getInstance(project);
+				}
 			}
 		}
 		return null;
