@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -18,8 +20,11 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
+import org.eclipse.jdt.core.dom.ChildListPropertyDescriptor;
+import org.eclipse.jdt.core.dom.ChildPropertyDescriptor;
 import org.eclipse.jdt.core.dom.Comment;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ITypeBinding;
@@ -30,7 +35,9 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SimplePropertyDescriptor;
 import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -715,46 +722,41 @@ public class ASTutils {
 			Logger.logError(e);
 		}		
 				
-		int stringLine = doc.getLineOfOffset(literal.getStartPosition());
-		List<Comment> comments = cu.getCommentList();		
+		// get whole line in which string literal
+		int lineNo = doc.getLineOfOffset(literal.getStartPosition());
+		int lineOffset = doc.getLineOffset(lineNo);
+		int lineLength = doc.getLineLength(lineNo);
+		String lineOfString = doc.get(lineOffset, lineLength);
 		
-		for (Comment comment : comments) {
-			if (! (comment instanceof LineComment))
-				continue;
+		// search for a line comment in this line
+		int indexComment = lineOfString.indexOf("//");
+		
+		if (indexComment == -1)
+			return false;
+		
+		String comment = lineOfString.substring(indexComment);
 			
-			LineComment lineComment = (LineComment) comment;
+		// remove first "//" of line comment
+		comment = comment.substring(2).toLowerCase();
+		
+		// split line comments, necessary if more NON-NLS comments exist in one line, eg.: $NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3
+		String[] comments = comment.split("//");
+		
+		for (String commentFrag : comments) {
+			commentFrag = commentFrag.trim();
 			
-			int startPos = lineComment.getStartPosition();
-			int commentLine = doc.getLineOfOffset(startPos);
-			int length = lineComment.getLength();
+			// if comment match format: "$non-nls$" then ignore whole line
+			if (commentFrag.matches("^\\$non-nls\\$$")) {
+				return true;
 			
-			if (stringLine != commentLine || comment.getStartPosition() < literal.getStartPosition())
-				continue;
-						
-			String commentVal = doc.get(startPos, length);
-			
-			// remove first "//" of LineComment
-			commentVal = commentVal.substring(2).toLowerCase();
-			
-			// split line comments, necessary if more NON-NLS comments exist in one line, eg.: $NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3
-			String[] commentVals = commentVal.split("//");
-			
-			for (String commentStr : commentVals) {
-				commentStr = commentStr.trim();
-				
-				// if comment match format: "$non-nls$" then ignore whole line
-				if (commentStr.matches("^\\$non-nls\\$$")) {
+			// if comment match format: "$non-nls-{number}$" then only ignore string which is on given position
+			} else if (commentFrag.matches("^\\$non-nls-\\d+\\$$")) {
+				int iString = findNonInternationalisationPosition(cu, doc, literal.getStartPosition());
+				int iComment = new Integer(commentFrag.substring(9,10));
+				if (iString == iComment)
 					return true;
-				
-				// if comment match format: "$non-nls-{number}$" then only ignore string which is on given position
-				} else if (commentStr.matches("^\\$non-nls-\\d+\\$$")) {
-					int iString = findNonInternationalisationPosition(cu, doc, literal.getStartPosition());
-					int iComment = new Integer(commentStr.substring(9,10));
-					if (iString == iComment)
-						return true;
-				}
 			}
-		}		
+		}				
 		return false;
 	}
 	
