@@ -20,6 +20,7 @@ import java.util.Set;
 
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.resource.validator.FileMarkerStrategy;
@@ -63,6 +64,7 @@ public class Builder extends IncrementalProjectBuilder {
 				break;
 			case IResourceDelta.REMOVED:
                 System.out.println("RBE DELTA Removed"); //$NON-NLS-1$
+                RBManager.getInstance(delta.getResource().getProject()).notifyResourceRemoved(delta.getResource());
 				// handle removed resource
 				break;
 			case IResourceDelta.CHANGED:

@@ -38,5 +38,7 @@ public interface IMessagesBundleGroup {
     
     public String getProjectName();
     
+    public void removeMessagesBundle(IMessagesBundle messagesBundle);
+    
     public void dispose();
 }

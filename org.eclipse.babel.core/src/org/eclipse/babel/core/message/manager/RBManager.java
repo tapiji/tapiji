@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -108,6 +109,21 @@ public class RBManager {
 				System.out.println(bundleGroup.getResourceBundleId() + "deleted!");
 			}
 		} 
+	}
+	
+	public void notifyResourceRemoved(IResource resourceBundle) {
+		String parentName = resourceBundle.getParent().getName();
+		String resourceBundleId = parentName + "." + getResourceBundleName(resourceBundle);
+		IMessagesBundleGroup bundleGroup = resourceBundles.get(resourceBundleId);
+		if (bundleGroup != null) {
+			Locale locale = getLocaleByName(getResourceBundleName(resourceBundle), resourceBundle.getName());
+			IMessagesBundle messagesBundle = bundleGroup.getMessagesBundle(locale);
+			if (messagesBundle != null) {
+				bundleGroup.removeMessagesBundle(messagesBundle);
+			}
+		}
+		// TODO: maybe save and reinit the editor?
+
 	}
 	
 	/**
@@ -359,5 +375,35 @@ public class RBManager {
 			location = location.substring(project.getName().length() + 1, location.length());
 			return ResourcesPlugin.getWorkspace().getRoot().getProject(project.getName()).getFile(location);
 		}
+	}
+	
+	protected Locale getLocaleByName (String bundleName, String localeID) {
+		// Check locale
+		Locale locale = null;
+		localeID = localeID.substring(0, localeID.length() - "properties".length() - 1);
+		if (localeID.length() == bundleName.length()) {
+			// default locale
+			return null;
+		} else {
+			localeID = localeID.substring(bundleName.length() + 1);
+			String[] localeTokens = localeID.split("_");
+			
+			switch (localeTokens.length) {
+			case 1:
+				locale = new Locale(localeTokens[0]);
+				break;
+			case 2:
+				locale = new Locale(localeTokens[0], localeTokens[1]);
+				break;
+			case 3:
+				locale = new Locale(localeTokens[0], localeTokens[1], localeTokens[2]);
+				break;
+				default:
+					locale = null;
+					break;
+			}
+		}
+		
+		return locale;
 	}
 }
