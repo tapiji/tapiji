@@ -1,5 +1,6 @@
 package org.eclipselabs.tapiji.tools.core.ui.views.messagesview.dnd;
 
+import org.eclipse.babel.core.configuration.DirtyHack;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.api.MessagesBundleFactory;
@@ -109,23 +110,33 @@ public class KeyTreeItemDropTarget extends DropTargetAdapter {
 						IKeyTreeNode childrenTreeNode = keyTree.getChild(oldKey);
 						
 						IMessagesBundleGroup bundleGroup = contentProvider.getBundle();
-					
+						
+						DirtyHack.setFireEnabled(false);
+						DirtyHack.setEditorModificationEnabled(false); // editor won't get dirty
+						
 						// Adopt and add new bundle entries
 						addBundleEntries(newKeyPrefix, childrenTreeNode, bundleGroup);
 						
-						if (event.detail == DND.DROP_MOVE)
+						if (event.detail == DND.DROP_MOVE) {
 							remBundleEntries(childrenTreeNode, bundleGroup);
+						}
 						
 						// Store changes
 						RBManager manager = RBManager.getInstance(((MessagesBundleGroup) bundleGroup).getProjectName());
 						
-						manager.writeToFile(bundleGroup);						
+						manager.writeToFile(bundleGroup);	
+						manager.fireEditorChanged(); // refresh the View
 						
 						target.refresh();
-					} else
+					} else {
 						event.detail = DND.DROP_NONE;
+					}
 		
          	   } catch (Exception e) { Logger.logError(e); }
+         	   finally {
+         		   DirtyHack.setFireEnabled(true);
+         		   DirtyHack.setEditorModificationEnabled(true);
+         	   }
             }
          });
 	}
