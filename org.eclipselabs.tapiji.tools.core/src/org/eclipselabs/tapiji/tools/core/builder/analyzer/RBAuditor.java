@@ -9,13 +9,16 @@ import org.eclipse.ui.IMarkerResolution;
 import org.eclipselabs.tapiji.tools.core.extensions.I18nResourceAuditor;
 import org.eclipselabs.tapiji.tools.core.extensions.ILocation;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipselabs.tapiji.tools.core.util.RBFileUtils;
 
 
 public class RBAuditor extends I18nResourceAuditor {
 
 	@Override
 	public void audit(IResource resource) {
-		ResourceBundleManager.getManager(resource.getProject()).addBundleResource (resource);
+		if (RBFileUtils.isResourceBundleFile(resource)) {
+			ResourceBundleManager.getManager(resource.getProject()).addBundleResource (resource);
+		}
 	}
 
 	@Override

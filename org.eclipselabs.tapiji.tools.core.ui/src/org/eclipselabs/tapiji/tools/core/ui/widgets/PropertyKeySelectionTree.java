@@ -363,9 +363,9 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
                                 	
                                 	RBManager.getInstance(manager.getProject()).writeToFile(messagesBundle);
                                     
+                                	setTreeStructure();
+                                	
                                     DirtyHack.setFireEnabled(true);
-                                    
-                                    setTreeStructure();
                                     
                                 }
                             }
@@ -671,6 +671,12 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
     		if (resourceBundle != null) {
     			setTreeStructure();
     		}
+    	}
+    	
+    	@Override
+    	public void onResourceChanged(IMessagesBundle bundle) {
+    		// TODO Auto-generated method stub
+    		
     	}
     }
 }

@@ -219,6 +219,12 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
         
         TextEditor textEditor = null;
         if (resource != null && resource instanceof IFile) {
+        	try {
+				resource.refreshLocal(IResource.DEPTH_ZERO, null);
+			} catch (CoreException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
             IEditorInput newEditorInput = 
                     new FileEditorInput((IFile) resource);
             textEditor = null;

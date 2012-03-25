@@ -34,4 +34,9 @@ public interface IMessagesBundleGroup {
     
     boolean hasPropertiesFileGroupStrategy();
     
+    public boolean isMessageKey(String key);
+    
+    public String getProjectName();
+    
+    public void dispose();
 }

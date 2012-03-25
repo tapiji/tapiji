@@ -39,6 +39,8 @@ public class PropertiesFileResource extends AbstractPropertiesResource {
 
     private File file;
     
+    private FileChangeListenerImpl fileChangeListener;
+    
     /**
      * Constructor.
      * @param locale the resource locale
@@ -54,11 +56,9 @@ public class PropertiesFileResource extends AbstractPropertiesResource {
             File file) throws FileNotFoundException {
         super(locale, serializer, deserializer);
         this.file = file;
-        FileMonitor.getInstance().addFileChangeListener(new FileChangeListener() {
-            public void fileChanged(final File changedFile) {
-                fireResourceChange(PropertiesFileResource.this);
-            }
-        }, file, 2000);  //TODO make file scan delay configurable
+        this.fileChangeListener = new FileChangeListenerImpl();
+        
+        FileMonitor.getInstance().addFileChangeListener(this.fileChangeListener, file, 2000);  //TODO make file scan delay configurable
     }
 
     
@@ -168,6 +168,15 @@ public class PropertiesFileResource extends AbstractPropertiesResource {
      * Nothing to do: we were not listening to changes to this file.
      */
     public void dispose() {
-    	//nothing to do.
+    	FileMonitor.getInstance().removeFileChangeListener(this.fileChangeListener, file);
+    }
+    
+    private class FileChangeListenerImpl implements FileChangeListener {
+    	
+    	@Override
+    	public void fileChanged(final File changedFile) {
+            fireResourceChange(PropertiesFileResource.this);
+        }
+    	
     }
 }

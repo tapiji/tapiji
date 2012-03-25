@@ -558,9 +558,11 @@ public class ResourceBundleManager {
 	
 	public IFile getRandomFile(String bundleName) {
 		try {
-			IResource res = (resources.get(bundleName)).iterator().next(); 
+			IResource res = (resources.get(bundleName)).iterator().next();
 			return res.getProject().getFile(res.getProjectRelativePath());
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	

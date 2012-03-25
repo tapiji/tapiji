@@ -135,7 +135,7 @@ public class Builder extends IncrementalProjectBuilder {
 				if (_alreadBuiltMessageBundle != null) {
 					for (MessagesBundleGroup msgGrp : _alreadBuiltMessageBundle.values()) {
 						try {
-							msgGrp.dispose();
+//							msgGrp.dispose(); // TODO: [alst] do we need this really?
 						} catch (Throwable t) {
 							//FIXME: remove this debugging:
 							System.err.println(
@@ -168,6 +168,8 @@ public class Builder extends IncrementalProjectBuilder {
 	 * @param resource The resource currently validated.
 	 */
 	void checkBundleResource(IResource resource) {
+		if (true)
+		return; // TODO [alst] 
         if (resource instanceof IFile && resource.getName().endsWith(
                 ".properties")) { //$NON-NLS-1$ //TODO have customized?
             IFile file = (IFile) resource;

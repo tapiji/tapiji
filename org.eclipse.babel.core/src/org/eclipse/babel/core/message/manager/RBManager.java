@@ -1,6 +1,7 @@
 package org.eclipse.babel.core.message.manager;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import org.eclipse.babel.core.configuration.ConfigurationManager;
 import org.eclipse.babel.core.configuration.DirtyHack;
 import org.eclipse.babel.core.factory.MessagesBundleGroupFactory;
 import org.eclipse.babel.core.message.Message;
+import org.eclipse.babel.core.message.resource.PropertiesFileResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.core.util.PDEUtils;
 import org.eclipse.core.resources.IFile;
@@ -19,6 +21,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
@@ -61,12 +66,25 @@ public class RBManager {
 		if (resourceBundles.containsKey(bundleGroup.getResourceBundleId())) {
 			IMessagesBundleGroup oldbundleGroup = resourceBundles.get(bundleGroup.getResourceBundleId());
 			if (!equalHash(oldbundleGroup, bundleGroup)) {
-				// not same -> sync
-				if (oldbundleGroup.hasPropertiesFileGroupStrategy()) {
-					syncBundles(bundleGroup, oldbundleGroup); // rethink that line
+				boolean oldHasPropertiesStrategy = oldbundleGroup.hasPropertiesFileGroupStrategy();
+				boolean newHasPropertiesStrategy = bundleGroup.hasPropertiesFileGroupStrategy();
+				
+				// in this case, the old one is only writing to the property file, not the editor
+				// we have to sync them and store the bundle with the editor as resource
+				if (oldHasPropertiesStrategy && !newHasPropertiesStrategy) {
+					
+					syncBundles(bundleGroup, oldbundleGroup);
 					resourceBundles.put(bundleGroup.getResourceBundleId(), bundleGroup);
-				} else {
+					
+					oldbundleGroup.dispose();
+					
+				} else if ( (oldHasPropertiesStrategy && newHasPropertiesStrategy)
+							|| (!oldHasPropertiesStrategy && !newHasPropertiesStrategy) ) {
+					
 					syncBundles(oldbundleGroup, bundleGroup);
+				} else {
+					// in this case our old resource has an EditorSite, but not the new one
+					bundleGroup.dispose();
 				}
 			}
 		} else {
@@ -120,7 +138,7 @@ public class RBManager {
 							oldBundle.addMessage(newMsg);
 						} else { // check value
 							oldMsg.setComment(newMsg.getComment());
-							oldMsg.setText(newMsg.getValue()); // ?silent because of illegal thread access (firePropChanged)
+							oldMsg.setText(newMsg.getValue());
 						}
 					}
 				}
@@ -176,13 +194,14 @@ public class RBManager {
 		// TODO fragments
 		
 		INSTANCE = managerMap.get(project);
+		
 		if (INSTANCE == null) {
 			INSTANCE = new RBManager();
 			INSTANCE.project = project;
 			managerMap.put(project, INSTANCE);
-//			INSTANCE.detectResourceBundles(); // almost there
-			
+			INSTANCE.detectResourceBundles();
 		}
+		
 		return INSTANCE;
 	}
 	
@@ -231,6 +250,11 @@ public class RBManager {
 		}
 	}
 	
+	public void fireResourceChanged(IMessagesBundle bundle) {
+		for (IMessagesEditorListener listener : this.editorListeners) {
+			listener.onResourceChanged(bundle);
+		}
+	}
 	
 	protected void detectResourceBundles () {
 		try {		
@@ -251,8 +275,35 @@ public class RBManager {
 		// create it with MessagesBundleFactory or read from resource!
 		// we can optimize that, now we create a bundle group for each bundle
 		// we should create a bundle group only once!
-		MessagesBundleGroupFactory.createBundleGroup(resource);
+		
+		String resourceBundleId = getResourceBundleId(resource);
+		if (!resourceBundles.containsKey(resourceBundleId)) {
+			// if we do not have this condition, then you will be doomed with
+			// resource out of syncs, because here we instantiate
+			// PropertiesFileResources, which have an evil setText-Method
+			MessagesBundleGroupFactory.createBundleGroup(resource);
+		}
 	}
+	
+	public static String getResourceBundleId (IResource resource) {
+		String packageFragment = "";
+
+		IJavaElement propertyFile = JavaCore.create(resource.getParent());
+		if (propertyFile != null && propertyFile instanceof IPackageFragment)
+			packageFragment = ((IPackageFragment) propertyFile).getElementName();
+		
+		return (packageFragment.length() > 0 ? packageFragment  + "." : "") + 
+				getResourceBundleName(resource);
+	}
+	
+	 public static String getResourceBundleName(IResource res) {
+	        String name = res.getName();
+	    	String regex = "^(.*?)" //$NON-NLS-1$
+	                + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" //$NON-NLS-1$
+	                + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." //$NON-NLS-1$
+	                + res.getFileExtension() + ")$"; //$NON-NLS-1$
+	        return name.replaceFirst(regex, "$1"); //$NON-NLS-1$
+	    }
 	
 	public void writeToFile(IMessagesBundleGroup bundleGroup) {
 		for (IMessagesBundle bundle : bundleGroup.getMessagesBundles()) {
@@ -267,6 +318,7 @@ public class RBManager {
 		String editorContent = ps.serialize(bundle);
 		IFile file = getFile(bundle);
 		try {
+			file.refreshLocal(IResource.DEPTH_ZERO, null);
 			file.setContents(new ByteArrayInputStream(editorContent.getBytes()), 
 					false, true, null);
 			file.refreshLocal(IResource.DEPTH_ZERO, null);
@@ -275,11 +327,25 @@ public class RBManager {
 		} finally {
 			DirtyHack.setEditorModificationEnabled(true);
 		}
+		
+		fireResourceChanged(bundle);
+		
 	}
 
 	private IFile getFile(IMessagesBundle bundle) {
-		String location = bundle.getResource().getResourceLocationLabel(); ///TEST/src/messages/Messages_en_IN.properties
-		location = location.substring(project.getName().length() + 1, location.length());
-		return ResourcesPlugin.getWorkspace().getRoot().getProject(project.getName()).getFile(location);
+		if (bundle.getResource() instanceof PropertiesFileResource) { // different ResourceLocationLabel
+			String path = bundle.getResource().getResourceLocationLabel(); // P:\Allianz\Workspace\AST\TEST\src\messages\Messages_de.properties
+			int index = path.indexOf("src");
+	    	String pathBeforeSrc = path.substring(0, index - 1);
+	    	int lastIndexOf = pathBeforeSrc.lastIndexOf(File.separatorChar);
+	    	String projectName = path.substring(lastIndexOf + 1, index - 1);
+	    	String relativeFilePath = path.substring(index, path.length());
+	    	
+	    	return ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).getFile(relativeFilePath);
+		} else {
+			String location = bundle.getResource().getResourceLocationLabel(); ///TEST/src/messages/Messages_en_IN.properties
+			location = location.substring(project.getName().length() + 1, location.length());
+			return ResourcesPlugin.getWorkspace().getRoot().getProject(project.getName()).getFile(location);
+		}
 	}
 }

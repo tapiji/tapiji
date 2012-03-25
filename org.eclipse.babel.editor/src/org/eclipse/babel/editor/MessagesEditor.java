@@ -196,7 +196,6 @@ public class MessagesEditor extends MultiPageEditorPart
      * Saves the multi-page editor's document.
      */
     public void doSave(IProgressMonitor monitor) {
-    	
         for (ITextEditor textEditor : textEditorsIndex) {
             textEditor.doSave(monitor);
         }

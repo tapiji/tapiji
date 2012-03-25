@@ -84,7 +84,7 @@ public class MessagesBundle extends AbstractMessageModel
      * Called before this object will be discarded.
      */
     public void dispose() {
-    	
+    	this.resource.dispose();
     }
     
     /**
