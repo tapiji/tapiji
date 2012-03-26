@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
-
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -20,24 +18,17 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
-import org.eclipse.jdt.core.dom.ChildListPropertyDescriptor;
-import org.eclipse.jdt.core.dom.ChildPropertyDescriptor;
-import org.eclipse.jdt.core.dom.Comment;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
-import org.eclipse.jdt.core.dom.LineComment;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.SimplePropertyDescriptor;
 import org.eclipse.jdt.core.dom.SimpleType;
-import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -684,6 +675,7 @@ public class ASTutils {
 			lsfinder = new LinePreStringsFinder(offset, doc);
 			cu.accept(lsfinder);
 		} catch (BadLocationException e) {
+			Logger.logError(e);
 		}
 		if (lsfinder == null) return 1;
 		
@@ -692,14 +684,15 @@ public class ASTutils {
 		return strings.size()+1;
 	}
 	
-	private static void createReplaceNonInternationalisationComment(CompilationUnit cu, IDocument doc, int position) {
+	public static void createReplaceNonInternationalisationComment(CompilationUnit cu, IDocument doc, int position) {
 		int i = findNonInternationalisationPosition(cu, doc, position);
 				
 		IRegion reg;
 		try {
 			reg = doc.getLineInformationOfOffset(position);
 			doc.replace(reg.getOffset()+reg.getLength(), 0, " //$NON-NLS-"+i+"$");
-		} catch (BadLocationException e1) {
+		} catch (BadLocationException e) {
+			Logger.logError(e);
 		}
 	}
 	
