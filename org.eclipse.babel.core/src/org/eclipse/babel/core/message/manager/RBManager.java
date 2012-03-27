@@ -16,6 +16,7 @@ import org.eclipse.babel.core.factory.MessagesBundleGroupFactory;
 import org.eclipse.babel.core.message.Message;
 import org.eclipse.babel.core.message.resource.PropertiesFileResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
+import org.eclipse.babel.core.message.strategy.PropertiesFileGroupStrategy;
 import org.eclipse.babel.core.util.PDEUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -57,6 +58,27 @@ public class RBManager {
 		} else {
 			return resourceBundles.get(name);
 		}
+	}
+	
+	public List<String> getMessagesBundleGroupNames() {
+		Set<String> keySet = resourceBundles.keySet();
+		List<String> bundleGroupNames = new ArrayList<String>();
+	
+		for (String key : keySet) {
+			bundleGroupNames.add(project.getName() + "/" + key);
+		}
+		return bundleGroupNames;
+	}
+	
+	public static List<String> getAllMessagesBundleGroupNames() {
+		Set<IProject> projects = getAllSupportedProjects();
+		List<String> bundleGroupNames = new ArrayList<String>();
+		
+		for (IProject project : projects) {
+			RBManager manager = getInstance(project);
+			bundleGroupNames.addAll(manager.getMessagesBundleGroupNames());
+		}		
+		return bundleGroupNames;
 	}
 	
 	/**
@@ -106,14 +128,15 @@ public class RBManager {
 		if (resourceBundles.containsKey(bundleGroup.getResourceBundleId())) {
 			if (equalHash(resourceBundles.get(bundleGroup.getResourceBundleId()), bundleGroup)) {
 				resourceBundles.remove(bundleGroup.getResourceBundleId());
-				System.out.println(bundleGroup.getResourceBundleId() + "deleted!");
+				System.out.println(bundleGroup.getResourceBundleId() + " deleted!");
 			}
 		} 
 	}
 	
 	public void notifyResourceRemoved(IResource resourceBundle) {
-		String parentName = resourceBundle.getParent().getName();
-		String resourceBundleId = parentName + "." + getResourceBundleName(resourceBundle);
+		//String parentName = resourceBundle.getParent().getName();
+		//String resourceBundleId = parentName + "." + getResourceBundleName(resourceBundle);
+		String resourceBundleId = PropertiesFileGroupStrategy.getResourceBundleId(resourceBundle);
 		IMessagesBundleGroup bundleGroup = resourceBundles.get(resourceBundleId);
 		if (bundleGroup != null) {
 			Locale locale = getLocaleByName(getResourceBundleName(resourceBundle), resourceBundle.getName());
@@ -121,7 +144,11 @@ public class RBManager {
 			if (messagesBundle != null) {
 				bundleGroup.removeMessagesBundle(messagesBundle);
 			}
+			if (bundleGroup.getMessagesBundleCount() == 0) {
+				notifyMessagesBundleDeleted(bundleGroup);
+			}
 		}
+		
 		// TODO: maybe save and reinit the editor?
 
 	}
@@ -143,7 +170,7 @@ public class RBManager {
 		List<IMessage> keysToRemove = new ArrayList<IMessage>();
 		
 		DirtyHack.setFireEnabled(false); // hebelt AbstractMessageModel aus 
-		// sonst müssten wir in setText von EclipsePropertiesEditorResource ein asyncExec zulassen
+		// sonst mï¿½ssten wir in setText von EclipsePropertiesEditorResource ein asyncExec zulassen
 		
 		for (IMessagesBundle newBundle : newBundleGroup.getMessagesBundles()) {
 			IMessagesBundle oldBundle = oldBundleGroup.getMessagesBundle(newBundle.getLocale());
