@@ -160,6 +160,8 @@ public class ResourceBundleNewWizardPage extends WizardPage {
                 setAddButtonState();
             }
         });
+        // add a single Locale so that the bundleLocalesList isn't empty on startup
+        bundleLocalesList.add(DEFAULT_LOCALE);
     }
     
     /**
@@ -184,6 +186,7 @@ public class ResourceBundleNewWizardPage extends WizardPage {
             public void widgetSelected(SelectionEvent event) {
                 bundleLocalesList.add(getSelectedLocaleAsString());
                 setAddButtonState();
+                dialogChanged(); // for the locale-check
             }
         });
 
@@ -199,6 +202,7 @@ public class ResourceBundleNewWizardPage extends WizardPage {
                         bundleLocalesList.getSelectionIndices());
                 removeButton.setEnabled(false);
                 setAddButtonState();
+                dialogChanged(); // for the locale-check
             }
         });
     }
@@ -331,7 +335,7 @@ public class ResourceBundleNewWizardPage extends WizardPage {
     }
     
     /**
-     * Ensures that both text fields are set.
+     * Ensures that both text fields and the Locale field are set.
      */
     /*default*/ void dialogChanged() {
         String container = getContainerName();
@@ -351,6 +355,12 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         if (dotLoc != -1) {
             updateStatus(MessagesEditorPlugin.getString(
                     "editor.wiz.error.extension")); //$NON-NLS-1$
+            return;
+        }
+        // check if at least one Locale has been added to th list
+        if (bundleLocalesList.getItemCount() <= 0) {
+        	updateStatus(MessagesEditorPlugin.getString(
+                    "editor.wiz.error.locale")); //$NON-NLS-1$
             return;
         }
         updateStatus(null);
