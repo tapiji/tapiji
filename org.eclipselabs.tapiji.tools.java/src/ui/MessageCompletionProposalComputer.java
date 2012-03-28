@@ -140,8 +140,8 @@ public class MessageCompletionProposalComputer implements
 					offset - stringLiteralStart.length(),
 					stringLiteralStart.length(), 
 					manager, resource, csav.getDefinedResourceBundles(offset)));
-			completions.add(new NewResourceBundleEntryProposal(resource, stringLiteralStart, offset - stringLiteralStart.length(),
-					stringLiteralStart.length(), false, manager, null/*, csav.getDefinedResourceBundles(offset)*/));
+			completions.add(new NewResourceBundleEntryProposal(resource, offset - stringLiteralStart.length(),
+					false, manager, null/*, csav.getDefinedResourceBundles(offset)*/));
 		} else {
 //			if (!"Hallo Welt".equals(stringLiteralStart)) {
 //				// If a part of a String has already been entered
@@ -149,8 +149,8 @@ public class MessageCompletionProposalComputer implements
 //					completions.add(new ValueOfResourceBundleProposal(offset - stringLiteralStart.length(),
 //							stringLiteralStart.length(), "hello.world", "Hallo Welt!"));
 //				}
-				completions.add(new NewResourceBundleEntryProposal(resource, stringLiteralStart, offset - stringLiteralStart.length(),
-						stringLiteralStart.length(), false, manager, null/*, csav.getDefinedResourceBundles(offset)*/));
+				completions.add(new NewResourceBundleEntryProposal(resource, offset - stringLiteralStart.length(),
+						false, manager, null/*, csav.getDefinedResourceBundles(offset)*/));
 			
 //			}
 		}
@@ -179,14 +179,14 @@ public class MessageCompletionProposalComputer implements
 				}
 			}
 			if (!hit)
-				completions.add(new NewResourceBundleEntryProposal(resource, stringLiteralStart, offset - stringLiteralStart.length(),
-						stringLiteralStart.length(), true, manager, bundleName/*, csav.getDefinedResourceBundles(offset)*/));
+				completions.add(new NewResourceBundleEntryProposal(resource, offset - stringLiteralStart.length(),
+						true, manager, bundleName/*, csav.getDefinedResourceBundles(offset)*/));
 		} else {
 			for (String key : bundleGroup.getMessageKeys()) {
 				completions.add (new MessageCompletionProposal (posStart, stringLiteralStart.length(), key, false));
 			}
-			completions.add(new NewResourceBundleEntryProposal(resource, stringLiteralStart, offset - stringLiteralStart.length(),
-					stringLiteralStart.length(), true, manager, bundleName/*, csav.getDefinedResourceBundles(offset)*/));
+			completions.add(new NewResourceBundleEntryProposal(resource, offset - stringLiteralStart.length(),
+					true, manager, bundleName/*, csav.getDefinedResourceBundles(offset)*/));
 			
 		}
 		return completions;

@@ -76,16 +76,7 @@ public class ASTutils {
 		return rbAccessor;
 	}
 	
-	public static String insertExistingBundleRef (IDocument document,
-												IResource resource,
-												int offset,
-												int length,
-												String resourceBundleId,
-												String key,
-												Locale locale) {
-		String reference = "";
-		String newName = null;
-
+	public static CompilationUnit getCompilationUnit(IResource resource) {
 		IJavaElement je = JavaCore.create(resource, JavaCore.create(resource.getProject()));
 
 		// get the type of the currently loaded resource
@@ -98,6 +89,20 @@ public class ASTutils {
 		CompilationUnit cu = SharedASTProvider.getAST(typeRoot,
 		// do not wait for AST creation
 				SharedASTProvider.WAIT_YES, null);
+		return cu;
+	}
+	
+	public static String insertExistingBundleRef (IDocument document,
+												IResource resource,
+												int offset,
+												int length,
+												String resourceBundleId,
+												String key,
+												Locale locale) {
+		String reference = "";
+		String newName = null;
+
+		CompilationUnit cu = getCompilationUnit(resource);
 		
 		String variableName = ASTutils.resolveRBReferenceVar(document, resource, offset, resourceBundleId, cu);
 		if (variableName == null)
@@ -753,6 +758,13 @@ public class ASTutils {
 		return false;
 	}
 	
+	
+	public static StringLiteral getStringAtPos(CompilationUnit cu, int position) {
+		StringFinder strFinder = new StringFinder(position);
+		cu.accept(strFinder);
+		return strFinder.getString();
+	}
+	
 	static class PositionalTypeFinder extends ASTVisitor {
 		
 		private int position;
@@ -968,5 +980,25 @@ public class ASTutils {
 			}
 			return true;
 		}
-	}	
+	}
+	
+	static class StringFinder extends ASTVisitor {
+		private int position;
+		private StringLiteral string;
+		
+		public StringFinder(int position) {
+			this.position = position;
+		}
+		
+		public StringLiteral getString(){
+			return string;
+		}
+		
+		@Override
+		public boolean visit (StringLiteral node) {
+			if (position > node.getStartPosition() && position < (node.getStartPosition()+node.getLength()))
+				string = node;
+			return true;
+		}
+	}
 }

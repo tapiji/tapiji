@@ -1,6 +1,8 @@
 package ui.autocompletion;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.text.IDocument;
@@ -26,19 +28,29 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 	private String bundleName;
 	private String reference;
 
-	public NewResourceBundleEntryProposal(IResource resource, String str, int startPos, int endPos, boolean bundleContext, 
+	public NewResourceBundleEntryProposal(IResource resource, int startPos, boolean bundleContext, 
 			ResourceBundleManager manager, String bundleName) {
-		this.startPos = startPos;
-		this.endPos = endPos;
+		
+		CompilationUnit cu = ASTutils.getCompilationUnit(resource);
+		
+		StringLiteral string = ASTutils.getStringAtPos(cu, startPos);
+				
+		this.startPos = string.getStartPosition()+1;
+		this.endPos = string.getLength()-2;
 		this.bundleContext = bundleContext;
 		this.manager = manager;
-		this.value = str;
+		this.value = string.getLiteralValue();
 		this.resource = resource;
 		this.bundleName = bundleName;
 	}
 
 	@Override
 	public void apply(IDocument document) {
+		
+		CompilationUnit cu = ASTutils.getCompilationUnit(resource);
+		
+		StringLiteral lit = ASTutils.getStringAtPos(cu, startPos);
+		
 		CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
 				Display.getDefault().getActiveShell(),
 				manager,
