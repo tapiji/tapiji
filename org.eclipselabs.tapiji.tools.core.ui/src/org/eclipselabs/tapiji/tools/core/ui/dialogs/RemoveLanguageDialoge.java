@@ -1,6 +1,5 @@
 package org.eclipselabs.tapiji.tools.core.ui.dialogs;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 

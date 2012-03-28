@@ -2,8 +2,6 @@ package org.eclipselabs.tapiji.tools.core.ui.dialogs;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -15,7 +13,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ListDialog;
-import org.eclipselabs.tapiji.tools.core.util.ImageUtils;
 
 
 public class FragmentProjectSelectionDialog extends ListDialog{

@@ -24,132 +24,151 @@ import org.eclipselabs.tapiji.tools.core.ui.quickfix.CreateResourceBundleEntry;
 
 import quickfix.ExcludeResourceFromInternationalization;
 import quickfix.ExportToResourceBundleResolution;
+import quickfix.IgnoreStringFromInternationalization;
 import quickfix.ReplaceResourceBundleDefReference;
 import quickfix.ReplaceResourceBundleReference;
 import auditor.model.SLLocation;
 
 public class JavaResourceAuditor extends I18nResourceAuditor {
 
-	protected List<SLLocation> constantLiterals = new ArrayList<SLLocation>();
-	protected List<SLLocation> brokenResourceReferences = new ArrayList<SLLocation>();
-	protected List<SLLocation> brokenBundleReferences = new ArrayList<SLLocation>();
-	
-	public String[] getFileEndings () {
-		return new String [] {"java"};
+    protected List<SLLocation> constantLiterals = new ArrayList<SLLocation>();
+    protected List<SLLocation> brokenResourceReferences = new ArrayList<SLLocation>();
+    protected List<SLLocation> brokenBundleReferences = new ArrayList<SLLocation>();
+
+    @Override
+    public String[] getFileEndings() {
+	return new String[] { "java" };
+    }
+
+    @Override
+    public void audit(IResource resource) {
+	IJavaElement javaElement = JavaCore.create(resource);
+	if (javaElement == null)
+	    return;
+
+	if (!(javaElement instanceof ICompilationUnit))
+	    return;
+
+	ICompilationUnit icu = (ICompilationUnit) javaElement;
+	ResourceAuditVisitor csav = new ResourceAuditVisitor(resource
+		.getProject().getFile(resource.getProjectRelativePath()),
+		ResourceBundleManager.getManager(resource.getProject()));
+
+	// get the type of the currently loaded resource
+	ITypeRoot typeRoot = icu;
+
+	if (typeRoot == null)
+	    return;
+
+	// get a reference to the shared AST of the loaded CompilationUnit
+	CompilationUnit cu = SharedASTProvider.getAST(typeRoot,
+	// do not wait for AST creation
+		SharedASTProvider.WAIT_YES, null);
+	if (cu == null) {
+	    System.out.println("Cannot audit resource: "
+		    + resource.getFullPath());
+	    return;
 	}
-	
-	public void audit(IResource resource) {
-		IJavaElement javaElement = JavaCore.create(resource);
-		if (javaElement == null)
-			return;
+	cu.accept(csav);
 
-		if (!(javaElement instanceof ICompilationUnit))
-			return;
+	// Report all constant string literals
+	constantLiterals = csav.getConstantStringLiterals();
 
-		ICompilationUnit icu = (ICompilationUnit) javaElement;
-		ResourceAuditVisitor csav = new ResourceAuditVisitor(
-				resource.getProject().getFile(resource.getProjectRelativePath()), 
-				ResourceBundleManager.getManager(resource.getProject())
-			);
+	// Report all broken Resource-Bundle references
+	brokenResourceReferences = csav.getBrokenResourceReferences();
 
-		// get the type of the currently loaded resource
-		ITypeRoot typeRoot = icu;
+	// Report all broken definitions to Resource-Bundle references
+	brokenBundleReferences = csav.getBrokenRBReferences();
+    }
 
-		if (typeRoot == null)
-			return;
+    @Override
+    public List<ILocation> getConstantStringLiterals() {
+	return new ArrayList<ILocation>(constantLiterals);
+    }
 
-		// get a reference to the shared AST of the loaded CompilationUnit
-		CompilationUnit cu = SharedASTProvider.getAST(typeRoot,
-		// do not wait for AST creation
-				SharedASTProvider.WAIT_YES, null);
-		if (cu == null) {
-			System.out.println ("Cannot audit resource: " + resource.getFullPath());
-			return;
-		}
-		cu.accept(csav);
+    @Override
+    public List<ILocation> getBrokenResourceReferences() {
+	return new ArrayList<ILocation>(brokenResourceReferences);
+    }
 
-		// Report all constant string literals
-		constantLiterals = csav.getConstantStringLiterals();
-		
-		// Report all broken Resource-Bundle references
-		brokenResourceReferences = csav.getBrokenResourceReferences();
-		
-		// Report all broken definitions to Resource-Bundle references
-		brokenBundleReferences = csav.getBrokenRBReferences();
+    @Override
+    public List<ILocation> getBrokenBundleReferences() {
+	return new ArrayList<ILocation>(brokenBundleReferences);
+    }
+
+    @Override
+    public String getContextId() {
+	return "java";
+    }
+    
+    @Override
+    public List<IMarkerResolution> getMarkerResolutions(IMarker marker) {
+	List<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
+	int cause = marker.getAttribute("cause", -1);
+
+	switch (marker.getAttribute("cause", -1)) {
+	case IMarkerConstants.CAUSE_CONSTANT_LITERAL:
+		resolutions.add(new IgnoreStringFromInternationalization());
+		resolutions.add(new ExcludeResourceFromInternationalization());
+	    resolutions.add(new ExportToResourceBundleResolution());
+	    break;
+	case IMarkerConstants.CAUSE_BROKEN_REFERENCE:
+	    String dataName = marker.getAttribute("bundleName", "");
+	    int dataStart = marker.getAttribute("bundleStart", 0);
+	    int dataEnd = marker.getAttribute("bundleEnd", 0);
+
+	    IProject project = marker.getResource().getProject();
+	    ResourceBundleManager manager = ResourceBundleManager
+		    .getManager(project);
+
+	    if (manager.getResourceBundle(dataName) != null) {
+		String key = marker.getAttribute("key", "");
+
+		resolutions.add(new CreateResourceBundleEntry(key, manager,
+			dataName));
+		resolutions.add(new ReplaceResourceBundleReference(key,
+			dataName));
+		resolutions.add(new ReplaceResourceBundleDefReference(dataName,
+			dataStart, dataEnd));
+	    } else {
+		String bname = dataName;
+
+		Set<IResource> bundleResources = ResourceBundleManager
+			.getManager(marker.getResource().getProject())
+			.getAllResourceBundleResources(bname);
+
+		if (bundleResources != null && bundleResources.size() > 0)
+		    resolutions
+			    .add(new IncludeResource(bname, bundleResources));
+		else
+		    resolutions.add(new CreateResourceBundle(bname, marker
+			    .getResource(), dataStart, dataEnd));
+		resolutions.add(new ReplaceResourceBundleDefReference(bname,
+			dataStart, dataEnd));
+	    }
+
+	    break;
+	case IMarkerConstants.CAUSE_BROKEN_RB_REFERENCE:
+	    String bname = marker.getAttribute("key", "");
+
+	    Set<IResource> bundleResources = ResourceBundleManager.getManager(
+		    marker.getResource().getProject())
+		    .getAllResourceBundleResources(bname);
+
+	    if (bundleResources != null && bundleResources.size() > 0)
+		resolutions.add(new IncludeResource(bname, bundleResources));
+	    else
+		resolutions.add(new CreateResourceBundle(marker.getAttribute(
+			"key", ""), marker.getResource(), marker.getAttribute(
+			IMarker.CHAR_START, 0), marker.getAttribute(
+			IMarker.CHAR_END, 0)));
+	    resolutions.add(new ReplaceResourceBundleDefReference(marker
+		    .getAttribute("key", ""), marker.getAttribute(
+		    IMarker.CHAR_START, 0), marker.getAttribute(
+		    IMarker.CHAR_END, 0)));
 	}
 
-	@Override
-	public List<ILocation> getConstantStringLiterals() {
-		return new ArrayList<ILocation>(constantLiterals);
-	}
-
-	@Override
-	public List<ILocation> getBrokenResourceReferences() {
-		return new ArrayList<ILocation>(brokenResourceReferences);
-	}
-
-	@Override
-	public List<ILocation> getBrokenBundleReferences() {
-		return new ArrayList<ILocation>(brokenBundleReferences);
-	}
-
-	@Override
-	public String getContextId() {
-		return "java";
-	}
-
-	@Override
-	public List<IMarkerResolution> getMarkerResolutions(IMarker marker) {
-		List<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
-		int cause = marker.getAttribute("cause", -1);
-
-		switch (marker.getAttribute("cause", -1)) {
-			case IMarkerConstants.CAUSE_CONSTANT_LITERAL:
-				resolutions.add(new ExportToResourceBundleResolution());
-				resolutions.add(new ExcludeResourceFromInternationalization());
-				break;
-			case IMarkerConstants.CAUSE_BROKEN_REFERENCE:
-				String dataName = marker.getAttribute("bundleName", "");
-				int dataStart = marker.getAttribute("bundleStart", 0);
-				int dataEnd =   marker.getAttribute("bundleEnd", 0);
-	
-				IProject project = marker.getResource().getProject();
-				ResourceBundleManager manager = ResourceBundleManager.getManager(project);
-				
-				if (manager.getResourceBundle(dataName) != null) {
-					String key = marker.getAttribute("key", "");
-					
-					resolutions.add(new CreateResourceBundleEntry(key, manager, dataName));
-					resolutions.add(new ReplaceResourceBundleReference(key, dataName));
-					resolutions.add(new ReplaceResourceBundleDefReference(dataName, dataStart, dataEnd));
-				} else {
-					String bname = dataName;
-					
-					Set<IResource> bundleResources = 
-						ResourceBundleManager.getManager(marker.getResource().getProject()).getAllResourceBundleResources(bname);
-					
-					if (bundleResources != null && bundleResources.size() > 0)
-						resolutions.add(new IncludeResource(bname, bundleResources));
-					else
-						resolutions.add(new CreateResourceBundle(bname, marker.getResource(), dataStart, dataEnd));
-					resolutions.add(new ReplaceResourceBundleDefReference(bname, dataStart, dataEnd));
-				}
-			
-				break;
-			case IMarkerConstants.CAUSE_BROKEN_RB_REFERENCE:
-				String bname = marker.getAttribute("key", "");
-				
-				Set<IResource> bundleResources = 
-					ResourceBundleManager.getManager(marker.getResource().getProject()).getAllResourceBundleResources(bname);
-				
-				if (bundleResources != null && bundleResources.size() > 0)
-					resolutions.add(new IncludeResource(bname, bundleResources));
-				else
-					resolutions.add(new CreateResourceBundle(marker.getAttribute("key", ""), marker.getResource(),marker.getAttribute(IMarker.CHAR_START, 0), marker.getAttribute(IMarker.CHAR_END, 0)));
-				resolutions.add(new ReplaceResourceBundleDefReference(marker.getAttribute("key", ""), marker.getAttribute(IMarker.CHAR_START, 0), marker.getAttribute(IMarker.CHAR_END, 0)));
-		}
-		
-		return resolutions;
-	}
+	return resolutions;
+    }
 
 }

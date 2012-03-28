@@ -8,7 +8,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipselabs.tapiji.tools.core.Logger;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipselabs.tapiji.tools.core.util.RBFileUtils;
-import org.eclipselabs.tapiji.tools.core.util.ResourceUtils;
 
 
 public class ResourceBundleDetectionVisitor implements IResourceVisitor,

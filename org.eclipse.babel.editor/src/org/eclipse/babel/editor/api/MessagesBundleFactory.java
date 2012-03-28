@@ -9,40 +9,34 @@ import java.util.logging.Logger;
 import org.eclipse.babel.core.message.Message;
 import org.eclipse.babel.core.message.MessageException;
 import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.resource.PropertiesFileResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
-import org.eclipse.babel.core.message.strategy.PropertiesFileGroupStrategy;
-import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.ui.PlatformUI;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 
 
 public class MessagesBundleFactory {
 
     static Logger logger = Logger.getLogger(MessagesBundleFactory.class.getSimpleName());
     
-    public static IMessagesBundleGroup createBundleGroup(IResource resource) {
-        // TODO überlegen welche Strategy wann ziehen soll
-        //zB
-        if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage() == null || 
-                PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() ==  null) {
-            File ioFile = new File(resource.getRawLocation().toFile().getPath());
-            
-            logger.log(Level.INFO, "createBundleGroup: " + resource.getName());
-            
-            return new MessagesBundleGroup(new PropertiesFileGroupStrategy(ioFile, MsgEditorPreferences.getInstance(), MsgEditorPreferences.getInstance()));
-        } else {
-            return MessagesBundleGroupFactory.createBundleGroup(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorSite(), (IFile)resource);
-        }
-        
-    }
+//    public static IMessagesBundleGroup createBundleGroup(IResource resource) {
+//        // TODO ï¿½berlegen welche Strategy wann ziehen soll
+//        //zB
+//        if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage() == null || 
+//                PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor() ==  null) {
+//            File ioFile = new File(resource.getRawLocation().toFile().getPath());
+//            
+//            logger.log(Level.INFO, "createBundleGroup: " + resource.getName());
+//            
+//            return new MessagesBundleGroup(new PropertiesFileGroupStrategy(ioFile, MsgEditorPreferences.getInstance().getSerializerConfig(), 
+//            		MsgEditorPreferences.getInstance().getDeserializerConfig()));
+//        } else {
+//            return MessagesBundleGroupFactory.createBundleGroup(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorSite(), (IFile)resource);
+//        }
+//        
+//    }
     
     public static IMessage createMessage(String key, Locale locale) {
         String l = locale == null ? "[default]" : locale.toString();
@@ -62,8 +56,8 @@ public class MessagesBundleFactory {
             
             return new MessagesBundle(new PropertiesFileResource(
                     locale,
-                    new PropertiesSerializer(MsgEditorPreferences.getInstance()),
-                    new PropertiesDeserializer(MsgEditorPreferences.getInstance()),
+                    new PropertiesSerializer(MsgEditorPreferences.getInstance().getSerializerConfig()),
+                    new PropertiesDeserializer(MsgEditorPreferences.getInstance().getDeserializerConfig()),
                     resource));
         } catch (FileNotFoundException e) {
             throw new MessageException(

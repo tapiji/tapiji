@@ -10,13 +10,10 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
-import java.beans.PropertyChangeEvent;
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.IMessagesBundleGroupListener;
 import org.eclipse.babel.core.message.Message;
-import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
@@ -36,6 +33,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 
 /**
  * Tree for displaying and navigating through resource bundle keys.
@@ -44,7 +43,8 @@ import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
 public class I18NEntry extends Composite {
 
     private final MessagesEditor editor;
-    private final MessagesBundleGroup messagesBundleGroup;
+    private final String bundleGroupId;
+    private final String projectName;
     private final Locale locale;
 
     private boolean expanded = true;
@@ -64,7 +64,8 @@ public class I18NEntry extends Composite {
         super(parent, SWT.NONE);
         this.editor = editor;
         this.locale = locale;
-        this.messagesBundleGroup = editor.getBundleGroup();
+        this.bundleGroupId = editor.getBundleGroup().getResourceBundleId();
+        this.projectName = editor.getBundleGroup().getProjectName();
         
         GridLayout gridLayout = new GridLayout(1, false);        
         gridLayout.horizontalSpacing = 0;
@@ -151,12 +152,14 @@ public class I18NEntry extends Composite {
     }
     
     public boolean isEditable() {
-        MessagesBundle bundle = (MessagesBundle) messagesBundleGroup.getMessagesBundle(locale);
+    	IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(projectName).getMessagesBundleGroup(bundleGroupId);
+        IMessagesBundle bundle = messagesBundleGroup.getMessagesBundle(locale);
     	return ((TextEditor) bundle.getResource().getSource()).isEditable();
     }
     
     public String getResourceLocationLabel() {
-        MessagesBundle bundle = (MessagesBundle) messagesBundleGroup.getMessagesBundle(locale);
+    	IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(projectName).getMessagesBundleGroup(bundleGroupId);
+    	IMessagesBundle bundle = messagesBundleGroup.getMessagesBundle(locale);
     	return bundle.getResource().getResourceLocationLabel();
     }
     
@@ -241,30 +244,35 @@ public class I18NEntry extends Composite {
         
         editor.addChangeListener(new MessagesEditorChangeAdapter() {
             public void selectedKeyChanged(String oldKey, String newKey) {
-                boolean isKey =
-                        newKey != null && messagesBundleGroup.isMessageKey(newKey);
-                textBox.setEnabled(isKey);
-                if (isKey) {
-                    IMessage entry = messagesBundleGroup.getMessage(
-                            newKey, locale);
-                    if (entry == null || entry.getValue() == null) {
-                        textBox.setText(null);
-//                        commentedCheckbox.setSelection(false);
-                    } else {
-//                        commentedCheckbox.setSelection(bundleEntry.isCommented());
-                        textBox.setText(entry.getValue());
-                    }
-                } else {
-                    textBox.setText(null);
-                }
+            	updateKey(newKey);
             }
         });
 
     }
+    
+	void updateKey(String key) {
+		IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(
+				projectName).getMessagesBundleGroup(bundleGroupId);
+		boolean isKey = key != null && messagesBundleGroup.isMessageKey(key);
+		textBox.setEnabled(isKey);
+		if (isKey) {
+			IMessage entry = messagesBundleGroup.getMessage(key, locale);
+			if (entry == null || entry.getValue() == null) {
+				textBox.setText(null);
+				// commentedCheckbox.setSelection(false);
+			} else {
+				// commentedCheckbox.setSelection(bundleEntry.isCommented());
+				textBox.setText(entry.getValue());
+			}
+		} else {
+			textBox.setText(null);
+		}
+	}
 
     private void updateModel() {
         if (editor.getSelectedKey() != null) {
             if (!BabelUtils.equals(focusGainedText, textBox.getText())) {
+            	IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(projectName).getMessagesBundleGroup(bundleGroupId);
                 String key = editor.getSelectedKey();
                 IMessage entry = messagesBundleGroup.getMessage(key, locale);
                 if (entry == null) {

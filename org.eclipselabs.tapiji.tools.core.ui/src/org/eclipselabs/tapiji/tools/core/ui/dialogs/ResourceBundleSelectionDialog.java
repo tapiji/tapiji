@@ -2,6 +2,7 @@ package org.eclipselabs.tapiji.tools.core.ui.dialogs;
 
 import java.util.List;
 
+import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -10,7 +11,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ListDialog;
-import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipselabs.tapiji.tools.core.util.ImageUtils;
 
 
@@ -34,9 +34,9 @@ public class ResourceBundleSelectionDialog extends ListDialog {
 		this.setBlockOnOpen(true);
 		
 		if (project != null)
-			this.setInput(ResourceBundleManager.getManager(project).getResourceBundleNames());
+			this.setInput(RBManager.getInstance(project).getMessagesBundleGroupNames());
 		else
-			this.setInput(ResourceBundleManager.getAllResourceBundleNames());
+			this.setInput(RBManager.getAllMessagesBundleGroupNames());
 	}
 	
 	public String getSelectedBundleId () {

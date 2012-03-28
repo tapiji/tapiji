@@ -3,8 +3,6 @@ package org.eclipselabs.tapiji.translator.actions;
 import java.io.File;
 import java.text.MessageFormat;
 
-import javax.security.auth.callback.ConfirmationCallback;
-
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;

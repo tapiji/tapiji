@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2008 Stefan Mücke and others.
+ * Copyright (c) 2008 Stefan Mï¿½cke and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Stefan Mücke - initial API and implementation
+ *     Stefan Mï¿½cke - initial API and implementation
  *******************************************************************************/
 package org.eclipse.pde.nls.internal.ui.model;
 
@@ -15,9 +15,9 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.core.resources.IFile;

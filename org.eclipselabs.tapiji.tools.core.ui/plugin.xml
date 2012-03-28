@@ -112,5 +112,14 @@
             name="Builder Settings">
       </page>
    </extension>
-
+  
+   <extension
+         point="org.eclipse.ui.editors.markerUpdaters">
+      <updater
+            class="org.eclipselabs.tapiji.tools.core.ui.markers.MarkerUpdater"
+            id="org.eclipselabs.tapiji.tools.core.ui.MarkerUpdater"
+            markerType="org.eclipse.core.resources.problemmarker">
+      </updater>
+    </extension>
+	
 </plugin>

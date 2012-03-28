@@ -13,10 +13,9 @@ package org.eclipse.babel.core.message.resource;
 import java.util.Locale;
 import java.util.Properties;
 
-import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 
 
 /**
@@ -51,7 +50,7 @@ public abstract class AbstractPropertiesResource
      * @see org.eclipse.babel.core.message.resource.IMessagesResource#serialize(
      *              org.eclipse.babel.core.message.MessagesBundle)
      */
-    public void serialize(MessagesBundle messagesBundle) {
+    public void serialize(IMessagesBundle messagesBundle) {
         setText(serializer.serialize(messagesBundle));
     }
 
@@ -59,7 +58,7 @@ public abstract class AbstractPropertiesResource
      * @see org.eclipse.babel.core.message.resource.IMessagesResource
      * 		#deserialize(org.eclipse.babel.core.message.MessagesBundle)
      */
-    public void deserialize(MessagesBundle messagesBundle) {
+    public void deserialize(IMessagesBundle messagesBundle) {
         deserializer.deserialize(messagesBundle, getText());
     }
 

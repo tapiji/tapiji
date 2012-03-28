@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.eclipse.babel.core.message.manager.IMessagesEditorListener;
+import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
@@ -22,6 +24,7 @@ import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -29,6 +32,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 
 /**
  * Internationalization page where one can edit all resource bundle entries 
@@ -95,7 +99,27 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
         setExpandHorizontal(true);
         setExpandVertical(true);
         setMinWidth(400);
-
+        
+        RBManager instance = RBManager.getInstance(editor.getBundleGroup().getProjectName());
+        instance.addMessagesEditorListener(new IMessagesEditorListener() {
+			
+			public void onSave() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			public void onModify() {
+				// TODO Auto-generated method stub
+			}
+			
+			public void onResourceChanged(IMessagesBundle bundle) {
+				I18NEntry i18nEntry = entryComposites.get(bundle.getLocale());
+				if (i18nEntry != null && !getSelection().isEmpty()) {
+					i18nEntry.updateKey(String.valueOf(((IStructuredSelection)getSelection()).getFirstElement()));
+				}
+			}
+			
+		});
     }
     
     /**

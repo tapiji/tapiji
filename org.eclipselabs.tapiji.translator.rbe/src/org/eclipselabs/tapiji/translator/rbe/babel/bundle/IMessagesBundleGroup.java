@@ -32,4 +32,13 @@ public interface IMessagesBundleGroup {
     
     String getResourceBundleId();
     
+    boolean hasPropertiesFileGroupStrategy();
+    
+    public boolean isMessageKey(String key);
+    
+    public String getProjectName();
+    
+    public void removeMessagesBundle(IMessagesBundle messagesBundle);
+    
+    public void dispose();
 }

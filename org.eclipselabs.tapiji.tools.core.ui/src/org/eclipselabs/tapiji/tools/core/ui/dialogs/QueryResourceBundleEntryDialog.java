@@ -26,7 +26,6 @@ import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipselabs.tapiji.tools.core.ui.widgets.ResourceSelector;
 import org.eclipselabs.tapiji.tools.core.ui.widgets.event.ResourceSelectionEvent;
 import org.eclipselabs.tapiji.tools.core.ui.widgets.listener.IResourceSelectionListener;
-import org.eclipselabs.tapiji.tools.core.util.LocaleUtils;
 
 
 public class QueryResourceBundleEntryDialog extends TitleAreaDialog {

@@ -12,14 +12,11 @@ package org.eclipse.babel.editor.resource;
 
 import java.util.Locale;
 
+import org.eclipse.babel.core.configuration.DirtyHack;
 import org.eclipse.babel.core.message.resource.AbstractPropertiesResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.jface.text.DocumentEvent;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IDocumentListener;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -137,10 +134,13 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource 
     	 * we are on the UI thread.  This may not be the best place to do
     	 * this???
     	 */
+    	// [alst] muss 2x speichern wenn async exec
 //    	Display.getDefault().asyncExec(new Runnable() {
 //			public void run() {
-		        textEditor.getDocumentProvider().getDocument(
-		                textEditor.getEditorInput()).set(content);
+		if (DirtyHack.isEditorModificationEnabled()) {
+			textEditor.getDocumentProvider()
+					.getDocument(textEditor.getEditorInput()).set(content);
+		}
 //			}
 //		});
     }

@@ -19,11 +19,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.eclipse.babel.core.message.resource.IMessagesResource;
-import org.eclipse.babel.core.message.resource.IMessagesResourceChangeListener;
 import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResourceChangeListener;
 
 /**
  * For a given scope, all messages for a national language.  
@@ -84,7 +84,7 @@ public class MessagesBundle extends AbstractMessageModel
      * Called before this object will be discarded.
      */
     public void dispose() {
-    	
+    	this.resource.dispose();
     }
     
     /**

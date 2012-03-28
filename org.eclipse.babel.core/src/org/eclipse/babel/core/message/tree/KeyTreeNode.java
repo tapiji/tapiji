@@ -150,7 +150,7 @@ public class KeyTreeNode implements Comparable<KeyTreeNode>, IKeyTreeNode {
     public boolean equals(Object obj) {
         if (!(obj instanceof KeyTreeNode)) {
             return false;
-        }
+        } 
         KeyTreeNode node = (KeyTreeNode) obj;
         return BabelUtils.equals(name, node.name)
                 && BabelUtils.equals(parent, node.parent);

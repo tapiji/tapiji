@@ -1,7 +1,6 @@
 package util;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -12,12 +11,12 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
-import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
@@ -25,7 +24,6 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
-import org.eclipse.jdt.core.dom.LineComment;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
@@ -33,16 +31,17 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
-import org.eclipse.jdt.core.dom.TagElement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import org.eclipse.jdt.ui.SharedASTProvider;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.text.edits.TextEdit;
+import org.eclipselabs.tapiji.tools.core.Logger;
 
 import auditor.MethodParameterDescriptor;
 import auditor.model.SLLocation;
@@ -670,13 +669,13 @@ public class ASTutils {
 		return exp;
 	}
 	
-	
 	private static int findNonInternationalisationPosition(CompilationUnit cu, IDocument doc, int offset){
 		LinePreStringsFinder lsfinder = null;
 		try {
 			lsfinder = new LinePreStringsFinder(offset, doc);
 			cu.accept(lsfinder);
 		} catch (BadLocationException e) {
+			Logger.logError(e);
 		}
 		if (lsfinder == null) return 1;
 		
@@ -685,14 +684,15 @@ public class ASTutils {
 		return strings.size()+1;
 	}
 	
-	private static void createReplaceNonInternationalisationComment(CompilationUnit cu, IDocument doc, int position) {
+	public static void createReplaceNonInternationalisationComment(CompilationUnit cu, IDocument doc, int position) {
 		int i = findNonInternationalisationPosition(cu, doc, position);
 				
 		IRegion reg;
 		try {
 			reg = doc.getLineInformationOfOffset(position);
 			doc.replace(reg.getOffset()+reg.getLength(), 0, " //$NON-NLS-"+i+"$");
-		} catch (BadLocationException e1) {
+		} catch (BadLocationException e) {
+			Logger.logError(e);
 		}
 	}
 	
@@ -704,7 +704,54 @@ public class ASTutils {
 		lrw.insertAfter(placeHolder, fd, null);
 	}
 
-
+	public static boolean existsNonInternationalisationComment(StringLiteral literal) throws BadLocationException {
+		CompilationUnit cu = (CompilationUnit) literal.getRoot();
+		ICompilationUnit icu = (ICompilationUnit) cu.getJavaElement();
+		
+		IDocument doc = null;
+		try {
+			doc = new Document(icu.getSource());
+		} catch (JavaModelException e) {
+			Logger.logError(e);
+		}		
+				
+		// get whole line in which string literal
+		int lineNo = doc.getLineOfOffset(literal.getStartPosition());
+		int lineOffset = doc.getLineOffset(lineNo);
+		int lineLength = doc.getLineLength(lineNo);
+		String lineOfString = doc.get(lineOffset, lineLength);
+		
+		// search for a line comment in this line
+		int indexComment = lineOfString.indexOf("//");
+		
+		if (indexComment == -1)
+			return false;
+		
+		String comment = lineOfString.substring(indexComment);
+			
+		// remove first "//" of line comment
+		comment = comment.substring(2).toLowerCase();
+		
+		// split line comments, necessary if more NON-NLS comments exist in one line, eg.: $NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3
+		String[] comments = comment.split("//");
+		
+		for (String commentFrag : comments) {
+			commentFrag = commentFrag.trim();
+			
+			// if comment match format: "$non-nls$" then ignore whole line
+			if (commentFrag.matches("^\\$non-nls\\$$")) {
+				return true;
+			
+			// if comment match format: "$non-nls-{number}$" then only ignore string which is on given position
+			} else if (commentFrag.matches("^\\$non-nls-\\d+\\$$")) {
+				int iString = findNonInternationalisationPosition(cu, doc, literal.getStartPosition());
+				int iComment = new Integer(commentFrag.substring(9,10));
+				if (iString == iComment)
+					return true;
+			}
+		}				
+		return false;
+	}
 	
 	static class PositionalTypeFinder extends ASTVisitor {
 		
@@ -921,6 +968,5 @@ public class ASTutils {
 			}
 			return true;
 		}
-	}
-	
+	}	
 }

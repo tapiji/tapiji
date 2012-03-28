@@ -168,7 +168,7 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
      */
     private InputStream openContentStream() {
         String contents = ""; //$NON-NLS-1$
-        if (MsgEditorPreferences.getInstance().isShowSupportEnabled()) {
+        if (MsgEditorPreferences.getInstance().getSerializerConfig().isShowSupportEnabled()) {
 //            contents = PropertiesGenerator.GENERATED_BY;
         }
         return new ByteArrayInputStream(contents.getBytes());

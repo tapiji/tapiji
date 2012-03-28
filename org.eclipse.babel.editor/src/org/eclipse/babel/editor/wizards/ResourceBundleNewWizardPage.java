@@ -27,6 +27,7 @@ import org.eclipse.babel.editor.widgets.LocaleSelector;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
@@ -159,6 +160,8 @@ public class ResourceBundleNewWizardPage extends WizardPage {
                 setAddButtonState();
             }
         });
+        // add a single Locale so that the bundleLocalesList isn't empty on startup
+        bundleLocalesList.add(DEFAULT_LOCALE);
     }
     
     /**
@@ -183,6 +186,7 @@ public class ResourceBundleNewWizardPage extends WizardPage {
             public void widgetSelected(SelectionEvent event) {
                 bundleLocalesList.add(getSelectedLocaleAsString());
                 setAddButtonState();
+                dialogChanged(); // for the locale-check
             }
         });
 
@@ -198,6 +202,7 @@ public class ResourceBundleNewWizardPage extends WizardPage {
                         bundleLocalesList.getSelectionIndices());
                 removeButton.setEnabled(false);
                 setAddButtonState();
+                dialogChanged(); // for the locale-check
             }
         });
     }
@@ -271,24 +276,39 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         label.setText("[locale].properties"); //$NON-NLS-1$
     }
     
-    
     /**
      * Tests if the current workbench selection is a suitable
      * container to use.
      */
     private void initialize() {
-        if (selection!=null && selection.isEmpty()==false && selection instanceof IStructuredSelection) {
+        if (selection!=null && selection.isEmpty()==false && 
+        		selection instanceof IStructuredSelection) {
             IStructuredSelection ssel = (IStructuredSelection)selection;
-            if (ssel.size()>1) return;
-            Object obj = ssel.getFirstElement();
-            if (obj instanceof IResource) {
-                IContainer container;
-                if (obj instanceof IContainer)
-                    container = (IContainer)obj;
-                else
-                    container = ((IResource)obj).getParent();
-                containerText.setText(container.getFullPath().toString());
+            if (ssel.size()>1) {
+            	return;
             }
+            Object obj = ssel.getFirstElement();
+            if (obj instanceof IAdaptable) {
+	    		IResource resource = (IResource) ((IAdaptable) obj).
+	    				getAdapter(IResource.class);
+	    		// check if selection is a file
+	    		if (resource.getType() == IResource.FILE) {
+	    			resource = resource.getParent();
+	    		}
+	    		// fill filepath container
+	    		containerText.setText(resource.getFullPath().
+	    				toPortableString());
+	    	} else if (obj instanceof IResource) { 
+	    		// this will most likely never happen (legacy code)
+                IContainer container;
+                if (obj instanceof IContainer) {
+                    container = (IContainer)obj;
+                } else {
+                	container = ((IResource)obj).getParent();
+                }
+                containerText.setText(container.getFullPath().
+                		toPortableString());
+            } 
         }
         fileText.setText("ApplicationResources"); //$NON-NLS-1$
     }
@@ -315,7 +335,7 @@ public class ResourceBundleNewWizardPage extends WizardPage {
     }
     
     /**
-     * Ensures that both text fields are set.
+     * Ensures that both text fields and the Locale field are set.
      */
     /*default*/ void dialogChanged() {
         String container = getContainerName();
@@ -335,6 +355,12 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         if (dotLoc != -1) {
             updateStatus(MessagesEditorPlugin.getString(
                     "editor.wiz.error.extension")); //$NON-NLS-1$
+            return;
+        }
+        // check if at least one Locale has been added to th list
+        if (bundleLocalesList.getItemCount() <= 0) {
+        	updateStatus(MessagesEditorPlugin.getString(
+                    "editor.wiz.error.locale")); //$NON-NLS-1$
             return;
         }
         updateStatus(null);

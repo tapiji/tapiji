@@ -71,8 +71,9 @@ public class ResKeyTreeLabelProvider extends KeyTreeLabelProvider {
 		if (columnIndex <= locales.size()) {
 		    IValuedKeyTreeNode item = (IValuedKeyTreeNode) element;
 			String entry = item.getValue(locales.get(columnIndex-1));
-			if (entry != null)
+			if (entry != null) {
 				return entry;
+			}
 		}
 		return "";
 	}

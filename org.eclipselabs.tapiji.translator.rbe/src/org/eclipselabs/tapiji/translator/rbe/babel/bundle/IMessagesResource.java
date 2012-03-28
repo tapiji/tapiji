@@ -8,11 +8,9 @@
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.core.message.resource;
+package org.eclipselabs.tapiji.translator.rbe.babel.bundle;
 
 import java.util.Locale;
-
-import org.eclipse.babel.core.message.MessagesBundle;
 
 /**
  * Class abstracting the underlying native storage mechanism for persisting
@@ -35,12 +33,12 @@ public interface IMessagesResource {
      * Serializes a {@link MessagesBundle} instance to its native format.
      * @param messagesBundle the MessagesBundle to serialize
      */
-    void serialize(MessagesBundle messagesBundle);
+    void serialize(IMessagesBundle messagesBundle);
     /**
      * Deserializes a {@link MessagesBundle} instance from its native format.
      * @param messagesBundle the MessagesBundle to deserialize
      */
-    void deserialize(MessagesBundle messagesBundle);
+    void deserialize(IMessagesBundle messagesBundle);
     /**
      * Adds a messages resource listener.  Implementors are required to notify
      * listeners of changes within the native implementation.

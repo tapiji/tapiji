@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.api.KeyTreeFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -15,6 +16,7 @@ import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IAbstractKeyTreeModel;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeVisitor;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.TreeType;
@@ -86,13 +88,14 @@ public class ResKeyTreeContentProvider implements ITreeContentProvider {
 	
 	protected Object[] convertKTItoVKTI (Object[] children) {
 		Collection<IValuedKeyTreeNode> items = new ArrayList<IValuedKeyTreeNode>();
+		IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(bundle.getProjectName()).getMessagesBundleGroup(bundle.getResourceBundleId());
 		
 		for (Object o : children) {
 			if (o instanceof IValuedKeyTreeNode)
 				items.add((IValuedKeyTreeNode)o);
 			else {
 			    IKeyTreeNode kti = (IKeyTreeNode) o;
-			    IValuedKeyTreeNode vkti = KeyTreeFactory.createKeyTree(kti.getParent(), kti.getName(), kti.getMessageKey(), bundle);
+			    IValuedKeyTreeNode vkti = KeyTreeFactory.createKeyTree(kti.getParent(), kti.getName(), kti.getMessageKey(), messagesBundleGroup);
 
 			    for (IKeyTreeNode k : kti.getChildren()) {
 					vkti.addChild(k);
@@ -101,7 +104,7 @@ public class ResKeyTreeContentProvider implements ITreeContentProvider {
 				// init translations
 				for (Locale l : locales) {
 					try {
-					    IMessage message = bundle.getMessagesBundle(l).getMessage(kti.getMessageKey());
+					    IMessage message = messagesBundleGroup.getMessagesBundle(l).getMessage(kti.getMessageKey());
 					    if (message != null) {
 					        vkti.addValue(l, message.getValue());
 					    }
@@ -216,7 +219,7 @@ public class ResKeyTreeContentProvider implements ITreeContentProvider {
     }
 	
 	public IMessagesBundleGroup getBundle() {
-		return bundle;
+		return RBManager.getInstance(manager.getProject()).getMessagesBundleGroup(bundle.getResourceBundleId());
 	}
 
 	public ResourceBundleManager getManager() {
@@ -240,7 +243,9 @@ public class ResKeyTreeContentProvider implements ITreeContentProvider {
     public void setTreeType(TreeType treeType) {
         if (this.treeType != treeType) {
             this.treeType = treeType;
-            viewer.refresh();
+            if (viewer != null) {
+            	viewer.refresh();
+            }
         }
     }
 }

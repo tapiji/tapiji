@@ -16,7 +16,6 @@ import java.util.Locale;
 
 import org.eclipse.babel.core.message.MessageException;
 import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.resource.PropertiesIFileResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
@@ -39,6 +38,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 
 
 /**
@@ -188,14 +188,14 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
             	//site is null during the build.
                 messagesResource = new PropertiesIFileResource(
                         locale,
-                        new PropertiesSerializer(prefs),
-                        new PropertiesDeserializer(prefs),
+                        new PropertiesSerializer(prefs.getSerializerConfig()),
+                        new PropertiesDeserializer(prefs.getDeserializerConfig()),
                         (IFile) resource, MessagesEditorPlugin.getDefault());
             } else {
                 messagesResource = new EclipsePropertiesEditorResource(
                         locale,
-                        new PropertiesSerializer(prefs),
-                        new PropertiesDeserializer(prefs),
+                        new PropertiesSerializer(prefs.getSerializerConfig()),
+                        new PropertiesDeserializer(prefs.getDeserializerConfig()),
                         createEditor(resource, locale));
             }
             return new MessagesBundle(messagesResource);
@@ -219,6 +219,12 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
         
         TextEditor textEditor = null;
         if (resource != null && resource instanceof IFile) {
+        	try {
+				resource.refreshLocal(IResource.DEPTH_ZERO, null);
+			} catch (CoreException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
             IEditorInput newEditorInput = 
                     new FileEditorInput((IFile) resource);
             textEditor = null;

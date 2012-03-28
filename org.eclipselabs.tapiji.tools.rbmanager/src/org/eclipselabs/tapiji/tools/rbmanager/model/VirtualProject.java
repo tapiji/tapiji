@@ -6,7 +6,6 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.swt.widgets.Display;
 import org.eclipselabs.tapiji.tools.core.util.FragmentProjectUtils;
 
 /**

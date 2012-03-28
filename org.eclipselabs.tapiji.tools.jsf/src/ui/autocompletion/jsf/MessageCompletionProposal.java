@@ -20,7 +20,6 @@ import org.eclipselabs.tapiji.tools.core.builder.InternationalizationNature;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 
 import ui.autocompletion.NewResourceBundleEntryProposal;
-
 import auditor.JSFResourceBundleDetector;
 
 public class MessageCompletionProposal implements IContentAssistProcessor  {

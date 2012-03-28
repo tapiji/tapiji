@@ -22,12 +22,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.babel.core.message.manager.RBManager;
-import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy;
+import org.eclipse.babel.core.message.strategy.PropertiesFileGroupStrategy;
 import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 
 /**
  * Grouping of all messages bundle of the same kind.
@@ -214,6 +215,31 @@ public class MessagesBundleGroup extends AbstractMessageModel implements IMessag
         
     }
     
+    public void removeMessagesBundle(IMessagesBundle messagesBundle) {
+    	Locale locale = messagesBundle.getLocale();
+    	
+    	if (localeBundles.containsKey(locale)) {
+    		localeBundles.remove(locale);
+    	}
+    	
+    	// which keys should I not remove?
+    	Set<String> keysNotToRemove = new TreeSet<String>();
+    	
+    	for (String key : messagesBundle.getKeys()) {
+    		for (IMessagesBundle bundle : localeBundles.values()) {
+    			if (bundle.getMessage(key) != null) {
+    				keysNotToRemove.add(key);
+    			}
+    		}
+    	}
+    	
+    	// remove keys
+    	for (String keyToRemove : messagesBundle.getKeys()) {
+    		if (!keysNotToRemove.contains(keyToRemove)) { // we can remove
+    			keys.remove(keyToRemove);
+    		}
+    	}
+    }
     
     /**
      * Gets this messages bundle group name.
@@ -420,7 +446,6 @@ public class MessagesBundleGroup extends AbstractMessageModel implements IMessag
     	return this.projectName;
     }
 
-
 	/**
      * Class listening for changes in underlying messages bundle and 
      * relays them to the listeners for MessagesBundleGroup.
@@ -479,4 +504,8 @@ public class MessagesBundleGroup extends AbstractMessageModel implements IMessag
             }
         }
     }
+
+	public boolean hasPropertiesFileGroupStrategy() {
+		return groupStrategy instanceof PropertiesFileGroupStrategy;
+	}
 }

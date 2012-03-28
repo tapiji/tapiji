@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide;bundle-version="3.6.2",
  org.eclipse.jface.text;bundle-version="3.6.1",
  org.eclipse.jdt.core;bundle-version="3.6.2",
- org.eclipse.core.resources;bundle-version="3.6.1"
+ org.eclipse.core.resources;bundle-version="3.6.1",
+ org.eclipse.ui.editors
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.eclipselabs.tapiji.tools.core.ui,
@@ -30,4 +31,5 @@ Export-Package: org.eclipselabs.tapiji.tools.core.ui,
  org.eclipselabs.tapiji.tools.core.ui.widgets.listener,
  org.eclipselabs.tapiji.tools.core.ui.widgets.provider,
  org.eclipselabs.tapiji.tools.core.ui.widgets.sorter
-Import-Package: org.eclipse.core.filebuffers
+Import-Package: org.eclipse.core.filebuffers,
+ org.eclipse.ui.texteditor
