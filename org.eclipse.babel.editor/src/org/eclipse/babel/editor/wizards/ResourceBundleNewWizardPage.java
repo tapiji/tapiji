@@ -26,6 +26,7 @@ import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.widgets.LocaleSelector;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Path;
@@ -62,13 +63,21 @@ public class ResourceBundleNewWizardPage extends WizardPage {
             + MessagesEditorPlugin.getString("editor.default") //$NON-NLS-1$
             + "]"; //$NON-NLS-1$
     
+    /**
+     * contains the path of the folder in which the resource file will be created
+     */
     private Text containerText;
+    /**
+     * Contains the name of the resource file
+     */
     private Text fileText;
     private ISelection selection;
     
     private Button addButton;
     private Button removeButton;
-    
+    /**
+     * Contains all added locales
+     */
     private List bundleLocalesList;
     
     private LocaleSelector localeSelector;
@@ -363,6 +372,29 @@ public class ResourceBundleNewWizardPage extends WizardPage {
                     "editor.wiz.error.locale")); //$NON-NLS-1$
             return;
         }
+        // check if the container field contains a valid path
+        // meaning: Project exists, at least one segment, valid path
+        Path pathContainer = new Path(container);
+        if (!pathContainer.isValidPath(container)) {
+        	updateStatus(MessagesEditorPlugin.getString(
+                    "editor.wiz.error.invalidpath")); //$NON-NLS-1$
+            return;
+        }
+        
+        if (pathContainer.segmentCount() < 1) {
+        	updateStatus(MessagesEditorPlugin.getString(
+                    "editor.wiz.error.invalidpath")); //$NON-NLS-1$
+        	return;
+        }
+        
+        if (!projectExists(pathContainer.segment(0))) {
+        	String errormessage = MessagesEditorPlugin.getString(
+                    "editor.wiz.error.projectnotexist");
+        	errormessage = String.format(errormessage, pathContainer.segment(0));
+        	updateStatus(errormessage); //$NON-NLS-1$
+        	return;
+        }
+        
         updateStatus(null);
     }
 
@@ -412,5 +444,20 @@ public class ResourceBundleNewWizardPage extends WizardPage {
             return selectedLocale.toString();
         }
         return DEFAULT_LOCALE;
+    }
+    
+    /**
+     * Checks if there is a Project with the given name in the Package Explorer
+     * @param projectName
+     * @return
+     */
+    /*default*/ boolean projectExists(String projectName) {
+    	IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+        Path containerNamePath = new Path("/"+projectName);
+        IResource resource = root.findMember(containerNamePath);
+        if (resource == null) {
+        	return false;
+        }
+        return resource.exists();
     }
 }

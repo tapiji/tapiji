@@ -19,6 +19,7 @@ import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -69,7 +70,7 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
         page = new ResourceBundleNewWizardPage(selection);
         addPage(page);
     }
-
+    
     /**
      * This method is called when 'Finish' button is pressed in
      * the wizard. We will create an operation and run it
@@ -79,6 +80,16 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
         final String containerName = page.getContainerName();
         final String baseName = page.getFileName();
         final String[] locales = page.getLocaleStrings();
+        if (!folderExists(containerName)) {
+        	//show choosedialog
+        	String message = MessagesEditorPlugin.getString(
+                    "editor.wiz.createfolder");
+        	message = String.format(message, containerName);
+        	if(!MessageDialog.openConfirm(getShell(), "Create Folder", message)) { //$NON-NLS-1$
+        		return false;
+        	}
+        	
+        }
         IRunnableWithProgress op = new IRunnableWithProgress() {
             public void run(IProgressMonitor monitor) throws InvocationTargetException {
                 try {
@@ -96,6 +107,10 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
                                      + ".properties"; //$NON-NLS-1$
                         }
                         file = createFile(containerName, fileName, monitor);
+                    }
+                    if (file == null) { // file creation failed
+                    	MessageDialog.openError(getShell(), "Error", "Error creating file"); //$NON-NLS-1$
+                    	throwCoreException("File \""+containerName+baseName+"\" could not be created"); //$NON-NLS-1$
                     }
                     final IFile lastFile = file;
                     getShell().getDisplay().asyncExec(new Runnable() {
@@ -123,16 +138,29 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
         } catch (InvocationTargetException e) {
             Throwable realException = e.getTargetException();
             MessageDialog.openError(getShell(), 
-                    "Error", realException.getMessage()); //$NON-NLS-1$
+                    "Error", realException.getLocalizedMessage()); //$NON-NLS-1$
             return false;
         }
         return true;
+    }
+    /*
+     * Checks if the input folder existsS
+     */
+    /*default*/ boolean folderExists(String path) {
+    	IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+        IResource resource = root.findMember(new Path(path));
+        if (resource == null) {
+        	return false;
+        } else {
+        	return resource.exists();
+        }
     }
     
     /*
      * The worker method. It will find the container, create the
      * file if missing or just replace its contents, and open
-     * the editor on the newly created file.
+     * the editor on the newly created file. Will also create
+     * the parent folders of the file if they do not exist.
      */
     /*default*/ IFile createFile(
             String containerName,
@@ -143,12 +171,36 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
         monitor.beginTask(MessagesEditorPlugin.getString(
                 "editor.wiz.creating") + fileName, 2); //$NON-NLS-1$
         IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-        IResource resource = root.findMember(new Path(containerName));
-        if (!resource.exists() || !(resource instanceof IContainer)) {
-            throwCoreException("Container \"" + containerName  //$NON-NLS-1$
-                    + "\" does not exist."); //$NON-NLS-1$
+        Path containerNamePath = new Path(containerName);
+        IResource resource = root.findMember(containerNamePath);
+        if (resource == null) {
+        	if (!createFolder(containerNamePath, root, monitor)) {
+        		MessageDialog.openError(getShell(), "Error", 
+        				String.format(MessagesEditorPlugin.getString(
+        						"editor.wiz.error.couldnotcreatefolder"), 
+        						containerName)); //$NON-NLS-1$
+        		return null;
+        	}
+        } else if (!resource.exists() || !(resource instanceof IContainer)) {
+            //throwCoreException("Container \"" + containerName  //$NON-NLS-1$
+            //        + "\" does not exist."); //$NON-NLS-1$
+        	if (!createFolder(containerNamePath, root, monitor)) {
+        		MessageDialog.openError(getShell(), "Error", 
+        				String.format(MessagesEditorPlugin.getString(
+        						"editor.wiz.error.couldnotcreatefolder"), 
+        						containerName)); //$NON-NLS-1$
+        		return null;
+        	}
         }
-        IContainer container = (IContainer) resource;
+        
+        IContainer container = (IContainer) root.findMember(containerNamePath);
+        if (container == null) {
+        	MessageDialog.openError(getShell(), "Error", 
+    				String.format(MessagesEditorPlugin.getString(
+    						"editor.wiz.error.couldnotcreatefolder"), 
+    						containerName)); //$NON-NLS-1$
+    		return null;
+        }
         final IFile file = container.getFile(new Path(fileName));
         try {
             InputStream stream = openContentStream();
@@ -164,6 +216,41 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
     }
     
     /*
+     * Recursively creates all missing folders
+     */
+    /*default*/ boolean createFolder(Path folderPath, IWorkspaceRoot root, IProgressMonitor monitor) {
+    	IResource baseResource = root.findMember(folderPath);
+    	if (!(baseResource == null)) {
+    		if (baseResource.exists()) {
+    			return true;
+    		}
+    	} else { // if folder does not exist
+    		if (folderPath.segmentCount() <= 1) {
+    			return true;
+    		}
+    		Path oneSegmentLess = (Path)folderPath.removeLastSegments(1); // get parent
+    		if (createFolder(oneSegmentLess, root, monitor)) { // create parent folder
+    			IResource resource = root.findMember(oneSegmentLess);
+    			if (resource  == null) {
+    				return false; // resource is null
+    			} else if (!resource.exists() || !(resource instanceof IContainer)) {
+    				return false; // resource does not exist
+    			}
+    			final IFolder folder = root.getFolder(folderPath);
+    			try {
+					folder.create(true, true, monitor);
+				} catch (CoreException e) {
+					return false;
+				}
+    			return true;
+    		} else {
+    			return false; // could not create parent folder of the input path
+    		}
+    	}
+    	return true;
+    }
+    
+    /*
      * We will initialize file contents with a sample text.
      */
     private InputStream openContentStream() {
@@ -174,7 +261,7 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
         return new ByteArrayInputStream(contents.getBytes());
     }
 
-    private void throwCoreException(String message) throws CoreException {
+    private synchronized void throwCoreException(String message) throws CoreException {
         IStatus status = new Status(IStatus.ERROR, 
                 "org.eclipse.babel.editor",  //$NON-NLS-1$
                 IStatus.OK, message, null);
