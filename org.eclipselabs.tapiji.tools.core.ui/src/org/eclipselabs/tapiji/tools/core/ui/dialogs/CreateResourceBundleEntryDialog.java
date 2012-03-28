@@ -32,6 +32,8 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 
 	private static int WIDTH_LEFT_COLUMN = 100;
 	
+	private static final String DEFAULT_KEY = "defaultkey";
+	
 	private ResourceBundleManager manager;
 	private Collection<String> availableBundles;
 	
@@ -62,6 +64,9 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 		this.manager = manager;
 		this.availableBundles = manager.getResourceBundleNames();
 		this.selectedKey = preselectedKey != null ? preselectedKey.trim() : preselectedKey;
+		if (this.selectedKey.equals("")) {
+			this.selectedKey = DEFAULT_KEY;
+		}
 		this.selectedDefaultText = preselectedMessage;
 		this.selectedRB = preselectedBundle;
 		this.selectedLocale = preselectedLocale;
@@ -134,6 +139,7 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 			}
 		});
 		updateAvailableLanguages();
+		validate();
 	}
 	
 	protected void updateAvailableLanguages () {
@@ -205,10 +211,10 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 		lblKeyGrid.widthHint = WIDTH_LEFT_COLUMN;
 		lblKey.setLayoutData(lblKeyGrid);
 		lblKey.setText("Key:");
-		
 		txtKey = new Text (group, SWT.BORDER);
 		txtKey.setText(selectedKey);
-		txtKey.setEditable(selectedKey.trim().length() == 0 || selectedKey.indexOf("[Platzhalter]")>=0);
+		// grey ouut textfield  if there already is a preset key
+		txtKey.setEditable(selectedKey.trim().length() == 0 || selectedKey.indexOf("[Platzhalter]")>=0 || selectedKey.equals(DEFAULT_KEY));
 		txtKey.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false, 1, 1));
 		txtKey.addModifyListener(new ModifyListener() {
 			
@@ -306,6 +312,9 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 		this.setMessage("Please, specify details about the new Resource-Bundle entry");
 	}
 	
+	/**
+	 * Validates all inputs of the CreateResourceBundleEntryDialog
+	 */
 	protected void validate () {
 		// Check Resource-Bundle ids
 		boolean keyValid = false;
@@ -370,7 +379,7 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 			}
 		});
 		
-		okButton.setEnabled(false);
+		okButton.setEnabled(true);
 		cancelButton.setEnabled(true);
 	}
 	
