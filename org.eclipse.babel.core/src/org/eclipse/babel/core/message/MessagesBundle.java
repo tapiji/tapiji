@@ -174,6 +174,23 @@ public class MessagesBundle extends AbstractMessageModel
             fireMessageRemoved(message);
         }
     }
+    
+    /**
+     * Removes a message from this messages bundle and adds it's parent key to bundle.
+     * E.g.: key = a.b.c gets deleted, a.b gets added with a default message
+     * @param messageKey the key of the message to remove
+     */
+    public void removeMessageAddParentKey(String messageKey) {
+    	removeMessage(messageKey);   	
+            
+        // add parent key
+        int index = messageKey.lastIndexOf(".");
+        messageKey = (index == -1 ? "" : messageKey.substring(0, index));
+        
+        if (! messageKey.isEmpty())
+        	addMessage(new Message(messageKey, getLocale()));        
+    }
+    
     /**
      * Removes messages from this messages bundle.
      * @param messageKeys the keys of the messages to remove

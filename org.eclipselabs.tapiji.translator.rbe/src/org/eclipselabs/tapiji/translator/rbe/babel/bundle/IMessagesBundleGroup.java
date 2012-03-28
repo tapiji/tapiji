@@ -41,4 +41,6 @@ public interface IMessagesBundleGroup {
     public void removeMessagesBundle(IMessagesBundle messagesBundle);
     
     public void dispose();
+
+	void removeMessagesAddParentKey(String key);
 }

@@ -66,11 +66,11 @@ public class KeyTreeItemDropTarget extends DropTargetAdapter {
 	private void remBundleEntries(IKeyTreeNode children, IMessagesBundleGroup group) {
 		String key = children.getMessageKey();
 		
-		group.removeMessages(key);
-		
 		for (IKeyTreeNode childs : children.getChildren()) {
 			remBundleEntries(childs, group);
 		}
+		
+		group.removeMessagesAddParentKey(key);
 	}
 	
 	public void drop (final DropTargetEvent event) {
@@ -96,29 +96,37 @@ public class KeyTreeItemDropTarget extends DropTargetAdapter {
 						String[] keyArr = (oldKey).split("\\."); 
 						String key = keyArr[keyArr.length-1];
 						
-						// old key is new key, only possible if copy operation, otherwise key gets deleted
-						if (oldKey.equals(newKeyPrefix + "." + key) && event.detail == DND.DROP_MOVE)
-							return;
-						
-						// prevent cycle loop if drop parent into child node
-						if (newKeyPrefix.contains(oldKey) && event.detail == DND.DROP_MOVE)
-							return;
-						
 						ResKeyTreeContentProvider contentProvider = (ResKeyTreeContentProvider) target.getContentProvider();
 						IAbstractKeyTreeModel keyTree = (IAbstractKeyTreeModel) target.getInput();
 						
-						IKeyTreeNode childrenTreeNode = keyTree.getChild(oldKey);
+						// key gets dropped into it's parent node
+						if (oldKey.equals(newKeyPrefix + "." + key))
+							return;	// TODO: give user feedback
+						
+						// prevent cycle loop if key gets dropped into its child node
+						if (newKeyPrefix.contains(oldKey))
+							return; // TODO: give user feedback
+						
+						// source node already exists in target
+						IKeyTreeNode targetTreeNode = keyTree.getChild(newKeyPrefix);
+						for (IKeyTreeNode targetChild : targetTreeNode.getChildren()) {
+							if (targetChild.getName().equals(key))
+								return; // TODO: give user feedback
+						}
+						
+						IKeyTreeNode sourceTreeNode = keyTree.getChild(oldKey);						
 						
 						IMessagesBundleGroup bundleGroup = contentProvider.getBundle();
 						
 						DirtyHack.setFireEnabled(false);
 						DirtyHack.setEditorModificationEnabled(false); // editor won't get dirty
 						
-						// Adopt and add new bundle entries
-						addBundleEntries(newKeyPrefix, childrenTreeNode, bundleGroup);
+						// add new bundle entries of source node + all children
+						addBundleEntries(newKeyPrefix, sourceTreeNode, bundleGroup);
 						
+						// if drag & drop is move event, delete source entry + it's children
 						if (event.detail == DND.DROP_MOVE) {
-							remBundleEntries(childrenTreeNode, bundleGroup);
+							remBundleEntries(sourceTreeNode, bundleGroup);
 						}
 						
 						// Store changes

@@ -283,6 +283,16 @@ public class MessagesBundleGroup extends AbstractMessageModel implements IMessag
     }
     
     /**
+     * Removes messages matching the given key from all messages bundle and add it's parent key to bundles.
+     * @param key key of messages to remove
+     */
+    public void removeMessagesAddParentKey(String key) {
+        for (IMessagesBundle msgBundle : localeBundles.values()) {
+        	msgBundle.removeMessageAddParentKey(key);
+        }
+    }
+    
+    /**
      * Sets whether messages matching the <code>key</code> are active or not.
      * @param key key of messages
      */

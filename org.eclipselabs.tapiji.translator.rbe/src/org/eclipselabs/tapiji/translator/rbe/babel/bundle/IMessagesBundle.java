@@ -35,4 +35,6 @@ public interface IMessagesBundle {
     String getComment();
     
     IMessagesResource getResource();
+
+	void removeMessageAddParentKey(String key);
 }
