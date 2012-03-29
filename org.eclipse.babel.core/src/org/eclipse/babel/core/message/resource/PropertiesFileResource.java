@@ -26,11 +26,10 @@ import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.core.util.FileChangeListener;
 import org.eclipse.babel.core.util.FileMonitor;
 
-
 /**
- * Properties file, where the underlying storage is a regular {@link File}.
- * For files referenced through Eclipse workspace, implementors should
- * use {@link PropertiesIFileResource}.
+ * Properties file, where the underlying storage is a regular {@link File}. For
+ * files referenced through Eclipse workspace, implementors should use
+ * {@link PropertiesIFileResource}.
  * 
  * @author Pascal Essiembre
  * @see PropertiesIFileResource
@@ -38,145 +37,156 @@ import org.eclipse.babel.core.util.FileMonitor;
 public class PropertiesFileResource extends AbstractPropertiesResource {
 
     private File file;
-    
+
     private FileChangeListenerImpl fileChangeListener;
-    
+
     /**
      * Constructor.
-     * @param locale the resource locale
-     * @param serializer resource serializer
-     * @param deserializer resource deserializer
-     * @param file the underlying file
-     * @throws FileNotFoundException 
+     * 
+     * @param locale
+     *            the resource locale
+     * @param serializer
+     *            resource serializer
+     * @param deserializer
+     *            resource deserializer
+     * @param file
+     *            the underlying file
+     * @throws FileNotFoundException
      */
-    public PropertiesFileResource(
-            Locale locale,
-            PropertiesSerializer serializer,
-            PropertiesDeserializer deserializer,
-            File file) throws FileNotFoundException {
-        super(locale, serializer, deserializer);
-        this.file = file;
-        this.fileChangeListener = new FileChangeListenerImpl();
-        
-        FileMonitor.getInstance().addFileChangeListener(this.fileChangeListener, file, 2000);  //TODO make file scan delay configurable
+    public PropertiesFileResource(Locale locale,
+	    PropertiesSerializer serializer,
+	    PropertiesDeserializer deserializer, File file)
+	    throws FileNotFoundException {
+	super(locale, serializer, deserializer);
+	this.file = file;
+	this.fileChangeListener = new FileChangeListenerImpl();
+
+	FileMonitor.getInstance().addFileChangeListener(
+		this.fileChangeListener, file, 2000); // TODO make file scan
+						      // delay configurable
     }
 
-    
     /**
      * @see org.eclipse.babel.core.message.resource.AbstractPropertiesResource
-     * 			#getText()
+     *      #getText()
      */
+    @Override
     public String getText() {
-        FileReader inputStream = null;
-        StringWriter outputStream = null;
-        try {
-        	if (!file.exists()) {
-        		return "";
-        	}
-            inputStream = new FileReader(file);
-            outputStream = new StringWriter();
-            int c;
-            while ((c = inputStream.read()) != -1) {
-                outputStream.write(c);
-            }
-        } catch (IOException e) {
-            //TODO handle better.
-            throw new RuntimeException(
-                    "Cannot get properties file text. Handle better.", e);
-        } finally {
-            closeReader(inputStream);
-            closeWriter(outputStream);
-        }
-        return outputStream.toString();
+	FileReader inputStream = null;
+	StringWriter outputStream = null;
+	try {
+	    if (!file.exists()) {
+		return "";
+	    }
+	    inputStream = new FileReader(file);
+	    outputStream = new StringWriter();
+	    int c;
+	    while ((c = inputStream.read()) != -1) {
+		outputStream.write(c);
+	    }
+	} catch (IOException e) {
+	    // TODO handle better.
+	    throw new RuntimeException(
+		    "Cannot get properties file text. Handle better.", e);
+	} finally {
+	    closeReader(inputStream);
+	    closeWriter(outputStream);
+	}
+	return outputStream.toString();
     }
 
     /**
      * @see org.eclipse.babel.core.message.resource.AbstractPropertiesResource
-     * 		#setText(java.lang.String)
+     *      #setText(java.lang.String)
      */
+    @Override
     public void setText(String content) {
-        StringReader inputStream = null;
-        FileWriter outputStream = null;
-        try {
-            inputStream = new StringReader(content);
-            outputStream = new FileWriter(file);
-            int c;
-            while ((c = inputStream.read()) != -1) {
-                outputStream.write(c);
-            }
-        } catch (IOException e) {
-            //TODO handle better.
-            throw new RuntimeException(
-                    "Cannot get properties file text. Handle better.", e);
-        } finally {
-            closeReader(inputStream);
-            closeWriter(outputStream);
-            
-//            IFile file =
-//                ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( new
-//                Path(getResourceLocationLabel()));
-//            try {
-//                file.refreshLocal(IResource.DEPTH_ZERO, null);
-//            } catch (CoreException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-        }
+	StringReader inputStream = null;
+	FileWriter outputStream = null;
+	try {
+	    inputStream = new StringReader(content);
+	    outputStream = new FileWriter(file);
+	    int c;
+	    while ((c = inputStream.read()) != -1) {
+		outputStream.write(c);
+	    }
+	} catch (IOException e) {
+	    // TODO handle better.
+	    throw new RuntimeException(
+		    "Cannot get properties file text. Handle better.", e);
+	} finally {
+	    closeReader(inputStream);
+	    closeWriter(outputStream);
+
+	    // IFile file =
+	    // ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( new
+	    // Path(getResourceLocationLabel()));
+	    // try {
+	    // file.refreshLocal(IResource.DEPTH_ZERO, null);
+	    // } catch (CoreException e) {
+	    // // TODO Auto-generated catch block
+	    // e.printStackTrace();
+	    // }
+	}
     }
 
     /**
      * @see org.eclipse.babel.core.message.resource
-     * 			.IMessagesResource#getSource()
+     *      .IMessagesResource#getSource()
      */
+    @Override
     public Object getSource() {
-        return file;
+	return file;
     }
-    
+
     /**
      * @return The resource location label. or null if unknown.
      */
+    @Override
     public String getResourceLocationLabel() {
-    	return file.getAbsolutePath();
+	return file.getAbsolutePath();
     }
-    
-    //TODO move to util class for convinience???
+
+    // TODO move to util class for convinience???
     private void closeWriter(Writer writer) {
-        if (writer != null) {
-            try {
-                writer.close();
-            } catch (IOException e) {
-                //TODO handle better.
-                throw new RuntimeException("Cannot close writer stream.", e);
-            }
-        }
+	if (writer != null) {
+	    try {
+		writer.close();
+	    } catch (IOException e) {
+		// TODO handle better.
+		throw new RuntimeException("Cannot close writer stream.", e);
+	    }
+	}
     }
-    
-    //TODO move to util class for convinience???
+
+    // TODO move to util class for convinience???
     public void closeReader(Reader reader) {
-        if (reader != null) {
-            try {
-                reader.close();
-            } catch (IOException e) {
-                //TODO handle better.
-                throw new RuntimeException("Cannot close reader.", e);
-            }
-        }
+	if (reader != null) {
+	    try {
+		reader.close();
+	    } catch (IOException e) {
+		// TODO handle better.
+		throw new RuntimeException("Cannot close reader.", e);
+	    }
+	}
     }
-    
+
     /**
-     * Called before this object will be discarded.
-     * Nothing to do: we were not listening to changes to this file.
+     * Called before this object will be discarded. Nothing to do: we were not
+     * listening to changes to this file.
      */
+    @Override
     public void dispose() {
-    	FileMonitor.getInstance().removeFileChangeListener(this.fileChangeListener, file);
+	FileMonitor.getInstance().removeFileChangeListener(
+		this.fileChangeListener, file);
     }
-    
+
     private class FileChangeListenerImpl implements FileChangeListener {
-    	
-    	@Override
-    	public void fileChanged(final File changedFile) {
-            fireResourceChange(PropertiesFileResource.this);
-        }
-    	
+
+	@Override
+	public void fileChanged(final File changedFile) {
+	    fireResourceChange(PropertiesFileResource.this);
+	}
+
     }
 }

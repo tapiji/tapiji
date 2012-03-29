@@ -32,490 +32,545 @@ import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 
 /**
  * Grouping of all messages bundle of the same kind.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
-public class MessagesBundleGroup extends AbstractMessageModel implements IMessagesBundleGroup {
+public class MessagesBundleGroup extends AbstractMessageModel implements
+	IMessagesBundleGroup {
 
-	private String projectName;
-	
-    private static final IMessagesBundleGroupListener[]
-            EMPTY_GROUP_LISTENERS = new IMessagesBundleGroupListener[] {};
+    private String projectName;
+
+    private static final IMessagesBundleGroupListener[] EMPTY_GROUP_LISTENERS = new IMessagesBundleGroupListener[] {};
     private static final Message[] EMPTY_MESSAGES = new Message[] {};
-    
-    public static final String PROPERTY_MESSAGES_BUNDLE_COUNT =
-            "messagesBundleCount"; //$NON-NLS-1$
-    public static final String PROPERTY_KEY_COUNT =
-        "keyCount"; //$NON-NLS-1$
+
+    public static final String PROPERTY_MESSAGES_BUNDLE_COUNT = "messagesBundleCount"; //$NON-NLS-1$
+    public static final String PROPERTY_KEY_COUNT = "keyCount"; //$NON-NLS-1$
 
     /** For serialization. */
     private static final long serialVersionUID = -1977849534191384324L;
     /** Bundles forming the group (key=Locale; value=MessagesBundle). */
     private final Map<Locale, IMessagesBundle> localeBundles = new HashMap<Locale, IMessagesBundle>();
-    private final Set<String> keys = new TreeSet<String>(); 
-    private final IMessagesBundleListener messagesBundleListener =
-            new MessagesBundleListener();
-    
+    private final Set<String> keys = new TreeSet<String>();
+    private final IMessagesBundleListener messagesBundleListener = new MessagesBundleListener();
+
     private final IMessagesBundleGroupStrategy groupStrategy;
     private static final Locale[] EMPTY_LOCALES = new Locale[] {};
     private final String name;
     private final String resourceBundleId;
-    
+
     /**
      * Creates a new messages bundle group.
-     * @param groupStrategy a IMessagesBundleGroupStrategy instance
+     * 
+     * @param groupStrategy
+     *            a IMessagesBundleGroupStrategy instance
      */
     public MessagesBundleGroup(IMessagesBundleGroupStrategy groupStrategy) {
-        super();
-        this.groupStrategy = groupStrategy;
-        this.name = groupStrategy.createMessagesBundleGroupName();
-        this.resourceBundleId = groupStrategy.createMessagesBundleId();
-        
-        this.projectName = groupStrategy.getProjectName();
-        
-        MessagesBundle[] bundles = groupStrategy.loadMessagesBundles();
-        if (bundles != null) {
-            for (int i = 0; i < bundles.length; i++) {
-                addMessagesBundle(bundles[i]);
-            }
-        }
-        
-        RBManager.getInstance(this.projectName).notifyMessagesBundleCreated(this);
-    }
-    
-    /**
-     * Called before this object will be discarded.
-     * Disposes the underlying MessageBundles
-     */
-    public void dispose() {
-    	for (IMessagesBundle mb : getMessagesBundles()) {
-    		try {
-    			mb.dispose();
-    		} catch (Throwable t) {
-    			//FIXME: remove debug:
-    			System.err.println("Error disposing message-bundle " +
-    					((MessagesBundle)mb).getResource().getResourceLocationLabel());
-    			//disregard crashes: this is a best effort to dispose things.
-    		}
-    	}
-    	
-    	RBManager.getInstance(this.projectName).notifyMessagesBundleDeleted(this);
+	super();
+	this.groupStrategy = groupStrategy;
+	this.name = groupStrategy.createMessagesBundleGroupName();
+	this.resourceBundleId = groupStrategy.createMessagesBundleId();
+
+	this.projectName = groupStrategy.getProjectName();
+
+	MessagesBundle[] bundles = groupStrategy.loadMessagesBundles();
+	if (bundles != null) {
+	    for (int i = 0; i < bundles.length; i++) {
+		addMessagesBundle(bundles[i]);
+	    }
+	}
+
+	RBManager.getInstance(this.projectName).notifyMessagesBundleCreated(
+		this);
     }
 
-    
+    /**
+     * Called before this object will be discarded. Disposes the underlying
+     * MessageBundles
+     */
+    @Override
+    public void dispose() {
+	for (IMessagesBundle mb : getMessagesBundles()) {
+	    try {
+		mb.dispose();
+	    } catch (Throwable t) {
+		// FIXME: remove debug:
+		System.err.println("Error disposing message-bundle "
+			+ ((MessagesBundle) mb).getResource()
+				.getResourceLocationLabel());
+		// disregard crashes: this is a best effort to dispose things.
+	    }
+	}
+
+	RBManager.getInstance(this.projectName).notifyMessagesBundleDeleted(
+		this);
+    }
+
     /**
      * Gets the messages bundle matching given locale.
-     * @param locale locale of bundle to retreive
+     * 
+     * @param locale
+     *            locale of bundle to retreive
      * @return a bundle
      */
+    @Override
     public IMessagesBundle getMessagesBundle(Locale locale) {
-        return localeBundles.get(locale);
+	return localeBundles.get(locale);
     }
 
     /**
-     * Gets the messages bundle matching given source object.  A source
-     * object being a context-specific concrete underlying implementation of a
+     * Gets the messages bundle matching given source object. A source object
+     * being a context-specific concrete underlying implementation of a
      * <code>MessagesBundle</code> as per defined in
-	 * <code>IMessageResource</code>.
-     * @param source the source object to match
+     * <code>IMessageResource</code>.
+     * 
+     * @param source
+     *            the source object to match
      * @return a messages bundle
      * @see IMessagesResource
      */
     public MessagesBundle getMessagesBundle(Object source) {
-    	for (IMessagesBundle messagesBundle : getMessagesBundles()) {
-            if (equals(source, ((MessagesBundle)messagesBundle).getResource().getSource())) {
-                return (MessagesBundle) messagesBundle;
-            }
-        }
-        return null;
+	for (IMessagesBundle messagesBundle : getMessagesBundles()) {
+	    if (equals(source, ((MessagesBundle) messagesBundle).getResource()
+		    .getSource())) {
+		return (MessagesBundle) messagesBundle;
+	    }
+	}
+	return null;
     }
-    
+
     /**
-     * Adds an empty <code>MessagesBundle</code> to this group for the
-     * given locale.
-     * @param locale locale for the new bundle added
+     * Adds an empty <code>MessagesBundle</code> to this group for the given
+     * locale.
+     * 
+     * @param locale
+     *            locale for the new bundle added
      */
     public void addMessagesBundle(Locale locale) {
-        addMessagesBundle(groupStrategy.createMessagesBundle(locale));
+	addMessagesBundle(groupStrategy.createMessagesBundle(locale));
     }
 
     /**
      * Gets all locales making up this messages bundle group.
      */
     public Locale[] getLocales() {
-        return localeBundles.keySet().toArray(EMPTY_LOCALES);
+	return localeBundles.keySet().toArray(EMPTY_LOCALES);
     }
 
     /**
      * Gets all messages associated with the given message key.
-     * @param key a message key
+     * 
+     * @param key
+     *            a message key
      * @return messages
      */
+    @Override
     public IMessage[] getMessages(String key) {
-        List<IMessage> messages = new ArrayList<IMessage>();
-    	for (IMessagesBundle messagesBundle : getMessagesBundles()) {
-            IMessage message = messagesBundle.getMessage(key);
-            if (message != null) {
-                messages.add(message);
-            }
-        }
-        return messages.toArray(EMPTY_MESSAGES);
+	List<IMessage> messages = new ArrayList<IMessage>();
+	for (IMessagesBundle messagesBundle : getMessagesBundles()) {
+	    IMessage message = messagesBundle.getMessage(key);
+	    if (message != null) {
+		messages.add(message);
+	    }
+	}
+	return messages.toArray(EMPTY_MESSAGES);
     }
 
     /**
      * Gets the message matching given key and locale.
-     * @param locale locale for which to retrieve the message
-     * @param key key matching entry to retrieve the message
+     * 
+     * @param locale
+     *            locale for which to retrieve the message
+     * @param key
+     *            key matching entry to retrieve the message
      * @return a message
      */
+    @Override
     public IMessage getMessage(String key, Locale locale) {
-        IMessagesBundle messagesBundle = getMessagesBundle(locale);
-        if (messagesBundle != null) {
-            return messagesBundle.getMessage(key);
-        }
-        return null;
+	IMessagesBundle messagesBundle = getMessagesBundle(locale);
+	if (messagesBundle != null) {
+	    return messagesBundle.getMessage(key);
+	}
+	return null;
     }
 
-    
     /**
      * Adds a messages bundle to this group.
-     * @param messagesBundle bundle to add
-     * @throws MessageException if a messages bundle for the same locale
-     *         already exists.
+     * 
+     * @param messagesBundle
+     *            bundle to add
+     * @throws MessageException
+     *             if a messages bundle for the same locale already exists.
      */
     public void addMessagesBundle(IMessagesBundle messagesBundle) {
-        addMessagesBundle(messagesBundle.getLocale(), messagesBundle);
+	addMessagesBundle(messagesBundle.getLocale(), messagesBundle);
     }
-    
+
+    @Override
     public void addMessagesBundle(Locale locale, IMessagesBundle messagesBundle) {
-        MessagesBundle mb = (MessagesBundle) messagesBundle;
-        if (localeBundles.get(mb.getLocale()) != null) {
-            throw new MessageException(
-                 "A bundle with the same locale already exists."); //$NON-NLS-1$
-        }
-        
-        int oldBundleCount = localeBundles.size();
-        localeBundles.put(mb.getLocale(), mb);
-        
-        firePropertyChange(PROPERTY_MESSAGES_BUNDLE_COUNT,
-                oldBundleCount, localeBundles.size());
-        fireMessagesBundleAdded(mb);
-        
-        String[] bundleKeys = mb.getKeys();
-        for (int i = 0; i < bundleKeys.length; i++) {
-            String key = bundleKeys[i];
-            if (!keys.contains(key)) {
-                int oldKeyCount = keys.size();
-                keys.add(key);
-                firePropertyChange(
-                        PROPERTY_KEY_COUNT, oldKeyCount, keys.size());
-                fireKeyAdded(key);
-            }
-        }
-        mb.addMessagesBundleListener(messagesBundleListener);
-        
+	MessagesBundle mb = (MessagesBundle) messagesBundle;
+	if (localeBundles.get(mb.getLocale()) != null) {
+	    throw new MessageException(
+		    "A bundle with the same locale already exists."); //$NON-NLS-1$
+	}
+
+	int oldBundleCount = localeBundles.size();
+	localeBundles.put(mb.getLocale(), mb);
+
+	firePropertyChange(PROPERTY_MESSAGES_BUNDLE_COUNT, oldBundleCount,
+		localeBundles.size());
+	fireMessagesBundleAdded(mb);
+
+	String[] bundleKeys = mb.getKeys();
+	for (int i = 0; i < bundleKeys.length; i++) {
+	    String key = bundleKeys[i];
+	    if (!keys.contains(key)) {
+		int oldKeyCount = keys.size();
+		keys.add(key);
+		firePropertyChange(PROPERTY_KEY_COUNT, oldKeyCount, keys.size());
+		fireKeyAdded(key);
+	    }
+	}
+	mb.addMessagesBundleListener(messagesBundleListener);
+
     }
-    
+
+    @Override
     public void removeMessagesBundle(IMessagesBundle messagesBundle) {
-    	Locale locale = messagesBundle.getLocale();
-    	
-    	if (localeBundles.containsKey(locale)) {
-    		localeBundles.remove(locale);
-    	}
-    	
-    	// which keys should I not remove?
-    	Set<String> keysNotToRemove = new TreeSet<String>();
-    	
-    	for (String key : messagesBundle.getKeys()) {
-    		for (IMessagesBundle bundle : localeBundles.values()) {
-    			if (bundle.getMessage(key) != null) {
-    				keysNotToRemove.add(key);
-    			}
-    		}
-    	}
-    	
-    	// remove keys
-    	for (String keyToRemove : messagesBundle.getKeys()) {
-    		if (!keysNotToRemove.contains(keyToRemove)) { // we can remove
-    			keys.remove(keyToRemove);
-    		}
-    	}
+	Locale locale = messagesBundle.getLocale();
+
+	if (localeBundles.containsKey(locale)) {
+	    localeBundles.remove(locale);
+	}
+
+	// which keys should I not remove?
+	Set<String> keysNotToRemove = new TreeSet<String>();
+
+	for (String key : messagesBundle.getKeys()) {
+	    for (IMessagesBundle bundle : localeBundles.values()) {
+		if (bundle.getMessage(key) != null) {
+		    keysNotToRemove.add(key);
+		}
+	    }
+	}
+
+	// remove keys
+	for (String keyToRemove : messagesBundle.getKeys()) {
+	    if (!keysNotToRemove.contains(keyToRemove)) { // we can remove
+		keys.remove(keyToRemove);
+	    }
+	}
     }
-    
+
     /**
      * Gets this messages bundle group name.
+     * 
      * @return bundle group name
      */
+    @Override
     public String getName() {
-        return name;
+	return name;
     }
-    
+
     /**
      * Adds an empty message to every messages bundle of this group with the
      * given.
-     * @param key message key
+     * 
+     * @param key
+     *            message key
      */
+    @Override
     public void addMessages(String key) {
-        for (IMessagesBundle msgBundle : localeBundles.values()) {
-           	((MessagesBundle)msgBundle).addMessage(key);
-        }
+	for (IMessagesBundle msgBundle : localeBundles.values()) {
+	    ((MessagesBundle) msgBundle).addMessage(key);
+	}
     }
 
     /**
      * Renames a key in all messages bundles forming this group.
-     * @param sourceKey the message key to rename
-     * @param targetKey the new message name
+     * 
+     * @param sourceKey
+     *            the message key to rename
+     * @param targetKey
+     *            the new message name
      */
     public void renameMessageKeys(String sourceKey, String targetKey) {
-        for (IMessagesBundle msgBundle : localeBundles.values()) {
-        	msgBundle.renameMessageKey(
-            		sourceKey, targetKey);
-        }
-    }    
+	for (IMessagesBundle msgBundle : localeBundles.values()) {
+	    msgBundle.renameMessageKey(sourceKey, targetKey);
+	}
+    }
 
     /**
      * Removes messages matching the given key from all messages bundle.
-     * @param key key of messages to remove
+     * 
+     * @param key
+     *            key of messages to remove
      */
+    @Override
     public void removeMessages(String key) {
-        for (IMessagesBundle msgBundle : localeBundles.values()) {
-        	msgBundle.removeMessage(key);
-        }
+	for (IMessagesBundle msgBundle : localeBundles.values()) {
+	    msgBundle.removeMessage(key);
+	}
     }
-    
+
     /**
-     * Removes messages matching the given key from all messages bundle and add it's parent key to bundles.
-     * @param key key of messages to remove
+     * Removes messages matching the given key from all messages bundle and add
+     * it's parent key to bundles.
+     * 
+     * @param key
+     *            key of messages to remove
      */
+    @Override
     public void removeMessagesAddParentKey(String key) {
-        for (IMessagesBundle msgBundle : localeBundles.values()) {
-        	msgBundle.removeMessageAddParentKey(key);
-        }
+	for (IMessagesBundle msgBundle : localeBundles.values()) {
+	    msgBundle.removeMessageAddParentKey(key);
+	}
     }
-    
+
     /**
      * Sets whether messages matching the <code>key</code> are active or not.
-     * @param key key of messages
+     * 
+     * @param key
+     *            key of messages
      */
     public void setMessagesActive(String key, boolean active) {
-        for (IMessagesBundle msgBundle : localeBundles.values()) {
-            IMessage entry = msgBundle.getMessage(key);
-            if (entry != null) {
-                entry.setActive(active);
-            }
-        }
+	for (IMessagesBundle msgBundle : localeBundles.values()) {
+	    IMessage entry = msgBundle.getMessage(key);
+	    if (entry != null) {
+		entry.setActive(active);
+	    }
+	}
     }
-    
+
     /**
-     * Duplicates each messages matching the <code>sourceKey</code> to
-     * the <code>newKey</code>.
-     * @param sourceKey original key
-     * @param targetKey new key
-     * @throws MessageException if a target key already exists
+     * Duplicates each messages matching the <code>sourceKey</code> to the
+     * <code>newKey</code>.
+     * 
+     * @param sourceKey
+     *            original key
+     * @param targetKey
+     *            new key
+     * @throws MessageException
+     *             if a target key already exists
      */
     public void duplicateMessages(String sourceKey, String targetKey) {
-        if (sourceKey.equals(targetKey)) {
-            return;
-        }
-        for (IMessagesBundle msgBundle : localeBundles.values()) {
-        	msgBundle.duplicateMessage(
-            		sourceKey, targetKey);
-        }
+	if (sourceKey.equals(targetKey)) {
+	    return;
+	}
+	for (IMessagesBundle msgBundle : localeBundles.values()) {
+	    msgBundle.duplicateMessage(sourceKey, targetKey);
+	}
     }
-    
+
     /**
      * Returns a collection of all bundles in this group.
+     * 
      * @return the bundles in this group
      */
+    @Override
     public Collection<IMessagesBundle> getMessagesBundles() {
-        return localeBundles.values();
+	return localeBundles.values();
     }
-    
+
     /**
      * Gets all keys from all messages bundles.
+     * 
      * @return all keys from all messages bundles
      */
+    @Override
     public String[] getMessageKeys() {
-        return keys.toArray(BabelUtils.EMPTY_STRINGS);
+	return keys.toArray(BabelUtils.EMPTY_STRINGS);
     }
-    
+
     /**
      * Whether the given key is found in this messages bundle group.
-     * @param key the key to find
+     * 
+     * @param key
+     *            the key to find
      * @return <code>true</code> if the key exists in this bundle group.
      */
+    @Override
     public boolean isMessageKey(String key) {
-        return keys.contains(key);
+	return keys.contains(key);
     }
-    
+
     /**
      * Gets the number of messages bundles in this group.
+     * 
      * @return the number of messages bundles in this group
      */
+    @Override
     public int getMessagesBundleCount() {
-        return localeBundles.size();
+	return localeBundles.size();
     }
-    
+
     /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof MessagesBundleGroup)) {
-            return false;
-        }
-        MessagesBundleGroup messagesBundleGroup = (MessagesBundleGroup) obj;
-        return equals(localeBundles, messagesBundleGroup.localeBundles);
-    }    
-    
+	if (!(obj instanceof MessagesBundleGroup)) {
+	    return false;
+	}
+	MessagesBundleGroup messagesBundleGroup = (MessagesBundleGroup) obj;
+	return equals(localeBundles, messagesBundleGroup.localeBundles);
+    }
+
     public final synchronized void addMessagesBundleGroupListener(
-            final IMessagesBundleGroupListener listener) {
-        addPropertyChangeListener(listener);
+	    final IMessagesBundleGroupListener listener) {
+	addPropertyChangeListener(listener);
     }
+
     public final synchronized void removeMessagesBundleGroupListener(
-            final IMessagesBundleGroupListener listener) {
-        removePropertyChangeListener(listener);
+	    final IMessagesBundleGroupListener listener) {
+	removePropertyChangeListener(listener);
     }
-    public final synchronized IMessagesBundleGroupListener[] 
-                getMessagesBundleGroupListeners() {
-        //TODO find more efficient way to avoid class cast.
-        return Arrays.asList(
-                getPropertyChangeListeners()).toArray(
-                        EMPTY_GROUP_LISTENERS);
+
+    public final synchronized IMessagesBundleGroupListener[] getMessagesBundleGroupListeners() {
+	// TODO find more efficient way to avoid class cast.
+	return Arrays.asList(getPropertyChangeListeners()).toArray(
+		EMPTY_GROUP_LISTENERS);
     }
-    
-    
+
     private void fireKeyAdded(String key) {
-        IMessagesBundleGroupListener[] listeners =
-                getMessagesBundleGroupListeners();
-        for (int i = 0; i < listeners.length; i++) {
-            IMessagesBundleGroupListener listener = listeners[i];
-            listener.keyAdded(key);
-        }
+	IMessagesBundleGroupListener[] listeners = getMessagesBundleGroupListeners();
+	for (int i = 0; i < listeners.length; i++) {
+	    IMessagesBundleGroupListener listener = listeners[i];
+	    listener.keyAdded(key);
+	}
     }
+
     private void fireKeyRemoved(String key) {
-        IMessagesBundleGroupListener[] listeners =
-                getMessagesBundleGroupListeners();
-        for (int i = 0; i < listeners.length; i++) {
-            IMessagesBundleGroupListener listener = listeners[i];
-            listener.keyRemoved(key);
-        }
+	IMessagesBundleGroupListener[] listeners = getMessagesBundleGroupListeners();
+	for (int i = 0; i < listeners.length; i++) {
+	    IMessagesBundleGroupListener listener = listeners[i];
+	    listener.keyRemoved(key);
+	}
     }
+
     private void fireMessagesBundleAdded(MessagesBundle messagesBundle) {
-        IMessagesBundleGroupListener[] listeners =
-                getMessagesBundleGroupListeners();
-        for (int i = 0; i < listeners.length; i++) {
-            IMessagesBundleGroupListener listener = listeners[i];
-            listener.messagesBundleAdded(messagesBundle);
-        }
+	IMessagesBundleGroupListener[] listeners = getMessagesBundleGroupListeners();
+	for (int i = 0; i < listeners.length; i++) {
+	    IMessagesBundleGroupListener listener = listeners[i];
+	    listener.messagesBundleAdded(messagesBundle);
+	}
     }
+
     private void fireMessagesBundleRemoved(MessagesBundle messagesBundle) {
-        IMessagesBundleGroupListener[] listeners =
-                getMessagesBundleGroupListeners();
-        for (int i = 0; i < listeners.length; i++) {
-            IMessagesBundleGroupListener listener = listeners[i];
-            listener.messagesBundleRemoved(messagesBundle);
-        }
+	IMessagesBundleGroupListener[] listeners = getMessagesBundleGroupListeners();
+	for (int i = 0; i < listeners.length; i++) {
+	    IMessagesBundleGroupListener listener = listeners[i];
+	    listener.messagesBundleRemoved(messagesBundle);
+	}
     }
-    
+
     /**
      * Returns true if the supplied key is already existing in this group.
      * 
-     * @param key   The key that shall be tested.
+     * @param key
+     *            The key that shall be tested.
      * 
-     * @return  true <=> The key is already existing.
+     * @return true <=> The key is already existing.
      */
+    @Override
     public boolean containsKey(String key) {
-        for (Locale locale : localeBundles.keySet()) {
-            IMessagesBundle messagesBundle = localeBundles.get(locale);
-            for (String k : messagesBundle.getKeys()) {
-                if (k.equals(key)) {
-                    return true;
-                } else {
-                    continue;
-                }
-            }
-        }
-        return false;
+	for (Locale locale : localeBundles.keySet()) {
+	    IMessagesBundle messagesBundle = localeBundles.get(locale);
+	    for (String k : messagesBundle.getKeys()) {
+		if (k.equals(key)) {
+		    return true;
+		} else {
+		    continue;
+		}
+	    }
+	}
+	return false;
     }
-    
+
     /**
      * Is the given key found in this bundle group.
-     * @param key the key to find
+     * 
+     * @param key
+     *            the key to find
      * @return <code>true</code> if the key exists in this bundle group.
      */
+    @Override
     public boolean isKey(String key) {
-        return keys.contains(key);
+	return keys.contains(key);
     }
-    
-    
-    
+
+    @Override
     public String getResourceBundleId() {
-		return resourceBundleId;
-	}
-
-    public String getProjectName() {
-    	return this.projectName;
+	return resourceBundleId;
     }
 
-	/**
-     * Class listening for changes in underlying messages bundle and 
-     * relays them to the listeners for MessagesBundleGroup.
+    @Override
+    public String getProjectName() {
+	return this.projectName;
+    }
+
+    /**
+     * Class listening for changes in underlying messages bundle and relays them
+     * to the listeners for MessagesBundleGroup.
      */
     private class MessagesBundleListener implements IMessagesBundleListener {
-        public void messageAdded(MessagesBundle messagesBundle,
-                Message message) {
-            int oldCount = keys.size();
-            IMessagesBundleGroupListener[] listeners =
-                    getMessagesBundleGroupListeners();
-            for (int i = 0; i < listeners.length; i++) {
-                IMessagesBundleGroupListener listener = listeners[i];
-                listener.messageAdded(messagesBundle, message);
-                if (getMessages(message.getKey()).length == 1) {
-                    keys.add(message.getKey());
-                    firePropertyChange(
-                            PROPERTY_KEY_COUNT, oldCount, keys.size());
-                    fireKeyAdded(message.getKey());
-                }
-            }
-        }
-        public void messageRemoved(MessagesBundle messagesBundle,
-                Message message) {
-            int oldCount = keys.size();
-            IMessagesBundleGroupListener[] listeners =
-                    getMessagesBundleGroupListeners();
-            for (int i = 0; i < listeners.length; i++) {
-                IMessagesBundleGroupListener listener = listeners[i];
-                listener.messageRemoved(messagesBundle, message);
-                int keyMessagesCount = getMessages(message.getKey()).length;
-                if (keyMessagesCount == 0 && keys.contains(message.getKey())) {
-                    keys.remove(message.getKey());
-                    firePropertyChange(
-                            PROPERTY_KEY_COUNT, oldCount, keys.size());
-                    fireKeyRemoved(message.getKey());
-                }
-            }
-        }
-        public void messageChanged(MessagesBundle messagesBundle,
-                PropertyChangeEvent changeEvent) {
-            IMessagesBundleGroupListener[] listeners =
-                    getMessagesBundleGroupListeners();
-            for (int i = 0; i < listeners.length; i++) {
-                IMessagesBundleGroupListener listener = listeners[i];
-                listener.messageChanged(messagesBundle, changeEvent);
-            }
-        }
-        // MessagesBundle property changes:
-        public void propertyChange(PropertyChangeEvent evt) {
-            MessagesBundle bundle = (MessagesBundle) evt.getSource();
-            IMessagesBundleGroupListener[] listeners =
-                    getMessagesBundleGroupListeners();
-            for (int i = 0; i < listeners.length; i++) {
-                IMessagesBundleGroupListener listener = listeners[i];
-                listener.messagesBundleChanged(bundle, evt);
-            }
-        }
+	@Override
+	public void messageAdded(MessagesBundle messagesBundle, Message message) {
+	    int oldCount = keys.size();
+	    IMessagesBundleGroupListener[] listeners = getMessagesBundleGroupListeners();
+	    for (int i = 0; i < listeners.length; i++) {
+		IMessagesBundleGroupListener listener = listeners[i];
+		listener.messageAdded(messagesBundle, message);
+		if (getMessages(message.getKey()).length == 1) {
+		    keys.add(message.getKey());
+		    firePropertyChange(PROPERTY_KEY_COUNT, oldCount,
+			    keys.size());
+		    fireKeyAdded(message.getKey());
+		}
+	    }
+	}
+
+	@Override
+	public void messageRemoved(MessagesBundle messagesBundle,
+		Message message) {
+	    int oldCount = keys.size();
+	    IMessagesBundleGroupListener[] listeners = getMessagesBundleGroupListeners();
+	    for (int i = 0; i < listeners.length; i++) {
+		IMessagesBundleGroupListener listener = listeners[i];
+		listener.messageRemoved(messagesBundle, message);
+		int keyMessagesCount = getMessages(message.getKey()).length;
+		if (keyMessagesCount == 0 && keys.contains(message.getKey())) {
+		    keys.remove(message.getKey());
+		    firePropertyChange(PROPERTY_KEY_COUNT, oldCount,
+			    keys.size());
+		    fireKeyRemoved(message.getKey());
+		}
+	    }
+	}
+
+	@Override
+	public void messageChanged(MessagesBundle messagesBundle,
+		PropertyChangeEvent changeEvent) {
+	    IMessagesBundleGroupListener[] listeners = getMessagesBundleGroupListeners();
+	    for (int i = 0; i < listeners.length; i++) {
+		IMessagesBundleGroupListener listener = listeners[i];
+		listener.messageChanged(messagesBundle, changeEvent);
+	    }
+	}
+
+	// MessagesBundle property changes:
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+	    MessagesBundle bundle = (MessagesBundle) evt.getSource();
+	    IMessagesBundleGroupListener[] listeners = getMessagesBundleGroupListeners();
+	    for (int i = 0; i < listeners.length; i++) {
+		IMessagesBundleGroupListener listener = listeners[i];
+		listener.messagesBundleChanged(bundle, evt);
+	    }
+	}
     }
 
-	public boolean hasPropertiesFileGroupStrategy() {
-		return groupStrategy instanceof PropertiesFileGroupStrategy;
-	}
+    @Override
+    public boolean hasPropertiesFileGroupStrategy() {
+	return groupStrategy instanceof PropertiesFileGroupStrategy;
+    }
 }

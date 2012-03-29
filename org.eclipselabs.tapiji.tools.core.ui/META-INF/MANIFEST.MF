@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Ui
+Bundle-Name: TapiJI Tools Core UI
 Bundle-SymbolicName: org.eclipselabs.tapiji.tools.core.ui;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.0.2.qualifier
 Bundle-Activator: org.eclipselabs.tapiji.tools.core.ui.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -33,3 +33,4 @@ Export-Package: org.eclipselabs.tapiji.tools.core.ui,
  org.eclipselabs.tapiji.tools.core.ui.widgets.sorter
 Import-Package: org.eclipse.core.filebuffers,
  org.eclipse.ui.texteditor
+Bundle-Vendor: Vienna University of Technology
