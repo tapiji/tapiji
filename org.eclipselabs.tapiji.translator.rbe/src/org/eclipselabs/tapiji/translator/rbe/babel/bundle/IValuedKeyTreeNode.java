@@ -11,6 +11,8 @@ public interface IValuedKeyTreeNode extends IKeyTreeNode{
 
     public void addValue (Locale locale, String value);
     
+    public void setValue (Locale locale, String newValue);
+    
     public String getValue (Locale locale);
     
     public Collection<String> getValues ();

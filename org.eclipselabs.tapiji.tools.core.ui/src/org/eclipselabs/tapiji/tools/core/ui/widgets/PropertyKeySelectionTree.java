@@ -39,6 +39,8 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
@@ -326,7 +328,7 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
                 tCol.setEditingSupport(new EditingSupport(treeViewer) {
 
                     TextCellEditor editor = null;
-
+                    
                     @Override
                     protected void setValue(Object element, Object value) {
                     	boolean writeToFile = true;
@@ -334,7 +336,7 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
                         if (element instanceof IValuedKeyTreeNode) {
                             IValuedKeyTreeNode vkti = (IValuedKeyTreeNode) element;
                             String activeKey = vkti.getMessageKey();
-
+                            
                             if (activeKey != null) {
                                 IMessagesBundleGroup bundleGroup = manager.getResourceBundle(resourceBundle);
                                 IMessage entry = bundleGroup.getMessage(activeKey, l);
@@ -354,19 +356,19 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
                                 		IMessage newMessage = MessagesBundleFactory.createMessage(activeKey, l);
                                 		newMessage.setText(String.valueOf(value));
                                 		newMessage.setComment(comment);
-                                		messagesBundle.addMessage(newMessage);
-                                		
+                                		messagesBundle.addMessage(newMessage);                                		
                                 	} else {
                                     	message.setText(String.valueOf(value));
                                     	message.setComment(comment);
                                     }
                                 	
                                 	RBManager.getInstance(manager.getProject()).writeToFile(messagesBundle);
-                                    
-                                	setTreeStructure();
+                                	
+                                	// update TreeViewer
+                                	vkti.setValue(l, String.valueOf(value));
+                                	treeViewer.refresh();
                                 	
                                     DirtyHack.setFireEnabled(true);
-                                    
                                 }
                             }
                         }
@@ -382,6 +384,33 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
                         if (editor == null) {
                             Composite tree = (Composite) treeViewer.getControl();
                             editor = new TextCellEditor(tree);
+                            editor.getControl().addTraverseListener(new TraverseListener() {
+                            	
+            					@Override
+            					public void keyTraversed(TraverseEvent e) {
+            						Logger.logInfo("CELL_EDITOR: " + e.toString());
+            						if (e.detail == SWT.TRAVERSE_TAB_NEXT || e.detail ==
+            								SWT.TRAVERSE_TAB_PREVIOUS) {
+            							
+            								e.doit = false;            								
+            								int colIndex = visibleLocales.indexOf(l)+1;            								            								
+            								Object sel = ((IStructuredSelection) treeViewer.getSelection()).getFirstElement();
+            								int noOfCols = treeViewer.getTree().getColumnCount();
+            								
+            								// go to next cell
+            								if (e.detail == SWT.TRAVERSE_TAB_NEXT) {
+            									int nextColIndex = colIndex+1;
+            									if (nextColIndex < noOfCols)
+            										treeViewer.editElement(sel, nextColIndex);
+            								// go to previous cell
+            								} else if (e.detail == SWT.TRAVERSE_TAB_PREVIOUS) {
+            									int prevColIndex = colIndex-1;
+            									if (prevColIndex > 0)
+            										treeViewer.editElement(sel, colIndex-1);
+            								}      								
+            						}	
+            					}
+            				});
                         }
                         return editor;
                     }
@@ -623,12 +652,10 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
     	}
     }
 
-    public void addNewItem() {
+    public void addNewItem(ISelection selection) {
         //event.feedback = DND.FEEDBACK_INSERT_BEFORE;
         String newKeyPrefix = "";
 
-        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-        ISelection selection = window.getActivePage().getSelection();
         if (selection instanceof IStructuredSelection) {
             for (Iterator<?> iter = ((IStructuredSelection) selection).iterator(); iter.hasNext();) {
                 Object elem = iter.next();

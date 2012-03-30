@@ -35,6 +35,12 @@ public class ValuedKeyTreeNode extends KeyTreeNode implements IValuedKeyTreeNode
         return values.get(locale);
     }
     
+    public void setValue(Locale locale, String newValue) {
+    	if (values.containsKey(locale))
+    		values.remove(locale);
+    	addValue(locale, newValue);
+    }
+    
     public Collection<String> getValues () {
         return values.values();
     }

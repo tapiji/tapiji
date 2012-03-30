@@ -1,6 +1,7 @@
 package org.eclipselabs.tapiji.tools.core.ui.views.messagesview;
 
 import org.eclipse.jface.action.ContributionItem;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -17,6 +18,7 @@ public class ResourceBundleEntry extends ContributionItem implements
 		ISelectionChangedListener {
 
 	private PropertyKeySelectionTree parentView;
+	private ISelection selection;
 	private boolean legalSelection = false;
 
 	// Menu-Items
@@ -27,8 +29,9 @@ public class ResourceBundleEntry extends ContributionItem implements
 	public ResourceBundleEntry() {
 	}
 
-	public ResourceBundleEntry(PropertyKeySelectionTree view, boolean legalSelection) {
-		this.legalSelection = legalSelection;
+	public ResourceBundleEntry(PropertyKeySelectionTree view, ISelection selection) {
+		this.selection = selection;
+		this.legalSelection = ! selection.isEmpty();
 		this.parentView = view;
 		parentView.addSelectionChangedListener(this);
 	}
@@ -45,7 +48,7 @@ public class ResourceBundleEntry extends ContributionItem implements
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				parentView.addNewItem();
+				parentView.addNewItem(selection);
 			}
 			
 			@Override

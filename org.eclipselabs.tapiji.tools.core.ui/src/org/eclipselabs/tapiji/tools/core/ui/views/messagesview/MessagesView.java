@@ -311,6 +311,7 @@ public class MessagesView extends ViewPart implements IResourceBundleChangedList
 						viewState.setSelectedBundleId(resourceBundle.substring(iSep +1));
 						viewState.setVisibleLocales(null);
 						redrawTreeViewer();
+						setTitleToolTip(resourceBundle);
 					}
 				}
 			}
@@ -320,7 +321,7 @@ public class MessagesView extends ViewPart implements IResourceBundleChangedList
 		selectResourceBundle.setDescription("Allows you to select the Resource-Bundle which is used as message-source.");
 		selectResourceBundle.setImageDescriptor(Activator.getImageDescriptor(ImageUtils.IMAGE_RESOURCE_BUNDLE));
 	
-		contextDependentMenu = new ResourceBundleEntry(treeViewer, !treeViewer.getViewer().getSelection().isEmpty());
+		contextDependentMenu = new ResourceBundleEntry(treeViewer, treeViewer.getViewer().getSelection());
 		
 		enableFuzzyMatching = new Action () {
 			public void run () {
@@ -399,7 +400,7 @@ public class MessagesView extends ViewPart implements IResourceBundleChangedList
 		manager.add(editable);
 		manager.add(new Separator());
 		
-		manager.add(new ResourceBundleEntry(treeViewer, !treeViewer.getViewer().getSelection().isEmpty()));
+		manager.add(new ResourceBundleEntry(treeViewer, treeViewer.getViewer().getSelection()));
 		manager.add(new Separator());
 		
 		for (Action loc : visibleLocaleActions) {
