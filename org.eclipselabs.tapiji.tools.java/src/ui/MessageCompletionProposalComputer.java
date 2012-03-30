@@ -12,7 +12,6 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.ui.SharedASTProvider;
 import org.eclipse.jdt.ui.text.java.ContentAssistInvocationContext;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposalComputer;
 import org.eclipse.jdt.ui.text.java.JavaContentAssistInvocationContext;
@@ -27,6 +26,7 @@ import ui.autocompletion.InsertResourceBundleReferenceProposal;
 import ui.autocompletion.MessageCompletionProposal;
 import ui.autocompletion.NewResourceBundleEntryProposal;
 import ui.autocompletion.NoActionProposal;
+import util.ASTutils;
 import auditor.ResourceAuditVisitor;
 
 public class MessageCompletionProposalComputer implements
@@ -80,11 +80,9 @@ public class MessageCompletionProposalComputer implements
 					
 					if (typeRoot == null)
 						return null;
-		
-					// get a reference to the shared AST of the loaded CompilationUnit
-					cu = SharedASTProvider.getAST(typeRoot,
-					// do not wait for AST creation
-							SharedASTProvider.WAIT_YES, null);
+					
+					cu = ASTutils.getCompilationUnit(typeRoot);
+					
 					cu.accept(csav);
 				}
 			

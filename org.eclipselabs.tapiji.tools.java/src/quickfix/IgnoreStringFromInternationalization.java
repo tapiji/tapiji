@@ -8,13 +8,8 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.ITypeRoot;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.ui.SharedASTProvider;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IMarkerResolution2;
@@ -35,17 +30,7 @@ public class IgnoreStringFromInternationalization implements IMarkerResolution2 
 		IResource resource = marker.getResource();
 		ResourceBundleManager manager = ResourceBundleManager.getManager(resource.getProject());
 		
-		IJavaElement je = JavaCore.create(resource, JavaCore.create(resource.getProject()));
-		// get the type of the currently loaded resource
-		ITypeRoot typeRoot = ((ICompilationUnit) je);
-		// get a reference to the shared AST of the loaded CompilationUnit
-		CompilationUnit cu = SharedASTProvider.getAST(typeRoot,
-		// do not wait for AST creation
-				SharedASTProvider.WAIT_YES, null);
-				
-		/*ICompilationUnit icu = (ICompilationUnit) cu.getJavaElement();
-		
-		IDocument doc = null;*/
+		CompilationUnit cu = ASTutils.getCompilationUnit(resource);
 		
 		ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager(); 
 		IPath path = resource.getRawLocation(); 

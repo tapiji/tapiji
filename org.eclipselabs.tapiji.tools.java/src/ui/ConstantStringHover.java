@@ -3,13 +3,13 @@ package ui;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.ui.JavaUI;
-import org.eclipse.jdt.ui.SharedASTProvider;
 import org.eclipse.jdt.ui.text.java.hover.IJavaEditorTextHover;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 
+import util.ASTutils;
 import auditor.ResourceAuditVisitor;
 
 public class ConstantStringHover implements IJavaEditorTextHover {
@@ -33,11 +33,8 @@ public class ConstantStringHover implements IJavaEditorTextHover {
 
 		if (typeRoot == null)
 			return;
-
-		// get a reference to the shared AST of the loaded CompilationUnit
-		CompilationUnit cu = SharedASTProvider.getAST(typeRoot,
-		// do not wait for AST creation
-				SharedASTProvider.WAIT_NO, null);
+		
+		CompilationUnit cu = ASTutils.getCompilationUnit(typeRoot);
 
 		if (cu == null)
 			return;

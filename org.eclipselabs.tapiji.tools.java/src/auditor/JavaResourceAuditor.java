@@ -7,12 +7,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.ITypeRoot;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.ui.SharedASTProvider;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipselabs.tapiji.tools.core.builder.quickfix.CreateResourceBundle;
 import org.eclipselabs.tapiji.tools.core.builder.quickfix.IncludeResource;
@@ -27,6 +22,7 @@ import quickfix.ExportToResourceBundleResolution;
 import quickfix.IgnoreStringFromInternationalization;
 import quickfix.ReplaceResourceBundleDefReference;
 import quickfix.ReplaceResourceBundleReference;
+import util.ASTutils;
 import auditor.model.SLLocation;
 
 public class JavaResourceAuditor extends I18nResourceAuditor {
@@ -42,28 +38,13 @@ public class JavaResourceAuditor extends I18nResourceAuditor {
 
     @Override
     public void audit(IResource resource) {
-	IJavaElement javaElement = JavaCore.create(resource);
-	if (javaElement == null)
-	    return;
-
-	if (!(javaElement instanceof ICompilationUnit))
-	    return;
-
-	ICompilationUnit icu = (ICompilationUnit) javaElement;
+	
 	ResourceAuditVisitor csav = new ResourceAuditVisitor(resource
 		.getProject().getFile(resource.getProjectRelativePath()),
 		ResourceBundleManager.getManager(resource.getProject()));
 
-	// get the type of the currently loaded resource
-	ITypeRoot typeRoot = icu;
-
-	if (typeRoot == null)
-	    return;
-
 	// get a reference to the shared AST of the loaded CompilationUnit
-	CompilationUnit cu = SharedASTProvider.getAST(typeRoot,
-	// do not wait for AST creation
-		SharedASTProvider.WAIT_YES, null);
+	CompilationUnit cu = ASTutils.getCompilationUnit(resource);
 	if (cu == null) {
 	    System.out.println("Cannot audit resource: "
 		    + resource.getFullPath());

@@ -79,15 +79,12 @@ public class KeyTreeItemDropTarget extends DropTargetAdapter {
          	   try {
 		
 					if (TextTransfer.getInstance().isSupportedType (event.currentDataType)) {
-						String newKeyPrefix = "";
-						String newName = "";
-						
+						String newKeyPrefix = "";						
 						
 						if (event.item instanceof TreeItem &&
 							((TreeItem) event.item).getData() instanceof IValuedKeyTreeNode) {
 							IValuedKeyTreeNode targetTreeNode = (IValuedKeyTreeNode) ((TreeItem) event.item).getData();			
 							newKeyPrefix = targetTreeNode.getMessageKey();
-							newName = targetTreeNode.getName();
 						}
 							
 						String message = (String)event.data;

@@ -78,17 +78,21 @@ public class ASTutils {
 	
 	public static CompilationUnit getCompilationUnit(IResource resource) {
 		IJavaElement je = JavaCore.create(resource, JavaCore.create(resource.getProject()));
-
 		// get the type of the currently loaded resource
 		ITypeRoot typeRoot = ((ICompilationUnit) je);
-
+		
 		if (typeRoot == null)
 			return null;
-
+		
+		return getCompilationUnit(typeRoot);
+	}
+	
+	public static CompilationUnit getCompilationUnit(ITypeRoot typeRoot) {
 		// get a reference to the shared AST of the loaded CompilationUnit
 		CompilationUnit cu = SharedASTProvider.getAST(typeRoot,
 		// do not wait for AST creation
 				SharedASTProvider.WAIT_YES, null);
+		
 		return cu;
 	}
 	
@@ -146,18 +150,10 @@ public class ASTutils {
 		String newName = null;
 		String reference = "";
 		
-		IJavaElement je = JavaCore.create(resource, JavaCore.create(resource.getProject()));
-
-		// get the type of the currently loaded resource
-		ITypeRoot typeRoot = ((ICompilationUnit) je);
-
-		if (typeRoot == null)
+		CompilationUnit cu = getCompilationUnit(resource);
+		
+		if (cu == null)
 			return null;
-
-		// get a reference to the shared AST of the loaded CompilationUnit
-		CompilationUnit cu = SharedASTProvider.getAST(typeRoot,
-		// do not wait for AST creation
-				SharedASTProvider.WAIT_YES, null);
 		
 		String variableName = ASTutils.resolveRBReferenceVar(document, resource, startPos, resourceBundleId, cu);
 		if (variableName == null)
@@ -195,9 +191,7 @@ public class ASTutils {
 		
 		if (variableName == null) {
 			// refresh reference to the shared AST of the loaded CompilationUnit
-			cu = SharedASTProvider.getAST(typeRoot,
-			// do not wait for AST creation
-					SharedASTProvider.WAIT_YES, null);
+			cu = getCompilationUnit(resource);
 			
 			ASTutils.createResourceBundleReference(resource, startPos, document, resourceBundleId, null, true, newName, cu);
 //			createReplaceNonInternationalisationComment(cu, document, pos);
