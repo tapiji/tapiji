@@ -32,9 +32,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
-import org.eclipse.pde.core.plugin.IFragmentModel;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
-import org.eclipse.pde.core.plugin.PluginRegistry;
+import org.eclipse.osgi.service.resolver.BundleDescription;
 
 /**
  * A <code>ResourceBundleModel</code> is the host for all
@@ -185,112 +183,141 @@ public class ResourceBundleModel extends ResourceBundleElement {
 
 		IJavaProject javaProject = (IJavaProject) project
 			.getNature(JAVA_NATURE);
-
-		// Plugin and fragment projects
-		IPluginModelBase pluginModel = PluginRegistry
-			.findModel(project);
 		String pluginId = null;
-		if (pluginModel != null) {
-		    // Get plugin id
-		    pluginId = pluginModel.getBundleDescription().getName(); //
-		    // OSGi bundle name
-		    if (pluginId == null) {
-			pluginId = pluginModel.getPluginBase().getId(); // non-OSGi
-			// plug-in id
-		    }
-		    boolean isFragment = pluginModel instanceof IFragmentModel;
-		    if (isFragment) {
-			IFragmentModel fragmentModel = (IFragmentModel) pluginModel;
-			pluginId = fragmentModel.getFragment().getPluginId();
-		    }
 
-		    // Look for additional 'nl' resources
-		    IFolder nl = project.getFolder("nl"); //$NON-NLS-1$
-		    if (isFragment && nl.exists()) {
-			IResource[] members = nl.members();
-			for (IResource member : members) {
-			    if (member instanceof IFolder) {
-				IFolder langFolder = (IFolder) member;
-				String language = langFolder.getName();
+		try {
+		    Class IFragmentModel = Class
+			    .forName("org.eclipse.pde.core.plugin.IFragmentModel");
+		    Class IPluginModelBase = Class
+			    .forName("org.eclipse.pde.core.plugin.IPluginModelBase");
+		    Class PluginRegistry = Class
+			    .forName("org.eclipse.pde.core.plugin.PluginRegistry");
+		    Class IPluginBase = Class
+			    .forName("org.eclipse.pde.core.plugin.IPluginBase");
+		    Class PluginFragmentModel = Class
+			    .forName("org.eclipse.core.runtime.model.PluginFragmentModel");
 
-				// Collect property files
-				IFile[] propertyFiles = collectPropertyFiles(langFolder);
-				for (IFile file : propertyFiles) {
-				    // Compute path name
-				    IPath path = file.getProjectRelativePath();
-				    String country = ""; //$NON-NLS-1$
-				    String packageName = null;
-				    int segmentCount = path.segmentCount();
-				    if (segmentCount > 1) {
-					StringBuilder builder = new StringBuilder();
+		    // Plugin and fragment projects
+		    Class pluginModel = (Class) PluginRegistry.getMethod(
+			    "findModel", IProject.class).invoke(null, project);
+		    if (pluginModel != null) {
+			// Get plugin id
+			BundleDescription bd = (BundleDescription) IPluginModelBase
+				.getMethod("getBundleDescription").invoke(
+					pluginModel);
+			pluginId = bd.getName();
+			// OSGi bundle name
+			if (pluginId == null) {
+			    Object pluginBase = IPluginModelBase.getMethod(
+				    "getPluginBase").invoke(pluginModel);
+			    pluginId = (String) IPluginBase.getMethod("getId")
+				    .invoke(pluginBase); // non-OSGi
+			    // plug-in id
+			}
 
-					// Segment 0: 'nl'
-					// Segment 1: language code
-					// Segment 2: (country code)
-					int begin = 2;
-					if (segmentCount > 2
-						&& isCountry(path.segment(2))) {
-					    begin = 3;
-					    country = path.segment(2);
+			boolean isFragment = IFragmentModel
+				.isInstance(pluginModel);
+			if (isFragment) {
+			    Object pfm = IFragmentModel
+				    .getMethod("getFragment");
+			    pluginId = (String) PluginFragmentModel.getMethod(
+				    "getPluginId").invoke(pfm);
+			}
+
+			// Look for additional 'nl' resources
+			IFolder nl = project.getFolder("nl"); //$NON-NLS-1$
+			if (isFragment && nl.exists()) {
+			    IResource[] members = nl.members();
+			    for (IResource member : members) {
+				if (member instanceof IFolder) {
+				    IFolder langFolder = (IFolder) member;
+				    String language = langFolder.getName();
+
+				    // Collect property files
+				    IFile[] propertyFiles = collectPropertyFiles(langFolder);
+				    for (IFile file : propertyFiles) {
+					// Compute path name
+					IPath path = file
+						.getProjectRelativePath();
+					String country = ""; //$NON-NLS-1$
+					String packageName = null;
+					int segmentCount = path.segmentCount();
+					if (segmentCount > 1) {
+					    StringBuilder builder = new StringBuilder();
+
+					    // Segment 0: 'nl'
+					    // Segment 1: language code
+					    // Segment 2: (country code)
+					    int begin = 2;
+					    if (segmentCount > 2
+						    && isCountry(path
+							    .segment(2))) {
+						begin = 3;
+						country = path.segment(2);
+					    }
+
+					    for (int i = begin; i < segmentCount - 1; i++) {
+						if (i > begin)
+						    builder.append('.');
+						builder.append(path.segment(i));
+					    }
+					    packageName = builder.toString();
 					}
 
-					for (int i = begin; i < segmentCount - 1; i++) {
-					    if (i > begin)
-						builder.append('.');
-					    builder.append(path.segment(i));
-					}
-					packageName = builder.toString();
+					String baseName = getBaseName(file
+						.getName());
+
+					ResourceBundleFamily family = getOrCreateFamily(
+						project.getName(), pluginId,
+						packageName, baseName);
+					addBundle(family,
+						getLocale(language, country),
+						file);
 				    }
-
-				    String baseName = getBaseName(file
-					    .getName());
-
-				    ResourceBundleFamily family = getOrCreateFamily(
-					    project.getName(), pluginId,
-					    packageName, baseName);
-				    addBundle(family,
-					    getLocale(language, country), file);
 				}
 			    }
 			}
-		    }
 
-		    // Collect property files
-		    if (isFragment || javaProject == null) {
-			IFile[] propertyFiles = collectPropertyFiles(project);
-			for (IFile file : propertyFiles) {
-			    IPath path = file.getProjectRelativePath();
-			    int segmentCount = path.segmentCount();
+			// Collect property files
+			if (isFragment || javaProject == null) {
+			    IFile[] propertyFiles = collectPropertyFiles(project);
+			    for (IFile file : propertyFiles) {
+				IPath path = file.getProjectRelativePath();
+				int segmentCount = path.segmentCount();
 
-			    if (segmentCount > 0
-				    && path.segment(0).equals("nl")) //$NON-NLS-1$
-				continue; // 'nl' resource have been processed
-					  // above
+				if (segmentCount > 0
+					&& path.segment(0).equals("nl")) //$NON-NLS-1$
+				    continue; // 'nl' resource have been
+					      // processed
+				// above
 
-			    // Guess package name
-			    String packageName = null;
-			    if (segmentCount > 1) {
-				StringBuilder builder = new StringBuilder();
-				for (int i = 0; i < segmentCount - 1; i++) {
-				    if (i > 0)
-					builder.append('.');
-				    builder.append(path.segment(i));
+				// Guess package name
+				String packageName = null;
+				if (segmentCount > 1) {
+				    StringBuilder builder = new StringBuilder();
+				    for (int i = 0; i < segmentCount - 1; i++) {
+					if (i > 0)
+					    builder.append('.');
+					builder.append(path.segment(i));
+				    }
+				    packageName = builder.toString();
 				}
-				packageName = builder.toString();
+
+				String baseName = getBaseName(file.getName());
+				String language = getLanguage(file.getName());
+				String country = getCountry(file.getName());
+
+				ResourceBundleFamily family = getOrCreateFamily(
+					project.getName(), pluginId,
+					packageName, baseName);
+				addBundle(family, getLocale(language, country),
+					file);
 			    }
-
-			    String baseName = getBaseName(file.getName());
-			    String language = getLanguage(file.getName());
-			    String country = getCountry(file.getName());
-
-			    ResourceBundleFamily family = getOrCreateFamily(
-				    project.getName(), pluginId, packageName,
-				    baseName);
-			    addBundle(family, getLocale(language, country),
-				    file);
 			}
-		    }
 
+		    }
+		} catch (Throwable e) {
+		    // MessagesEditorPlugin.log(e);
 		}
 
 		// Look for resource bundles in Java packages (output folders,

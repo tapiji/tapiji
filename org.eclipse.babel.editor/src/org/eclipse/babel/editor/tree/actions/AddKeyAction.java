@@ -22,7 +22,7 @@ import org.eclipse.jface.window.Window;
 
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public class AddKeyAction extends AbstractTreeAction {
 
@@ -30,38 +30,37 @@ public class AddKeyAction extends AbstractTreeAction {
      * 
      */
     public AddKeyAction(MessagesEditor editor, TreeViewer treeViewer) {
-        super(editor, treeViewer);
-        setText(MessagesEditorPlugin.getString("key.add")); //$NON-NLS-1$
-        setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_ADD));
-        setToolTipText("TODO put something here"); //TODO put tooltip
+	super(editor, treeViewer);
+	setText(MessagesEditorPlugin.getString("key.add") + " ..."); //$NON-NLS-1$
+	setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_ADD));
+	setToolTipText("TODO put something here"); // TODO put tooltip
     }
-
 
     /**
      * @see org.eclipse.jface.action.Action#run()
      */
+    @Override
     public void run() {
-        KeyTreeNode node = getNodeSelection();
-        String key = node.getMessageKey();
-        String msgHead = MessagesEditorPlugin.getString("dialog.add.head");
-        String msgBody = MessagesEditorPlugin.getString("dialog.add.body");
-        InputDialog dialog = new InputDialog(
-                getShell(), msgHead, msgBody, key, new IInputValidator() {
-                    public String isValid(String newText) {
-                        if (getBundleGroup().isMessageKey(newText)) {
-                            return  MessagesEditorPlugin.getString(
-                                    "dialog.error.exists");
-                        }
-                        return null;
-                    }
-                });
-        dialog.open();
-        if (dialog.getReturnCode() == Window.OK ) {
-            String inputKey = dialog.getValue();
-            MessagesBundleGroup messagesBundleGroup = getBundleGroup();
-            messagesBundleGroup.addMessages(inputKey);
-        }
+	KeyTreeNode node = getNodeSelection();
+	String key = node.getMessageKey();
+	String msgHead = MessagesEditorPlugin.getString("dialog.add.head");
+	String msgBody = MessagesEditorPlugin.getString("dialog.add.body");
+	InputDialog dialog = new InputDialog(getShell(), msgHead, msgBody, key,
+		new IInputValidator() {
+		    public String isValid(String newText) {
+			if (getBundleGroup().isMessageKey(newText)) {
+			    return MessagesEditorPlugin
+				    .getString("dialog.error.exists");
+			}
+			return null;
+		    }
+		});
+	dialog.open();
+	if (dialog.getReturnCode() == Window.OK) {
+	    String inputKey = dialog.getValue();
+	    MessagesBundleGroup messagesBundleGroup = getBundleGroup();
+	    messagesBundleGroup.addMessages(inputKey);
+	}
     }
-    
-    
+
 }

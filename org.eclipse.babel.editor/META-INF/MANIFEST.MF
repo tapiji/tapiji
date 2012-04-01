@@ -16,11 +16,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.core;bundle-version="3.2.0",
  org.eclipse.ltk.core.refactoring,
  org.eclipse.ltk.ui.refactoring,
- org.eclipse.pde.core;bundle-version="3.2.0",
  org.junit;resolution:=optional,
- org.eclipse.babel.core;visibility:=reexport
+ org.eclipse.babel.core;visibility:=reexport,
+ org.eclipse.pde.core;resolution:=optional
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %plugin.provider
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
 Export-Package: org.eclipse.babel.editor.api
