@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.widgets;
 
+import java.util.Stack;
+
+import org.eclipse.babel.core.message.manager.IMessagesEditorListener;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusListener;
@@ -21,6 +24,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 
 
 /**
@@ -60,6 +64,8 @@ public class NullableText extends Composite {
     public NullableText(Composite parent, int style) {
         super(parent, SWT.NONE);
         text = new Text(this, style);
+        text.setData("UNDO", new Stack<String>());
+        text.setData("REDO", new Stack<String>());
         defaultColor = text.getBackground();
         nullColor = UIUtils.getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
         
@@ -88,6 +94,8 @@ public class NullableText extends Composite {
             this.text.setText(text);
             renderNormal();
         }
+        Stack<String> undoCache = (Stack<String>) this.text.getData("UNDO");
+        undoCache.push(this.text.getText());
     }
     public String getText() {
         if (isnull) {
@@ -176,5 +184,24 @@ public class NullableText extends Composite {
     public void setEditable(boolean editable) {
         text.setEditable(editable);
     }
+    
+//    private class SaveListener implements IMessagesEditorListener {
+//
+//		public void onSave() {
+//			Stack<String> undoCache = (Stack<String>) text.getData("UNDO");
+//			undoCache.clear();
+//		}
+//
+//		public void onModify() {
+//			// TODO Auto-generated method stub
+//			
+//		}
+//
+//		public void onResourceChanged(IMessagesBundle bundle) {
+//			// TODO Auto-generated method stub
+//			
+//		}
+//    	
+//    }
     
 }

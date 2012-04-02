@@ -20,7 +20,9 @@ import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.Stack;
 
+import org.eclipse.babel.core.configuration.DirtyHack;
 import org.eclipse.babel.core.message.AbstractIFileChangeListener;
 import org.eclipse.babel.core.message.AbstractIFileChangeListener.IFileChangeListenerRegistry;
 import org.eclipse.babel.editor.builder.ToggleNatureAction;
@@ -36,6 +38,12 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.pde.nls.internal.ui.model.ResourceBundleModel;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -77,6 +85,53 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChang
 	public MessagesEditorPlugin() {
 		resourceChangeSubscribers = new HashMap<String,Set<AbstractIFileChangeListener>>();
 	}
+	
+    static {
+    	Display.getDefault().addFilter(SWT.KeyUp, new UndoKeyListener());
+    }
+    
+    private static class UndoKeyListener implements Listener {
+    
+    	public void handleEvent(Event event) {
+    		Control focusControl = event.display.getFocusControl();
+    		if (event.stateMask == SWT.CONTROL && focusControl instanceof Text) {
+    			
+    			Text txt = (Text) focusControl;
+    			String actText = txt.getText();
+    			Stack<String> undoStack = (Stack<String>) txt.getData("UNDO");
+				Stack<String> redoStack = (Stack<String>) txt.getData("REDO");
+				
+    			if (event.keyCode == 'z' && undoStack != null && redoStack != null) { // Undo
+    				event.doit = false;
+    				
+    				if (undoStack.size() > 0) {
+    					String peek = undoStack.peek();
+    					if (actText != null && !txt.getText().equals(peek)) {
+    						String pop = undoStack.pop();
+	    					txt.setText(pop);
+	    					txt.setSelection(pop.length());
+	    					redoStack.push(actText);
+    					}
+    				}
+    			} else if (event.keyCode == 'y' && undoStack != null && redoStack != null) { // Redo
+    				
+    				event.doit = false;
+    				
+    				if (redoStack.size() > 0) {
+    					String peek = redoStack.peek();
+    					
+    					if (actText != null && !txt.getText().equals(peek)) {
+    						String pop = redoStack.pop();
+	    					txt.setText(pop);
+	    					txt.setSelection(pop.length());
+	    					undoStack.push(actText);
+    					}
+    				}
+    			}
+    		}
+    	}
+    	
+    }
 
 	/**
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(
