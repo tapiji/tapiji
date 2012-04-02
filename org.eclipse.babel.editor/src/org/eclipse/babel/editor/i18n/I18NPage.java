@@ -25,6 +25,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -219,5 +220,9 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
 
     public void setSelection(ISelection selection) {
         keysComposite.getTreeViewer().setSelection(selection);
+    }
+    
+    public TreeViewer getTreeViewer() {
+    	return keysComposite.getTreeViewer();
     }
 }

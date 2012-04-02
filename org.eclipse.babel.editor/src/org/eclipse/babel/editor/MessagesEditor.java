@@ -11,6 +11,9 @@
 package org.eclipse.babel.editor;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,6 +36,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -47,11 +51,13 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.IGotoMarker;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesEditor;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 
 /**
  * Multi-page editor for editing resource bundles.
@@ -81,6 +87,10 @@ public class MessagesEditor extends MultiPageEditorPart
     
     private AbstractKeyTreeModel keyTreeModel;
     
+    private IFile file; // init
+    
+    private boolean updateSelectedKey;
+    
     /**
      * Creates a multi-page editor example.
      */
@@ -103,7 +113,7 @@ public class MessagesEditor extends MultiPageEditorPart
         throws PartInitException {
     	
     	if (editorInput instanceof IFileEditorInput) {
-            IFile file = ((IFileEditorInput) editorInput).getFile();
+            file = ((IFileEditorInput) editorInput).getFile();
             if (MsgEditorPreferences.getInstance().isBuilderSetupAutomatically()) {
 	            IProject p = file.getProject();
 	            if (p != null && p.isAccessible()) {
@@ -207,8 +217,35 @@ public class MessagesEditor extends MultiPageEditorPart
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
-        RBManager.getInstance(messagesBundleGroup.getProjectName()).fireEditorSaved();
+		
+		updateSelectedKey = true;
+		
+		RBManager instance = RBManager.getInstance(messagesBundleGroup.getProjectName());
+		
+		refreshKeyTreeModel(); // keeps editor and I18NPage in sync
+		
+		instance.fireEditorSaved();
+		
+//		// maybe new init?
+    }
+    
+    private void refreshKeyTreeModel() {
+    	String selectedKey = getSelectedKey(); // memorize
+		
+		messagesBundleGroup = MessagesBundleGroupFactory.createBundleGroup((IEditorSite)getSite(), file);
+		
+		AbstractKeyTreeModel oldModel = this.keyTreeModel;
+		this.keyTreeModel = new AbstractKeyTreeModel(messagesBundleGroup);
+		
+		for (IMessagesEditorChangeListener listener : changeListeners) {
+        	listener.keyTreeModelChanged(oldModel, this.keyTreeModel);
+        }
+		
+		i18nPage.getTreeViewer().expandAll();
+		
+		if (selectedKey != null) {
+			setSelectedKey(selectedKey);
+		}
     }
     
     /**
@@ -287,10 +324,57 @@ public class MessagesEditor extends MultiPageEditorPart
      */
     protected void pageChange(int newPageIndex) {
         super.pageChange(newPageIndex);
+        if (newPageIndex != 0) { // if we just want the default page -> == 1
+        	setSelection(newPageIndex);
+        } else if (newPageIndex == 0 && updateSelectedKey) {
+        	// TODO: find better way
+    		for (IMessagesBundle bundle : messagesBundleGroup.getMessagesBundles()) {
+    			RBManager.getInstance(messagesBundleGroup.getProjectName()).fireResourceChanged(bundle);
+    		}
+    		updateSelectedKey = false;
+        }
+        
 //        if (newPageIndex == 0) {
 //            resourceMediator.reloadProperties();
 //            i18nPage.refreshTextBoxes();
 //        }
+    }
+    
+    private void setSelection(int newPageIndex) {
+    	ITextEditor editor = textEditorsIndex.get(--newPageIndex);
+    	String selectedKey = getSelectedKey();
+    	if (selectedKey != null) {
+	    	if (editor.getEditorInput() instanceof FileEditorInput) {
+	    		FileEditorInput input = (FileEditorInput) editor.getEditorInput();
+	    		try {
+					BufferedReader reader = new BufferedReader(new InputStreamReader(input.getFile().getContents()));
+					String line = "";
+					int selectionIndex = 0;
+					boolean found = false;
+					
+					while ((line = reader.readLine()) != null) {
+						int index = line.indexOf('=');
+						if (index != -1) {
+							if (selectedKey.equals(line.substring(0, index).trim())) {
+								found = true;
+								break;
+							}
+						}
+						selectionIndex += line.length() + 2; // + \r\n
+					}
+					
+					if (found) {
+						editor.selectAndReveal(selectionIndex, 0);
+					}
+				} catch (CoreException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    	}
+    	}
+    	
     }
 
     
