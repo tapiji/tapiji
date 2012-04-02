@@ -51,12 +51,13 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesEditor;
 
 /**
  * Multi-page editor for editing resource bundles.
  */
 public class MessagesEditor extends MultiPageEditorPart
-        implements IGotoMarker {
+        implements IGotoMarker, IMessagesEditor {
 
     /** Editor ID, as defined in plugin.xml. */
     public static final String EDITOR_ID = 

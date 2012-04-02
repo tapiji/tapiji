@@ -488,7 +488,7 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
 
             @Override
             public void run() {
-                editSelectedItem();
+            	editSelectedItem();
             }
 
         };
@@ -620,8 +620,18 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
     }
 
     public void editSelectedItem() {
+    	String key = "";
+    	ISelection selection = treeViewer.getSelection();
+    	if (selection instanceof IStructuredSelection) {            		 
+    		IStructuredSelection structSel = (IStructuredSelection) selection;
+    		if (structSel.getFirstElement() instanceof IKeyTreeNode) {
+    			IKeyTreeNode keyTreeNode = (IKeyTreeNode) structSel.getFirstElement();
+    			key = keyTreeNode.getMessageKey();
+    		}
+    	}
+    	
         EditorUtils.openEditor(site.getPage(), manager.getRandomFile(resourceBundle),
-                EditorUtils.RESOURCE_BUNDLE_EDITOR);
+                EditorUtils.RESOURCE_BUNDLE_EDITOR, key);
     }
 
     public void deleteSelectedItems() {

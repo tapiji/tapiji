@@ -11,7 +11,9 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.IAnnotationModel;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.AbstractMarkerAnnotationModel;
@@ -20,6 +22,7 @@ import org.eclipselabs.tapiji.tools.core.Activator;
 import org.eclipselabs.tapiji.tools.core.Logger;
 import org.eclipselabs.tapiji.tools.core.extensions.ILocation;
 import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesEditor;
 
 
 public class EditorUtils {
@@ -50,14 +53,24 @@ public class EditorUtils {
 		return formattedMessage;
 	}
 	
-	public static void openEditor (IWorkbenchPage page, IFile file, String editor) {
-		// open the default-editor for this file type
+	public static IEditorPart openEditor (IWorkbenchPage page, IFile file, String editor) {
+		// open the rb-editor for this file type
 		try {
-			// TODO open resourcebundleeditor
-			IDE.openEditor(page, file, editor);
-		} catch (Exception e) {
+			return IDE.openEditor(page, file, editor);
+		} catch (PartInitException e) {
 			Logger.logError(e);
 		}
+		return null;
+	}
+	
+	public static IEditorPart openEditor (IWorkbenchPage page, IFile file, String editor, String key) {
+		// open the rb-editor for this file type and selects given msg key		
+		IEditorPart part = openEditor(page, file, editor);
+		if (part instanceof IMessagesEditor) {
+			IMessagesEditor msgEditor = (IMessagesEditor) part;
+			msgEditor.setSelectedKey(key);
+		}		
+		return part;
 	}
 	
 	public static void reportToMarker(String string, ILocation problem, int cause, String key, ILocation data, String context) {
