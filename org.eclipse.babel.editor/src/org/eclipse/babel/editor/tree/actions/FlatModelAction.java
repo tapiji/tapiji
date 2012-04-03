@@ -14,9 +14,9 @@ import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.tree.KeyTreeContentProvider;
 import org.eclipse.babel.editor.util.UIUtils;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.TreeType;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.TreeType;
 
 /**
  * @author Pascal Essiembre

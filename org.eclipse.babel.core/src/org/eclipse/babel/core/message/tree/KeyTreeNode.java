@@ -17,8 +17,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.eclipse.babel.core.util.BabelUtils;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 
 /**
  * Class representing a node in the tree of keys.

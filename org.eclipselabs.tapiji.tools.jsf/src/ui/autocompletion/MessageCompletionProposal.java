@@ -1,11 +1,11 @@
 package ui.autocompletion;
 
+import org.eclipse.babel.tapiji.tools.core.util.ImageUtils;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipselabs.tapiji.tools.core.util.ImageUtils;
 
 
 public class MessageCompletionProposal implements IJavaCompletionProposal {

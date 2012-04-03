@@ -12,8 +12,8 @@ package org.eclipse.babel.core.message.checks;
 
 import org.eclipse.babel.core.message.Message;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessage;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 
 /**
  * All purpose {@link Message} testing.   Use this interface to establish 

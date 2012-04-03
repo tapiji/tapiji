@@ -27,6 +27,7 @@ import org.eclipse.babel.editor.resource.validator.FileMarkerStrategy;
 import org.eclipse.babel.editor.resource.validator.IValidationMarkerStrategy;
 import org.eclipse.babel.editor.resource.validator.MessagesBundleGroupValidator;
 import org.eclipse.babel.editor.util.UIUtils;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -37,7 +38,6 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 
 /**
  * @author Pascal Essiembre

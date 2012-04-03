@@ -1,5 +1,6 @@
 package ui;
 
+import org.eclipse.babel.tapiji.tools.core.builder.InternationalizationNature;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextHover;
@@ -11,7 +12,6 @@ import org.eclipse.jst.jsf.context.resolver.structureddocument.internal.ITextReg
 import org.eclipse.jst.jsf.context.structureddocument.IStructuredDocumentContext;
 import org.eclipse.jst.jsf.context.structureddocument.IStructuredDocumentContextFactory;
 import org.eclipse.jst.jsp.core.internal.regions.DOMJSPRegionContexts;
-import org.eclipselabs.tapiji.tools.core.builder.InternationalizationNature;
 
 import util.ELUtils;
 import auditor.JSFResourceBundleDetector;

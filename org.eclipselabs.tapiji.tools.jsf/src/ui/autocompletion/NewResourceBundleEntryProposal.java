@@ -1,5 +1,7 @@
 package ui.autocompletion;
 
+import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -10,8 +12,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipselabs.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
 
 
 public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {

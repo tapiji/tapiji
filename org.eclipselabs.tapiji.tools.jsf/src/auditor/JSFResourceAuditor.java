@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.babel.tapiji.tools.core.builder.quickfix.CreateResourceBundle;
+import org.eclipse.babel.tapiji.tools.core.builder.quickfix.IncludeResource;
+import org.eclipse.babel.tapiji.tools.core.extensions.I18nResourceAuditor;
+import org.eclipse.babel.tapiji.tools.core.extensions.ILocation;
+import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;
+import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.quickfix.CreateResourceBundleEntry;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IMarkerResolution;
-import org.eclipselabs.tapiji.tools.core.builder.quickfix.CreateResourceBundle;
-import org.eclipselabs.tapiji.tools.core.builder.quickfix.IncludeResource;
-import org.eclipselabs.tapiji.tools.core.extensions.I18nResourceAuditor;
-import org.eclipselabs.tapiji.tools.core.extensions.ILocation;
-import org.eclipselabs.tapiji.tools.core.extensions.IMarkerConstants;
-import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipselabs.tapiji.tools.core.ui.quickfix.CreateResourceBundleEntry;
 
 import quickfix.ExportToResourceBundleResolution;
 import quickfix.ReplaceResourceBundleDefReference;

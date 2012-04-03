@@ -13,7 +13,7 @@ package org.eclipse.babel.core.message;
 import java.beans.PropertyChangeListener;
 import java.util.Locale;
 
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessage;
 
 /**
  * A single entry in a <code>MessagesBundle</code>.

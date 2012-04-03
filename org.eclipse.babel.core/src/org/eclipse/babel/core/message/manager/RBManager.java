@@ -18,6 +18,9 @@ import org.eclipse.babel.core.message.resource.PropertiesFileResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.core.message.strategy.PropertiesFileGroupStrategy;
 import org.eclipse.babel.core.util.PDEUtils;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessage;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -26,9 +29,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 
 /**
  * 
@@ -314,7 +314,7 @@ public class RBManager {
 	for (IProject p : projects) {
 	    try {
 		if (ignoreNature
-			|| p.hasNature("org.eclipselabs.tapiji.tools.core.nature")) {
+			|| p.hasNature("org.eclipse.babel.tapiji.tools.core.nature")) {
 		    projs.add(p);
 		}
 	    } catch (CoreException e) {

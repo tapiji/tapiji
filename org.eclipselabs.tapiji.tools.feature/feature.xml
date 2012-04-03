@@ -137,28 +137,28 @@ This Agreement is governed by the laws of the State of New York and the intellec
    </requires>
 
    <plugin
-         id="org.eclipselabs.tapiji.tools.core"
+         id="org.eclipse.babel.tapiji.tools.core"
          download-size="0"
          install-size="0"
          version="0.0.2.qualifier"
          unpack="false"/>
 
    <plugin
-         id="org.eclipselabs.tapiji.tools.java"
+         id="org.eclipse.babel.tapiji.tools.java"
          download-size="0"
          install-size="0"
          version="0.0.2.qualifier"
          unpack="false"/>
 
    <plugin
-         id="org.eclipselabs.tapiji.translator.rbe"
+         id="org.eclipse.babel.tapiji.translator.rbe"
          download-size="0"
          install-size="0"
          version="0.0.2.qualifier"
          unpack="false"/>
 
    <plugin
-         id="org.eclipselabs.tapiji.tools.rbmanager"
+         id="org.eclipse.babel.tapiji.tools.rbmanager"
          download-size="0"
          install-size="0"
          version="0.0.2.qualifier"

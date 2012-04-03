@@ -18,9 +18,9 @@ import java.util.StringTokenizer;
 
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.MessagesBundleGroupAdapter;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IAbstractKeyTreeModel;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeVisitor;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IAbstractKeyTreeModel;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeVisitor;
 
 
 /**

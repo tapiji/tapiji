@@ -15,12 +15,12 @@ import java.util.Collection;
 
 import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeVisitor;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.TreeType;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeVisitor;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.TreeType;
 
 
 /**

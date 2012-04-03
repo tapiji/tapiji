@@ -15,9 +15,9 @@ import java.util.Collection;
 
 import org.eclipse.babel.core.message.checks.proximity.IProximityAnalyzer;
 import org.eclipse.babel.core.util.BabelUtils;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessage;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 
 
 /**

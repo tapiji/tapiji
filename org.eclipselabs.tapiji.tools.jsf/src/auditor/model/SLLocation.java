@@ -2,8 +2,8 @@ package auditor.model;
 
 import java.io.Serializable;
 
+import org.eclipse.babel.tapiji.tools.core.extensions.ILocation;
 import org.eclipse.core.resources.IFile;
-import org.eclipselabs.tapiji.tools.core.extensions.ILocation;
 
 
 public class SLLocation implements Serializable, ILocation {

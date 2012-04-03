@@ -23,6 +23,9 @@ import org.eclipse.babel.editor.MessagesEditorMarkers;
 import org.eclipse.babel.editor.tree.actions.AddKeyAction;
 import org.eclipse.babel.editor.tree.actions.DeleteKeyAction;
 import org.eclipse.babel.editor.tree.actions.RenameKeyAction;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeContributor;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.TreeType;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -41,9 +44,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeContributor;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.TreeType;
 
 /**
  * @author Pascal Essiembre

@@ -1,6 +1,6 @@
 package org.eclipse.babel.core.message.manager;
 
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 
 public interface IMessagesEditorListener {
 

@@ -1,5 +1,6 @@
 package quickfix;
 
+import org.eclipse.babel.tapiji.tools.core.ui.dialogs.ResourceBundleSelectionDialog;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
@@ -12,7 +13,6 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMarkerResolution2;
-import org.eclipselabs.tapiji.tools.core.ui.dialogs.ResourceBundleSelectionDialog;
 
 
 public class ReplaceResourceBundleDefReference implements IMarkerResolution2 {

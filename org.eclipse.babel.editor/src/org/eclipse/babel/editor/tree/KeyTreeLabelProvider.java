@@ -20,6 +20,7 @@ import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.MessagesEditorMarkers;
 import org.eclipse.babel.editor.util.OverlayImageIcon;
 import org.eclipse.babel.editor.util.UIUtils;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IFontProvider;
@@ -28,7 +29,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
 
 /**
  * Label provider for key tree viewer.

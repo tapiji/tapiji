@@ -1,7 +1,7 @@
 package util;
 
+import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.core.resources.IProject;
-import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 
 
 public class ELUtils {

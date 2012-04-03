@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="org.eclipselabs.tapiji.tools.core.builderExtension" name="BuilderExtension" schema="schema/org.eclipselabs.tapiji.tools.core.builderExtension.exsd"/>
+   <extension-point id="org.eclipse.babel.tapiji.tools.core.builderExtension" name="BuilderExtension" schema="schema/org.eclipse.babel.tapiji.tools.core.builderExtension.exsd"/>
 
    
    <extension
          id="I18NBuilder"
          point="org.eclipse.core.resources.builders">
       <builder hasNature="true">
-         <run class="org.eclipselabs.tapiji.tools.core.builder.StringLiteralAuditor" />
+         <run class="org.eclipse.babel.tapiji.tools.core.builder.StringLiteralAuditor" />
       </builder>
    </extension>
    
    <extension
-         id="org.eclipselabs.tapiji.tools.core.nature"
+         id="org.eclipse.babel.tapiji.tools.core.nature"
          name="Internationalization Nature"
          point="org.eclipse.core.resources.natures">
       <runtime>
-         <run class="org.eclipselabs.tapiji.tools.core.builder.InternationalizationNature" />
+         <run class="org.eclipse.babel.tapiji.tools.core.builder.InternationalizationNature" />
       </runtime>
-      <builder id="org.eclipselabs.tapiji.tools.core.I18NBuilder" />
+      <builder id="org.eclipse.babel.tapiji.tools.core.I18NBuilder" />
 <!--      <requires-nature id="org.eclipse.jdt.core.javanature"/> -->
    </extension>
    
@@ -108,13 +108,13 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="org.eclipselabs.tapiji.tools.core.model.preferences.TapiJIPreferenceInitializer">
+            class="org.eclipse.babel.tapiji.tools.core.model.preferences.TapiJIPreferenceInitializer">
       </initializer>
    </extension>
    <extension
          point="org.eclipse.babel.core.babelConfiguration">
       <IConfiguration
-            class="org.eclipselabs.tapiji.tools.core.model.preferences.TapiJIPreferences">
+            class="org.eclipse.babel.tapiji.tools.core.model.preferences.TapiJIPreferences">
       </IConfiguration>
    </extension>
 

@@ -2,29 +2,29 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipselabs.tapiji.tools.core.builderExtension">
+         point="org.eclipse.babel.tapiji.tools.core.builderExtension">
       <i18nResourceAuditor
-            class="auditor.JavaResourceAuditor">
+            class="org.eclipse.babel.tapiji.tools.java.auditor.JavaResourceAuditor">
       </i18nResourceAuditor>
    </extension>
    <extension
          point="org.eclipse.jdt.ui.javaEditorTextHovers">
       <hover
             activate="true"
-            class="ui.ConstantStringHover"
+            class="org.eclipse.babel.tapiji.tools.java.ui.ConstantStringHover"
             description="hovers constant strings"
-            id="org.eclipselabs.tapiji.tools.java.ui.ConstantStringHover"
+            id="org.eclipse.babel.tapiji.tools.java.ui.ConstantStringHover"
             label="Constant Strings">
       </hover>
    </extension>
    <extension
-         id="org.eclipselabs.tapiji.tools.java.ui.MessageCompletionProcessor"
-         name="org.eclipselabs.tapiji.tools.java.ui.MessageCompletionProcessor"
+         id="org.eclipse.babel.tapiji.tools.java.ui.MessageCompletionProcessor"
+         name="org.eclipse.babel.tapiji.tools.java.ui.MessageCompletionProcessor"
          point="org.eclipse.jdt.ui.javaCompletionProposalComputer">
       <javaCompletionProposalComputer
             activate="true"
             categoryId="org.eclipse.jdt.ui.defaultProposalCategory"
-            class="ui.MessageCompletionProposalComputer">
+            class="org.eclipse.babel.tapiji.tools.java.ui.MessageCompletionProposalComputer">
          <partition
                type="__java_string">
          </partition>

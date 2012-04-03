@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.eclipse.babel.core.message.checks;
 
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessage;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 
 /**
  * Visitor for finding if a key has at least one corresponding bundle entry

@@ -14,7 +14,7 @@ import java.util.Locale;
 
 import org.eclipse.babel.core.message.MessageException;
 import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 
 
 

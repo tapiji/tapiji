@@ -32,6 +32,9 @@ import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.resource.EclipsePropertiesEditorResource;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.editor.views.MessagesBundleGroupOutline;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesEditor;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -55,9 +58,6 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesEditor;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 
 /**
  * Multi-page editor for editing resource bundles.

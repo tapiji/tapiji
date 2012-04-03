@@ -13,8 +13,8 @@ package org.eclipse.babel.core.message.tree.visitor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeVisitor;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeVisitor;
 
 /**
  * Visitor for finding keys matching the given regular expression.

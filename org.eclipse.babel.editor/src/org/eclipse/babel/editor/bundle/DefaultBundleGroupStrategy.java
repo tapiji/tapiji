@@ -25,6 +25,7 @@ import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.resource.EclipsePropertiesEditorResource;
 import org.eclipse.babel.editor.util.UIUtils;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -38,7 +39,6 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 
 
 /**

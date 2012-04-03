@@ -1,13 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: TapiJI Tools Core UI
-Bundle-SymbolicName: org.eclipselabs.tapiji.tools.core.ui;singleton:=true
+Bundle-SymbolicName: org.eclipse.babel.tapiji.tools.core.ui;singleton:=true
 Bundle-Version: 0.0.2.qualifier
-Bundle-Activator: org.eclipselabs.tapiji.tools.core.ui.Activator
+Bundle-Activator: org.eclipse.babel.tapiji.tools.core.ui.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jdt.ui;bundle-version="3.6.2",
- org.eclipselabs.tapiji.tools.core;bundle-version="0.0.2";visibility:=reexport,
+ org.eclipse.babel.tapiji.tools.core;bundle-version="0.0.2";visibility:=reexport,
  org.eclipse.ui.ide;bundle-version="3.6.2",
  org.eclipse.jface.text;bundle-version="3.6.1",
  org.eclipse.jdt.core;bundle-version="3.6.2",
@@ -15,22 +15,22 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.editors
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: org.eclipselabs.tapiji.tools.core.ui,
- org.eclipselabs.tapiji.tools.core.ui.decorators,
- org.eclipselabs.tapiji.tools.core.ui.dialogs,
- org.eclipselabs.tapiji.tools.core.ui.filters,
- org.eclipselabs.tapiji.tools.core.ui.markers,
- org.eclipselabs.tapiji.tools.core.ui.menus,
- org.eclipselabs.tapiji.tools.core.ui.prefrences,
- org.eclipselabs.tapiji.tools.core.ui.quickfix,
- org.eclipselabs.tapiji.tools.core.ui.views.messagesview,
- org.eclipselabs.tapiji.tools.core.ui.views.messagesview.dnd,
- org.eclipselabs.tapiji.tools.core.ui.widgets,
- org.eclipselabs.tapiji.tools.core.ui.widgets.event,
- org.eclipselabs.tapiji.tools.core.ui.widgets.filter,
- org.eclipselabs.tapiji.tools.core.ui.widgets.listener,
- org.eclipselabs.tapiji.tools.core.ui.widgets.provider,
- org.eclipselabs.tapiji.tools.core.ui.widgets.sorter
+Export-Package: org.eclipse.babel.tapiji.tools.core.ui,
+ org.eclipse.babel.tapiji.tools.core.ui.decorators,
+ org.eclipse.babel.tapiji.tools.core.ui.dialogs,
+ org.eclipse.babel.tapiji.tools.core.ui.filters,
+ org.eclipse.babel.tapiji.tools.core.ui.markers,
+ org.eclipse.babel.tapiji.tools.core.ui.menus,
+ org.eclipse.babel.tapiji.tools.core.ui.prefrences,
+ org.eclipse.babel.tapiji.tools.core.ui.quickfix,
+ org.eclipse.babel.tapiji.tools.core.ui.views.messagesview,
+ org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.dnd,
+ org.eclipse.babel.tapiji.tools.core.ui.widgets,
+ org.eclipse.babel.tapiji.tools.core.ui.widgets.event,
+ org.eclipse.babel.tapiji.tools.core.ui.widgets.filter,
+ org.eclipse.babel.tapiji.tools.core.ui.widgets.listener,
+ org.eclipse.babel.tapiji.tools.core.ui.widgets.provider,
+ org.eclipse.babel.tapiji.tools.core.ui.widgets.sorter
 Import-Package: org.eclipse.core.filebuffers,
  org.eclipse.ui.texteditor
 Bundle-Vendor: Vienna University of Technology

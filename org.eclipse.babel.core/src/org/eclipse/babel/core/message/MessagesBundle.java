@@ -20,10 +20,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.babel.core.util.BabelUtils;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResourceChangeListener;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessage;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesResource;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesResourceChangeListener;
 
 /**
  * For a given scope, all messages for a national language.  

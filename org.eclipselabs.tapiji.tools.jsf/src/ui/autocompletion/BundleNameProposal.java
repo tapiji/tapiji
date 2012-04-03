@@ -3,6 +3,8 @@ package ui.autocompletion;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.babel.tapiji.tools.core.builder.InternationalizationNature;
+import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.text.IDocument;
@@ -19,8 +21,6 @@ import org.eclipse.jst.jsf.context.resolver.structureddocument.internal.ITextReg
 import org.eclipse.jst.jsf.context.structureddocument.IStructuredDocumentContext;
 import org.eclipse.jst.jsf.context.structureddocument.IStructuredDocumentContextFactory;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
-import org.eclipselabs.tapiji.tools.core.builder.InternationalizationNature;
-import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 

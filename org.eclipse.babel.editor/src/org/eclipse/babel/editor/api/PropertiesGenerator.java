@@ -2,7 +2,7 @@ package org.eclipse.babel.editor.api;
 
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 
 
 public class PropertiesGenerator {

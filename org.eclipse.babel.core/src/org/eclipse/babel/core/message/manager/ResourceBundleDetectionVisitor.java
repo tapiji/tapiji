@@ -51,7 +51,7 @@ public class ResourceBundleDetectionVisitor implements IResourceVisitor,
 		return true;
 	}
 	
-	private final String RB_MARKER_ID = "org.eclipselabs.tapiji.tools.core.ResourceBundleAuditMarker";
+	private final String RB_MARKER_ID = "org.eclipse.babel.tapiji.tools.core.ResourceBundleAuditMarker";
 	
 	private boolean isResourceBundleFile(IResource file) {
 		boolean isValied = false;

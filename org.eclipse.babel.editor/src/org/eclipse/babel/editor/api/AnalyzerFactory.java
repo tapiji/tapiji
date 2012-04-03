@@ -21,7 +21,7 @@
 package org.eclipse.babel.editor.api;
 
 import org.eclipse.babel.core.message.checks.proximity.LevenshteinDistanceAnalyzer;
-import org.eclipselabs.tapiji.translator.rbe.model.analyze.ILevenshteinDistanceAnalyzer;
+import org.eclipse.babel.tapiji.translator.rbe.model.analyze.ILevenshteinDistanceAnalyzer;
 
 
 public class AnalyzerFactory {

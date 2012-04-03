@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: TapiJI Tools
-Bundle-SymbolicName: org.eclipselabs.tapiji.tools.core;singleton:=true
+Bundle-SymbolicName: org.eclipse.babel.tapiji.tools.core;singleton:=true
 Bundle-Version: 0.0.2.qualifier
-Bundle-Activator: org.eclipselabs.tapiji.tools.core.Activator
+Bundle-Activator: org.eclipse.babel.tapiji.tools.core.Activator
 Bundle-Vendor: Vienna University of Technology
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.core;bundle-version="3.5.2",
  org.eclipse.core.resources,
  org.eclipse.jface.text;bundle-version="3.5.2",
- org.eclipselabs.tapiji.translator.rbe;bundle-version="0.0.2",
+ org.eclipse.babel.tapiji.translator.rbe;bundle-version="0.0.2",
  org.eclipse.babel.editor;bundle-version="0.8.0";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
@@ -24,14 +24,14 @@ Import-Package: org.eclipse.core.filebuffers,
  org.eclipse.jface.text.contentassist,
  org.eclipse.ui.ide,
  org.eclipse.ui.texteditor
-Export-Package: org.eclipselabs.tapiji.tools.core,
- org.eclipselabs.tapiji.tools.core.builder,
- org.eclipselabs.tapiji.tools.core.builder.analyzer,
- org.eclipselabs.tapiji.tools.core.builder.quickfix,
- org.eclipselabs.tapiji.tools.core.extensions,
- org.eclipselabs.tapiji.tools.core.model,
- org.eclipselabs.tapiji.tools.core.model.exception,
- org.eclipselabs.tapiji.tools.core.model.manager,
- org.eclipselabs.tapiji.tools.core.model.preferences,
- org.eclipselabs.tapiji.tools.core.model.view,
- org.eclipselabs.tapiji.tools.core.util
+Export-Package: org.eclipse.babel.tapiji.tools.core,
+ org.eclipse.babel.tapiji.tools.core.builder,
+ org.eclipse.babel.tapiji.tools.core.builder.analyzer,
+ org.eclipse.babel.tapiji.tools.core.builder.quickfix,
+ org.eclipse.babel.tapiji.tools.core.extensions,
+ org.eclipse.babel.tapiji.tools.core.model,
+ org.eclipse.babel.tapiji.tools.core.model.exception,
+ org.eclipse.babel.tapiji.tools.core.model.manager,
+ org.eclipse.babel.tapiji.tools.core.model.preferences,
+ org.eclipse.babel.tapiji.tools.core.model.view,
+ org.eclipse.babel.tapiji.tools.core.util

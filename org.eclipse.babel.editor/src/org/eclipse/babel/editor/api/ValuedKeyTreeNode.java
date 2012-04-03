@@ -8,9 +8,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.babel.core.message.tree.KeyTreeNode;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
 
 
 public class ValuedKeyTreeNode extends KeyTreeNode implements IValuedKeyTreeNode {

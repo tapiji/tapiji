@@ -86,10 +86,6 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChang
 		resourceChangeSubscribers = new HashMap<String,Set<AbstractIFileChangeListener>>();
 	}
 	
-    static {
-    	Display.getDefault().addFilter(SWT.KeyUp, new UndoKeyListener());
-    }
-    
     private static class UndoKeyListener implements Listener {
     
     	public void handleEvent(Event event) {
@@ -176,6 +172,14 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChang
         	}
         };
         ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener);
+        
+        Display.getDefault().asyncExec(new Runnable() {
+			
+			public void run() {
+				Display.getDefault().addFilter(SWT.KeyUp, new UndoKeyListener());
+				
+			}
+		});
 	}
 
 	/**

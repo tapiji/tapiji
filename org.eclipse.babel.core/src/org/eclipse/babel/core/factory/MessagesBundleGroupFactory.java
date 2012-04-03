@@ -5,8 +5,8 @@ import java.io.File;
 import org.eclipse.babel.core.configuration.ConfigurationManager;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.strategy.PropertiesFileGroupStrategy;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 import org.eclipse.core.resources.IResource;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 
 public class MessagesBundleGroupFactory {
 	

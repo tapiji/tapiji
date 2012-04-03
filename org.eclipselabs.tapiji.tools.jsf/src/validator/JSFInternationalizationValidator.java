@@ -2,6 +2,9 @@ package validator;
 
 import java.util.List;
 
+import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;
+import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.util.EditorUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
@@ -13,9 +16,6 @@ import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidationContext;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
-import org.eclipselabs.tapiji.tools.core.extensions.IMarkerConstants;
-import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipselabs.tapiji.tools.core.util.EditorUtils;
 
 import auditor.JSFResourceBundleDetector;
 import auditor.model.SLLocation;

@@ -21,6 +21,7 @@ import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.util.UIUtils;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -33,7 +34,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 
 /**
  * Internationalization page where one can edit all resource bundle entries 

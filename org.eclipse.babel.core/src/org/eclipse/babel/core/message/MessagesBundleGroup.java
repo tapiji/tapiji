@@ -25,10 +25,10 @@ import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy;
 import org.eclipse.babel.core.message.strategy.PropertiesFileGroupStrategy;
 import org.eclipse.babel.core.util.BabelUtils;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessage;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 
 /**
  * Grouping of all messages bundle of the same kind.

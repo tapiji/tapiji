@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResourceChangeListener;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesResource;
+import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesResourceChangeListener;
 
 /**
  * Base implementation of a {@link IMessagesResource} bound to a locale

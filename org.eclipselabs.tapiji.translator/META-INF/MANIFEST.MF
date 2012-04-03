@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.ui.ide;bundle-version="3.6.0",
  org.junit,
- org.eclipselabs.tapiji.translator.rbe;bundle-version="0.0.2"
+ org.eclipse.babel.tapiji.translator.rbe;bundle-version="0.0.2"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Vienna University of Technology
