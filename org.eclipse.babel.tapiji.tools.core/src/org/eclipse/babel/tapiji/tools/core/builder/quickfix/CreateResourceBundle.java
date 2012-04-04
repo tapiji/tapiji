@@ -32,7 +32,7 @@ public class CreateResourceBundle implements IMarkerResolution2 {
 	private int end;
 	private String key;
 	private boolean jsfContext;
-	private final String newBunldeWizard = "com.essiembre.eclipse.rbe.ui.wizards.ResourceBundleWizard";
+	private final String newBunldeWizard = "org.eclipse.babel.editor.wizards.ResourceBundleWizard";
 
 	public CreateResourceBundle(String key, IResource resource, int start, int end) {
 		this.key = ResourceUtils.deriveNonExistingRBName(key, ResourceBundleManager.getManager( resource.getProject() ));

@@ -7,6 +7,7 @@ import org.eclipse.babel.tapiji.translator.rbe.ui.wizards.IResourceBundleWizard;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
+import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -33,7 +34,7 @@ public class CreateResourceBundleProposal implements IJavaCompletionProposal {
 	private int end;
 	private String key;
 	private boolean jsfContext;
-	private final String newBunldeWizard = "com.essiembre.eclipse.rbe.ui.wizards.ResourceBundleWizard";
+	private final String newBunldeWizard = "org.eclipse.babel.editor.wizards.ResourceBundleWizard";
 
 	public CreateResourceBundleProposal (String key, IResource resource, int start, int end) {
 		this.key = ResourceUtils.deriveNonExistingRBName(key, ResourceBundleManager.getManager( resource.getProject() ));
@@ -68,6 +69,7 @@ public class CreateResourceBundleProposal implements IJavaCompletionProposal {
 			// Then if we have a wizard, open it.
 			if (descriptor != null) {
 				IWizard wizard = descriptor.createWizard();
+				
 				if (!(wizard instanceof IResourceBundleWizard))
 					return;
 				
@@ -111,10 +113,11 @@ public class CreateResourceBundleProposal implements IJavaCompletionProposal {
 					pathName = "";
 				}
 				
-				rbw.setDefaultPath (pathName);
+				rbw.setDefaultPath(pathName);
 					
 				WizardDialog wd = new WizardDialog(Display.getDefault()
 						.getActiveShell(), wizard);
+				
 				wd.setTitle(wizard.getWindowTitle());
 				if (wd.open() == WizardDialog.OK) {
 					(new StringLiteralAuditor()).buildProject(null, resource.getProject());
@@ -123,8 +126,8 @@ public class CreateResourceBundleProposal implements IJavaCompletionProposal {
 					ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager(); 
 					IPath path = resource.getRawLocation(); 
 					try {
-						bufferManager.connect(path, null); 
-						ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(path);
+						bufferManager.connect(path, LocationKind.NORMALIZE ,null); 
+						ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(path, LocationKind.NORMALIZE);
 						IDocument document = textFileBuffer.getDocument(); 
 					
 						if (document.get().charAt(start-1) == '"' && document.get().charAt(start) != '"') {

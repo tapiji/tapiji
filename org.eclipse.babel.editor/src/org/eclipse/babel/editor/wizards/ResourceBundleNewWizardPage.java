@@ -82,15 +82,23 @@ public class ResourceBundleNewWizardPage extends WizardPage {
     
     private LocaleSelector localeSelector;
 
+    private String defaultPath = "";
+    private String defaultRBName = "ApplicationResources";
+    
     /**
      * Constructor for SampleNewWizardPage.
      * @param selection workbench selection
      */
-    public ResourceBundleNewWizardPage(ISelection selection) {
+    public ResourceBundleNewWizardPage(ISelection selection, String defaultPath, String defaultRBName) {
         super("wizardPage"); //$NON-NLS-1$
         setTitle(MessagesEditorPlugin.getString("editor.wiz.title")); //$NON-NLS-1$
         setDescription(MessagesEditorPlugin.getString("editor.wiz.desc")); //$NON-NLS-1$
         this.selection = selection;
+        
+        if (! defaultPath.isEmpty())
+        	this.defaultPath = defaultPath;
+        if (! defaultRBName.isEmpty())
+        	this.defaultRBName = defaultRBName;
     }
 
     /**
@@ -290,7 +298,10 @@ public class ResourceBundleNewWizardPage extends WizardPage {
      * container to use.
      */
     private void initialize() {
-        if (selection!=null && selection.isEmpty()==false && 
+        if (! defaultPath.isEmpty()) {
+        	containerText.setText(defaultPath);
+        	
+        } else if (selection!=null && selection.isEmpty()==false && 
         		selection instanceof IStructuredSelection) {
             IStructuredSelection ssel = (IStructuredSelection)selection;
             if (ssel.size()>1) {
@@ -319,7 +330,8 @@ public class ResourceBundleNewWizardPage extends WizardPage {
                 		toPortableString());
             } 
         }
-        fileText.setText("ApplicationResources"); //$NON-NLS-1$
+        
+        fileText.setText(defaultRBName);
     }
     
     /**
@@ -459,5 +471,13 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         	return false;
         }
         return resource.exists();
+    }
+    
+    public void setDefaultRBName(String name) {
+    	defaultRBName = name;
+    }
+    
+    public void setDefaultPath(String path) {
+    	defaultPath = path;
     }
 }

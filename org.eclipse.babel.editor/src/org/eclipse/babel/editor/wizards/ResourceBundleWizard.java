@@ -17,6 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
+import org.eclipse.babel.tapiji.translator.rbe.ui.wizards.IResourceBundleWizard;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -50,9 +51,12 @@ import org.eclipse.ui.ide.IDE;
  * "properties".
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
-public class ResourceBundleWizard extends Wizard implements INewWizard {
+public class ResourceBundleWizard extends Wizard implements INewWizard, IResourceBundleWizard {
     private ResourceBundleNewWizardPage page;
     private ISelection selection;
+    
+    private String defaultRbName = "";
+    private String defaultPath = "";
 
     /**
      * Constructor for ResourceBundleWizard.
@@ -67,7 +71,7 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
      */
 
     public void addPages() {
-        page = new ResourceBundleNewWizardPage(selection);
+        page = new ResourceBundleNewWizardPage(selection, defaultPath, defaultRbName);
         addPage(page);
     }
     
@@ -277,4 +281,12 @@ public class ResourceBundleWizard extends Wizard implements INewWizard {
             IWorkbench workbench, IStructuredSelection structSelection) {
         this.selection = structSelection;
     }
+
+	public void setBundleId(String rbName) {
+		defaultRbName = rbName;
+	}
+
+	public void setDefaultPath(String pathName) {
+		defaultPath = pathName;
+	}
 }
