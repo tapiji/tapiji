@@ -182,12 +182,15 @@ public class MessageCompletionProposalComputer implements
 			hit = true;
 		}
 	    }
-	    if (!hit)
+	    if (!hit) {
 		completions.add(new NewResourceBundleEntryProposal(resource,
 			offset - stringLiteralStart.length(), true, manager,
 			bundleName/*
 				   * , csav.getDefinedResourceBundles (offset)
 				   */));
+
+		// TODO: reference to existing resource
+	    }
 	} else {
 	    for (String key : bundleGroup.getMessageKeys()) {
 		completions.add(new MessageCompletionProposal(posStart,
