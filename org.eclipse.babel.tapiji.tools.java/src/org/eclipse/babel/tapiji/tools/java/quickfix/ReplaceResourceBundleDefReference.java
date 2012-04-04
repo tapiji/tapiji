@@ -4,6 +4,7 @@ import org.eclipse.babel.tapiji.tools.core.ui.dialogs.ResourceBundleSelectionDia
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
+import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -54,8 +55,8 @@ public class ReplaceResourceBundleDefReference implements IMarkerResolution2 {
 		ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager(); 
 		IPath path = resource.getRawLocation(); 
 		try {
-			bufferManager.connect(path, null); 
-			ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(path);
+			bufferManager.connect(path, LocationKind.NORMALIZE, null); 
+			ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(path, LocationKind.NORMALIZE);
 			IDocument document = textFileBuffer.getDocument(); 
 		
 			ResourceBundleSelectionDialog dialog = new ResourceBundleSelectionDialog(Display.getDefault().getActiveShell(),
@@ -65,6 +66,8 @@ public class ReplaceResourceBundleDefReference implements IMarkerResolution2 {
 				return;
 			
 			key = dialog.getSelectedBundleId();
+			int iSep = key.lastIndexOf("/");
+			key = iSep != -1 ? key.substring(iSep+1) : key;
 			
 			document.replace(startPos, endPos, "\"" + key + "\"");
 			
@@ -73,7 +76,7 @@ public class ReplaceResourceBundleDefReference implements IMarkerResolution2 {
 			e.printStackTrace();
 		} finally {
 			try {
-				bufferManager.disconnect(path, null);
+				bufferManager.disconnect(path, LocationKind.NORMALIZE, null);
 			} catch (CoreException e) {
 				e.printStackTrace();
 			} 

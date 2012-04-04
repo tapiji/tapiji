@@ -7,6 +7,7 @@ import org.eclipse.babel.tapiji.tools.core.ui.dialogs.ResourceBundleEntrySelecti
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
+import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -54,8 +55,8 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 		ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager(); 
 		IPath path = resource.getRawLocation(); 
 		try {
-			bufferManager.connect(path, null); 
-			ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(path);
+			bufferManager.connect(path, LocationKind.NORMALIZE, null); 
+			ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(path, LocationKind.NORMALIZE);
 			IDocument document = textFileBuffer.getDocument(); 
 		
 			ResourceBundleEntrySelectionDialog dialog = new ResourceBundleEntrySelectionDialog(
@@ -75,7 +76,7 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 			e.printStackTrace();
 		} finally {
 			try {
-				bufferManager.disconnect(path, null);
+				bufferManager.disconnect(path, LocationKind.NORMALIZE, null);
 			} catch (CoreException e) {
 				e.printStackTrace();
 			} 
