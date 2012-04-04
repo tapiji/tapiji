@@ -18,10 +18,6 @@ import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.CompletionContext;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.ITypeRoot;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.ui.text.java.ContentAssistInvocationContext;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposalComputer;
@@ -32,11 +28,6 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
 public class MessageCompletionProposalComputer implements
 	IJavaCompletionProposalComputer {
 
-    private ResourceAuditVisitor csav;
-    private IJavaElement je;
-    private IJavaElement javaElement;
-    private CompilationUnit cu;
-
     public MessageCompletionProposalComputer() {
 
     }
@@ -44,7 +35,9 @@ public class MessageCompletionProposalComputer implements
     @Override
     public List<ICompletionProposal> computeCompletionProposals(
 	    ContentAssistInvocationContext context, IProgressMonitor monitor) {
+
 	List<ICompletionProposal> completions = new ArrayList<ICompletionProposal>();
+	ResourceAuditVisitor csav;
 
 	if (!InternationalizationNature
 		.hasNature(((JavaContentAssistInvocationContext) context)
@@ -52,8 +45,8 @@ public class MessageCompletionProposalComputer implements
 	    return completions;
 
 	try {
-	    CompletionContext coreContext = ((JavaContentAssistInvocationContext) context)
-		    .getCoreContext();
+	    JavaContentAssistInvocationContext javaContext = ((JavaContentAssistInvocationContext) context);
+	    CompletionContext coreContext = javaContext.getCoreContext();
 	    int tokenStart = coreContext.getTokenStart();
 	    int tokenEnd = coreContext.getTokenEnd();
 	    int tokenOffset = coreContext.getOffset();
@@ -61,6 +54,11 @@ public class MessageCompletionProposalComputer implements
 
 	    if (isStringLiteral)
 		tokenStart++;
+
+	    if (tokenStart < 0) {
+		tokenStart = tokenOffset;
+		tokenEnd = tokenOffset;
+	    }
 
 	    tokenEnd = Math.max(tokenEnd, tokenStart);
 
@@ -70,56 +68,38 @@ public class MessageCompletionProposalComputer implements
 		fullToken = context.getDocument().get(tokenStart,
 			tokenEnd - tokenStart);
 
-	    // TODO: bad way for getting the resource
-	    if (javaElement == null)
-		javaElement = ((JavaContentAssistInvocationContext) context)
-			.getCompilationUnit().getElementAt(
-				coreContext.getOffset());
-
 	    // Check if the string literal is up to be written within the
 	    // context
 	    // of a resource-bundle accessor method
 	    ResourceBundleManager manager = ResourceBundleManager
-		    .getManager(javaElement.getResource().getProject());
+		    .getManager(javaContext.getCompilationUnit().getResource()
+			    .getProject());
 
-	    if (csav == null) {
-		csav = new ResourceAuditVisitor(null, manager);
-		je = JavaCore.create(javaElement.getResource());
+	    IResource resource = javaContext.getCompilationUnit().getResource();
+
+	    csav = new ResourceAuditVisitor(null, manager);
+
+	    CompilationUnit cu = ASTutils.getCompilationUnit(resource);
+
+	    cu.accept(csav);
+
+	    if (csav.getKeyAt(new Long(tokenOffset)) != null && isStringLiteral) {
+		completions.addAll(getResourceBundleCompletionProposals(
+			tokenStart, tokenEnd, tokenOffset, isStringLiteral,
+			fullToken, manager, csav, resource));
+	    } else if (csav.getRBReferenceAt(new Long(tokenOffset)) != null
+		    && isStringLiteral) {
+		completions.addAll(getRBReferenceCompletionProposals(
+			tokenStart, tokenEnd, fullToken, isStringLiteral,
+			manager, resource));
+	    } else {
+		completions.addAll(getBasicJavaCompletionProposals(tokenStart,
+			tokenEnd, tokenOffset, fullToken, isStringLiteral,
+			manager, csav, resource));
 	    }
+	    if (completions.size() == 1)
+		completions.add(new NoActionProposal());
 
-	    if (je instanceof ICompilationUnit) {
-		// get the type of the currently loaded resource
-		if (cu == null) {
-		    ITypeRoot typeRoot = ((ICompilationUnit) je);
-
-		    if (typeRoot == null)
-			return null;
-
-		    cu = ASTutils.getCompilationUnit(typeRoot);
-
-		    cu.accept(csav);
-		}
-
-		if (csav.getKeyAt(new Long(tokenOffset)) != null) {
-		    completions
-			    .addAll(getResourceBundleCompletionProposals(
-				    tokenStart, tokenEnd, tokenOffset,
-				    isStringLiteral, fullToken, manager, csav,
-				    javaElement.getResource()));
-		} else if (csav.getRBReferenceAt(new Long(tokenOffset)) != null) {
-		    completions.addAll(getRBReferenceCompletionProposals(
-			    tokenStart, tokenEnd, fullToken, isStringLiteral,
-			    manager, je.getResource()));
-		} else {
-		    completions.addAll(getBasicJavaCompletionProposals(
-			    tokenStart, tokenEnd, tokenOffset, fullToken,
-			    isStringLiteral, manager, csav, je.getResource()));
-		}
-		if (completions.size() == 1)
-		    completions.add(new NoActionProposal());
-
-	    } else
-		return null;
 	} catch (Exception e) {
 	    Logger.logError(e);
 	}
@@ -191,7 +171,7 @@ public class MessageCompletionProposalComputer implements
 	    // If a part of a String has already been entered
 	    for (String key : bundleGroup.getMessageKeys()) {
 		if (key.toLowerCase().startsWith(fullToken)) {
-		    if (key.equals(fullToken))
+		    if (!key.equals(fullToken))
 			completions.add(new MessageCompletionProposal(
 				tokenStart, tokenEnd - tokenStart, key, false));
 		    else
@@ -232,13 +212,12 @@ public class MessageCompletionProposalComputer implements
 
     @Override
     public void sessionEnded() {
-	csav = null;
-	javaElement = null;
-	cu = null;
+
     }
 
     @Override
     public void sessionStarted() {
+
     }
 
 }

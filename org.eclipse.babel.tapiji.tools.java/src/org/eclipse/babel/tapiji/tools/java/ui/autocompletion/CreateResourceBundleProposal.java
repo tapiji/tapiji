@@ -33,7 +33,6 @@ public class CreateResourceBundleProposal implements IJavaCompletionProposal {
     private int start;
     private int end;
     private String key;
-    private boolean jsfContext;
     private final String newBunldeWizard = "org.eclipse.babel.editor.wizards.ResourceBundleWizard";
 
     public CreateResourceBundleProposal(String key, IResource resource,

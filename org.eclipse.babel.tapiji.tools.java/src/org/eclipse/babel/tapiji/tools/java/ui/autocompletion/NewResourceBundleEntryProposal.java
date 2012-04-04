@@ -4,8 +4,6 @@ import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
 import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.text.IDocument;
@@ -43,11 +41,6 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 
     @Override
     public void apply(IDocument document) {
-
-	CompilationUnit cu = ASTutils.getCompilationUnit(resource);
-
-	StringLiteral lit = ASTutils.getStringAtPos(cu, startPos);
-
 	CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
 		Display.getDefault().getActiveShell(), manager,
 		bundleContext ? value : "", bundleContext ? "" : value,
@@ -83,7 +76,6 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 
     @Override
     public IContextInformation getContextInformation() {
-	// TODO Auto-generated method stub
 	return null;
     }
 
@@ -115,7 +107,6 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 
     @Override
     public int getRelevance() {
-	// TODO Auto-generated method stub
 	if (this.value.trim().length() == 0)
 	    return 96;
 	else

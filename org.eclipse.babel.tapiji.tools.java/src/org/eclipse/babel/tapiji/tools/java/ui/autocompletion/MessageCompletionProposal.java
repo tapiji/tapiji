@@ -1,5 +1,6 @@
 package org.eclipse.babel.tapiji.tools.java.ui.autocompletion;
 
+import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.util.ImageUtils;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.text.IDocument;
@@ -27,14 +28,13 @@ public class MessageCompletionProposal implements IJavaCompletionProposal {
 	try {
 	    document.replace(offset, length, content);
 	} catch (Exception e) {
-	    e.printStackTrace();
+	    Logger.logError(e);
 	}
     }
 
     @Override
     public String getAdditionalProposalInfo() {
-	return null;// "Inserts the property key '" + content +
-		    // "' of the resource-bundle 'at.test.messages'";
+	return "Inserts the resource key '" + this.content + "'";
     }
 
     @Override
