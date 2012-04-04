@@ -28,22 +28,13 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
     private String reference;
 
     public NewResourceBundleEntryProposal(IResource resource, int startPos,
+	    int endPos, String value, boolean isStringLiteral,
 	    boolean bundleContext, ResourceBundleManager manager,
 	    String bundleName) {
 
-	CompilationUnit cu = ASTutils.getCompilationUnit(resource);
-
-	StringLiteral string = ASTutils.getStringAtPos(cu, startPos);
-
-	if (string == null) {
-	    this.startPos = startPos;
-	    this.endPos = 0;
-	    this.value = "";
-	} else {
-	    this.startPos = string.getStartPosition() + 1;
-	    this.endPos = string.getLength() - 2;
-	    this.value = string.getLiteralValue();
-	}
+	this.startPos = startPos;
+	this.endPos = endPos;
+	this.value = value;
 	this.bundleContext = bundleContext;
 	this.manager = manager;
 	this.resource = resource;
@@ -70,9 +61,9 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 	try {
 	    if (!bundleContext)
 		reference = ASTutils.insertNewBundleRef(document, resource,
-			startPos, endPos, resourceBundleId, key);
+			startPos, endPos - startPos, resourceBundleId, key);
 	    else {
-		document.replace(startPos, endPos, key);
+		document.replace(startPos, endPos - startPos, key);
 		reference = key + "\"";
 	    }
 	    ResourceBundleManager.refreshResource(resource);
@@ -126,7 +117,7 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
     public int getRelevance() {
 	// TODO Auto-generated method stub
 	if (this.value.trim().length() == 0)
-	    return 1096;
+	    return 96;
 	else
 	    return 1096;
     }

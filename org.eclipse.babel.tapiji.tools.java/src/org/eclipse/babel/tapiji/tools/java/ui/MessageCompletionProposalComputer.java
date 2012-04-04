@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.builder.InternationalizationNature;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.java.auditor.ResourceAuditVisitor;
@@ -53,13 +54,27 @@ public class MessageCompletionProposalComputer implements
 	try {
 	    CompletionContext coreContext = ((JavaContentAssistInvocationContext) context)
 		    .getCoreContext();
-	    int offset = coreContext.getOffset();
+	    int tokenStart = coreContext.getTokenStart();
+	    int tokenEnd = coreContext.getTokenEnd();
+	    int tokenOffset = coreContext.getOffset();
+	    boolean isStringLiteral = coreContext.getTokenKind() == CompletionContext.TOKEN_KIND_STRING_LITERAL;
 
+	    if (isStringLiteral)
+		tokenStart++;
+
+	    tokenEnd = Math.max(tokenEnd, tokenStart);
+
+	    String fullToken = "";
+
+	    if (tokenStart < tokenEnd)
+		fullToken = context.getDocument().get(tokenStart,
+			tokenEnd - tokenStart);
+
+	    // TODO: bad way for getting the resource
 	    if (javaElement == null)
 		javaElement = ((JavaContentAssistInvocationContext) context)
-			.getCompilationUnit().getElementAt(offset);
-
-	    String stringLiteralStart = new String(coreContext.getToken());
+			.getCompilationUnit().getElementAt(
+				coreContext.getOffset());
 
 	    // Check if the string literal is up to be written within the
 	    // context
@@ -85,124 +100,119 @@ public class MessageCompletionProposalComputer implements
 		    cu.accept(csav);
 		}
 
-		// StringLiteralAnalyzer sla = new
-		// StringLiteralAnalyzer(javaElement.getResource());
-		if (csav.getKeyAt(new Long(offset)) != null) {
-		    completions.addAll(getResourceBundleCompletionProposals(
-			    offset, stringLiteralStart, manager, csav,
-			    javaElement.getResource()));
-		} else if (csav.getRBReferenceAt(new Long(offset)) != null) {
-		    completions.addAll(getRBReferenceCompletionProposals(
-			    offset, stringLiteralStart, manager,
-			    je.getResource()));
-		} else {
+		if (csav.getKeyAt(new Long(tokenOffset)) != null) {
 		    completions
-			    .addAll(getBasicJavaCompletionProposals(offset,
-				    stringLiteralStart, manager, csav,
-				    je.getResource()));
+			    .addAll(getResourceBundleCompletionProposals(
+				    tokenStart, tokenEnd, tokenOffset,
+				    isStringLiteral, fullToken, manager, csav,
+				    javaElement.getResource()));
+		} else if (csav.getRBReferenceAt(new Long(tokenOffset)) != null) {
+		    completions.addAll(getRBReferenceCompletionProposals(
+			    tokenStart, tokenEnd, fullToken, isStringLiteral,
+			    manager, je.getResource()));
+		} else {
+		    completions.addAll(getBasicJavaCompletionProposals(
+			    tokenStart, tokenEnd, tokenOffset, fullToken,
+			    isStringLiteral, manager, csav, je.getResource()));
 		}
 		if (completions.size() == 1)
 		    completions.add(new NoActionProposal());
+
 	    } else
 		return null;
 	} catch (Exception e) {
-	    // e.printStackTrace();
+	    Logger.logError(e);
 	}
 	return completions;
     }
 
     private Collection<ICompletionProposal> getRBReferenceCompletionProposals(
-	    int offset, String stringLiteralStart,
-	    ResourceBundleManager manager, IResource resource) {
+	    int tokenStart, int tokenEnd, String fullToken,
+	    boolean isStringLiteral, ResourceBundleManager manager,
+	    IResource resource) {
 	List<ICompletionProposal> completions = new ArrayList<ICompletionProposal>();
-	int posStart = offset - stringLiteralStart.length();
 	boolean hit = false;
 
 	// Show a list of available resource bundles
 	List<String> resourceBundles = manager.getResourceBundleIdentifiers();
 	for (String rbName : resourceBundles) {
-	    if (rbName.startsWith(stringLiteralStart)) {
-		if (rbName.equals(stringLiteralStart))
+	    if (rbName.startsWith(fullToken)) {
+		if (rbName.equals(fullToken))
 		    hit = true;
 		else
-		    completions.add(new MessageCompletionProposal(posStart,
-			    stringLiteralStart.length(), rbName, true));
+		    completions.add(new MessageCompletionProposal(tokenStart,
+			    tokenEnd - tokenStart, rbName, true));
 	    }
 	}
 
-	if (!hit && stringLiteralStart.trim().length() > 0)
-	    completions.add(new CreateResourceBundleProposal(
-		    stringLiteralStart, resource, posStart, posStart
-			    + stringLiteralStart.length()));
+	if (!hit && fullToken.trim().length() > 0)
+	    completions.add(new CreateResourceBundleProposal(fullToken,
+		    resource, tokenStart, tokenEnd));
 
 	return completions;
     }
 
     protected List<ICompletionProposal> getBasicJavaCompletionProposals(
-	    int offset, String stringLiteralStart,
-	    ResourceBundleManager manager, ResourceAuditVisitor csav,
-	    IResource resource) {
+	    int tokenStart, int tokenEnd, int tokenOffset, String fullToken,
+	    boolean isStringLiteral, ResourceBundleManager manager,
+	    ResourceAuditVisitor csav, IResource resource) {
 	List<ICompletionProposal> completions = new ArrayList<ICompletionProposal>();
 
-	if (stringLiteralStart.length() == 0) {
+	if (fullToken.length() == 0) {
 	    // If nothing has been entered
-	    completions.add(new InsertResourceBundleReferenceProposal(offset
-		    - stringLiteralStart.length(), stringLiteralStart.length(),
-		    manager, resource, csav.getDefinedResourceBundles(offset)));
-	    completions.add(new NewResourceBundleEntryProposal(resource, offset
-		    - stringLiteralStart.length(), false, manager, null));
+	    completions.add(new InsertResourceBundleReferenceProposal(
+		    tokenStart, tokenEnd - tokenStart, manager, resource, csav
+			    .getDefinedResourceBundles(tokenOffset)));
+	    completions.add(new NewResourceBundleEntryProposal(resource,
+		    tokenStart, tokenEnd, fullToken, isStringLiteral, false,
+		    manager, null));
 	} else {
-	    completions.add(new NewResourceBundleEntryProposal(resource, offset
-		    - stringLiteralStart.length(), false, manager, null));
+	    completions.add(new NewResourceBundleEntryProposal(resource,
+		    tokenStart, tokenEnd, fullToken, isStringLiteral, false,
+		    manager, null));
 	}
 	return completions;
     }
 
     protected List<ICompletionProposal> getResourceBundleCompletionProposals(
-	    int offset, String stringLiteralStart,
+	    int tokenStart, int tokenEnd, int tokenOffset,
+	    boolean isStringLiteral, String fullToken,
 	    ResourceBundleManager manager, ResourceAuditVisitor csav,
 	    IResource resource) {
+
 	List<ICompletionProposal> completions = new ArrayList<ICompletionProposal>();
-	IRegion region = csav.getKeyAt(new Long(offset));
+	IRegion region = csav.getKeyAt(new Long(tokenOffset));
 	String bundleName = csav.getBundleReference(region);
-	int posStart = offset - stringLiteralStart.length();
 	IMessagesBundleGroup bundleGroup = manager
 		.getResourceBundle(bundleName);
 
-	if (stringLiteralStart.length() > 0) {
+	if (fullToken.length() > 0) {
 	    boolean hit = false;
 	    // If a part of a String has already been entered
 	    for (String key : bundleGroup.getMessageKeys()) {
-		if (key.toLowerCase().startsWith(
-			stringLiteralStart.toLowerCase())) {
-		    if (!key.equals(stringLiteralStart))
-			completions.add(new MessageCompletionProposal(posStart,
-				stringLiteralStart.length(), key, false));
+		if (key.toLowerCase().startsWith(fullToken)) {
+		    if (key.equals(fullToken))
+			completions.add(new MessageCompletionProposal(
+				tokenStart, tokenEnd - tokenStart, key, false));
 		    else
 			hit = true;
 		}
 	    }
 	    if (!hit) {
 		completions.add(new NewResourceBundleEntryProposal(resource,
-			offset - stringLiteralStart.length(), true, manager,
-			bundleName/*
-				   * , csav.getDefinedResourceBundles (offset)
-				   */));
+			tokenStart, tokenEnd, fullToken, isStringLiteral, true,
+			manager, bundleName));
 
 		// TODO: reference to existing resource
 	    }
 	} else {
 	    for (String key : bundleGroup.getMessageKeys()) {
-		completions.add(new MessageCompletionProposal(posStart,
-			stringLiteralStart.length(), key, false));
+		completions.add(new MessageCompletionProposal(tokenStart,
+			tokenEnd - tokenStart, key, false));
 	    }
-	    completions
-		    .add(new NewResourceBundleEntryProposal(resource, offset
-			    - stringLiteralStart.length(), true, manager,
-			    bundleName/*
-				       * ,
-				       * csav.getDefinedResourceBundles(offset)
-				       */));
+	    completions.add(new NewResourceBundleEntryProposal(resource,
+		    tokenStart, tokenEnd, fullToken, isStringLiteral, true,
+		    manager, bundleName));
 
 	}
 	return completions;
