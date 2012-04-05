@@ -47,10 +47,15 @@ public class MessageCompletionProposalComputer implements
 	try {
 	    JavaContentAssistInvocationContext javaContext = ((JavaContentAssistInvocationContext) context);
 	    CompletionContext coreContext = javaContext.getCoreContext();
+
 	    int tokenStart = coreContext.getTokenStart();
 	    int tokenEnd = coreContext.getTokenEnd();
 	    int tokenOffset = coreContext.getOffset();
 	    boolean isStringLiteral = coreContext.getTokenKind() == CompletionContext.TOKEN_KIND_STRING_LITERAL;
+
+	    if (coreContext.getTokenKind() == CompletionContext.TOKEN_KIND_NAME
+		    && (tokenEnd + 1) - tokenStart > 0)
+		return completions;
 
 	    if (isStringLiteral)
 		tokenStart++;
@@ -69,8 +74,7 @@ public class MessageCompletionProposalComputer implements
 			tokenEnd - tokenStart);
 
 	    // Check if the string literal is up to be written within the
-	    // context
-	    // of a resource-bundle accessor method
+	    // context of a resource-bundle accessor method
 	    ResourceBundleManager manager = ResourceBundleManager
 		    .getManager(javaContext.getCompilationUnit().getResource()
 			    .getProject());
