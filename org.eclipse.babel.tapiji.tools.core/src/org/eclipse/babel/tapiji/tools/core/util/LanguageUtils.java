@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.StringBufferInputStream;
 import java.util.Locale;
 
-import org.eclipse.babel.editor.api.PropertiesGenerator;
+import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.core.resources.IContainer;
@@ -22,7 +22,7 @@ import org.eclipse.core.runtime.jobs.Job;
 
 
 public class LanguageUtils {
-	private static final String INITIALISATION_STRING = PropertiesGenerator.GENERATED_BY;
+	private static final String INITIALISATION_STRING = PropertiesSerializer.GENERATED_BY;
 	
 	
 	private static IFile createFile(IContainer container, String fileName, IProgressMonitor monitor) throws CoreException, IOException {

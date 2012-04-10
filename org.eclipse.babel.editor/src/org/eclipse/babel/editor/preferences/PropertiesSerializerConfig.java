@@ -9,10 +9,12 @@ import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.core.runtime.Preferences;
 
 /**
- * @author ala
- *
+ * The concrete implementation of {@link IPropertiesSerializerConfig}.
+ * 
+ * @author Alexej Strelzow
  */
 public class PropertiesSerializerConfig implements IPropertiesSerializerConfig {
+	//  Moved from MsgEditorPreferences, to make it more flexible.
 
     /** MsgEditorPreferences. */
     private static final Preferences PREFS = 

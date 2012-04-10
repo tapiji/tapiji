@@ -7,8 +7,18 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPage;
 
+/**
+ * Util class for editor operations.
+ * <br><br>
+ * 
+ * @author Alexej Strelzow
+ */
 public class EditorUtil {
 	
+	/**
+	 * @param page The {@link IWorkbenchPage}
+	 * @return The selected {@link IKeyTreeNode} of the page.
+	 */
     public static IKeyTreeNode getSelectedKeyTreeNode (IWorkbenchPage page) {
         MessagesEditor editor = (MessagesEditor)page.getActiveEditor();
         if (editor.getSelectedPage() instanceof I18NPage) {

@@ -14,7 +14,7 @@ import java.util.Set;
 
 import org.eclipse.babel.core.configuration.DirtyHack;
 import org.eclipse.babel.core.message.manager.RBManager;
-import org.eclipse.babel.editor.api.MessagesBundleFactory;
+import org.eclipse.babel.editor.api.MessageFactory;
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.builder.InternationalizationNature;
 import org.eclipse.babel.tapiji.tools.core.builder.StringLiteralAuditor;
@@ -228,7 +228,7 @@ public class ResourceBundleManager {
 	
 	public void unloadResourceBundle (String name) {
 		RBManager instance = RBManager.getInstance(project);
-		instance.deleteMessagesBundle(name);
+		instance.deleteMessagesBundleGroup(name);
 	}
 	
 	public IMessagesBundleGroup getResourceBundle (String name) {
@@ -699,7 +699,7 @@ public class ResourceBundleManager {
 			DirtyHack.setFireEnabled(false);
 			
 			IMessagesBundle messagesBundle = bundleGroup.getMessagesBundle(locale);
-			IMessage m = MessagesBundleFactory.createMessage(key, locale);
+			IMessage m = MessageFactory.createMessage(key, locale);
 			m.setText(message);
 			messagesBundle.addMessage(m);
 

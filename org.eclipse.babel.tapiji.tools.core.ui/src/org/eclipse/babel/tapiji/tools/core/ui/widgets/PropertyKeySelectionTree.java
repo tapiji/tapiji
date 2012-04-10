@@ -11,7 +11,7 @@ import org.eclipse.babel.core.configuration.DirtyHack;
 import org.eclipse.babel.core.message.manager.IMessagesEditorListener;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.api.KeyTreeFactory;
-import org.eclipse.babel.editor.api.MessagesBundleFactory;
+import org.eclipse.babel.editor.api.MessageFactory;
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.model.IResourceBundleChangedListener;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleChangedEvent;
@@ -353,7 +353,7 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
                                     
                                 	IMessage message = messagesBundle.getMessage(activeKey);
                                 	if (message == null) {
-                                		IMessage newMessage = MessagesBundleFactory.createMessage(activeKey, l);
+                                		IMessage newMessage = MessageFactory.createMessage(activeKey, l);
                                 		newMessage.setText(String.valueOf(value));
                                 		newMessage.setComment(comment);
                                 		messagesBundle.addMessage(newMessage);                                		

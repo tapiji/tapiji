@@ -1,5 +1,10 @@
 package org.eclipse.babel.core.message.resource.ser;
 
+/**
+ * Interface for the serialization process.
+ * 
+ * @author Alexej Strelzow
+ */
 public interface IPropertiesSerializerConfig {
 
     /** New Line Type: Default. */

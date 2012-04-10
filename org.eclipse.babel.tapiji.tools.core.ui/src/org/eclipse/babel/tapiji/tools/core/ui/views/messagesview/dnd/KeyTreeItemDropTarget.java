@@ -3,7 +3,7 @@ package org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.dnd;
 import org.eclipse.babel.core.configuration.DirtyHack;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.manager.RBManager;
-import org.eclipse.babel.editor.api.MessagesBundleFactory;
+import org.eclipse.babel.editor.api.MessageFactory;
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.provider.ResKeyTreeContentProvider;
 import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IAbstractKeyTreeModel;
@@ -45,7 +45,7 @@ public class KeyTreeItemDropTarget extends DropTargetAdapter {
  			IMessage[] messages = bundleGroup.getMessages(oldKey);			
  			for (IMessage message : messages) {
 				IMessagesBundle messagesBundle = bundleGroup.getMessagesBundle(message.getLocale());
-				IMessage m = MessagesBundleFactory.createMessage(newKey, message.getLocale());
+				IMessage m = MessageFactory.createMessage(newKey, message.getLocale());
 				m.setText(message.getValue());
 				m.setComment(message.getComment());
 				messagesBundle.addMessage(m);

@@ -9,11 +9,12 @@ import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.core.runtime.Preferences;
 
 /**
- * @author ala
- *
+ * The concrete implementation of {@link IPropertiesDeserializerConfig}.
+ * 
+ * @author Alexej Strelzow
  */
 public class PropertiesDeserializerConfig implements
-		IPropertiesDeserializerConfig {
+		IPropertiesDeserializerConfig { //  Moved from MsgEditorPreferences, to make it more flexible.
 
     /** MsgEditorPreferences. */
     private static final Preferences PREFS = 
