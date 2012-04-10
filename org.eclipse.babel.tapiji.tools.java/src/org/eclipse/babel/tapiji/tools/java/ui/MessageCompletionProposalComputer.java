@@ -28,6 +28,11 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
 public class MessageCompletionProposalComputer implements
 	IJavaCompletionProposalComputer {
 
+    private ResourceAuditVisitor csav;
+    private IResource resource;
+    private CompilationUnit cu;
+    private ResourceBundleManager manager;
+
     public MessageCompletionProposalComputer() {
 
     }
@@ -37,7 +42,6 @@ public class MessageCompletionProposalComputer implements
 	    ContentAssistInvocationContext context, IProgressMonitor monitor) {
 
 	List<ICompletionProposal> completions = new ArrayList<ICompletionProposal>();
-	ResourceAuditVisitor csav;
 
 	if (!InternationalizationNature
 		.hasNature(((JavaContentAssistInvocationContext) context)
@@ -75,17 +79,19 @@ public class MessageCompletionProposalComputer implements
 
 	    // Check if the string literal is up to be written within the
 	    // context of a resource-bundle accessor method
-	    ResourceBundleManager manager = ResourceBundleManager
-		    .getManager(javaContext.getCompilationUnit().getResource()
-			    .getProject());
 
-	    IResource resource = javaContext.getCompilationUnit().getResource();
+	    if (cu == null) {
+		manager = ResourceBundleManager.getManager(javaContext
+			.getCompilationUnit().getResource().getProject());
 
-	    csav = new ResourceAuditVisitor(null, manager);
+		resource = javaContext.getCompilationUnit().getResource();
 
-	    CompilationUnit cu = ASTutils.getCompilationUnit(resource);
+		csav = new ResourceAuditVisitor(null, manager);
 
-	    cu.accept(csav);
+		cu = ASTutils.getCompilationUnit(resource);
+
+		cu.accept(csav);
+	    }
 
 	    if (csav.getKeyAt(new Long(tokenOffset)) != null && isStringLiteral) {
 		completions.addAll(getResourceBundleCompletionProposals(
@@ -216,7 +222,10 @@ public class MessageCompletionProposalComputer implements
 
     @Override
     public void sessionEnded() {
-
+	cu = null;
+	csav = null;
+	resource = null;
+	manager = null;
     }
 
     @Override
