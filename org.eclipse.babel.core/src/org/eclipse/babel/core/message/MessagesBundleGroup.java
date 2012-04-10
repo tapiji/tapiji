@@ -79,7 +79,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 	    }
 	}
 
-	RBManager.getInstance(this.projectName).notifyMessagesBundleCreated(
+	RBManager.getInstance(this.projectName).notifyMessagesBundleGroupCreated(
 		this);
     }
 
@@ -101,7 +101,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 	    }
 	}
 
-	RBManager.getInstance(this.projectName).notifyMessagesBundleDeleted(
+	RBManager.getInstance(this.projectName).notifyMessagesBundleGroupDeleted(
 		this);
     }
 

@@ -1,6 +1,7 @@
 package org.eclipse.babel.core.configuration;
 
 /**
+ * Interface to TapiJI preference page.
  * 
  * @author Alexej Strelzow
  */
