@@ -86,7 +86,7 @@ public class MessageCompletionProposalComputer implements
 
 		resource = javaContext.getCompilationUnit().getResource();
 
-		csav = new ResourceAuditVisitor(null, manager);
+		csav = new ResourceAuditVisitor(null, manager.getProject().getName());
 
 		cu = ASTutils.getCompilationUnit(resource);
 
@@ -151,15 +151,15 @@ public class MessageCompletionProposalComputer implements
 	if (fullToken.length() == 0) {
 	    // If nothing has been entered
 	    completions.add(new InsertResourceBundleReferenceProposal(
-		    tokenStart, tokenEnd - tokenStart, manager, resource, csav
+		    tokenStart, tokenEnd - tokenStart, manager.getProject().getName(), resource, csav
 			    .getDefinedResourceBundles(tokenOffset)));
 	    completions.add(new NewResourceBundleEntryProposal(resource,
 		    tokenStart, tokenEnd, fullToken, isStringLiteral, false,
-		    manager, null));
+		    manager.getProject().getName(), null));
 	} else {
 	    completions.add(new NewResourceBundleEntryProposal(resource,
 		    tokenStart, tokenEnd, fullToken, isStringLiteral, false,
-		    manager, null));
+		    manager.getProject().getName(), null));
 	}
 	return completions;
     }
@@ -191,7 +191,7 @@ public class MessageCompletionProposalComputer implements
 	    if (!hit) {
 		completions.add(new NewResourceBundleEntryProposal(resource,
 			tokenStart, tokenEnd, fullToken, isStringLiteral, true,
-			manager, bundleName));
+			manager.getProject().getName(), bundleName));
 
 		// TODO: reference to existing resource
 	    }
@@ -202,7 +202,7 @@ public class MessageCompletionProposalComputer implements
 	    }
 	    completions.add(new NewResourceBundleEntryProposal(resource,
 		    tokenStart, tokenEnd, fullToken, isStringLiteral, true,
-		    manager, bundleName));
+		    manager.getProject().getName(), bundleName));
 
 	}
 	return completions;

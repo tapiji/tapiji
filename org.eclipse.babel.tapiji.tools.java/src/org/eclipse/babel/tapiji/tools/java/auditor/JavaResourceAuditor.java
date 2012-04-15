@@ -41,7 +41,7 @@ public class JavaResourceAuditor extends I18nResourceAuditor {
 	
 	ResourceAuditVisitor csav = new ResourceAuditVisitor(resource
 		.getProject().getFile(resource.getProjectRelativePath()),
-		ResourceBundleManager.getManager(resource.getProject()));
+		resource.getProject().getName());
 
 	// get a reference to the shared AST of the loaded CompilationUnit
 	CompilationUnit cu = ASTutils.getCompilationUnit(resource);
@@ -105,7 +105,7 @@ public class JavaResourceAuditor extends I18nResourceAuditor {
 	    if (manager.getResourceBundle(dataName) != null) {
 		String key = marker.getAttribute("key", "");
 
-		resolutions.add(new CreateResourceBundleEntry(key, manager,
+		resolutions.add(new CreateResourceBundleEntry(key,
 			dataName));
 		resolutions.add(new ReplaceResourceBundleReference(key,
 			dataName));

@@ -1,7 +1,6 @@
 package org.eclipse.babel.tapiji.tools.java.quickfix;
 
 import org.eclipse.babel.tapiji.tools.core.Logger;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
@@ -28,7 +27,6 @@ public class IgnoreStringFromInternationalization implements IMarkerResolution2 
 	@Override
 	public void run(IMarker marker) {
 		IResource resource = marker.getResource();
-		ResourceBundleManager manager = ResourceBundleManager.getManager(resource.getProject());
 		
 		CompilationUnit cu = ASTutils.getCompilationUnit(resource);
 		

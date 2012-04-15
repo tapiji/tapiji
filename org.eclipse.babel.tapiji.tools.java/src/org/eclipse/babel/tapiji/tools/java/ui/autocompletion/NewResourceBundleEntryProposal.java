@@ -2,6 +2,7 @@ package org.eclipse.babel.tapiji.tools.java.ui.autocompletion;
 
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
+import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog.DialogConfiguration;
 import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
@@ -20,31 +21,40 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
     private int endPos;
     private String value;
     private boolean bundleContext;
-    private ResourceBundleManager manager;
+    private String projectName;
     private IResource resource;
     private String bundleName;
     private String reference;
 
     public NewResourceBundleEntryProposal(IResource resource, int startPos,
 	    int endPos, String value, boolean isStringLiteral,
-	    boolean bundleContext, ResourceBundleManager manager,
+	    boolean bundleContext, String projectName,
 	    String bundleName) {
 
 	this.startPos = startPos;
 	this.endPos = endPos;
 	this.value = value;
 	this.bundleContext = bundleContext;
-	this.manager = manager;
+	this.projectName = projectName;
 	this.resource = resource;
 	this.bundleName = bundleName;
     }
 
     @Override
     public void apply(IDocument document) {
+	
 	CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
-		Display.getDefault().getActiveShell(), manager,
-		bundleContext ? value : "", bundleContext ? "" : value,
-		bundleName == null ? "" : bundleName, "");
+			Display.getDefault().getActiveShell());
+	
+	DialogConfiguration config = dialog.new DialogConfiguration();
+	config.setPreselectedKey(bundleContext ? value : "");
+	config.setPreselectedMessage(value);
+	config.setPreselectedBundle(bundleName == null ? "" : bundleName);
+	config.setPreselectedLocale("");
+	config.setProjectName(projectName);
+	
+	dialog.setDialogConfiguration(config);
+	
 	if (dialog.open() != InputDialog.OK)
 	    return;
 

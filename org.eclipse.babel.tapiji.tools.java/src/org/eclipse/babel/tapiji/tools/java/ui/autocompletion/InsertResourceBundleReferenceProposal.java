@@ -3,7 +3,6 @@ package org.eclipse.babel.tapiji.tools.java.ui.autocompletion;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.ResourceBundleEntrySelectionDialog;
 import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
 import org.eclipse.core.resources.IResource;
@@ -18,74 +17,75 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 public class InsertResourceBundleReferenceProposal implements
-	IJavaCompletionProposal {
+		IJavaCompletionProposal {
 
-    private int offset = 0;
-    private int length = 0;
-    private ResourceBundleManager manager;
-    private IResource resource;
-    private String reference;
+	private int offset = 0;
+	private int length = 0;
+	private IResource resource;
+	private String reference;
+	private String projectName;
 
-    public InsertResourceBundleReferenceProposal(int offset, int length,
-	    ResourceBundleManager manager, IResource resource,
-	    Collection<String> availableBundles) {
-	this.offset = offset;
-	this.length = length;
-	this.manager = manager;
-	this.resource = resource;
-    }
+	public InsertResourceBundleReferenceProposal(int offset, int length,
+			String projectName, IResource resource, Collection<String> availableBundles) {
+		this.offset = offset;
+		this.length = length;
+		this.resource = resource;
+		this.projectName = projectName;
+	}
 
-    @Override
-    public void apply(IDocument document) {
-	ResourceBundleEntrySelectionDialog dialog = new ResourceBundleEntrySelectionDialog(
-		Display.getDefault().getActiveShell(), manager, "");
-	if (dialog.open() != InputDialog.OK)
-	    return;
+	@Override
+	public void apply(IDocument document) {
+		ResourceBundleEntrySelectionDialog dialog = new ResourceBundleEntrySelectionDialog(
+				Display.getDefault().getActiveShell());
+		dialog.setProjectName(projectName);
 
-	String resourceBundleId = dialog.getSelectedResourceBundle();
-	String key = dialog.getSelectedResource();
-	Locale locale = dialog.getSelectedLocale();
+		if (dialog.open() != InputDialog.OK)
+			return;
 
-	reference = ASTutils.insertExistingBundleRef(document, resource,
-		offset, length, resourceBundleId, key, locale);
-    }
+		String resourceBundleId = dialog.getSelectedResourceBundle();
+		String key = dialog.getSelectedResource();
+		Locale locale = dialog.getSelectedLocale();
 
-    @Override
-    public String getAdditionalProposalInfo() {
-	// TODO Auto-generated method stub
-	return null;
-    }
+		reference = ASTutils.insertExistingBundleRef(document, resource,
+				offset, length, resourceBundleId, key, locale);
+	}
 
-    @Override
-    public IContextInformation getContextInformation() {
-	return null;
-    }
+	@Override
+	public String getAdditionalProposalInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public String getDisplayString() {
-	return "Insert reference to a localized string literal";
-    }
+	@Override
+	public IContextInformation getContextInformation() {
+		return null;
+	}
 
-    @Override
-    public Image getImage() {
-	return PlatformUI.getWorkbench().getSharedImages()
-		.getImageDescriptor(ISharedImages.IMG_OBJ_ADD).createImage();
-    }
+	@Override
+	public String getDisplayString() {
+		return "Insert reference to a localized string literal";
+	}
 
-    @Override
-    public Point getSelection(IDocument document) {
-	// TODO Auto-generated method stub
-	int referenceLength = reference == null ? 0 : reference.length();
-	return new Point(offset + referenceLength, 0);
-    }
+	@Override
+	public Image getImage() {
+		return PlatformUI.getWorkbench().getSharedImages()
+				.getImageDescriptor(ISharedImages.IMG_OBJ_ADD).createImage();
+	}
 
-    @Override
-    public int getRelevance() {
-	// TODO Auto-generated method stub
-	if (this.length == 0)
-	    return 97;
-	else
-	    return 1097;
-    }
+	@Override
+	public Point getSelection(IDocument document) {
+		// TODO Auto-generated method stub
+		int referenceLength = reference == null ? 0 : reference.length();
+		return new Point(offset + referenceLength, 0);
+	}
+
+	@Override
+	public int getRelevance() {
+		// TODO Auto-generated method stub
+		if (this.length == 0)
+			return 97;
+		else
+			return 1097;
+	}
 
 }

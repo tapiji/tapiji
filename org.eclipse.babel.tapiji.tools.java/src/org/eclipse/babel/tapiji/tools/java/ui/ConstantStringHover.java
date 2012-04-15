@@ -44,7 +44,7 @@ public class ConstantStringHover implements IJavaEditorTextHover {
 		);
 		
 		// determine the element at the position of the cursur
-		csf = new ResourceAuditVisitor(null, manager);
+		csf = new ResourceAuditVisitor(null, manager.getProject().getName());
 		cu.accept(csf);
 	}
 
