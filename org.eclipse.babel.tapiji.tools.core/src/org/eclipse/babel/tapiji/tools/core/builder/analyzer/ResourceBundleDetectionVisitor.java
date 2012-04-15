@@ -3,6 +3,7 @@ package org.eclipse.babel.tapiji.tools.core.builder.analyzer;
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.util.RBFileUtils;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
@@ -13,10 +14,10 @@ import org.eclipse.core.runtime.CoreException;
 public class ResourceBundleDetectionVisitor implements IResourceVisitor,
 		IResourceDeltaVisitor {
 
-	private ResourceBundleManager manager = null;
+	private IProject project = null;
 	
-	public ResourceBundleDetectionVisitor(ResourceBundleManager manager) {
-		this.manager = manager;
+	public ResourceBundleDetectionVisitor(IProject project) {
+		this.project = project;
 	}
 
 	@Override
@@ -24,11 +25,13 @@ public class ResourceBundleDetectionVisitor implements IResourceVisitor,
 		try {
 			if (RBFileUtils.isResourceBundleFile(resource)) {
 				Logger.logInfo("Loading Resource-Bundle file '" + resource.getName() + "'");
- 				if (!ResourceBundleManager.isResourceExcluded(resource))
-					manager.addBundleResource(resource);
+ 				if (!ResourceBundleManager.isResourceExcluded(resource)) {
+ 					ResourceBundleManager.getManager(project).addBundleResource(resource);
+ 				}
 				return false;
-			} else
+			} else {
 				return true;
+			}
 		} catch (Exception e) {
 			return false;
 		}

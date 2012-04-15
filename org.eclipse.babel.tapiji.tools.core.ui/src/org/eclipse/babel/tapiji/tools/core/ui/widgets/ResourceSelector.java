@@ -36,11 +36,11 @@ public class ResourceSelector  extends Composite {
 	public static final int DISPLAY_KEYS = 0;
 	public static final int DISPLAY_TEXT = 1;
 	
-	private Locale displayLocale;
+	private Locale displayLocale = null; // default
 	private int displayMode;
 	private String resourceBundle;
-	private ResourceBundleManager manager;
-	private boolean showTree;
+	private String projectName;
+	private boolean showTree = true;
 	
 	private TreeViewer viewer;
 	private TreeColumnLayout basicLayout;
@@ -52,24 +52,11 @@ public class ResourceSelector  extends Composite {
 	private StyledCellLabelProvider labelProvider;
 	
 	public ResourceSelector(Composite parent, 
-						    int style,
-						    ResourceBundleManager manager,
-						    String resourceBundle,
-						    int displayMode,
-						 	Locale displayLocale,
-						 	boolean showTree) {
+						    int style) {
 		super(parent, style);		
-		this.manager = manager;
-		this.resourceBundle = resourceBundle;
-		this.displayMode = displayMode;
-		this.displayLocale = displayLocale;
-		this.showTree = showTree;
-		this.treeType = showTree ? TreeType.Tree : TreeType.Flat;
-		
+
 		initLayout (this);
 		initViewer (this);
-		
-		updateViewer (true);
 	}
 
 	protected void updateContentProvider (IMessagesBundleGroup group) {
@@ -78,9 +65,13 @@ public class ResourceSelector  extends Composite {
 			treeType = TreeType.Flat;
 		} 
 		
+		ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
+		
 		IAbstractKeyTreeModel model = KeyTreeFactory.createModel(manager.getResourceBundle(resourceBundle));
-		((ResKeyTreeContentProvider)viewer.getContentProvider()).setBundleGroup(manager.getResourceBundle(resourceBundle));
-		((ResKeyTreeContentProvider)viewer.getContentProvider()).setTreeType(treeType);
+		ResKeyTreeContentProvider contentProvider = (ResKeyTreeContentProvider)viewer.getContentProvider();
+		contentProvider.setProjectName(manager.getProject().getName());
+		contentProvider.setBundleId(resourceBundle);
+		contentProvider.setTreeType(treeType);
         if (viewer.getInput() == null) {
         	viewer.setUseHashlookup(true);
         }
@@ -93,7 +84,7 @@ public class ResourceSelector  extends Composite {
 	}
 	
 	protected void updateViewer (boolean updateContent) {
-	    IMessagesBundleGroup group = manager.getResourceBundle(resourceBundle);
+	    IMessagesBundleGroup group = ResourceBundleManager.getManager(projectName).getResourceBundle(resourceBundle);
 	    
 		if (group == null)
 			return;
@@ -134,6 +125,7 @@ public class ResourceSelector  extends Composite {
 				ISelection selection = event.getSelection();
 				String selectionSummary = "";
 				String selectedKey = "";
+				ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
 				
 				if (selection instanceof IStructuredSelection) {
 					Iterator<IKeyTreeNode> itSel = ((IStructuredSelection) selection).iterator();
@@ -230,4 +222,20 @@ public class ResourceSelector  extends Composite {
 		}
 	}
 
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public boolean isShowTree() {
+		return showTree;
+	}
+
+	public void setShowTree(boolean showTree) {
+		if (this.showTree != showTree) {
+			this.showTree = showTree;
+			this.treeType = showTree ? TreeType.Tree : TreeType.Flat;
+			updateViewer(false);
+		}
+	}
+	
 }

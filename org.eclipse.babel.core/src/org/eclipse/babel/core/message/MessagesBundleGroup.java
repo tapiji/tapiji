@@ -278,12 +278,12 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
      * @param key
      *            message key
      */
-    @Override
-    public void addMessages(String key) {
-	for (IMessagesBundle msgBundle : localeBundles.values()) {
-	    ((MessagesBundle) msgBundle).addMessage(key);
+	@Override
+	public void addMessages(String key) {
+		for (IMessagesBundle msgBundle : localeBundles.values()) {
+			((MessagesBundle) msgBundle).addMessage(key);
+		}
 	}
-    }
 
     /**
      * Renames a key in all messages bundles forming this group.

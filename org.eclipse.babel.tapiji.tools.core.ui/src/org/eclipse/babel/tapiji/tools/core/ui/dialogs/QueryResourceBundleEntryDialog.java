@@ -300,7 +300,12 @@ public class QueryResourceBundleEntryDialog extends TitleAreaDialog {
 		lblKeys.setLayoutData(new GridData(GridData.END, GridData.BEGINNING, false, false, 1, 1));
 		lblKeys.setText("Resource:");
 		
-		resourceSelector = new ResourceSelector (group, SWT.NONE, manager, cmbRB.getText(), searchOption, null, true);
+		resourceSelector = new ResourceSelector (group, SWT.NONE);
+		
+		resourceSelector.setProjectName(manager.getProject().getName());
+		resourceSelector.setResourceBundle(cmbRB.getText());
+		resourceSelector.setDisplayMode(searchOption);
+		
 		GridData resourceSelectionData = new GridData(GridData.FILL, GridData.CENTER, true, false, 1, 1);
 		resourceSelectionData.heightHint = 150;
 		resourceSelectionData.widthHint = 400;

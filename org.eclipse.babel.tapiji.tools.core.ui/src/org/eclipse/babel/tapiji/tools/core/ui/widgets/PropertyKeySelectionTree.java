@@ -18,6 +18,7 @@ import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleChangedEv
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.model.view.SortInfo;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
+import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog.DialogConfiguration;
 import org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.dnd.KeyTreeItemDropTarget;
 import org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.dnd.MessagesDragSource;
 import org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.dnd.MessagesDropTarget;
@@ -77,10 +78,9 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
     private final int KEY_COLUMN_WEIGHT = 1;
     private final int LOCALE_COLUMN_WEIGHT = 1;
 
-    private ResourceBundleManager manager;
-    private String resourceBundle;
     private List<Locale> visibleLocales = new ArrayList<Locale>();
     private boolean editable;
+    private String resourceBundle;
 
     private IWorkbenchPartSite site;
     private TreeColumnLayout basicLayout;
@@ -110,15 +110,16 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
 
     /*** LISTENERS ***/
     private ISelectionChangedListener selectionChangedListener;
+	private String projectName;
 
     public PropertyKeySelectionTree(IViewSite viewSite, IWorkbenchPartSite site, Composite parent, int style,
             String projectName, String resources, List<Locale> locales) {
         super(parent, style);
         this.site = site;
-        resourceBundle = resources;
+        this.resourceBundle = resources;
+        this.projectName = projectName;
 
         if (resourceBundle != null && resourceBundle.trim().length() > 0) {
-            manager = ResourceBundleManager.getManager(projectName);
             if (locales == null)
                 initVisibleLocales();
             else
@@ -186,8 +187,8 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
     protected void initTreeViewer() {
         this.setRedraw(false);
         // init content provider
-        contentProvider = new ResKeyTreeContentProvider(manager.getResourceBundle(resourceBundle), visibleLocales,
-                manager, resourceBundle, treeType);
+        contentProvider = new ResKeyTreeContentProvider(visibleLocales,
+                projectName, resourceBundle, treeType);
         treeViewer.setContentProvider(contentProvider);
 
         // init label provider
@@ -225,7 +226,7 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
     }
 
     public void setTreeStructure() {
-        IAbstractKeyTreeModel model = KeyTreeFactory.createModel(manager.getResourceBundle(resourceBundle));
+        IAbstractKeyTreeModel model = KeyTreeFactory.createModel(ResourceBundleManager.getManager(projectName).getResourceBundle(resourceBundle));
         if (treeViewer.getInput() == null) {
             treeViewer.setUseHashlookup(true);
         }
@@ -236,12 +237,15 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
     }
 
     protected void refreshContent(ResourceBundleChangedEvent event) {
-        if (visibleLocales == null)
+        if (visibleLocales == null) {
             initVisibleLocales();
+        }
+        ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
 
         // update content provider
         contentProvider.setLocales(visibleLocales);
-        contentProvider.setBundleGroup(manager.getResourceBundle(resourceBundle));
+        contentProvider.setProjectName(manager.getProject().getName());
+        contentProvider.setBundleId(resourceBundle);
 
         // init label provider
         IMessagesBundleGroup group = manager.getResourceBundle(resourceBundle);
@@ -255,6 +259,7 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
 
     protected void initVisibleLocales() {
         SortedMap<String, Locale> locSorted = new TreeMap<String, Locale>();
+        ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
         sortInfo = new SortInfo();
         visibleLocales.clear();
         if (resourceBundle != null) {
@@ -320,6 +325,7 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
         basicLayout.setColumnData(keyColumn, new ColumnWeightData(KEY_COLUMN_WEIGHT));
 
         if (visibleLocales != null) {
+        	final ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
             for (final Locale l : visibleLocales) {
                 TreeColumn col = new TreeColumn(tree, SWT.NONE);
 
@@ -466,7 +472,7 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
         //KeyTreeItemDragSource ktiSource = new KeyTreeItemDragSource (treeViewer);
         KeyTreeItemDropTarget ktiTarget = new KeyTreeItemDropTarget(treeViewer);
         MessagesDragSource source = new MessagesDragSource(treeViewer, this.resourceBundle);
-        MessagesDropTarget target = new MessagesDropTarget(treeViewer, manager, resourceBundle);
+        MessagesDropTarget target = new MessagesDropTarget(treeViewer, projectName, resourceBundle);
 
         // Initialize drag source for copy event
         DragSource dragSource = new DragSource(treeViewer.getControl(), DND.DROP_COPY | DND.DROP_MOVE);
@@ -508,6 +514,7 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
     protected void registerListeners() {
 
     	this.editorListener = new MessagesEditorListener();
+    	ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
     	if (manager != null) {
     		RBManager.getInstance(manager.getProject()).addMessagesEditorListener(editorListener);
     	}
@@ -523,6 +530,7 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
     }
 
     protected void unregisterListeners() {
+    	ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
     	if (manager != null) {
     		RBManager.getInstance(manager.getProject()).removeMessagesEditorListener(editorListener);
     	}
@@ -611,10 +619,6 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
         return visibleLocales;
     }
 
-    public ResourceBundleManager getManager() {
-        return this.manager;
-    }
-
     public String getResourceBundle() {
         return resourceBundle;
     }
@@ -630,6 +634,7 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
     		}
     	}
     	
+    	ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
         EditorUtils.openEditor(site.getPage(), manager.getRandomFile(resourceBundle),
                 EditorUtils.RESOURCE_BUNDLE_EDITOR, key);
     }
@@ -649,6 +654,7 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
         }
 
         try {
+        	ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
             manager.removeResourceBundleEntry(getResourceBundle(), keys);
         } catch (Exception ex) {
             Logger.logError(ex);
@@ -676,9 +682,18 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
             }
         }
 
-        CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(Display.getDefault()
-                .getActiveShell(), manager, newKeyPrefix.trim().length() > 0 ? newKeyPrefix + "." + "[Platzhalter]"
-                : "", "", getResourceBundle(), "");
+		CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
+				Display.getDefault().getActiveShell());
+		
+		DialogConfiguration config = dialog.new DialogConfiguration();
+		config.setPreselectedKey(newKeyPrefix.trim().length() > 0 ? newKeyPrefix + "." + "[Platzhalter]" : "");
+		config.setPreselectedMessage("");
+		config.setPreselectedBundle(getResourceBundle());
+		config.setPreselectedLocale("");
+		config.setProjectName(projectName);
+		
+		dialog.setDialogConfiguration(config);
+		
         if (dialog.open() != InputDialog.OK)
             return;
     }

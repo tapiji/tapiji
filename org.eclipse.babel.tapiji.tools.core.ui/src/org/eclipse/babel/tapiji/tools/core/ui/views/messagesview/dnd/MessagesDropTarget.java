@@ -1,7 +1,7 @@
 package org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.dnd;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
+import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog.DialogConfiguration;
 import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -13,14 +13,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TreeItem;
 
 public class MessagesDropTarget extends DropTargetAdapter {
-	private final TreeViewer target;
-	private final ResourceBundleManager manager;
+	private final String projectName;
 	private String bundleName;
 	
-	public MessagesDropTarget (TreeViewer viewer, ResourceBundleManager manager, String bundleName) {
+	public MessagesDropTarget (TreeViewer viewer, String projectName, String bundleName) {
 		super();
-		target = viewer;
-		this.manager = manager;
+		this.projectName = projectName;
 		this.bundleName = bundleName;
 	}
 	
@@ -43,13 +41,17 @@ public class MessagesDropTarget extends DropTargetAdapter {
 			String message = (String)event.data;
 			
 			CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
-					Display.getDefault().getActiveShell(),
-					manager,
-					newKeyPrefix.trim().length() > 0 ? newKeyPrefix + "." + "[Platzhalter]" : "",
-					message,
-					bundleName,
-					""
-				);
+					Display.getDefault().getActiveShell());
+			
+			DialogConfiguration config = dialog.new DialogConfiguration();
+			config.setPreselectedKey(newKeyPrefix.trim().length() > 0 ? newKeyPrefix + "." + "[Platzhalter]" : "");
+			config.setPreselectedMessage(message);
+			config.setPreselectedBundle(bundleName);
+			config.setPreselectedLocale("");
+			config.setProjectName(projectName);
+			
+			dialog.setDialogConfiguration(config);
+			
 			if (dialog.open() != InputDialog.OK)
 				return;
 		} else

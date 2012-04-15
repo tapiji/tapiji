@@ -7,12 +7,10 @@ import java.util.Locale;
 
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.api.KeyTreeFactory;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IAbstractKeyTreeModel;
 import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
 import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeVisitor;
 import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
 import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.TreeType;
@@ -30,28 +28,26 @@ public class ResKeyTreeContentProvider implements ITreeContentProvider {
     
     private TreeType treeType = TreeType.Tree;
     
-    /** Represents empty objects. */
-    private static Object[] EMPTY_ARRAY = new Object[0];
     /** Viewer this provided act upon. */
     protected TreeViewer treeViewer;
     
-	private IMessagesBundleGroup bundle;
 	private List<Locale> locales;
-	private ResourceBundleManager manager;
 	private String bundleId;
+	private String projectName;
 	
-	
-	public ResKeyTreeContentProvider (IMessagesBundleGroup iBundleGroup, List<Locale> locales, 
-	                                  ResourceBundleManager manager, String bundleId, TreeType treeType) {
-		this.bundle = iBundleGroup;
+	public ResKeyTreeContentProvider (List<Locale> locales, String projectName, String bundleId, TreeType treeType) {
 		this.locales = locales;
-		this.manager = manager;
+		this.projectName = projectName;
 		this.bundleId = bundleId;
 		this.treeType = treeType;
 	}
 	
-	public void setBundleGroup (IMessagesBundleGroup iBundleGroup) {
-		this.bundle = iBundleGroup;
+	public void setBundleId (String bundleId) {
+		this.bundleId = bundleId;
+	}
+	
+	public void setProjectName (String projectName) {
+		this.projectName = projectName;
 	}
 		
 	public ResKeyTreeContentProvider() {
@@ -64,14 +60,6 @@ public class ResKeyTreeContentProvider implements ITreeContentProvider {
 	
 	@Override
 	public Object[] getChildren(Object parentElement) {
-	    // brauche sie als VKTI
-//	    if(parentElement instanceof IAbstractKeyTreeModel) {
-//            IAbstractKeyTreeModel model = (IAbstractKeyTreeModel) parentElement;
-//            return convertKTItoVKTI(model.getRootNodes()); 
-//	    } else if (parentElement instanceof IValuedKeyTreeNode) { // convert because we hold the children as IKeyTreeNodes
-//	        return convertKTItoVKTI(((IValuedKeyTreeNode) parentElement).getChildren());
-//        } 
-	    //new code
 	    IKeyTreeNode parentNode = (IKeyTreeNode) parentElement;
         switch (treeType) {
         case Tree:
@@ -82,13 +70,11 @@ public class ResKeyTreeContentProvider implements ITreeContentProvider {
             // Should not happen
             return new IKeyTreeNode[0];
         }
-	    //new code
-//        return EMPTY_ARRAY;
 	}
 	
 	protected Object[] convertKTItoVKTI (Object[] children) {
 		Collection<IValuedKeyTreeNode> items = new ArrayList<IValuedKeyTreeNode>();
-		IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(bundle.getProjectName()).getMessagesBundleGroup(bundle.getResourceBundleId());
+		IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(this.projectName).getMessagesBundleGroup(this.bundleId);
 		
 		for (Object o : children) {
 			if (o instanceof IValuedKeyTreeNode)
@@ -119,7 +105,6 @@ public class ResKeyTreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(Object inputElement) {
-//		return getChildren(inputElement);
 	    switch (treeType) {
 	        case Tree:
 	            return convertKTItoVKTI(keyTreeModel.getRootNodes());
@@ -143,22 +128,6 @@ public class ResKeyTreeContentProvider implements ITreeContentProvider {
 
 	@Override
     public Object getParent(Object element) {
-//        Object[] parent = new Object[1];
-//        
-//        if(element instanceof IKeyTreeNode) {
-//            return ((IKeyTreeNode) element).getParent();
-//        }
-//
-//        if (parent[0] == null)
-//            return null;
-//
-//        Object[] result = convertKTItoVKTI(parent);
-//        if (result.length > 0)
-//            return result[0];
-//        else
-//            return null;
-	    
-	    // new code
 	    IKeyTreeNode node = (IKeyTreeNode) element;
         switch (treeType) {
         case Tree:
@@ -169,16 +138,12 @@ public class ResKeyTreeContentProvider implements ITreeContentProvider {
             // Should not happen
             return null;
         }
-	    // new code
 	}
 	
 	 /**
      * @see ITreeContentProvider#hasChildren(Object)
      */
     public boolean hasChildren(Object element) {
-//        return countChildren(element) > 0;
-        
-        // new code
         switch (treeType) {
             case Tree:
                 return keyTreeModel.getChildren((IKeyTreeNode) element).length > 0;
@@ -188,7 +153,6 @@ public class ResKeyTreeContentProvider implements ITreeContentProvider {
                 // Should not happen
                 return false;
          }
-        // new code
     }
     
     public int countChildren(Object element) {
@@ -219,13 +183,9 @@ public class ResKeyTreeContentProvider implements ITreeContentProvider {
     }
 	
 	public IMessagesBundleGroup getBundle() {
-		return RBManager.getInstance(manager.getProject()).getMessagesBundleGroup(bundle.getResourceBundleId());
+		return RBManager.getInstance(projectName).getMessagesBundleGroup(this.bundleId);
 	}
 
-	public ResourceBundleManager getManager() {
-		return manager;
-	}
-	
 	public String getBundleId() {
 		return bundleId;
 	}

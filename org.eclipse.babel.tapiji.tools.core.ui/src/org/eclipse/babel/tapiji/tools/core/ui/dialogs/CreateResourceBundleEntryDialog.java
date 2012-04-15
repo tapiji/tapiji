@@ -34,8 +34,7 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 	
 	private static final String DEFAULT_KEY = "defaultkey";
 	
-	private ResourceBundleManager manager;
-	private Collection<String> availableBundles;
+	private String projectName;
 	
 	private Text txtKey;
 	private Combo cmbRB;
@@ -54,22 +53,63 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 	/*** MODIFY LISTENER ***/
 	ModifyListener rbModifyListener;
 	
-	public CreateResourceBundleEntryDialog(Shell parentShell, 
-									  	   ResourceBundleManager manager, 
-									  	   String preselectedKey,
-									  	   String preselectedMessage,
-									  	   String preselectedBundle,
-									  	   String preselectedLocale) {
+	public class DialogConfiguration {
+
+		String projectName;
+		
+		String preselectedKey;
+		String preselectedMessage;
+		String preselectedBundle;
+		String preselectedLocale;
+		
+		public String getProjectName() {
+			return projectName;
+		}
+		public void setProjectName(String projectName) {
+			this.projectName = projectName;
+		}
+		public String getPreselectedKey() {
+			return preselectedKey;
+		}
+		public void setPreselectedKey(String preselectedKey) {
+			this.preselectedKey = preselectedKey;
+		}
+		public String getPreselectedMessage() {
+			return preselectedMessage;
+		}
+		public void setPreselectedMessage(String preselectedMessage) {
+			this.preselectedMessage = preselectedMessage;
+		}
+		public String getPreselectedBundle() {
+			return preselectedBundle;
+		}
+		public void setPreselectedBundle(String preselectedBundle) {
+			this.preselectedBundle = preselectedBundle;
+		}
+		public String getPreselectedLocale() {
+			return preselectedLocale;
+		}
+		public void setPreselectedLocale(String preselectedLocale) {
+			this.preselectedLocale = preselectedLocale;
+		}
+		
+	}
+	
+	public CreateResourceBundleEntryDialog(Shell parentShell) {
 		super(parentShell);
-		this.manager = manager;
-		this.availableBundles = manager.getResourceBundleNames();
+	}
+	
+	public void setDialogConfiguration(DialogConfiguration config) {
+		String preselectedKey = config.getPreselectedKey();
 		this.selectedKey = preselectedKey != null ? preselectedKey.trim() : preselectedKey;
-		if (this.selectedKey.equals("")) {
+		if ("".equals(this.selectedKey)) {
 			this.selectedKey = DEFAULT_KEY;
 		}
-		this.selectedDefaultText = preselectedMessage;
-		this.selectedRB = preselectedBundle;
-		this.selectedLocale = preselectedLocale;
+		
+		this.selectedDefaultText = config.getPreselectedMessage();
+		this.selectedRB = config.getPreselectedBundle();
+		this.selectedLocale = config.getPreselectedLocale();
+		this.projectName = config.getProjectName();
 	}
 
 	public String getSelectedResourceBundle () {
@@ -94,6 +134,8 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 		cmbRB.removeAll();
 		int iSel = -1;
 		int index = 0;
+		
+		Collection<String> availableBundles = ResourceBundleManager.getManager(projectName).getResourceBundleNames();
 		
 		for (String bundle : availableBundles) {
 			cmbRB.add(bundle);
@@ -146,8 +188,11 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 		cmbLanguage.removeAll();
 		String selectedBundle = cmbRB.getText();
 		
-		if (selectedBundle.trim().equals(""))
+		if ("".equals(selectedBundle.trim())) {
 			return;
+		}
+		
+		ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
 		
 		// Retrieve available locales for the selected resource-bundle
 		Set<Locale> locales = manager.getProvidedLocales(selectedBundle);
@@ -287,7 +332,7 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 	protected void okPressed() {
 		super.okPressed();
 		// TODO debug
-		
+		ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
 		// Insert new Resource-Bundle reference
 		Locale locale = LocaleUtils.getLocaleByDisplayName( manager.getProvidedLocales(selectedRB), selectedLocale); // new Locale(""); // retrieve locale
 		
@@ -321,9 +366,10 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 		boolean keyValidChar = ResourceUtils.isValidResourceKey(selectedKey);
 		boolean rbValid = false;
 		boolean textValid = false;
+		ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
 		boolean localeValid = LocaleUtils.containsLocaleByDisplayName(manager.getProvidedLocales(selectedRB), selectedLocale);
 		
-		for (String rbId : this.availableBundles) {
+		for (String rbId : manager.getResourceBundleNames()) {
 			if (rbId.equals(selectedRB)) {
 				rbValid = true;
 				break;

@@ -112,8 +112,8 @@ public class ResourceBundleManager {
 		if (manager == null) {
 			manager = new ResourceBundleManager();
 			manager.project = project;
-			manager.detectResourceBundles();
 			rbmanager.put(project, manager);
+			manager.detectResourceBundles();
 			
 		}
 		return manager;
@@ -297,12 +297,12 @@ public class ResourceBundleManager {
 	
 	protected void detectResourceBundles () {
 		try {		
-			project.accept(new ResourceBundleDetectionVisitor(this));
+			project.accept(new ResourceBundleDetectionVisitor(getProject()));
 			
 			IProject[] fragments = FragmentProjectUtils.lookupFragment(project);
 			if (fragments != null){
 				for (IProject p :  fragments){
-					p.accept(new ResourceBundleDetectionVisitor(this));
+					p.accept(new ResourceBundleDetectionVisitor(getProject()));
 				}
 			}
 		} catch (CoreException e) {

@@ -1,6 +1,5 @@
 package org.eclipse.babel.tapiji.tools.core.ui.dialogs;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
@@ -34,8 +33,9 @@ public class ResourceBundleEntrySelectionDialog extends TitleAreaDialog {
 	private static int SEARCH_FULLTEXT = 0;
 	private static int SEARCH_KEY = 1;
 	
-	private ResourceBundleManager manager;
-	private Collection<String> availableBundles;
+	private String projectName;
+	private String bundleName;
+	
 	private int searchOption  = SEARCH_FULLTEXT;
 	private String resourceBundle = "";
 	
@@ -57,12 +57,8 @@ public class ResourceBundleEntrySelectionDialog extends TitleAreaDialog {
 	private String selectedKey = "";
 	
 	
-	public ResourceBundleEntrySelectionDialog(Shell parentShell, ResourceBundleManager manager, String bundleName) {
+	public ResourceBundleEntrySelectionDialog(Shell parentShell) {
 		super(parentShell);
-		this.manager = manager;
-		// init available resource bundles
-		this.availableBundles = manager.getResourceBundleNames();
-		this.preselectedRB = bundleName;
 	}
 
 	@Override
@@ -78,7 +74,7 @@ public class ResourceBundleEntrySelectionDialog extends TitleAreaDialog {
 		// init available resource bundles
 		cmbRB.removeAll();
 		int i = 0;
-		for (String bundle : availableBundles) {
+		for (String bundle : ResourceBundleManager.getManager(projectName).getResourceBundleNames()) {
 			cmbRB.add(bundle);
 			if (bundle.equals(preselectedRB)) {
 				cmbRB.select(i);
@@ -87,7 +83,7 @@ public class ResourceBundleEntrySelectionDialog extends TitleAreaDialog {
 			i++;
 		}
 		
-		if (availableBundles.size() > 0) {
+		if (ResourceBundleManager.getManager(projectName).getResourceBundleNames().size() > 0) {
 			if (preselectedRB.trim().length() == 0) {
 				cmbRB.select(0);
 				cmbRB.setEnabled(true);
@@ -141,7 +137,7 @@ public class ResourceBundleEntrySelectionDialog extends TitleAreaDialog {
 			return;
 		
 		// Retrieve available locales for the selected resource-bundle
-		Set<Locale> locales = manager.getProvidedLocales(selectedBundle);
+		Set<Locale> locales = ResourceBundleManager.getManager(projectName).getProvidedLocales(selectedBundle);
 		for (Locale l : locales) {
 			String displayName = l.getDisplayName();
 			if (displayName.equals(""))
@@ -161,7 +157,7 @@ public class ResourceBundleEntrySelectionDialog extends TitleAreaDialog {
 		if (selectedBundle.trim().equals(""))
 			return;
 		
-		Set<Locale> locales = manager.getProvidedLocales(selectedBundle);
+		Set<Locale> locales = ResourceBundleManager.getManager(projectName).getProvidedLocales(selectedBundle);
 		Iterator<Locale> it = locales.iterator();
 		String selectedLocale = cmbLanguage.getText();
 		while (it.hasNext()) {
@@ -299,7 +295,12 @@ public class ResourceBundleEntrySelectionDialog extends TitleAreaDialog {
 		lblKeys.setLayoutData(new GridData(GridData.END, GridData.BEGINNING, false, false, 1, 1));
 		lblKeys.setText("Resource:");
 		
-		resourceSelector = new ResourceSelector (group, SWT.NONE, manager, cmbRB.getText(), searchOption, null, true);
+		resourceSelector = new ResourceSelector (group, SWT.NONE);
+		
+		resourceSelector.setProjectName(projectName);
+		resourceSelector.setResourceBundle(cmbRB.getText());
+		resourceSelector.setDisplayMode(searchOption);
+		
 		GridData resourceSelectionData = new GridData(GridData.FILL, GridData.CENTER, true, false, 1, 1);
 		resourceSelectionData.heightHint = 150;
 		resourceSelectionData.widthHint = 400;
@@ -355,7 +356,7 @@ public class ResourceBundleEntrySelectionDialog extends TitleAreaDialog {
 		boolean localeValid = false;
 		boolean keyValid = false;
 		
-		for (String rbId : this.availableBundles) {
+		for (String rbId : ResourceBundleManager.getManager(projectName).getResourceBundleNames()) {
 			if (rbId.equals(selectedRB)) {
 				rbValid = true;
 				break;
@@ -365,7 +366,7 @@ public class ResourceBundleEntrySelectionDialog extends TitleAreaDialog {
 		if (selectedLocale != null) 
 			localeValid = true;
 		
-		if (manager.isResourceExisting(selectedRB, selectedKey))
+		if (ResourceBundleManager.getManager(projectName).isResourceExisting(selectedRB, selectedKey))
 			keyValid = true;
 		
 		// print Validation summary
@@ -419,5 +420,17 @@ public class ResourceBundleEntrySelectionDialog extends TitleAreaDialog {
 	
 	public Locale getSelectedLocale () {
 		return selectedLocale;
+	}
+	
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	
+	public void setBundleName(String bundleName) {
+		this.bundleName = bundleName;
+		
+		if (preselectedRB.isEmpty()) {
+			preselectedRB = this.bundleName;
+		}
 	}
 }

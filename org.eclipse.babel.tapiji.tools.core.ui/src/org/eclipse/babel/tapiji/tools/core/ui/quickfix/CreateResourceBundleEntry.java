@@ -2,8 +2,8 @@ package org.eclipse.babel.tapiji.tools.core.ui.quickfix;
 
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.builder.StringLiteralAuditor;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
+import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog.DialogConfiguration;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
@@ -23,7 +23,7 @@ public class CreateResourceBundleEntry implements IMarkerResolution2 {
 	private String key;
 	private String bundleId;
 	
-	public CreateResourceBundleEntry (String key, ResourceBundleManager manager, String bundleId) {
+	public CreateResourceBundleEntry (String key, String bundleId) {
 		this.key = key;
 		this.bundleId = bundleId;
 	}
@@ -58,12 +58,18 @@ public class CreateResourceBundleEntry implements IMarkerResolution2 {
 			IDocument document = textFileBuffer.getDocument(); 
 			
 			CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
-					Display.getDefault().getActiveShell(),
-					ResourceBundleManager.getManager(resource.getProject()),
-					key != null ? key : "",
-					"",
-					bundleId,
-					"");
+					Display.getDefault().getActiveShell());
+			
+			DialogConfiguration config = dialog.new DialogConfiguration();
+			config.setPreselectedKey(key != null ? key : "");
+			config.setPreselectedMessage("");
+			config.setPreselectedBundle(bundleId);
+			config.setPreselectedLocale("");
+			config.setProjectName(resource.getProject().getName());
+			
+			dialog.setDialogConfiguration(config);
+			
+			
 			if (dialog.open() != InputDialog.OK)
 				return;
 		} catch (Exception e) {
