@@ -2,7 +2,6 @@ package quickfix;
 
 import java.util.Locale;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.ResourceBundleEntrySelectionDialog;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
@@ -63,9 +62,11 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 			IDocument document = textFileBuffer.getDocument();
 
 			ResourceBundleEntrySelectionDialog dialog = new ResourceBundleEntrySelectionDialog(
-					Display.getDefault().getActiveShell(),
-					ResourceBundleManager.getManager(resource.getProject()),
-					bundleId);
+					Display.getDefault().getActiveShell());
+			
+			dialog.setProjectName(resource.getProject().getName());
+			dialog.setBundleName(bundleId);
+			
 			if (dialog.open() != InputDialog.OK)
 				return;
 

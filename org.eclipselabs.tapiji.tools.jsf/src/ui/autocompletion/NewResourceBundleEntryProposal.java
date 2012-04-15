@@ -2,6 +2,7 @@ package ui.autocompletion;
 
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
+import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog.DialogConfiguration;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -38,16 +39,22 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 
 	@Override
 	public void apply(IDocument document) {
-		CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
-				Display.getDefault().getActiveShell(),
-				manager,
-				isKey ? value : "",
-				!isKey ? value : "",
-				bundleName == null ? "" : bundleName,
-				"");
-		if (dialog.open() != InputDialog.OK)
-			return;
 		
+		CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
+				Display.getDefault().getActiveShell());
+		
+		DialogConfiguration config = dialog.new DialogConfiguration();
+		config.setPreselectedKey(isKey ? value : "");
+		config.setPreselectedMessage(!isKey ? value : "");
+		config.setPreselectedBundle(bundleName == null ? "" : bundleName);
+		config.setPreselectedLocale("");
+		config.setProjectName(resource.getProject().getName());
+		
+		dialog.setDialogConfiguration(config);
+		
+		if (dialog.open() != InputDialog.OK) {
+			return;
+		}
 		
 		String resourceBundleId = dialog.getSelectedResourceBundle();
 		String key = dialog.getSelectedKey();

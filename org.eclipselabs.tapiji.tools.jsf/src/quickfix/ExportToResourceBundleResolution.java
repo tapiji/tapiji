@@ -1,7 +1,7 @@
 package quickfix;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
+import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog.DialogConfiguration;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
@@ -53,12 +53,19 @@ public class ExportToResourceBundleResolution implements IMarkerResolution2 {
 		    .getTextFileBuffer(path);
 	    IDocument document = textFileBuffer.getDocument();
 
-	    CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
-		    Display.getDefault().getActiveShell(),
-		    ResourceBundleManager.getManager(resource.getProject()),
-		    "",
-		    (startPos < document.getLength() && endPos > 1) ? document
-			    .get(startPos, endPos) : "", "", "");
+		CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
+				Display.getDefault().getActiveShell());
+		
+		DialogConfiguration config = dialog.new DialogConfiguration();
+		config.setPreselectedKey("");
+		config.setPreselectedMessage("");
+		config.setPreselectedBundle((startPos < document.getLength() && endPos > 1) ? document
+			    .get(startPos, endPos) : "");
+		config.setPreselectedLocale("");
+		config.setProjectName(resource.getProject().getName());
+	    
+		dialog.setDialogConfiguration(config);
+		
 	    if (dialog.open() != InputDialog.OK)
 		return;
 

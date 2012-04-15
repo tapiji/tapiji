@@ -74,7 +74,7 @@ public class JSFResourceAuditor extends I18nResourceAuditor {
 				if (manager.getResourceBundle(dataName) != null) {
 					String key = marker.getAttribute("key", "");
 					
-					resolutions.add(new CreateResourceBundleEntry(key, manager, dataName));
+					resolutions.add(new CreateResourceBundleEntry(key, dataName));
 					resolutions.add(new ReplaceResourceBundleReference(key, dataName));
 					resolutions.add(new ReplaceResourceBundleDefReference(dataName, dataStart, dataEnd));
 				} else {
