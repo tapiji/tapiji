@@ -8,7 +8,7 @@
          id="I18NBuilder"
          point="org.eclipse.core.resources.builders">
       <builder hasNature="true">
-         <run class="org.eclipse.babel.tapiji.tools.core.builder.StringLiteralAuditor" />
+         <run class="org.eclipse.babel.tapiji.tools.core.builder.I18nBuilder" />
       </builder>
    </extension>
    

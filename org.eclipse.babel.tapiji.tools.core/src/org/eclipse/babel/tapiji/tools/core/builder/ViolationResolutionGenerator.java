@@ -14,28 +14,28 @@ public class ViolationResolutionGenerator implements
 
     @Override
     public boolean hasResolutions(IMarker marker) {
-    	return true;
+	return true;
     }
 
     @Override
     public IMarkerResolution[] getResolutions(IMarker marker) {
-	
-	    EditorUtils.updateMarker(marker);
-	       
-		String contextId = marker.getAttribute("context", "");
-	
-		// find resolution generator for the given context
-		try {
-		    I18nAuditor auditor = StringLiteralAuditor
-			    .getI18nAuditorByContext(contextId);
-		    List<IMarkerResolution> resolutions = auditor
-			    .getMarkerResolutions(marker);
-		    return resolutions
-			    .toArray(new IMarkerResolution[resolutions.size()]);
-		} catch (NoSuchResourceAuditorException e) {
-		}
-	
-		return new IMarkerResolution[0];
+
+	EditorUtils.updateMarker(marker);
+
+	String contextId = marker.getAttribute("context", "");
+
+	// find resolution generator for the given context
+	try {
+	    I18nAuditor auditor = I18nBuilder
+		    .getI18nAuditorByContext(contextId);
+	    List<IMarkerResolution> resolutions = auditor
+		    .getMarkerResolutions(marker);
+	    return resolutions
+		    .toArray(new IMarkerResolution[resolutions.size()]);
+	} catch (NoSuchResourceAuditorException e) {
+	}
+
+	return new IMarkerResolution[0];
     }
 
 }
