@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Copyright (c) 2012 TapiJI.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.rbmanager.viewer;
 
 import java.util.List;
@@ -82,7 +89,7 @@ public class ResourceBundleLabelProvider extends LabelProvider implements ILabel
 			
 			if (element instanceof IProject){
 				VirtualContainer vproject =  vcManager.getContainer((IProject) element);
-//				if (vproject != null && vproject instanceof VirtualFragment) text.append("°");
+//				if (vproject != null && vproject instanceof VirtualFragment) text.append("ï¿½");
 			}
 			
 			VirtualContainer vContainer = vcManager.getContainer(container);
@@ -105,7 +112,7 @@ public class ResourceBundleLabelProvider extends LabelProvider implements ILabel
 				}
 				
 				VirtualProject vproject = (VirtualProject) vcManager.getContainer(((IFile) element).getProject());
-				if (vproject!= null && vproject.isFragment()) text.append("°");
+				if (vproject!= null && vproject.isFragment()) text.append("ï¿½");
 			}
 		}
 		if(element instanceof String){
