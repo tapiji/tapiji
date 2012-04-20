@@ -23,7 +23,7 @@ public class BuilderPropertyChangeListener implements IPropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent event) {
-	if (event.getNewValue().equals(true) && isTapiPropertyp(event))
+	if (event.getNewValue().equals(true) && isTapiJIPropertyp(event))
 	    rebuild();
 
 	if (event.getProperty().equals(TapiJIPreferences.NON_RB_PATTERN))
@@ -31,30 +31,30 @@ public class BuilderPropertyChangeListener implements IPropertyChangeListener {
 
 	if (event.getNewValue().equals(false)) {
 	    if (event.getProperty().equals(TapiJIPreferences.AUDIT_RESOURCE)) {
-		removeProperty(EditorUtils.MARKER_ID, -1);
+		deleteMarkersByCause(EditorUtils.MARKER_ID, -1);
 	    }
 	    if (event.getProperty().equals(TapiJIPreferences.AUDIT_RB)) {
-		removeProperty(EditorUtils.RB_MARKER_ID, -1);
+		deleteMarkersByCause(EditorUtils.RB_MARKER_ID, -1);
 	    }
 	    if (event.getProperty().equals(
 		    TapiJIPreferences.AUDIT_UNSPEZIFIED_KEY)) {
-		removeProperty(EditorUtils.RB_MARKER_ID,
+		deleteMarkersByCause(EditorUtils.RB_MARKER_ID,
 			IMarkerConstants.CAUSE_UNSPEZIFIED_KEY);
 	    }
 	    if (event.getProperty().equals(TapiJIPreferences.AUDIT_SAME_VALUE)) {
-		removeProperty(EditorUtils.RB_MARKER_ID,
+		deleteMarkersByCause(EditorUtils.RB_MARKER_ID,
 			IMarkerConstants.CAUSE_SAME_VALUE);
 	    }
 	    if (event.getProperty().equals(
 		    TapiJIPreferences.AUDIT_MISSING_LANGUAGE)) {
-		removeProperty(EditorUtils.RB_MARKER_ID,
+		deleteMarkersByCause(EditorUtils.RB_MARKER_ID,
 			IMarkerConstants.CAUSE_MISSING_LANGUAGE);
 	    }
 	}
 
     }
 
-    private boolean isTapiPropertyp(PropertyChangeEvent event) {
+    private boolean isTapiJIPropertyp(PropertyChangeEvent event) {
 	if (event.getProperty().equals(TapiJIPreferences.AUDIT_RESOURCE)
 		|| event.getProperty().equals(TapiJIPreferences.AUDIT_RB)
 		|| event.getProperty().equals(
@@ -71,14 +71,14 @@ public class BuilderPropertyChangeListener implements IPropertyChangeListener {
     /*
      * cause == -1 ignores the attribute 'case'
      */
-    private void removeProperty(final String markertpye, final int cause) {
+    private void deleteMarkersByCause(final String markertype, final int cause) {
 	final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 	BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
 	    @Override
 	    public void run() {
 		IMarker[] marker;
 		try {
-		    marker = workspace.getRoot().findMarkers(markertpye, true,
+		    marker = workspace.getRoot().findMarkers(markertype, true,
 			    IResource.DEPTH_INFINITE);
 
 		    for (IMarker m : marker) {
@@ -86,7 +86,7 @@ public class BuilderPropertyChangeListener implements IPropertyChangeListener {
 			    if (m.getAttribute("cause", -1) == cause)
 				m.delete();
 			    if (cause == -1)
-				m.getResource().deleteMarkers(markertpye, true,
+				m.getResource().deleteMarkers(markertype, true,
 					IResource.DEPTH_INFINITE);
 			}
 		    }

@@ -45,7 +45,7 @@ import org.w3c.dom.NodeList;
  * @author Uwe Voigt (http://sourceforge.net/users/uwe_ewald/)
  */
 public class PDEUtils {
-	
+
 	/** Bundle manifest name */
 	public static final String OSGI_BUNDLE_MANIFEST = "META-INF/MANIFEST.MF"; //$NON-NLS-1$
 	/** Plugin manifest name */
@@ -54,155 +54,194 @@ public class PDEUtils {
 	public static final String FRAGMENT_MANIFEST = "fragment.xml"; //$NON-NLS-1$
 
 	/**
-	 * Returns the plugin-id of the project if it is a plugin project. Else
-	 * null is returned.
+	 * Returns the plugin-id of the project if it is a plugin project. Else null
+	 * is returned.
 	 * 
-	 * @param project the project
+	 * @param project
+	 *            the project
 	 * @return the plugin-id or null
 	 */
 	public static String getPluginId(IProject project) {
-		if (project == null)
+		if (project == null) {
 			return null;
+		}
 		IResource manifest = project.findMember(OSGI_BUNDLE_MANIFEST);
-		String id = getManifestEntryValue(manifest, Constants.BUNDLE_SYMBOLICNAME);
-		if (id != null)
+		String id = getManifestEntryValue(manifest,
+		        Constants.BUNDLE_SYMBOLICNAME);
+		if (id != null) {
 			return id;
+		}
 		manifest = project.findMember(PLUGIN_MANIFEST);
-		if (manifest == null)
+		if (manifest == null) {
 			manifest = project.findMember(FRAGMENT_MANIFEST);
-    	if (manifest instanceof IFile) {
-    		InputStream in = null;
-    		try {
-	    		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-	    		in = ((IFile) manifest).getContents();
-    			Document document = builder.parse(in);
-    			Node node = getXMLElement(document, "plugin"); //$NON-NLS-1$
-    			if (node == null)
-    				node = getXMLElement(document, "fragment"); //$NON-NLS-1$
-    			if (node != null)
-    				node = node.getAttributes().getNamedItem("id"); //$NON-NLS-1$
-    			if (node != null)
-    				return node.getNodeValue();
-    		} catch (Exception e) {
+		}
+		if (manifest instanceof IFile) {
+			InputStream in = null;
+			try {
+				DocumentBuilder builder = DocumentBuilderFactory.newInstance()
+				        .newDocumentBuilder();
+				in = ((IFile) manifest).getContents();
+				Document document = builder.parse(in);
+				Node node = getXMLElement(document, "plugin"); //$NON-NLS-1$
+				if (node == null) {
+					node = getXMLElement(document, "fragment"); //$NON-NLS-1$
+				}
+				if (node != null) {
+					node = node.getAttributes().getNamedItem("id"); //$NON-NLS-1$
+				}
+				if (node != null) {
+					return node.getNodeValue();
+				}
+			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
-    			try {
-    				if (in != null)
-    					in.close();
+				try {
+					if (in != null) {
+						in.close();
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-    		}
-    	}
-    	return null;
+			}
+		}
+		return null;
 	}
 
 	/**
-     * Returns all project containing plugin/fragment of the specified
-     * project. If the specified project itself is a fragment, then only this is returned.
-     *  
-     * @param pluginProject the plugin project
-     * @return the all project containing a fragment or null if none
-     */
-    public static IProject[] lookupFragment(IProject pluginProject) {
-    	List<IProject> fragmentIds = new ArrayList<IProject>();
-    	
+	 * Returns all project containing plugin/fragment of the specified project.
+	 * If the specified project itself is a fragment, then only this is
+	 * returned.
+	 * 
+	 * @param pluginProject
+	 *            the plugin project
+	 * @return the all project containing a fragment or null if none
+	 */
+	public static IProject[] lookupFragment(IProject pluginProject) {
+		List<IProject> fragmentIds = new ArrayList<IProject>();
+
 		String pluginId = PDEUtils.getPluginId(pluginProject);
-		if (pluginId == null)
+		if (pluginId == null) {
 			return null;
-		String fragmentId = getFragmentId(pluginProject, getPluginId(getFragmentHost(pluginProject)));
-		if (fragmentId != null){
+		}
+		String fragmentId = getFragmentId(pluginProject,
+		        getPluginId(getFragmentHost(pluginProject)));
+		if (fragmentId != null) {
 			fragmentIds.add(pluginProject);
 			return fragmentIds.toArray(new IProject[0]);
 		}
-		
-    	IProject[] projects = pluginProject.getWorkspace().getRoot().getProjects();
-    	for (int i = 0; i < projects.length; i++) {
-			IProject project = projects[i];
-			if (!project.isOpen())
-				continue;
-			if (getFragmentId(project, pluginId) == null)
-				continue;
-			fragmentIds.add(project);
-		}
-    	
-    	if (fragmentIds.size() > 0) return fragmentIds.toArray(new IProject[0]);
-    	else return null;
-    }
 
-    public static boolean isFragment(IProject pluginProject){
-    	String pluginId = PDEUtils.getPluginId(pluginProject);
-		if (pluginId == null)
-			return false;
-		String fragmentId = getFragmentId(pluginProject, getPluginId(getFragmentHost(pluginProject)));
-		if (fragmentId != null)
-			return true;
-		else
-			return false;
-    }
-    
-    public static List<IProject> getFragments(IProject hostProject){
-    	List<IProject> fragmentIds = new ArrayList<IProject>();
-    	
-    	String pluginId = PDEUtils.getPluginId(hostProject);
-    	IProject[] projects = hostProject.getWorkspace().getRoot().getProjects();
-    	
-    	for (int i = 0; i < projects.length; i++) {
+		IProject[] projects = pluginProject.getWorkspace().getRoot()
+		        .getProjects();
+		for (int i = 0; i < projects.length; i++) {
 			IProject project = projects[i];
-			if (!project.isOpen())
+			if (!project.isOpen()) {
 				continue;
-			if (getFragmentId(project, pluginId) == null)
+			}
+			if (getFragmentId(project, pluginId) == null) {
 				continue;
+			}
 			fragmentIds.add(project);
 		}
-    	
-    	return fragmentIds;
-    }
-    
-    /**
+
+		if (fragmentIds.size() > 0) {
+			return fragmentIds.toArray(new IProject[0]);
+		} else {
+			return null;
+		}
+	}
+
+	public static boolean isFragment(IProject pluginProject) {
+		String pluginId = PDEUtils.getPluginId(pluginProject);
+		if (pluginId == null) {
+			return false;
+		}
+		String fragmentId = getFragmentId(pluginProject,
+		        getPluginId(getFragmentHost(pluginProject)));
+		if (fragmentId != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static List<IProject> getFragments(IProject hostProject) {
+		List<IProject> fragmentIds = new ArrayList<IProject>();
+
+		String pluginId = PDEUtils.getPluginId(hostProject);
+		IProject[] projects = hostProject.getWorkspace().getRoot()
+		        .getProjects();
+
+		for (int i = 0; i < projects.length; i++) {
+			IProject project = projects[i];
+			if (!project.isOpen()) {
+				continue;
+			}
+			if (getFragmentId(project, pluginId) == null) {
+				continue;
+			}
+			fragmentIds.add(project);
+		}
+
+		return fragmentIds;
+	}
+
+	/**
 	 * Returns the fragment-id of the project if it is a fragment project with
 	 * the specified host plugin id as host. Else null is returned.
 	 * 
-	 * @param project the project
-	 * @param hostPluginId the host plugin id
+	 * @param project
+	 *            the project
+	 * @param hostPluginId
+	 *            the host plugin id
 	 * @return the plugin-id or null
 	 */
-    public static String getFragmentId(IProject project, String hostPluginId) {
+	public static String getFragmentId(IProject project, String hostPluginId) {
 		IResource manifest = project.findMember(FRAGMENT_MANIFEST);
 		Node fragmentNode = getXMLElement(getXMLDocument(manifest), "fragment"); //$NON-NLS-1$
 		if (fragmentNode != null) {
-			Node hostNode = fragmentNode.getAttributes().getNamedItem("plugin-id"); //$NON-NLS-1$
-			if (hostNode != null && hostNode.getNodeValue().equals(hostPluginId)) {
+			Node hostNode = fragmentNode.getAttributes().getNamedItem(
+			        "plugin-id"); //$NON-NLS-1$
+			if (hostNode != null
+			        && hostNode.getNodeValue().equals(hostPluginId)) {
 				Node idNode = fragmentNode.getAttributes().getNamedItem("id"); //$NON-NLS-1$
-				if (idNode != null)
+				if (idNode != null) {
 					return idNode.getNodeValue();
-	    	}
+				}
+			}
 		}
-    	manifest = project.findMember(OSGI_BUNDLE_MANIFEST);
-    	String hostId = getManifestEntryValue(manifest, Constants.FRAGMENT_HOST);
-    	if (hostId != null && hostId.equals(hostPluginId))
-    		return getManifestEntryValue(manifest, Constants.BUNDLE_SYMBOLICNAME);
-    	return null;
+		manifest = project.findMember(OSGI_BUNDLE_MANIFEST);
+		String hostId = getManifestEntryValue(manifest, Constants.FRAGMENT_HOST);
+		if (hostId != null && hostId.equals(hostPluginId)) {
+			return getManifestEntryValue(manifest,
+			        Constants.BUNDLE_SYMBOLICNAME);
+		}
+		return null;
 	}
-    
-    /**
-     * Returns the host plugin project of the specified project if it contains a fragment.
-     *  
-     * @param fragment the fragment project
-     * @return the host plugin project or null
-     */
+
+	/**
+	 * Returns the host plugin project of the specified project if it contains a
+	 * fragment.
+	 * 
+	 * @param fragment
+	 *            the fragment project
+	 * @return the host plugin project or null
+	 */
 	public static IProject getFragmentHost(IProject fragment) {
 		IResource manifest = fragment.findMember(FRAGMENT_MANIFEST);
 		Node fragmentNode = getXMLElement(getXMLDocument(manifest), "fragment"); //$NON-NLS-1$
 		if (fragmentNode != null) {
-			Node hostNode = fragmentNode.getAttributes().getNamedItem("plugin-id"); //$NON-NLS-1$
-			if (hostNode != null)
-				return fragment.getWorkspace().getRoot().getProject(hostNode.getNodeValue());
+			Node hostNode = fragmentNode.getAttributes().getNamedItem(
+			        "plugin-id"); //$NON-NLS-1$
+			if (hostNode != null) {
+				return fragment.getWorkspace().getRoot()
+				        .getProject(hostNode.getNodeValue());
+			}
 		}
-    	manifest = fragment.findMember(OSGI_BUNDLE_MANIFEST);
-    	String hostId = getManifestEntryValue(manifest, Constants.FRAGMENT_HOST);
-    	if (hostId != null)
-    		return fragment.getWorkspace().getRoot().getProject(hostId);
+		manifest = fragment.findMember(OSGI_BUNDLE_MANIFEST);
+		String hostId = getManifestEntryValue(manifest, Constants.FRAGMENT_HOST);
+		if (hostId != null) {
+			return fragment.getWorkspace().getRoot().getProject(hostId);
+		}
 		return null;
 	}
 
@@ -210,28 +249,29 @@ public class PDEUtils {
 	 * Returns the file content as UTF8 string.
 	 * 
 	 * @param file
-	 * @param charset 
+	 * @param charset
 	 * @return
 	 */
 	public static String getFileContent(IFile file, String charset) {
-    	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    	InputStream in = null;
-    	try {
-    		in = file.getContents(true);
-        	byte[] buf = new byte[8000];
-        	for (int count; (count = in.read(buf)) != -1;)
-        		outputStream.write(buf, 0, count);
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	} finally {
-    		if (in != null) {
-    			try {
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		InputStream in = null;
+		try {
+			in = file.getContents(true);
+			byte[] buf = new byte[8000];
+			for (int count; (count = in.read(buf)) != -1;) {
+				outputStream.write(buf, 0, count);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (in != null) {
+				try {
 					in.close();
 				} catch (IOException ignore) {
 				}
-    		}
-    	}
-    	try {
+			}
+		}
+		try {
 			return outputStream.toString(charset);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -239,52 +279,59 @@ public class PDEUtils {
 		}
 	}
 
-    private static String getManifestEntryValue(IResource manifest, String entryKey) {
-    	if (manifest instanceof IFile) {
-    		String content = getFileContent((IFile) manifest, "UTF8"); //$NON-NLS-1$
-    		int index = content.indexOf(entryKey);
-    		if (index != -1) {
-    			StringTokenizer st = new StringTokenizer(content.substring(index
-    					+ entryKey.length()), ";:\r\n"); //$NON-NLS-1$
-    			return st.nextToken().trim();
-    		}
-    	}
-    	return null;
-    }
+	private static String getManifestEntryValue(IResource manifest,
+	        String entryKey) {
+		if (manifest instanceof IFile) {
+			String content = getFileContent((IFile) manifest, "UTF8"); //$NON-NLS-1$
+			int index = content.indexOf(entryKey);
+			if (index != -1) {
+				StringTokenizer st = new StringTokenizer(
+				        content.substring(index + entryKey.length()), ";:\r\n"); //$NON-NLS-1$
+				return st.nextToken().trim();
+			}
+		}
+		return null;
+	}
 
-    private static Document getXMLDocument(IResource resource) {
-    	if (!(resource instanceof IFile))
-    		return null;
+	private static Document getXMLDocument(IResource resource) {
+		if (!(resource instanceof IFile)) {
+			return null;
+		}
 		InputStream in = null;
 		try {
-    		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-    		in = ((IFile) resource).getContents();
+			DocumentBuilder builder = DocumentBuilderFactory.newInstance()
+			        .newDocumentBuilder();
+			in = ((IFile) resource).getContents();
 			return builder.parse(in);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		} finally {
 			try {
-				if (in != null)
+				if (in != null) {
 					in.close();
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-    }
-    
-    private static Node getXMLElement(Document document, String name) {
-    	if (document == null)
-    		return null;
-    	NodeList list = document.getChildNodes();
-    	for (int i = 0; i < list.getLength(); i++) {
+	}
+
+	private static Node getXMLElement(Document document, String name) {
+		if (document == null) {
+			return null;
+		}
+		NodeList list = document.getChildNodes();
+		for (int i = 0; i < list.getLength(); i++) {
 			Node node = list.item(i);
-			if (node.getNodeType() != Node.ELEMENT_NODE)
+			if (node.getNodeType() != Node.ELEMENT_NODE) {
 				continue;
-			if (name.equals(node.getNodeName()))
+			}
+			if (name.equals(node.getNodeName())) {
 				return node;
+			}
 		}
 		return null;
-    }
-    
+	}
+
 }
