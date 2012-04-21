@@ -13,16 +13,16 @@ import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 
-public class NoActionProposal  implements IJavaCompletionProposal  {
+public class NoActionProposal implements IJavaCompletionProposal {
 
-	public NoActionProposal () {
+	public NoActionProposal() {
 		super();
 	}
-	
+
 	@Override
 	public void apply(IDocument document) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

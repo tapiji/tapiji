@@ -24,7 +24,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 public class InsertResourceBundleReferenceProposal implements
-		IJavaCompletionProposal {
+        IJavaCompletionProposal {
 
 	private int offset = 0;
 	private int length = 0;
@@ -33,7 +33,8 @@ public class InsertResourceBundleReferenceProposal implements
 	private String projectName;
 
 	public InsertResourceBundleReferenceProposal(int offset, int length,
-			String projectName, IResource resource, Collection<String> availableBundles) {
+	        String projectName, IResource resource,
+	        Collection<String> availableBundles) {
 		this.offset = offset;
 		this.length = length;
 		this.resource = resource;
@@ -43,18 +44,19 @@ public class InsertResourceBundleReferenceProposal implements
 	@Override
 	public void apply(IDocument document) {
 		ResourceBundleEntrySelectionDialog dialog = new ResourceBundleEntrySelectionDialog(
-				Display.getDefault().getActiveShell());
+		        Display.getDefault().getActiveShell());
 		dialog.setProjectName(projectName);
 
-		if (dialog.open() != InputDialog.OK)
+		if (dialog.open() != InputDialog.OK) {
 			return;
+		}
 
 		String resourceBundleId = dialog.getSelectedResourceBundle();
 		String key = dialog.getSelectedResource();
 		Locale locale = dialog.getSelectedLocale();
 
 		reference = ASTutils.insertExistingBundleRef(document, resource,
-				offset, length, resourceBundleId, key, locale);
+		        offset, length, resourceBundleId, key, locale);
 	}
 
 	@Override
@@ -76,7 +78,7 @@ public class InsertResourceBundleReferenceProposal implements
 	@Override
 	public Image getImage() {
 		return PlatformUI.getWorkbench().getSharedImages()
-				.getImageDescriptor(ISharedImages.IMG_OBJ_ADD).createImage();
+		        .getImageDescriptor(ISharedImages.IMG_OBJ_ADD).createImage();
 	}
 
 	@Override
@@ -89,10 +91,11 @@ public class InsertResourceBundleReferenceProposal implements
 	@Override
 	public int getRelevance() {
 		// TODO Auto-generated method stub
-		if (this.length == 0)
+		if (this.length == 0) {
 			return 97;
-		else
+		} else {
 			return 1097;
+		}
 	}
 
 }

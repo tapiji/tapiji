@@ -23,7 +23,6 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IMarkerResolution2;
 
-
 public class IgnoreStringFromInternationalization implements IMarkerResolution2 {
 
 	@Override
@@ -34,30 +33,31 @@ public class IgnoreStringFromInternationalization implements IMarkerResolution2 
 	@Override
 	public void run(IMarker marker) {
 		IResource resource = marker.getResource();
-		
+
 		CompilationUnit cu = ASTutils.getCompilationUnit(resource);
-		
-		ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager(); 
-		IPath path = resource.getRawLocation(); 
-		
-		
+
+		ITextFileBufferManager bufferManager = FileBuffers
+		        .getTextFileBufferManager();
+		IPath path = resource.getRawLocation();
+
 		try {
-			bufferManager.connect(path, LocationKind.NORMALIZE, null); 
-			ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(path, LocationKind.NORMALIZE);
-			IDocument document = textFileBuffer.getDocument(); 
-			
+			bufferManager.connect(path, LocationKind.NORMALIZE, null);
+			ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(
+			        path, LocationKind.NORMALIZE);
+			IDocument document = textFileBuffer.getDocument();
+
 			int position = marker.getAttribute(IMarker.CHAR_START, 0);
-			
-			ASTutils.createReplaceNonInternationalisationComment(cu, document, position);
+
+			ASTutils.createReplaceNonInternationalisationComment(cu, document,
+			        position);
 			textFileBuffer.commit(null, false);
-			
+
 		} catch (JavaModelException e) {
 			Logger.logError(e);
 		} catch (CoreException e) {
 			Logger.logError(e);
 		}
-		
-		
+
 	}
 
 	@Override

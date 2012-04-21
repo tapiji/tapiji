@@ -5,3 +5,17 @@ Bundle-SymbolicName: org.eclipse.babel.tapiji.tools.java
 Bundle-Version: 0.0.2.qualifier
 Bundle-Vendor: Vienna University of Technology
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.eclipse.babel.tapiji.tools.java.util,
+ org.eclipse.babel.tapiji.tools.java.visitor
+Import-Package: org.eclipse.babel.tapiji.tools.core.model.manager,
+ org.eclipse.core.filebuffers,
+ org.eclipse.core.resources,
+ org.eclipse.jdt.ui,
+ org.eclipse.jface.text,
+ org.eclipse.text.edits,
+ org.eclipse.ui
+Require-Bundle: org.eclipse.core.resources;bundle-version="3.7.101",
+ org.eclipse.jdt.core;bundle-version="3.7.3",
+ org.eclipse.core.runtime;bundle-version="3.7.0",
+ org.eclipse.jface;bundle-version="3.7.0",
+ org.eclipse.babel.tapiji.tools.core;bundle-version="0.0.2"

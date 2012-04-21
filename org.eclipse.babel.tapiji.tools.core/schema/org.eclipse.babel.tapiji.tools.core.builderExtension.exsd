@@ -81,7 +81,7 @@
 &lt;pre&gt;
 &lt;extension point=&quot;org.eclipselabs.tapiji.tools.core.builderExtension&quot;&gt;
     &lt;i18nResourceAuditor
-        class=&quot;auditor.JavaResourceAuditor&quot;&gt;
+        class=&quot;ui.JavaResourceAuditor&quot;&gt;
     &lt;/i18nResourceAuditor&gt;
 &lt;/extension&gt;
 &lt;/pre&gt;

@@ -24,11 +24,11 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMarkerResolution2;
 
-
 public class ExportToResourceBundleResolution implements IMarkerResolution2 {
 
-	public ExportToResourceBundleResolution () {}
-	
+	public ExportToResourceBundleResolution() {
+	}
+
 	@Override
 	public String getDescription() {
 		return "Export constant string literal to a resource bundle.";
@@ -50,36 +50,35 @@ public class ExportToResourceBundleResolution implements IMarkerResolution2 {
 		int startPos = marker.getAttribute(IMarker.CHAR_START, 0);
 		int endPos = marker.getAttribute(IMarker.CHAR_END, 0) - startPos;
 		IResource resource = marker.getResource();
-		
-		ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager(); 
-		IPath path = resource.getRawLocation(); 
+
+		ITextFileBufferManager bufferManager = FileBuffers
+		        .getTextFileBufferManager();
+		IPath path = resource.getRawLocation();
 		try {
-			bufferManager.connect(path, LocationKind.NORMALIZE, null); 
-			ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(path, LocationKind.NORMALIZE);
-			IDocument document = textFileBuffer.getDocument(); 
-			
+			bufferManager.connect(path, LocationKind.NORMALIZE, null);
+			ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(
+			        path, LocationKind.NORMALIZE);
+			IDocument document = textFileBuffer.getDocument();
+
 			CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
-					Display.getDefault().getActiveShell());
-			
+			        Display.getDefault().getActiveShell());
+
 			DialogConfiguration config = dialog.new DialogConfiguration();
 			config.setPreselectedKey("");
 			config.setPreselectedMessage("");
-			config.setPreselectedBundle((startPos+1 < document.getLength() && endPos > 1) ? document.get(startPos+1, endPos-2) : "");
+			config.setPreselectedBundle((startPos + 1 < document.getLength() && endPos > 1) ? document
+			        .get(startPos + 1, endPos - 2) : "");
 			config.setPreselectedLocale("");
 			config.setProjectName(resource.getProject().getName());
-			
+
 			dialog.setDialogConfiguration(config);
-			
+
 			if (dialog.open() != InputDialog.OK)
 				return;
-			
-			ASTutils.insertNewBundleRef(document, 
-					resource, 
-					startPos, 
-					endPos, 
-					dialog.getSelectedResourceBundle(), 
-					dialog.getSelectedKey());
-	
+
+			ASTutils.insertNewBundleRef(document, resource, startPos, endPos,
+			        dialog.getSelectedResourceBundle(), dialog.getSelectedKey());
+
 			textFileBuffer.commit(null, false);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -88,9 +87,8 @@ public class ExportToResourceBundleResolution implements IMarkerResolution2 {
 				bufferManager.disconnect(path, null);
 			} catch (CoreException e) {
 				e.printStackTrace();
-			} 
+			}
 		}
-		
 
 	}
 

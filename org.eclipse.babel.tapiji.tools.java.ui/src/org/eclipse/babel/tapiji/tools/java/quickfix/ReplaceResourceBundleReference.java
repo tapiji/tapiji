@@ -24,12 +24,11 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMarkerResolution2;
 
-
 public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 
 	private String key;
 	private String bundleId;
-	
+
 	public ReplaceResourceBundleReference(String key, String bundleId) {
 		this.key = key;
 		this.bundleId = bundleId;
@@ -38,8 +37,8 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 	@Override
 	public String getDescription() {
 		return "Replaces the non-existing Resource-Bundle key '"
-				+ key
-				+ "' with a reference to an already existing localized string literal.";
+		        + key
+		        + "' with a reference to an already existing localized string literal.";
 	}
 
 	@Override
@@ -57,28 +56,30 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 		int startPos = marker.getAttribute(IMarker.CHAR_START, 0);
 		int endPos = marker.getAttribute(IMarker.CHAR_END, 0) - startPos;
 		IResource resource = marker.getResource();
-		
-		ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager(); 
-		IPath path = resource.getRawLocation(); 
+
+		ITextFileBufferManager bufferManager = FileBuffers
+		        .getTextFileBufferManager();
+		IPath path = resource.getRawLocation();
 		try {
-			bufferManager.connect(path, LocationKind.NORMALIZE, null); 
-			ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(path, LocationKind.NORMALIZE);
-			IDocument document = textFileBuffer.getDocument(); 
-		
+			bufferManager.connect(path, LocationKind.NORMALIZE, null);
+			ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(
+			        path, LocationKind.NORMALIZE);
+			IDocument document = textFileBuffer.getDocument();
+
 			ResourceBundleEntrySelectionDialog dialog = new ResourceBundleEntrySelectionDialog(
-					Display.getDefault().getActiveShell());
-			
+			        Display.getDefault().getActiveShell());
+
 			dialog.setProjectName(resource.getProject().getName());
 			dialog.setBundleName(bundleId);
-			
+
 			if (dialog.open() != InputDialog.OK)
 				return;
-			
+
 			String key = dialog.getSelectedResource();
 			Locale locale = dialog.getSelectedLocale();
-			
+
 			document.replace(startPos, endPos, "\"" + key + "\"");
-			
+
 			textFileBuffer.commit(null, false);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -87,7 +88,7 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 				bufferManager.disconnect(path, LocationKind.NORMALIZE, null);
 			} catch (CoreException e) {
 				e.printStackTrace();
-			} 
+			}
 		}
 	}
 

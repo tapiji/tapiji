@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.java.auditor;
+package org.eclipse.babel.tapiji.tools.java.visitor;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,8 +17,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.eclipse.babel.tapiji.tools.core.model.SLLocation;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipse.babel.tapiji.tools.java.auditor.model.SLLocation;
 import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -40,7 +40,7 @@ import org.eclipse.jface.text.Region;
  * 
  */
 public class ResourceAuditVisitor extends ASTVisitor implements
-		IResourceVisitor {
+        IResourceVisitor {
 
 	private List<SLLocation> constants;
 	private List<SLLocation> brokenStrings;
@@ -52,8 +52,7 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 	private IFile file;
 	private Map<IVariableBinding, VariableDeclarationFragment> variableBindingManagers = new HashMap<IVariableBinding, VariableDeclarationFragment>();
 	private String projectName;
-	
-	
+
 	public ResourceAuditVisitor(IFile file, String projectName) {
 		constants = new ArrayList<SLLocation>();
 		brokenStrings = new ArrayList<SLLocation>();
@@ -62,20 +61,22 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 		this.projectName = projectName;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(VariableDeclarationStatement varDeclaration) {
 		for (Iterator<VariableDeclarationFragment> itFrag = varDeclaration
-				.fragments().iterator(); itFrag.hasNext();) {
+		        .fragments().iterator(); itFrag.hasNext();) {
 			VariableDeclarationFragment fragment = itFrag.next();
 			parseVariableDeclarationFragment(fragment);
 		}
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(FieldDeclaration fieldDeclaration) {
 		for (Iterator<VariableDeclarationFragment> itFrag = fieldDeclaration
-				.fragments().iterator(); itFrag.hasNext();) {
+		        .fragments().iterator(); itFrag.hasNext();) {
 			VariableDeclarationFragment fragment = itFrag.next();
 			parseVariableDeclarationFragment(fragment);
 		}
@@ -83,7 +84,7 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 	}
 
 	protected void parseVariableDeclarationFragment(
-			VariableDeclarationFragment fragment) {
+	        VariableDeclarationFragment fragment) {
 		IVariableBinding vBinding = fragment.resolveBinding();
 		this.variableBindingManagers.put(vBinding, fragment);
 	}
@@ -92,60 +93,61 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 	public boolean visit(StringLiteral stringLiteral) {
 		try {
 			ASTNode parent = stringLiteral.getParent();
-			ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
+			ResourceBundleManager manager = ResourceBundleManager
+			        .getManager(projectName);
 
 			if (parent instanceof MethodInvocation) {
 				MethodInvocation methodInvocation = (MethodInvocation) parent;
 
 				IRegion region = new Region(stringLiteral.getStartPosition(),
-						stringLiteral.getLength());
+				        stringLiteral.getLength());
 
 				// Check if this method invokes the getString-Method on a
 				// ResourceBundle Implementation
 				if (ASTutils.isMatchingMethodParamDesc(methodInvocation,
-						stringLiteral, ASTutils.getRBAccessorDesc())) {
+				        stringLiteral, ASTutils.getRBAccessorDesc())) {
 					// Check if the given Resource-Bundle reference is broken
 					SLLocation rbName = ASTutils.resolveResourceBundleLocation(
-							methodInvocation, ASTutils.getRBDefinitionDesc(),
-							variableBindingManagers);
+					        methodInvocation, ASTutils.getRBDefinitionDesc(),
+					        variableBindingManagers);
 					if (rbName == null
-							|| manager.isKeyBroken(rbName.getLiteral(),
-									stringLiteral.getLiteralValue())) {
+					        || manager.isKeyBroken(rbName.getLiteral(),
+					                stringLiteral.getLiteralValue())) {
 						// report new problem
 						SLLocation desc = new SLLocation(file,
-								stringLiteral.getStartPosition(),
-								stringLiteral.getStartPosition()
-										+ stringLiteral.getLength(),
-								stringLiteral.getLiteralValue());
+						        stringLiteral.getStartPosition(),
+						        stringLiteral.getStartPosition()
+						                + stringLiteral.getLength(),
+						        stringLiteral.getLiteralValue());
 						desc.setData(rbName);
 						brokenStrings.add(desc);
 					}
 
 					// store position of resource-bundle access
 					keyPositions.put(
-							Long.valueOf(stringLiteral.getStartPosition()),
-							region);
+					        Long.valueOf(stringLiteral.getStartPosition()),
+					        region);
 					bundleKeys.put(region, stringLiteral.getLiteralValue());
 					bundleReferences.put(region, rbName.getLiteral());
 					return false;
 				} else if (ASTutils.isMatchingMethodParamDesc(methodInvocation,
-						stringLiteral, ASTutils.getRBDefinitionDesc())) {
+				        stringLiteral, ASTutils.getRBDefinitionDesc())) {
 					rbDefReferences.put(
-							Long.valueOf(stringLiteral.getStartPosition()),
-							region);
+					        Long.valueOf(stringLiteral.getStartPosition()),
+					        region);
 					boolean referenceBroken = true;
 					for (String bundle : manager.getResourceBundleIdentifiers()) {
 						if (bundle.trim().equals(
-								stringLiteral.getLiteralValue())) {
+						        stringLiteral.getLiteralValue())) {
 							referenceBroken = false;
 						}
 					}
 					if (referenceBroken) {
 						this.brokenRBReferences.add(new SLLocation(file,
-								stringLiteral.getStartPosition(), stringLiteral
-										.getStartPosition()
-										+ stringLiteral.getLength(),
-								stringLiteral.getLiteralValue()));
+						        stringLiteral.getStartPosition(), stringLiteral
+						                .getStartPosition()
+						                + stringLiteral.getLength(),
+						        stringLiteral.getLiteralValue()));
 					}
 
 					return false;
@@ -159,9 +161,9 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 
 			// constant string literal found
 			constants.add(new SLLocation(file,
-					stringLiteral.getStartPosition(), stringLiteral
-							.getStartPosition() + stringLiteral.getLength(),
-					stringLiteral.getLiteralValue()));
+			        stringLiteral.getStartPosition(), stringLiteral
+			                .getStartPosition() + stringLiteral.getLength(),
+			        stringLiteral.getLiteralValue()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -186,12 +188,13 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 		Iterator<Long> keys = keyPositions.keySet().iterator();
 		while (keys.hasNext()) {
 			Long startPos = keys.next();
-			if (startPos > position)
+			if (startPos > position) {
 				break;
+			}
 
 			IRegion region = keyPositions.get(startPos);
 			if (region.getOffset() <= position
-					&& (region.getOffset() + region.getLength()) >= position) {
+			        && (region.getOffset() + region.getLength()) >= position) {
 				reg = region;
 				break;
 			}
@@ -201,10 +204,11 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 	}
 
 	public String getKeyAt(IRegion region) {
-		if (bundleKeys.containsKey(region))
+		if (bundleKeys.containsKey(region)) {
 			return bundleKeys.get(region);
-		else
+		} else {
 			return "";
+		}
 	}
 
 	public String getBundleReference(IRegion region) {
@@ -220,8 +224,9 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 	public Collection<String> getDefinedResourceBundles(int offset) {
 		Collection<String> result = new HashSet<String>();
 		for (String s : bundleReferences.values()) {
-			if (s != null)
+			if (s != null) {
 				result.add(s);
+			}
 		}
 		return result;
 	}
@@ -232,12 +237,13 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 		Iterator<Long> keys = rbDefReferences.keySet().iterator();
 		while (keys.hasNext()) {
 			Long startPos = keys.next();
-			if (startPos > offset)
+			if (startPos > offset) {
 				break;
+			}
 
 			IRegion region = rbDefReferences.get(startPos);
 			if (region != null && region.getOffset() <= offset
-					&& (region.getOffset() + region.getLength()) >= offset) {
+			        && (region.getOffset() + region.getLength()) >= offset) {
 				reg = region;
 				break;
 			}

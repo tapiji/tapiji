@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.babel.tapiji.tools.core.builderExtension">
       <i18nResourceAuditor
-            class="org.eclipse.babel.tapiji.tools.java.auditor.JavaResourceAuditor">
+            class="org.eclipse.babel.tapiji.tools.java.ui.JavaResourceAuditor">
       </i18nResourceAuditor>
    </extension>
    <extension

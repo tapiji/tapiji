@@ -18,7 +18,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 
-public class ExcludeResourceFromInternationalization implements IMarkerResolution2 {
+public class ExcludeResourceFromInternationalization implements
+        IMarkerResolution2 {
 
 	@Override
 	public String getLabel() {
@@ -28,24 +29,28 @@ public class ExcludeResourceFromInternationalization implements IMarkerResolutio
 	@Override
 	public void run(IMarker marker) {
 		final IResource resource = marker.getResource();
-		
+
 		IWorkbench wb = PlatformUI.getWorkbench();
 		IProgressService ps = wb.getProgressService();
 		try {
 			ps.busyCursorWhile(new IRunnableWithProgress() {
 				public void run(IProgressMonitor pm) {
-			
+
 					ResourceBundleManager manager = null;
-					pm.beginTask("Excluding Resource from Internationalization", 1);
-					
-					if (manager == null || (manager.getProject() != resource.getProject())) 
-							manager = ResourceBundleManager.getManager(resource.getProject());
+					pm.beginTask(
+					        "Excluding Resource from Internationalization", 1);
+
+					if (manager == null
+					        || (manager.getProject() != resource.getProject()))
+						manager = ResourceBundleManager.getManager(resource
+						        .getProject());
 					manager.excludeResource(resource, pm);
 					pm.worked(1);
 					pm.done();
-				}				
+				}
 			});
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 	}
 
 	@Override
