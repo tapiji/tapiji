@@ -592,6 +592,7 @@ public class PropertyKeySelectionTree extends Composite implements IResourceBund
         // WTF?
         treeType = treeType.equals(TreeType.Tree) && sorter.getSortInfo().getColIdx() == 0 ? TreeType.Tree : TreeType.Flat; 
         treeViewer.refresh();
+        this.refreshContent(null);
     }
 
     public SortInfo getSortInfo() {
