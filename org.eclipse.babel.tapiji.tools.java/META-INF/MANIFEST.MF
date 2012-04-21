@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: TapiJI Tools Java extension
+Bundle-SymbolicName: org.eclipse.babel.tapiji.tools.java
+Bundle-Version: 0.0.2.qualifier
+Bundle-Vendor: Vienna University of Technology
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
