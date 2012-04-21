@@ -7,10 +7,9 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.util;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileReader;
+import java.io.IOException;
 
 import org.eclipse.babel.tapiji.tools.core.Activator;
 import org.eclipse.babel.tapiji.tools.core.Logger;
@@ -30,19 +29,9 @@ public class FileUtils {
     protected static String readFileAsString(File filePath) {
     	String content = "";
     	
-    	if (!filePath.exists()) return content;
     	try {
-    		BufferedReader fileReader = new BufferedReader(new FileReader(filePath));
-	        String line = "";
-	        
-	        while ((line = fileReader.readLine()) != null) {
-	        	content += line + "\n";
-	        }
-	        
-	        // close filereader
-	        fileReader.close();
-    	} catch (Exception e) {
-    		// TODO log error output
+    		content = org.apache.commons.io.FileUtils.readFileToString(filePath);
+    	} catch (IOException e) {
     		Logger.logError(e);
     	}
     	
