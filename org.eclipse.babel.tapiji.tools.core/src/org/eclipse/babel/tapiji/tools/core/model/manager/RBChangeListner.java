@@ -25,10 +25,10 @@ public class RBChangeListner implements IResourceChangeListener {
 		try {
 			event.getDelta().accept(new IResourceDeltaVisitor() {
 				@Override
-				public boolean visit(IResourceDelta delta) throws CoreException {					
+				public boolean visit(IResourceDelta delta) throws CoreException {
 					IResource resource = delta.getResource();
 					if (RBFileUtils.isResourceBundleFile(resource)) {
-//						ResourceBundleManager.getManager(resource.getProject()).bundleResourceModified(delta);
+						// ResourceBundleManager.getManager(resource.getProject()).bundleResourceModified(delta);
 						return false;
 					}
 					return true;

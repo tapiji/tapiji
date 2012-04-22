@@ -20,9 +20,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 
-
 public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
-		ITableColorProvider, ITableFontProvider {
+        ITableColorProvider, ITableFontProvider {
 
 	private IMessagesBundle locale;
 
@@ -30,19 +29,19 @@ public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
 		this.locale = iBundle;
 	}
 
-	//@Override
+	// @Override
 	public Image getColumnImage(Object element, int columnIndex) {
 		return null;
 	}
 
-	//@Override
+	// @Override
 	public String getColumnText(Object element, int columnIndex) {
 		try {
-		    IKeyTreeNode item = (IKeyTreeNode) element;
+			IKeyTreeNode item = (IKeyTreeNode) element;
 			IMessage entry = locale.getMessage(item.getMessageKey());
 			if (entry != null) {
 				String value = entry.getValue();
-				if (value.length() > 40) 
+				if (value.length() > 40)
 					value = value.substring(0, 39) + "...";
 			}
 		} catch (Exception e) {
@@ -52,7 +51,7 @@ public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
 
 	@Override
 	public Color getBackground(Object element, int columnIndex) {
-		return null;//return new Color(Display.getDefault(), 255, 0, 0);
+		return null;// return new Color(Display.getDefault(), 255, 0, 0);
 	}
 
 	@Override
@@ -63,7 +62,7 @@ public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
 
 	@Override
 	public Font getFont(Object element, int columnIndex) {
-		return null; //UIUtils.createFont(SWT.BOLD);
+		return null; // UIUtils.createFont(SWT.BOLD);
 	}
 
 	@Override
@@ -72,8 +71,8 @@ public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
 		int columnIndex = cell.getColumnIndex();
 		cell.setImage(this.getColumnImage(element, columnIndex));
 		cell.setText(this.getColumnText(element, columnIndex));
-		
+
 		super.update(cell);
 	}
-	
+
 }

@@ -12,13 +12,16 @@ package org.eclipse.babel.tapiji.translator.rbe.babel.bundle;
 
 /**
  * Listener being notified when a {@link IMessagesResource} content changes.
+ * 
  * @author Pascal Essiembre
  */
 public interface IMessagesResourceChangeListener {
 
 	/**
 	 * Method called when the messages resource has changed.
-	 * @param resource the resource that changed
+	 * 
+	 * @param resource
+	 *            the resource that changed
 	 */
-    void resourceChanged(IMessagesResource resource);
+	void resourceChanged(IMessagesResource resource);
 }

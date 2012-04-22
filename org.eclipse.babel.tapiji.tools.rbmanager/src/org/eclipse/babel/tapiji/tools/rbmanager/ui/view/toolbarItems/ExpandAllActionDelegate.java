@@ -26,12 +26,12 @@ import org.eclipse.ui.progress.UIJob;
 
 public class ExpandAllActionDelegate implements IViewActionDelegate {
 	private CommonViewer viewer;
-	
+
 	@Override
 	public void run(IAction action) {
-		Object data = viewer.getControl().getData();	
+		Object data = viewer.getControl().getData();
 
-		for(final IProject p : ((IWorkspaceRoot)data).getProjects()){
+		for (final IProject p : ((IWorkspaceRoot) data).getProjects()) {
 			UIJob job = new UIJob("expand Projects") {
 				@Override
 				public IStatus runInUIThread(IProgressMonitor monitor) {
@@ -39,7 +39,7 @@ public class ExpandAllActionDelegate implements IViewActionDelegate {
 					return Status.OK_STATUS;
 				}
 			};
-			
+
 			job.schedule();
 		}
 	}

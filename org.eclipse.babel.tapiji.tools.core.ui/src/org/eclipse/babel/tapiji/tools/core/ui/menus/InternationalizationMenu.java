@@ -51,17 +51,17 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 
-
 public class InternationalizationMenu extends ContributionItem {
 	private boolean excludeMode = true;
 	private boolean internationalizationEnabled = false;
-	
+
 	private MenuItem mnuToggleInt;
 	private MenuItem excludeResource;
 	private MenuItem addLanguage;
 	private MenuItem removeLanguage;
-	
-	public InternationalizationMenu() {}
+
+	public InternationalizationMenu() {
+	}
 
 	public InternationalizationMenu(String id) {
 		super(id);
@@ -69,13 +69,12 @@ public class InternationalizationMenu extends ContributionItem {
 
 	@Override
 	public void fill(Menu menu, int index) {
-		if (getSelectedProjects().size() == 0 || 
-			!projectsSupported())
+		if (getSelectedProjects().size() == 0 || !projectsSupported())
 			return;
-		
+
 		// Toggle Internatinalization
-		mnuToggleInt = new MenuItem (menu, SWT.PUSH);
-		mnuToggleInt.addSelectionListener(new SelectionAdapter () {
+		mnuToggleInt = new MenuItem(menu, SWT.PUSH);
+		mnuToggleInt.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -83,10 +82,10 @@ public class InternationalizationMenu extends ContributionItem {
 			}
 
 		});
-		
+
 		// Exclude Resource
-		excludeResource = new MenuItem (menu, SWT.PUSH);
-		excludeResource.addSelectionListener(new SelectionAdapter () {
+		excludeResource = new MenuItem(menu, SWT.PUSH);
+		excludeResource.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -94,97 +93,101 @@ public class InternationalizationMenu extends ContributionItem {
 			}
 
 		});
-		
+
 		new MenuItem(menu, SWT.SEPARATOR);
-		
+
 		// Add Language
 		addLanguage = new MenuItem(menu, SWT.PUSH);
 		addLanguage.addSelectionListener(new SelectionAdapter() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				runAddLanguage();
 			}
-			
+
 		});
-		
-		// Remove Language	
+
+		// Remove Language
 		removeLanguage = new MenuItem(menu, SWT.PUSH);
 		removeLanguage.addSelectionListener(new SelectionAdapter() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				runRemoveLanguage();
 			}
-			
+
 		});
-		
-		menu.addMenuListener(new MenuAdapter () {
-			public void menuShown (MenuEvent e) {
-				updateStateToggleInt (mnuToggleInt);
-				//updateStateGenRBAccessor (generateAccessor);
-				updateStateExclude (excludeResource);
-				updateStateAddLanguage (addLanguage);
-				updateStateRemoveLanguage (removeLanguage);
+
+		menu.addMenuListener(new MenuAdapter() {
+			public void menuShown(MenuEvent e) {
+				updateStateToggleInt(mnuToggleInt);
+				// updateStateGenRBAccessor (generateAccessor);
+				updateStateExclude(excludeResource);
+				updateStateAddLanguage(addLanguage);
+				updateStateRemoveLanguage(removeLanguage);
 			}
 		});
 	}
 
-	protected void runGenRBAccessor () {
-		GenerateBundleAccessorDialog dlg = new GenerateBundleAccessorDialog(Display.getDefault().getActiveShell());
+	protected void runGenRBAccessor() {
+		GenerateBundleAccessorDialog dlg = new GenerateBundleAccessorDialog(
+		        Display.getDefault().getActiveShell());
 		if (dlg.open() != InputDialog.OK)
 			return;
 	}
-	
-	protected void updateStateGenRBAccessor (MenuItem menuItem) {
+
+	protected void updateStateGenRBAccessor(MenuItem menuItem) {
 		Collection<IPackageFragment> frags = getSelectedPackageFragments();
 		menuItem.setEnabled(frags.size() > 0);
 	}
-	
-	protected void updateStateToggleInt (MenuItem menuItem) {
+
+	protected void updateStateToggleInt(MenuItem menuItem) {
 		Collection<IProject> projects = getSelectedProjects();
 		boolean enabled = projects.size() > 0;
 		menuItem.setEnabled(enabled);
 		setVisible(enabled);
-		internationalizationEnabled = InternationalizationNature.hasNature(projects.iterator().next());
-		//menuItem.setSelection(enabled && internationalizationEnabled);
-		
+		internationalizationEnabled = InternationalizationNature
+		        .hasNature(projects.iterator().next());
+		// menuItem.setSelection(enabled && internationalizationEnabled);
+
 		if (internationalizationEnabled)
 			menuItem.setText("Disable Internationalization");
-		else 
+		else
 			menuItem.setText("Enable Internationalization");
 	}
 
-	private Collection<IPackageFragment> getSelectedPackageFragments () {
-		Collection<IPackageFragment> frags = new HashSet<IPackageFragment> ();
-		IWorkbenchWindow window = 
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		ISelection selection = window.getActivePage().getSelection ();
+	private Collection<IPackageFragment> getSelectedPackageFragments() {
+		Collection<IPackageFragment> frags = new HashSet<IPackageFragment>();
+		IWorkbenchWindow window = PlatformUI.getWorkbench()
+		        .getActiveWorkbenchWindow();
+		ISelection selection = window.getActivePage().getSelection();
 		if (selection instanceof IStructuredSelection) {
-			for (Iterator<?> iter = ((IStructuredSelection)selection).iterator(); iter.hasNext();) {
+			for (Iterator<?> iter = ((IStructuredSelection) selection)
+			        .iterator(); iter.hasNext();) {
 				Object elem = iter.next();
 				if (elem instanceof IPackageFragment) {
 					IPackageFragment frag = (IPackageFragment) elem;
 					if (!frag.isReadOnly())
-						frags.add (frag);
+						frags.add(frag);
 				}
 			}
 		}
 		return frags;
 	}
-	
-	private Collection<IProject> getSelectedProjects () {
-		Collection<IProject> projects = new HashSet<IProject> ();
-		IWorkbenchWindow window = 
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		ISelection selection = window.getActivePage().getSelection ();
+
+	private Collection<IProject> getSelectedProjects() {
+		Collection<IProject> projects = new HashSet<IProject>();
+		IWorkbenchWindow window = PlatformUI.getWorkbench()
+		        .getActiveWorkbenchWindow();
+		ISelection selection = window.getActivePage().getSelection();
 		if (selection instanceof IStructuredSelection) {
-			for (Iterator<?> iter = ((IStructuredSelection)selection).iterator(); iter.hasNext();) {
+			for (Iterator<?> iter = ((IStructuredSelection) selection)
+			        .iterator(); iter.hasNext();) {
 				Object elem = iter.next();
 				if (!(elem instanceof IResource)) {
 					if (!(elem instanceof IAdaptable))
 						continue;
-					elem = ((IAdaptable) elem).getAdapter (IResource.class);
+					elem = ((IAdaptable) elem).getAdapter(IResource.class);
 					if (!(elem instanceof IResource))
 						continue;
 				}
@@ -193,44 +196,45 @@ public class InternationalizationMenu extends ContributionItem {
 					if (!(elem instanceof IProject))
 						continue;
 				}
-				if (((IProject)elem).isAccessible())
-					projects.add ((IProject)elem);
-				
+				if (((IProject) elem).isAccessible())
+					projects.add((IProject) elem);
+
 			}
 		}
 		return projects;
 	}
-	
+
 	protected boolean projectsSupported() {
-		Collection<IProject> projects = getSelectedProjects ();
+		Collection<IProject> projects = getSelectedProjects();
 		for (IProject project : projects) {
 			if (!InternationalizationNature.supportsNature(project))
 				return false;
 		}
-		
+
 		return true;
 	}
-	
-	protected void runToggleInt () {
-		Collection<IProject> projects = getSelectedProjects ();
+
+	protected void runToggleInt() {
+		Collection<IProject> projects = getSelectedProjects();
 		for (IProject project : projects) {
-			toggleNature (project);
+			toggleNature(project);
 		}
 	}
-	
-	private void toggleNature (IProject project) {
-		if (InternationalizationNature.hasNature (project)) {
-			InternationalizationNature.removeNature (project);
+
+	private void toggleNature(IProject project) {
+		if (InternationalizationNature.hasNature(project)) {
+			InternationalizationNature.removeNature(project);
 		} else {
-			InternationalizationNature.addNature (project);
+			InternationalizationNature.addNature(project);
 		}
-	}	
-	protected void updateStateExclude (MenuItem menuItem) {
+	}
+
+	protected void updateStateExclude(MenuItem menuItem) {
 		Collection<IResource> resources = getSelectedResources();
 		menuItem.setEnabled(resources.size() > 0 && internationalizationEnabled);
 		ResourceBundleManager manager = null;
 		excludeMode = false;
-		
+
 		for (IResource res : resources) {
 			if (manager == null || (manager.getProject() != res.getProject()))
 				manager = ResourceBundleManager.getManager(res.getProject());
@@ -238,51 +242,56 @@ public class InternationalizationMenu extends ContributionItem {
 				if (!ResourceBundleManager.isResourceExcluded(res)) {
 					excludeMode = true;
 				}
-			} catch (Exception e) {	}
+			} catch (Exception e) {
+			}
 		}
-		
+
 		if (!excludeMode)
 			menuItem.setText("Include Resource");
-		else 
+		else
 			menuItem.setText("Exclude Resource");
 	}
-	
-	private Collection<IResource> getSelectedResources () {
-		Collection<IResource> resources = new HashSet<IResource> ();
-		IWorkbenchWindow window = 
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		ISelection selection = window.getActivePage().getSelection ();
+
+	private Collection<IResource> getSelectedResources() {
+		Collection<IResource> resources = new HashSet<IResource>();
+		IWorkbenchWindow window = PlatformUI.getWorkbench()
+		        .getActiveWorkbenchWindow();
+		ISelection selection = window.getActivePage().getSelection();
 		if (selection instanceof IStructuredSelection) {
-			for (Iterator<?> iter = ((IStructuredSelection)selection).iterator(); iter.hasNext();) {
+			for (Iterator<?> iter = ((IStructuredSelection) selection)
+			        .iterator(); iter.hasNext();) {
 				Object elem = iter.next();
 				if (elem instanceof IProject)
 					continue;
-				
+
 				if (elem instanceof IResource) {
-					resources.add ((IResource)elem);
+					resources.add((IResource) elem);
 				} else if (elem instanceof IJavaElement) {
-					resources.add (((IJavaElement)elem).getResource());
+					resources.add(((IJavaElement) elem).getResource());
 				}
 			}
 		}
 		return resources;
 	}
-	
-	protected void runExclude () {
-		final Collection<IResource> selectedResources = getSelectedResources ();
-		
+
+	protected void runExclude() {
+		final Collection<IResource> selectedResources = getSelectedResources();
+
 		IWorkbench wb = PlatformUI.getWorkbench();
 		IProgressService ps = wb.getProgressService();
 		try {
 			ps.busyCursorWhile(new IRunnableWithProgress() {
 				public void run(IProgressMonitor pm) {
-			
+
 					ResourceBundleManager manager = null;
-					pm.beginTask("Including resources to Internationalization", selectedResources.size());
-					
+					pm.beginTask("Including resources to Internationalization",
+					        selectedResources.size());
+
 					for (IResource res : selectedResources) {
-						if (manager == null || (manager.getProject() != res.getProject()))
-							manager = ResourceBundleManager.getManager(res.getProject());
+						if (manager == null
+						        || (manager.getProject() != res.getProject()))
+							manager = ResourceBundleManager.getManager(res
+							        .getProject());
 						if (excludeMode)
 							manager.excludeResource(res, pm);
 						else
@@ -292,92 +301,112 @@ public class InternationalizationMenu extends ContributionItem {
 					pm.done();
 				}
 			});
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 	}
 
-	protected void updateStateAddLanguage(MenuItem menuItem){
+	protected void updateStateAddLanguage(MenuItem menuItem) {
 		Collection<IProject> projects = getSelectedProjects();
-		boolean hasResourceBundles=false;
-		for (IProject p : projects){
-			ResourceBundleManager rbmanager = ResourceBundleManager.getManager(p);
-			hasResourceBundles = rbmanager.getResourceBundleIdentifiers().size() > 0 ? true : false;
+		boolean hasResourceBundles = false;
+		for (IProject p : projects) {
+			ResourceBundleManager rbmanager = ResourceBundleManager
+			        .getManager(p);
+			hasResourceBundles = rbmanager.getResourceBundleIdentifiers()
+			        .size() > 0 ? true : false;
 		}
-		
+
 		menuItem.setText("Add Language To Project");
 		menuItem.setEnabled(projects.size() > 0 && hasResourceBundles);
 	}
-	
-	protected void runAddLanguage() {	
-		AddLanguageDialoge dialog = new AddLanguageDialoge(new Shell(Display.getCurrent()));
+
+	protected void runAddLanguage() {
+		AddLanguageDialoge dialog = new AddLanguageDialoge(new Shell(
+		        Display.getCurrent()));
 		if (dialog.open() == InputDialog.OK) {
 			final Locale locale = dialog.getSelectedLanguage();
-			
-			Collection<IProject> selectedProjects =  getSelectedProjects();
-			for (IProject project :  selectedProjects){
-				//check if project is fragmentproject and continue working with the hostproject, if host not member of selectedProjects
-				if (FragmentProjectUtils.isFragment(project)){
-					IProject host = FragmentProjectUtils.getFragmentHost(project);
+
+			Collection<IProject> selectedProjects = getSelectedProjects();
+			for (IProject project : selectedProjects) {
+				// check if project is fragmentproject and continue working with
+				// the hostproject, if host not member of selectedProjects
+				if (FragmentProjectUtils.isFragment(project)) {
+					IProject host = FragmentProjectUtils
+					        .getFragmentHost(project);
 					if (!selectedProjects.contains(host))
 						project = host;
 					else
 						continue;
 				}
-				
-				List<IProject> fragments = FragmentProjectUtils.getFragments(project);
-				
+
+				List<IProject> fragments = FragmentProjectUtils
+				        .getFragments(project);
+
 				if (!fragments.isEmpty()) {
 					FragmentProjectSelectionDialog fragmentDialog = new FragmentProjectSelectionDialog(
-							Display.getCurrent().getActiveShell(), project,
-							fragments);
-					
+					        Display.getCurrent().getActiveShell(), project,
+					        fragments);
+
 					if (fragmentDialog.open() == InputDialog.OK)
 						project = fragmentDialog.getSelectedProject();
 				}
-				
+
 				final IProject selectedProject = project;
 				BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
 					@Override
 					public void run() {
-						LanguageUtils.addLanguageToProject(selectedProject, locale);
+						LanguageUtils.addLanguageToProject(selectedProject,
+						        locale);
 					}
-					
+
 				});
-				
+
 			}
 		}
 	}
-	
-	
+
 	protected void updateStateRemoveLanguage(MenuItem menuItem) {
 		Collection<IProject> projects = getSelectedProjects();
-		boolean hasResourceBundles=false;
-		if (projects.size() == 1){
+		boolean hasResourceBundles = false;
+		if (projects.size() == 1) {
 			IProject project = projects.iterator().next();
-			ResourceBundleManager rbmanager = ResourceBundleManager.getManager(project);
-			hasResourceBundles = rbmanager.getResourceBundleIdentifiers().size() > 0 ? true : false;
+			ResourceBundleManager rbmanager = ResourceBundleManager
+			        .getManager(project);
+			hasResourceBundles = rbmanager.getResourceBundleIdentifiers()
+			        .size() > 0 ? true : false;
 		}
 		menuItem.setText("Remove Language From Project");
-		menuItem.setEnabled(projects.size() == 1 && hasResourceBundles/*&& more than one common languages contained*/);
+		menuItem.setEnabled(projects.size() == 1 && hasResourceBundles/*
+																	 * && more
+																	 * than one
+																	 * common
+																	 * languages
+																	 * contained
+																	 */);
 	}
 
 	protected void runRemoveLanguage() {
 		final IProject project = getSelectedProjects().iterator().next();
-		RemoveLanguageDialoge dialog = new RemoveLanguageDialoge(project, new Shell(Display.getCurrent()));
-				
-		
+		RemoveLanguageDialoge dialog = new RemoveLanguageDialoge(project,
+		        new Shell(Display.getCurrent()));
+
 		if (dialog.open() == InputDialog.OK) {
 			final Locale locale = dialog.getSelectedLanguage();
-			if (locale != null) {				
-				if (MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), "Confirm", "Do you really want remove all properties-files for "+locale.getDisplayName()+"?"))
-					BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
-						@Override
-						public void run() {
-							LanguageUtils.removeLanguageFromProject(project, locale);
-						}
-					});
-					
+			if (locale != null) {
+				if (MessageDialog.openConfirm(Display.getCurrent()
+				        .getActiveShell(), "Confirm",
+				        "Do you really want remove all properties-files for "
+				                + locale.getDisplayName() + "?"))
+					BusyIndicator.showWhile(Display.getCurrent(),
+					        new Runnable() {
+						        @Override
+						        public void run() {
+							        LanguageUtils.removeLanguageFromProject(
+							                project, locale);
+						        }
+					        });
+
 			}
 		}
 	}
-	
+
 }

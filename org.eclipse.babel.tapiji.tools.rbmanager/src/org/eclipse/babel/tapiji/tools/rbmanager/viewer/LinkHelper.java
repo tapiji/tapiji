@@ -26,22 +26,24 @@ import org.eclipse.ui.navigator.ILinkHelper;
 public class LinkHelper implements ILinkHelper {
 
 	public static IStructuredSelection viewer;
-	
+
 	@Override
-	public IStructuredSelection findSelection(IEditorInput anInput) {		
+	public IStructuredSelection findSelection(IEditorInput anInput) {
 		IFile file = ResourceUtil.getFile(anInput);
-		 if (file != null) {
-			 return new StructuredSelection(file);
-			 }
+		if (file != null) {
+			return new StructuredSelection(file);
+		}
 		return StructuredSelection.EMPTY;
 	}
 
 	@Override
-	public void activateEditor(IWorkbenchPage aPage,IStructuredSelection aSelection) {
+	public void activateEditor(IWorkbenchPage aPage,
+	        IStructuredSelection aSelection) {
 		if (aSelection.getFirstElement() instanceof IFile)
 			try {
 				IDE.openEditor(aPage, (IFile) aSelection.getFirstElement());
-			} catch (PartInitException e) {/**/}
+			} catch (PartInitException e) {/**/
+			}
 	}
 
 }

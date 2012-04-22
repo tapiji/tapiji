@@ -24,18 +24,17 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ListDialog;
 
-
-public class FragmentProjectSelectionDialog extends ListDialog{
+public class FragmentProjectSelectionDialog extends ListDialog {
 	private IProject hostproject;
 	private List<IProject> allProjects;
-	
-	
-	public FragmentProjectSelectionDialog(Shell parent, IProject hostproject, List<IProject> fragmentprojects){
+
+	public FragmentProjectSelectionDialog(Shell parent, IProject hostproject,
+	        List<IProject> fragmentprojects) {
 		super(parent);
 		this.hostproject = hostproject;
 		this.allProjects = new ArrayList<IProject>(fragmentprojects);
-		allProjects.add(0,hostproject);
-		
+		allProjects.add(0, hostproject);
+
 		init();
 	}
 
@@ -45,7 +44,7 @@ public class FragmentProjectSelectionDialog extends ListDialog{
 		this.setTitle("Project Selector");
 		this.setContentProvider(new IProjectContentProvider());
 		this.setLabelProvider(new IProjectLabelProvider());
-		
+
 		this.setInput(allProjects);
 	}
 
@@ -56,8 +55,7 @@ public class FragmentProjectSelectionDialog extends ListDialog{
 		return null;
 	}
 
-	
-	//private classes--------------------------------------------------------
+	// private classes--------------------------------------------------------
 	class IProjectContentProvider implements IStructuredContentProvider {
 
 		@Override
@@ -69,43 +67,45 @@ public class FragmentProjectSelectionDialog extends ListDialog{
 		@Override
 		public void dispose() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 			// TODO Auto-generated method stub
 		}
-		
+
 	}
-	
+
 	class IProjectLabelProvider implements ILabelProvider {
 
 		@Override
 		public Image getImage(Object element) {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(
-					ISharedImages.IMG_OBJ_PROJECT);
+			return PlatformUI.getWorkbench().getSharedImages()
+			        .getImage(ISharedImages.IMG_OBJ_PROJECT);
 		}
 
 		@Override
 		public String getText(Object element) {
 			IProject p = ((IProject) element);
 			String text = p.getName();
-			if (p.equals(hostproject)) text += " [host project]";
-			else text += " [fragment project]";
+			if (p.equals(hostproject))
+				text += " [host project]";
+			else
+				text += " [fragment project]";
 			return text;
 		}
 
 		@Override
 		public void addListener(ILabelProviderListener listener) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void dispose() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -117,8 +117,8 @@ public class FragmentProjectSelectionDialog extends ListDialog{
 		@Override
 		public void removeListener(ILabelProviderListener listener) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
 }

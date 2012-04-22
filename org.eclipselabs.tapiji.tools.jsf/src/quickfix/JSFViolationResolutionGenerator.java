@@ -15,7 +15,7 @@ import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator;
 
 public class JSFViolationResolutionGenerator implements
-		IMarkerResolutionGenerator {
+        IMarkerResolutionGenerator {
 
 	@Override
 	public IMarkerResolution[] getResolutions(IMarker marker) {

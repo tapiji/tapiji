@@ -32,7 +32,8 @@ public class OverlayIcon extends CompositeImageDescriptor {
 		this.img = baseImage;
 		this.overlay = overlayImage;
 		this.location = location;
-		this.imgSize = new Point(baseImage.getImageData().width, baseImage.getImageData().height);
+		this.imgSize = new Point(baseImage.getImageData().width,
+		        baseImage.getImageData().height);
 	}
 
 	@Override
@@ -52,7 +53,7 @@ public class OverlayIcon extends CompositeImageDescriptor {
 			break;
 		case BOTTOM_RIGHT:
 			drawImage(imageData, imgSize.x - imageData.width, imgSize.y
-					- imageData.height);
+			        - imageData.height);
 			break;
 		}
 	}

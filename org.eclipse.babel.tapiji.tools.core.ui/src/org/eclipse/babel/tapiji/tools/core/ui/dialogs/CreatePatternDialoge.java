@@ -20,50 +20,47 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class CreatePatternDialoge extends Dialog{
+public class CreatePatternDialoge extends Dialog {
 	private String pattern;
 	private Text patternText;
-	
-	
+
 	public CreatePatternDialoge(Shell shell) {
-		this(shell,"");
+		this(shell, "");
 	}
-	
+
 	public CreatePatternDialoge(Shell shell, String pattern) {
 		super(shell);
 		this.pattern = pattern;
-//		setShellStyle(SWT.RESIZE);
+		// setShellStyle(SWT.RESIZE);
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent) {		
+	protected Control createDialogArea(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, true));
-		composite.setLayoutData(new GridData(SWT.FILL,SWT.TOP, false, false));
-		
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+
 		Label descriptionLabel = new Label(composite, SWT.NONE);
 		descriptionLabel.setText("Enter a regular expression:");
-		
+
 		patternText = new Text(composite, SWT.WRAP | SWT.MULTI);
 		GridData gData = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gData.widthHint = 400;
 		gData.heightHint = 60;
 		patternText.setLayoutData(gData);
 		patternText.setText(pattern);
-		
 
-		
 		return composite;
 	}
 
 	@Override
 	protected void okPressed() {
-		pattern =  patternText.getText();
-		
+		pattern = patternText.getText();
+
 		super.okPressed();
 	}
-	
-	public String getPattern(){
+
+	public String getPattern() {
 		return pattern;
 	}
 

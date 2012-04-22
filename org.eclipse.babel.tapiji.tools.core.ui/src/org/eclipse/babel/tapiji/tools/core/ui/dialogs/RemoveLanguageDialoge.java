@@ -24,37 +24,36 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ListDialog;
 
-
-public class RemoveLanguageDialoge extends ListDialog{
+public class RemoveLanguageDialoge extends ListDialog {
 	private IProject project;
 
-	
 	public RemoveLanguageDialoge(IProject project, Shell shell) {
 		super(shell);
-		this.project=project;
-		
+		this.project = project;
+
 		initDialog();
 	}
 
-	protected void initDialog () {
+	protected void initDialog() {
 		this.setAddCancelButton(true);
 		this.setMessage("Select one of the following languages to delete:");
 		this.setTitle("Language Selector");
 		this.setContentProvider(new RBContentProvider());
 		this.setLabelProvider(new RBLabelProvider());
-		
-		this.setInput(ResourceBundleManager.getManager(project).getProjectProvidedLocales());
+
+		this.setInput(ResourceBundleManager.getManager(project)
+		        .getProjectProvidedLocales());
 	}
-	
+
 	public Locale getSelectedLanguage() {
 		Object[] selection = this.getResult();
 		if (selection != null && selection.length > 0)
 			return (Locale) selection[0];
 		return null;
 	}
-	
-	
-	//private classes-------------------------------------------------------------------------------------
+
+	// private
+	// classes-------------------------------------------------------------------------------------
 	class RBContentProvider implements IStructuredContentProvider {
 
 		@Override
@@ -66,17 +65,17 @@ public class RemoveLanguageDialoge extends ListDialog{
 		@Override
 		public void dispose() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
-	
+
 	class RBLabelProvider implements ILabelProvider {
 
 		@Override
@@ -88,21 +87,24 @@ public class RemoveLanguageDialoge extends ListDialog{
 		public String getText(Object element) {
 			Locale l = ((Locale) element);
 			String text = l.getDisplayName();
-			if (text==null || text.equals("")) text="default";
-			else text += " - "+l.getLanguage()+" "+l.getCountry()+" "+l.getVariant();
+			if (text == null || text.equals(""))
+				text = "default";
+			else
+				text += " - " + l.getLanguage() + " " + l.getCountry() + " "
+				        + l.getVariant();
 			return text;
 		}
 
 		@Override
 		public void addListener(ILabelProviderListener listener) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void dispose() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -114,8 +116,8 @@ public class RemoveLanguageDialoge extends ListDialog{
 		@Override
 		public void removeListener(ILabelProviderListener listener) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
 }

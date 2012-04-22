@@ -541,7 +541,11 @@ public class ResourceBundleManager {
 			Logger.logError(e);
 		}
 
-		(new I18nBuilder()).buildResource(res, null);
+		try {
+			res.touch(null);
+		} catch (CoreException e) {
+			Logger.logError(e);
+		}
 
 		// Check if the included resource represents a resource-bundle
 		if (RBFileUtils.isResourceBundleFile(res)) {
@@ -553,7 +557,13 @@ public class ResourceBundleManager {
 			// this.loadResourceBundle(bundleName);
 
 			if (newRB) {
-				(new I18nBuilder()).buildProject(null, res.getProject());
+				try {
+					resource.getProject().build(
+					        IncrementalProjectBuilder.FULL_BUILD,
+					        I18nBuilder.BUILDER_ID, null, null);
+				} catch (CoreException e) {
+					Logger.logError(e);
+				}
 			}
 			fireResourceBundleChangedEvent(getResourceBundleId(res),
 			        new ResourceBundleChangedEvent(
@@ -817,10 +827,9 @@ public class ResourceBundleManager {
 		return keyExists;
 	}
 
-	public static void refreshResource(IResource resource) {
+	public static void rebuildProject(IResource resource) {
 		try {
-			resource.getProject().build(IncrementalProjectBuilder.FULL_BUILD,
-			        I18nBuilder.BUILDER_ID, null, null);
+			resource.touch(null);
 		} catch (CoreException e) {
 			Logger.logError(e);
 		}

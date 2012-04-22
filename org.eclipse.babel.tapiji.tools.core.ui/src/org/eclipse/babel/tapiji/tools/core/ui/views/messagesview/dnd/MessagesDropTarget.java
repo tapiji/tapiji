@@ -25,43 +25,47 @@ import org.eclipse.swt.widgets.TreeItem;
 public class MessagesDropTarget extends DropTargetAdapter {
 	private final String projectName;
 	private String bundleName;
-	
-	public MessagesDropTarget (TreeViewer viewer, String projectName, String bundleName) {
+
+	public MessagesDropTarget(TreeViewer viewer, String projectName,
+	        String bundleName) {
 		super();
 		this.projectName = projectName;
 		this.bundleName = bundleName;
 	}
-	
-	public void dragEnter (DropTargetEvent event) {
+
+	public void dragEnter(DropTargetEvent event) {
 	}
-	
-	public void drop (DropTargetEvent event) {
+
+	public void drop(DropTargetEvent event) {
 		if (event.detail != DND.DROP_COPY)
 			return;
-		
-		if (TextTransfer.getInstance().isSupportedType (event.currentDataType)) {
-			//event.feedback = DND.FEEDBACK_INSERT_BEFORE;
+
+		if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) {
+			// event.feedback = DND.FEEDBACK_INSERT_BEFORE;
 			String newKeyPrefix = "";
-			
-			if (event.item instanceof TreeItem &&
-				((TreeItem) event.item).getData() instanceof IValuedKeyTreeNode) {
-				newKeyPrefix = ((IValuedKeyTreeNode) ((TreeItem) event.item).getData()).getMessageKey();
+
+			if (event.item instanceof TreeItem
+			        && ((TreeItem) event.item).getData() instanceof IValuedKeyTreeNode) {
+				newKeyPrefix = ((IValuedKeyTreeNode) ((TreeItem) event.item)
+				        .getData()).getMessageKey();
 			}
-				
-			String message = (String)event.data;
-			
+
+			String message = (String) event.data;
+
 			CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
-					Display.getDefault().getActiveShell());
-			
+			        Display.getDefault().getActiveShell());
+
 			DialogConfiguration config = dialog.new DialogConfiguration();
-			config.setPreselectedKey(newKeyPrefix.trim().length() > 0 ? newKeyPrefix + "." + "[Platzhalter]" : "");
+			config.setPreselectedKey(newKeyPrefix.trim().length() > 0 ? newKeyPrefix
+			        + "." + "[Platzhalter]"
+			        : "");
 			config.setPreselectedMessage(message);
 			config.setPreselectedBundle(bundleName);
 			config.setPreselectedLocale("");
 			config.setProjectName(projectName);
-			
+
 			dialog.setDialogConfiguration(config);
-			
+
 			if (dialog.open() != InputDialog.OK)
 				return;
 		} else

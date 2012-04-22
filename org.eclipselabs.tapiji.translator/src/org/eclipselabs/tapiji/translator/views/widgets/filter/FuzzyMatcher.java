@@ -21,29 +21,29 @@ public class FuzzyMatcher extends ExactMatcher {
 
 	protected ILevenshteinDistanceAnalyzer lvda;
 	protected float minimumSimilarity = 0.75f;
-	
+
 	public FuzzyMatcher(StructuredViewer viewer) {
 		super(viewer);
 		lvda = AnalyzerFactory.getLevenshteinDistanceAnalyzer();
 	}
 
-	public double getMinimumSimilarity () {
+	public double getMinimumSimilarity() {
 		return minimumSimilarity;
 	}
-	
-	public void setMinimumSimilarity (float similarity) {
+
+	public void setMinimumSimilarity(float similarity) {
 		this.minimumSimilarity = similarity;
 	}
-	
+
 	@Override
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
 		boolean exactMatch = super.select(viewer, parentElement, element);
 		boolean match = exactMatch;
-		
+
 		Term term = (Term) element;
-		
+
 		FilterInfo filterInfo = (FilterInfo) term.getInfo();
-		
+
 		for (Translation translation : term.getAllTranslations()) {
 			String value = translation.value;
 			String locale = translation.id;
@@ -54,12 +54,13 @@ public class FuzzyMatcher extends ExactMatcher {
 				filterInfo.addFoundInTranslation(locale);
 				filterInfo.addSimilarity(locale, dist);
 				match = true;
-				filterInfo.addFoundInTranslationRange(locale, 0, value.length());
+				filterInfo
+				        .addFoundInTranslationRange(locale, 0, value.length());
 			}
 		}
-		
+
 		term.setInfo(filterInfo);
-		return match; 
+		return match;
 	}
 
 }

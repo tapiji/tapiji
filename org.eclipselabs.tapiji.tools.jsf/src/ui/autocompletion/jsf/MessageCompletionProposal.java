@@ -32,64 +32,68 @@ import org.eclipse.jst.jsf.context.structureddocument.IStructuredDocumentContext
 import ui.autocompletion.NewResourceBundleEntryProposal;
 import auditor.JSFResourceBundleDetector;
 
-public class MessageCompletionProposal implements IContentAssistProcessor  {
+public class MessageCompletionProposal implements IContentAssistProcessor {
 
 	@Override
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer,
-			int offset) {
-		List <ICompletionProposal> proposals = new ArrayList<ICompletionProposal> ();
-		
+	        int offset) {
+		List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
+
 		final IStructuredDocumentContext context = IStructuredDocumentContextFactory.INSTANCE
-			.getContext(viewer, offset);
-	
-		IWorkspaceContextResolver workspaceResolver =  IStructuredDocumentContextResolverFactory.INSTANCE
-			.getWorkspaceContextResolver(context);
-	
+		        .getContext(viewer, offset);
+
+		IWorkspaceContextResolver workspaceResolver = IStructuredDocumentContextResolverFactory.INSTANCE
+		        .getWorkspaceContextResolver(context);
+
 		IProject project = workspaceResolver.getProject();
 		IResource resource = workspaceResolver.getResource();
-		
+
 		if (project != null) {
 			if (!InternationalizationNature.hasNature(project))
-				return proposals.toArray(new CompletionProposal[proposals.size()]);
+				return proposals.toArray(new CompletionProposal[proposals
+				        .size()]);
 		} else
 			return proposals.toArray(new CompletionProposal[proposals.size()]);
-		
+
 		// Compute proposals
-		String expression = getProposalPrefix (viewer.getDocument(), offset); 
-		String bundleId = JSFResourceBundleDetector.resolveResourceBundleId(viewer.getDocument(), 
-				JSFResourceBundleDetector.getBundleVariableName(expression));
+		String expression = getProposalPrefix(viewer.getDocument(), offset);
+		String bundleId = JSFResourceBundleDetector.resolveResourceBundleId(
+		        viewer.getDocument(),
+		        JSFResourceBundleDetector.getBundleVariableName(expression));
 		String key = JSFResourceBundleDetector.getResourceKey(expression);
-		
-		if (expression.trim().length() > 0 && 
-			bundleId.trim().length() > 0 &&
-			isNonExistingKey (project, bundleId, key)) {
+
+		if (expression.trim().length() > 0 && bundleId.trim().length() > 0
+		        && isNonExistingKey(project, bundleId, key)) {
 			// Add 'New Resource' proposal
 			int startpos = offset - key.length();
 			int length = key.length();
-			
-			proposals.add(new NewResourceBundleEntryProposal(resource, key, startpos, length, ResourceBundleManager.getManager(project)
-					, bundleId, true));
+
+			proposals.add(new NewResourceBundleEntryProposal(resource, key,
+			        startpos, length,
+			        ResourceBundleManager.getManager(project), bundleId, true));
 		}
-		
+
 		return proposals.toArray(new ICompletionProposal[proposals.size()]);
 	}
 
 	private String getProposalPrefix(IDocument document, int offset) {
 		String content = document.get().substring(0, offset);
 		int expIntro = content.lastIndexOf("#{");
-		
-		return content.substring(expIntro+2, offset);
+
+		return content.substring(expIntro + 2, offset);
 	}
 
-	protected boolean isNonExistingKey (IProject project, String bundleId, String key) {
-		ResourceBundleManager manager = ResourceBundleManager.getManager(project);
-		
+	protected boolean isNonExistingKey(IProject project, String bundleId,
+	        String key) {
+		ResourceBundleManager manager = ResourceBundleManager
+		        .getManager(project);
+
 		return !manager.isResourceExisting(bundleId, key);
 	}
-	
+
 	@Override
 	public IContextInformation[] computeContextInformation(ITextViewer viewer,
-			int offset) {
+	        int offset) {
 		// TODO Auto-generated method stub
 		return null;
 	}

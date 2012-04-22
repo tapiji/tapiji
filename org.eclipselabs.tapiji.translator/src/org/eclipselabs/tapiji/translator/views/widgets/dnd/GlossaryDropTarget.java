@@ -20,18 +20,17 @@ import org.eclipselabs.tapiji.translator.model.Glossary;
 import org.eclipselabs.tapiji.translator.model.Term;
 import org.eclipselabs.tapiji.translator.views.widgets.provider.GlossaryContentProvider;
 
-
 public class GlossaryDropTarget extends DropTargetAdapter {
 	private final TreeViewer target;
 	private final GlossaryManager manager;
-	
-	public GlossaryDropTarget (TreeViewer viewer, GlossaryManager manager) {
+
+	public GlossaryDropTarget(TreeViewer viewer, GlossaryManager manager) {
 		super();
 		this.target = viewer;
 		this.manager = manager;
 	}
-	
-	public void dragEnter (DropTargetEvent event) {
+
+	public void dragEnter(DropTargetEvent event) {
 		if (event.detail == DND.DROP_MOVE || event.detail == DND.DROP_DEFAULT) {
 			if ((event.operations & DND.DROP_MOVE) != 0)
 				event.detail = DND.DROP_MOVE;
@@ -39,26 +38,28 @@ public class GlossaryDropTarget extends DropTargetAdapter {
 				event.detail = DND.DROP_NONE;
 		}
 	}
-	
-	public void drop (DropTargetEvent event) {
-		if (TermTransfer.getInstance().isSupportedType (event.currentDataType)) {
+
+	public void drop(DropTargetEvent event) {
+		if (TermTransfer.getInstance().isSupportedType(event.currentDataType)) {
 			Term parentTerm = null;
-			
+
 			event.detail = DND.DROP_MOVE;
 			event.feedback = DND.FEEDBACK_INSERT_AFTER;
 
-			if (event.item instanceof TreeItem &&
-				((TreeItem) event.item).getData() instanceof Term) {
+			if (event.item instanceof TreeItem
+			        && ((TreeItem) event.item).getData() instanceof Term) {
 				parentTerm = ((Term) ((TreeItem) event.item).getData());
 			}
-				
+
 			Term[] moveTerm = (Term[]) event.data;
-			Glossary glossary = ((GlossaryContentProvider) target.getContentProvider()).getGlossary();
-			
-			/* Remove the move term from its initial position 
-			for (Term selectionObject : moveTerm)
-				glossary.removeTerm(selectionObject);*/
-			
+			Glossary glossary = ((GlossaryContentProvider) target
+			        .getContentProvider()).getGlossary();
+
+			/*
+			 * Remove the move term from its initial position for (Term
+			 * selectionObject : moveTerm) glossary.removeTerm(selectionObject);
+			 */
+
 			/* Insert the move term on its target position */
 			if (parentTerm == null) {
 				for (Term t : moveTerm)
@@ -67,7 +68,7 @@ public class GlossaryDropTarget extends DropTargetAdapter {
 				for (Term t : moveTerm)
 					parentTerm.subTerms.add(t);
 			}
-			
+
 			manager.setGlossary(glossary);
 			try {
 				manager.saveGlossary();

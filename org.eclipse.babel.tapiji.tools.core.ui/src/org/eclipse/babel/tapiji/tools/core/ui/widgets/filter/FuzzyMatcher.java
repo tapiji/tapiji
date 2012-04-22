@@ -22,28 +22,29 @@ public class FuzzyMatcher extends ExactMatcher {
 
 	protected ILevenshteinDistanceAnalyzer lvda;
 	protected float minimumSimilarity = 0.75f;
-	
+
 	public FuzzyMatcher(StructuredViewer viewer) {
 		super(viewer);
-		lvda = AnalyzerFactory.getLevenshteinDistanceAnalyzer();;
+		lvda = AnalyzerFactory.getLevenshteinDistanceAnalyzer();
+		;
 	}
 
-	public double getMinimumSimilarity () {
+	public double getMinimumSimilarity() {
 		return minimumSimilarity;
 	}
-	
-	public void setMinimumSimilarity (float similarity) {
+
+	public void setMinimumSimilarity(float similarity) {
 		this.minimumSimilarity = similarity;
 	}
-	
+
 	@Override
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
 		boolean exactMatch = super.select(viewer, parentElement, element);
 		boolean match = exactMatch;
-		
+
 		IValuedKeyTreeNode vkti = (IValuedKeyTreeNode) element;
 		FilterInfo filterInfo = (FilterInfo) vkti.getInfo();
-		
+
 		for (Locale l : vkti.getLocales()) {
 			String value = vkti.getValue(l);
 			if (filterInfo.hasFoundInLocale(l))
@@ -56,7 +57,7 @@ public class FuzzyMatcher extends ExactMatcher {
 				filterInfo.addFoundInLocaleRange(l, 0, value.length());
 			}
 		}
-		
+
 		vkti.setInfo(filterInfo);
 		return match;
 	}

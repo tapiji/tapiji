@@ -22,44 +22,48 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.OperationCanceledException;
 
-
 public class FileUtils {
 
-	public static String readFile (IResource resource) {
+	public static String readFile(IResource resource) {
 		return readFileAsString(resource.getRawLocation().toFile());
 	}
-	
-    protected static String readFileAsString(File filePath) {
-    	String content = "";
-    	
-    	try {
-    		content = org.apache.commons.io.FileUtils.readFileToString(filePath);
-    	} catch (IOException e) {
-    		Logger.logError(e);
-    	}
-    	
-    	return content;
-    }
+
+	protected static String readFileAsString(File filePath) {
+		String content = "";
+
+		try {
+			content = org.apache.commons.io.FileUtils
+			        .readFileToString(filePath);
+		} catch (IOException e) {
+			Logger.logError(e);
+		}
+
+		return content;
+	}
 
 	public static File getRBManagerStateFile() {
-		return Activator.getDefault().getStateLocation().append("internationalization.xml").toFile();
+		return Activator.getDefault().getStateLocation()
+		        .append("internationalization.xml").toFile();
 	}
 
 	/**
-	 * Don't use that -> causes {@link ResourceException} -> because File out of sync
+	 * Don't use that -> causes {@link ResourceException} -> because File out of
+	 * sync
+	 * 
 	 * @param file
 	 * @param editorContent
 	 * @throws CoreException
 	 * @throws OperationCanceledException
 	 */
-	public synchronized void saveTextFile(IFile file, String editorContent) 
-		   throws CoreException, OperationCanceledException {
+	public synchronized void saveTextFile(IFile file, String editorContent)
+	        throws CoreException, OperationCanceledException {
 		try {
-			file.setContents(new ByteArrayInputStream(editorContent.getBytes()), 
-					false, true, null);
+			file.setContents(
+			        new ByteArrayInputStream(editorContent.getBytes()), false,
+			        true, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

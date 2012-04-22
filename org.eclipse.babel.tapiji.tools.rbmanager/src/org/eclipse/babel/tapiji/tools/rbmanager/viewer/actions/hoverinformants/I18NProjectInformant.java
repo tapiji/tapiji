@@ -31,37 +31,37 @@ public class I18NProjectInformant implements HoverInformant {
 	private String locales;
 	private String fragments;
 	private boolean show = false;
-	
+
 	private Composite infoComposite;
 	private Label localeLabel;
 	private Composite localeGroup;
 	private Label fragmentsLabel;
 	private Composite fragmentsGroup;
-	
+
 	private GridData infoData;
 	private GridData showLocalesData;
 	private GridData showFragmentsData;
-	
+
 	@Override
 	public Composite getInfoComposite(Object data, Composite parent) {
 		show = false;
-		
-		if (infoComposite == null){
+
+		if (infoComposite == null) {
 			infoComposite = new Composite(parent, SWT.NONE);
-			GridLayout layout =new GridLayout(1,false);
+			GridLayout layout = new GridLayout(1, false);
 			layout.verticalSpacing = 1;
 			layout.horizontalSpacing = 0;
 			infoComposite.setLayout(layout);
-			
+
 			infoData = new GridData(SWT.LEFT, SWT.TOP, true, true);
 			infoComposite.setLayoutData(infoData);
 		}
-		
-		if (data instanceof IProject) {					
+
+		if (data instanceof IProject) {
 			addLocale(infoComposite, data);
 			addFragments(infoComposite, data);
-		} 
-		
+		}
+
 		if (show) {
 			infoData.heightHint = -1;
 			infoData.widthHint = -1;
@@ -69,11 +69,11 @@ public class I18NProjectInformant implements HoverInformant {
 			infoData.heightHint = 0;
 			infoData.widthHint = 0;
 		}
-		
+
 		infoComposite.layout();
 		infoComposite.pack();
 		sinkColor(infoComposite);
-		
+
 		return infoComposite;
 	}
 
@@ -81,55 +81,54 @@ public class I18NProjectInformant implements HoverInformant {
 	public boolean show() {
 		return show;
 	}
-	
-	private void setColor(Control control){
+
+	private void setColor(Control control) {
 		Display display = control.getParent().getDisplay();
-		
-		control.setForeground(display
-				.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
-		control.setBackground(display
-				.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+
+		control.setForeground(display.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
+		control.setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 	}
-	
-	private void sinkColor(Composite composite){
+
+	private void sinkColor(Composite composite) {
 		setColor(composite);
-		
-		for(Control c : composite.getChildren()){
-			setColor(c);		
-			if (c instanceof Composite) sinkColor((Composite) c);
+
+		for (Control c : composite.getChildren()) {
+			setColor(c);
+			if (c instanceof Composite)
+				sinkColor((Composite) c);
 		}
 	}
 
-	private void addLocale(Composite parent, Object data){
+	private void addLocale(Composite parent, Object data) {
 		if (localeGroup == null) {
-			localeGroup =  new Composite(parent, SWT.NONE);
+			localeGroup = new Composite(parent, SWT.NONE);
 			localeLabel = new Label(localeGroup, SWT.SINGLE);
-			
+
 			showLocalesData = new GridData(SWT.LEFT, SWT.TOP, true, true);
 			localeGroup.setLayoutData(showLocalesData);
 		}
-		
+
 		locales = getProvidedLocales(data);
-		
+
 		if (locales.length() != 0) {
 			localeLabel.setText(locales);
-			localeLabel.pack();	
+			localeLabel.pack();
 			show = true;
-//			showLocalesData.heightHint = -1;
-//			showLocalesData.widthHint=-1;
+			// showLocalesData.heightHint = -1;
+			// showLocalesData.widthHint=-1;
 		} else {
 			localeLabel.setText("No Language Provided");
 			localeLabel.pack();
 			show = true;
-//			showLocalesData.heightHint = 0;
-//			showLocalesData.widthHint = 0;
+			// showLocalesData.heightHint = 0;
+			// showLocalesData.widthHint = 0;
 		}
-		
-//		localeGroup.layout();
+
+		// localeGroup.layout();
 		localeGroup.pack();
 	}
-	
-	private void addFragments(Composite parent, Object data){
+
+	private void addFragments(Composite parent, Object data) {
 		if (fragmentsGroup == null) {
 			fragmentsGroup = new Composite(parent, SWT.NONE);
 			GridLayout layout = new GridLayout(1, false);
@@ -141,7 +140,7 @@ public class I18NProjectInformant implements HoverInformant {
 			fragmentsGroup.setLayoutData(showFragmentsData);
 
 			Composite fragmentTitleGroup = new Composite(fragmentsGroup,
-					SWT.NONE);
+			        SWT.NONE);
 			layout = new GridLayout(2, false);
 			layout.verticalSpacing = 0;
 			layout.horizontalSpacing = 5;
@@ -149,7 +148,7 @@ public class I18NProjectInformant implements HoverInformant {
 
 			Label fragmentImageLabel = new Label(fragmentTitleGroup, SWT.NONE);
 			fragmentImageLabel.setImage(ImageUtils
-					.getBaseImage(ImageUtils.FRAGMENT_PROJECT_IMAGE));
+			        .getBaseImage(ImageUtils.FRAGMENT_PROJECT_IMAGE));
 			fragmentImageLabel.pack();
 
 			Label fragementTitleLabel = new Label(fragmentTitleGroup, SWT.NONE);
@@ -157,27 +156,28 @@ public class I18NProjectInformant implements HoverInformant {
 			fragementTitleLabel.pack();
 			fragmentsLabel = new Label(fragmentsGroup, SWT.SINGLE);
 		}
-		
+
 		fragments = getFragmentProjects(data);
-		
+
 		if (fragments.length() != 0) {
 			fragmentsLabel.setText(fragments);
 			show = true;
 			showFragmentsData.heightHint = -1;
-			showFragmentsData.widthHint= -1;
+			showFragmentsData.widthHint = -1;
 			fragmentsLabel.pack();
 		} else {
 			showFragmentsData.heightHint = 0;
 			showFragmentsData.widthHint = 0;
 		}
-		
+
 		fragmentsGroup.layout();
 		fragmentsGroup.pack();
 	}
-	
+
 	private String getProvidedLocales(Object data) {
 		if (data instanceof IProject) {
-			ResourceBundleManager rbmanger = ResourceBundleManager.getManager((IProject) data);
+			ResourceBundleManager rbmanger = ResourceBundleManager
+			        .getManager((IProject) data);
 			Set<Locale> ls = rbmanger.getProjectProvidedLocales();
 
 			if (ls.size() > 0) {
@@ -203,25 +203,26 @@ public class I18NProjectInformant implements HoverInformant {
 				return sb.toString();
 			}
 		}
-		
-		
+
 		return "";
 	}
 
 	private String getFragmentProjects(Object data) {
-		if (data instanceof IProject){
-			List<IProject> fragments = FragmentProjectUtils.getFragments((IProject) data);
+		if (data instanceof IProject) {
+			List<IProject> fragments = FragmentProjectUtils
+			        .getFragments((IProject) data);
 			if (fragments.size() > 0) {
 				StringBuilder sb = new StringBuilder();
-				
+
 				int i = 0;
-				for (IProject f : fragments){
+				for (IProject f : fragments) {
 					sb.append(f.getName());
-					if (++i != fragments.size()) sb.append("\n");
+					if (++i != fragments.size())
+						sb.append("\n");
 				}
 				return sb.toString();
 			}
-		}		
+		}
 		return "";
 	}
 }

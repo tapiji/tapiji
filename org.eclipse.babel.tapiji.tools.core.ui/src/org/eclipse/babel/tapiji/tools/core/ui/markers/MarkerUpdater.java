@@ -17,8 +17,8 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.ui.texteditor.IMarkerUpdater;
 
-public class MarkerUpdater  implements IMarkerUpdater {
-	
+public class MarkerUpdater implements IMarkerUpdater {
+
 	@Override
 	public String getMarkerType() {
 		return "org.eclipse.core.resources.problemmarker";
@@ -32,16 +32,16 @@ public class MarkerUpdater  implements IMarkerUpdater {
 
 	@Override
 	public boolean updateMarker(IMarker marker, IDocument document,
-			Position position) {
+	        Position position) {
 		try {
-				int start = position.getOffset();
-				int end = position.getOffset() + position.getLength();
-				marker.setAttribute(IMarker.CHAR_START, start);
-				marker.setAttribute(IMarker.CHAR_END, end);
-				return true;
-			} catch (CoreException e) {
-				Logger.logError(e);
-				return false;
-			}
+			int start = position.getOffset();
+			int end = position.getOffset() + position.getLength();
+			marker.setAttribute(IMarker.CHAR_START, start);
+			marker.setAttribute(IMarker.CHAR_END, end);
+			return true;
+		} catch (CoreException e) {
+			Logger.logError(e);
+			return false;
+		}
 	}
 }

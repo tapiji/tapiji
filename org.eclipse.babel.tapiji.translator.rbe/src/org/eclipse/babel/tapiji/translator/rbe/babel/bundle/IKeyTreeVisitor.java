@@ -10,16 +10,18 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.translator.rbe.babel.bundle;
 
-
 /**
  * Objects implementing this interface can act as a visitor to a
  * <code>IKeyTreeModel</code>.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public interface IKeyTreeVisitor {
-    /**
-     * Visits a key tree node.
-     * @param item key tree node to visit
-     */
+	/**
+	 * Visits a key tree node.
+	 * 
+	 * @param item
+	 *            key tree node to visit
+	 */
 	void visitKeyTreeNode(IKeyTreeNode node);
 }

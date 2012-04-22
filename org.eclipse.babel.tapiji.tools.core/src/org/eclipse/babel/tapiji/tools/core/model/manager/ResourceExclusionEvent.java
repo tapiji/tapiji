@@ -28,5 +28,5 @@ public class ResourceExclusionEvent {
 	public Collection<Object> getChangedResources() {
 		return changedResources;
 	}
-	
+
 }

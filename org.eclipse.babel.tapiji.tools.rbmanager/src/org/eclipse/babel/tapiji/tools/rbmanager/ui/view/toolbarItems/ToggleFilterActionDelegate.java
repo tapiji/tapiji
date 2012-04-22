@@ -20,20 +20,18 @@ import org.eclipse.ui.navigator.ICommonFilterDescriptor;
 import org.eclipse.ui.navigator.INavigatorContentService;
 import org.eclipse.ui.navigator.INavigatorFilterService;
 
-
-
-public class ToggleFilterActionDelegate implements IViewActionDelegate{
+public class ToggleFilterActionDelegate implements IViewActionDelegate {
 	private INavigatorFilterService filterService;
 	private boolean active;
-	private static final String[] FILTER = {RBManagerActivator.PLUGIN_ID+".filter.ProblematicResourceBundleFiles"};	
-	
+	private static final String[] FILTER = { RBManagerActivator.PLUGIN_ID
+	        + ".filter.ProblematicResourceBundleFiles" };
+
 	@Override
-	public void run(IAction action) {		
-		if (active==true){
+	public void run(IAction action) {
+		if (active == true) {
 			filterService.activateFilterIdsAndUpdateViewer(new String[0]);
 			active = false;
-		}
-		else {
+		} else {
 			filterService.activateFilterIdsAndUpdateViewer(FILTER);
 			active = true;
 		}
@@ -46,22 +44,23 @@ public class ToggleFilterActionDelegate implements IViewActionDelegate{
 
 	@Override
 	public void init(IViewPart view) {
-		INavigatorContentService contentService = ((CommonNavigator) view).getCommonViewer().getNavigatorContentService(); 
-		
+		INavigatorContentService contentService = ((CommonNavigator) view)
+		        .getCommonViewer().getNavigatorContentService();
+
 		filterService = contentService.getFilterService();
 		filterService.activateFilterIdsAndUpdateViewer(new String[0]);
-		active=false;
+		active = false;
 	}
-
 
 	@SuppressWarnings("unused")
 	private String[] getActiveFilterIds() {
-		ICommonFilterDescriptor[] fds = filterService.getVisibleFilterDescriptors();
-		String activeFilterIds[]=new String[fds.length];
-		
-		for(int i=0;i<fds.length;i++)
-			activeFilterIds[i]=fds[i].getId();
-			
+		ICommonFilterDescriptor[] fds = filterService
+		        .getVisibleFilterDescriptors();
+		String activeFilterIds[] = new String[fds.length];
+
+		for (int i = 0; i < fds.length; i++)
+			activeFilterIds[i] = fds[i].getId();
+
 		return activeFilterIds;
 	}
 

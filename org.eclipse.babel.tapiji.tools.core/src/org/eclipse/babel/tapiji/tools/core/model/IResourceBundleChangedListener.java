@@ -14,6 +14,6 @@ import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleChangedEv
 
 public interface IResourceBundleChangedListener {
 
-	public void resourceBundleChanged (ResourceBundleChangedEvent event);
-	
+	public void resourceBundleChanged(ResourceBundleChangedEvent event);
+
 }

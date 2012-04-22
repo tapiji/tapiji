@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2008 Stefan Mücke and others.
+ * Copyright (c) 2008 Stefan Mï¿½cke and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Stefan Mücke - initial API and implementation
+ *     Stefan Mï¿½cke - initial API and implementation
  *******************************************************************************/
 package org.eclipse.pde.nls.internal.ui.editor;
 
@@ -113,10 +113,12 @@ public class LocalizationEditor extends EditorPart {
 			this.columnConfig = columnConfig;
 		}
 
+		@Override
 		public String getText(Object element) {
 			ResourceBundleKey key = (ResourceBundleKey) element;
-			if (columnConfig == KEY)
+			if (columnConfig == KEY) {
 				return key.getName();
+			}
 			Locale locale = (Locale) columnConfig;
 			String value;
 			try {
@@ -125,8 +127,9 @@ public class LocalizationEditor extends EditorPart {
 				value = null;
 				MessagesEditorPlugin.log(e);
 			}
-			if (value == null)
+			if (value == null) {
 				value = "";
+			}
 			return value;
 		}
 	}
@@ -139,6 +142,7 @@ public class LocalizationEditor extends EditorPart {
 		/*
 		 * @see org.eclipse.jface.action.Action#run()
 		 */
+		@Override
 		public void run() {
 			ResourceBundleKey key = getSelectedEntry();
 			if (key == null) {
@@ -146,7 +150,8 @@ public class LocalizationEditor extends EditorPart {
 			}
 			Shell shell = Display.getCurrent().getActiveShell();
 			Locale[] locales = getLocales();
-			EditResourceBundleEntriesDialog dialog = new EditResourceBundleEntriesDialog(shell, locales);
+			EditResourceBundleEntriesDialog dialog = new EditResourceBundleEntriesDialog(
+			        shell, locales);
 			dialog.setResourceBundleKey(key);
 			if (dialog.open() == Window.OK) {
 				updateLabels();
@@ -156,24 +161,28 @@ public class LocalizationEditor extends EditorPart {
 
 	private class ConfigureColumnsAction extends Action {
 		public ConfigureColumnsAction() {
-			super(null, IAction.AS_PUSH_BUTTON); //$NON-NLS-1$
-			setImageDescriptor(MessagesEditorPlugin.getImageDescriptor("elcl16/conf_columns.gif"));
+			super(null, IAction.AS_PUSH_BUTTON);
+			setImageDescriptor(MessagesEditorPlugin
+			        .getImageDescriptor("elcl16/conf_columns.gif"));
 			setToolTipText("Configure Columns");
 		}
 
 		/*
 		 * @see org.eclipse.jface.action.Action#run()
 		 */
+		@Override
 		public void run() {
 			Shell shell = Display.getCurrent().getActiveShell();
 			String[] values = new String[columnConfigs.length];
 			for (int i = 0; i < columnConfigs.length; i++) {
 				String config = columnConfigs[i].toString();
-				if (config.equals("")) //$NON-NLS-1$
+				if (config.equals("")) {
 					config = "default"; //$NON-NLS-1$
+				}
 				values[i] = config;
 			}
-			ConfigureColumnsDialog dialog = new ConfigureColumnsDialog(shell, values);
+			ConfigureColumnsDialog dialog = new ConfigureColumnsDialog(shell,
+			        values);
 			if (dialog.open() == Window.OK) {
 				String[] result = dialog.getResult();
 				Object[] newConfigs = new Object[result.length];
@@ -193,14 +202,16 @@ public class LocalizationEditor extends EditorPart {
 
 	private class EditFilterOptionsAction extends Action {
 		public EditFilterOptionsAction() {
-			super(null, IAction.AS_PUSH_BUTTON); //$NON-NLS-1$
-			setImageDescriptor(MessagesEditorPlugin.getImageDescriptor("elcl16/filter_obj.gif"));
+			super(null, IAction.AS_PUSH_BUTTON);
+			setImageDescriptor(MessagesEditorPlugin
+			        .getImageDescriptor("elcl16/filter_obj.gif"));
 			setToolTipText("Edit Filter Options");
 		}
 
 		/*
 		 * @see org.eclipse.jface.action.Action#run()
 		 */
+		@Override
 		public void run() {
 			Shell shell = Display.getCurrent().getActiveShell();
 			FilterOptionsDialog dialog = new FilterOptionsDialog(shell);
@@ -215,14 +226,16 @@ public class LocalizationEditor extends EditorPart {
 
 	private class RefreshAction extends Action {
 		public RefreshAction() {
-			super(null, IAction.AS_PUSH_BUTTON); //$NON-NLS-1$
-			setImageDescriptor(MessagesEditorPlugin.getImageDescriptor("elcl16/refresh.gif"));
+			super(null, IAction.AS_PUSH_BUTTON);
+			setImageDescriptor(MessagesEditorPlugin
+			        .getImageDescriptor("elcl16/refresh.gif"));
 			setToolTipText("Refresh");
 		}
 
 		/*
 		 * @see org.eclipse.jface.action.Action#run()
 		 */
+		@Override
 		public void run() {
 			MessagesEditorPlugin.disposeModel();
 			entryList = new ResourceBundleKeyList(new ResourceBundleKey[0]);
@@ -232,11 +245,14 @@ public class LocalizationEditor extends EditorPart {
 		}
 	}
 
-	private class BundleStringComparator implements Comparator<ResourceBundleKey> {
+	private class BundleStringComparator implements
+	        Comparator<ResourceBundleKey> {
 		private final Locale locale;
+
 		public BundleStringComparator(Locale locale) {
 			this.locale = locale;
 		}
+
 		public int compare(ResourceBundleKey o1, ResourceBundleKey o2) {
 			String value1 = null;
 			String value2 = null;
@@ -250,53 +266,59 @@ public class LocalizationEditor extends EditorPart {
 			} catch (CoreException e) {
 				MessagesEditorPlugin.log(e);
 			}
-			if (value1 == null)
+			if (value1 == null) {
 				value1 = ""; //$NON-NLS-1$
-			if (value2 == null)
+			}
+			if (value2 == null) {
 				value2 = ""; //$NON-NLS-1$
+			}
 			return value1.compareToIgnoreCase(value2);
 		}
 	}
 
 	private class ExportAction extends Action {
 		public ExportAction() {
-			super(null, IAction.AS_PUSH_BUTTON); //$NON-NLS-1$
-			setImageDescriptor(MessagesEditorPlugin.getImageDescriptor("elcl16/export.gif"));
+			super(null, IAction.AS_PUSH_BUTTON);
+			setImageDescriptor(MessagesEditorPlugin
+			        .getImageDescriptor("elcl16/export.gif"));
 			setToolTipText("Export Current View to CSV or HTML File");
 		}
 
 		/*
 		 * @see org.eclipse.jface.action.Action#run()
 		 */
+		@Override
 		public void run() {
 			Shell shell = Display.getCurrent().getActiveShell();
 			FileDialog dialog = new FileDialog(shell);
 			dialog.setText("Export File");
-			dialog.setFilterExtensions(new String[] {"*.*", "*.htm; *.html", "*.txt; *.csv"});
-			dialog.setFilterNames(new String[] {"All Files (*.*)", "HTML File (*.htm; *.html)",
-					"Tabulator Separated File (*.txt; *.csv)"});
+			dialog.setFilterExtensions(new String[] { "*.*", "*.htm; *.html",
+			        "*.txt; *.csv" });
+			dialog.setFilterNames(new String[] { "All Files (*.*)",
+			        "HTML File (*.htm; *.html)",
+			        "Tabulator Separated File (*.txt; *.csv)" });
 			final String filename = dialog.open();
 			if (filename != null) {
 				BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
 					public void run() {
 						File file = new File(filename);
 						try {
-							BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-								new FileOutputStream(file),
-								"UTF8")); //$NON-NLS-1$
+							BufferedWriter writer = new BufferedWriter(
+							        new OutputStreamWriter(
+							                new FileOutputStream(file), "UTF8")); //$NON-NLS-1$
 							boolean isHtml = filename.endsWith(".htm") || filename.endsWith(".html"); //$NON-NLS-1$ //$NON-NLS-2$
 							if (isHtml) {
 								writer.write("" //$NON-NLS-1$
-										+ "<html>\r\n" //$NON-NLS-1$
-										+ "<head>\r\n" //$NON-NLS-1$
-										+ "<meta http-equiv=Content-Type content=\"text/html; charset=UTF-8\">\r\n" //$NON-NLS-1$
-										+ "<style>\r\n" //$NON-NLS-1$
-										+ "table {width:100%;}\r\n" //$NON-NLS-1$
-										+ "td.sep {height:10px;background:#C0C0C0;}\r\n" //$NON-NLS-1$
-										+ "</style>\r\n" //$NON-NLS-1$
-										+ "</head>\r\n" //$NON-NLS-1$
-										+ "<body>\r\n" //$NON-NLS-1$
-										+ "<table width=\"100%\" border=\"1\">\r\n"); //$NON-NLS-1$
+								        + "<html>\r\n" //$NON-NLS-1$
+								        + "<head>\r\n" //$NON-NLS-1$
+								        + "<meta http-equiv=Content-Type content=\"text/html; charset=UTF-8\">\r\n" //$NON-NLS-1$
+								        + "<style>\r\n" //$NON-NLS-1$
+								        + "table {width:100%;}\r\n" //$NON-NLS-1$
+								        + "td.sep {height:10px;background:#C0C0C0;}\r\n" //$NON-NLS-1$
+								        + "</style>\r\n" //$NON-NLS-1$
+								        + "</head>\r\n" //$NON-NLS-1$
+								        + "<body>\r\n" //$NON-NLS-1$
+								        + "<table width=\"100%\" border=\"1\">\r\n"); //$NON-NLS-1$
 							}
 
 							int size = entryList.getSize();
@@ -313,8 +335,9 @@ public class LocalizationEditor extends EditorPart {
 										writer.write("<tr><td>"); //$NON-NLS-1$
 									}
 									Object config = configs[j];
-									if (!isHtml && j > 0)
+									if (!isHtml && j > 0) {
 										writer.write("\t"); //$NON-NLS-1$
+									}
 									if (config == KEY) {
 										writer.write(key.getName());
 									} else {
@@ -332,7 +355,8 @@ public class LocalizationEditor extends EditorPart {
 										} else {
 											valueCount++;
 										}
-										writer.write(EditResourceBundleEntriesDialog.escape(value));
+										writer.write(EditResourceBundleEntriesDialog
+										        .escape(value));
 									}
 									if (isHtml) {
 										writer.write("</td></tr>\r\n"); //$NON-NLS-1$
@@ -350,23 +374,21 @@ public class LocalizationEditor extends EditorPart {
 							}
 							writer.close();
 							Shell shell = Display.getCurrent().getActiveShell();
-							MessageDialog.openInformation(
-									shell,
-									"Finished",
-									"File written successfully.\n\nNumber of entries written: "
-											+ entryList.getSize()
-											+ "\nNumber of translations: "
-											+ valueCount
-											+ " ("
-											+ missingCount
-											+ " missing)");
+							MessageDialog.openInformation(shell, "Finished",
+							        "File written successfully.\n\nNumber of entries written: "
+							                + entryList.getSize()
+							                + "\nNumber of translations: "
+							                + valueCount + " (" + missingCount
+							                + " missing)");
 						} catch (IOException e) {
 							Shell shell = Display.getCurrent().getActiveShell();
-							ErrorDialog.openError(shell, "Error", "Error saving file.", new Status(
-								IStatus.ERROR,
-								MessagesEditorPlugin.PLUGIN_ID,
-								e.getMessage(),
-								e));
+							ErrorDialog.openError(
+							        shell,
+							        "Error",
+							        "Error saving file.",
+							        new Status(IStatus.ERROR,
+							                MessagesEditorPlugin.PLUGIN_ID, e
+							                        .getMessage(), e));
 						}
 					}
 				});
@@ -376,7 +398,8 @@ public class LocalizationEditor extends EditorPart {
 
 	public static final String ID = "org.eclipse.pde.nls.ui.LocalizationEditor"; //$NON-NLS-1$
 
-	protected static final Object KEY = "key"; // used to indicate the key column
+	protected static final Object KEY = "key"; // used to indicate the key
+											   // column
 
 	private static final String PREF_SECTION_NAME = "org.eclipse.pde.nls.ui.LocalizationEditor"; //$NON-NLS-1$
 	private static final String PREF_SORT_ORDER = "sortOrder"; //$NON-NLS-1$
@@ -400,7 +423,7 @@ public class LocalizationEditor extends EditorPart {
 	protected Composite queryComposite;
 	protected Text queryText;
 
-	// Results 
+	// Results
 	private Section resultsSection;
 	private Composite tableComposite;
 	protected TableViewer tableViewer;
@@ -413,7 +436,8 @@ public class LocalizationEditor extends EditorPart {
 	protected FilterOptions filterOptions;
 
 	/**
-	 * Column configuration. Values may be either <code>KEY</code> or a {@link Locale}.
+	 * Column configuration. Values may be either <code>KEY</code> or a
+	 * {@link Locale}.
 	 */
 	protected Object[] columnConfigs;
 	/**
@@ -428,6 +452,7 @@ public class LocalizationEditor extends EditorPart {
 		public boolean contains(ISchedulingRule rule) {
 			return rule == this;
 		}
+
 		public boolean isConflicting(ISchedulingRule rule) {
 			return rule == this;
 		}
@@ -439,7 +464,8 @@ public class LocalizationEditor extends EditorPart {
 	}
 
 	public ResourceBundleKey getSelectedEntry() {
-		IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
+		IStructuredSelection selection = (IStructuredSelection) tableViewer
+		        .getSelection();
 		if (selection.size() == 1) {
 			return (ResourceBundleKey) selection.getFirstElement();
 		}
@@ -459,7 +485,8 @@ public class LocalizationEditor extends EditorPart {
 		form.setSeparatorVisible(true);
 		form.setText("Localization");
 
-		form.setImage(formImage = MessagesEditorPlugin.getImageDescriptor("obj16/nls_editor.gif").createImage()); //$NON-NLS-1$
+		form.setImage(formImage = MessagesEditorPlugin.getImageDescriptor(
+		        "obj16/nls_editor.gif").createImage()); //$NON-NLS-1$
 		toolkit.adapt(form);
 		toolkit.paintBordersFor(form);
 		final Composite body = form.getBody();
@@ -492,8 +519,10 @@ public class LocalizationEditor extends EditorPart {
 		toolkit.createLabel(queryComposite, "Search:");
 
 		// Query text
-		queryText = toolkit.createText(queryComposite, "", SWT.WRAP | SWT.SINGLE); //$NON-NLS-1$
+		queryText = toolkit.createText(queryComposite,
+		        "", SWT.WRAP | SWT.SINGLE); //$NON-NLS-1$
 		queryText.addKeyListener(new KeyAdapter() {
+			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.keyCode == SWT.ARROW_DOWN) {
 					table.setFocus();
@@ -523,13 +552,16 @@ public class LocalizationEditor extends EditorPart {
 		toolkit.adapt(control);
 
 		// Results section
-		resultsSection = toolkit.createSection(body, ExpandableComposite.TITLE_BAR
-				| ExpandableComposite.LEFT_TEXT_CLIENT_ALIGNMENT);
-		resultsSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+		resultsSection = toolkit.createSection(body,
+		        ExpandableComposite.TITLE_BAR
+		                | ExpandableComposite.LEFT_TEXT_CLIENT_ALIGNMENT);
+		resultsSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
+		        true, 2, 1));
 		resultsSection.setText("Localization Strings");
 		toolkit.adapt(resultsSection);
 
-		final Composite resultsComposite = toolkit.createComposite(resultsSection, SWT.NONE);
+		final Composite resultsComposite = toolkit.createComposite(
+		        resultsSection, SWT.NONE);
 		toolkit.adapt(resultsComposite);
 		final GridLayout gridLayout2 = new GridLayout();
 		gridLayout2.marginTop = 1;
@@ -539,8 +571,10 @@ public class LocalizationEditor extends EditorPart {
 		resultsComposite.setLayout(gridLayout2);
 
 		filteredLabel = new Label(resultsSection, SWT.NONE);
-		filteredLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
-		filteredLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+		filteredLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER,
+		        false, false));
+		filteredLabel.setForeground(Display.getCurrent().getSystemColor(
+		        SWT.COLOR_RED));
 		filteredLabel.setText(""); //$NON-NLS-1$
 
 		toolkit.paintBordersFor(resultsComposite);
@@ -548,9 +582,11 @@ public class LocalizationEditor extends EditorPart {
 		resultsSection.setTextClient(filteredLabel);
 
 		tableComposite = toolkit.createComposite(resultsComposite, SWT.NONE);
-		tableComposite.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TREE_BORDER);
+		tableComposite.setData(FormToolkit.KEY_DRAW_BORDER,
+		        FormToolkit.TREE_BORDER);
 		toolkit.adapt(tableComposite);
-		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
+		        true));
 
 		// Table
 		createTableViewer();
@@ -563,7 +599,7 @@ public class LocalizationEditor extends EditorPart {
 		filterOptions.pluginPatterns = new String[0];
 		filterOptions.keysWithMissingEntriesOnly = false;
 		sortOrder = KEY;
-		columnConfigs = new Object[] {KEY, new Locale(""), new Locale("de")}; //$NON-NLS-1$ //$NON-NLS-2$
+		columnConfigs = new Object[] { KEY, new Locale(""), new Locale("de") }; //$NON-NLS-1$ //$NON-NLS-2$
 
 		// Load configuration
 		try {
@@ -578,7 +614,8 @@ public class LocalizationEditor extends EditorPart {
 	}
 
 	protected void updateFilterLabel() {
-		if (filterOptions.filterPlugins || filterOptions.keysWithMissingEntriesOnly) {
+		if (filterOptions.filterPlugins
+		        || filterOptions.keysWithMissingEntriesOnly) {
 			filteredLabel.setText("(filtered)");
 		} else {
 			filteredLabel.setText(""); //$NON-NLS-1$
@@ -588,10 +625,12 @@ public class LocalizationEditor extends EditorPart {
 
 	private void loadSettings() {
 		// TODO Move this to the preferences?
-		IDialogSettings dialogSettings = MessagesEditorPlugin.getDefault().getDialogSettings();
+		IDialogSettings dialogSettings = MessagesEditorPlugin.getDefault()
+		        .getDialogSettings();
 		IDialogSettings section = dialogSettings.getSection(PREF_SECTION_NAME);
-		if (section == null)
+		if (section == null) {
 			return;
+		}
 
 		// Sort order
 		String sortOrderString = section.get(PREF_SORT_ORDER);
@@ -610,7 +649,8 @@ public class LocalizationEditor extends EditorPart {
 		// Columns
 		String columns = section.get(PREF_COLUMNS);
 		if (columns != null) {
-			String[] cols = columns.substring(1, columns.length() - 1).split(","); //$NON-NLS-1$
+			String[] cols = columns.substring(1, columns.length() - 1).split(
+			        ","); //$NON-NLS-1$
 			columnConfigs = new Object[cols.length];
 			for (int i = 0; i < cols.length; i++) {
 				String value = cols[i].trim();
@@ -633,7 +673,8 @@ public class LocalizationEditor extends EditorPart {
 		this.filterOptions.filterPlugins = "true".equals(filterOptions); //$NON-NLS-1$
 		String patterns = section.get(PREF_FILTER_OPTIONS_PLUGIN_PATTERNS);
 		if (patterns != null) {
-			String[] split = patterns.substring(1, patterns.length() - 1).split(","); //$NON-NLS-1$
+			String[] split = patterns.substring(1, patterns.length() - 1)
+			        .split(","); //$NON-NLS-1$
 			for (int i = 0; i < split.length; i++) {
 				split[i] = split[i].trim();
 			}
@@ -641,11 +682,12 @@ public class LocalizationEditor extends EditorPart {
 		}
 		this.filterOptions.keysWithMissingEntriesOnly = "true".equals(section.get(PREF_FILTER_OPTIONS_MISSING_ONLY)); //$NON-NLS-1$
 
-		// TODO Save column widths 
+		// TODO Save column widths
 	}
 
 	private void saveSettings() {
-		IDialogSettings dialogSettings = MessagesEditorPlugin.getDefault().getDialogSettings();
+		IDialogSettings dialogSettings = MessagesEditorPlugin.getDefault()
+		        .getDialogSettings();
 		IDialogSettings section = dialogSettings.getSection(PREF_SECTION_NAME);
 		if (section == null) {
 			section = dialogSettings.addNewSection(PREF_SECTION_NAME);
@@ -657,13 +699,17 @@ public class LocalizationEditor extends EditorPart {
 		section.put(PREF_COLUMNS, Arrays.toString(columnConfigs));
 
 		// Filter options
-		section.put(PREF_FILTER_OPTIONS_FILTER_PLUGINS, filterOptions.filterPlugins);
-		section.put(PREF_FILTER_OPTIONS_PLUGIN_PATTERNS, Arrays.toString(filterOptions.pluginPatterns));
-		section.put(PREF_FILTER_OPTIONS_MISSING_ONLY, filterOptions.keysWithMissingEntriesOnly);
+		section.put(PREF_FILTER_OPTIONS_FILTER_PLUGINS,
+		        filterOptions.filterPlugins);
+		section.put(PREF_FILTER_OPTIONS_PLUGIN_PATTERNS,
+		        Arrays.toString(filterOptions.pluginPatterns));
+		section.put(PREF_FILTER_OPTIONS_MISSING_ONLY,
+		        filterOptions.keysWithMissingEntriesOnly);
 	}
 
 	private void createTableViewer() {
-		table = new Table(tableComposite, SWT.VIRTUAL | SWT.FULL_SELECTION | SWT.MULTI);
+		table = new Table(tableComposite, SWT.VIRTUAL | SWT.FULL_SELECTION
+		        | SWT.MULTI);
 		tableViewer = new TableViewer(table);
 		table.setHeaderVisible(true);
 		toolkit.adapt(table);
@@ -674,9 +720,12 @@ public class LocalizationEditor extends EditorPart {
 			public void updateElement(int index) {
 				tableViewer.replace(entryList.getKey(index), index);
 			}
+
 			public void dispose() {
 			}
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+
+			public void inputChanged(Viewer viewer, Object oldInput,
+			        Object newInput) {
 			}
 		});
 		tableViewer.addDoubleClickListener(new IDoubleClickListener() {
@@ -696,7 +745,8 @@ public class LocalizationEditor extends EditorPart {
 		});
 		Menu contextMenu = menuManager.createContextMenu(table);
 		table.setMenu(contextMenu);
-		getSite().registerContextMenu(menuManager, getSite().getSelectionProvider());
+		getSite().registerContextMenu(menuManager,
+		        getSite().getSelectionProvider());
 	}
 
 	protected void fillContextMenu(IMenuManager menu) {
@@ -706,8 +756,10 @@ public class LocalizationEditor extends EditorPart {
 			menu.add(new Separator());
 		}
 		MenuManager showInSubMenu = new MenuManager("&Show In");
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		IContributionItem item = ContributionItemFactory.VIEWS_SHOW_IN.create(window);
+		IWorkbenchWindow window = PlatformUI.getWorkbench()
+		        .getActiveWorkbenchWindow();
+		IContributionItem item = ContributionItemFactory.VIEWS_SHOW_IN
+		        .create(window);
 		showInSubMenu.add(item);
 		menu.add(showInSubMenu);
 	}
@@ -726,7 +778,8 @@ public class LocalizationEditor extends EditorPart {
 	}
 
 	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+	public void init(IEditorSite site, IEditorInput input)
+	        throws PartInitException {
 		setSite(site);
 		setInput(input);
 		this.input = (LocalizationEditorInput) input;
@@ -784,14 +837,15 @@ public class LocalizationEditor extends EditorPart {
 					strPattern = "*".concat(strPattern); //$NON-NLS-1$
 				}
 
-				ResourceBundleModel model = MessagesEditorPlugin.getModel(new NullProgressMonitor());
+				ResourceBundleModel model = MessagesEditorPlugin
+				        .getModel(new NullProgressMonitor());
 				Locale[] locales = getLocales();
 
 				// Collect keys
 				ResourceBundleKey[] keys;
 				if (!filterOptions.filterPlugins
-						|| filterOptions.pluginPatterns == null
-						|| filterOptions.pluginPatterns.length == 0) {
+				        || filterOptions.pluginPatterns == null
+				        || filterOptions.pluginPatterns.length == 0) {
 
 					// Ensure the bundles are loaded
 					for (Locale locale : locales) {
@@ -812,7 +866,8 @@ public class LocalizationEditor extends EditorPart {
 					String[] patterns = filterOptions.pluginPatterns;
 					StringMatcher[] matchers = new StringMatcher[patterns.length];
 					for (int i = 0; i < matchers.length; i++) {
-						matchers[i] = new StringMatcher(patterns[i], true, false);
+						matchers[i] = new StringMatcher(patterns[i], true,
+						        false);
 					}
 
 					int size = 0;
@@ -833,14 +888,17 @@ public class LocalizationEditor extends EditorPart {
 						size += family.getKeyCount();
 					}
 
-					ArrayList<ResourceBundleKey> filteredKeys = new ArrayList<ResourceBundleKey>(size);
+					ArrayList<ResourceBundleKey> filteredKeys = new ArrayList<ResourceBundleKey>(
+					        size);
 					for (ResourceBundleFamily family : families) {
 						// Ensure the bundles are loaded
 						for (Locale locale : locales) {
 							try {
-								ResourceBundle bundle = family.getBundle(locale);
-								if (bundle != null)
+								ResourceBundle bundle = family
+								        .getBundle(locale);
+								if (bundle != null) {
 									bundle.load();
+								}
 							} catch (CoreException e) {
 								MessagesEditorPlugin.log(e);
 							}
@@ -851,25 +909,30 @@ public class LocalizationEditor extends EditorPart {
 							filteredKeys.add(key);
 						}
 					}
-					keys = filteredKeys.toArray(new ResourceBundleKey[filteredKeys.size()]);
+					keys = filteredKeys
+					        .toArray(new ResourceBundleKey[filteredKeys.size()]);
 				}
 
 				// Filter keys
 				ArrayList<ResourceBundleKey> filtered = new ArrayList<ResourceBundleKey>();
 
-				StringMatcher keyMatcher = new StringMatcher(keyPattern, true, false);
-				StringMatcher strMatcher = new StringMatcher(strPattern, true, false);
+				StringMatcher keyMatcher = new StringMatcher(keyPattern, true,
+				        false);
+				StringMatcher strMatcher = new StringMatcher(strPattern, true,
+				        false);
 				for (ResourceBundleKey key : keys) {
-					if (monitor.isCanceled())
+					if (monitor.isCanceled()) {
 						return Status.OK_STATUS;
+					}
 
 					// Missing entries
 					if (filterOptions.keysWithMissingEntriesOnly) {
 						boolean hasMissingEntry = false;
 						// Check all columns for missing values
 						for (Object config : columnConfigs) {
-							if (config == KEY)
+							if (config == KEY) {
 								continue;
+							}
 							Locale locale = (Locale) config;
 							String value = null;
 							try {
@@ -882,8 +945,9 @@ public class LocalizationEditor extends EditorPart {
 								break;
 							}
 						}
-						if (!hasMissingEntry)
+						if (!hasMissingEntry) {
 							continue;
+						}
 					}
 
 					// Match key
@@ -894,8 +958,9 @@ public class LocalizationEditor extends EditorPart {
 
 					// Match entries
 					for (Object config : columnConfigs) {
-						if (config == KEY)
+						if (config == KEY) {
 							continue;
+						}
 						Locale locale = (Locale) config;
 						String value = null;
 						try {
@@ -910,11 +975,14 @@ public class LocalizationEditor extends EditorPart {
 					}
 				}
 
-				ResourceBundleKey[] array = filtered.toArray(new ResourceBundleKey[filtered.size()]);
+				ResourceBundleKey[] array = filtered
+				        .toArray(new ResourceBundleKey[filtered.size()]);
 				if (sortOrder == KEY) {
 					Arrays.sort(array, new Comparator<ResourceBundleKey>() {
-						public int compare(ResourceBundleKey o1, ResourceBundleKey o2) {
-							return o1.getName().compareToIgnoreCase(o2.getName());
+						public int compare(ResourceBundleKey o1,
+						        ResourceBundleKey o2) {
+							return o1.getName().compareToIgnoreCase(
+							        o2.getName());
 						}
 					});
 				} else {
@@ -923,8 +991,9 @@ public class LocalizationEditor extends EditorPart {
 				}
 				entryList = new ResourceBundleKeyList(array);
 
-				if (monitor.isCanceled())
+				if (monitor.isCanceled()) {
 					return Status.OK_STATUS;
+				}
 
 				final ResourceBundleKeyList entryList2 = entryList;
 				Display.getDefault().syncExec(new Runnable() {
@@ -968,7 +1037,8 @@ public class LocalizationEditor extends EditorPart {
 	}
 
 	/**
-	 * @param columnConfigs an array containing <code>KEY</code> and {@link Locale} values 
+	 * @param columnConfigs
+	 *            an array containing <code>KEY</code> and {@link Locale} values
 	 */
 	public void setColumns(Object[] columnConfigs) {
 		this.columnConfigs = columnConfigs;
@@ -992,10 +1062,12 @@ public class LocalizationEditor extends EditorPart {
 
 		// Create columns
 		for (Object config : columnConfigs) {
-			if (config == null)
+			if (config == null) {
 				continue;
+			}
 
-			final TableViewerColumn viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+			final TableViewerColumn viewerColumn = new TableViewerColumn(
+			        tableViewer, SWT.NONE);
 			TableColumn column = viewerColumn.getColumn();
 			if (config == KEY) {
 				column.setText("Key");
@@ -1005,14 +1077,16 @@ public class LocalizationEditor extends EditorPart {
 					column.setText("Default Bundle");
 				} else {
 					String displayName = locale.getDisplayName();
-					if (displayName.equals("")) //$NON-NLS-1$
+					if (displayName.equals("")) {
 						displayName = locale.toString();
+					}
 					column.setText(displayName);
 					localesToUnload.remove(locale);
 				}
 			}
 
-			viewerColumn.setLabelProvider(new LocalizationLabelProvider(config));
+			viewerColumn
+			        .setLabelProvider(new LocalizationLabelProvider(config));
 			tableColumnLayout.setColumnData(column, new ColumnWeightData(33));
 			columns.add(column);
 			column.addSelectionListener(new SelectionAdapter() {
@@ -1040,8 +1114,9 @@ public class LocalizationEditor extends EditorPart {
 			sortOrder = KEY; // fall back to default sort order
 		}
 		int index = configs.indexOf(sortOrder);
-		if (index != -1)
+		if (index != -1) {
 			table.setSortColumn(columns.get(index));
+		}
 
 		refresh();
 	}
@@ -1051,18 +1126,22 @@ public class LocalizationEditor extends EditorPart {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (IShowInSource.class == adapter) {
 			return new IShowInSource() {
 				public ShowInContext getShowInContext() {
 					ResourceBundleKey entry = getSelectedEntry();
-					if (entry == null)
+					if (entry == null) {
 						return null;
-					ResourceBundle bundle = entry.getParent().getBundle(new Locale(""));
-					if (bundle == null)
+					}
+					ResourceBundle bundle = entry.getParent().getBundle(
+					        new Locale(""));
+					if (bundle == null) {
 						return null;
+					}
 					Object resource = bundle.getUnderlyingResource();
-					return new ShowInContext(resource, new StructuredSelection(resource));
+					return new ShowInContext(resource, new StructuredSelection(
+					        resource));
 				}
 			};
 		}

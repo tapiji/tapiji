@@ -37,7 +37,7 @@ public class KeyTreeItemTransfer extends ByteArrayTransfer {
 	}
 
 	public void javaToNative(Object object, TransferData transferData) {
-		if (!checkType(object)  || !isSupportedType(transferData)) {
+		if (!checkType(object) || !isSupportedType(transferData)) {
 			DND.error(DND.ERROR_INVALID_DATA);
 		}
 		IKeyTreeNode[] terms = (IKeyTreeNode[]) object;
@@ -49,7 +49,7 @@ public class KeyTreeItemTransfer extends ByteArrayTransfer {
 			}
 			byte[] buffer = out.toByteArray();
 			oOut.close();
-			
+
 			super.javaToNative(buffer, transferData);
 		} catch (IOException e) {
 			Logger.logError(e);
@@ -73,10 +73,10 @@ public class KeyTreeItemTransfer extends ByteArrayTransfer {
 			try {
 				ByteArrayInputStream in = new ByteArrayInputStream(buffer);
 				ObjectInputStream readIn = new ObjectInputStream(in);
-				//while (readIn.available() > 0) {
+				// while (readIn.available() > 0) {
 				IKeyTreeNode newTerm = (IKeyTreeNode) readIn.readObject();
-					terms.add(newTerm);
-				//}
+				terms.add(newTerm);
+				// }
 				readIn.close();
 			} catch (Exception ex) {
 				Logger.logError(ex);
@@ -98,7 +98,7 @@ public class KeyTreeItemTransfer extends ByteArrayTransfer {
 
 	boolean checkType(Object object) {
 		if (object == null || !(object instanceof IKeyTreeNode[])
-				|| ((IKeyTreeNode[]) object).length == 0) {
+		        || ((IKeyTreeNode[]) object).length == 0) {
 			return false;
 		}
 		IKeyTreeNode[] myTypes = (IKeyTreeNode[]) object;

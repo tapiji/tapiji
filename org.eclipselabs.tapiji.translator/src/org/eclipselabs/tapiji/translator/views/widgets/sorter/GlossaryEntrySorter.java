@@ -18,22 +18,19 @@ import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipselabs.tapiji.translator.model.Term;
 import org.eclipselabs.tapiji.translator.model.Translation;
 
-
 public class GlossaryEntrySorter extends ViewerSorter {
 
-	private StructuredViewer 	viewer;
-	private SortInfo 			sortInfo;
-	private int 				referenceCol;
-	private List<String>		translations;
-	
-	public GlossaryEntrySorter (StructuredViewer viewer,
-								SortInfo sortInfo,
-								int referenceCol,
-								List<String> translations) {
+	private StructuredViewer viewer;
+	private SortInfo sortInfo;
+	private int referenceCol;
+	private List<String> translations;
+
+	public GlossaryEntrySorter(StructuredViewer viewer, SortInfo sortInfo,
+	        int referenceCol, List<String> translations) {
 		this.viewer = viewer;
 		this.referenceCol = referenceCol;
 		this.translations = translations;
-		
+
 		if (sortInfo != null)
 			this.sortInfo = sortInfo;
 		else
@@ -63,33 +60,38 @@ public class GlossaryEntrySorter extends ViewerSorter {
 				return super.compare(viewer, e1, e2);
 			Term comp1 = (Term) e1;
 			Term comp2 = (Term) e2;
-			
+
 			int result = 0;
 
 			if (sortInfo == null)
 				return 0;
-			
+
 			if (sortInfo.getColIdx() == 0) {
-				Translation transComp1 = comp1.getTranslation(translations.get(referenceCol));
-				Translation transComp2 = comp2.getTranslation(translations.get(referenceCol));
+				Translation transComp1 = comp1.getTranslation(translations
+				        .get(referenceCol));
+				Translation transComp2 = comp2.getTranslation(translations
+				        .get(referenceCol));
 				if (transComp1 != null && transComp2 != null)
 					result = transComp1.value.compareTo(transComp2.value);
 			} else {
-				int col = sortInfo.getColIdx() < referenceCol ? sortInfo.getColIdx() + 1 : sortInfo.getColIdx();
-				Translation transComp1 = comp1.getTranslation(translations.get(col));
-				Translation transComp2 = comp2.getTranslation(translations.get(col));
-				
+				int col = sortInfo.getColIdx() < referenceCol ? sortInfo
+				        .getColIdx() + 1 : sortInfo.getColIdx();
+				Translation transComp1 = comp1.getTranslation(translations
+				        .get(col));
+				Translation transComp2 = comp2.getTranslation(translations
+				        .get(col));
+
 				if (transComp1 == null)
 					transComp1 = new Translation();
 				if (transComp2 == null)
 					transComp2 = new Translation();
 				result = transComp1.value.compareTo(transComp2.value);
 			}
-			
+
 			return result * (sortInfo.isDESC() ? -1 : 1);
 		} catch (Exception e) {
 			return 0;
 		}
 	}
-	
+
 }

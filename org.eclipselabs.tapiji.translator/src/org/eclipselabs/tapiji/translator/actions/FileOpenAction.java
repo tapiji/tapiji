@@ -23,53 +23,53 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipselabs.tapiji.translator.utils.FileUtils;
 
 public class FileOpenAction extends Action implements
-	IWorkbenchWindowActionDelegate {
+        IWorkbenchWindowActionDelegate {
 
-    /** Editor ids **/
-    public static final String RESOURCE_BUNDLE_EDITOR = "com.essiembre.rbe.eclipse.editor.ResourceBundleEditor";
+	/** Editor ids **/
+	public static final String RESOURCE_BUNDLE_EDITOR = "com.essiembre.rbe.eclipse.editor.ResourceBundleEditor";
 
-    private IWorkbenchWindow window;
+	private IWorkbenchWindow window;
 
-    @Override
-    public void run(IAction action) {
-	String fileName = FileUtils.queryFileName(window.getShell(),
-		"Open Resource-Bundle", SWT.OPEN,
-		new String[] { "*.properties" });
-	if (!FileUtils.isResourceBundle(fileName)) {
-	    MessageDialog.openError(window.getShell(),
-		    "Cannot open Resource-Bundle",
-		    "The choosen file does not represent a Resource-Bundle!");
-	    return;
+	@Override
+	public void run(IAction action) {
+		String fileName = FileUtils.queryFileName(window.getShell(),
+		        "Open Resource-Bundle", SWT.OPEN,
+		        new String[] { "*.properties" });
+		if (!FileUtils.isResourceBundle(fileName)) {
+			MessageDialog.openError(window.getShell(),
+			        "Cannot open Resource-Bundle",
+			        "The choosen file does not represent a Resource-Bundle!");
+			return;
+		}
+
+		if (fileName != null) {
+			IWorkbenchPage page = window.getActivePage();
+			try {
+				page.openEditor(
+				        new FileEditorInput(FileUtils
+				                .getResourceBundleRef(fileName)),
+				        RESOURCE_BUNDLE_EDITOR);
+
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
-	if (fileName != null) {
-	    IWorkbenchPage page = window.getActivePage();
-	    try {
-		page.openEditor(
-			new FileEditorInput(FileUtils
-				.getResourceBundleRef(fileName)),
-			RESOURCE_BUNDLE_EDITOR);
+	@Override
+	public void selectionChanged(IAction action, ISelection selection) {
+		// TODO Auto-generated method stub
 
-	    } catch (CoreException e) {
-		e.printStackTrace();
-	    }
 	}
-    }
 
-    @Override
-    public void selectionChanged(IAction action, ISelection selection) {
-	// TODO Auto-generated method stub
+	@Override
+	public void dispose() {
+		window = null;
+	}
 
-    }
-
-    @Override
-    public void dispose() {
-	window = null;
-    }
-
-    @Override
-    public void init(IWorkbenchWindow window) {
-	this.window = window;
-    }
+	@Override
+	public void init(IWorkbenchWindow window) {
+		this.window = window;
+	}
 
 }

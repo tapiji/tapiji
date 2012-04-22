@@ -13,7 +13,8 @@ package org.eclipse.babel.tapiji.tools.core.ui.widgets.provider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-public class LightKeyTreeLabelProvider extends KeyTreeLabelProvider  implements ITableLabelProvider {
+public class LightKeyTreeLabelProvider extends KeyTreeLabelProvider implements
+        ITableLabelProvider {
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 		return null;

@@ -21,19 +21,21 @@ import org.eclipse.ui.navigator.ICommonActionExtensionSite;
  */
 public class VirtualRBActionProvider extends CommonActionProvider {
 	private IAction openAction;
-	
+
 	public VirtualRBActionProvider() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void init(ICommonActionExtensionSite aSite){
+	public void init(ICommonActionExtensionSite aSite) {
 		super.init(aSite);
-		openAction = new OpenVRBAction(aSite.getViewSite().getSelectionProvider());
+		openAction = new OpenVRBAction(aSite.getViewSite()
+		        .getSelectionProvider());
 	}
-	
+
 	@Override
-	public void fillActionBars(IActionBars actionBars){
-		actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, openAction);
+	public void fillActionBars(IActionBars actionBars) {
+		actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN,
+		        openAction);
 	}
 }

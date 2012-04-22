@@ -23,7 +23,6 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipselabs.tapiji.translator.core.GlossaryManager;
 import org.eclipselabs.tapiji.translator.utils.FileUtils;
 
-
 public class NewGlossaryAction implements IWorkbenchWindowActionDelegate {
 
 	/** The workbench window */
@@ -31,28 +30,30 @@ public class NewGlossaryAction implements IWorkbenchWindowActionDelegate {
 
 	@Override
 	public void run(IAction action) {
-		String fileName= FileUtils.queryFileName(window.getShell(), "New Glossary", SWT.SAVE, new String[] {"*.xml"} );
-		
+		String fileName = FileUtils.queryFileName(window.getShell(),
+		        "New Glossary", SWT.SAVE, new String[] { "*.xml" });
+
 		if (!fileName.endsWith(".xml")) {
 			if (fileName.endsWith("."))
 				fileName += "xml";
 			else
 				fileName += ".xml";
 		}
-		
-		if (new File (fileName).exists()) {
+
+		if (new File(fileName).exists()) {
 			String recallPattern = "The file \"{0}\" already exists. Do you want to replace this file with an empty translation glossary?";
 			MessageFormat mf = new MessageFormat(recallPattern);
-			
-			if (!MessageDialog.openQuestion(window.getShell(), 
-					"File already exists!", mf.format(new String[] {fileName})))
+
+			if (!MessageDialog.openQuestion(window.getShell(),
+			        "File already exists!",
+			        mf.format(new String[] { fileName })))
 				return;
 		}
-		
+
 		if (fileName != null) {
-			IWorkbenchPage page= window.getActivePage();
-			GlossaryManager.newGlossary (new File (fileName));
-		} 
+			IWorkbenchPage page = window.getActivePage();
+			GlossaryManager.newGlossary(new File(fileName));
+		}
 	}
 
 	@Override

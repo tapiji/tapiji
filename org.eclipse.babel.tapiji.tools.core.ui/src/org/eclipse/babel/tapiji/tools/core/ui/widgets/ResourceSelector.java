@@ -40,146 +40,165 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 
-
-public class ResourceSelector  extends Composite {
+public class ResourceSelector extends Composite {
 
 	public static final int DISPLAY_KEYS = 0;
 	public static final int DISPLAY_TEXT = 1;
-	
+
 	private Locale displayLocale = null; // default
 	private int displayMode;
 	private String resourceBundle;
 	private String projectName;
 	private boolean showTree = true;
-	
+
 	private TreeViewer viewer;
 	private TreeColumnLayout basicLayout;
 	private TreeColumn entries;
 	private Set<IResourceSelectionListener> listeners = new HashSet<IResourceSelectionListener>();
-	
+
 	// Viewer model
 	private TreeType treeType = TreeType.Tree;
 	private StyledCellLabelProvider labelProvider;
-	
-	public ResourceSelector(Composite parent, 
-						    int style) {
-		super(parent, style);		
 
-		initLayout (this);
-		initViewer (this);
+	public ResourceSelector(Composite parent, int style) {
+		super(parent, style);
+
+		initLayout(this);
+		initViewer(this);
 	}
 
-	protected void updateContentProvider (IMessagesBundleGroup group) {
+	protected void updateContentProvider(IMessagesBundleGroup group) {
 		// define input of treeviewer
 		if (!showTree || displayMode == DISPLAY_TEXT) {
 			treeType = TreeType.Flat;
-		} 
-		
-		ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
-		
-		IAbstractKeyTreeModel model = KeyTreeFactory.createModel(manager.getResourceBundle(resourceBundle));
-		ResKeyTreeContentProvider contentProvider = (ResKeyTreeContentProvider)viewer.getContentProvider();
+		}
+
+		ResourceBundleManager manager = ResourceBundleManager
+		        .getManager(projectName);
+
+		IAbstractKeyTreeModel model = KeyTreeFactory.createModel(manager
+		        .getResourceBundle(resourceBundle));
+		ResKeyTreeContentProvider contentProvider = (ResKeyTreeContentProvider) viewer
+		        .getContentProvider();
 		contentProvider.setProjectName(manager.getProject().getName());
 		contentProvider.setBundleId(resourceBundle);
 		contentProvider.setTreeType(treeType);
-        if (viewer.getInput() == null) {
-        	viewer.setUseHashlookup(true);
-        }
-		
-//		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
-		org.eclipse.jface.viewers.TreePath[] expandedTreePaths = viewer.getExpandedTreePaths();
+		if (viewer.getInput() == null) {
+			viewer.setUseHashlookup(true);
+		}
+
+		// viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
+		org.eclipse.jface.viewers.TreePath[] expandedTreePaths = viewer
+		        .getExpandedTreePaths();
 		viewer.setInput(model);
 		viewer.refresh();
 		viewer.setExpandedTreePaths(expandedTreePaths);
 	}
-	
-	protected void updateViewer (boolean updateContent) {
-	    IMessagesBundleGroup group = ResourceBundleManager.getManager(projectName).getResourceBundle(resourceBundle);
-	    
+
+	protected void updateViewer(boolean updateContent) {
+		IMessagesBundleGroup group = ResourceBundleManager.getManager(
+		        projectName).getResourceBundle(resourceBundle);
+
 		if (group == null)
 			return;
-		
+
 		if (displayMode == DISPLAY_TEXT) {
-			labelProvider = new ValueKeyTreeLabelProvider(group.getMessagesBundle(displayLocale));
+			labelProvider = new ValueKeyTreeLabelProvider(
+			        group.getMessagesBundle(displayLocale));
 			treeType = TreeType.Flat;
-			((ResKeyTreeContentProvider)viewer.getContentProvider()).setTreeType(treeType);
+			((ResKeyTreeContentProvider) viewer.getContentProvider())
+			        .setTreeType(treeType);
 		} else {
 			labelProvider = new ResKeyTreeLabelProvider(null);
 			treeType = TreeType.Tree;
-			((ResKeyTreeContentProvider)viewer.getContentProvider()).setTreeType(treeType);
+			((ResKeyTreeContentProvider) viewer.getContentProvider())
+			        .setTreeType(treeType);
 		}
-		
+
 		viewer.setLabelProvider(labelProvider);
 		if (updateContent)
 			updateContentProvider(group);
 	}
-	
-	protected void initLayout (Composite parent) {
+
+	protected void initLayout(Composite parent) {
 		basicLayout = new TreeColumnLayout();
 		parent.setLayout(basicLayout);
 	}
-	
-	protected void initViewer (Composite parent) {
-		viewer = new TreeViewer (parent, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
+
+	protected void initViewer(Composite parent) {
+		viewer = new TreeViewer(parent, SWT.BORDER | SWT.SINGLE
+		        | SWT.FULL_SELECTION);
 		Tree table = viewer.getTree();
-		
+
 		// Init table-columns
-		entries = new TreeColumn (table, SWT.NONE);
+		entries = new TreeColumn(table, SWT.NONE);
 		basicLayout.setColumnData(entries, new ColumnWeightData(1));
-		
+
 		viewer.setContentProvider(new ResKeyTreeContentProvider());
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			
+
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				ISelection selection = event.getSelection();
 				String selectionSummary = "";
 				String selectedKey = "";
-				ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
-				
+				ResourceBundleManager manager = ResourceBundleManager
+				        .getManager(projectName);
+
 				if (selection instanceof IStructuredSelection) {
-					Iterator<IKeyTreeNode> itSel = ((IStructuredSelection) selection).iterator();
+					Iterator<IKeyTreeNode> itSel = ((IStructuredSelection) selection)
+					        .iterator();
 					if (itSel.hasNext()) {
-					    IKeyTreeNode selItem = itSel.next();
-						IMessagesBundleGroup group = manager.getResourceBundle(resourceBundle);
+						IKeyTreeNode selItem = itSel.next();
+						IMessagesBundleGroup group = manager
+						        .getResourceBundle(resourceBundle);
 						selectedKey = selItem.getMessageKey();
-						
+
 						if (group == null)
 							return;
-						Iterator<Locale> itLocales = manager.getProvidedLocales(resourceBundle).iterator();
+						Iterator<Locale> itLocales = manager
+						        .getProvidedLocales(resourceBundle).iterator();
 						while (itLocales.hasNext()) {
 							Locale l = itLocales.next();
 							try {
-								selectionSummary += (l == null ? ResourceBundleManager.defaultLocaleTag : l.getDisplayLanguage()) + ":\n";
-								selectionSummary += "\t" + group.getMessagesBundle(l).getMessage(selItem.getMessageKey()).getValue() + "\n";
-							} catch (Exception e) {}
+								selectionSummary += (l == null ? ResourceBundleManager.defaultLocaleTag
+								        : l.getDisplayLanguage())
+								        + ":\n";
+								selectionSummary += "\t"
+								        + group.getMessagesBundle(l)
+								                .getMessage(
+								                        selItem.getMessageKey())
+								                .getValue() + "\n";
+							} catch (Exception e) {
+							}
 						}
 					}
 				}
-			
+
 				// construct ResourceSelectionEvent
-				ResourceSelectionEvent e = new ResourceSelectionEvent(selectedKey, selectionSummary);
+				ResourceSelectionEvent e = new ResourceSelectionEvent(
+				        selectedKey, selectionSummary);
 				fireSelectionChanged(e);
 			}
 		});
-		
+
 		// we need this to keep the tree expanded
-        viewer.setComparer(new IElementComparer() {
-			
+		viewer.setComparer(new IElementComparer() {
+
 			@Override
 			public int hashCode(Object element) {
 				final int prime = 31;
 				int result = 1;
 				result = prime * result
-						+ ((toString() == null) ? 0 : toString().hashCode());
+				        + ((toString() == null) ? 0 : toString().hashCode());
 				return result;
 			}
-			
+
 			@Override
 			public boolean equals(Object a, Object b) {
 				if (a == b) {
 					return true;
-				} 
+				}
 				if (a instanceof IKeyTreeNode && b instanceof IKeyTreeNode) {
 					IKeyTreeNode nodeA = (IKeyTreeNode) a;
 					IKeyTreeNode nodeB = (IKeyTreeNode) b;
@@ -189,7 +208,7 @@ public class ResourceSelector  extends Composite {
 			}
 		});
 	}
-	
+
 	public Locale getDisplayLocale() {
 		return displayLocale;
 	}
@@ -216,16 +235,16 @@ public class ResourceSelector  extends Composite {
 	public String getResourceBundle() {
 		return resourceBundle;
 	}
-	
-	public void addSelectionChangedListener (IResourceSelectionListener l) {
+
+	public void addSelectionChangedListener(IResourceSelectionListener l) {
 		listeners.add(l);
 	}
-	
-	public void removeSelectionChangedListener (IResourceSelectionListener l) {
+
+	public void removeSelectionChangedListener(IResourceSelectionListener l) {
 		listeners.remove(l);
 	}
-	
-	private void fireSelectionChanged (ResourceSelectionEvent event) {
+
+	private void fireSelectionChanged(ResourceSelectionEvent event) {
 		Iterator<IResourceSelectionListener> itResList = listeners.iterator();
 		while (itResList.hasNext()) {
 			itResList.next().selectionChanged(event);
@@ -247,5 +266,5 @@ public class ResourceSelector  extends Composite {
 			updateViewer(false);
 		}
 	}
-	
+
 }

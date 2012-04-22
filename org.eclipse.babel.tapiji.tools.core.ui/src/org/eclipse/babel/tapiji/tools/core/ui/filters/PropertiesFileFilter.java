@@ -17,7 +17,7 @@ import org.eclipse.jface.viewers.ViewerFilter;
 public class PropertiesFileFilter extends ViewerFilter {
 
 	private boolean debugEnabled = true;
-	
+
 	public PropertiesFileFilter() {
 
 	}
@@ -26,15 +26,15 @@ public class PropertiesFileFilter extends ViewerFilter {
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
 		if (debugEnabled)
 			return true;
-		
+
 		if (element.getClass().getSimpleName().equals("CompilationUnit"))
 			return false;
-		
+
 		if (!(element instanceof IFile))
 			return true;
-		
+
 		IFile file = (IFile) element;
-		
+
 		return file.getFileExtension().equalsIgnoreCase("properties");
 	}
 

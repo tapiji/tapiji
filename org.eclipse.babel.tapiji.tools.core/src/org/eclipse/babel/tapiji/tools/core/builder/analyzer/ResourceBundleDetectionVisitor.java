@@ -20,12 +20,11 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 
-
 public class ResourceBundleDetectionVisitor implements IResourceVisitor,
-		IResourceDeltaVisitor {
+        IResourceDeltaVisitor {
 
 	private IProject project = null;
-	
+
 	public ResourceBundleDetectionVisitor(IProject project) {
 		this.project = project;
 	}
@@ -34,10 +33,12 @@ public class ResourceBundleDetectionVisitor implements IResourceVisitor,
 	public boolean visit(IResource resource) throws CoreException {
 		try {
 			if (RBFileUtils.isResourceBundleFile(resource)) {
-				Logger.logInfo("Loading Resource-Bundle file '" + resource.getName() + "'");
- 				if (!ResourceBundleManager.isResourceExcluded(resource)) {
- 					ResourceBundleManager.getManager(project).addBundleResource(resource);
- 				}
+				Logger.logInfo("Loading Resource-Bundle file '"
+				        + resource.getName() + "'");
+				if (!ResourceBundleManager.isResourceExcluded(resource)) {
+					ResourceBundleManager.getManager(project)
+					        .addBundleResource(resource);
+				}
 				return false;
 			} else {
 				return true;
@@ -52,11 +53,11 @@ public class ResourceBundleDetectionVisitor implements IResourceVisitor,
 		IResource resource = delta.getResource();
 
 		if (RBFileUtils.isResourceBundleFile(resource)) {
-//			ResourceBundleManager.getManager(resource.getProject()).bundleResourceModified(delta);
+			// ResourceBundleManager.getManager(resource.getProject()).bundleResourceModified(delta);
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 }

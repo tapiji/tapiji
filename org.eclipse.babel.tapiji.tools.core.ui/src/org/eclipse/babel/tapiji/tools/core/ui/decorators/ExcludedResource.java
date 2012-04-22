@@ -30,27 +30,25 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.swt.graphics.Image;
 
-
 public class ExcludedResource implements ILabelDecorator,
-	IResourceExclusionListener {
+        IResourceExclusionListener {
 
 	private static final String ENTRY_SUFFIX = "[no i18n]";
-	private static final Image OVERLAY_IMAGE_ON = 
-		ImageUtils.getImage(ImageUtils.IMAGE_EXCLUDED_RESOURCE_ON);
-	private static final Image OVERLAY_IMAGE_OFF = 
-		ImageUtils.getImage(ImageUtils.IMAGE_EXCLUDED_RESOURCE_OFF);
-	private final List<ILabelProviderListener> label_provider_listener = 
-		new ArrayList<ILabelProviderListener> ();
-	
+	private static final Image OVERLAY_IMAGE_ON = ImageUtils
+	        .getImage(ImageUtils.IMAGE_EXCLUDED_RESOURCE_ON);
+	private static final Image OVERLAY_IMAGE_OFF = ImageUtils
+	        .getImage(ImageUtils.IMAGE_EXCLUDED_RESOURCE_OFF);
+	private final List<ILabelProviderListener> label_provider_listener = new ArrayList<ILabelProviderListener>();
+
 	public boolean decorate(Object element) {
 		boolean needsDecoration = false;
-		if (element instanceof IFolder ||
-			element instanceof IFile) {
-			IResource resource = (IResource) element; 
+		if (element instanceof IFolder || element instanceof IFile) {
+			IResource resource = (IResource) element;
 			if (!InternationalizationNature.hasNature(resource.getProject()))
-				return false; 
+				return false;
 			try {
-				ResourceBundleManager manager = ResourceBundleManager.getManager(resource.getProject());
+				ResourceBundleManager manager = ResourceBundleManager
+				        .getManager(resource.getProject());
 				if (!manager.isResourceExclusionListenerRegistered(this))
 					manager.registerResourceExclusionListener(this);
 				if (ResourceBundleManager.isResourceExcluded(resource)) {
@@ -62,7 +60,7 @@ public class ExcludedResource implements ILabelDecorator,
 		}
 		return needsDecoration;
 	}
-	
+
 	@Override
 	public void addListener(ILabelProviderListener listener) {
 		label_provider_listener.add(listener);
@@ -70,7 +68,8 @@ public class ExcludedResource implements ILabelDecorator,
 
 	@Override
 	public void dispose() {
-		ResourceBundleManager.unregisterResourceExclusionListenerFromAllManagers (this);
+		ResourceBundleManager
+		        .unregisterResourceExclusionListenerFromAllManagers(this);
 	}
 
 	@Override
@@ -85,7 +84,8 @@ public class ExcludedResource implements ILabelDecorator,
 
 	@Override
 	public void exclusionChanged(ResourceExclusionEvent event) {
-		LabelProviderChangedEvent labelEvent = new LabelProviderChangedEvent(this, event.getChangedResources().toArray());
+		LabelProviderChangedEvent labelEvent = new LabelProviderChangedEvent(
+		        this, event.getChangedResources().toArray());
 		for (ILabelProviderListener l : label_provider_listener)
 			l.labelProviderChanged(labelEvent);
 	}
@@ -93,9 +93,11 @@ public class ExcludedResource implements ILabelDecorator,
 	@Override
 	public Image decorateImage(Image image, Object element) {
 		if (decorate(element)) {
-			DecorationOverlayIcon overlayIcon = new DecorationOverlayIcon(image, 
-																		  Activator.getImageDescriptor(ImageUtils.IMAGE_EXCLUDED_RESOURCE_OFF), 
-																		  IDecoration.TOP_RIGHT);
+			DecorationOverlayIcon overlayIcon = new DecorationOverlayIcon(
+			        image,
+			        Activator
+			                .getImageDescriptor(ImageUtils.IMAGE_EXCLUDED_RESOURCE_OFF),
+			        IDecoration.TOP_RIGHT);
 			return overlayIcon.createImage();
 		} else {
 			return image;
@@ -109,7 +111,5 @@ public class ExcludedResource implements ILabelDecorator,
 		} else
 			return text;
 	}
-
-
 
 }

@@ -20,14 +20,14 @@ import org.eclipse.core.resources.IProject;
 
 /**
  * Representation of a project
- *
+ * 
  */
-public class VirtualProject extends VirtualContainer{
+public class VirtualProject extends VirtualContainer {
 	private boolean isFragment;
 	private IProject hostProject;
 	private List<IProject> fragmentProjects = new LinkedList<IProject>();
-	
-	//Slow
+
+	// Slow
 	public VirtualProject(IProject project, boolean countResourceBundles) {
 		super(project, countResourceBundles);
 		isFragment = FragmentProjectUtils.isFragment(project);
@@ -36,38 +36,39 @@ public class VirtualProject extends VirtualContainer{
 		} else
 			fragmentProjects = FragmentProjectUtils.getFragments(project);
 	}
-	
+
 	/*
 	 * No fragment search
 	 */
-	public VirtualProject(final IProject project, boolean isFragment, boolean countResourceBundles){
+	public VirtualProject(final IProject project, boolean isFragment,
+	        boolean countResourceBundles) {
 		super(project, countResourceBundles);
 		this.isFragment = isFragment;
-//		Display.getDefault().asyncExec(new Runnable() {
-//			@Override
-//			public void run() {
-//				hostProject = FragmentProjectUtils.getFragmentHost(project);
-//			}
-//		});
+		// Display.getDefault().asyncExec(new Runnable() {
+		// @Override
+		// public void run() {
+		// hostProject = FragmentProjectUtils.getFragmentHost(project);
+		// }
+		// });
 	}
-	
-	public Set<Locale> getProvidedLocales(){
+
+	public Set<Locale> getProvidedLocales() {
 		return rbmanager.getProjectProvidedLocales();
 	}
-	
-	public boolean isFragment(){
+
+	public boolean isFragment() {
 		return isFragment;
 	}
-	
-	public IProject getHostProject(){
+
+	public IProject getHostProject() {
 		return hostProject;
 	}
 
 	public boolean hasFragments() {
 		return !fragmentProjects.isEmpty();
 	}
-	
-	public List<IProject> getFragmets(){
+
+	public List<IProject> getFragmets() {
 		return fragmentProjects;
 	}
 }

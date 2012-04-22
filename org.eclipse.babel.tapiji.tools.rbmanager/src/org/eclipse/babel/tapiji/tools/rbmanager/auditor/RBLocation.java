@@ -21,20 +21,20 @@ public class RBLocation implements ILocation {
 	private String language;
 	private Serializable data;
 	private ILocation sameValuePartner;
-	
-	
+
 	public RBLocation(IFile file, int startPos, int endPos, String language) {
 		this.file = file;
 		this.startPos = startPos;
 		this.endPos = endPos;
 		this.language = language;
 	}
-	
-	public RBLocation(IFile file, int startPos, int endPos, String language, ILocation sameValuePartner) {
+
+	public RBLocation(IFile file, int startPos, int endPos, String language,
+	        ILocation sameValuePartner) {
 		this(file, startPos, endPos, language);
-		this.sameValuePartner=sameValuePartner;
+		this.sameValuePartner = sameValuePartner;
 	}
-	
+
 	@Override
 	public IFile getFile() {
 		return file;
@@ -56,15 +56,15 @@ public class RBLocation implements ILocation {
 	}
 
 	@Override
-	public Serializable getData () {
+	public Serializable getData() {
 		return data;
 	}
-	
-	public void setData (Serializable data) {
+
+	public void setData(Serializable data) {
 		this.data = data;
 	}
 
-	public ILocation getSameValuePartner(){
+	public ILocation getSameValuePartner() {
 		return sameValuePartner;
 	}
 }

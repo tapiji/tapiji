@@ -27,13 +27,14 @@ public class TapiJIPreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
 
-		//ResourceBundle-Settings
+		// ResourceBundle-Settings
 		List<CheckItem> patterns = new LinkedList<CheckItem>();
 		patterns.add(new CheckItem("^(.)*/build\\.properties", true));
 		patterns.add(new CheckItem("^(.)*/config\\.properties", true));
 		patterns.add(new CheckItem("^(.)*/targetplatform/(.)*", true));
-		prefs.setDefault(TapiJIPreferences.NON_RB_PATTERN, TapiJIPreferences.convertListToString(patterns));
-		
+		prefs.setDefault(TapiJIPreferences.NON_RB_PATTERN,
+		        TapiJIPreferences.convertListToString(patterns));
+
 		// Builder
 		prefs.setDefault(TapiJIPreferences.AUDIT_RESOURCE, true);
 		prefs.setDefault(TapiJIPreferences.AUDIT_RB, true);
@@ -41,5 +42,5 @@ public class TapiJIPreferenceInitializer extends AbstractPreferenceInitializer {
 		prefs.setDefault(TapiJIPreferences.AUDIT_SAME_VALUE, false);
 		prefs.setDefault(TapiJIPreferences.AUDIT_MISSING_LANGUAGE, true);
 	}
-	
+
 }

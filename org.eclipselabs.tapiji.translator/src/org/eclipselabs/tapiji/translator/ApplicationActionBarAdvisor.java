@@ -36,47 +36,51 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
 	}
-	
+
 	@Override
 	protected void fillCoolBar(ICoolBarManager coolBar) {
 		super.fillCoolBar(coolBar);
-		
-		coolBar.add(new GroupMarker("group.file")); 
-		{ 
+
+		coolBar.add(new GroupMarker("group.file"));
+		{
 			// File Group
 			IToolBarManager fileToolBar = new ToolBarManager(coolBar.getStyle());
 
 			fileToolBar.add(new Separator(IWorkbenchActionConstants.NEW_GROUP));
-			fileToolBar.add(new GroupMarker(IWorkbenchActionConstants.OPEN_EXT));
-			
-			fileToolBar.add(new GroupMarker(IWorkbenchActionConstants.SAVE_GROUP));
+			fileToolBar
+			        .add(new GroupMarker(IWorkbenchActionConstants.OPEN_EXT));
+
+			fileToolBar.add(new GroupMarker(
+			        IWorkbenchActionConstants.SAVE_GROUP));
 			fileToolBar.add(getAction(ActionFactory.SAVE.getId()));
-			
+
 			// Add to the cool bar manager
-			coolBar.add(new ToolBarContributionItem(fileToolBar,IWorkbenchActionConstants.TOOLBAR_FILE));
+			coolBar.add(new ToolBarContributionItem(fileToolBar,
+			        IWorkbenchActionConstants.TOOLBAR_FILE));
 		}
-		
+
 		coolBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 		coolBar.add(new GroupMarker(IWorkbenchActionConstants.GROUP_EDITOR));
 	}
-	
+
 	@Override
 	protected void fillMenuBar(IMenuManager menuBar) {
 		super.fillMenuBar(menuBar);
-		
+
 		menuBar.add(fileMenu());
-		menuBar.add(new GroupMarker (IWorkbenchActionConstants.MB_ADDITIONS));
+		menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 		menuBar.add(helpMenu());
 	}
 
-	private MenuManager helpMenu () {
-		MenuManager helpMenu = new MenuManager ("&Help", IWorkbenchActionConstants.M_HELP);
-		
+	private MenuManager helpMenu() {
+		MenuManager helpMenu = new MenuManager("&Help",
+		        IWorkbenchActionConstants.M_HELP);
+
 		helpMenu.add(getAction(ActionFactory.ABOUT.getId()));
-		
+
 		return helpMenu;
 	}
-	
+
 	private MenuManager fileMenu() {
 		MenuManager menu = new MenuManager("&File", "file_mnu");
 		menu.add(new GroupMarker(IWorkbenchActionConstants.FILE_START));
@@ -89,17 +93,19 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		menu.add(getAction(ActionFactory.SAVE.getId()));
 		menu.add(getAction(ActionFactory.SAVE_ALL.getId()));
 
-		menu.add(ContributionItemFactory.REOPEN_EDITORS.create(getActionBarConfigurer().getWindowConfigurer().getWindow()));
+		menu.add(ContributionItemFactory.REOPEN_EDITORS
+		        .create(getActionBarConfigurer().getWindowConfigurer()
+		                .getWindow()));
 		menu.add(new GroupMarker(IWorkbenchActionConstants.MRU));
 		menu.add(new Separator());
 		menu.add(getAction(ActionFactory.QUIT.getId()));
 		return menu;
 	}
-	
+
 	@Override
 	protected void makeActions(IWorkbenchWindow window) {
 		super.makeActions(window);
-		
+
 		registerAsGlobal(ActionFactory.SAVE.create(window));
 		registerAsGlobal(ActionFactory.SAVE_AS.create(window));
 		registerAsGlobal(ActionFactory.SAVE_ALL.create(window));
@@ -109,10 +115,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		registerAsGlobal(ActionFactory.ABOUT.create(window));
 		registerAsGlobal(ActionFactory.QUIT.create(window));
 	}
-	
+
 	private void registerAsGlobal(IAction action) {
 		getActionBarConfigurer().registerGlobalAction(action);
 		register(action);
 	}
-	
+
 }

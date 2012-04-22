@@ -14,16 +14,16 @@ public class ResourceSelectionEvent {
 
 	private String selectionSummary;
 	private String selectedKey;
-	
-	public ResourceSelectionEvent (String selectedKey, String selectionSummary) {
+
+	public ResourceSelectionEvent(String selectedKey, String selectionSummary) {
 		this.setSelectionSummary(selectionSummary);
 		this.setSelectedKey(selectedKey);
 	}
 
-	public void setSelectedKey (String key) {
+	public void setSelectedKey(String key) {
 		selectedKey = key;
 	}
-	
+
 	public void setSelectionSummary(String selectionSummary) {
 		this.selectionSummary = selectionSummary;
 	}
@@ -35,7 +35,5 @@ public class ResourceSelectionEvent {
 	public String getSelectedKey() {
 		return selectedKey;
 	}
-	
-	
-	
+
 }

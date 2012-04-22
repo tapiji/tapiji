@@ -23,9 +23,8 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-
 public class ResourceBundleEntry extends ContributionItem implements
-		ISelectionChangedListener {
+        ISelectionChangedListener {
 
 	private PropertyKeySelectionTree parentView;
 	private ISelection selection;
@@ -39,9 +38,10 @@ public class ResourceBundleEntry extends ContributionItem implements
 	public ResourceBundleEntry() {
 	}
 
-	public ResourceBundleEntry(PropertyKeySelectionTree view, ISelection selection) {
+	public ResourceBundleEntry(PropertyKeySelectionTree view,
+	        ISelection selection) {
 		this.selection = selection;
-		this.legalSelection = ! selection.isEmpty();
+		this.legalSelection = !selection.isEmpty();
 		this.parentView = view;
 		parentView.addSelectionChangedListener(this);
 	}
@@ -53,17 +53,17 @@ public class ResourceBundleEntry extends ContributionItem implements
 		addItem = new MenuItem(menu, SWT.NONE, index);
 		addItem.setText("Add ...");
 		addItem.setImage(PlatformUI.getWorkbench().getSharedImages()
-				.getImageDescriptor(ISharedImages.IMG_OBJ_ADD).createImage());
-		addItem.addSelectionListener( new SelectionListener() {
-			
+		        .getImageDescriptor(ISharedImages.IMG_OBJ_ADD).createImage());
+		addItem.addSelectionListener(new SelectionListener() {
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				parentView.addNewItem(selection);
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				
+
 			}
 		});
 
@@ -72,15 +72,15 @@ public class ResourceBundleEntry extends ContributionItem implements
 			editItem = new MenuItem(menu, SWT.NONE, index + 1);
 			editItem.setText("Edit");
 			editItem.addSelectionListener(new SelectionListener() {
-				
+
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					parentView.editSelectedItem();
 				}
-				
+
 				@Override
 				public void widgetDefaultSelected(SelectionEvent e) {
-					
+
 				}
 			});
 
@@ -88,18 +88,18 @@ public class ResourceBundleEntry extends ContributionItem implements
 			removeItem = new MenuItem(menu, SWT.NONE, index + 2);
 			removeItem.setText("Remove");
 			removeItem.setImage(PlatformUI.getWorkbench().getSharedImages()
-					.getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE)
-					.createImage());
-			removeItem.addSelectionListener( new SelectionListener() {
-				
+			        .getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE)
+			        .createImage());
+			removeItem.addSelectionListener(new SelectionListener() {
+
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					parentView.deleteSelectedItems();
 				}
-				
+
 				@Override
 				public void widgetDefaultSelected(SelectionEvent e) {
-					
+
 				}
 			});
 			enableMenuItems();

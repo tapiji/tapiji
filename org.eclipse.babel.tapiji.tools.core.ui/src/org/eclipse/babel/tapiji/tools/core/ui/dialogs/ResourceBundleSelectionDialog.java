@@ -23,39 +23,39 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ListDialog;
 
-
 public class ResourceBundleSelectionDialog extends ListDialog {
 
 	private IProject project;
-	
+
 	public ResourceBundleSelectionDialog(Shell parent, IProject project) {
 		super(parent);
 		this.project = project;
-		
-		initDialog ();
+
+		initDialog();
 	}
-	
-	protected void initDialog () {
+
+	protected void initDialog() {
 		this.setAddCancelButton(true);
 		this.setMessage("Select one of the following Resource-Bundle to open:");
 		this.setTitle("Resource-Bundle Selector");
 		this.setContentProvider(new RBContentProvider());
 		this.setLabelProvider(new RBLabelProvider());
 		this.setBlockOnOpen(true);
-		
+
 		if (project != null)
-			this.setInput(RBManager.getInstance(project).getMessagesBundleGroupNames());
+			this.setInput(RBManager.getInstance(project)
+			        .getMessagesBundleGroupNames());
 		else
 			this.setInput(RBManager.getAllMessagesBundleGroupNames());
 	}
-	
-	public String getSelectedBundleId () {
+
+	public String getSelectedBundleId() {
 		Object[] selection = this.getResult();
 		if (selection != null && selection.length > 0)
 			return (String) selection[0];
 		return null;
 	}
-	
+
 	class RBContentProvider implements IStructuredContentProvider {
 
 		@Override
@@ -67,17 +67,17 @@ public class ResourceBundleSelectionDialog extends ListDialog {
 		@Override
 		public void dispose() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
-	
+
 	class RBLabelProvider implements ILabelProvider {
 
 		@Override
@@ -95,13 +95,13 @@ public class ResourceBundleSelectionDialog extends ListDialog {
 		@Override
 		public void addListener(ILabelProviderListener listener) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void dispose() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -113,8 +113,8 @@ public class ResourceBundleSelectionDialog extends ListDialog {
 		@Override
 		public void removeListener(ILabelProviderListener listener) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
 }

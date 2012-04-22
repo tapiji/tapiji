@@ -16,26 +16,25 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipselabs.tapiji.translator.model.Term;
 import org.eclipselabs.tapiji.translator.model.Translation;
 
-
 public class ExactMatcher extends ViewerFilter {
 
 	protected final StructuredViewer viewer;
 	protected String pattern = "";
 	protected StringMatcher matcher;
-	
-	public ExactMatcher (StructuredViewer viewer) {
+
+	public ExactMatcher(StructuredViewer viewer) {
 		this.viewer = viewer;
 	}
-	
-	public String getPattern () {
+
+	public String getPattern() {
 		return pattern;
 	}
-	
-	public void setPattern (String p) {
+
+	public void setPattern(String p) {
 		boolean filtering = matcher != null;
 		if (p != null && p.trim().length() > 0) {
 			pattern = p;
-			matcher = new StringMatcher ("*" + pattern + "*", true, false);
+			matcher = new StringMatcher("*" + pattern + "*", true, false);
 			if (!filtering)
 				viewer.addFilter(this);
 			else
@@ -48,13 +47,13 @@ public class ExactMatcher extends ViewerFilter {
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
 		Term term = (Term) element;
 		FilterInfo filterInfo = new FilterInfo();
 		boolean selected = false;
-		
+
 		// Iterate translations
 		for (Translation translation : term.getAllTranslations()) {
 			String value = translation.value;
@@ -63,16 +62,17 @@ public class ExactMatcher extends ViewerFilter {
 				filterInfo.addFoundInTranslation(locale);
 				filterInfo.addSimilarity(locale, 1d);
 				int start = -1;
-				while ((start = value.toLowerCase().indexOf(pattern.toLowerCase(), start+1)) >= 0) {
-					filterInfo.addFoundInTranslationRange(locale, start, pattern.length());
+				while ((start = value.toLowerCase().indexOf(
+				        pattern.toLowerCase(), start + 1)) >= 0) {
+					filterInfo.addFoundInTranslationRange(locale, start,
+					        pattern.length());
 				}
 				selected = true;
 			}
-		} 
-		
+		}
+
 		term.setInfo(filterInfo);
 		return selected;
 	}
-
 
 }

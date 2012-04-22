@@ -20,12 +20,12 @@ public class LocaleLabelProvider implements ILabelProvider {
 
 	@Override
 	public void addListener(ILabelProviderListener listener) {
-		
+
 	}
 
 	@Override
 	public void dispose() {
-		
+
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class LocaleLabelProvider implements ILabelProvider {
 
 	@Override
 	public void removeListener(ILabelProviderListener listener) {
-		
+
 	}
 
 	@Override
@@ -47,8 +47,8 @@ public class LocaleLabelProvider implements ILabelProvider {
 	@Override
 	public String getText(Object element) {
 		if (element != null && element instanceof Locale)
-			return ((Locale)element).getDisplayName();
-		
+			return ((Locale) element).getDisplayName();
+
 		return null;
 	}
 

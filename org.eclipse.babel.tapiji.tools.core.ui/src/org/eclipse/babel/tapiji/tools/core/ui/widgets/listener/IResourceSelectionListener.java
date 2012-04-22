@@ -14,6 +14,6 @@ import org.eclipse.babel.tapiji.tools.core.ui.widgets.event.ResourceSelectionEve
 
 public interface IResourceSelectionListener {
 
-	public void selectionChanged (ResourceSelectionEvent e);
-	
+	public void selectionChanged(ResourceSelectionEvent e);
+
 }

@@ -63,8 +63,8 @@ import org.eclipselabs.tapiji.translator.views.widgets.provider.GlossaryLabelPro
 import org.eclipselabs.tapiji.translator.views.widgets.sorter.GlossaryEntrySorter;
 import org.eclipselabs.tapiji.translator.views.widgets.sorter.SortInfo;
 
-
-public class GlossaryWidget extends Composite implements IResourceChangeListener {
+public class GlossaryWidget extends Composite implements
+        IResourceChangeListener {
 
 	private final int TERM_COLUMN_WEIGHT = 1;
 	private final int DESCRIPTION_COLUMN_WEIGHT = 1;
@@ -99,29 +99,30 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 	/*** ACTIONS ***/
 	private Action doubleClickAction;
 
-	public GlossaryWidget(IWorkbenchPartSite site,
-			Composite parent, int style, GlossaryManager manager, String refLang, List<String> dls) {
+	public GlossaryWidget(IWorkbenchPartSite site, Composite parent, int style,
+	        GlossaryManager manager, String refLang, List<String> dls) {
 		super(parent, style);
 		this.site = site;
-		
+
 		if (manager != null) {
 			this.manager = manager;
 			this.glossary = manager.getGlossary();
-			
+
 			if (refLang != null)
 				this.referenceLocale = refLang;
 			else
 				this.referenceLocale = glossary.info.getTranslations()[0];
-			
+
 			if (dls != null)
-				this.translationsToDisplay = dls.toArray(new String[dls.size()]);
+				this.translationsToDisplay = dls
+				        .toArray(new String[dls.size()]);
 			else
 				this.translationsToDisplay = glossary.info.getTranslations();
 		}
 
 		constructWidget();
 
-		if (this.glossary!= null) {
+		if (this.glossary != null) {
 			initTreeViewer();
 			initMatchers();
 			initSorters();
@@ -133,20 +134,21 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 
 	protected void registerListeners() {
 		treeViewer.getControl().addKeyListener(new KeyAdapter() {
-			public void keyPressed (KeyEvent event) {
-				if (event.character == SWT.DEL &&
-					event.stateMask == 0) {
+			public void keyPressed(KeyEvent event) {
+				if (event.character == SWT.DEL && event.stateMask == 0) {
 					deleteSelectedItems();
 				}
 			}
 		});
-		
+
 		// Listen resource changes
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
 	}
-	
+
 	protected void initSorters() {
-		sorter = new GlossaryEntrySorter(treeViewer, sortInfo, glossary.getIndexOfLocale (referenceLocale), glossary.info.translations);
+		sorter = new GlossaryEntrySorter(treeViewer, sortInfo,
+		        glossary.getIndexOfLocale(referenceLocale),
+		        glossary.info.translations);
 		treeViewer.setSorter(sorter);
 	}
 
@@ -157,10 +159,10 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 
 			if (!fuzzyMatchingEnabled && enable) {
 				if (matcher.getPattern().trim().length() > 1
-						&& matcher.getPattern().startsWith("*")
-						&& matcher.getPattern().endsWith("*"))
+				        && matcher.getPattern().startsWith("*")
+				        && matcher.getPattern().endsWith("*"))
 					pattern = pattern.substring(1).substring(0,
-							pattern.length() - 2);
+					        pattern.length() - 2);
 				matcher.setPattern(null);
 			}
 		}
@@ -179,26 +181,28 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 		treeViewer.resetFilters();
 
 		String patternBefore = matcher != null ? matcher.getPattern() : "";
-		
+
 		if (fuzzyMatchingEnabled) {
 			matcher = new FuzzyMatcher(treeViewer);
 			((FuzzyMatcher) matcher).setMinimumSimilarity(matchingPrecision);
 		} else
 			matcher = new ExactMatcher(treeViewer);
-		
+
 		matcher.setPattern(patternBefore);
-		
+
 		if (this.selectiveViewEnabled)
 			new SelectiveMatcher(treeViewer, site.getPage());
 	}
 
 	protected void initTreeViewer() {
 		// init content provider
-		contentProvider = new GlossaryContentProvider( this.glossary );
+		contentProvider = new GlossaryContentProvider(this.glossary);
 		treeViewer.setContentProvider(contentProvider);
 
-		// init label provider 
-		labelProvider = new GlossaryLabelProvider(this.displayedTranslations.indexOf(referenceLocale), this.displayedTranslations, site.getPage());
+		// init label provider
+		labelProvider = new GlossaryLabelProvider(
+		        this.displayedTranslations.indexOf(referenceLocale),
+		        this.displayedTranslations, site.getPage());
 		treeViewer.setLabelProvider(labelProvider);
 
 		setTreeStructure(grouped);
@@ -206,10 +210,11 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 
 	public void setTreeStructure(boolean grouped) {
 		this.grouped = grouped;
-		((GlossaryContentProvider)treeViewer.getContentProvider()).setGrouped(this.grouped);
+		((GlossaryContentProvider) treeViewer.getContentProvider())
+		        .setGrouped(this.grouped);
 		if (treeViewer.getInput() == null)
 			treeViewer.setUseHashlookup(false);
-		treeViewer.setInput(this.glossary); 
+		treeViewer.setInput(this.glossary);
 		treeViewer.refresh();
 	}
 
@@ -218,7 +223,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 		this.setLayout(basicLayout);
 
 		treeViewer = new TreeViewer(this, SWT.FULL_SELECTION | SWT.SINGLE
-				| SWT.BORDER);
+		        | SWT.BORDER);
 		Tree tree = treeViewer.getTree();
 
 		if (glossary != null) {
@@ -240,34 +245,39 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 	}
 
 	/**
-     * Gets the orientation suited for a given locale.
-     * @param locale the locale
-     * @return <code>SWT.RIGHT_TO_LEFT</code> or <code>SWT.LEFT_TO_RIGHT</code>
-     */
-    private int getOrientation(Locale locale){
-        if(locale!=null){
-            ComponentOrientation orientation = ComponentOrientation.getOrientation(locale);
-            if(orientation==ComponentOrientation.RIGHT_TO_LEFT){
-                return SWT.RIGHT_TO_LEFT;
-            }
-        }
-        return SWT.LEFT_TO_RIGHT;
-    }
-	
+	 * Gets the orientation suited for a given locale.
+	 * 
+	 * @param locale
+	 *            the locale
+	 * @return <code>SWT.RIGHT_TO_LEFT</code> or <code>SWT.LEFT_TO_RIGHT</code>
+	 */
+	private int getOrientation(Locale locale) {
+		if (locale != null) {
+			ComponentOrientation orientation = ComponentOrientation
+			        .getOrientation(locale);
+			if (orientation == ComponentOrientation.RIGHT_TO_LEFT) {
+				return SWT.RIGHT_TO_LEFT;
+			}
+		}
+		return SWT.LEFT_TO_RIGHT;
+	}
+
 	protected void constructTreeColumns(Tree tree) {
 		tree.removeAll();
 		if (this.displayedTranslations == null)
-			this.displayedTranslations = new ArrayList <String>();
-		
+			this.displayedTranslations = new ArrayList<String>();
+
 		this.displayedTranslations.clear();
 
 		/** Reference term */
 		String[] refDef = referenceLocale.split("_");
-		Locale l = refDef.length < 3 ? (refDef.length < 2 ? new Locale (refDef[0]) : new Locale(refDef[0], refDef[1])) : new Locale (refDef[0], refDef[1], refDef[2]);
-		
+		Locale l = refDef.length < 3 ? (refDef.length < 2 ? new Locale(
+		        refDef[0]) : new Locale(refDef[0], refDef[1])) : new Locale(
+		        refDef[0], refDef[1], refDef[2]);
+
 		this.displayedTranslations.add(referenceLocale);
-		termColumn = new TreeColumn(tree, SWT.RIGHT_TO_LEFT/*getOrientation(l)*/);
-		
+		termColumn = new TreeColumn(tree, SWT.RIGHT_TO_LEFT/* getOrientation(l) */);
+
 		termColumn.setText(l.getDisplayName());
 		TreeViewerColumn termCol = new TreeViewerColumn(treeViewer, termColumn);
 		termCol.setEditingSupport(new EditingSupport(treeViewer) {
@@ -277,17 +287,19 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 			protected void setValue(Object element, Object value) {
 				if (element instanceof Term) {
 					Term term = (Term) element;
-					Translation translation = (Translation) term.getTranslation(referenceLocale);
-					
+					Translation translation = (Translation) term
+					        .getTranslation(referenceLocale);
+
 					if (translation != null) {
 						translation.value = (String) value;
-						Glossary gl = ((GlossaryContentProvider)treeViewer.getContentProvider()).getGlossary();
+						Glossary gl = ((GlossaryContentProvider) treeViewer
+						        .getContentProvider()).getGlossary();
 						manager.setGlossary(gl);
 						try {
 							manager.saveGlossary();
 						} catch (Exception e) {
 							e.printStackTrace();
-						}							
+						}
 					}
 					treeViewer.refresh();
 				}
@@ -301,8 +313,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 			@Override
 			protected CellEditor getCellEditor(Object element) {
 				if (editor == null) {
-					Composite tree = (Composite) treeViewer
-							.getControl();
+					Composite tree = (Composite) treeViewer.getControl();
 					editor = new TextCellEditor(tree);
 				}
 				return editor;
@@ -326,89 +337,92 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 			}
 		});
 		basicLayout.setColumnData(termColumn, new ColumnWeightData(
-				TERM_COLUMN_WEIGHT));
+		        TERM_COLUMN_WEIGHT));
 
-		
 		/** Translations */
 		String[] allLocales = this.translationsToDisplay;
-		
+
 		int iCol = 1;
 		for (String locale : allLocales) {
 			final int ifCall = iCol;
 			final String sfLocale = locale;
 			if (locale.equalsIgnoreCase(this.referenceLocale))
 				continue;
-			
+
 			// trac the rendered translation
 			this.displayedTranslations.add(locale);
-			
-			String [] locDef = locale.split("_");
-			l = locDef.length < 3 ? (locDef.length < 2 ? new Locale (locDef[0]) : new Locale(locDef[0], locDef[1])) : new Locale (locDef[0], locDef[1], locDef[2]);
-			
+
+			String[] locDef = locale.split("_");
+			l = locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0])
+			        : new Locale(locDef[0], locDef[1])) : new Locale(locDef[0],
+			        locDef[1], locDef[2]);
+
 			// Add editing support to this table column
 			TreeColumn descriptionColumn = new TreeColumn(tree, SWT.NONE);
-			TreeViewerColumn tCol = new TreeViewerColumn(treeViewer, descriptionColumn);
+			TreeViewerColumn tCol = new TreeViewerColumn(treeViewer,
+			        descriptionColumn);
 			tCol.setEditingSupport(new EditingSupport(treeViewer) {
 				TextCellEditor editor = null;
-	
+
 				@Override
 				protected void setValue(Object element, Object value) {
 					if (element instanceof Term) {
 						Term term = (Term) element;
-						Translation translation = (Translation) term.getTranslation(sfLocale);
-						
+						Translation translation = (Translation) term
+						        .getTranslation(sfLocale);
+
 						if (translation != null) {
 							translation.value = (String) value;
-							Glossary gl = ((GlossaryContentProvider)treeViewer.getContentProvider()).getGlossary();
+							Glossary gl = ((GlossaryContentProvider) treeViewer
+							        .getContentProvider()).getGlossary();
 							manager.setGlossary(gl);
 							try {
 								manager.saveGlossary();
 							} catch (Exception e) {
 								e.printStackTrace();
-							}							
+							}
 						}
 						treeViewer.refresh();
 					}
 				}
-	
+
 				@Override
 				protected Object getValue(Object element) {
 					return labelProvider.getColumnText(element, ifCall);
 				}
-	
+
 				@Override
 				protected CellEditor getCellEditor(Object element) {
 					if (editor == null) {
-						Composite tree = (Composite) treeViewer
-								.getControl();
+						Composite tree = (Composite) treeViewer.getControl();
 						editor = new TextCellEditor(tree);
 					}
 					return editor;
 				}
-	
+
 				@Override
 				protected boolean canEdit(Object element) {
 					return editable;
 				}
 			});
-	
+
 			descriptionColumn.setText(l.getDisplayName());
 			descriptionColumn.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					updateSorter(ifCall);
 				}
-	
+
 				@Override
 				public void widgetDefaultSelected(SelectionEvent e) {
 					updateSorter(ifCall);
 				}
 			});
 			basicLayout.setColumnData(descriptionColumn, new ColumnWeightData(
-					DESCRIPTION_COLUMN_WEIGHT));
-			iCol ++;
+			        DESCRIPTION_COLUMN_WEIGHT));
+			iCol++;
 		}
-	
+
 	}
 
 	protected void updateSorter(int idx) {
@@ -436,13 +450,13 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 
 		// Initialize drag source for copy event
 		DragSource dragSource = new DragSource(treeViewer.getControl(),
-				DND.DROP_MOVE);
+		        DND.DROP_MOVE);
 		dragSource.setTransfer(new Transfer[] { TermTransfer.getInstance() });
 		dragSource.addDragListener(source);
 
 		// Initialize drop target for copy event
 		DropTarget dropTarget = new DropTarget(treeViewer.getControl(),
-				DND.DROP_MOVE);
+		        DND.DROP_MOVE);
 		dropTarget.setTransfer(new Transfer[] { TermTransfer.getInstance() });
 		dropTarget.addDropListener(target);
 	}
@@ -470,7 +484,6 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 
 	/*** SELECTION LISTENER ***/
 
-
 	private void refreshViewer() {
 		treeViewer.refresh();
 	}
@@ -486,7 +499,8 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 		else
 			grouped = true;
 		labelProvider.setSearchEnabled(!grouped);
-		this.setTreeStructure(grouped && sorter != null && sorter.getSortInfo().getColIdx() == 0);
+		this.setTreeStructure(grouped && sorter != null
+		        && sorter.getSortInfo().getColIdx() == 0);
 		treeViewer.refresh();
 	}
 
@@ -519,15 +533,16 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 
 	public void deleteSelectedItems() {
 		List<String> ids = new ArrayList<String>();
-		this.glossary = ((GlossaryContentProvider) treeViewer.getContentProvider()).getGlossary();
-		
+		this.glossary = ((GlossaryContentProvider) treeViewer
+		        .getContentProvider()).getGlossary();
+
 		ISelection selection = site.getSelectionProvider().getSelection();
 		if (selection instanceof IStructuredSelection) {
 			for (Iterator<?> iter = ((IStructuredSelection) selection)
-					.iterator(); iter.hasNext();) {
+			        .iterator(); iter.hasNext();) {
 				Object elem = iter.next();
 				if (elem instanceof Term) {
-					this.glossary.removeTerm ((Term)elem);
+					this.glossary.removeTerm((Term) elem);
 					this.manager.setGlossary(this.glossary);
 					try {
 						this.manager.saveGlossary();
@@ -547,7 +562,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 		ISelection selection = site.getSelectionProvider().getSelection();
 		if (selection instanceof IStructuredSelection) {
 			for (Iterator<?> iter = ((IStructuredSelection) selection)
-					.iterator(); iter.hasNext();) {
+			        .iterator(); iter.hasNext();) {
 				Object elem = iter.next();
 				if (elem instanceof Term) {
 					parentTerm = ((Term) elem);
@@ -556,22 +571,24 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 			}
 		}
 
-		InputDialog dialog = new InputDialog (this.getShell(), "Neuer Begriff",
-				"Please, define the new term:", "", null);
-		
+		InputDialog dialog = new InputDialog(this.getShell(), "Neuer Begriff",
+		        "Please, define the new term:", "", null);
+
 		if (dialog.open() == InputDialog.OK) {
-			if (dialog.getValue() != null && dialog.getValue().trim().length() > 0) {
-				this.glossary = ((GlossaryContentProvider) treeViewer.getContentProvider()).getGlossary();
-				
+			if (dialog.getValue() != null
+			        && dialog.getValue().trim().length() > 0) {
+				this.glossary = ((GlossaryContentProvider) treeViewer
+				        .getContentProvider()).getGlossary();
+
 				// Construct a new term
 				Term newTerm = new Term();
-				Translation defaultTranslation = new Translation ();
+				Translation defaultTranslation = new Translation();
 				defaultTranslation.id = referenceLocale;
 				defaultTranslation.value = dialog.getValue();
 				newTerm.translations.add(defaultTranslation);
-				
-				this.glossary.addTerm (parentTerm, newTerm);
-				
+
+				this.glossary.addTerm(parentTerm, newTerm);
+
 				this.manager.setGlossary(this.glossary);
 				try {
 					this.manager.saveGlossary();
@@ -594,25 +611,24 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 	public float getMatchingPrecision() {
 		return matchingPrecision;
 	}
-	
+
 	public Control getControl() {
 		return treeViewer.getControl();
 	}
-	
-	public Glossary getGlossary () {
+
+	public Glossary getGlossary() {
 		return this.glossary;
 	}
 
-	public void addSelectionChangedListener(
-			ISelectionChangedListener listener) {
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
 		treeViewer.addSelectionChangedListener(listener);
 	}
 
 	public String getReferenceLanguage() {
 		return referenceLocale;
 	}
-	
-	public void setReferenceLanguage (String lang) {
+
+	public void setReferenceLanguage(String lang) {
 		this.referenceLocale = lang;
 	}
 
@@ -620,11 +636,11 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 		this.selectiveViewEnabled = enable;
 		initMatchers();
 	}
-	
+
 	public boolean isSelectiveViewEnabled() {
 		return selectiveViewEnabled;
 	}
-	
+
 	@Override
 	public void dispose() {
 		super.dispose();
@@ -636,5 +652,5 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 		initMatchers();
 		this.refreshViewer();
 	}
-	
+
 }

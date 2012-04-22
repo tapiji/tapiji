@@ -41,8 +41,8 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 	@Override
 	public String getDescription() {
 		return "Replaces the non-existing Resource-Bundle key '"
-				+ key
-				+ "' with a reference to an already existing localized string literal.";
+		        + key
+		        + "' with a reference to an already existing localized string literal.";
 	}
 
 	@Override
@@ -63,20 +63,20 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 		IResource resource = marker.getResource();
 
 		ITextFileBufferManager bufferManager = FileBuffers
-				.getTextFileBufferManager();
+		        .getTextFileBufferManager();
 		IPath path = resource.getRawLocation();
 		try {
 			bufferManager.connect(path, null);
 			ITextFileBuffer textFileBuffer = bufferManager
-					.getTextFileBuffer(path);
+			        .getTextFileBuffer(path);
 			IDocument document = textFileBuffer.getDocument();
 
 			ResourceBundleEntrySelectionDialog dialog = new ResourceBundleEntrySelectionDialog(
-					Display.getDefault().getActiveShell());
-			
+			        Display.getDefault().getActiveShell());
+
 			dialog.setProjectName(resource.getProject().getName());
 			dialog.setBundleName(bundleId);
-			
+
 			if (dialog.open() != InputDialog.OK)
 				return;
 
@@ -84,18 +84,18 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 			Locale locale = dialog.getSelectedLocale();
 
 			String jsfBundleVar = JSFResourceBundleDetector
-					.getBundleVariableName(document.get().substring(startPos,
-							startPos + endPos));
+			        .getBundleVariableName(document.get().substring(startPos,
+			                startPos + endPos));
 
 			if (key.indexOf(".") >= 0) {
 				int quoteDblIdx = document.get().substring(0, startPos)
-						.lastIndexOf("\"");
+				        .lastIndexOf("\"");
 				int quoteSingleIdx = document.get().substring(0, startPos)
-						.lastIndexOf("'");
+				        .lastIndexOf("'");
 				String quoteSign = quoteDblIdx < quoteSingleIdx ? "\"" : "'";
 
 				document.replace(startPos, endPos, jsfBundleVar + "["
-						+ quoteSign + key + quoteSign + "]");
+				        + quoteSign + key + quoteSign + "]");
 			} else {
 				document.replace(startPos, endPos, jsfBundleVar + "." + key);
 			}

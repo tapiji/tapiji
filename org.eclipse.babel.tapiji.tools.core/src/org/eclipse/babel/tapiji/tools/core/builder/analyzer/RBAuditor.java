@@ -21,19 +21,19 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IMarkerResolution;
 
-
 public class RBAuditor extends I18nResourceAuditor {
 
 	@Override
 	public void audit(IResource resource) {
 		if (RBFileUtils.isResourceBundleFile(resource)) {
-			ResourceBundleManager.getManager(resource.getProject()).addBundleResource (resource);
+			ResourceBundleManager.getManager(resource.getProject())
+			        .addBundleResource(resource);
 		}
 	}
 
 	@Override
 	public String[] getFileEndings() {
-		return new String [] { "properties" };
+		return new String[] { "properties" };
 	}
 
 	@Override

@@ -20,14 +20,14 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	private static final String PERSPECTIVE_ID = "org.eclipselabs.tapiji.translator.perspective";
 
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(
-			IWorkbenchWindowConfigurer configurer) {
+	        IWorkbenchWindowConfigurer configurer) {
 		return new ApplicationWorkbenchWindowAdvisor(configurer);
 	}
 
 	public String getInitialWindowPerspectiveId() {
 		return PERSPECTIVE_ID;
 	}
-	
+
 	@Override
 	public void initialize(IWorkbenchConfigurer configurer) {
 		super.initialize(configurer);

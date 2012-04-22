@@ -7,6 +7,7 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.java.ui.autocompletion;
 
+import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog.DialogConfiguration;
@@ -61,23 +62,24 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 
 		dialog.setDialogConfiguration(config);
 
-		if (dialog.open() != InputDialog.OK)
+		if (dialog.open() != InputDialog.OK) {
 			return;
+		}
 
 		String resourceBundleId = dialog.getSelectedResourceBundle();
 		String key = dialog.getSelectedKey();
 
 		try {
-			if (!bundleContext)
+			if (!bundleContext) {
 				reference = ASTutils.insertNewBundleRef(document, resource,
 				        startPos, endPos - startPos, resourceBundleId, key);
-			else {
+			} else {
 				document.replace(startPos, endPos - startPos, key);
 				reference = key + "\"";
 			}
-			ResourceBundleManager.refreshResource(resource);
+			ResourceBundleManager.rebuildProject(resource);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.logError(e);
 		}
 	}
 
@@ -86,8 +88,9 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 		if (value != null && value.length() > 0) {
 			return "Exports the focused string literal into a Java Resource-Bundle. This action results "
 			        + "in a Resource-Bundle reference!";
-		} else
+		} else {
 			return "";
+		}
 	}
 
 	@Override
@@ -98,13 +101,15 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 	@Override
 	public String getDisplayString() {
 		String displayStr = "";
-		if (bundleContext)
+		if (bundleContext) {
 			displayStr = "Create a new resource-bundle-entry";
-		else
+		} else {
 			displayStr = "Create a new localized string literal";
+		}
 
-		if (value != null && value.length() > 0)
+		if (value != null && value.length() > 0) {
 			displayStr += " for '" + value + "'";
+		}
 
 		return displayStr;
 	}
@@ -123,10 +128,11 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 
 	@Override
 	public int getRelevance() {
-		if (this.value.trim().length() == 0)
+		if (this.value.trim().length() == 0) {
 			return 96;
-		else
+		} else {
 			return 1096;
+		}
 	}
 
 }

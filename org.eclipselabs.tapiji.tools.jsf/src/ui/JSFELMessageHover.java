@@ -36,38 +36,43 @@ public class JSFELMessageHover implements ITextHover {
 	private IProject project = null;
 
 	public final String getHoverInfo(final ITextViewer textViewer,
-			final IRegion hoverRegion) {
-		String bundleName = JSFResourceBundleDetector.resolveResourceBundleId(textViewer.getDocument(), 
-				JSFResourceBundleDetector.getBundleVariableName(expressionValue));
-		String resourceKey = JSFResourceBundleDetector.getResourceKey(expressionValue);
-		
-		return ELUtils.getResource (project, bundleName, resourceKey);
+	        final IRegion hoverRegion) {
+		String bundleName = JSFResourceBundleDetector.resolveResourceBundleId(
+		        textViewer.getDocument(), JSFResourceBundleDetector
+		                .getBundleVariableName(expressionValue));
+		String resourceKey = JSFResourceBundleDetector
+		        .getResourceKey(expressionValue);
+
+		return ELUtils.getResource(project, bundleName, resourceKey);
 	}
 
 	public final IRegion getHoverRegion(final ITextViewer textViewer,
-			final int documentPosition) {
+	        final int documentPosition) {
 		final IStructuredDocumentContext context = IStructuredDocumentContextFactory.INSTANCE
-			.getContext(textViewer, documentPosition);
-		
-		IWorkspaceContextResolver workspaceResolver =  IStructuredDocumentContextResolverFactory.INSTANCE
-			.getWorkspaceContextResolver(context);
+		        .getContext(textViewer, documentPosition);
+
+		IWorkspaceContextResolver workspaceResolver = IStructuredDocumentContextResolverFactory.INSTANCE
+		        .getWorkspaceContextResolver(context);
 
 		project = workspaceResolver.getProject();
-		
+
 		if (project != null) {
 			if (!InternationalizationNature.hasNature(project))
 				return null;
 		} else
 			return null;
 
-		final ITextRegionContextResolver symbolResolver = IStructuredDocumentContextResolverFactory.INSTANCE.getTextRegionResolver(context);
-		
-		if (!symbolResolver.getRegionType().equals(DOMJSPRegionContexts.JSP_VBL_CONTENT))
+		final ITextRegionContextResolver symbolResolver = IStructuredDocumentContextResolverFactory.INSTANCE
+		        .getTextRegionResolver(context);
+
+		if (!symbolResolver.getRegionType().equals(
+		        DOMJSPRegionContexts.JSP_VBL_CONTENT))
 			return null;
 		expressionValue = symbolResolver.getRegionText();
-		
-		return new Region (symbolResolver.getStartOffset(), symbolResolver.getLength());
-		
+
+		return new Region(symbolResolver.getStartOffset(),
+		        symbolResolver.getLength());
+
 	}
 
 }

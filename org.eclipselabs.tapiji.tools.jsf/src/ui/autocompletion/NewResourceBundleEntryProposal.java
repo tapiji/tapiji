@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-
 public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 
 	private int startPos;
@@ -36,8 +35,9 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 	private String reference;
 	private boolean isKey;
 
-	public NewResourceBundleEntryProposal(IResource resource, String str, int startPos, int endPos, 
-			ResourceBundleManager manager, String bundleName, boolean isKey) {
+	public NewResourceBundleEntryProposal(IResource resource, String str,
+	        int startPos, int endPos, ResourceBundleManager manager,
+	        String bundleName, boolean isKey) {
 		this.startPos = startPos;
 		this.endPos = endPos;
 		this.manager = manager;
@@ -49,30 +49,30 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 
 	@Override
 	public void apply(IDocument document) {
-		
+
 		CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
-				Display.getDefault().getActiveShell());
-		
+		        Display.getDefault().getActiveShell());
+
 		DialogConfiguration config = dialog.new DialogConfiguration();
 		config.setPreselectedKey(isKey ? value : "");
 		config.setPreselectedMessage(!isKey ? value : "");
 		config.setPreselectedBundle(bundleName == null ? "" : bundleName);
 		config.setPreselectedLocale("");
 		config.setProjectName(resource.getProject().getName());
-		
+
 		dialog.setDialogConfiguration(config);
-		
+
 		if (dialog.open() != InputDialog.OK) {
 			return;
 		}
-		
+
 		String resourceBundleId = dialog.getSelectedResourceBundle();
 		String key = dialog.getSelectedKey();
-		
+
 		try {
 			document.replace(startPos, endPos, key);
 			reference = key + "\"";
-			ResourceBundleManager.refreshResource(resource);
+			ResourceBundleManager.rebuildProject(resource);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -81,9 +81,9 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 	@Override
 	public String getAdditionalProposalInfo() {
 		// TODO Auto-generated method stub
-		return "Creates a new string literal within one of the" +
-				" project's resource bundles. This action results " + 
-				"in a reference to the localized string literal!";
+		return "Creates a new string literal within one of the"
+		        + " project's resource bundles. This action results "
+		        + "in a reference to the localized string literal!";
 	}
 
 	@Override
@@ -95,9 +95,9 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 	@Override
 	public String getDisplayString() {
 		String displayStr = "";
-		
+
 		displayStr = "Create a new localized string literal";
-		
+
 		if (this.isKey) {
 			if (value != null && value.length() > 0)
 				displayStr += " with the key '" + value + "'";
@@ -110,14 +110,14 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 
 	@Override
 	public Image getImage() {
-		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(
-				ISharedImages.IMG_OBJ_ADD).createImage();
+		return PlatformUI.getWorkbench().getSharedImages()
+		        .getImageDescriptor(ISharedImages.IMG_OBJ_ADD).createImage();
 	}
 
 	@Override
 	public Point getSelection(IDocument document) {
 		// TODO Auto-generated method stub
-		return new Point (startPos + reference.length()-1, 0);
+		return new Point(startPos + reference.length() - 1, 0);
 	}
 
 	@Override

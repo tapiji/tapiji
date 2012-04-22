@@ -34,19 +34,18 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
-
 public class BundleNameProposal implements IContentAssistProcessor {
 
 	@Override
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer,
-			int offset) {
+	        int offset) {
 		List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
 
 		final IStructuredDocumentContext context = IStructuredDocumentContextFactory.INSTANCE
-				.getContext(viewer, offset);
+		        .getContext(viewer, offset);
 
 		IWorkspaceContextResolver workspaceResolver = IStructuredDocumentContextResolverFactory.INSTANCE
-				.getWorkspaceContextResolver(context);
+		        .getWorkspaceContextResolver(context);
 
 		IProject project = workspaceResolver.getProject();
 		IResource resource = workspaceResolver.getResource();
@@ -54,53 +53,56 @@ public class BundleNameProposal implements IContentAssistProcessor {
 		if (project != null) {
 			if (!InternationalizationNature.hasNature(project))
 				return proposals.toArray(new ICompletionProposal[proposals
-						.size()]);
+				        .size()]);
 		} else
 			return proposals.toArray(new ICompletionProposal[proposals.size()]);
 
-		addBundleProposals(proposals, context, offset, viewer.getDocument(), 
-				resource);
-		
+		addBundleProposals(proposals, context, offset, viewer.getDocument(),
+		        resource);
+
 		return proposals.toArray(new ICompletionProposal[proposals.size()]);
 	}
 
-	private void addBundleProposals(List<ICompletionProposal> proposals, 
-			final IStructuredDocumentContext context, 
-			int startPos, 
-			IDocument document,
-			IResource resource) {
+	private void addBundleProposals(List<ICompletionProposal> proposals,
+	        final IStructuredDocumentContext context, int startPos,
+	        IDocument document, IResource resource) {
 		final ITextRegionContextResolver resolver = IStructuredDocumentContextResolverFactory.INSTANCE
-				.getTextRegionResolver(context);
+		        .getTextRegionResolver(context);
 
 		if (resolver != null) {
 			final String regionType = resolver.getRegionType();
-			startPos = resolver.getStartOffset()+1;
-			
+			startPos = resolver.getStartOffset() + 1;
+
 			if (regionType != null
-					&& regionType
-							.equals(DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE)) {
+			        && regionType
+			                .equals(DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE)) {
 
 				final ITaglibContextResolver tlResolver = IStructuredDocumentContextResolverFactory.INSTANCE
-						.getTaglibContextResolver(context);
+				        .getTaglibContextResolver(context);
 
 				if (tlResolver != null) {
 					Attr attr = getAttribute(context);
 					String startString = attr.getValue();
-					
+
 					int length = startString.length();
-					
+
 					if (attr != null) {
 						Node tagElement = attr.getOwnerElement();
-						if (tagElement == null) 
+						if (tagElement == null)
 							return;
-						
+
 						String nodeName = tagElement.getNodeName();
-						if (nodeName.substring(nodeName.indexOf(":")+1).toLowerCase().equals("loadbundle")) {
-							ResourceBundleManager manager = ResourceBundleManager.getManager(resource.getProject());
-							for (String id : manager.getResourceBundleIdentifiers()) {
-								if (id.startsWith(startString) && id.length() != startString.length()) {
-									proposals.add(new ui.autocompletion.MessageCompletionProposal(
-											startPos, length, id, true));
+						if (nodeName.substring(nodeName.indexOf(":") + 1)
+						        .toLowerCase().equals("loadbundle")) {
+							ResourceBundleManager manager = ResourceBundleManager
+							        .getManager(resource.getProject());
+							for (String id : manager
+							        .getResourceBundleIdentifiers()) {
+								if (id.startsWith(startString)
+								        && id.length() != startString.length()) {
+									proposals
+									        .add(new ui.autocompletion.MessageCompletionProposal(
+									                startPos, length, id, true));
 								}
 							}
 						}
@@ -112,7 +114,7 @@ public class BundleNameProposal implements IContentAssistProcessor {
 
 	private Attr getAttribute(IStructuredDocumentContext context) {
 		final IDOMContextResolver domResolver = IStructuredDocumentContextResolverFactory.INSTANCE
-				.getDOMContextResolver(context);
+		        .getDOMContextResolver(context);
 
 		if (domResolver != null) {
 			final Node curNode = domResolver.getNode();
@@ -124,10 +126,10 @@ public class BundleNameProposal implements IContentAssistProcessor {
 		return null;
 
 	}
-	
+
 	@Override
 	public IContextInformation[] computeContextInformation(ITextViewer viewer,
-			int offset) {
+	        int offset) {
 		// TODO Auto-generated method stub
 		return null;
 	}

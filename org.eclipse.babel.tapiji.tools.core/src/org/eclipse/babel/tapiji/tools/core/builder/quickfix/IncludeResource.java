@@ -23,23 +23,24 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 
-
 public class IncludeResource implements IMarkerResolution2 {
 
 	private String bundleName;
 	private Set<IResource> bundleResources;
-	
-	public IncludeResource (String bundleName, Set<IResource> bundleResources) {
+
+	public IncludeResource(String bundleName, Set<IResource> bundleResources) {
 		this.bundleResources = bundleResources;
 		this.bundleName = bundleName;
 	}
-	
+
 	@Override
 	public String getDescription() {
-		return "The Resource-Bundle with id '" + bundleName + "' has been " +
-			   "excluded from Internationalization. Based on this fact, no internationalization " +
-			   "supoort is provided for this Resource-Bundle. Performing this action, internationalization " +
-			   "support for '" + bundleName + "' will be enabled"; 
+		return "The Resource-Bundle with id '"
+		        + bundleName
+		        + "' has been "
+		        + "excluded from Internationalization. Based on this fact, no internationalization "
+		        + "supoort is provided for this Resource-Bundle. Performing this action, internationalization "
+		        + "support for '" + bundleName + "' will be enabled";
 	}
 
 	@Override
@@ -60,8 +61,10 @@ public class IncludeResource implements IMarkerResolution2 {
 		try {
 			ps.busyCursorWhile(new IRunnableWithProgress() {
 				public void run(IProgressMonitor pm) {
-					ResourceBundleManager manager = ResourceBundleManager.getManager(marker.getResource().getProject());
-					pm.beginTask("Including resources to Internationalization", bundleResources.size());
+					ResourceBundleManager manager = ResourceBundleManager
+					        .getManager(marker.getResource().getProject());
+					pm.beginTask("Including resources to Internationalization",
+					        bundleResources.size());
 					for (IResource resource : bundleResources) {
 						manager.includeResource(resource, pm);
 						pm.worked(1);
@@ -69,7 +72,8 @@ public class IncludeResource implements IMarkerResolution2 {
 					pm.done();
 				}
 			});
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 	}
 
 }
