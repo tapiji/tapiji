@@ -7,6 +7,7 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.java.ui.autocompletion;
 
+import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.builder.I18nBuilder;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.util.ResourceUtils;
@@ -16,6 +17,7 @@ import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
@@ -136,9 +138,13 @@ public class CreateResourceBundleProposal implements IJavaCompletionProposal {
 
 				wd.setTitle(wizard.getWindowTitle());
 				if (wd.open() == WizardDialog.OK) {
-					(new I18nBuilder()).buildProject(null,
-					        resource.getProject());
-					(new I18nBuilder()).buildResource(resource, null);
+					try {
+						resource.getProject().build(
+						        IncrementalProjectBuilder.FULL_BUILD,
+						        I18nBuilder.BUILDER_ID, null, null);
+					} catch (CoreException e) {
+						Logger.logError(e);
+					}
 
 					ITextFileBufferManager bufferManager = FileBuffers
 					        .getTextFileBufferManager();
