@@ -28,6 +28,7 @@ import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
 import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.TreeType;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -72,6 +73,7 @@ public class KeyTreeContributor implements IKeyTreeContributor {
         
         KeyTreeContentProvider contentProvider = new KeyTreeContentProvider(treeType);
 		treeViewer.setContentProvider(contentProvider);
+		ColumnViewerToolTipSupport.enableFor (treeViewer);
         treeViewer.setLabelProvider(new KeyTreeLabelProvider(editor, treeModel, contentProvider));
         if (treeViewer.getInput() == null)
             treeViewer.setUseHashlookup(true);

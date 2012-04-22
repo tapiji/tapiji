@@ -22,10 +22,10 @@ import org.eclipse.babel.editor.util.OverlayImageIcon;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
@@ -35,7 +35,7 @@ import org.eclipse.swt.graphics.Image;
  * @author Pascal Essiembre
  */
 public class KeyTreeLabelProvider 
-        extends LabelProvider implements IFontProvider, IColorProvider {	
+        extends ColumnLabelProvider implements IFontProvider, IColorProvider {	
 
     private static final int KEY_DEFAULT = 1 << 1;
     private static final int KEY_COMMENTED = 1 << 2;
@@ -131,6 +131,28 @@ public class KeyTreeLabelProvider
     		// Should not happen
     		return "error";
         }
+	}
+	
+	public String getToolTipText(Object element) {
+		if (element instanceof KeyTreeNode) {
+			KeyTreeNode node = (KeyTreeNode)element;
+			Collection<IMessageCheck> c = editor.getMarkers().getFailedChecks(node.getMessageKey());
+			if (c == null || c.isEmpty()) {
+				return null;
+			}
+			boolean isMissingOrUnused = editor.getMarkers().isMissingOrUnusedKey(node.getMessageKey());
+			if (isMissingOrUnused) {
+				if (editor.getMarkers().isUnusedKey(node.getMessageKey(), isMissingOrUnused)) {
+					return "This Locale is unused";
+				} else {
+					return "This Locale has missing translations";
+				}
+			}
+			if (editor.getMarkers().hasDuplicateValue(node.getMessageKey())) {
+				return "This Locale has a duplicate value";
+			}
+		}
+		return null;
 	}
 
     /**

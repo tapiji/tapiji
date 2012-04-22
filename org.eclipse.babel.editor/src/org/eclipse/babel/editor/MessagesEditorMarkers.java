@@ -21,6 +21,7 @@ import java.util.Observable;
 import org.eclipse.babel.core.message.MessagesBundle;
 import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.MessagesBundleGroupAdapter;
+import org.eclipse.babel.core.message.checks.DuplicateValueCheck;
 import org.eclipse.babel.core.message.checks.IMessageCheck;
 import org.eclipse.babel.core.message.checks.MissingValueCheck;
 import org.eclipse.babel.editor.resource.validator.IValidationMarkerStrategy;
@@ -188,6 +189,21 @@ public class MessagesEditorMarkers
     	//the code is up to date with the default properties
     	//file, the key is now unused.
     	return markers != null && markersContainMissing(markers);
+    }
+    
+    /**
+     * 
+     * @param key
+     * @return true when the value is a duplicate value
+     */
+    public boolean hasDuplicateValue(String key) {
+    	Collection<IMessageCheck> markers = getFailedChecks(key);
+    	for (IMessageCheck marker : markers) {
+    		if (marker instanceof DuplicateValueCheck) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
     
     private boolean markersContainMissing(Collection<IMessageCheck> markers) {
