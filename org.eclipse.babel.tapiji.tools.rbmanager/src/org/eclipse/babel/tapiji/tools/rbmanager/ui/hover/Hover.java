@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- *     Martin Reiterer - initial API and implementation
+ *     Michael Gasser - initial API and implementation
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.rbmanager.ui.hover;
 
