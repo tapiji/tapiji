@@ -174,6 +174,15 @@ public class MessagesEditorMarkers
     
     /**
      * @param key
+     * @return true when the key has a missing issue
+     */
+    public boolean isMissingKey(String key) {
+    	Collection<IMessageCheck> markers = getFailedChecks(key);
+    	return markers != null && markersContainMissing(markers);
+    }
+    
+    /**
+     * @param key
      * @param isMissingOrUnused true when it has been assesed already
      * that it is missing or unused
      * @return true when the key is unused
@@ -196,7 +205,7 @@ public class MessagesEditorMarkers
      * @param key
      * @return true when the value is a duplicate value
      */
-    public boolean hasDuplicateValue(String key) {
+    public boolean isDuplicateValue(String key) {
     	Collection<IMessageCheck> markers = getFailedChecks(key);
     	for (IMessageCheck marker : markers) {
     		if (marker instanceof DuplicateValueCheck) {

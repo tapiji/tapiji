@@ -38,7 +38,7 @@ public class ShowDuplicateAction extends Action {
         this.locale = locale;
         setText("Show duplicate keys.");
         setImageDescriptor(
-                UIUtils.getImageDescriptor("duplicate.gif"));
+                UIUtils.getImageDescriptor(UIUtils.IMAGE_DUPLICATE));
         setToolTipText("TODO put something here"); //TODO put tooltip
     }
 

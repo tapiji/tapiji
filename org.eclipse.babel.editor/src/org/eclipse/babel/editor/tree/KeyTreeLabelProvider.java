@@ -21,9 +21,12 @@ import org.eclipse.babel.editor.MessagesEditorMarkers;
 import org.eclipse.babel.editor.util.OverlayImageIcon;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.graphics.Color;
@@ -82,18 +85,28 @@ public class KeyTreeLabelProvider
 			KeyTreeNode node = (KeyTreeNode)element;
 			Collection<IMessageCheck> c = editor.getMarkers().getFailedChecks(node.getMessageKey());
 			if (c == null || c.isEmpty()) {
-				return UIUtils.getImage(UIUtils.IMAGE_KEY);
+				// Return the default key image as no issue exists
+				return UIUtils.getKeyImage();
 			}
-			boolean isMissingOrUnused = editor.getMarkers().isMissingOrUnusedKey(node.getMessageKey());
-			if (isMissingOrUnused) {
-				if (editor.getMarkers().isUnusedKey(node.getMessageKey(), isMissingOrUnused)) {
-					return UIUtils.getImage(UIUtils.IMAGE_UNUSED_TRANSLATION);
-				} else {
-					return UIUtils.getImage(UIUtils.IMAGE_MISSING_TRANSLATION);
+			if (editor.getMarkers().isUnusedKey(node.getMessageKey(), false)) {
+				if (editor.getMarkers().isMissingKey(node.getMessageKey())){
+					return UIUtils.getMissingAndUnusedTranslationsImage();
+				} else if (editor.getMarkers().isDuplicateValue(node.getMessageKey())) {
+					return UIUtils.getDuplicateEntryAndUnusedTranslationsImage();
 				}
-			} else {
-				return UIUtils.getImage(UIUtils.IMAGE_WARNED_TRANSLATION);
+				return UIUtils.getUnusedTranslationsImage();
+			} else if (editor.getMarkers().isMissingKey(node.getMessageKey())){
+				return UIUtils.getMissingTranslationImage();
+			} else if (editor.getMarkers().isDuplicateValue(node.getMessageKey())) {
+				return UIUtils.getDuplicateEntryImage();
 			}
+			
+			// This shouldnt happen, but just in case a default key with a warning icon will be showed
+			Image someWarning = UIUtils.getKeyImage();
+			ImageDescriptor warning = ImageDescriptor.createFromImage(UIUtils.getImage(UIUtils.IMAGE_WARNING));
+			someWarning = new DecorationOverlayIcon(someWarning, warning, IDecoration.BOTTOM_RIGHT).createImage();
+			return someWarning;
+			//return UIUtils.getImage(UIUtils.IMAGE_WARNED_TRANSLATION);
 		} else {
 /*	        // Figure out background icon
 	        if (messagesBundleGroup.isMessageKey(key)) {
@@ -107,9 +120,10 @@ public class KeyTreeLabelProvider
 	        } else {
 	            iconFlags += KEY_VIRTUAL;
 	        }*/
-			return UIUtils.getImage(UIUtils.IMAGE_KEY);
+			
+			return UIUtils.getKeyImage();
+			
 		}
-		
 	}
 
 
@@ -148,7 +162,7 @@ public class KeyTreeLabelProvider
 					return "This Locale has missing translations";
 				}
 			}
-			if (editor.getMarkers().hasDuplicateValue(node.getMessageKey())) {
+			if (editor.getMarkers().isDuplicateValue(node.getMessageKey())) {
 				return "This Locale has a duplicate value";
 			}
 		}

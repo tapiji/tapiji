@@ -37,6 +37,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.viewers.DecorationOverlayIcon;
+import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
@@ -100,13 +102,21 @@ public final class UIUtils {
     public static final String IMAGE_EMPTY =
     		"empty.gif";  //$NON-NLS-1$
     public static final String IMAGE_MISSING_TRANSLATION =
-			"missing_translation.png";  //$NON-NLS-1$
+			"missing_translation.gif";  //$NON-NLS-1$
     public static final String IMAGE_UNUSED_TRANSLATION =
 			"unused_translation.png";  //$NON-NLS-1$
     public static final String IMAGE_UNUSED_AND_MISSING_TRANSLATIONS =
 			"unused_and_missing_translations.png";  //$NON-NLS-1$
     public static final String IMAGE_WARNED_TRANSLATION =
 			"warned_translation.png";  //$NON-NLS-1$
+    public static final String IMAGE_DUPLICATE =
+			"duplicate.gif";  //$NON-NLS-1$
+    
+    public static final String IMAGE_WARNING =
+			"warning.gif";  //$NON-NLS-1$
+    public static final String IMAGE_ERROR =
+			"error_co.gif";  //$NON-NLS-1$
+    
     
     /** Image registry. */
     private static final ImageRegistry imageRegistry =
@@ -425,6 +435,64 @@ public final class UIUtils {
         return image;
     }
 
+    /**
+     * @return Image for the icon that indicates a key with no issues
+     */
+    public static Image getKeyImage() {
+    	Image image = UIUtils.getImage(UIUtils.IMAGE_KEY);
+    	return image;
+    }
+    
+    /**
+     * @return Image for the icon which indicates a key that has missing translations
+     */
+    public static Image getMissingTranslationImage() {
+    	Image image = UIUtils.getImage(UIUtils.IMAGE_KEY);
+    	ImageDescriptor missing = ImageDescriptor.createFromImage(UIUtils.getImage(UIUtils.IMAGE_ERROR));
+		image = new DecorationOverlayIcon(image, missing, IDecoration.BOTTOM_RIGHT).createImage();
+    	return image;
+    }
+    
+    /**
+     * @return Image for the icon which indicates a key that is unused
+     */
+    public static Image getUnusedTranslationsImage() {
+    	Image image = UIUtils.getImage(UIUtils.IMAGE_UNUSED_TRANSLATION);
+    	ImageDescriptor warning = ImageDescriptor.createFromImage(UIUtils.getImage(UIUtils.IMAGE_WARNING));
+		image = new DecorationOverlayIcon(image, warning, IDecoration.BOTTOM_RIGHT).createImage();
+    	return image;
+    }
+    
+    /**
+     * @return Image for the icon which indicates a key that has missing translations and is unused
+     */
+    public static Image getMissingAndUnusedTranslationsImage() {
+    	Image image = UIUtils.getImage(UIUtils.IMAGE_UNUSED_TRANSLATION);
+    	ImageDescriptor missing = ImageDescriptor.createFromImage(UIUtils.getImage(UIUtils.IMAGE_ERROR));
+		image = new DecorationOverlayIcon(image, missing, IDecoration.BOTTOM_RIGHT).createImage();
+    	return image;
+    }
+    
+    /**
+     * @return Image for the icon which indicates a key that has duplicate entries
+     */
+    public static Image getDuplicateEntryImage() {
+    	Image image = UIUtils.getImage(UIUtils.IMAGE_KEY);
+    	ImageDescriptor missing = ImageDescriptor.createFromImage(UIUtils.getImage(UIUtils.IMAGE_WARNING));
+		image = new DecorationOverlayIcon(image, missing, IDecoration.BOTTOM_RIGHT).createImage();
+    	return image;
+    }
+    
+    /**
+     * @return Image for the icon which indicates a key that has duplicate entries and is unused
+     */
+    public static Image getDuplicateEntryAndUnusedTranslationsImage() {
+    	Image image = UIUtils.getImage(UIUtils.IMAGE_UNUSED_TRANSLATION);
+    	ImageDescriptor missing = ImageDescriptor.createFromImage(UIUtils.getImage(UIUtils.IMAGE_DUPLICATE));
+		image = new DecorationOverlayIcon(image, missing, IDecoration.BOTTOM_RIGHT).createImage();
+    	return image;
+    }
+    
     /**
      * Gets the orientation suited for a given locale.
      * @param locale the locale
