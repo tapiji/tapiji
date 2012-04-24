@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Matthias Lettmayer - added setBundleId() + setDefaultPath() (fixed issue 60)
  ******************************************************************************/
 package org.eclipse.babel.editor.wizards;
 

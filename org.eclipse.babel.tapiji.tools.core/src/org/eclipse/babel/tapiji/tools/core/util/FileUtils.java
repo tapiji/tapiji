@@ -7,6 +7,7 @@
  * 
  * Contributors:
  *     Martin Reiterer - initial API and implementation
+ *     Matthias Lettmayer - improved readFileAsString() to use Apache Commons IO (fixed issue 74)
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.util;
 

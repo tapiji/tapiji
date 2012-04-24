@@ -8,6 +8,8 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  *     Clemente Lodi-Fe - bug fix
+ *     Matthias Lettmayer - key traversal + updating tree improvement (fixed issue 22)
+ *     					  - fixed editSelectedItem() to open an editor and select the key (fixed issue 59)
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.widgets;
 

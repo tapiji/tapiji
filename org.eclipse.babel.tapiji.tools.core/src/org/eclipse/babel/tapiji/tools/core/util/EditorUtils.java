@@ -7,6 +7,8 @@
  * 
  * Contributors:
  *     Martin Reiterer - initial API and implementation
+ *     Matthias Lettmayer - added update marker utils to update and get right position of marker (fixed issue 8)
+ *     					  - fixed openEditor() to open an editor and selecting a key (fixed issue 59)
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.util;
 

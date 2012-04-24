@@ -7,6 +7,7 @@
  * 
  * Contributors:
  *     Martin Reiterer - initial API and implementation
+ *     Matthias Lettmayer - added functionality to dnd a tree with children (fixed issue 5) 
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.dnd;
 

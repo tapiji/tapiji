@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- *     Martin Reiterer - initial API and implementation
+ *     Matthias Lettmayer - created interface to select a key in an editor (fixed issue 59)
  ******************************************************************************/
 package org.eclipse.babel.tapiji.translator.rbe.babel.bundle;
 

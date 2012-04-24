@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Matthias Lettmayer - fixed bug in returnNodeWithKey()
  ******************************************************************************/
 package org.eclipse.babel.core.message.tree;
 

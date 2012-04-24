@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Matthias Lettmayer - added removeMessageAddParentKey() (fixed issue 41)
  ******************************************************************************/
 package org.eclipse.babel.core.message;
 

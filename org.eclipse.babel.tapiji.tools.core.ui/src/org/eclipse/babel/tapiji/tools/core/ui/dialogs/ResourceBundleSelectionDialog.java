@@ -7,6 +7,7 @@
  * 
  * Contributors:
  *     Martin Reiterer - initial API and implementation
+ *     Matthias Lettmayer - adapt setInput, so only existing RB get displayed (fixed issue 40)
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.dialogs;
 

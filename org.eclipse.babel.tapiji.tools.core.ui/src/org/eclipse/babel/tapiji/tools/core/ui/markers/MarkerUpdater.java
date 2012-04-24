@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- *     Martin Reiterer - initial API and implementation
+ *     Matthias Lettmayer - created a marker updater, which updates it's position (fixes Issue 8)
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.markers;
 
