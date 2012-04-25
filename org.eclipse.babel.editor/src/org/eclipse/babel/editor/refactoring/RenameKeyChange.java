@@ -13,8 +13,8 @@ package org.eclipse.babel.editor.refactoring;
 import java.text.MessageFormat;
 import java.util.Collection;
 
-import org.eclipse.babel.core.message.MessagesBundleGroup;
-import org.eclipse.babel.core.message.tree.KeyTreeNode;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
+import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;

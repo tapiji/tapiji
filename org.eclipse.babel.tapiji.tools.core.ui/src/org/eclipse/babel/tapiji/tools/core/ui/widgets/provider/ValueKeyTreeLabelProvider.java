@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.widgets.provider;
 
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
+import org.eclipse.babel.core.message.IMessage;
+import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ViewerCell;

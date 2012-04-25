@@ -17,7 +17,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.eclipse.babel.core.message.MessagesBundle;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.core.resources.IContainer;

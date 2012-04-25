@@ -1,6 +1,6 @@
 package org.eclipse.babel.core.configuration;
 
-import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.core.message.resource.ser.IPropertiesDeserializerConfig;
 import org.eclipse.babel.core.message.resource.ser.IPropertiesSerializerConfig;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;

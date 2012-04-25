@@ -30,9 +30,9 @@
  */
 package org.eclipse.babel.tapiji.tools.core.ui.widgets.provider;
 
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.babel.tapiji.tools.core.Activator;
 import org.eclipse.babel.tapiji.tools.core.util.FontUtils;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;

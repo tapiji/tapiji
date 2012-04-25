@@ -12,17 +12,17 @@
 package org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.dnd;
 
 import org.eclipse.babel.core.configuration.DirtyHack;
-import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.factory.MessageFactory;
+import org.eclipse.babel.core.message.IMessage;
+import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.IMessagesBundleGroup;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.core.message.manager.RBManager;
-import org.eclipse.babel.editor.api.MessageFactory;
+import org.eclipse.babel.core.message.tree.IAbstractKeyTreeModel;
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
+import org.eclipse.babel.editor.api.IValuedKeyTreeNode;
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.provider.ResKeyTreeContentProvider;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IAbstractKeyTreeModel;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;

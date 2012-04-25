@@ -13,7 +13,7 @@ package org.eclipse.babel.editor.resource;
 import java.util.Locale;
 
 import org.eclipse.babel.core.configuration.DirtyHack;
-import org.eclipse.babel.core.message.resource.AbstractPropertiesResource;
+import org.eclipse.babel.core.message.resource.internal.AbstractPropertiesResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.core.resources.IResource;

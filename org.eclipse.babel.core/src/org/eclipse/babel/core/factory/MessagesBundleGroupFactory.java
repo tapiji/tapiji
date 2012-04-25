@@ -3,9 +3,9 @@ package org.eclipse.babel.core.factory;
 import java.io.File;
 
 import org.eclipse.babel.core.configuration.ConfigurationManager;
-import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.IMessagesBundleGroup;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.core.message.strategy.PropertiesFileGroupStrategy;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 import org.eclipse.core.resources.IResource;
 
 /**

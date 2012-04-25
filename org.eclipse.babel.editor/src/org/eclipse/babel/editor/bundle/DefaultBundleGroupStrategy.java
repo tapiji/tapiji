@@ -14,9 +14,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.MessageException;
-import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.core.message.resource.PropertiesIFileResource;
+import org.eclipse.babel.core.message.internal.MessageException;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
+import org.eclipse.babel.core.message.resource.IMessagesResource;
+import org.eclipse.babel.core.message.resource.internal.PropertiesIFileResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy;
@@ -25,7 +26,6 @@ import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.resource.EclipsePropertiesEditorResource;
 import org.eclipse.babel.editor.util.UIUtils;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -91,7 +91,7 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
     }
 
     /**
-     * @see org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy
+     * @see org.eclipse.babel.core.message.internal.strategy.IMessagesBundleGroupStrategy
      *          #createMessagesBundleGroupName()
      */
     public String createMessagesBundleGroupName() {

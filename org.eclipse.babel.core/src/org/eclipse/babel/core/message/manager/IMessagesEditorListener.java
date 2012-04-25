@@ -1,6 +1,6 @@
 package org.eclipse.babel.core.message.manager;
 
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
+import org.eclipse.babel.core.message.IMessagesBundle;
 
 /**
  * Used to sync TapiJI with Babel and vice versa.

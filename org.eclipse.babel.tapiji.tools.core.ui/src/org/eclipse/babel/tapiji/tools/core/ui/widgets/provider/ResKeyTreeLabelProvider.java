@@ -14,12 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.babel.core.message.IMessage;
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
+import org.eclipse.babel.editor.api.IValuedKeyTreeNode;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.filter.FilterInfo;
 import org.eclipse.babel.tapiji.tools.core.util.FontUtils;
 import org.eclipse.babel.tapiji.tools.core.util.ImageUtils;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;

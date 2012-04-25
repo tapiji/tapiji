@@ -25,9 +25,9 @@ import java.util.Locale;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.core.message.resource.PropertiesIFileResource;
-import org.eclipse.babel.core.message.resource.PropertiesReadOnlyResource;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
+import org.eclipse.babel.core.message.resource.internal.PropertiesIFileResource;
+import org.eclipse.babel.core.message.resource.internal.PropertiesReadOnlyResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
@@ -134,7 +134,7 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
     }
 
     /**
-     * @see org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy
+     * @see org.eclipse.babel.core.message.internal.strategy.IMessagesBundleGroupStrategy
      *          #createMessagesBundleGroupName()
      */
     public String createMessagesBundleGroupName() {

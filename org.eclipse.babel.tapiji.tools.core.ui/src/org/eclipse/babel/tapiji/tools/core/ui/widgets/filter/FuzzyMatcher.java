@@ -13,8 +13,8 @@ package org.eclipse.babel.tapiji.tools.core.ui.widgets.filter;
 import java.util.Locale;
 
 import org.eclipse.babel.editor.api.AnalyzerFactory;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
-import org.eclipse.babel.tapiji.translator.rbe.model.analyze.ILevenshteinDistanceAnalyzer;
+import org.eclipse.babel.editor.api.ILevenshteinDistanceAnalyzer;
+import org.eclipse.babel.editor.api.IValuedKeyTreeNode;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 

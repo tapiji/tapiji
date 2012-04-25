@@ -17,9 +17,9 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.eclipse.babel.core.message.checks.DuplicateValueCheck;
 import org.eclipse.babel.core.message.checks.IMessageCheck;
-import org.eclipse.babel.core.message.checks.MissingValueCheck;
+import org.eclipse.babel.core.message.checks.internal.DuplicateValueCheck;
+import org.eclipse.babel.core.message.checks.internal.MissingValueCheck;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.i18n.actions.ShowDuplicateAction;

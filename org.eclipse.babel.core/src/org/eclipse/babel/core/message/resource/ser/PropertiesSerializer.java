@@ -13,9 +13,9 @@ package org.eclipse.babel.core.message.resource.ser;
 import java.util.Arrays;
 import java.util.Properties;
 
-import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
+import org.eclipse.babel.core.message.IMessage;
+import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
 
 /**
  * Class responsible for serializing a {@link MessagesBundle} into

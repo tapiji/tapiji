@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.dnd;
 
+import org.eclipse.babel.editor.api.IValuedKeyTreeNode;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog.DialogConfiguration;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DND;

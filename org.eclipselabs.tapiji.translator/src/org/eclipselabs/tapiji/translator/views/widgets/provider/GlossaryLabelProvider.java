@@ -13,9 +13,9 @@ package org.eclipselabs.tapiji.translator.views.widgets.provider;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.babel.core.message.IMessage;
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.babel.editor.api.EditorUtil;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessage;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;

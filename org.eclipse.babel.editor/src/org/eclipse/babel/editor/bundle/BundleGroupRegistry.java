@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.bundle;
 
-import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.core.resources.IResource;
 
 

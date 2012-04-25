@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.builder.InternationalizationNature;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
@@ -21,7 +22,6 @@ import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.NewResourceBundleEn
 import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.NoActionProposal;
 import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
 import org.eclipse.babel.tapiji.tools.java.visitor.ResourceAuditVisitor;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.CompletionContext;

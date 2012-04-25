@@ -13,10 +13,10 @@ package org.eclipse.babel.core.message.tree.visitor;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.eclipse.babel.core.message.MessagesBundleGroup;
-import org.eclipse.babel.core.message.tree.KeyTreeNode;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeVisitor;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
+import org.eclipse.babel.core.message.tree.IKeyTreeVisitor;
+import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 
 
 /**
@@ -52,9 +52,9 @@ public class KeyCheckVisitor implements IKeyTreeVisitor {
     }
     
     /**
-     * @see org.eclipse.babel.core.message.tree.visitor.IKeyTreeVisitor
+     * @see org.eclipse.babel.core.message.internal.tree.visitor.IKeyTreeVisitor
      *      #visitKeyTreeNode(
-     *              org.eclipse.babel.core.message.tree.KeyTreeNode)
+     *              org.eclipse.babel.core.message.internal.tree.internal.KeyTreeNode)
      */
     public void visitKeyTreeNode(IKeyTreeNode node) {
         if (keyCheck == null) {

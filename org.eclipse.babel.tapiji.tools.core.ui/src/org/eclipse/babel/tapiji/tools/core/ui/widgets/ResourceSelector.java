@@ -15,6 +15,10 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
+import org.eclipse.babel.core.message.IMessagesBundleGroup;
+import org.eclipse.babel.core.message.tree.IAbstractKeyTreeModel;
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
+import org.eclipse.babel.core.message.tree.TreeType;
 import org.eclipse.babel.editor.api.KeyTreeFactory;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.event.ResourceSelectionEvent;
@@ -22,10 +26,6 @@ import org.eclipse.babel.tapiji.tools.core.ui.widgets.listener.IResourceSelectio
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.provider.ResKeyTreeContentProvider;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.provider.ResKeyTreeLabelProvider;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.provider.ValueKeyTreeLabelProvider;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IAbstractKeyTreeModel;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.TreeType;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.IElementComparer;

@@ -13,8 +13,8 @@ package org.eclipse.babel.core.message.tree.visitor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeVisitor;
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
+import org.eclipse.babel.core.message.tree.IKeyTreeVisitor;
 
 /**
  * Visitor for finding keys matching the given regular expression.
@@ -35,8 +35,8 @@ public class NodePathRegexVisitor implements IKeyTreeVisitor {
     }
 
     /**
-     * @see org.eclipse.babel.core.message.tree.visitor.IKeyTreeVisitor
-     *      #visitKeyTreeNode(org.eclipse.babel.core.message.tree.KeyTreeNode)
+     * @see org.eclipse.babel.core.message.internal.tree.visitor.IKeyTreeVisitor
+     *      #visitKeyTreeNode(org.eclipse.babel.core.message.internal.tree.internal.KeyTreeNode)
      */
     public void visitKeyTreeNode(IKeyTreeNode node) {
         if (node.getMessageKey().matches(regex)) {

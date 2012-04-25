@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.core.message.tree.visitor;
 
-import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 
 /**
  * All purpose key testing.   Use this interface to establish whether

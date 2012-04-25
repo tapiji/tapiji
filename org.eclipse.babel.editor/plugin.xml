@@ -152,7 +152,7 @@
     </category>
     <wizard
           category="org.eclipse.babel.editor.wizards.ResourceBundle"
-          class="org.eclipse.babel.editor.wizards.ResourceBundleWizard"
+          class="org.eclipse.babel.editor.wizards.internal.ResourceBundleWizard"
           icon="icons/resourcebundle.gif"
           id="org.eclipse.babel.editor.wizards.ResourceBundleWizard"
           name="%wizard.rb.title">

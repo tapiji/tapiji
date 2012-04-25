@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.jface,
  org.eclipse.babel.tapiji.tools.core.ui;bundle-version="0.0.2",
  org.eclipse.babel.tapiji.tools.java;bundle-version="0.0.2",
- org.eclipse.jdt.core;bundle-version="3.7.3"
+ org.eclipse.jdt.core
 Import-Package: org.eclipse.babel.tapiji.translator.rbe.babel.bundle,
  org.eclipse.babel.tapiji.translator.rbe.ui.wizards,
  org.eclipse.core.filebuffers,

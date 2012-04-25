@@ -14,8 +14,8 @@ Import-Package: org.eclipse.babel.tapiji.tools.core.model.manager,
  org.eclipse.jface.text,
  org.eclipse.text.edits,
  org.eclipse.ui
-Require-Bundle: org.eclipse.core.resources;bundle-version="3.7.101",
- org.eclipse.jdt.core;bundle-version="3.7.3",
- org.eclipse.core.runtime;bundle-version="3.7.0",
- org.eclipse.jface;bundle-version="3.7.0",
+Require-Bundle: org.eclipse.core.resources,
+ org.eclipse.jdt.core,
+ org.eclipse.core.runtime,
+ org.eclipse.jface,
  org.eclipse.babel.tapiji.tools.core;bundle-version="0.0.2"

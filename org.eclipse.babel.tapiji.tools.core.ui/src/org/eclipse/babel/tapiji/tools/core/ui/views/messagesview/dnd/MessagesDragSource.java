@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.dnd;
 
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DragSourceEvent;

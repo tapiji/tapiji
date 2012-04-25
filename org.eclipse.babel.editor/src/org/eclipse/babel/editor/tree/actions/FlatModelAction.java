@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.tree.actions;
 
+import org.eclipse.babel.core.message.tree.TreeType;
 import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
-import org.eclipse.babel.editor.tree.KeyTreeContentProvider;
+import org.eclipse.babel.editor.tree.internal.KeyTreeContentProvider;
 import org.eclipse.babel.editor.util.UIUtils;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.TreeType;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.TreeViewer;
 

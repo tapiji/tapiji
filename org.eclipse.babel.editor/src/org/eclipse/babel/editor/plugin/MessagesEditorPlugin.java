@@ -22,9 +22,8 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Stack;
 
-import org.eclipse.babel.core.configuration.DirtyHack;
-import org.eclipse.babel.core.message.AbstractIFileChangeListener;
-import org.eclipse.babel.core.message.AbstractIFileChangeListener.IFileChangeListenerRegistry;
+import org.eclipse.babel.core.message.internal.AbstractIFileChangeListener;
+import org.eclipse.babel.core.message.internal.AbstractIFileChangeListener.IFileChangeListenerRegistry;
 import org.eclipse.babel.editor.builder.ToggleNatureAction;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.core.resources.IResource;

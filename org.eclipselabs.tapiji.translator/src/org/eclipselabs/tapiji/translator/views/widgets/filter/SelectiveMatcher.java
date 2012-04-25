@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.views.widgets.filter;
 
+import org.eclipse.babel.core.message.IMessage;
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.babel.editor.api.EditorUtil;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;

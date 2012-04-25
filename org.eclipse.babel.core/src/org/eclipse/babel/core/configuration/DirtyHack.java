@@ -1,6 +1,6 @@
 package org.eclipse.babel.core.configuration;
 
-import org.eclipse.babel.core.message.AbstractMessageModel;
+import org.eclipse.babel.core.message.internal.AbstractMessageModel;
 
 /**
  * Contains following two <b>dirty</b> workaround flags:

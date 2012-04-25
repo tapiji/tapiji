@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.refactoring;
 
-import org.eclipse.babel.core.message.tree.KeyTreeNode;
+import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.RenameRefactoring;
