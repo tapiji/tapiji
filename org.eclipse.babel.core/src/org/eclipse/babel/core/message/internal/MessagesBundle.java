@@ -363,6 +363,12 @@ public class MessagesBundle extends AbstractMessageModel
         }
     }
     
+    /**
+     * Returns the value to the given key, if the key exists.
+     * Otherwise may throw a NPE.
+     * @param key, the key of a message.
+     * @return The value to the given key.
+     */
     public String getValue(String key) {
         return getMessage(key).getValue();
     }

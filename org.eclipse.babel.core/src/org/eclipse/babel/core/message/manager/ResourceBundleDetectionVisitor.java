@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2012 TapiJI.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Martin Reiterer - initial API and implementation
+ ******************************************************************************/
+
 package org.eclipse.babel.core.message.manager;
 
 import java.util.LinkedList;
@@ -27,8 +38,9 @@ public class ResourceBundleDetectionVisitor implements IResourceVisitor,
 		try {
 			if (isResourceBundleFile(resource)) {
 				
+				// TODO: optimize that. ResourceBundleManager knows what to in-, and exclude
+				// here, we will load every bundle...
 //				Logger.logInfo("Loading Resource-Bundle file '" + resource.getName() + "'");
-				
 // 				if (!ResourceBundleManager.isResourceExcluded(resource)) {
 					manager.addBundleResource(resource);
 // 				}
