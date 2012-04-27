@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - TapJI integration -> DirtyHack
  ******************************************************************************/
 package org.eclipse.babel.editor.resource;
 

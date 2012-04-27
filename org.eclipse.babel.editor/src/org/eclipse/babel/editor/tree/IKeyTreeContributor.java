@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- *     Martin Reiterer - initial API and implementation
+ *     Alexej Strelzow - initial API and implementation
  ******************************************************************************/
 package org.eclipse.babel.editor.tree;
 

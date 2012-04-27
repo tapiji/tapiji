@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - TapiJI integration, fixed issues 37, 48
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 

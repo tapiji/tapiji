@@ -7,6 +7,8 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - TapJI integration, bug fixes & enhancements
+ *    				  - issue 35, 36, 48, 73
  ******************************************************************************/
 package org.eclipse.babel.editor;
 

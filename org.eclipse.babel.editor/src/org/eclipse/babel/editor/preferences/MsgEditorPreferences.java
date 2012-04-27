@@ -7,6 +7,8 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - externalized IPropertiesSerializerConfig and 
+ *    					IPropertiesDeserializerConfig for better reuse
  ******************************************************************************/
 package org.eclipse.babel.editor.preferences;
 

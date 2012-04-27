@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - updateKey
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
