@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - TapJI integration, correct dispose
  *    Matthias Lettmayer - added removeMessageAddParentKey() (fixed issue 41)
  ******************************************************************************/
 package org.eclipse.babel.core.message.internal;
