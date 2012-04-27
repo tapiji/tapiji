@@ -9,7 +9,7 @@
  *    Pascal Essiembre - initial API and implementation
  *    Matthias Lettmayer - added setBundleId() + setDefaultPath() (fixed issue 60)
  ******************************************************************************/
-package org.eclipse.babel.editor.wizards;
+package org.eclipse.babel.editor.wizards.internal;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
-import org.eclipse.babel.tapiji.translator.rbe.ui.wizards.IResourceBundleWizard;
+import org.eclipse.babel.editor.wizards.IResourceBundleWizard;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
