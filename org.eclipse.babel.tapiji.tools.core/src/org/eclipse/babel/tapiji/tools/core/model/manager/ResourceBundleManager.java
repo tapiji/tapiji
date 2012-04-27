@@ -7,6 +7,7 @@
  * 
  * Contributors:
  *     Martin Reiterer - initial API and implementation
+ *     Alexej Strelzow - moved object management to RBManager, Babel integration
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.model.manager;
 

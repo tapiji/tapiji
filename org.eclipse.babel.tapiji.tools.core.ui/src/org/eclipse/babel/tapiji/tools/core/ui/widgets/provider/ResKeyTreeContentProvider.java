@@ -7,6 +7,7 @@
  * 
  * Contributors:
  *     Martin Reiterer - initial API and implementation
+ *     Alexej Strelzow - Babel integration
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.widgets.provider;
 

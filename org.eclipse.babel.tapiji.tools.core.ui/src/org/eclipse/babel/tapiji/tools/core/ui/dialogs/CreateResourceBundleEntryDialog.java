@@ -8,6 +8,7 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  *     Clemente Lodi-Fe - bug fix
+ *     Alexej Strelzow - added DialogConfiguration
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.dialogs;
 

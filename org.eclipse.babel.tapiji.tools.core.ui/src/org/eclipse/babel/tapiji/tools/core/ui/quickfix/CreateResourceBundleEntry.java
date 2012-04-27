@@ -7,6 +7,7 @@
  * 
  * Contributors:
  *     Martin Reiterer - initial API and implementation
+ *     Alexej Strelzow - modified CreateResourceBundleEntryDialog instantiation
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.quickfix;
 

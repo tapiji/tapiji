@@ -7,6 +7,7 @@
  * 
  * Contributors:
  *     Martin Reiterer - initial API and implementation
+ *     Alexej Strelzow - disabled modification handling
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.model.manager;
 
@@ -18,6 +19,8 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
 
+// TODO: find usage for this class, because all the object management
+// has been moved to RBManager
 public class RBChangeListner implements IResourceChangeListener {
 
 	@Override
