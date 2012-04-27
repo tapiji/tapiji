@@ -93,7 +93,7 @@ public class FilePreferencePage extends PreferencePage implements
 		List<CheckItem> patternItems = TapiJIPreferences
 		        .getNonRbPatternAsList();
 		for (CheckItem s : patternItems) {
-			s.toTableItem(table);
+			toTableItem(table, s);
 		}
 
 		Composite sitebar = new Composite(composite, SWT.NONE);
@@ -201,7 +201,7 @@ public class FilePreferencePage extends PreferencePage implements
 		List<CheckItem> patterns = TapiJIPreferences.convertStringToList(prefs
 		        .getDefaultString(TapiJIPreferences.NON_RB_PATTERN));
 		for (CheckItem s : patterns) {
-			s.toTableItem(table);
+			toTableItem(table, s);
 		}
 	}
 
@@ -217,5 +217,12 @@ public class FilePreferencePage extends PreferencePage implements
 		        TapiJIPreferences.convertListToString(patterns));
 
 		return super.performOk();
+	}
+	
+	private TableItem toTableItem(Table table, CheckItem s) {
+		TableItem item = new TableItem(table, SWT.NONE);
+		item.setText(s.getName());
+		item.setChecked(s.getChecked());
+		return item;
 	}
 }
