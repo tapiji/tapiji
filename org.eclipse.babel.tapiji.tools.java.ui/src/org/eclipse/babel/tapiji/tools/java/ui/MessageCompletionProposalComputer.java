@@ -20,7 +20,7 @@ import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.InsertResourceBundl
 import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.MessageCompletionProposal;
 import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.NewResourceBundleEntryProposal;
 import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.NoActionProposal;
-import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
+import org.eclipse.babel.tapiji.tools.java.ui.util.ASTutilsUI;
 import org.eclipse.babel.tapiji.tools.java.visitor.ResourceAuditVisitor;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -101,7 +101,7 @@ public class MessageCompletionProposalComputer implements
 				csav = new ResourceAuditVisitor(null, manager.getProject()
 				        .getName());
 
-				cu = ASTutils.getCompilationUnit(resource);
+				cu = ASTutilsUI.getCompilationUnit(resource);
 
 				cu.accept(csav);
 			}

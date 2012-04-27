@@ -8,7 +8,7 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.builder.quickfix;
+package org.eclipse.babel.tapiji.tools.core.ui.quickfix;
 
 import java.util.Set;
 

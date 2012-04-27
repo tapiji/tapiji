@@ -12,7 +12,6 @@ Require-Bundle: org.eclipse.core.resources;bundle-version="3.6.0",
  org.eclipse.babel.tapiji.tools.java;bundle-version="0.0.2",
  org.eclipse.jdt.core
 Import-Package: org.eclipse.babel.tapiji.translator.rbe.babel.bundle,
- org.eclipse.babel.tapiji.translator.rbe.ui.wizards,
  org.eclipse.core.filebuffers,
  org.eclipse.jface.dialogs,
  org.eclipse.jface.text,
@@ -28,5 +27,6 @@ Import-Package: org.eclipse.babel.tapiji.translator.rbe.babel.bundle,
  org.eclipse.ui.texteditor,
  org.eclipse.ui.wizards
 Bundle-Vendor: Vienna University of Technology
+Export-Package: org.eclipse.babel.tapiji.tools.java.ui.util
 
 

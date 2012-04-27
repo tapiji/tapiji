@@ -11,20 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.babel.tapiji.tools.core.builder.quickfix.CreateResourceBundle;
-import org.eclipse.babel.tapiji.tools.core.builder.quickfix.IncludeResource;
 import org.eclipse.babel.tapiji.tools.core.extensions.I18nResourceAuditor;
 import org.eclipse.babel.tapiji.tools.core.extensions.ILocation;
 import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;
 import org.eclipse.babel.tapiji.tools.core.model.SLLocation;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.quickfix.CreateResourceBundle;
 import org.eclipse.babel.tapiji.tools.core.ui.quickfix.CreateResourceBundleEntry;
+import org.eclipse.babel.tapiji.tools.core.ui.quickfix.IncludeResource;
 import org.eclipse.babel.tapiji.tools.java.ui.quickfix.ExcludeResourceFromInternationalization;
 import org.eclipse.babel.tapiji.tools.java.ui.quickfix.ExportToResourceBundleResolution;
 import org.eclipse.babel.tapiji.tools.java.ui.quickfix.IgnoreStringFromInternationalization;
 import org.eclipse.babel.tapiji.tools.java.ui.quickfix.ReplaceResourceBundleDefReference;
 import org.eclipse.babel.tapiji.tools.java.ui.quickfix.ReplaceResourceBundleReference;
-import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
+import org.eclipse.babel.tapiji.tools.java.ui.util.ASTutilsUI;
 import org.eclipse.babel.tapiji.tools.java.visitor.ResourceAuditVisitor;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -51,7 +51,7 @@ public class JavaResourceAuditor extends I18nResourceAuditor {
 		        resource.getProject().getName());
 
 		// get a reference to the shared AST of the loaded CompilationUnit
-		CompilationUnit cu = ASTutils.getCompilationUnit(resource);
+		CompilationUnit cu = ASTutilsUI.getCompilationUnit(resource);
 		if (cu == null) {
 			System.out.println("Cannot audit resource: "
 			        + resource.getFullPath());

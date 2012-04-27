@@ -11,7 +11,7 @@ import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog.DialogConfiguration;
-import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
+import org.eclipse.babel.tapiji.tools.java.ui.util.ASTutilsUI;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -71,7 +71,7 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 
 		try {
 			if (!bundleContext) {
-				reference = ASTutils.insertNewBundleRef(document, resource,
+				reference = ASTutilsUI.insertNewBundleRef(document, resource,
 				        startPos, endPos - startPos, resourceBundleId, key);
 			} else {
 				document.replace(startPos, endPos - startPos, key);

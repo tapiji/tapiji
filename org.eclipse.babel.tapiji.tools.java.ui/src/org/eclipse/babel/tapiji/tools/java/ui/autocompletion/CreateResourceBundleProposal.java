@@ -7,11 +7,11 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.java.ui.autocompletion;
 
+import org.eclipse.babel.editor.wizards.IResourceBundleWizard;
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.builder.I18nBuilder;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.util.ResourceUtils;
-import org.eclipse.babel.tapiji.translator.rbe.ui.wizards.IResourceBundleWizard;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;

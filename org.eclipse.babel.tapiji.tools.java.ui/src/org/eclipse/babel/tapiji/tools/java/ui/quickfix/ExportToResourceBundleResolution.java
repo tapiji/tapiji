@@ -9,7 +9,7 @@ package org.eclipse.babel.tapiji.tools.java.ui.quickfix;
 
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog.DialogConfiguration;
-import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
+import org.eclipse.babel.tapiji.tools.java.ui.util.ASTutilsUI;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
@@ -76,7 +76,7 @@ public class ExportToResourceBundleResolution implements IMarkerResolution2 {
 			if (dialog.open() != InputDialog.OK)
 				return;
 
-			ASTutils.insertNewBundleRef(document, resource, startPos, endPos,
+			ASTutilsUI.insertNewBundleRef(document, resource, startPos, endPos,
 			        dialog.getSelectedResourceBundle(), dialog.getSelectedKey());
 
 			textFileBuffer.commit(null, false);

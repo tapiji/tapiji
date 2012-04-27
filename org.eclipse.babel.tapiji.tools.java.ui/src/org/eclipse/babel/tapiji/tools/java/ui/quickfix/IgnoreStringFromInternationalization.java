@@ -8,6 +8,7 @@
 package org.eclipse.babel.tapiji.tools.java.ui.quickfix;
 
 import org.eclipse.babel.tapiji.tools.core.Logger;
+import org.eclipse.babel.tapiji.tools.java.ui.util.ASTutilsUI;
 import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
@@ -34,7 +35,7 @@ public class IgnoreStringFromInternationalization implements IMarkerResolution2 
 	public void run(IMarker marker) {
 		IResource resource = marker.getResource();
 
-		CompilationUnit cu = ASTutils.getCompilationUnit(resource);
+		CompilationUnit cu = ASTutilsUI.getCompilationUnit(resource);
 
 		ITextFileBufferManager bufferManager = FileBuffers
 		        .getTextFileBufferManager();

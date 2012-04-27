@@ -8,10 +8,11 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.builder;
+package org.eclipse.babel.tapiji.tools.core.ui.builder;
 
 import java.util.List;
 
+import org.eclipse.babel.tapiji.tools.core.builder.I18nBuilder;
 import org.eclipse.babel.tapiji.tools.core.extensions.I18nAuditor;
 import org.eclipse.babel.tapiji.tools.core.model.exception.NoSuchResourceAuditorException;
 import org.eclipse.babel.tapiji.tools.core.util.EditorUtils;

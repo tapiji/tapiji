@@ -8,7 +8,7 @@
 package org.eclipse.babel.tapiji.tools.java.ui;
 
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
+import org.eclipse.babel.tapiji.tools.java.ui.util.ASTutilsUI;
 import org.eclipse.babel.tapiji.tools.java.visitor.ResourceAuditVisitor;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -41,7 +41,7 @@ public class ConstantStringHover implements IJavaEditorTextHover {
 			return;
 		}
 
-		CompilationUnit cu = ASTutils.getCompilationUnit(typeRoot);
+		CompilationUnit cu = ASTutilsUI.getCompilationUnit(typeRoot);
 
 		if (cu == null) {
 			return;

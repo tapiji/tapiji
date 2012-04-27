@@ -48,11 +48,11 @@
    <extension
          point="org.eclipse.ui.ide.markerResolution">
       <markerResolutionGenerator
-            class="org.eclipse.babel.tapiji.tools.core.builder.ViolationResolutionGenerator"
+            class="org.eclipse.babel.tapiji.tools.core.ui.builder.ViolationResolutionGenerator"
             markerType="org.eclipse.babel.tapiji.tools.core.StringLiteralAuditMarker">
       </markerResolutionGenerator>
       <markerResolutionGenerator
-            class="org.eclipse.babel.tapiji.tools.core.builder.ViolationResolutionGenerator"
+            class="org.eclipse.babel.tapiji.tools.core.ui.builder.ViolationResolutionGenerator"
             markerType="org.eclipse.babel.tapiji.tools.core.ResourceBundleAuditMarker">
       </markerResolutionGenerator>
    </extension>

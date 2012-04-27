@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Locale;
 
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.ResourceBundleEntrySelectionDialog;
-import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
+import org.eclipse.babel.tapiji.tools.java.ui.util.ASTutilsUI;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -55,7 +55,7 @@ public class InsertResourceBundleReferenceProposal implements
 		String key = dialog.getSelectedResource();
 		Locale locale = dialog.getSelectedLocale();
 
-		reference = ASTutils.insertExistingBundleRef(document, resource,
+		reference = ASTutilsUI.insertExistingBundleRef(document, resource,
 		        offset, length, resourceBundleId, key, locale);
 	}
 
