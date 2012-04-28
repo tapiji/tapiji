@@ -7,13 +7,10 @@ Bundle-Activator: org.eclipse.babel.tapiji.tools.core.Activator
 Bundle-Vendor: Vienna University of Technology
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.jdt.ui;bundle-version="3.5.2",
  org.eclipse.ui.ide,
  org.eclipse.jdt.core;bundle-version="3.5.2",
  org.eclipse.core.resources,
- org.eclipse.jface.text;bundle-version="3.5.2",
- org.eclipse.babel.core;bundle-version="0.8.0";visibility:=reexport,
- org.eclipse.babel.tapiji.translator.rbe;bundle-version="0.0.2"
+ org.eclipse.babel.core;bundle-version="0.8.0";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Import-Package: org.apache.commons.io,
@@ -26,12 +23,10 @@ Import-Package: org.apache.commons.io,
  org.eclipse.ui.ide,
  org.eclipse.ui.texteditor
 Export-Package: org.eclipse.babel.tapiji.tools.core,
- org.eclipse.babel.tapiji.tools.core.builder,
  org.eclipse.babel.tapiji.tools.core.builder.analyzer,
  org.eclipse.babel.tapiji.tools.core.extensions,
  org.eclipse.babel.tapiji.tools.core.model,
  org.eclipse.babel.tapiji.tools.core.model.exception,
  org.eclipse.babel.tapiji.tools.core.model.manager,
  org.eclipse.babel.tapiji.tools.core.model.preferences,
- org.eclipse.babel.tapiji.tools.core.model.view,
  org.eclipse.babel.tapiji.tools.core.util

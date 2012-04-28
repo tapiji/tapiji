@@ -2,27 +2,8 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="org.eclipse.babel.tapiji.tools.core.builderExtension" name="BuilderExtension" schema="schema/org.eclipse.babel.tapiji.tools.core.builderExtension.exsd"/>
+   <extension-point id="org.eclipse.babel.tapiji.tools.core.stateLoader" name="StateLoader" schema="schema/org.eclipse.babel.tapiji.tools.core.stateLoader.exsd"/>
 
-   
-   <extension
-         id="I18NBuilder"
-         point="org.eclipse.core.resources.builders">
-      <builder hasNature="true">
-         <run class="org.eclipse.babel.tapiji.tools.core.builder.I18nBuilder" />
-      </builder>
-   </extension>
-   
-   <extension
-         id="org.eclipse.babel.tapiji.tools.core.nature"
-         name="Internationalization Nature"
-         point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run class="org.eclipse.babel.tapiji.tools.core.builder.InternationalizationNature" />
-      </runtime>
-      <builder id="org.eclipse.babel.tapiji.tools.core.I18NBuilder" />
-<!--      <requires-nature id="org.eclipse.jdt.core.javanature"/> -->
-   </extension>
-   
    <extension
          id="StringLiteralAuditMarker"
          name="String Literal Audit Marker"

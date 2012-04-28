@@ -10,7 +10,7 @@
  *    Alexej Strelzow - TapJI integration, bug fixes & enhancements
  *    				  - issue 35, 36, 48, 73
  ******************************************************************************/
-package org.eclipse.babel.editor;
+package org.eclipse.babel.editor.internal;
 
 
 import java.io.BufferedReader;
@@ -28,6 +28,8 @@ import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
+import org.eclipse.babel.editor.IMessagesEditor;
+import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 import org.eclipse.babel.editor.builder.ToggleNatureAction;
 import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
 import org.eclipse.babel.editor.i18n.I18NPage;
@@ -36,7 +38,6 @@ import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.resource.EclipsePropertiesEditorResource;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.editor.views.MessagesBundleGroupOutline;
-import org.eclipse.babel.tapiji.translator.rbe.babel.bundle.IMessagesEditor;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;

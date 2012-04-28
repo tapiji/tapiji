@@ -2,6 +2,25 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
+         id="I18NBuilder"
+         point="org.eclipse.core.resources.builders">
+      <builder hasNature="true">
+         <run class="org.eclipse.babel.tapiji.tools.core.ui.builder.I18nBuilder" />
+      </builder>
+   </extension>
+   
+   <extension
+         id="org.eclipse.babel.tapiji.tools.core.nature"
+         name="Internationalization Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="org.eclipse.babel.tapiji.tools.core.ui.builder.InternationalizationNature" />
+      </runtime>
+      <builder id="org.eclipse.babel.tapiji.tools.core.I18NBuilder" />
+<!--      <requires-nature id="org.eclipse.jdt.core.javanature"/> -->
+   </extension>
+   
+   <extension
          point="org.eclipse.ui.views">
       <category
             id="org.eclipse.babel.tapiji"
@@ -121,5 +140,11 @@
             markerType="org.eclipse.core.resources.problemmarker">
       </updater>
     </extension>
+   <extension
+         point="org.eclipse.babel.tapiji.tools.core.stateLoader">
+      <IStateLoader
+            class="org.eclipse.babel.tapiji.tools.core.ui.memento.ResourceBundleManagerStateLoader">
+      </IStateLoader>
+   </extension>
 	
 </plugin>

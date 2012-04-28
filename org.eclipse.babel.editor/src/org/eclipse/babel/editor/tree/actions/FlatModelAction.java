@@ -11,7 +11,7 @@
 package org.eclipse.babel.editor.tree.actions;
 
 import org.eclipse.babel.core.message.tree.TreeType;
-import org.eclipse.babel.editor.MessagesEditor;
+import org.eclipse.babel.editor.internal.MessagesEditor;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.tree.internal.KeyTreeContentProvider;
 import org.eclipse.babel.editor.util.UIUtils;

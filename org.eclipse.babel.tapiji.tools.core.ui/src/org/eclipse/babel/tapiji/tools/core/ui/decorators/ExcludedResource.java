@@ -13,13 +13,13 @@ package org.eclipse.babel.tapiji.tools.core.ui.decorators;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.babel.tapiji.tools.core.Activator;
 import org.eclipse.babel.tapiji.tools.core.Logger;
-import org.eclipse.babel.tapiji.tools.core.builder.InternationalizationNature;
 import org.eclipse.babel.tapiji.tools.core.model.IResourceExclusionListener;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceExclusionEvent;
-import org.eclipse.babel.tapiji.tools.core.util.ImageUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.Activator;
+import org.eclipse.babel.tapiji.tools.core.ui.builder.InternationalizationNature;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.ImageUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;

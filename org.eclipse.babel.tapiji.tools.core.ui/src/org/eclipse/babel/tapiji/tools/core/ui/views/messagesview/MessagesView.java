@@ -15,15 +15,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.eclipse.babel.tapiji.tools.core.Activator;
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.model.IResourceBundleChangedListener;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleChangedEvent;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipse.babel.tapiji.tools.core.model.view.MessagesViewState;
+import org.eclipse.babel.tapiji.tools.core.ui.Activator;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.ResourceBundleSelectionDialog;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.ImageUtils;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.PropertyKeySelectionTree;
-import org.eclipse.babel.tapiji.tools.core.util.ImageUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -63,7 +62,6 @@ public class MessagesView extends ViewPart implements
 	public static final String ID = "org.eclipse.babel.tapiji.tools.core.views.MessagesView";
 
 	// View State
-	private IMemento memento;
 	private MessagesViewState viewState;
 
 	// Search-Bar
@@ -470,7 +468,6 @@ public class MessagesView extends ViewPart implements
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
-		this.memento = memento;
 
 		// init Viewstate
 		viewState = new MessagesViewState(null, null, false, null);

@@ -8,14 +8,14 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.builder;
+package org.eclipse.babel.tapiji.tools.core.ui.builder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.babel.tapiji.tools.core.Activator;
 import org.eclipse.babel.tapiji.tools.core.Logger;
+import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IProjectNature;
@@ -27,7 +27,8 @@ import org.eclipse.core.runtime.jobs.Job;
 
 public class InternationalizationNature implements IProjectNature {
 
-	private static final String NATURE_ID = Activator.PLUGIN_ID + ".nature";
+	private static final String NATURE_ID = ResourceBundleManager.NATURE_ID;
+	
 	private IProject project;
 
 	@Override

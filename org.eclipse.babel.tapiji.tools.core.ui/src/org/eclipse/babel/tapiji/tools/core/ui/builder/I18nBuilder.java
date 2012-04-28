@@ -8,7 +8,7 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.builder;
+package org.eclipse.babel.tapiji.tools.core.ui.builder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,16 +18,15 @@ import java.util.Set;
 
 import org.eclipse.babel.core.configuration.ConfigurationManager;
 import org.eclipse.babel.core.configuration.IConfiguration;
-import org.eclipse.babel.tapiji.tools.core.Activator;
 import org.eclipse.babel.tapiji.tools.core.Logger;
-import org.eclipse.babel.tapiji.tools.core.builder.analyzer.ResourceFinder;
-import org.eclipse.babel.tapiji.tools.core.extensions.I18nAuditor;
-import org.eclipse.babel.tapiji.tools.core.extensions.I18nRBAuditor;
-import org.eclipse.babel.tapiji.tools.core.extensions.I18nResourceAuditor;
 import org.eclipse.babel.tapiji.tools.core.extensions.ILocation;
 import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;
 import org.eclipse.babel.tapiji.tools.core.model.exception.NoSuchResourceAuditorException;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.analyzer.ResourceFinder;
+import org.eclipse.babel.tapiji.tools.core.ui.extensions.I18nAuditor;
+import org.eclipse.babel.tapiji.tools.core.ui.extensions.I18nRBAuditor;
+import org.eclipse.babel.tapiji.tools.core.ui.extensions.I18nResourceAuditor;
 import org.eclipse.babel.tapiji.tools.core.util.EditorUtils;
 import org.eclipse.babel.tapiji.tools.core.util.RBFileUtils;
 import org.eclipse.core.resources.ICommand;
@@ -45,8 +44,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 
 public class I18nBuilder extends IncrementalProjectBuilder {
 
-	public static final String BUILDER_ID = Activator.PLUGIN_ID
-	        + ".I18NBuilder";
+	public static final String BUILDER_ID = ResourceBundleManager.BUILDER_ID;
 
 	// private static I18nAuditor[] resourceAuditors;
 	// private static Set<String> supportedFileEndings;

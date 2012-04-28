@@ -18,11 +18,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ltk.ui.refactoring,
  org.junit;resolution:=optional,
  org.eclipse.babel.core;visibility:=reexport,
- org.eclipse.pde.core;resolution:=optional,
- org.eclipse.babel.tapiji.translator.rbe;bundle-version="0.0.2"
+ org.eclipse.pde.core;resolution:=optional
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %plugin.provider
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
-Export-Package: org.eclipse.babel.editor.api,
+Export-Package: org.eclipse.babel.editor,
+ org.eclipse.babel.editor.api,
  org.eclipse.babel.editor.wizards

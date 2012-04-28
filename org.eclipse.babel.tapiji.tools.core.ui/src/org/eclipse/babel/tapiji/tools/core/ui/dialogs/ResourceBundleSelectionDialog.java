@@ -14,7 +14,7 @@ package org.eclipse.babel.tapiji.tools.core.ui.dialogs;
 import java.util.List;
 
 import org.eclipse.babel.core.message.manager.RBManager;
-import org.eclipse.babel.tapiji.tools.core.util.ImageUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.ImageUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;

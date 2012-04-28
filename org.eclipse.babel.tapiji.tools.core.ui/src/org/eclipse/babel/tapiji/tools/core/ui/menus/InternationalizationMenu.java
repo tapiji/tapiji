@@ -16,8 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import org.eclipse.babel.tapiji.tools.core.builder.InternationalizationNature;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.builder.InternationalizationNature;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.AddLanguageDialoge;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.FragmentProjectSelectionDialog;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.GenerateBundleAccessorDialog;

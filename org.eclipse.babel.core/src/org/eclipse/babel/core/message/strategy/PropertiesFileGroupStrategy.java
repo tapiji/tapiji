@@ -25,14 +25,11 @@ import org.eclipse.babel.core.message.resource.ser.IPropertiesSerializerConfig;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.core.util.BabelUtils;
+import org.eclipse.babel.core.util.NameUtils;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.JavaCore;
 
 
 /**
@@ -170,27 +167,7 @@ public class PropertiesFileGroupStrategy implements IMessagesBundleGroupStrategy
     	
     	IFile f = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).getFile(relativeFilePath);
     	
-    	return getResourceBundleId(f);
-    }
-    
-    public static String getResourceBundleId (IResource resource) {
-		String packageFragment = "";
-		
-		IJavaElement propertyFile = JavaCore.create(resource.getParent());
-		if (propertyFile != null && propertyFile instanceof IPackageFragment)
-			packageFragment = ((IPackageFragment) propertyFile).getElementName();
-		
-		return (packageFragment.length() > 0 ? packageFragment  + "." : "") + 
-				getResourceBundleName(resource);
-	}
-    
-    public static String getResourceBundleName(IResource res) {
-        String name = res.getName();
-    	String regex = "^(.*?)" //$NON-NLS-1$
-                + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" //$NON-NLS-1$
-                + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." //$NON-NLS-1$
-                + res.getFileExtension() + ")$"; //$NON-NLS-1$
-        return name.replaceFirst(regex, "$1"); //$NON-NLS-1$
+    	return NameUtils.getResourceBundleId(f);
     }
     
     public String getProjectName() {

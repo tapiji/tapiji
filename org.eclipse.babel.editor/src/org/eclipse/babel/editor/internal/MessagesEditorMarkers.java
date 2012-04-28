@@ -8,7 +8,7 @@
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.editor;
+package org.eclipse.babel.editor.internal;
 
 import java.beans.PropertyChangeEvent;
 import java.util.Collection;

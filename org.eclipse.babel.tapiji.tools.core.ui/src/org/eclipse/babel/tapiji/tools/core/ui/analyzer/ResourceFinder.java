@@ -8,14 +8,14 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.builder.analyzer;
+package org.eclipse.babel.tapiji.tools.core.ui.analyzer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.babel.tapiji.tools.core.Logger;
-import org.eclipse.babel.tapiji.tools.core.builder.I18nBuilder;
+import org.eclipse.babel.tapiji.tools.core.ui.builder.I18nBuilder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;

@@ -13,7 +13,7 @@ package org.eclipse.babel.tapiji.tools.core.ui.widgets.sorter;
 import java.util.Locale;
 
 import org.eclipse.babel.editor.api.IValuedKeyTreeNode;
-import org.eclipse.babel.tapiji.tools.core.model.view.SortInfo;
+import org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.SortInfo;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;

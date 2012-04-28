@@ -8,9 +8,9 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.util;
+package org.eclipse.babel.tapiji.tools.core.ui.utils;
 
-import org.eclipse.babel.tapiji.tools.core.Activator;
+import org.eclipse.babel.tapiji.tools.core.ui.Activator;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
 

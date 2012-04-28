@@ -32,15 +32,17 @@ import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.message.tree.IAbstractKeyTreeModel;
 import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.babel.core.message.tree.TreeType;
+import org.eclipse.babel.core.util.FileUtils;
 import org.eclipse.babel.editor.api.IValuedKeyTreeNode;
 import org.eclipse.babel.editor.api.KeyTreeFactory;
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.model.IResourceBundleChangedListener;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleChangedEvent;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipse.babel.tapiji.tools.core.model.view.SortInfo;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog.DialogConfiguration;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.SortInfo;
 import org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.dnd.KeyTreeItemDropTarget;
 import org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.dnd.MessagesDragSource;
 import org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.dnd.MessagesDropTarget;
@@ -49,7 +51,6 @@ import org.eclipse.babel.tapiji.tools.core.ui.widgets.filter.FuzzyMatcher;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.provider.ResKeyTreeContentProvider;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.provider.ResKeyTreeLabelProvider;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.sorter.ValuedKeyTreeItemSorter;
-import org.eclipse.babel.tapiji.tools.core.util.EditorUtils;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -364,7 +365,6 @@ public class PropertyKeySelectionTree extends Composite implements
 
 					@Override
 					protected void setValue(Object element, Object value) {
-						boolean writeToFile = true;
 
 						if (element instanceof IValuedKeyTreeNode) {
 							IValuedKeyTreeNode vkti = (IValuedKeyTreeNode) element;
@@ -402,8 +402,8 @@ public class PropertyKeySelectionTree extends Composite implements
 										message.setComment(comment);
 									}
 
-									RBManager.getInstance(manager.getProject())
-									        .writeToFile(messagesBundle);
+									FileUtils.writeToFile(messagesBundle);
+									RBManager.getInstance(manager.getProject()).fireResourceChanged(messagesBundle);
 
 									// update TreeViewer
 									vkti.setValue(l, String.valueOf(value));

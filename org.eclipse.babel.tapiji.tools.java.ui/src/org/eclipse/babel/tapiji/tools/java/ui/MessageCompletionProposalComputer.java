@@ -13,8 +13,8 @@ import java.util.List;
 
 import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.tapiji.tools.core.Logger;
-import org.eclipse.babel.tapiji.tools.core.builder.InternationalizationNature;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.builder.InternationalizationNature;
 import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.CreateResourceBundleProposal;
 import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.InsertResourceBundleReferenceProposal;
 import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.MessageCompletionProposal;

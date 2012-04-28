@@ -8,10 +8,11 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.extensions;
+package org.eclipse.babel.tapiji.tools.core.ui.extensions;
 
 import java.util.List;
 
+import org.eclipse.babel.tapiji.tools.core.extensions.ILocation;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IMarkerResolution;

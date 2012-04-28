@@ -10,7 +10,7 @@
  ******************************************************************************/
 package ui.autocompletion;
 
-import org.eclipse.babel.tapiji.tools.core.util.ImageUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.ImageUtils;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.IContextInformation;

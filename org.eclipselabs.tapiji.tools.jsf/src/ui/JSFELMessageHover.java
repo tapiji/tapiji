@@ -10,7 +10,7 @@
  ******************************************************************************/
 package ui;
 
-import org.eclipse.babel.tapiji.tools.core.builder.InternationalizationNature;
+import org.eclipse.babel.tapiji.tools.core.ui.builder.InternationalizationNature;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextHover;

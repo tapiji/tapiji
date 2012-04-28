@@ -11,8 +11,6 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.model.manager;
 
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -29,9 +27,10 @@ import org.eclipse.babel.core.message.IMessage;
 import org.eclipse.babel.core.message.IMessagesBundle;
 import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.core.message.manager.RBManager;
+import org.eclipse.babel.core.util.FileUtils;
+import org.eclipse.babel.core.util.NameUtils;
+import org.eclipse.babel.tapiji.tools.core.Activator;
 import org.eclipse.babel.tapiji.tools.core.Logger;
-import org.eclipse.babel.tapiji.tools.core.builder.I18nBuilder;
-import org.eclipse.babel.tapiji.tools.core.builder.InternationalizationNature;
 import org.eclipse.babel.tapiji.tools.core.builder.analyzer.ResourceBundleDetectionVisitor;
 import org.eclipse.babel.tapiji.tools.core.model.IResourceBundleChangedListener;
 import org.eclipse.babel.tapiji.tools.core.model.IResourceDescriptor;
@@ -39,26 +38,24 @@ import org.eclipse.babel.tapiji.tools.core.model.IResourceExclusionListener;
 import org.eclipse.babel.tapiji.tools.core.model.ResourceDescriptor;
 import org.eclipse.babel.tapiji.tools.core.model.exception.ResourceBundleException;
 import org.eclipse.babel.tapiji.tools.core.util.EditorUtils;
-import org.eclipse.babel.tapiji.tools.core.util.FileUtils;
 import org.eclipse.babel.tapiji.tools.core.util.FragmentProjectUtils;
 import org.eclipse.babel.tapiji.tools.core.util.RBFileUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.ui.IMemento;
-import org.eclipse.ui.XMLMemento;
 
 public class ResourceBundleManager {
 
@@ -86,21 +83,20 @@ public class ResourceBundleManager {
 
 	private static Map<String, Set<IResource>> allBundles = new HashMap<String, Set<IResource>>();
 
-	private static IResourceChangeListener changelistener;
+//	private static IResourceChangeListener changelistener; // RBChangeListener -> see stateLoader!
 
+	public static final String NATURE_ID = Activator.PLUGIN_ID + ".nature";
+	
+	public static final String BUILDER_ID = Activator.PLUGIN_ID + ".I18NBuilder";
+	
 	/* Host project */
 	private IProject project = null;
 
 	/** State-Serialization Information **/
 	private static boolean state_loaded = false;
-	private static final String TAG_INTERNATIONALIZATION = "Internationalization";
-	private static final String TAG_EXCLUDED = "Excluded";
-	private static final String TAG_RES_DESC = "ResourceDescription";
-	private static final String TAG_RES_DESC_ABS = "AbsolutePath";
-	private static final String TAG_RES_DESC_REL = "RelativePath";
-	private static final String TAB_RES_DESC_PRO = "ProjectName";
-	private static final String TAB_RES_DESC_BID = "BundleId";
 
+	private static IStateLoader stateLoader;
+	
 	// Define private constructor
 	private ResourceBundleManager() {
 	}
@@ -108,7 +104,10 @@ public class ResourceBundleManager {
 	public static ResourceBundleManager getManager(IProject project) {
 		// check if persistant state has been loaded
 		if (!state_loaded) {
-			loadManagerState();
+			stateLoader = getStateLoader();
+			stateLoader.loadState();
+			state_loaded = true;
+			excludedResources = stateLoader.getExcludedResources();
 		}
 
 		// set host-project
@@ -155,39 +154,6 @@ public class ResourceBundleManager {
 	protected boolean isResourceBundleLoaded(String bundleName) {
 		return RBManager.getInstance(project).containsMessagesBundleGroup(
 		        bundleName);
-	}
-
-	protected Locale getLocaleByName(String bundleName, String localeID) {
-		// Check locale
-		Locale locale = null;
-		bundleName = bundleNames.get(bundleName);
-		localeID = localeID.substring(0,
-		        localeID.length() - "properties".length() - 1);
-		if (localeID.length() == bundleName.length()) {
-			// default locale
-			return null;
-		} else {
-			localeID = localeID.substring(bundleName.length() + 1);
-			String[] localeTokens = localeID.split("_");
-
-			switch (localeTokens.length) {
-			case 1:
-				locale = new Locale(localeTokens[0]);
-				break;
-			case 2:
-				locale = new Locale(localeTokens[0], localeTokens[1]);
-				break;
-			case 3:
-				locale = new Locale(localeTokens[0], localeTokens[1],
-				        localeTokens[2]);
-				break;
-			default:
-				locale = null;
-				break;
-			}
-		}
-
-		return locale;
 	}
 
 	protected void unloadResource(String bundleName, IResource resource) {
@@ -367,8 +333,13 @@ public class ResourceBundleManager {
 		Set<IProject> projs = new HashSet<IProject>();
 
 		for (IProject p : projects) {
-			if (InternationalizationNature.hasNature(p)) {
-				projs.add(p);
+			try {
+				if (p.isOpen() && p.hasNature(NATURE_ID)) {
+					projs.add(p);
+				}
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		return projs;
@@ -439,7 +410,7 @@ public class ResourceBundleManager {
 					try {
 						res.getProject().build(
 						        IncrementalProjectBuilder.FULL_BUILD,
-						        I18nBuilder.BUILDER_ID, null, null);
+						        BUILDER_ID, null, null);
 					} catch (CoreException e) {
 						Logger.logError(e);
 					}
@@ -561,7 +532,7 @@ public class ResourceBundleManager {
 				try {
 					resource.getProject().build(
 					        IncrementalProjectBuilder.FULL_BUILD,
-					        I18nBuilder.BUILDER_ID, null, null);
+					        BUILDER_ID, null, null);
 				} catch (CoreException e) {
 					Logger.logError(e);
 				}
@@ -585,7 +556,7 @@ public class ResourceBundleManager {
 		IResource resource = res;
 
 		if (!state_loaded) {
-			loadManagerState();
+			stateLoader.loadState();
 		}
 
 		boolean isExcluded = false;
@@ -616,76 +587,13 @@ public class ResourceBundleManager {
 
 	public IFile getRandomFile(String bundleName) {
 		try {
-			IResource res = (resources.get(bundleName)).iterator().next();
-			return res.getProject().getFile(res.getProjectRelativePath());
+			Collection<IMessagesBundle> messagesBundles = RBManager.getInstance(project).getMessagesBundleGroup(bundleName).getMessagesBundles();
+			IMessagesBundle bundle = messagesBundles.iterator().next();
+			return FileUtils.getFile(bundle);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	private static void loadManagerState() {
-		excludedResources = new HashSet<IResourceDescriptor>();
-		FileReader reader = null;
-		try {
-			reader = new FileReader(FileUtils.getRBManagerStateFile());
-			loadManagerState(XMLMemento.createReadRoot(reader));
-			state_loaded = true;
-		} catch (Exception e) {
-			// do nothing
-		}
-
-		changelistener = new RBChangeListner();
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(
-		        changelistener,
-		        IResourceChangeEvent.PRE_DELETE
-		                | IResourceChangeEvent.POST_CHANGE);
-	}
-
-	private static void loadManagerState(XMLMemento memento) {
-		IMemento excludedChild = memento.getChild(TAG_EXCLUDED);
-		for (IMemento excluded : excludedChild.getChildren(TAG_RES_DESC)) {
-			IResourceDescriptor descriptor = new ResourceDescriptor();
-			descriptor.setAbsolutePath(excluded.getString(TAG_RES_DESC_ABS));
-			descriptor.setRelativePath(excluded.getString(TAG_RES_DESC_REL));
-			descriptor.setProjectName(excluded.getString(TAB_RES_DESC_PRO));
-			descriptor.setBundleId(excluded.getString(TAB_RES_DESC_BID));
-			excludedResources.add(descriptor);
-		}
-	}
-
-	public static void saveManagerState() {
-		if (excludedResources == null) {
-			return;
-		}
-		XMLMemento memento = XMLMemento
-		        .createWriteRoot(TAG_INTERNATIONALIZATION);
-		IMemento exclChild = memento.createChild(TAG_EXCLUDED);
-
-		Iterator<IResourceDescriptor> itExcl = excludedResources.iterator();
-		while (itExcl.hasNext()) {
-			IResourceDescriptor desc = itExcl.next();
-			IMemento resDesc = exclChild.createChild(TAG_RES_DESC);
-			resDesc.putString(TAB_RES_DESC_PRO, desc.getProjectName());
-			resDesc.putString(TAG_RES_DESC_ABS, desc.getAbsolutePath());
-			resDesc.putString(TAG_RES_DESC_REL, desc.getRelativePath());
-			resDesc.putString(TAB_RES_DESC_BID, desc.getBundleId());
-		}
-		FileWriter writer = null;
-		try {
-			writer = new FileWriter(FileUtils.getRBManagerStateFile());
-			memento.save(writer);
-		} catch (Exception e) {
-			// do nothing
-		} finally {
-			try {
-				if (writer != null) {
-					writer.close();
-				}
-			} catch (Exception e) {
-				// do nothing
-			}
-		}
 	}
 
 	@Deprecated
@@ -722,7 +630,7 @@ public class ResourceBundleManager {
 
 		if (resSet != null) {
 			for (IResource resource : resSet) {
-				Locale refLoc = getLocaleByName(resourceBundle,
+				Locale refLoc = NameUtils.getLocaleByName(resourceBundle,
 				        resource.getName());
 				if (refLoc == null
 				        && l == null
@@ -781,7 +689,8 @@ public class ResourceBundleManager {
 			m.setText(message);
 			messagesBundle.addMessage(m);
 
-			instance.writeToFile(messagesBundle);
+			FileUtils.writeToFile(messagesBundle);
+			instance.fireResourceChanged(messagesBundle);
 
 			DirtyHack.setFireEnabled(true);
 
@@ -853,4 +762,25 @@ public class ResourceBundleManager {
 		}
 		return locales;
 	}
+	
+	private static IStateLoader getStateLoader() {
+		
+		IExtensionPoint extp = Platform.getExtensionRegistry().getExtensionPoint(
+                "org.eclipse.babel.tapiji.tools.core" + ".stateLoader");
+        IConfigurationElement[] elements = extp.getConfigurationElements();
+        
+        if (elements.length != 0) {
+        	try {
+				return (IStateLoader) elements[0].createExecutableExtension("class");
+        	} catch (CoreException e) {
+				e.printStackTrace();
+			}
+        } 
+    	return null;
+	}
+
+	public static void saveManagerState() {
+		stateLoader.saveState();
+	}
+	
 }

@@ -8,7 +8,7 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.builder;
+package org.eclipse.babel.tapiji.tools.core.ui.builder;
 
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;

@@ -8,8 +8,9 @@
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.editor;
+package org.eclipse.babel.editor.internal;
 
+import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 import org.eclipse.babel.editor.actions.FilterKeysAction;
 import org.eclipse.babel.editor.actions.KeyTreeVisibleAction;
 import org.eclipse.babel.editor.actions.NewLocaleAction;

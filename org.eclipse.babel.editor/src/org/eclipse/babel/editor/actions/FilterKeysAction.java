@@ -11,9 +11,9 @@
 package org.eclipse.babel.editor.actions;
 
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
-import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
-import org.eclipse.babel.editor.MessagesEditorContributor;
+import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
+import org.eclipse.babel.editor.internal.MessagesEditorContributor;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;

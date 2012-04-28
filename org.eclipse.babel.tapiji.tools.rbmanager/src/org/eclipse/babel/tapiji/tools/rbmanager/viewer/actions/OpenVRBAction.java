@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.rbmanager.viewer.actions;
 
-import org.eclipse.babel.tapiji.tools.core.util.EditorUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils;
 import org.eclipse.babel.tapiji.tools.rbmanager.RBManagerActivator;
 import org.eclipse.babel.tapiji.tools.rbmanager.model.VirtualResourceBundle;
 import org.eclipse.jface.action.Action;

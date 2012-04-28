@@ -12,7 +12,7 @@ package org.eclipse.babel.editor.views;
 
 
 
-import org.eclipse.babel.editor.MessagesEditor;
+import org.eclipse.babel.editor.internal.MessagesEditor;
 import org.eclipse.babel.editor.tree.actions.CollapseAllAction;
 import org.eclipse.babel.editor.tree.actions.ExpandAllAction;
 import org.eclipse.babel.editor.tree.actions.FlatModelAction;

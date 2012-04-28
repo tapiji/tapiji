@@ -8,7 +8,7 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.builder;
+package org.eclipse.babel.tapiji.tools.core.ui.builder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,9 +18,9 @@ import java.util.Set;
 
 import org.eclipse.babel.tapiji.tools.core.Activator;
 import org.eclipse.babel.tapiji.tools.core.Logger;
-import org.eclipse.babel.tapiji.tools.core.builder.analyzer.RBAuditor;
-import org.eclipse.babel.tapiji.tools.core.extensions.I18nAuditor;
 import org.eclipse.babel.tapiji.tools.core.model.preferences.TapiJIPreferences;
+import org.eclipse.babel.tapiji.tools.core.ui.analyzer.RBAuditor;
+import org.eclipse.babel.tapiji.tools.core.ui.extensions.I18nAuditor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;

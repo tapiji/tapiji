@@ -8,7 +8,7 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.model.view;
+package org.eclipse.babel.tapiji.tools.core.ui.views.messagesview;
 
 import java.util.ArrayList;
 import java.util.List;

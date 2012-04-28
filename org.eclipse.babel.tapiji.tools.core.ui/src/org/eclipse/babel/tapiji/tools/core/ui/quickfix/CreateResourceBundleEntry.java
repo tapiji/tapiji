@@ -12,7 +12,7 @@
 package org.eclipse.babel.tapiji.tools.core.ui.quickfix;
 
 import org.eclipse.babel.tapiji.tools.core.Logger;
-import org.eclipse.babel.tapiji.tools.core.builder.I18nBuilder;
+import org.eclipse.babel.tapiji.tools.core.ui.builder.I18nBuilder;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreateResourceBundleEntryDialog.DialogConfiguration;
 import org.eclipse.core.filebuffers.FileBuffers;

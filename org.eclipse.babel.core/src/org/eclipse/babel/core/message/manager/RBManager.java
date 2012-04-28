@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.eclipse.babel.core.message.manager;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,7 +20,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.eclipse.babel.core.configuration.ConfigurationManager;
 import org.eclipse.babel.core.configuration.DirtyHack;
 import org.eclipse.babel.core.factory.MessagesBundleGroupFactory;
 import org.eclipse.babel.core.message.IMessage;
@@ -31,18 +28,13 @@ import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.core.message.internal.Message;
 import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
-import org.eclipse.babel.core.message.resource.internal.PropertiesFileResource;
-import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
-import org.eclipse.babel.core.message.strategy.PropertiesFileGroupStrategy;
+import org.eclipse.babel.core.util.FileUtils;
+import org.eclipse.babel.core.util.NameUtils;
 import org.eclipse.babel.core.util.PDEUtils;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.JavaCore;
 
 /**
  * Manages all {@link MessagesBundleGroup}s. That is:
@@ -201,15 +193,14 @@ public class RBManager {
 	 * @param resourceBundle The removed {@link MessagesBundle}
 	 */
 	public void notifyResourceRemoved(IResource resourceBundle) {
-		String resourceBundleId = PropertiesFileGroupStrategy
-				.getResourceBundleId(resourceBundle);
+		String resourceBundleId = NameUtils.getResourceBundleId(resourceBundle);
 		
 		IMessagesBundleGroup bundleGroup = resourceBundles
 				.get(resourceBundleId);
 		
 		if (bundleGroup != null) {
-			Locale locale = getLocaleByName(
-					getResourceBundleName(resourceBundle),
+			Locale locale = NameUtils.getLocaleByName(
+					NameUtils.getResourceBundleName(resourceBundle),
 					resourceBundle.getName());
 			IMessagesBundle messagesBundle = bundleGroup
 					.getMessagesBundle(locale);
@@ -476,7 +467,7 @@ public class RBManager {
 		// we can optimize that, now we create a bundle group for each bundle
 		// we should create a bundle group only once!
 
-		String resourceBundleId = getResourceBundleId(resource);
+		String resourceBundleId = NameUtils.getResourceBundleId(resource);
 		if (!resourceBundles.containsKey(resourceBundleId)) {
 			// if we do not have this condition, then you will be doomed with
 			// resource out of syncs, because here we instantiate
@@ -487,112 +478,10 @@ public class RBManager {
 		}
 	}
 
-	
-	//################################################################################################
-	//##################################		UTIL	   ###########################################
-	//################################################################################################
-	// TODO: move those methods, they do not belong here
-	
-	public static String getResourceBundleId(IResource resource) {
-		String packageFragment = "";
-
-		IJavaElement propertyFile = JavaCore.create(resource.getParent());
-		if (propertyFile != null && propertyFile instanceof IPackageFragment)
-			packageFragment = ((IPackageFragment) propertyFile)
-					.getElementName();
-
-		return (packageFragment.length() > 0 ? packageFragment + "." : "")
-				+ getResourceBundleName(resource);
-	}
-
-	public static String getResourceBundleName(IResource res) {
-		String name = res.getName();
-		String regex = "^(.*?)" //$NON-NLS-1$
-				+ "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" //$NON-NLS-1$
-				+ "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." //$NON-NLS-1$
-				+ res.getFileExtension() + ")$"; //$NON-NLS-1$
-		return name.replaceFirst(regex, "$1"); //$NON-NLS-1$
-	}
-
 	public void writeToFile(IMessagesBundleGroup bundleGroup) {
 		for (IMessagesBundle bundle : bundleGroup.getMessagesBundles()) {
-			writeToFile(bundle);
+			FileUtils.writeToFile(bundle);
+			fireResourceChanged(bundle);
 		}
-	}
-
-	public void writeToFile(IMessagesBundle bundle) {
-		DirtyHack.setEditorModificationEnabled(false);
-
-		PropertiesSerializer ps = new PropertiesSerializer(ConfigurationManager
-				.getInstance().getSerializerConfig());
-		String editorContent = ps.serialize(bundle);
-		IFile file = getFile(bundle);
-		try {
-			file.refreshLocal(IResource.DEPTH_ZERO, null);
-			file.setContents(
-					new ByteArrayInputStream(editorContent.getBytes()), false,
-					true, null);
-			file.refreshLocal(IResource.DEPTH_ZERO, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			DirtyHack.setEditorModificationEnabled(true);
-		}
-
-		fireResourceChanged(bundle);
-
-	}
-
-	private IFile getFile(IMessagesBundle bundle) {
-		if (bundle.getResource() instanceof PropertiesFileResource) { // different
-			// ResourceLocationLabel
-			String path = bundle.getResource().getResourceLocationLabel(); // P:\Allianz\Workspace\AST\TEST\src\messages\Messages_de.properties
-			int index = path.indexOf("src");
-			String pathBeforeSrc = path.substring(0, index - 1);
-			int lastIndexOf = pathBeforeSrc.lastIndexOf(File.separatorChar);
-			String projectName = path.substring(lastIndexOf + 1, index - 1);
-			String relativeFilePath = path.substring(index, path.length());
-
-			return ResourcesPlugin.getWorkspace().getRoot()
-					.getProject(projectName).getFile(relativeFilePath);
-		} else {
-			String location = bundle.getResource().getResourceLocationLabel(); // /TEST/src/messages/Messages_en_IN.properties
-			location = location.substring(project.getName().length() + 1,
-					location.length());
-			return ResourcesPlugin.getWorkspace().getRoot()
-					.getProject(project.getName()).getFile(location);
-		}
-	}
-
-	protected Locale getLocaleByName(String bundleName, String localeID) {
-		// Check locale
-		Locale locale = null;
-		localeID = localeID.substring(0,
-				localeID.length() - "properties".length() - 1);
-		if (localeID.length() == bundleName.length()) {
-			// default locale
-			return null;
-		} else {
-			localeID = localeID.substring(bundleName.length() + 1);
-			String[] localeTokens = localeID.split("_");
-
-			switch (localeTokens.length) {
-			case 1:
-				locale = new Locale(localeTokens[0]);
-				break;
-			case 2:
-				locale = new Locale(localeTokens[0], localeTokens[1]);
-				break;
-			case 3:
-				locale = new Locale(localeTokens[0], localeTokens[1],
-						localeTokens[2]);
-				break;
-			default:
-				locale = null;
-				break;
-			}
-		}
-
-		return locale;
 	}
 }
