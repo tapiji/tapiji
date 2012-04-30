@@ -671,10 +671,10 @@ public class ASTutils {
 		return false;
 	}
 
-	public static StringLiteral getStringAtPos(CompilationUnit cu, int position) {
-		StringFinder strFinder = new StringFinder(position);
+	public static StringLiteral getStringLiteralAtPos(CompilationUnit cu, int position) {
+		StringLiteralFinder strFinder = new StringLiteralFinder(position);
 		cu.accept(strFinder);
-		return strFinder.getString();
+		return strFinder.getStringLiteral();
 	}
 
 	static class PositionalTypeFinder extends ASTVisitor {
@@ -919,15 +919,15 @@ public class ASTutils {
 		}
 	}
 
-	static class StringFinder extends ASTVisitor {
+	static class StringLiteralFinder extends ASTVisitor {
 		private int position;
 		private StringLiteral string;
 
-		public StringFinder(int position) {
+		public StringLiteralFinder(int position) {
 			this.position = position;
 		}
 
-		public StringLiteral getString() {
+		public StringLiteral getStringLiteral() {
 			return string;
 		}
 

@@ -21,11 +21,13 @@ import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.MessageCompletionPr
 import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.NewResourceBundleEntryProposal;
 import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.NoActionProposal;
 import org.eclipse.babel.tapiji.tools.java.ui.util.ASTutilsUI;
+import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
 import org.eclipse.babel.tapiji.tools.java.visitor.ResourceAuditVisitor;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.CompletionContext;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.ui.text.java.ContentAssistInvocationContext;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposalComputer;
 import org.eclipse.jdt.ui.text.java.JavaContentAssistInvocationContext;
@@ -71,27 +73,6 @@ public class MessageCompletionProposalComputer implements
 				return completions;
 			}
 
-			if (isStringLiteral) {
-				tokenStart++;
-			}
-
-			if (tokenStart < 0) {
-				tokenStart = tokenOffset;
-				tokenEnd = tokenOffset;
-			}
-
-			tokenEnd = Math.max(tokenEnd, tokenStart);
-
-			String fullToken = "";
-
-			if (tokenStart < tokenEnd) {
-				fullToken = context.getDocument().get(tokenStart,
-				        tokenEnd - tokenStart);
-			}
-
-			// Check if the string literal is up to be written within the
-			// context of a resource-bundle accessor method
-
 			if (cu == null) {
 				manager = ResourceBundleManager.getManager(javaContext
 				        .getCompilationUnit().getResource().getProject());
@@ -105,7 +86,36 @@ public class MessageCompletionProposalComputer implements
 
 				cu.accept(csav);
 			}
+			
+			if (tokenStart < 0) {
+				// is string literal in front of cursor?
+				StringLiteral strLit = ASTutils.getStringLiteralAtPos(cu, tokenOffset-1);
+				if (strLit != null) {
+					tokenStart = strLit.getStartPosition();
+					tokenEnd = tokenStart + strLit.getLength() - 1;
+					tokenOffset = tokenOffset-1;
+					isStringLiteral = true;
+				} else {
+					tokenStart = tokenOffset;
+					tokenEnd = tokenOffset;
+				}
+			}
+			
+			if (isStringLiteral) {
+				tokenStart++;
+			}
 
+			tokenEnd = Math.max(tokenEnd, tokenStart);
+
+			String fullToken = "";
+
+			if (tokenStart < tokenEnd) {
+				fullToken = context.getDocument().get(tokenStart,
+				        tokenEnd - tokenStart);
+			}
+
+			// Check if the string literal is up to be written within the
+			// context of a resource-bundle accessor method
 			if (csav.getKeyAt(new Long(tokenOffset)) != null && isStringLiteral) {
 				completions.addAll(getResourceBundleCompletionProposals(
 				        tokenStart, tokenEnd, tokenOffset, isStringLiteral,
