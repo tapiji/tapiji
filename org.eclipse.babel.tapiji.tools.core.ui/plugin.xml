@@ -10,13 +10,13 @@
    </extension>
    
    <extension
-         id="org.eclipse.babel.tapiji.tools.core.nature"
+         id="org.eclipse.babel.tapiji.tools.core.ui.nature"
          name="Internationalization Nature"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run class="org.eclipse.babel.tapiji.tools.core.ui.builder.InternationalizationNature" />
       </runtime>
-      <builder id="org.eclipse.babel.tapiji.tools.core.I18NBuilder" />
+      <builder id="org.eclipse.babel.tapiji.tools.core.ui.I18NBuilder" />
 <!--      <requires-nature id="org.eclipse.jdt.core.javanature"/> -->
    </extension>
    
@@ -68,11 +68,11 @@
          point="org.eclipse.ui.ide.markerResolution">
       <markerResolutionGenerator
             class="org.eclipse.babel.tapiji.tools.core.ui.builder.ViolationResolutionGenerator"
-            markerType="org.eclipse.babel.tapiji.tools.core.StringLiteralAuditMarker">
+            markerType="org.eclipse.babel.tapiji.tools.core.ui.StringLiteralAuditMarker">
       </markerResolutionGenerator>
       <markerResolutionGenerator
             class="org.eclipse.babel.tapiji.tools.core.ui.builder.ViolationResolutionGenerator"
-            markerType="org.eclipse.babel.tapiji.tools.core.ResourceBundleAuditMarker">
+            markerType="org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleAuditMarker">
       </markerResolutionGenerator>
    </extension>
    <extension
@@ -114,19 +114,19 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="org.eclipse.babel.tapiji.tools.core.ui.prefrences.TapiHomePreferencePage"
+            class="org.eclipse.babel.tapiji.tools.core.ui.preferences.TapiHomePreferencePage"
             id="org.eclipse.babel.tapiji.tools.core.TapiJIGeneralPrefPage"
             name="TapiJI">
       </page>
       <page
             category="org.eclipse.babel.tapiji.tools.core.TapiJIGeneralPrefPage"
-            class="org.eclipse.babel.tapiji.tools.core.ui.prefrences.FilePreferencePage"
+            class="org.eclipse.babel.tapiji.tools.core.ui.preferences.FilePreferencePage"
             id="org.eclipse.babel.tapiji.tools.core.FilePrefPage"
             name="File Settings">
       </page>
       <page
             category="org.eclipse.babel.tapiji.tools.core.TapiJIGeneralPrefPage"
-            class="org.eclipse.babel.tapiji.tools.core.ui.prefrences.BuilderPreferencePage"
+            class="org.eclipse.babel.tapiji.tools.core.ui.preferences.BuilderPreferencePage"
             id="org.eclipse.babel.tapiji.tools.core.BuilderPrefPage"
             name="Builder Settings">
       </page>
@@ -146,5 +146,98 @@
             class="org.eclipse.babel.tapiji.tools.core.ui.memento.ResourceBundleManagerStateLoader">
       </IStateLoader>
    </extension>
-	
+   <extension
+         id="StringLiteralAuditMarker"
+         name="String Literal Audit Marker"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <super
+            type="org.eclipse.core.resources.textmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+      <attribute
+            name="stringLiteral">
+      </attribute>
+      <attribute
+            name="violation">
+      </attribute>
+      <attribute
+            name="context">
+      </attribute>
+      <attribute
+            name="cause">
+      </attribute>
+      <attribute
+            name="key">
+      </attribute>
+      <attribute
+            name="location">
+      </attribute>
+      <attribute
+            name="bundleName">
+      </attribute>
+      <attribute
+            name="bundleStart">
+      </attribute>
+      <attribute
+            name="bundleEnd">
+      </attribute>
+   </extension>
+   <extension
+         id="ResourceBundleAuditMarker"
+         name="Resource-Bundle Audit Marker"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <super
+            type="org.eclipse.core.resources.textmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+      <attribute
+            name="stringLiteral">
+      </attribute>
+      <attribute
+            name="violation">
+      </attribute>
+      <attribute
+            name="context">
+      </attribute>
+      <attribute
+            name="cause">
+      </attribute>
+      <attribute
+            name="key">
+      </attribute>
+      <attribute
+            name="location">
+      </attribute>
+      <attribute
+            name="language">
+      </attribute>
+      <attribute
+            name="bundleLine">
+      </attribute>
+      <attribute
+            name="problemPartner">
+      </attribute>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.babel.tapiji.tools.core.ui.preferences.TapiJIPreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.babel.core.babelConfiguration">
+      <IConfiguration
+            class="org.eclipse.babel.tapiji.tools.core.ui.preferences.TapiJIPreferences">
+      </IConfiguration>
+   </extension>	
 </plugin>

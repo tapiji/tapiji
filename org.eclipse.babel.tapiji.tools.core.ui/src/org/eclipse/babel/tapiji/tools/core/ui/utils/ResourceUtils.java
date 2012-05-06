@@ -8,12 +8,12 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.util;
+package org.eclipse.babel.tapiji.tools.core.ui.utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -45,8 +45,9 @@ public class ResourceUtils {
 			if (manager.getResourceBundleIdentifiers().contains(nameProposal)
 			        || nameProposal.length() == 0) {
 				nameProposal = nameProposal + (++i);
-			} else
+			} else {
 				break;
+			}
 		} while (true);
 
 		return nameProposal;
@@ -89,8 +90,9 @@ public class ResourceUtils {
 
 		for (IProject p : targetProjects) {
 			IContainer c = getCorrespondingFolders(baseFolder, p);
-			if (c.exists())
+			if (c.exists()) {
 				correspondingFolder.add(c);
+			}
 		}
 
 		return correspondingFolder;
@@ -108,10 +110,11 @@ public class ResourceUtils {
 		IPath relativ_folder = baseFolder.getFullPath().makeRelativeTo(
 		        baseFolder.getProject().getFullPath());
 
-		if (!relativ_folder.isEmpty())
+		if (!relativ_folder.isEmpty()) {
 			return targetProject.getFolder(relativ_folder);
-		else
+		} else {
 			return targetProject;
+		}
 	}
 
 }

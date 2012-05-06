@@ -18,9 +18,9 @@ import java.util.Set;
 
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.model.exception.ResourceBundleException;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipse.babel.tapiji.tools.core.util.LocaleUtils;
-import org.eclipse.babel.tapiji.tools.core.util.ResourceUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.LocaleUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.ResourceUtils;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;

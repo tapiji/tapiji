@@ -29,9 +29,9 @@ import org.eclipse.babel.core.message.IMessage;
 import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.tapiji.tools.core.extensions.ILocation;
 import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.extensions.I18nRBAuditor;
-import org.eclipse.babel.tapiji.tools.core.util.RBFileUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils;
 import org.eclipse.babel.tapiji.tools.rbmanager.auditor.quickfix.MissingLanguageResolution;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -93,8 +93,9 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 	 */
 	@Override
 	public void audit(IResource resource) {
-		if (!RBFileUtils.isResourceBundleFile(resource))
+		if (!RBFileUtils.isResourceBundleFile(resource)) {
 			return;
+		}
 
 		IFile file = (IFile) resource;
 		String rbId = RBFileUtils.getCorrespondingResourceBundleId(file);
@@ -104,8 +105,9 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 			        .getManager(file.getProject());
 			audit(rbId, rbmanager);
 			seenRBs.add(rbId);
-		} else
+		} else {
 			return;
+		}
 	}
 
 	/*
@@ -130,11 +132,12 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 					// check if a key has the same value like a key of an other
 					// properties-file
 					if (configuration.getAuditSameValue()
-					        && bundlefile.size() > 1)
+					        && bundlefile.size() > 1) {
 						for (IResource r2 : bundlefile) {
 							IFile f2 = (IFile) r2;
 							auditSameValues(f1, f2, key, bundlegroup);
 						}
+					}
 				}
 			}
 		}
@@ -158,8 +161,9 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 			int pos = calculateKeyLine(key, f1);
 			unspecifiedKeys.add(new RBLocation(f1, pos, pos + 1, key));
 			return true;
-		} else
+		} else {
 			return false;
+		}
 	}
 
 	/*
@@ -175,7 +179,7 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 		        && !(l1.toString().equals("") || l2.toString().equals(""))) {
 			IMessage message = bundlegroup.getMessage(key, l2);
 
-			if (message != null)
+			if (message != null) {
 				if (bundlegroup.getMessage(key, l1).getValue()
 				        .equals(message.getValue())) {
 					int pos1 = calculateKeyLine(key, f1);
@@ -183,6 +187,7 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 					sameValues.put(new RBLocation(f1, pos1, pos1 + 1, key),
 					        new RBLocation(f2, pos2, pos2 + 1, key));
 				}
+			}
 		}
 	}
 
@@ -201,8 +206,9 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 				// Add Warning to default-file or a random chosen file
 				IResource representative = rbmanager.getResourceBundleFile(
 				        rbId, null);
-				if (representative == null)
+				if (representative == null) {
 					representative = rbmanager.getRandomFile(rbId);
+				}
 				missingLanguages.add(new RBLocation((IFile) representative, 1,
 				        2, language));
 			}
@@ -223,8 +229,9 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 			String line;
 			while ((line = bf.readLine()) != null) {
 				if ((!line.isEmpty()) && (!line.startsWith("#"))
-				        && (line.compareTo(key) > 0))
+				        && (line.compareTo(key) > 0)) {
 					return linenumber;
+				}
 				linenumber++;
 			}
 			// System.setProperty("dirty", "false");

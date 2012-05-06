@@ -9,7 +9,7 @@
  *     Martin Reiterer - initial API and implementation
  *     Alexej Strelzow - moved SWT code to FilePreferencePage
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.model.preferences;
+package org.eclipse.babel.tapiji.tools.core.ui.preferences;
 
 
 public class CheckItem {

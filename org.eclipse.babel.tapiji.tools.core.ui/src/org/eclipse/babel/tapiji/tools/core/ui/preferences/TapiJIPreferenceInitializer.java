@@ -8,12 +8,12 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.model.preferences;
+package org.eclipse.babel.tapiji.tools.core.ui.preferences;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.babel.tapiji.tools.core.Activator;
+import org.eclipse.babel.tapiji.tools.core.ui.Activator;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 

@@ -13,10 +13,10 @@ package org.eclipse.babel.tapiji.tools.rbmanager.viewer.actions.hoverinformants;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipse.babel.tapiji.tools.core.util.EditorUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.ResourceUtils;
 import org.eclipse.babel.tapiji.tools.core.util.FragmentProjectUtils;
-import org.eclipse.babel.tapiji.tools.core.util.ResourceUtils;
 import org.eclipse.babel.tapiji.tools.rbmanager.ImageUtils;
 import org.eclipse.babel.tapiji.tools.rbmanager.model.VirtualResourceBundle;
 import org.eclipse.babel.tapiji.tools.rbmanager.ui.hover.HoverInformant;
@@ -102,8 +102,9 @@ public class RBMarkerInformant implements HoverInformant {
 
 		for (Control c : composite.getChildren()) {
 			setColor(c);
-			if (c instanceof Composite)
+			if (c instanceof Composite) {
 				sinkColor((Composite) c);
+			}
 		}
 	}
 
@@ -195,11 +196,12 @@ public class RBMarkerInformant implements HoverInformant {
 		if (data instanceof IResource) {
 			IResource res = (IResource) data;
 			try {
-				if (res.exists())
+				if (res.exists()) {
 					ms = res.findMarkers(EditorUtils.RB_MARKER_ID, false,
 					        IResource.DEPTH_INFINITE);
-				else
+				} else {
 					ms = new IMarker[0];
+				}
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
@@ -218,7 +220,8 @@ public class RBMarkerInformant implements HoverInformant {
 							        EditorUtils.RB_MARKER_ID, false,
 							        IResource.DEPTH_INFINITE);
 
-							ms = EditorUtils.concatMarkerArray(ms, fragment_ms);
+							ms = org.eclipse.babel.tapiji.tools.core.util.EditorUtils
+							        .concatMarkerArray(ms, fragment_ms);
 						}
 					} catch (CoreException e) {
 					}
@@ -234,19 +237,21 @@ public class RBMarkerInformant implements HoverInformant {
 
 			Collection<IResource> rBundles = rbmanager.getResourceBundles(vRB
 			        .getResourceBundleId());
-			if (!rBundles.isEmpty())
+			if (!rBundles.isEmpty()) {
 				for (IResource r : rBundles) {
 					try {
 						file_ms = r.findMarkers(EditorUtils.RB_MARKER_ID,
 						        false, IResource.DEPTH_INFINITE);
 						if (ms != null) {
-							ms = EditorUtils.concatMarkerArray(ms, file_ms);
+							ms = org.eclipse.babel.tapiji.tools.core.util.EditorUtils
+							        .concatMarkerArray(ms, file_ms);
 						} else {
 							ms = file_ms;
 						}
 					} catch (Exception e) {
 					}
 				}
+			}
 		}
 
 		StringBuilder sb = new StringBuilder();

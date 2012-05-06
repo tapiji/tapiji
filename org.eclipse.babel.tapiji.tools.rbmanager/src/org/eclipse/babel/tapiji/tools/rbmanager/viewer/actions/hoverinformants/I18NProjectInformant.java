@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.util.FragmentProjectUtils;
 import org.eclipse.babel.tapiji.tools.rbmanager.ImageUtils;
 import org.eclipse.babel.tapiji.tools.rbmanager.ui.hover.HoverInformant;
@@ -94,8 +94,9 @@ public class I18NProjectInformant implements HoverInformant {
 
 		for (Control c : composite.getChildren()) {
 			setColor(c);
-			if (c instanceof Composite)
+			if (c instanceof Composite) {
 				sinkColor((Composite) c);
+			}
 		}
 	}
 
@@ -186,17 +187,19 @@ public class I18NProjectInformant implements HoverInformant {
 
 				int i = 0;
 				for (Locale l : ls) {
-					if (!l.toString().equals(""))
+					if (l != null && !l.toString().equals("")) {
 						sb.append(l.getDisplayName());
-					else
+					} else {
 						sb.append("[Default]");
+					}
 
 					if (++i != ls.size()) {
 						sb.append(",");
-						if (i % 5 == 0)
+						if (i % 5 == 0) {
 							sb.append("\n");
-						else
+						} else {
 							sb.append(" ");
+						}
 					}
 
 				}
@@ -217,8 +220,9 @@ public class I18NProjectInformant implements HoverInformant {
 				int i = 0;
 				for (IProject f : fragments) {
 					sb.append(f.getName());
-					if (++i != fragments.size())
+					if (++i != fragments.size()) {
 						sb.append("\n");
+					}
 				}
 				return sb.toString();
 			}

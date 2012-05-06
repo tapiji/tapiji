@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipse.babel.tapiji.tools.core.util.LocaleUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.LocaleUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;

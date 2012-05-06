@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.babel.tapiji.tools.core.extensions.ILocation;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.extensions.I18nResourceAuditor;
-import org.eclipse.babel.tapiji.tools.core.util.RBFileUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IMarkerResolution;

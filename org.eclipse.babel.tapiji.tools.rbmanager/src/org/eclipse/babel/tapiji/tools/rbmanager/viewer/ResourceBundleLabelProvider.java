@@ -13,11 +13,10 @@ package org.eclipse.babel.tapiji.tools.rbmanager.viewer;
 import java.util.List;
 import java.util.Locale;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipse.babel.tapiji.tools.core.util.EditorUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.ResourceUtils;
 import org.eclipse.babel.tapiji.tools.core.util.FragmentProjectUtils;
-import org.eclipse.babel.tapiji.tools.core.util.RBFileUtils;
-import org.eclipse.babel.tapiji.tools.core.util.ResourceUtils;
 import org.eclipse.babel.tapiji.tools.rbmanager.ImageUtils;
 import org.eclipse.babel.tapiji.tools.rbmanager.model.VirtualContainer;
 import org.eclipse.babel.tapiji.tools.rbmanager.model.VirtualContentManager;
@@ -51,36 +50,42 @@ public class ResourceBundleLabelProvider extends LabelProvider implements
 		if (element instanceof IProject) {
 			VirtualProject p = (VirtualProject) vcManager
 			        .getContainer((IProject) element);
-			if (p != null && p.isFragment())
+			if (p != null && p.isFragment()) {
 				return returnImage = ImageUtils
 				        .getBaseImage(ImageUtils.FRAGMENT_PROJECT_IMAGE);
-			else
+			} else {
 				returnImage = PlatformUI.getWorkbench().getSharedImages()
 				        .getImage(ISharedImages.IMG_OBJ_PROJECT);
+			}
 		}
 		if ((element instanceof IContainer) && (returnImage == null)) {
 			returnImage = PlatformUI.getWorkbench().getSharedImages()
 			        .getImage(ISharedImages.IMG_OBJ_FOLDER);
 		}
-		if (element instanceof VirtualResourceBundle)
+		if (element instanceof VirtualResourceBundle) {
 			returnImage = ImageUtils
 			        .getBaseImage(ImageUtils.RESOURCEBUNDLE_IMAGE);
+		}
 		if (element instanceof IFile) {
-			if (RBFileUtils.isResourceBundleFile((IFile) element)) {
-				Locale l = RBFileUtils.getLocale((IFile) element);
+			if (org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils
+			        .isResourceBundleFile((IFile) element)) {
+				Locale l = org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils
+				        .getLocale((IFile) element);
 				returnImage = ImageUtils.getLocalIcon(l);
 
 				VirtualProject p = ((VirtualProject) vcManager
 				        .getContainer(((IFile) element).getProject()));
-				if (p != null && p.isFragment())
+				if (p != null && p.isFragment()) {
 					returnImage = ImageUtils.getImageWithFragment(returnImage);
+				}
 			}
 		}
 
 		if (returnImage != null) {
-			if (checkMarkers(element))
+			if (checkMarkers(element)) {
 				// Add a Warning Image
 				returnImage = ImageUtils.getImageWithWarning(returnImage);
+			}
 		}
 		return returnImage;
 	}
@@ -101,16 +106,19 @@ public class ResourceBundleLabelProvider extends LabelProvider implements
 			}
 
 			VirtualContainer vContainer = vcManager.getContainer(container);
-			if (vContainer != null && vContainer.getRbCount() != 0)
+			if (vContainer != null && vContainer.getRbCount() != 0) {
 				text.append(" [" + vContainer.getRbCount() + "]");
+			}
 
 		}
 		if (element instanceof VirtualResourceBundle) {
 			text.append(((VirtualResourceBundle) element).getName());
 		}
 		if (element instanceof IFile) {
-			if (RBFileUtils.isResourceBundleFile((IFile) element)) {
-				Locale locale = RBFileUtils.getLocale((IFile) element);
+			if (org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils
+			        .isResourceBundleFile((IFile) element)) {
+				Locale locale = org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils
+				        .getLocale((IFile) element);
 				text.append("     ");
 				if (locale != null) {
 					text.append(locale);
@@ -120,8 +128,9 @@ public class ResourceBundleLabelProvider extends LabelProvider implements
 
 				VirtualProject vproject = (VirtualProject) vcManager
 				        .getContainer(((IFile) element).getProject());
-				if (vproject != null && vproject.isFragment())
+				if (vproject != null && vproject.isFragment()) {
 					text.append("�");
+				}
 			}
 		}
 		if (element instanceof String) {
@@ -132,10 +141,12 @@ public class ResourceBundleLabelProvider extends LabelProvider implements
 
 	@Override
 	public String getDescription(Object anElement) {
-		if (anElement instanceof IResource)
+		if (anElement instanceof IResource) {
 			return ((IResource) anElement).getName();
-		if (anElement instanceof VirtualResourceBundle)
+		}
+		if (anElement instanceof VirtualResourceBundle) {
 			return ((VirtualResourceBundle) anElement).getName();
+		}
 		return null;
 	}
 
@@ -145,8 +156,9 @@ public class ResourceBundleLabelProvider extends LabelProvider implements
 			try {
 				if ((ms = ((IResource) element).findMarkers(
 				        EditorUtils.RB_MARKER_ID, true,
-				        IResource.DEPTH_INFINITE)).length > 0)
+				        IResource.DEPTH_INFINITE)).length > 0) {
 					return true;
+				}
 
 				if (element instanceof IContainer) {
 					List<IContainer> fragmentContainer = ResourceUtils
@@ -163,15 +175,16 @@ public class ResourceBundleLabelProvider extends LabelProvider implements
 								fragment_ms = c.findMarkers(
 								        EditorUtils.RB_MARKER_ID, false,
 								        IResource.DEPTH_INFINITE);
-								ms = EditorUtils.concatMarkerArray(ms,
-								        fragment_ms);
+								ms = org.eclipse.babel.tapiji.tools.core.util.EditorUtils
+								        .concatMarkerArray(ms, fragment_ms);
 							}
 						} catch (CoreException e) {
 							e.printStackTrace();
 						}
 					}
-					if (ms.length > 0)
+					if (ms.length > 0) {
 						return true;
+					}
 				}
 			} catch (CoreException e) {
 			}
@@ -181,8 +194,10 @@ public class ResourceBundleLabelProvider extends LabelProvider implements
 			        .getResourceBundleManager();
 			String id = ((VirtualResourceBundle) element).getResourceBundleId();
 			for (IResource r : rbmanager.getResourceBundles(id)) {
-				if (RBFileUtils.hasResourceBundleMarker(r))
+				if (org.eclipse.babel.tapiji.tools.core.util.RBFileUtils
+				        .hasResourceBundleMarker(r)) {
 					return true;
+				}
 			}
 		}
 

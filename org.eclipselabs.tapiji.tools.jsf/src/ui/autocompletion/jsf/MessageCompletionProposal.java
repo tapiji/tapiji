@@ -13,7 +13,7 @@ package ui.autocompletion.jsf;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.builder.InternationalizationNature;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;

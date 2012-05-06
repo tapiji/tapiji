@@ -21,11 +21,11 @@ import java.util.Map;
 
 import org.eclipse.babel.tapiji.tools.core.model.IResourceBundleChangedListener;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleChangedEvent;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipse.babel.tapiji.tools.core.model.preferences.TapiJIPreferences;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.preferences.TapiJIPreferences;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.ResourceUtils;
 import org.eclipse.babel.tapiji.tools.core.util.FragmentProjectUtils;
-import org.eclipse.babel.tapiji.tools.core.util.RBFileUtils;
-import org.eclipse.babel.tapiji.tools.core.util.ResourceUtils;
 import org.eclipse.babel.tapiji.tools.rbmanager.model.VirtualContainer;
 import org.eclipse.babel.tapiji.tools.rbmanager.model.VirtualContentManager;
 import org.eclipse.babel.tapiji.tools.rbmanager.model.VirtualProject;
@@ -95,15 +95,17 @@ public class ResourceBundleContentProvider implements ITreeContentProvider,
 				        .members();
 
 				List<Object> displayedProjects = new ArrayList<Object>();
-				for (IResource r : members)
+				for (IResource r : members) {
 					if (r instanceof IProject) {
 						IProject p = (IProject) r;
 						if (FragmentProjectUtils.isFragment(r.getProject())) {
-							if (vcManager.getContainer(p) == null)
+							if (vcManager.getContainer(p) == null) {
 								vcManager.addVContainer(p, new VirtualProject(
 								        p, true, false));
-							if (FRAGMENT_PROJECTS_IN_CONTENT)
+							}
+							if (FRAGMENT_PROJECTS_IN_CONTENT) {
 								displayedProjects.add(r);
+							}
 						} else {
 							if (SHOW_ONLY_PROJECTS_WITH_RBS) {
 								VirtualProject vP;
@@ -114,13 +116,15 @@ public class ResourceBundleContentProvider implements ITreeContentProvider,
 									registerResourceBundleListner(p);
 								}
 
-								if (vP.getRbCount() > 0)
+								if (vP.getRbCount() > 0) {
 									displayedProjects.add(p);
+								}
 							} else {
 								displayedProjects.add(p);
 							}
 						}
 					}
+				}
 
 				children = displayedProjects.toArray();
 				return children;
@@ -141,11 +145,12 @@ public class ResourceBundleContentProvider implements ITreeContentProvider,
 			IContainer container = (IContainer) parentElement;
 			if (!((VirtualProject) vcManager
 			        .getContainer(((IResource) parentElement).getProject()))
-			        .isFragment())
+			        .isFragment()) {
 				try {
 					children = addChildren(container);
 				} catch (CoreException e) {/**/
 				}
+			}
 		}
 
 		if (parentElement instanceof VirtualResourceBundle) {
@@ -175,10 +180,13 @@ public class ResourceBundleContentProvider implements ITreeContentProvider,
 		if (p.hasFragments()) {
 			List<IContainer> folders = ResourceUtils.getCorrespondingFolders(
 			        container, p.getFragmets());
-			for (IContainer f : folders)
-				for (IResource r : f.members())
-					if (r instanceof IFile)
+			for (IContainer f : folders) {
+				for (IResource r : f.members()) {
+					if (r instanceof IFile) {
 						members.add(r);
+					}
+				}
+			}
 		}
 
 		for (IResource r : members) {
@@ -192,10 +200,11 @@ public class ResourceBundleContentProvider implements ITreeContentProvider,
 
 					String vRBId;
 
-					if (!p.isFragment())
+					if (!p.isFragment()) {
 						vRBId = r.getProject() + "." + resourcebundleId;
-					else
+					} else {
 						vRBId = p.getHostProject() + "." + resourcebundleId;
+					}
 
 					VirtualResourceBundle vResourceBundle = vcManager
 					        .getVResourceBundles(vRBId);
@@ -208,13 +217,14 @@ public class ResourceBundleContentProvider implements ITreeContentProvider,
 						        ResourceBundleManager.getManager(r.getProject()));
 						vcManager.addVResourceBundle(vRBId, vrb);
 
-					} else
+					} else {
 						vrb = vcManager.getVResourceBundles(vRBId);
+					}
 
 					children.put(resourcebundleId, vrb);
 				}
 			}
-			if (r instanceof IContainer)
+			if (r instanceof IContainer) {
 				if (!r.isDerived()) { // Don't show the 'bin' folder
 					VirtualContainer vContainer = vcManager
 					        .getContainer((IContainer) r);
@@ -226,10 +236,12 @@ public class ResourceBundleContentProvider implements ITreeContentProvider,
 						vcManager.addVContainer((IContainer) r, vContainer);
 					}
 
-					if (vContainer.getRbCount() != 0) // Don't show folder
-													  // without resourcebundles
+					if (vContainer.getRbCount() != 0) {
+						// without resourcebundles
 						children.put("" + children.size(), r);
+					}
 				}
+			}
 		}
 		return children.values().toArray();
 	}
@@ -247,8 +259,9 @@ public class ResourceBundleContentProvider implements ITreeContentProvider,
 		if (element instanceof VirtualResourceBundle) {
 			Iterator<IResource> i = new HashSet<IResource>(
 			        ((VirtualResourceBundle) element).getFiles()).iterator();
-			if (i.hasNext())
+			if (i.hasNext()) {
 				return i.next().getParent();
+			}
 		}
 		return null;
 	}
@@ -257,25 +270,28 @@ public class ResourceBundleContentProvider implements ITreeContentProvider,
 	public boolean hasChildren(Object element) {
 		if (element instanceof IWorkspaceRoot) {
 			try {
-				if (((IWorkspaceRoot) element).members().length > 0)
+				if (((IWorkspaceRoot) element).members().length > 0) {
 					return true;
+				}
 			} catch (CoreException e) {
 			}
 		}
 		if (element instanceof IProject) {
 			VirtualProject vProject = (VirtualProject) vcManager
 			        .getContainer((IProject) element);
-			if (vProject != null && vProject.isFragment())
+			if (vProject != null && vProject.isFragment()) {
 				return false;
+			}
 		}
 		if (element instanceof IContainer) {
 			try {
 				VirtualContainer vContainer = vcManager
 				        .getContainer((IContainer) element);
-				if (vContainer != null)
+				if (vContainer != null) {
 					return vContainer.getRbCount() > 0 ? true : false;
-				else if (((IContainer) element).members().length > 0)
+				} else if (((IContainer) element).members().length > 0) {
 					return true;
+				}
 			} catch (CoreException e) {
 			}
 		}
@@ -307,8 +323,9 @@ public class ResourceBundleContentProvider implements ITreeContentProvider,
 			public boolean visit(IResourceDelta delta) throws CoreException {
 				final IResource res = delta.getResource();
 
-				if (!RBFileUtils.isResourceBundleFile(res))
+				if (!RBFileUtils.isResourceBundleFile(res)) {
 					return true;
+				}
 
 				switch (delta.getKind()) {
 				case IResourceDelta.REMOVED:
@@ -320,8 +337,9 @@ public class ResourceBundleContentProvider implements ITreeContentProvider,
 					checkListner(res);
 					break;
 				case IResourceDelta.CHANGED:
-					if (delta.getFlags() != IResourceDelta.MARKERS)
+					if (delta.getFlags() != IResourceDelta.MARKERS) {
 						return true;
+					}
 					break;
 				}
 
@@ -349,7 +367,7 @@ public class ResourceBundleContentProvider implements ITreeContentProvider,
 			IResource res = rbmanager.getRandomFile(event.getBundle());
 			IContainer hostContainer;
 
-			if (res == null)
+			if (res == null) {
 				try {
 					hostContainer = event.getProject()
 					        .getFile(event.getBundle()).getParent();
@@ -357,15 +375,16 @@ public class ResourceBundleContentProvider implements ITreeContentProvider,
 					refresh(null);
 					return;
 				}
-			else {
+			} else {
 				VirtualProject vProject = (VirtualProject) vcManager
-				        .getContainer((IContainer) res.getProject());
+				        .getContainer(res.getProject());
 				if (vProject != null && vProject.isFragment()) {
 					IProject hostProject = vProject.getHostProject();
 					hostContainer = ResourceUtils.getCorrespondingFolders(
 					        res.getParent(), hostProject);
-				} else
+				} else {
 					hostContainer = res.getParent();
+				}
 			}
 
 			recountParenthierarchy(hostContainer);
@@ -386,32 +405,36 @@ public class ResourceBundleContentProvider implements ITreeContentProvider,
 
 	// TODO problems with remove a hole ResourceBundle
 	private void recountParenthierarchy(IContainer parent) {
-		if (parent.isDerived())
+		if (parent.isDerived()) {
 			return; // Don't recount the 'bin' folder
+		}
 
-		VirtualContainer vContainer = vcManager
-		        .getContainer((IContainer) parent);
+		VirtualContainer vContainer = vcManager.getContainer(parent);
 		if (vContainer != null) {
 			vContainer.recount();
 		}
 
-		if ((parent instanceof IFolder))
+		if ((parent instanceof IFolder)) {
 			recountParenthierarchy(parent.getParent());
+		}
 	}
 
 	private void refresh(final IResource res) {
-		if (refresh == null || refresh.getResult() != null)
+		if (refresh == null || refresh.getResult() != null) {
 			refresh = new UIJob("refresh viewer") {
 				@Override
 				public IStatus runInUIThread(IProgressMonitor monitor) {
-					if (viewer != null && !viewer.getControl().isDisposed())
-						if (res != null)
+					if (viewer != null && !viewer.getControl().isDisposed()) {
+						if (res != null) {
 							viewer.refresh(res.getProject(), true); // refresh(res);
-						else
+						} else {
 							viewer.refresh();
+						}
+					}
 					return Status.OK_STATUS;
 				}
 			};
+		}
 		refresh.schedule();
 	}
 

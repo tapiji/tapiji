@@ -22,13 +22,13 @@ import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.extensions.ILocation;
 import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;
 import org.eclipse.babel.tapiji.tools.core.model.exception.NoSuchResourceAuditorException;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.analyzer.ResourceFinder;
 import org.eclipse.babel.tapiji.tools.core.ui.extensions.I18nAuditor;
 import org.eclipse.babel.tapiji.tools.core.ui.extensions.I18nRBAuditor;
 import org.eclipse.babel.tapiji.tools.core.ui.extensions.I18nResourceAuditor;
-import org.eclipse.babel.tapiji.tools.core.util.EditorUtils;
-import org.eclipse.babel.tapiji.tools.core.util.RBFileUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -222,36 +222,54 @@ public class I18nBuilder extends IncrementalProjectBuilder {
 	private void handleI18NAuditorMarkers(I18nResourceAuditor ra) {
 		try {
 			for (ILocation problem : ra.getConstantStringLiterals()) {
-				EditorUtils.reportToMarker(EditorUtils.getFormattedMessage(
-				        EditorUtils.MESSAGE_NON_LOCALIZED_LITERAL,
-				        new String[] { problem.getLiteral() }), problem,
-				        IMarkerConstants.CAUSE_CONSTANT_LITERAL, "",
-				        (ILocation) problem.getData(), ra.getContextId());
+				EditorUtils
+				        .reportToMarker(
+				                org.eclipse.babel.tapiji.tools.core.util.EditorUtils
+				                        .getFormattedMessage(
+				                                org.eclipse.babel.tapiji.tools.core.util.EditorUtils.MESSAGE_NON_LOCALIZED_LITERAL,
+				                                new String[] { problem
+				                                        .getLiteral() }),
+				                problem,
+				                IMarkerConstants.CAUSE_CONSTANT_LITERAL, "",
+				                (ILocation) problem.getData(), ra
+				                        .getContextId());
 			}
 
 			// Report all broken Resource-Bundle references
 			for (ILocation brokenLiteral : ra.getBrokenResourceReferences()) {
-				EditorUtils.reportToMarker(EditorUtils.getFormattedMessage(
-				        EditorUtils.MESSAGE_BROKEN_RESOURCE_REFERENCE,
-				        new String[] {
+				EditorUtils
+				        .reportToMarker(
+				                org.eclipse.babel.tapiji.tools.core.util.EditorUtils
+				                        .getFormattedMessage(
+				                                org.eclipse.babel.tapiji.tools.core.util.EditorUtils.MESSAGE_BROKEN_RESOURCE_REFERENCE,
+				                                new String[] {
+				                                        brokenLiteral
+				                                                .getLiteral(),
+				                                        ((ILocation) brokenLiteral
+				                                                .getData())
+				                                                .getLiteral() }),
+				                brokenLiteral,
+				                IMarkerConstants.CAUSE_BROKEN_REFERENCE,
 				                brokenLiteral.getLiteral(),
-				                ((ILocation) brokenLiteral.getData())
-				                        .getLiteral() }), brokenLiteral,
-				        IMarkerConstants.CAUSE_BROKEN_REFERENCE, brokenLiteral
-				                .getLiteral(), (ILocation) brokenLiteral
-				                .getData(), ra.getContextId());
+				                (ILocation) brokenLiteral.getData(), ra
+				                        .getContextId());
 			}
 
 			// Report all broken definitions to Resource-Bundle
 			// references
 			for (ILocation brokenLiteral : ra.getBrokenBundleReferences()) {
-				EditorUtils.reportToMarker(EditorUtils.getFormattedMessage(
-				        EditorUtils.MESSAGE_BROKEN_RESOURCE_BUNDLE_REFERENCE,
-				        new String[] { brokenLiteral.getLiteral() }),
-				        brokenLiteral,
-				        IMarkerConstants.CAUSE_BROKEN_RB_REFERENCE,
-				        brokenLiteral.getLiteral(), (ILocation) brokenLiteral
-				                .getData(), ra.getContextId());
+				EditorUtils
+				        .reportToMarker(
+				                org.eclipse.babel.tapiji.tools.core.util.EditorUtils
+				                        .getFormattedMessage(
+				                                org.eclipse.babel.tapiji.tools.core.util.EditorUtils.MESSAGE_BROKEN_RESOURCE_BUNDLE_REFERENCE,
+				                                new String[] { brokenLiteral
+				                                        .getLiteral() }),
+				                brokenLiteral,
+				                IMarkerConstants.CAUSE_BROKEN_RB_REFERENCE,
+				                brokenLiteral.getLiteral(),
+				                (ILocation) brokenLiteral.getData(), ra
+				                        .getContextId());
 			}
 		} catch (Exception e) {
 			Logger.logError(
@@ -267,14 +285,20 @@ public class I18nBuilder extends IncrementalProjectBuilder {
 			// Report all unspecified keys
 			if (configuration.getAuditMissingValue()) {
 				for (ILocation problem : ra.getUnspecifiedKeyReferences()) {
-					EditorUtils.reportToRBMarker(EditorUtils
-					        .getFormattedMessage(
-					                EditorUtils.MESSAGE_UNSPECIFIED_KEYS,
-					                new String[] { problem.getLiteral(),
-					                        problem.getFile().getName() }),
-					        problem, IMarkerConstants.CAUSE_UNSPEZIFIED_KEY,
-					        problem.getLiteral(), "", (ILocation) problem
-					                .getData(), ra.getContextId());
+					EditorUtils
+					        .reportToRBMarker(
+					                org.eclipse.babel.tapiji.tools.core.util.EditorUtils
+					                        .getFormattedMessage(
+					                                org.eclipse.babel.tapiji.tools.core.util.EditorUtils.MESSAGE_UNSPECIFIED_KEYS,
+					                                new String[] {
+					                                        problem.getLiteral(),
+					                                        problem.getFile()
+					                                                .getName() }),
+					                problem,
+					                IMarkerConstants.CAUSE_UNSPEZIFIED_KEY,
+					                problem.getLiteral(), "",
+					                (ILocation) problem.getData(), ra
+					                        .getContextId());
 				}
 			}
 
@@ -283,18 +307,25 @@ public class I18nBuilder extends IncrementalProjectBuilder {
 				Map<ILocation, ILocation> sameValues = ra
 				        .getSameValuesReferences();
 				for (ILocation problem : sameValues.keySet()) {
-					EditorUtils.reportToRBMarker(EditorUtils
-					        .getFormattedMessage(
-					                EditorUtils.MESSAGE_SAME_VALUE,
-					                new String[] {
-					                        problem.getFile().getName(),
-					                        sameValues.get(problem).getFile()
-					                                .getName(),
-					                        problem.getLiteral() }), problem,
-					        IMarkerConstants.CAUSE_SAME_VALUE, problem
-					                .getLiteral(), sameValues.get(problem)
-					                .getFile().getName(), (ILocation) problem
-					                .getData(), ra.getContextId());
+					EditorUtils
+					        .reportToRBMarker(
+					                org.eclipse.babel.tapiji.tools.core.util.EditorUtils
+					                        .getFormattedMessage(
+					                                org.eclipse.babel.tapiji.tools.core.util.EditorUtils.MESSAGE_SAME_VALUE,
+					                                new String[] {
+					                                        problem.getFile()
+					                                                .getName(),
+					                                        sameValues
+					                                                .get(problem)
+					                                                .getFile()
+					                                                .getName(),
+					                                        problem.getLiteral() }),
+					                problem,
+					                IMarkerConstants.CAUSE_SAME_VALUE,
+					                problem.getLiteral(),
+					                sameValues.get(problem).getFile().getName(),
+					                (ILocation) problem.getData(), ra
+					                        .getContextId());
 				}
 			}
 			// Report all missing languages
@@ -302,9 +333,9 @@ public class I18nBuilder extends IncrementalProjectBuilder {
 				for (ILocation problem : ra.getMissingLanguageReferences()) {
 					EditorUtils
 					        .reportToRBMarker(
-					                EditorUtils
+					                org.eclipse.babel.tapiji.tools.core.util.EditorUtils
 					                        .getFormattedMessage(
-					                                EditorUtils.MESSAGE_MISSING_LANGUAGE,
+					                                org.eclipse.babel.tapiji.tools.core.util.EditorUtils.MESSAGE_MISSING_LANGUAGE,
 					                                new String[] {
 					                                        RBFileUtils
 					                                                .getCorrespondingResourceBundleId(problem

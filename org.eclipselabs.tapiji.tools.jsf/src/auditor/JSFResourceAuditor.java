@@ -16,7 +16,7 @@ import java.util.Set;
 
 import org.eclipse.babel.tapiji.tools.core.extensions.ILocation;
 import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.extensions.I18nResourceAuditor;
 import org.eclipse.babel.tapiji.tools.core.ui.quickfix.CreateResourceBundle;
 import org.eclipse.babel.tapiji.tools.core.ui.quickfix.CreateResourceBundleEntry;

@@ -37,11 +37,12 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 
 /**
- * Manages all {@link MessagesBundleGroup}s. That is:
- * <li>Hold map with projects and their RBManager (1 RBManager per project)</li>
- * <li>Hold up-to-date map with resource bundles (= {@link MessagesBundleGroup})</li>
- * <li>Hold {@link IMessagesEditorListener}, which can be used to keep systems in sync</li>
- * <br><br>
+ * Manages all {@link MessagesBundleGroup}s. That is: <li>Hold map with projects
+ * and their RBManager (1 RBManager per project)</li> <li>Hold up-to-date map
+ * with resource bundles (= {@link MessagesBundleGroup})</li> <li>Hold
+ * {@link IMessagesEditorListener}, which can be used to keep systems in sync</li>
+ * <br>
+ * <br>
  * 
  * @author Alexej Strelzow
  */
@@ -59,21 +60,25 @@ public class RBManager {
 	private IProject project;
 
 	private static final String TAPIJI_NATURE = "org.eclipse.babel.tapiji.tools.core.nature";
-	
-	private static Logger logger = Logger.getLogger(RBManager.class.getSimpleName());
-	
+
+	private static Logger logger = Logger.getLogger(RBManager.class
+	        .getSimpleName());
+
 	private RBManager() {
 		resourceBundles = new HashMap<String, IMessagesBundleGroup>();
 		editorListeners = new ArrayList<IMessagesEditorListener>(3);
 	}
 
 	/**
-	 * @param resourceBundleId <package>.<resourceBundleName>
+	 * @param resourceBundleId
+	 *            <package>.<resourceBundleName>
 	 * @return {@link IMessagesBundleGroup} if found, else <code>null</code>
 	 */
 	public IMessagesBundleGroup getMessagesBundleGroup(String resourceBundleId) {
 		if (!resourceBundles.containsKey(resourceBundleId)) {
-			logger.log(Level.SEVERE, "getMessagesBundleGroup with non-existing Id: " + resourceBundleId);
+			logger.log(Level.SEVERE,
+			        "getMessagesBundleGroup with non-existing Id: "
+			                + resourceBundleId);
 			return null;
 		} else {
 			return resourceBundles.get(resourceBundleId);
@@ -82,7 +87,7 @@ public class RBManager {
 
 	/**
 	 * @return All the names of the <code>resourceBundles</code> in the format:
-	 * <projectName>/<resourceBundleId>
+	 *         <projectName>/<resourceBundleId>
 	 */
 	public List<String> getMessagesBundleGroupNames() {
 		List<String> bundleGroupNames = new ArrayList<String>();
@@ -94,7 +99,8 @@ public class RBManager {
 	}
 
 	/**
-	 * @return All the {@link #getMessagesBundleGroupNames()} of all the projects.
+	 * @return All the {@link #getMessagesBundleGroupNames()} of all the
+	 *         projects.
 	 */
 	public static List<String> getAllMessagesBundleGroupNames() {
 		List<String> bundleGroupNames = new ArrayList<String>();
@@ -107,26 +113,30 @@ public class RBManager {
 	}
 
 	/**
-	 * Notification, that a {@link IMessagesBundleGroup} has been created and needs to
-	 * be managed by the {@link RBManager}.
-	 * @param bundleGroup The new {@link IMessagesBundleGroup}
+	 * Notification, that a {@link IMessagesBundleGroup} has been created and
+	 * needs to be managed by the {@link RBManager}.
+	 * 
+	 * @param bundleGroup
+	 *            The new {@link IMessagesBundleGroup}
 	 */
-	public void notifyMessagesBundleGroupCreated(IMessagesBundleGroup bundleGroup) {
+	public void notifyMessagesBundleGroupCreated(
+	        IMessagesBundleGroup bundleGroup) {
 		if (resourceBundles.containsKey(bundleGroup.getResourceBundleId())) {
 			IMessagesBundleGroup oldbundleGroup = resourceBundles
-					.get(bundleGroup.getResourceBundleId());
-			
+			        .get(bundleGroup.getResourceBundleId());
+
 			// not the same object
 			if (!equalHash(oldbundleGroup, bundleGroup)) {
 				// we need to distinguish between 2 kinds of resources:
 				// 1) Property-File
 				// 2) Eclipse-Editor
-				// When first 1) is used, and some operations where made, we need to
+				// When first 1) is used, and some operations where made, we
+				// need to
 				// sync 2) when it appears!
 				boolean oldHasPropertiesStrategy = oldbundleGroup
-						.hasPropertiesFileGroupStrategy();
+				        .hasPropertiesFileGroupStrategy();
 				boolean newHasPropertiesStrategy = bundleGroup
-						.hasPropertiesFileGroupStrategy();
+				        .hasPropertiesFileGroupStrategy();
 
 				// in this case, the old one is only writing to the property
 				// file, not the editor
@@ -136,15 +146,18 @@ public class RBManager {
 
 					syncBundles(bundleGroup, oldbundleGroup);
 					resourceBundles.put(bundleGroup.getResourceBundleId(),
-							bundleGroup);
+					        bundleGroup);
 
-					logger.log(Level.INFO, "sync: " + bundleGroup.getResourceBundleId() + " with " + 
-							oldbundleGroup.getResourceBundleId());
-					
+					logger.log(
+					        Level.INFO,
+					        "sync: " + bundleGroup.getResourceBundleId()
+					                + " with "
+					                + oldbundleGroup.getResourceBundleId());
+
 					oldbundleGroup.dispose();
 
 				} else if ((oldHasPropertiesStrategy && newHasPropertiesStrategy)
-						|| (!oldHasPropertiesStrategy && !newHasPropertiesStrategy)) {
+				        || (!oldHasPropertiesStrategy && !newHasPropertiesStrategy)) {
 
 					// syncBundles(oldbundleGroup, bundleGroup); do not need
 					// that, because we take the new one
@@ -152,58 +165,67 @@ public class RBManager {
 					// Text-Editor instances, which we
 					// do not need -> read only phenomenon
 					resourceBundles.put(bundleGroup.getResourceBundleId(),
-							bundleGroup);
+					        bundleGroup);
 
-					logger.log(Level.INFO, "replace: " + bundleGroup.getResourceBundleId() + " with " + 
-							oldbundleGroup.getResourceBundleId());
-					
+					logger.log(
+					        Level.INFO,
+					        "replace: " + bundleGroup.getResourceBundleId()
+					                + " with "
+					                + oldbundleGroup.getResourceBundleId());
+
 					oldbundleGroup.dispose();
 				} else {
 					// in this case our old resource has an EditorSite, but not
 					// the new one
-					logger.log(Level.INFO, "dispose: " + bundleGroup.getResourceBundleId()); 
-					
+					logger.log(Level.INFO,
+					        "dispose: " + bundleGroup.getResourceBundleId());
+
 					bundleGroup.dispose();
 				}
 			}
 		} else {
 			resourceBundles.put(bundleGroup.getResourceBundleId(), bundleGroup);
-			
+
 			logger.log(Level.INFO, "add: " + bundleGroup.getResourceBundleId());
 		}
 	}
 
 	/**
 	 * Notification, that a {@link IMessagesBundleGroup} has been deleted!
-	 * @param bundleGroup The {@link IMessagesBundleGroup} to remove
+	 * 
+	 * @param bundleGroup
+	 *            The {@link IMessagesBundleGroup} to remove
 	 */
-	public void notifyMessagesBundleGroupDeleted(IMessagesBundleGroup bundleGroup) {
+	public void notifyMessagesBundleGroupDeleted(
+	        IMessagesBundleGroup bundleGroup) {
 		if (resourceBundles.containsKey(bundleGroup.getResourceBundleId())) {
 			if (equalHash(
-					resourceBundles.get(bundleGroup.getResourceBundleId()),
-					bundleGroup)) {
+			        resourceBundles.get(bundleGroup.getResourceBundleId()),
+			        bundleGroup)) {
 				resourceBundles.remove(bundleGroup.getResourceBundleId());
 			}
 		}
 	}
 
 	/**
-	 * Notification, that a resource bundle (= {@link MessagesBundle})
-	 * have been removed.
-	 * @param resourceBundle The removed {@link MessagesBundle}
+	 * Notification, that a resource bundle (= {@link MessagesBundle}) have been
+	 * removed.
+	 * 
+	 * @param resourceBundle
+	 *            The removed {@link MessagesBundle}
 	 */
 	public void notifyResourceRemoved(IResource resourceBundle) {
 		String resourceBundleId = NameUtils.getResourceBundleId(resourceBundle);
-		
+
 		IMessagesBundleGroup bundleGroup = resourceBundles
-				.get(resourceBundleId);
-		
+		        .get(resourceBundleId);
+
 		if (bundleGroup != null) {
 			Locale locale = NameUtils.getLocaleByName(
-					NameUtils.getResourceBundleName(resourceBundle),
-					resourceBundle.getName());
+			        NameUtils.getResourceBundleName(resourceBundle),
+			        resourceBundle.getName());
 			IMessagesBundle messagesBundle = bundleGroup
-					.getMessagesBundle(locale);
+			        .getMessagesBundle(locale);
 			if (messagesBundle != null) {
 				bundleGroup.removeMessagesBundle(messagesBundle);
 			}
@@ -217,28 +239,33 @@ public class RBManager {
 	}
 
 	/**
-	 * Because BABEL-Builder does not work correctly (adds 1 x and removes 2 x the
-	 * SAME {@link MessagesBundleGroup}!)
+	 * Because BABEL-Builder does not work correctly (adds 1 x and removes 2 x
+	 * the SAME {@link MessagesBundleGroup}!)
 	 * 
-	 * @param oldBundleGroup {@link IMessagesBundleGroup}
-	 * @param newBundleGroup {@link IMessagesBundleGroup}
-	 * @return <code>true</code> if same {@link IMessagesBundleGroup}, else <code>false</code>
+	 * @param oldBundleGroup
+	 *            {@link IMessagesBundleGroup}
+	 * @param newBundleGroup
+	 *            {@link IMessagesBundleGroup}
+	 * @return <code>true</code> if same {@link IMessagesBundleGroup}, else
+	 *         <code>false</code>
 	 */
 	private boolean equalHash(IMessagesBundleGroup oldBundleGroup,
-			IMessagesBundleGroup newBundleGroup) {
+	        IMessagesBundleGroup newBundleGroup) {
 		return oldBundleGroup.hashCode() == newBundleGroup.hashCode();
 	}
 
 	/**
-	 * Has only one use case. If we worked with property-file as resource and afterwards
-	 * the messages editor pops open, we need to sync them, so that the information
-	 * of the property-file won't get lost.
+	 * Has only one use case. If we worked with property-file as resource and
+	 * afterwards the messages editor pops open, we need to sync them, so that
+	 * the information of the property-file won't get lost.
 	 * 
-	 * @param oldBundleGroup The prior {@link IMessagesBundleGroup}
-	 * @param newBundleGroup The replacement
+	 * @param oldBundleGroup
+	 *            The prior {@link IMessagesBundleGroup}
+	 * @param newBundleGroup
+	 *            The replacement
 	 */
 	private void syncBundles(IMessagesBundleGroup oldBundleGroup,
-			IMessagesBundleGroup newBundleGroup) {
+	        IMessagesBundleGroup newBundleGroup) {
 		List<IMessagesBundle> bundlesToRemove = new ArrayList<IMessagesBundle>();
 		List<IMessage> keysToRemove = new ArrayList<IMessage>();
 
@@ -249,16 +276,16 @@ public class RBManager {
 
 		for (IMessagesBundle newBundle : newBundleGroup.getMessagesBundles()) {
 			IMessagesBundle oldBundle = oldBundleGroup
-					.getMessagesBundle(newBundle.getLocale());
+			        .getMessagesBundle(newBundle.getLocale());
 			if (oldBundle == null) { // it's a new one
 				oldBundleGroup.addMessagesBundle(newBundle.getLocale(),
-						newBundle);
+				        newBundle);
 			} else { // check keys
 				for (IMessage newMsg : newBundle.getMessages()) {
-					if (oldBundle.getMessage(newMsg.getKey()) == null) { 
+					if (oldBundle.getMessage(newMsg.getKey()) == null) {
 						// new entry, create new message
 						oldBundle.addMessage(new Message(newMsg.getKey(),
-								newMsg.getLocale()));
+						        newMsg.getLocale()));
 					} else { // update old entries
 						IMessage oldMsg = oldBundle.getMessage(newMsg.getKey());
 						if (oldMsg == null) { // it's a new one
@@ -275,7 +302,7 @@ public class RBManager {
 		// check keys
 		for (IMessagesBundle oldBundle : oldBundleGroup.getMessagesBundles()) {
 			IMessagesBundle newBundle = newBundleGroup
-					.getMessagesBundle(oldBundle.getLocale());
+			        .getMessagesBundle(oldBundle.getLocale());
 			if (newBundle == null) { // we have an old one
 				bundlesToRemove.add(oldBundle);
 			} else {
@@ -293,7 +320,7 @@ public class RBManager {
 
 		for (IMessage msg : keysToRemove) {
 			IMessagesBundle mb = oldBundleGroup.getMessagesBundle(msg
-					.getLocale());
+			        .getLocale());
 			if (mb != null) {
 				mb.removeMessage(msg.getKey());
 			}
@@ -304,30 +331,35 @@ public class RBManager {
 	}
 
 	/**
-	 * If TapiJI needs to delete sth. 
+	 * If TapiJI needs to delete sth.
 	 * 
-	 * @param resourceBundleId The resourceBundleId
+	 * @param resourceBundleId
+	 *            The resourceBundleId
 	 */
 	public void deleteMessagesBundleGroup(String resourceBundleId) {
 		// TODO: Try to unify it some time
 		if (resourceBundles.containsKey(resourceBundleId)) {
 			resourceBundles.remove(resourceBundleId);
 		} else {
-			logger.log(Level.SEVERE, "deleteMessagesBundleGroup with non-existing Id: " + resourceBundleId);
+			logger.log(Level.SEVERE,
+			        "deleteMessagesBundleGroup with non-existing Id: "
+			                + resourceBundleId);
 		}
 	}
 
 	/**
-	 * @param resourceBundleId The resourceBundleId
-	 * @return <code>true</code> if the manager knows the {@link MessagesBundleGroup}
-	 * 	with the id resourceBundleId
+	 * @param resourceBundleId
+	 *            The resourceBundleId
+	 * @return <code>true</code> if the manager knows the
+	 *         {@link MessagesBundleGroup} with the id resourceBundleId
 	 */
 	public boolean containsMessagesBundleGroup(String resourceBundleId) {
 		return resourceBundles.containsKey(resourceBundleId);
 	}
 
 	/**
-	 * @param project The project, which is managed by the {@link RBManager}
+	 * @param project
+	 *            The project, which is managed by the {@link RBManager}
 	 * @return The corresponding {@link RBManager} to the project
 	 */
 	public static RBManager getInstance(IProject project) {
@@ -349,7 +381,9 @@ public class RBManager {
 	}
 
 	/**
-	 * @param projectName The name of the project, which is managed by the {@link RBManager}
+	 * @param projectName
+	 *            The name of the project, which is managed by the
+	 *            {@link RBManager}
 	 * @return The corresponding {@link RBManager} to the project
 	 */
 	public static RBManager getInstance(String projectName) {
@@ -368,13 +402,15 @@ public class RBManager {
 	}
 
 	/**
-	 * @param ignoreNature <code>true</code> if the internationalization nature 
-	 * 	should be ignored, else <code>false</code>
-	 * @return A set of projects, which have the nature (ignoreNature == false) or not.
+	 * @param ignoreNature
+	 *            <code>true</code> if the internationalization nature should be
+	 *            ignored, else <code>false</code>
+	 * @return A set of projects, which have the nature (ignoreNature == false)
+	 *         or not.
 	 */
 	public static Set<IProject> getAllWorkspaceProjects(boolean ignoreNature) {
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot()
-				.getProjects();
+		        .getProjects();
 		Set<IProject> projs = new HashSet<IProject>();
 
 		for (IProject p : projects) {
@@ -383,7 +419,8 @@ public class RBManager {
 					projs.add(p);
 				}
 			} catch (CoreException e) {
-				logger.log(Level.SEVERE, "getAllWorkspaceProjects(...): hasNature failed!", e);
+				logger.log(Level.SEVERE,
+				        "getAllWorkspaceProjects(...): hasNature failed!", e);
 			}
 		}
 		return projs;
@@ -397,14 +434,16 @@ public class RBManager {
 	}
 
 	/**
-	 * @param listener {@link IMessagesEditorListener} to add
+	 * @param listener
+	 *            {@link IMessagesEditorListener} to add
 	 */
 	public void addMessagesEditorListener(IMessagesEditorListener listener) {
 		this.editorListeners.add(listener);
 	}
 
 	/**
-	 * @param listener {@link IMessagesEditorListener} to remove
+	 * @param listener
+	 *            {@link IMessagesEditorListener} to remove
 	 */
 	public void removeMessagesEditorListener(IMessagesEditorListener listener) {
 		this.editorListeners.remove(listener);
@@ -436,7 +475,8 @@ public class RBManager {
 	public void fireResourceChanged(IMessagesBundle bundle) {
 		for (IMessagesEditorListener listener : this.editorListeners) {
 			listener.onResourceChanged(bundle);
-			logger.log(Level.INFO, "fireResourceChanged" + bundle.getResource().getResourceLocationLabel());
+			logger.log(Level.INFO, "fireResourceChanged"
+			        + bundle.getResource().getResourceLocationLabel());
 		}
 	}
 
@@ -473,8 +513,9 @@ public class RBManager {
 			// resource out of syncs, because here we instantiate
 			// PropertiesFileResources, which have an evil setText-Method
 			MessagesBundleGroupFactory.createBundleGroup(resource);
-			
-			logger.log(Level.INFO, "addBundleResource (passive loading): " + resource.getName());
+
+			logger.log(Level.INFO, "addBundleResource (passive loading): "
+			        + resource.getName());
 		}
 	}
 

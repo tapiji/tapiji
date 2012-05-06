@@ -13,7 +13,7 @@ package validator;
 import java.util.List;
 
 import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.util.EditorUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -47,8 +47,9 @@ public class JSFInternationalizationValidator implements IValidator,
 			        .getFile(new Path(context.getURIs()[0]));
 
 			// full document validation
-			EditorUtils.deleteAuditMarkersForResource(file.getProject()
-			        .findMember(file.getProjectRelativePath()));
+			org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils
+			        .deleteAuditMarkersForResource(file.getProject()
+			                .findMember(file.getProjectRelativePath()));
 
 			// validate all bundle definitions
 			int pos = document.get().indexOf("loadBundle", 0);
@@ -97,13 +98,16 @@ public class JSFInternationalizationValidator implements IValidator,
 				String ref = document.get().substring(reg.getOffset(),
 				        reg.getOffset() + reg.getLength());
 
-				EditorUtils.reportToMarker(EditorUtils.getFormattedMessage(
-				        EditorUtils.MESSAGE_BROKEN_RESOURCE_BUNDLE_REFERENCE,
-				        new String[] { ref }),
-				        new SLLocation(file, reg.getOffset(), reg.getOffset()
-				                + reg.getLength(), ref),
-				        IMarkerConstants.CAUSE_BROKEN_RB_REFERENCE, ref, null,
-				        "jsf");
+				org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils
+				        .reportToMarker(
+				                EditorUtils
+				                        .getFormattedMessage(
+				                                EditorUtils.MESSAGE_BROKEN_RESOURCE_BUNDLE_REFERENCE,
+				                                new String[] { ref }),
+				                new SLLocation(file, reg.getOffset(), reg
+				                        .getOffset() + reg.getLength(), ref),
+				                IMarkerConstants.CAUSE_BROKEN_RB_REFERENCE,
+				                ref, null, "jsf");
 				return;
 			}
 
@@ -123,16 +127,19 @@ public class JSFInternationalizationValidator implements IValidator,
 					        region.getOffset(),
 					        region.getOffset() + region.getLength());
 
-					EditorUtils.reportToMarker(
-					        EditorUtils.getFormattedMessage(
-					                EditorUtils.MESSAGE_NON_LOCALIZED_LITERAL,
-					                new String[] { constantLiteral }),
-					        new SLLocation(file, region.getOffset()
-					                + evr.getOffset(), evr.getOffset()
-					                + region.getOffset() + region.getLength(),
-					                constantLiteral),
-					        IMarkerConstants.CAUSE_CONSTANT_LITERAL,
-					        constantLiteral, null, "jsf");
+					org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils
+					        .reportToMarker(
+					                EditorUtils
+					                        .getFormattedMessage(
+					                                EditorUtils.MESSAGE_NON_LOCALIZED_LITERAL,
+					                                new String[] { constantLiteral }),
+					                new SLLocation(file, region.getOffset()
+					                        + evr.getOffset(), evr.getOffset()
+					                        + region.getOffset()
+					                        + region.getLength(),
+					                        constantLiteral),
+					                IMarkerConstants.CAUSE_CONSTANT_LITERAL,
+					                constantLiteral, null, "jsf");
 				}
 
 				// check el expressions
@@ -174,7 +181,7 @@ public class JSFInternationalizationValidator implements IValidator,
 									                .get().substring(
 									                        bundleStart,
 									                        bundleEnd));
-									EditorUtils
+									org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils
 									        .reportToMarker(
 									                EditorUtils
 									                        .getFormattedMessage(

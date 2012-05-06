@@ -8,7 +8,7 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.util;
+package org.eclipse.babel.tapiji.tools.core.ui.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +17,7 @@ import java.util.Locale;
 
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.tapiji.tools.core.Logger;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -65,8 +65,9 @@ public class LanguageUtils {
 		ResourceBundleManager rbManager = ResourceBundleManager
 		        .getManager(project);
 
-		if (rbManager.getProvidedLocales(rbId).contains(locale))
+		if (rbManager.getProvidedLocales(rbId).contains(locale)) {
 			return;
+		}
 
 		final IResource file = rbManager.getRandomFile(rbId);
 		final IContainer c = ResourceUtils.getCorrespondingFolders(
@@ -81,14 +82,17 @@ public class LanguageUtils {
 					if (locale.getLanguage() != null
 					        && !locale.getLanguage().equalsIgnoreCase(
 					                ResourceBundleManager.defaultLocaleTag)
-					        && !locale.getLanguage().equals(""))
+					        && !locale.getLanguage().equals("")) {
 						newFilename += "_" + locale.getLanguage();
+					}
 					if (locale.getCountry() != null
-					        && !locale.getCountry().equals(""))
+					        && !locale.getCountry().equals("")) {
 						newFilename += "_" + locale.getCountry();
+					}
 					if (locale.getVariant() != null
-					        && !locale.getCountry().equals(""))
+					        && !locale.getCountry().equals("")) {
 						newFilename += "_" + locale.getVariant();
+					}
 					newFilename += ".properties";
 
 					createFile(c, newFilename, monitor);
@@ -128,64 +132,6 @@ public class LanguageUtils {
 		for (String rbId : rbManager.getResourceBundleIdentifiers()) {
 			addLanguageToResourceBundle(project, rbId, locale);
 		}
-	}
-
-	private static void deleteFile(IFile file, boolean force,
-	        IProgressMonitor monitor) throws CoreException {
-		EditorUtils.deleteAuditMarkersForResource(file);
-		file.delete(force, monitor);
-	}
-
-	/**
-	 * Removes the properties-file of a given locale from a ResourceBundle, if
-	 * the ResourceBundle provides the locale.
-	 * 
-	 * @param project
-	 * @param rbId
-	 * @param locale
-	 */
-	public static void removeFileFromResourceBundle(IProject project,
-	        String rbId, Locale locale) {
-		ResourceBundleManager rbManager = ResourceBundleManager
-		        .getManager(project);
-
-		if (!rbManager.getProvidedLocales(rbId).contains(locale))
-			return;
-
-		final IFile file = rbManager.getResourceBundleFile(rbId, locale);
-		final String filename = file.getName();
-
-		new Job("remove properties-file") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					deleteFile(file, true, monitor);
-				} catch (CoreException e) {
-					// MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					// "Confirm", "File could not be deleted");
-					Logger.logError("File could not be deleted", e);
-				}
-				return Status.OK_STATUS;
-			}
-		}.schedule();
-	}
-
-	/**
-	 * Removes all properties-files of a given locale from all ResourceBundles
-	 * of a project.
-	 * 
-	 * @param rbManager
-	 * @param locale
-	 * @return
-	 */
-	public static void removeLanguageFromProject(IProject project, Locale locale) {
-		ResourceBundleManager rbManager = ResourceBundleManager
-		        .getManager(project);
-
-		for (String rbId : rbManager.getResourceBundleIdentifiers()) {
-			removeFileFromResourceBundle(project, rbId, locale);
-		}
-
 	}
 
 }

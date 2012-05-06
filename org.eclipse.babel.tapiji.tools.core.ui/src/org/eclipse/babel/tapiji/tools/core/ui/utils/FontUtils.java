@@ -8,9 +8,9 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.util;
+package org.eclipse.babel.tapiji.tools.core.ui.utils;
 
-import org.eclipse.babel.tapiji.tools.core.Activator;
+import org.eclipse.babel.tapiji.tools.core.ui.Activator;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;

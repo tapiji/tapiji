@@ -9,7 +9,7 @@
  *     Martin Reiterer - initial API and implementation
  *     Alexej Strelzow - moved object management to RBManager, Babel integration
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.model.manager;
+package org.eclipse.babel.tapiji.tools.core.ui;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,17 +29,17 @@ import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.util.FileUtils;
 import org.eclipse.babel.core.util.NameUtils;
-import org.eclipse.babel.tapiji.tools.core.Activator;
 import org.eclipse.babel.tapiji.tools.core.Logger;
-import org.eclipse.babel.tapiji.tools.core.builder.analyzer.ResourceBundleDetectionVisitor;
 import org.eclipse.babel.tapiji.tools.core.model.IResourceBundleChangedListener;
 import org.eclipse.babel.tapiji.tools.core.model.IResourceDescriptor;
 import org.eclipse.babel.tapiji.tools.core.model.IResourceExclusionListener;
 import org.eclipse.babel.tapiji.tools.core.model.ResourceDescriptor;
 import org.eclipse.babel.tapiji.tools.core.model.exception.ResourceBundleException;
-import org.eclipse.babel.tapiji.tools.core.util.EditorUtils;
+import org.eclipse.babel.tapiji.tools.core.model.manager.IStateLoader;
+import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleChangedEvent;
+import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceExclusionEvent;
+import org.eclipse.babel.tapiji.tools.core.ui.analyzer.ResourceBundleDetectionVisitor;
 import org.eclipse.babel.tapiji.tools.core.util.FragmentProjectUtils;
-import org.eclipse.babel.tapiji.tools.core.util.RBFileUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -83,12 +83,14 @@ public class ResourceBundleManager {
 
 	private static Map<String, Set<IResource>> allBundles = new HashMap<String, Set<IResource>>();
 
-//	private static IResourceChangeListener changelistener; // RBChangeListener -> see stateLoader!
+	// private static IResourceChangeListener changelistener; //
+	// RBChangeListener -> see stateLoader!
 
 	public static final String NATURE_ID = Activator.PLUGIN_ID + ".nature";
-	
-	public static final String BUILDER_ID = Activator.PLUGIN_ID + ".I18NBuilder";
-	
+
+	public static final String BUILDER_ID = Activator.PLUGIN_ID
+	        + ".I18NBuilder";
+
 	/* Host project */
 	private IProject project = null;
 
@@ -96,7 +98,7 @@ public class ResourceBundleManager {
 	private static boolean state_loaded = false;
 
 	private static IStateLoader stateLoader;
-	
+
 	// Define private constructor
 	private ResourceBundleManager() {
 	}
@@ -386,7 +388,8 @@ public class ResourceBundleManager {
 
 	protected void excludeSingleResource(IResource res) {
 		IResourceDescriptor rd = new ResourceDescriptor(res);
-		EditorUtils.deleteAuditMarkersForResource(res);
+		org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils
+		        .deleteAuditMarkersForResource(res);
 
 		// exclude resource
 		excludedResources.add(rd);
@@ -395,7 +398,8 @@ public class ResourceBundleManager {
 		fireResourceExclusionEvent(new ResourceExclusionEvent(changedExclusoins));
 
 		// Check if the excluded resource represents a resource-bundle
-		if (RBFileUtils.isResourceBundleFile(res)) {
+		if (org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils
+		        .isResourceBundleFile(res)) {
 			String bundleName = getResourceBundleId(res);
 			Set<IResource> resSet = resources.remove(bundleName);
 			if (resSet != null) {
@@ -451,7 +455,8 @@ public class ResourceBundleManager {
 			try {
 				for (IResource resource : resourceSubTree) {
 					excludeSingleResource(resource);
-					EditorUtils.deleteAuditMarkersForResource(resource);
+					org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils
+					        .deleteAuditMarkersForResource(resource);
 					monitor.worked(1);
 				}
 			} catch (Exception e) {
@@ -520,7 +525,8 @@ public class ResourceBundleManager {
 		}
 
 		// Check if the included resource represents a resource-bundle
-		if (RBFileUtils.isResourceBundleFile(res)) {
+		if (org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils
+		        .isResourceBundleFile(res)) {
 			String bundleName = getResourceBundleId(res);
 			boolean newRB = resources.containsKey(bundleName);
 
@@ -531,8 +537,8 @@ public class ResourceBundleManager {
 			if (newRB) {
 				try {
 					resource.getProject().build(
-					        IncrementalProjectBuilder.FULL_BUILD,
-					        BUILDER_ID, null, null);
+					        IncrementalProjectBuilder.FULL_BUILD, BUILDER_ID,
+					        null, null);
 				} catch (CoreException e) {
 					Logger.logError(e);
 				}
@@ -563,7 +569,8 @@ public class ResourceBundleManager {
 
 		do {
 			if (excludedResources.contains(new ResourceDescriptor(resource))) {
-				if (RBFileUtils.isResourceBundleFile(resource)) {
+				if (org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils
+				        .isResourceBundleFile(resource)) {
 					Set<IResource> resources = allBundles
 					        .remove(getResourceBundleName(resource));
 					if (resources == null) {
@@ -587,7 +594,9 @@ public class ResourceBundleManager {
 
 	public IFile getRandomFile(String bundleName) {
 		try {
-			Collection<IMessagesBundle> messagesBundles = RBManager.getInstance(project).getMessagesBundleGroup(bundleName).getMessagesBundles();
+			Collection<IMessagesBundle> messagesBundles = RBManager
+			        .getInstance(project).getMessagesBundleGroup(bundleName)
+			        .getMessagesBundles();
 			IMessagesBundle bundle = messagesBundles.iterator().next();
 			return FileUtils.getFile(bundle);
 		} catch (Exception e) {
@@ -762,25 +771,27 @@ public class ResourceBundleManager {
 		}
 		return locales;
 	}
-	
+
 	private static IStateLoader getStateLoader() {
-		
-		IExtensionPoint extp = Platform.getExtensionRegistry().getExtensionPoint(
-                "org.eclipse.babel.tapiji.tools.core" + ".stateLoader");
-        IConfigurationElement[] elements = extp.getConfigurationElements();
-        
-        if (elements.length != 0) {
-        	try {
-				return (IStateLoader) elements[0].createExecutableExtension("class");
-        	} catch (CoreException e) {
+
+		IExtensionPoint extp = Platform.getExtensionRegistry()
+		        .getExtensionPoint(
+		                "org.eclipse.babel.tapiji.tools.core" + ".stateLoader");
+		IConfigurationElement[] elements = extp.getConfigurationElements();
+
+		if (elements.length != 0) {
+			try {
+				return (IStateLoader) elements[0]
+				        .createExecutableExtension("class");
+			} catch (CoreException e) {
 				e.printStackTrace();
 			}
-        } 
-    	return null;
+		}
+		return null;
 	}
 
 	public static void saveManagerState() {
 		stateLoader.saveState();
 	}
-	
+
 }

@@ -7,7 +7,7 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.java.ui;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.java.ui.util.ASTutilsUI;
 import org.eclipse.babel.tapiji.tools.java.visitor.ResourceAuditVisitor;
 import org.eclipse.jdt.core.ITypeRoot;

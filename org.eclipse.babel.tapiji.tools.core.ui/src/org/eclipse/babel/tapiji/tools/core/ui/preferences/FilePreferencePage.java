@@ -8,14 +8,12 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.ui.prefrences;
+package org.eclipse.babel.tapiji.tools.core.ui.preferences;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.babel.tapiji.tools.core.Activator;
-import org.eclipse.babel.tapiji.tools.core.model.preferences.CheckItem;
-import org.eclipse.babel.tapiji.tools.core.model.preferences.TapiJIPreferences;
+import org.eclipse.babel.tapiji.tools.core.ui.Activator;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.CreatePatternDialoge;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -177,8 +175,9 @@ public class FilePreferencePage extends PreferencePage implements
 			@Override
 			public void mouseDown(MouseEvent e) {
 				TableItem[] selection = table.getSelection();
-				if (selection.length > 0)
+				if (selection.length > 0) {
 					table.remove(table.indexOf(selection[0]));
+				}
 			}
 
 			@Override
@@ -218,7 +217,7 @@ public class FilePreferencePage extends PreferencePage implements
 
 		return super.performOk();
 	}
-	
+
 	private TableItem toTableItem(Table table, CheckItem s) {
 		TableItem item = new TableItem(table, SWT.NONE);
 		item.setText(s.getName());

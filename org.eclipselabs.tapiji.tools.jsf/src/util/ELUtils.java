@@ -10,7 +10,7 @@
  ******************************************************************************/
 package util;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.core.resources.IProject;
 
 public class ELUtils {

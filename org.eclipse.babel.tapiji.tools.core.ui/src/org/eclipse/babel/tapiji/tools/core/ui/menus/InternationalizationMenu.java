@@ -16,14 +16,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.builder.InternationalizationNature;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.AddLanguageDialoge;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.FragmentProjectSelectionDialog;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.GenerateBundleAccessorDialog;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.RemoveLanguageDialoge;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.LanguageUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils;
 import org.eclipse.babel.tapiji.tools.core.util.FragmentProjectUtils;
-import org.eclipse.babel.tapiji.tools.core.util.LanguageUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
@@ -69,8 +70,9 @@ public class InternationalizationMenu extends ContributionItem {
 
 	@Override
 	public void fill(Menu menu, int index) {
-		if (getSelectedProjects().size() == 0 || !projectsSupported())
+		if (getSelectedProjects().size() == 0 || !projectsSupported()) {
 			return;
+		}
 
 		// Toggle Internatinalization
 		mnuToggleInt = new MenuItem(menu, SWT.PUSH);
@@ -119,6 +121,7 @@ public class InternationalizationMenu extends ContributionItem {
 		});
 
 		menu.addMenuListener(new MenuAdapter() {
+			@Override
 			public void menuShown(MenuEvent e) {
 				updateStateToggleInt(mnuToggleInt);
 				// updateStateGenRBAccessor (generateAccessor);
@@ -132,8 +135,9 @@ public class InternationalizationMenu extends ContributionItem {
 	protected void runGenRBAccessor() {
 		GenerateBundleAccessorDialog dlg = new GenerateBundleAccessorDialog(
 		        Display.getDefault().getActiveShell());
-		if (dlg.open() != InputDialog.OK)
+		if (dlg.open() != InputDialog.OK) {
 			return;
+		}
 	}
 
 	protected void updateStateGenRBAccessor(MenuItem menuItem) {
@@ -150,10 +154,11 @@ public class InternationalizationMenu extends ContributionItem {
 		        .hasNature(projects.iterator().next());
 		// menuItem.setSelection(enabled && internationalizationEnabled);
 
-		if (internationalizationEnabled)
+		if (internationalizationEnabled) {
 			menuItem.setText("Disable Internationalization");
-		else
+		} else {
 			menuItem.setText("Enable Internationalization");
+		}
 	}
 
 	private Collection<IPackageFragment> getSelectedPackageFragments() {
@@ -167,8 +172,9 @@ public class InternationalizationMenu extends ContributionItem {
 				Object elem = iter.next();
 				if (elem instanceof IPackageFragment) {
 					IPackageFragment frag = (IPackageFragment) elem;
-					if (!frag.isReadOnly())
+					if (!frag.isReadOnly()) {
 						frags.add(frag);
+					}
 				}
 			}
 		}
@@ -185,19 +191,23 @@ public class InternationalizationMenu extends ContributionItem {
 			        .iterator(); iter.hasNext();) {
 				Object elem = iter.next();
 				if (!(elem instanceof IResource)) {
-					if (!(elem instanceof IAdaptable))
+					if (!(elem instanceof IAdaptable)) {
 						continue;
+					}
 					elem = ((IAdaptable) elem).getAdapter(IResource.class);
-					if (!(elem instanceof IResource))
+					if (!(elem instanceof IResource)) {
 						continue;
+					}
 				}
 				if (!(elem instanceof IProject)) {
 					elem = ((IResource) elem).getProject();
-					if (!(elem instanceof IProject))
+					if (!(elem instanceof IProject)) {
 						continue;
+					}
 				}
-				if (((IProject) elem).isAccessible())
+				if (((IProject) elem).isAccessible()) {
 					projects.add((IProject) elem);
+				}
 
 			}
 		}
@@ -207,8 +217,9 @@ public class InternationalizationMenu extends ContributionItem {
 	protected boolean projectsSupported() {
 		Collection<IProject> projects = getSelectedProjects();
 		for (IProject project : projects) {
-			if (!InternationalizationNature.supportsNature(project))
+			if (!InternationalizationNature.supportsNature(project)) {
 				return false;
+			}
 		}
 
 		return true;
@@ -236,8 +247,9 @@ public class InternationalizationMenu extends ContributionItem {
 		excludeMode = false;
 
 		for (IResource res : resources) {
-			if (manager == null || (manager.getProject() != res.getProject()))
+			if (manager == null || (manager.getProject() != res.getProject())) {
 				manager = ResourceBundleManager.getManager(res.getProject());
+			}
 			try {
 				if (!ResourceBundleManager.isResourceExcluded(res)) {
 					excludeMode = true;
@@ -246,10 +258,11 @@ public class InternationalizationMenu extends ContributionItem {
 			}
 		}
 
-		if (!excludeMode)
+		if (!excludeMode) {
 			menuItem.setText("Include Resource");
-		else
+		} else {
 			menuItem.setText("Exclude Resource");
+		}
 	}
 
 	private Collection<IResource> getSelectedResources() {
@@ -261,8 +274,9 @@ public class InternationalizationMenu extends ContributionItem {
 			for (Iterator<?> iter = ((IStructuredSelection) selection)
 			        .iterator(); iter.hasNext();) {
 				Object elem = iter.next();
-				if (elem instanceof IProject)
+				if (elem instanceof IProject) {
 					continue;
+				}
 
 				if (elem instanceof IResource) {
 					resources.add((IResource) elem);
@@ -281,6 +295,7 @@ public class InternationalizationMenu extends ContributionItem {
 		IProgressService ps = wb.getProgressService();
 		try {
 			ps.busyCursorWhile(new IRunnableWithProgress() {
+				@Override
 				public void run(IProgressMonitor pm) {
 
 					ResourceBundleManager manager = null;
@@ -289,13 +304,15 @@ public class InternationalizationMenu extends ContributionItem {
 
 					for (IResource res : selectedResources) {
 						if (manager == null
-						        || (manager.getProject() != res.getProject()))
+						        || (manager.getProject() != res.getProject())) {
 							manager = ResourceBundleManager.getManager(res
 							        .getProject());
-						if (excludeMode)
+						}
+						if (excludeMode) {
 							manager.excludeResource(res, pm);
-						else
+						} else {
 							manager.includeResource(res, pm);
+						}
 						pm.worked(1);
 					}
 					pm.done();
@@ -332,10 +349,11 @@ public class InternationalizationMenu extends ContributionItem {
 				if (FragmentProjectUtils.isFragment(project)) {
 					IProject host = FragmentProjectUtils
 					        .getFragmentHost(project);
-					if (!selectedProjects.contains(host))
+					if (!selectedProjects.contains(host)) {
 						project = host;
-					else
+					} else {
 						continue;
+					}
 				}
 
 				List<IProject> fragments = FragmentProjectUtils
@@ -346,8 +364,9 @@ public class InternationalizationMenu extends ContributionItem {
 					        Display.getCurrent().getActiveShell(), project,
 					        fragments);
 
-					if (fragmentDialog.open() == InputDialog.OK)
+					if (fragmentDialog.open() == InputDialog.OK) {
 						project = fragmentDialog.getSelectedProject();
+					}
 				}
 
 				final IProject selectedProject = project;
@@ -395,15 +414,16 @@ public class InternationalizationMenu extends ContributionItem {
 				if (MessageDialog.openConfirm(Display.getCurrent()
 				        .getActiveShell(), "Confirm",
 				        "Do you really want remove all properties-files for "
-				                + locale.getDisplayName() + "?"))
+				                + locale.getDisplayName() + "?")) {
 					BusyIndicator.showWhile(Display.getCurrent(),
 					        new Runnable() {
 						        @Override
 						        public void run() {
-							        LanguageUtils.removeLanguageFromProject(
+							        RBFileUtils.removeLanguageFromProject(
 							                project, locale);
 						        }
 					        });
+				}
 
 			}
 		}

@@ -21,7 +21,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.eclipse.babel.tapiji.tools.core.model.SLLocation;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -98,6 +98,10 @@ public class ResourceAuditVisitor extends ASTVisitor implements
 			ASTNode parent = stringLiteral.getParent();
 			ResourceBundleManager manager = ResourceBundleManager
 			        .getManager(projectName);
+
+			if (manager == null) {
+				return false;
+			}
 
 			if (parent instanceof MethodInvocation) {
 				MethodInvocation methodInvocation = (MethodInvocation) parent;

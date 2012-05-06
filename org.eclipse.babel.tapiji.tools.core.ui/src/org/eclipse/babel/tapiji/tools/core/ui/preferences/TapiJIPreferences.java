@@ -8,14 +8,14 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipse.babel.tapiji.tools.core.model.preferences;
+package org.eclipse.babel.tapiji.tools.core.ui.preferences;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import org.eclipse.babel.core.configuration.IConfiguration;
-import org.eclipse.babel.tapiji.tools.core.Activator;
+import org.eclipse.babel.tapiji.tools.core.ui.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
@@ -35,26 +35,32 @@ public class TapiJIPreferences implements IConfiguration {
 	private static final String DELIMITER = ";";
 	private static final String ATTRIBUTE_DELIMITER = ":";
 
+	@Override
 	public boolean getAuditSameValue() {
 		return PREF.getBoolean(AUDIT_SAME_VALUE);
 	}
 
+	@Override
 	public boolean getAuditMissingValue() {
 		return PREF.getBoolean(AUDIT_UNSPEZIFIED_KEY);
 	}
 
+	@Override
 	public boolean getAuditMissingLanguage() {
 		return PREF.getBoolean(AUDIT_MISSING_LANGUAGE);
 	}
 
+	@Override
 	public boolean getAuditRb() {
 		return PREF.getBoolean(AUDIT_RB);
 	}
 
+	@Override
 	public boolean getAuditResource() {
 		return PREF.getBoolean(AUDIT_RESOURCE);
 	}
 
+	@Override
 	public String getNonRbPattern() {
 		return PREF.getString(NON_RB_PATTERN);
 	}
@@ -73,10 +79,11 @@ public class TapiJIPreferences implements IConfiguration {
 			        tokenizer.nextToken(), ATTRIBUTE_DELIMITER);
 			String name = attribute.nextToken();
 			boolean checked;
-			if (attribute.nextToken().equals("true"))
+			if (attribute.nextToken().equals("true")) {
 				checked = true;
-			else
+			} else {
 				checked = false;
+			}
 
 			elements.add(new CheckItem(name, checked));
 		}
@@ -90,13 +97,15 @@ public class TapiJIPreferences implements IConfiguration {
 		for (CheckItem s : patterns) {
 			sb.append(s.getName());
 			sb.append(ATTRIBUTE_DELIMITER);
-			if (s.checked)
+			if (s.checked) {
 				sb.append("true");
-			else
+			} else {
 				sb.append("false");
+			}
 
-			if (++tokenCount != patterns.size())
+			if (++tokenCount != patterns.size()) {
 				sb.append(DELIMITER);
+			}
 		}
 		return sb.toString();
 	}

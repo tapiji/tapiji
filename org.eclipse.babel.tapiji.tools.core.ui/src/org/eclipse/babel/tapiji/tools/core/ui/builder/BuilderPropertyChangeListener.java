@@ -12,8 +12,8 @@ package org.eclipse.babel.tapiji.tools.core.ui.builder;
 
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;
-import org.eclipse.babel.tapiji.tools.core.model.preferences.TapiJIPreferences;
-import org.eclipse.babel.tapiji.tools.core.util.EditorUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.preferences.TapiJIPreferences;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;

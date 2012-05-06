@@ -10,8 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.rbmanager.model;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipse.babel.tapiji.tools.core.util.RBFileUtils;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -35,8 +34,9 @@ public class VirtualContainer {
 					return Status.OK_STATUS;
 				}
 			}.schedule();
-		} else
+		} else {
 			rbCount = 0;
+		}
 	}
 
 	protected VirtualContainer(IContainer container) {
@@ -49,9 +49,10 @@ public class VirtualContainer {
 	}
 
 	public ResourceBundleManager getResourceBundleManager() {
-		if (rbmanager == null)
+		if (rbmanager == null) {
 			rbmanager = ResourceBundleManager
 			        .getManager(container.getProject());
+		}
 		return rbmanager;
 	}
 
@@ -68,6 +69,7 @@ public class VirtualContainer {
 	}
 
 	public void recount() {
-		rbCount = RBFileUtils.countRecursiveResourceBundle(container);
+		rbCount = org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils
+		        .countRecursiveResourceBundle(container);
 	}
 }
