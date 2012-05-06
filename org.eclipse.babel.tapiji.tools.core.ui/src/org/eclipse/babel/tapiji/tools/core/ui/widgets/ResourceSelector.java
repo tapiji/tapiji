@@ -20,7 +20,7 @@ import org.eclipse.babel.core.message.tree.IAbstractKeyTreeModel;
 import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.babel.core.message.tree.TreeType;
 import org.eclipse.babel.editor.api.KeyTreeFactory;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.event.ResourceSelectionEvent;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.listener.IResourceSelectionListener;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.provider.ResKeyTreeContentProvider;

@@ -20,7 +20,7 @@ import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.model.IResourceDescriptor;
 import org.eclipse.babel.tapiji.tools.core.model.ResourceDescriptor;
 import org.eclipse.babel.tapiji.tools.core.model.manager.IStateLoader;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.util.FileUtils;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.XMLMemento;

@@ -15,9 +15,9 @@ import java.util.List;
 
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.model.IResourceExclusionListener;
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceExclusionEvent;
 import org.eclipse.babel.tapiji.tools.core.ui.Activator;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.builder.InternationalizationNature;
 import org.eclipse.babel.tapiji.tools.core.ui.utils.ImageUtils;
 import org.eclipse.core.resources.IFile;

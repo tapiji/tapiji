@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.ResourceSelector;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.event.ResourceSelectionEvent;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.listener.IResourceSelectionListener;

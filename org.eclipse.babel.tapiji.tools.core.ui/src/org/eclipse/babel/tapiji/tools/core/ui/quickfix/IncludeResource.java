@@ -12,7 +12,7 @@ package org.eclipse.babel.tapiji.tools.core.ui.quickfix;
 
 import java.util.Set;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;

@@ -13,7 +13,7 @@ package org.eclipse.babel.tapiji.tools.core.ui.dialogs;
 import java.util.Locale;
 import java.util.Set;
 
-import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.utils.ImageUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ILabelProvider;
