@@ -410,19 +410,20 @@ public class MessagesView extends ViewPart implements
 		new UIJob("set PopupMenu") {
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {
-				MenuManager menuMgr = new MenuManager("#PopupMenu");
-				menuMgr.setRemoveAllWhenShown(true);
-				menuMgr.addMenuListener(new IMenuListener() {
-					public void menuAboutToShow(IMenuManager manager) {
-						fillContextMenu(manager);
-					}
-				});
-				Menu menu = menuMgr.createContextMenu(treeViewer.getViewer()
-				        .getControl());
-				treeViewer.getViewer().getControl().setMenu(menu);
-				getViewSite().registerContextMenu(menuMgr,
-				        treeViewer.getViewer());
-
+				if (!treeViewer.isDisposed()) {
+					MenuManager menuMgr = new MenuManager("#PopupMenu");
+					menuMgr.setRemoveAllWhenShown(true);
+					menuMgr.addMenuListener(new IMenuListener() {
+						public void menuAboutToShow(IMenuManager manager) {
+							fillContextMenu(manager);
+						}
+					});
+					Menu menu = menuMgr.createContextMenu(treeViewer.getViewer()
+					        .getControl());
+					treeViewer.getViewer().getControl().setMenu(menu);
+					getViewSite().registerContextMenu(menuMgr,
+					        treeViewer.getViewer());
+				}
 				return Status.OK_STATUS;
 			}
 		}.schedule();
