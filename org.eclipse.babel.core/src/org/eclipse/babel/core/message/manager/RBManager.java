@@ -56,6 +56,8 @@ public class RBManager {
 	private static RBManager INSTANCE;
 
 	private List<IMessagesEditorListener> editorListeners;
+	
+	private List<IResourceDeltaListener> resourceListeners;
 
 	private IProject project;
 
@@ -67,6 +69,7 @@ public class RBManager {
 	private RBManager() {
 		resourceBundles = new HashMap<String, IMessagesBundleGroup>();
 		editorListeners = new ArrayList<IMessagesEditorListener>(3);
+		resourceListeners = new ArrayList<IResourceDeltaListener>(2);
 	}
 
 	/**
@@ -203,6 +206,10 @@ public class RBManager {
 			        resourceBundles.get(bundleGroup.getResourceBundleId()),
 			        bundleGroup)) {
 				resourceBundles.remove(bundleGroup.getResourceBundleId());
+				
+				for (IResourceDeltaListener deltaListener : resourceListeners) {
+					deltaListener.onDelete(bundleGroup);
+				}
 			}
 		}
 	}
@@ -229,6 +236,11 @@ public class RBManager {
 			if (messagesBundle != null) {
 				bundleGroup.removeMessagesBundle(messagesBundle);
 			}
+			
+			for (IResourceDeltaListener deltaListener : resourceListeners) {
+				deltaListener.onDelete(resourceBundleId, resourceBundle);
+			}
+			
 			if (bundleGroup.getMessagesBundleCount() == 0) {
 				notifyMessagesBundleGroupDeleted(bundleGroup);
 			}
@@ -447,6 +459,22 @@ public class RBManager {
 	 */
 	public void removeMessagesEditorListener(IMessagesEditorListener listener) {
 		this.editorListeners.remove(listener);
+	}
+	
+	/**
+	 * @param listener
+	 *            {@link IResourceDeltaListener} to add
+	 */
+	public void addResourceDeltaListener(IResourceDeltaListener listener) {
+		this.resourceListeners.add(listener);
+	}
+
+	/**
+	 * @param listener
+	 *            {@link IResourceDeltaListener} to remove
+	 */
+	public void removeResourceDeltaListener(IResourceDeltaListener listener) {
+		this.resourceListeners.remove(listener);
 	}
 
 	/**

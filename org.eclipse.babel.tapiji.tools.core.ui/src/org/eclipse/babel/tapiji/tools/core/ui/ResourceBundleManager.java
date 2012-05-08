@@ -26,6 +26,7 @@ import org.eclipse.babel.core.factory.MessageFactory;
 import org.eclipse.babel.core.message.IMessage;
 import org.eclipse.babel.core.message.IMessagesBundle;
 import org.eclipse.babel.core.message.IMessagesBundleGroup;
+import org.eclipse.babel.core.message.manager.IResourceDeltaListener;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.util.FileUtils;
 import org.eclipse.babel.core.util.NameUtils;
@@ -100,7 +101,28 @@ public class ResourceBundleManager {
 	private static IStateLoader stateLoader;
 
 	// Define private constructor
-	private ResourceBundleManager() {
+	private ResourceBundleManager(IProject project) {
+		this.project = project;
+		
+		RBManager.getInstance(project).addResourceDeltaListener(
+				new IResourceDeltaListener() {
+			
+			/**
+			 * {@inheritDoc}
+			 */
+			@Override
+			public void onDelete(IMessagesBundleGroup bundleGroup) {
+				resources.remove(bundleGroup.getResourceBundleId());
+			}
+			
+			/**
+			 * {@inheritDoc}
+			 */
+			@Override
+			public void onDelete(String resourceBundleId, IResource resource) {
+				resources.get(resourceBundleId).remove(resource);
+			}
+		});
 	}
 
 	public static ResourceBundleManager getManager(IProject project) {
@@ -119,11 +141,9 @@ public class ResourceBundleManager {
 
 		ResourceBundleManager manager = rbmanager.get(project);
 		if (manager == null) {
-			manager = new ResourceBundleManager();
-			manager.project = project;
+			manager = new ResourceBundleManager(project);
 			rbmanager.put(project, manager);
 			manager.detectResourceBundles();
-
 		}
 		return manager;
 	}

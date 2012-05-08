@@ -278,7 +278,10 @@ public class I18NEntry extends Composite {
                 IMessage entry = messagesBundleGroup.getMessage(key, locale);
                 if (entry == null) {
                     entry = new Message(key, locale);
-                    messagesBundleGroup.getMessagesBundle(locale).addMessage(entry);
+                    IMessagesBundle messagesBundle = messagesBundleGroup.getMessagesBundle(locale);
+                    if (messagesBundle != null) {
+                    	messagesBundle.addMessage(entry);
+                    }
                 }
                 entry.setText(textBox.getText());
             }
