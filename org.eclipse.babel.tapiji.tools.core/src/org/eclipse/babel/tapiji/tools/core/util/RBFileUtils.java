@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- *     Martin Reiterer - initial API and implementation
+ *     Michael Gasser - initial API and implementation
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.util;
 
@@ -14,11 +14,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.Action;
 
-/**
- * 
- * @author mgasser
- * 
- */
 public class RBFileUtils extends Action {
 	public static final String PROPERTIES_EXT = "properties";
 
