@@ -61,6 +61,7 @@ public class RBManager {
 
 	private static final String TAPIJI_NATURE = "org.eclipse.babel.tapiji.tools.core.nature";
 
+	// TODO: use logger of MessagesEditorPlugin
 	private static Logger logger = Logger.getLogger(RBManager.class
 	        .getSimpleName());
 
