@@ -47,15 +47,21 @@ public class NameUtils {
 	}
 	
 	public static Locale getLocaleByName(String bundleName, String localeID) {
+		String theBundleName = bundleName;
+		if (theBundleName.contains(".")) {
+			// we entered this method with the rbID and not the name!
+			theBundleName = theBundleName.substring(theBundleName.indexOf(".") + 1);
+		}
+		
 		// Check locale
 		Locale locale = null;
 		localeID = localeID.substring(0,
 				localeID.length() - "properties".length() - 1);
-		if (localeID.length() == bundleName.length()) {
+		if (localeID.length() == theBundleName.length()) {
 			// default locale
 			return null;
 		} else {
-			localeID = localeID.substring(bundleName.length() + 1);
+			localeID = localeID.substring(theBundleName.length() + 1);
 			String[] localeTokens = localeID.split("_");
 
 			switch (localeTokens.length) {
