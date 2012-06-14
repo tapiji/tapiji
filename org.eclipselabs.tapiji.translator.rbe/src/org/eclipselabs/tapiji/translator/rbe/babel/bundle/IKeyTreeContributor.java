@@ -1,4 +1,4 @@
-package org.eclipse.tapiji.rap.translator.rbe.babel.bundle;
+package org.eclipselabs.tapiji.translator.rbe.babel.bundle;
 
 import org.eclipse.jface.viewers.TreeViewer;
 

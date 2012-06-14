@@ -1,6 +1,6 @@
-package org.eclipse.tapiji.rap.translator.views.widgets.filter;
+package org.eclipselabs.tapiji.translator.views.widgets.filter;
 
-//TODO: import org.eclipse.babel.rap.editor.api.EditorUtil;
+import org.eclipse.babel.editor.api.EditorUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -11,10 +11,10 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.tapiji.rap.translator.model.Term;
-import org.eclipse.tapiji.rap.translator.model.Translation;
-import org.eclipse.tapiji.rap.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipse.tapiji.rap.translator.rbe.babel.bundle.IMessage;
+import org.eclipselabs.tapiji.translator.model.Term;
+import org.eclipselabs.tapiji.translator.model.Translation;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
 
 public class SelectiveMatcher extends ViewerFilter 
 						      implements ISelectionListener, ISelectionChangedListener {
@@ -28,7 +28,7 @@ public class SelectiveMatcher extends ViewerFilter
 	public SelectiveMatcher (StructuredViewer viewer, IWorkbenchPage page) {
 		this.viewer = viewer;
 		if (page.getActiveEditor() != null) {
-			//TODO: this.selectedItem = EditorUtil.getSelectedKeyTreeNode(page);
+			this.selectedItem = EditorUtil.getSelectedKeyTreeNode(page);
 		}
 		
 		this.page = page;

@@ -1,4 +1,4 @@
-package org.eclipse.tapiji.rap.translator.core;
+package org.eclipselabs.tapiji.translator.core;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -12,7 +12,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.eclipse.tapiji.rap.translator.model.Glossary;
+import org.eclipselabs.tapiji.translator.model.Glossary;
 
 
 public class GlossaryManager {

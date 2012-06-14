@@ -1,4 +1,4 @@
-package org.eclipse.tapiji.rap.translator.rbe.ui.wizards;
+package org.eclipselabs.tapiji.translator.rbe.ui.wizards;
 
 public interface IResourceBundleWizard {
 

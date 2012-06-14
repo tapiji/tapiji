@@ -1,12 +1,12 @@
-package org.eclipse.tapiji.rap.translator.utils;
+package org.eclipselabs.tapiji.translator.utils;
 
 import java.io.File;
 
-/*TODO: import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;*/
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -28,10 +28,10 @@ public class FileUtils {
           + TOKEN_FILE_EXTENSION + ")$"; 
 	
 	/** The singleton instance of Workspace */
-	//TODO: private static IWorkspace workspace;
+	private static IWorkspace workspace;
 	
 	/** Wrapper project for external file resources */
-	//TODO: private static IProject project;
+	private static IProject project;
 	
 	public static boolean isResourceBundle (String fileName) {
 		return fileName.toLowerCase().endsWith(".properties");
@@ -41,15 +41,15 @@ public class FileUtils {
 		return fileName.toLowerCase().endsWith(".xml");
 	}
 
-	/*TODO: public static IWorkspace getWorkspace () {
+	public static IWorkspace getWorkspace () {
 		if (workspace == null) {
 			workspace = ResourcesPlugin.getWorkspace();
 		}
 		
 		return workspace;
-	}*/
+	}
 	
-	/*TODO: public static IProject getProject () throws CoreException {
+	public static IProject getProject () throws CoreException {
 		if (project == null) {
 			project = getWorkspace().getRoot().getProject("ExternalResourceBundles");
 		}
@@ -60,17 +60,17 @@ public class FileUtils {
 			project.open(null);
 		
 		return project;
-	}*/
+	}
 	
-	/*TODO: public static void prePareEditorInputs () {
+	public static void prePareEditorInputs () {
 		IWorkspace workspace = getWorkspace();
-	}*/
+	}
 	
-	/*TODO: public static IFile getResourceBundleRef (String location) throws CoreException {
+	public static IFile getResourceBundleRef (String location) throws CoreException {
 		IPath path = new Path (location);
 		
 		/** Create all files of the Resource-Bundle within the project space and link them to the original file */
-		/*String regex = getPropertiesFileRegEx(path);
+		String regex = getPropertiesFileRegEx(path);
 		String projPathName = toProjectRelativePathName(path);
 		IFile file = getProject().getFile(projPathName);
 		file.createLink(path, IResource.REPLACE, null);
@@ -91,7 +91,7 @@ public class FileUtils {
         }
 		
 		return file;
-	}*/
+	}
 
 	protected static String toProjectRelativePathName (IPath path) {
 		String projectRelativeName = "";

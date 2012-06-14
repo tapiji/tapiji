@@ -1,16 +1,16 @@
-package org.eclipse.tapiji.rap.translator.views.widgets.filter;
+package org.eclipselabs.tapiji.translator.views.widgets.filter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/*TODO: import org.eclipse.jface.text.Region;*/
+import org.eclipse.jface.text.Region;
 
 public class FilterInfo {
 
 	private List<String> foundInTranslation = new ArrayList<String> ();
-	/*TODO: private Map<String, List<Region>> occurrences = new HashMap<String, List<Region>>();*/
+	private Map<String, List<Region>> occurrences = new HashMap<String, List<Region>>();
 	private Map<String, Double> localeSimilarity = new HashMap<String, Double>();
 	
 	public FilterInfo() {
@@ -41,17 +41,17 @@ public class FilterInfo {
 		return foundInTranslation.contains(l);
 	}
 	
-	/*TODO: public List<Region> getFoundInTranslationRanges (String locale) {
+	public List<Region> getFoundInTranslationRanges (String locale) {
 		List<Region> reg = occurrences.get(locale);
 		return (reg == null ? new ArrayList<Region>() : reg);
 	}
 	
-	TODO: public void addFoundInTranslationRange (String locale, int start, int length) {
+	public void addFoundInTranslationRange (String locale, int start, int length) {
 		List<Region> regions = occurrences.get(locale);
 		if (regions == null)
 			regions = new ArrayList<Region>();
 		regions.add(new Region(start, length));
 		occurrences.put(locale, regions);
-	}*/
+	}
 	
 }

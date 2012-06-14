@@ -1,12 +1,12 @@
-package org.eclipse.tapiji.rap.translator.views.widgets.provider;
+package org.eclipselabs.tapiji.translator.views.widgets.provider;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.tapiji.rap.translator.model.Glossary;
-import org.eclipse.tapiji.rap.translator.model.Term;
+import org.eclipselabs.tapiji.translator.model.Glossary;
+import org.eclipselabs.tapiji.translator.model.Term;
 
 
 public class GlossaryContentProvider implements ITreeContentProvider {

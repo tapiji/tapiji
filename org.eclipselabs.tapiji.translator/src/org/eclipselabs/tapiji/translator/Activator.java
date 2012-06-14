@@ -1,4 +1,4 @@
-package org.eclipse.tapiji.rap.translator;
+package org.eclipselabs.tapiji.translator;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;

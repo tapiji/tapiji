@@ -1,4 +1,4 @@
-package org.eclipse.tapiji.rap.translator.tests;
+package org.eclipselabs.tapiji.translator.tests;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -8,16 +8,17 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.eclipse.tapiji.rap.translator.model.Glossary;
-import org.eclipse.tapiji.rap.translator.model.Info;
-import org.eclipse.tapiji.rap.translator.model.Term;
-import org.eclipse.tapiji.rap.translator.model.Translation;
-import junit.framework.TestCase;;
+import org.eclipselabs.tapiji.translator.model.Glossary;
+import org.eclipselabs.tapiji.translator.model.Info;
+import org.eclipselabs.tapiji.translator.model.Term;
+import org.eclipselabs.tapiji.translator.model.Translation;
+import org.junit.Assert;
+import org.junit.Test;
 
 
-public class JaxBTest extends TestCase {
+public class JaxBTest {
 
-	
+	@Test
 	public void testModel () {
 		Glossary glossary = new Glossary ();
 		Info info = new Info ();
@@ -105,10 +106,11 @@ public class JaxBTest extends TestCase {
 			marshaller.marshal(glossary, new FileWriter ("C:\\test.xml"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			assertFalse(true);
+			Assert.assertFalse(true);
 		}
 	}
 	
+	@Test
 	public void testReadModel () {
 		Glossary glossary = new Glossary();
 		
@@ -118,7 +120,7 @@ public class JaxBTest extends TestCase {
 			glossary = (Glossary) unmarshaller.unmarshal(new File ("C:\\test.xml"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			assertFalse(true);
+			Assert.assertFalse(true);
 		}
 	}
 	

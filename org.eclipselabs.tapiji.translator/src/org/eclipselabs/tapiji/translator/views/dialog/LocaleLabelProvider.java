@@ -1,4 +1,4 @@
-package org.eclipse.tapiji.rap.translator.views.dialog;
+package org.eclipselabs.tapiji.translator.views.dialog;
 
 import java.util.Locale;
 

@@ -1,11 +1,11 @@
-package org.eclipse.tapiji.rap.translator.utils;
+package org.eclipselabs.tapiji.translator.utils;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.tapiji.rap.translator.Activator;
+import org.eclipselabs.tapiji.translator.Activator;
 
 
 public class FontUtils {

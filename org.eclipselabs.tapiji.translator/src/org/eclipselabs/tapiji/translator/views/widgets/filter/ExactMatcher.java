@@ -1,10 +1,10 @@
-package org.eclipse.tapiji.rap.translator.views.widgets.filter;
+package org.eclipselabs.tapiji.translator.views.widgets.filter;
 
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.tapiji.rap.translator.model.Term;
-import org.eclipse.tapiji.rap.translator.model.Translation;
+import org.eclipselabs.tapiji.translator.model.Term;
+import org.eclipselabs.tapiji.translator.model.Translation;
 
 
 public class ExactMatcher extends ViewerFilter {
@@ -54,7 +54,7 @@ public class ExactMatcher extends ViewerFilter {
 				filterInfo.addSimilarity(locale, 1d);
 				int start = -1;
 				while ((start = value.toLowerCase().indexOf(pattern.toLowerCase(), start+1)) >= 0) {
-					//TODO: filterInfo.addFoundInTranslationRange(locale, start, pattern.length());
+					filterInfo.addFoundInTranslationRange(locale, start, pattern.length());
 				}
 				selected = true;
 			}

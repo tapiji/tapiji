@@ -1,11 +1,11 @@
-package org.eclipse.tapiji.rap.translator.views.widgets.filter;
+package org.eclipselabs.tapiji.translator.views.widgets.filter;
 
-//TODO: import org.eclipse.babel.rap.editor.api.AnalyzerFactory;
+import org.eclipse.babel.editor.api.AnalyzerFactory;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.tapiji.rap.translator.model.Term;
-import org.eclipse.tapiji.rap.translator.model.Translation;
-import org.eclipse.tapiji.rap.translator.rbe.model.analyze.ILevenshteinDistanceAnalyzer;
+import org.eclipselabs.tapiji.translator.model.Term;
+import org.eclipselabs.tapiji.translator.model.Translation;
+import org.eclipselabs.tapiji.translator.rbe.model.analyze.ILevenshteinDistanceAnalyzer;
 
 public class FuzzyMatcher extends ExactMatcher {
 
@@ -14,7 +14,7 @@ public class FuzzyMatcher extends ExactMatcher {
 	
 	public FuzzyMatcher(StructuredViewer viewer) {
 		super(viewer);
-		//TODO: lvda = AnalyzerFactory.getLevenshteinDistanceAnalyzer();
+		lvda = AnalyzerFactory.getLevenshteinDistanceAnalyzer();
 	}
 
 	public double getMinimumSimilarity () {
@@ -44,7 +44,7 @@ public class FuzzyMatcher extends ExactMatcher {
 				filterInfo.addFoundInTranslation(locale);
 				filterInfo.addSimilarity(locale, dist);
 				match = true;
-				//TODO: filterInfo.addFoundInTranslationRange(locale, 0, value.length());
+				filterInfo.addFoundInTranslationRange(locale, 0, value.length());
 			}
 		}
 		

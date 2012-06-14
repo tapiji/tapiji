@@ -1,4 +1,4 @@
-package org.eclipse.tapiji.rap.translator.views.widgets.dnd;
+package org.eclipselabs.tapiji.translator.views.widgets.dnd;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,10 +7,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
-import org.eclipse.tapiji.rap.translator.core.GlossaryManager;
-import org.eclipse.tapiji.rap.translator.model.Glossary;
-import org.eclipse.tapiji.rap.translator.model.Term;
-import org.eclipse.tapiji.rap.translator.views.widgets.provider.GlossaryContentProvider;
+import org.eclipselabs.tapiji.translator.core.GlossaryManager;
+import org.eclipselabs.tapiji.translator.model.Glossary;
+import org.eclipselabs.tapiji.translator.model.Term;
+import org.eclipselabs.tapiji.translator.views.widgets.provider.GlossaryContentProvider;
 
 
 public class GlossaryDragSource implements DragSourceListener {
