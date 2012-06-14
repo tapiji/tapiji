@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator.views.widgets.filter;
+package org.eclipse.tapiji.rap.translator.views.widgets.filter;
 
 import java.util.Vector;
 

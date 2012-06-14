@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator.model;
+package org.eclipse.tapiji.rap.translator.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator.rbe.babel.bundle;
+package org.eclipse.tapiji.rap.translator.rbe.babel.bundle;
 
 import java.util.Locale;
 

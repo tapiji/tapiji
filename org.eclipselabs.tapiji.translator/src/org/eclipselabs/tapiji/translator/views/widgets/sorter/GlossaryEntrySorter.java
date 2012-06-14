@@ -1,12 +1,12 @@
-package org.eclipselabs.tapiji.translator.views.widgets.sorter;
+package org.eclipse.tapiji.rap.translator.views.widgets.sorter;
 
 import java.util.List;
 
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
-import org.eclipselabs.tapiji.translator.model.Term;
-import org.eclipselabs.tapiji.translator.model.Translation;
+import org.eclipse.tapiji.rap.translator.model.Term;
+import org.eclipse.tapiji.rap.translator.model.Translation;
 
 
 public class GlossaryEntrySorter extends ViewerSorter {

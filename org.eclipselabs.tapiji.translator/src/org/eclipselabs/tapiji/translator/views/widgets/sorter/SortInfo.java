@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator.views.widgets.sorter;
+package org.eclipse.tapiji.rap.translator.views.widgets.sorter;
 
 import java.util.List;
 import java.util.Locale;

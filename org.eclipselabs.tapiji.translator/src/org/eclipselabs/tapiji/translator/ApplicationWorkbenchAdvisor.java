@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator;
+package org.eclipse.tapiji.rap.translator;
 
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;

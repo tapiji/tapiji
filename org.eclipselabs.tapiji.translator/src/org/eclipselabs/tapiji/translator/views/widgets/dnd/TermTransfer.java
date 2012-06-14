@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator.views.widgets.dnd;
+package org.eclipse.tapiji.rap.translator.views.widgets.dnd;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,7 +11,7 @@ import java.util.List;
 import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TransferData;
-import org.eclipselabs.tapiji.translator.model.Term;
+import org.eclipse.tapiji.rap.translator.model.Term;
 
 
 public class TermTransfer extends ByteArrayTransfer {

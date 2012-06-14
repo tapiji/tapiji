@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator;
+package org.eclipse.tapiji.rap.translator;
 
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
@@ -62,7 +62,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private MenuManager helpMenu () {
 		MenuManager helpMenu = new MenuManager ("&Help", IWorkbenchActionConstants.M_HELP);
 		
-		helpMenu.add(getAction(ActionFactory.ABOUT.getId()));
+		//TODO: helpMenu.add(getAction(ActionFactory.ABOUT.getId()));
 		
 		return helpMenu;
 	}
@@ -96,7 +96,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		registerAsGlobal(ActionFactory.CLOSE.create(window));
 		registerAsGlobal(ActionFactory.CLOSE_ALL.create(window));
 		registerAsGlobal(ActionFactory.CLOSE_ALL_SAVED.create(window));
-		registerAsGlobal(ActionFactory.ABOUT.create(window));
+		//TODO: registerAsGlobal(ActionFactory.ABOUT.create(window));
 		registerAsGlobal(ActionFactory.QUIT.create(window));
 	}
 	

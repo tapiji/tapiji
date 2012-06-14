@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator.actions;
+package org.eclipse.tapiji.rap.translator.actions;
 
 import java.io.File;
 
@@ -9,8 +9,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
-import org.eclipselabs.tapiji.translator.core.GlossaryManager;
-import org.eclipselabs.tapiji.translator.utils.FileUtils;
+import org.eclipse.tapiji.rap.translator.core.GlossaryManager;
+import org.eclipse.tapiji.rap.translator.utils.FileUtils;
 
 
 public class OpenGlossaryAction implements IWorkbenchWindowActionDelegate {

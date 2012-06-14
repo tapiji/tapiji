@@ -1,31 +1,31 @@
-package org.eclipselabs.tapiji.translator.views.widgets.provider;
+package org.eclipse.tapiji.rap.translator.views.widgets.provider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.babel.editor.api.EditorUtil;
-import org.eclipse.jface.text.Region;
+//TODO: import org.eclipse.babel.editor.api.EditorUtil;
+//TODO: import org.eclipse.jface.text.Region;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StyledCellLabelProvider;
+//TODO: import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyleRange;
+//TODO: import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipselabs.tapiji.translator.model.Term;
-import org.eclipselabs.tapiji.translator.model.Translation;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipselabs.tapiji.translator.utils.FontUtils;
-import org.eclipselabs.tapiji.translator.views.widgets.filter.FilterInfo;
+import org.eclipse.tapiji.rap.translator.model.Term;
+import org.eclipse.tapiji.rap.translator.model.Translation;
+import org.eclipse.tapiji.rap.translator.rbe.babel.bundle.IKeyTreeNode;
+import org.eclipse.tapiji.rap.translator.rbe.babel.bundle.IMessage;
+import org.eclipse.tapiji.rap.translator.utils.FontUtils;
+import org.eclipse.tapiji.rap.translator.views.widgets.filter.FilterInfo;
 
-public class GlossaryLabelProvider extends StyledCellLabelProvider implements
+public class GlossaryLabelProvider /*TODO: extends StyledCellLabelProvider*/ implements
 				ISelectionListener, ISelectionChangedListener {
 
 	private boolean searchEnabled = false;
@@ -53,7 +53,7 @@ public class GlossaryLabelProvider extends StyledCellLabelProvider implements
 		this.referenceColumn = referenceColumn;
 		this.translations = translations;
 		if (page.getActiveEditor() != null) {
-			selectedItem = EditorUtil.getSelectedKeyTreeNode(page);
+			//TODO: selectedItem = EditorUtil.getSelectedKeyTreeNode(page);
 		}
 	}
 
@@ -91,7 +91,7 @@ public class GlossaryLabelProvider extends StyledCellLabelProvider implements
 		return matching;
 	}
 	
-	@Override
+	/*TODO: @Override
 	public void update(ViewerCell cell) {
 		Object element = cell.getElement();
 		int columnIndex = cell.getColumnIndex();
@@ -120,7 +120,7 @@ public class GlossaryLabelProvider extends StyledCellLabelProvider implements
 				cell.setForeground(gray);
 			}
 		} 
-	}
+	}*/
 
 	private boolean isCrossRefRegion(String cellText) {
 		if (selectedItem != null) {
@@ -155,7 +155,7 @@ public class GlossaryLabelProvider extends StyledCellLabelProvider implements
 			
 			IStructuredSelection sel = (IStructuredSelection) selection;
 			selectedItem = (IKeyTreeNode) sel.iterator().next();
-			this.getViewer().refresh();
+			//TODO: this.getViewer().refresh();
 		} catch (Exception e) {
 			// silent catch
 		}

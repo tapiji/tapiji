@@ -1,11 +1,11 @@
-package org.eclipselabs.tapiji.translator.views.widgets.model;
+package org.eclipse.tapiji.rap.translator.views.widgets.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.ui.IMemento;
-import org.eclipselabs.tapiji.translator.views.widgets.sorter.SortInfo;
+import org.eclipse.tapiji.rap.translator.views.widgets.sorter.SortInfo;
 
 
 public class GlossaryViewState {

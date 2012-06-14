@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator;
+package org.eclipse.tapiji.rap.translator;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.SWT;
@@ -20,7 +20,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipselabs.tapiji.translator.utils.FileUtils;
+import org.eclipse.tapiji.rap.translator.utils.FileUtils;
 
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
@@ -53,10 +53,10 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setInitialSize(new Point (1024, 768));
 		
 		/** Init workspace and container project */
-		try {
+		/*TODO: try {
 			FileUtils.getProject();
 		} catch (CoreException e) {
-		}
+		}*/
 	}
 	
 	@Override
@@ -100,7 +100,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 				Menu menu = new Menu (window.getShell(), SWT.POP_UP);
 				
 				MenuItem about = new MenuItem (menu, SWT.None);
-				about.setText("&Über");
+				about.setText("&ï¿½ber");
 				about.addListener(SWT.Selection, new Listener () {
 
 					@Override

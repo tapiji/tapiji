@@ -1,8 +1,8 @@
-package org.eclipselabs.tapiji.translator;
+package org.eclipse.tapiji.rap.translator;
 
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
-import org.eclipselabs.tapiji.translator.views.GlossaryView;
+import org.eclipse.tapiji.rap.translator.views.GlossaryView;
 
 
 public class Perspective implements IPerspectiveFactory {

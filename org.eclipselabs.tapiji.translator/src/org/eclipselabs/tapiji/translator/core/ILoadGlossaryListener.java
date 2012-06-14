@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator.core;
+package org.eclipse.tapiji.rap.translator.core;
 
 public interface ILoadGlossaryListener {
 

@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator.rbe.model.analyze;
+package org.eclipse.tapiji.rap.translator.rbe.model.analyze;
 
 public interface ILevenshteinDistanceAnalyzer {
 

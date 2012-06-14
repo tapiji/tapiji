@@ -1,14 +1,14 @@
-package org.eclipselabs.tapiji.translator.views.widgets.dnd;
+package org.eclipse.tapiji.rap.translator.views.widgets.dnd;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipselabs.tapiji.translator.core.GlossaryManager;
-import org.eclipselabs.tapiji.translator.model.Glossary;
-import org.eclipselabs.tapiji.translator.model.Term;
-import org.eclipselabs.tapiji.translator.views.widgets.provider.GlossaryContentProvider;
+import org.eclipse.tapiji.rap.translator.core.GlossaryManager;
+import org.eclipse.tapiji.rap.translator.model.Glossary;
+import org.eclipse.tapiji.rap.translator.model.Term;
+import org.eclipse.tapiji.rap.translator.views.widgets.provider.GlossaryContentProvider;
 
 
 public class GlossaryDropTarget extends DropTargetAdapter {

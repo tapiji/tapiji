@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator.views;
+package org.eclipse.tapiji.rap.translator.views;
 
 
 import java.io.File;
@@ -33,16 +33,16 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.dialogs.ListSelectionDialog;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipselabs.tapiji.translator.core.GlossaryManager;
-import org.eclipselabs.tapiji.translator.core.ILoadGlossaryListener;
-import org.eclipselabs.tapiji.translator.core.LoadGlossaryEvent;
-import org.eclipselabs.tapiji.translator.model.Glossary;
-import org.eclipselabs.tapiji.translator.views.dialog.LocaleContentProvider;
-import org.eclipselabs.tapiji.translator.views.dialog.LocaleLabelProvider;
-import org.eclipselabs.tapiji.translator.views.menus.GlossaryEntryMenuContribution;
-import org.eclipselabs.tapiji.translator.views.widgets.GlossaryWidget;
-import org.eclipselabs.tapiji.translator.views.widgets.model.GlossaryViewState;
-import org.eclipselabs.tapiji.translator.views.widgets.provider.GlossaryLabelProvider;
+import org.eclipse.tapiji.rap.translator.core.GlossaryManager;
+import org.eclipse.tapiji.rap.translator.core.ILoadGlossaryListener;
+import org.eclipse.tapiji.rap.translator.core.LoadGlossaryEvent;
+import org.eclipse.tapiji.rap.translator.model.Glossary;
+import org.eclipse.tapiji.rap.translator.views.dialog.LocaleContentProvider;
+import org.eclipse.tapiji.rap.translator.views.dialog.LocaleLabelProvider;
+import org.eclipse.tapiji.rap.translator.views.menus.GlossaryEntryMenuContribution;
+import org.eclipse.tapiji.rap.translator.views.widgets.GlossaryWidget;
+import org.eclipse.tapiji.rap.translator.views.widgets.model.GlossaryViewState;
+import org.eclipse.tapiji.rap.translator.views.widgets.provider.GlossaryLabelProvider;
 
 
 public class GlossaryView extends ViewPart implements ILoadGlossaryListener {
@@ -50,7 +50,7 @@ public class GlossaryView extends ViewPart implements ILoadGlossaryListener {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "org.eclipselabs.tapiji.translator.views.GlossaryView";
+	public static final String ID = "org.eclipse.tapiji.rap.translator.views.GlossaryView";
 	
 	/*** Primary view controls ***/
 	private GlossaryWidget treeViewer;

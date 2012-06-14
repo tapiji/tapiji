@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator.views.menus;
+package org.eclipse.tapiji.rap.translator.views.menus;
 
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipselabs.tapiji.translator.views.widgets.GlossaryWidget;
+import org.eclipse.tapiji.rap.translator.views.widgets.GlossaryWidget;
 
 
 public class GlossaryEntryMenuContribution  extends ContributionItem implements

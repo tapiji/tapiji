@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator.views.widgets;
+package org.eclipse.tapiji.rap.translator.views.widgets;
 
 import java.awt.ComponentOrientation;
 import java.util.ArrayList;
@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import org.eclipse.core.resources.IResourceChangeEvent;
+/* TODO: import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.ResourcesPlugin;*/
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.layout.TreeColumnLayout;
@@ -38,23 +38,23 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IWorkbenchPartSite;
-import org.eclipselabs.tapiji.translator.core.GlossaryManager;
-import org.eclipselabs.tapiji.translator.model.Glossary;
-import org.eclipselabs.tapiji.translator.model.Term;
-import org.eclipselabs.tapiji.translator.model.Translation;
-import org.eclipselabs.tapiji.translator.views.widgets.dnd.GlossaryDragSource;
-import org.eclipselabs.tapiji.translator.views.widgets.dnd.GlossaryDropTarget;
-import org.eclipselabs.tapiji.translator.views.widgets.dnd.TermTransfer;
-import org.eclipselabs.tapiji.translator.views.widgets.filter.ExactMatcher;
-import org.eclipselabs.tapiji.translator.views.widgets.filter.FuzzyMatcher;
-import org.eclipselabs.tapiji.translator.views.widgets.filter.SelectiveMatcher;
-import org.eclipselabs.tapiji.translator.views.widgets.provider.GlossaryContentProvider;
-import org.eclipselabs.tapiji.translator.views.widgets.provider.GlossaryLabelProvider;
-import org.eclipselabs.tapiji.translator.views.widgets.sorter.GlossaryEntrySorter;
-import org.eclipselabs.tapiji.translator.views.widgets.sorter.SortInfo;
+import org.eclipse.tapiji.rap.translator.core.GlossaryManager;
+import org.eclipse.tapiji.rap.translator.model.Glossary;
+import org.eclipse.tapiji.rap.translator.model.Term;
+import org.eclipse.tapiji.rap.translator.model.Translation;
+import org.eclipse.tapiji.rap.translator.views.widgets.dnd.GlossaryDragSource;
+import org.eclipse.tapiji.rap.translator.views.widgets.dnd.GlossaryDropTarget;
+import org.eclipse.tapiji.rap.translator.views.widgets.dnd.TermTransfer;
+import org.eclipse.tapiji.rap.translator.views.widgets.filter.ExactMatcher;
+import org.eclipse.tapiji.rap.translator.views.widgets.filter.FuzzyMatcher;
+import org.eclipse.tapiji.rap.translator.views.widgets.filter.SelectiveMatcher;
+import org.eclipse.tapiji.rap.translator.views.widgets.provider.GlossaryContentProvider;
+import org.eclipse.tapiji.rap.translator.views.widgets.provider.GlossaryLabelProvider;
+import org.eclipse.tapiji.rap.translator.views.widgets.sorter.GlossaryEntrySorter;
+import org.eclipse.tapiji.rap.translator.views.widgets.sorter.SortInfo;
 
 
-public class GlossaryWidget extends Composite implements IResourceChangeListener {
+public class GlossaryWidget extends Composite /*TODO: implements IResourceChangeListener*/ {
 
 	private final int TERM_COLUMN_WEIGHT = 1;
 	private final int DESCRIPTION_COLUMN_WEIGHT = 1;
@@ -132,7 +132,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 		});
 		
 		// Listen resource changes
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
+		//TODO: ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
 	}
 	
 	protected void initSorters() {
@@ -189,7 +189,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 
 		// init label provider 
 		labelProvider = new GlossaryLabelProvider(this.displayedTranslations.indexOf(referenceLocale), this.displayedTranslations, site.getPage());
-		treeViewer.setLabelProvider(labelProvider);
+		//treeViewer.setLabelProvider(labelProvider);
 
 		setTreeStructure(grouped);
 	}
@@ -238,7 +238,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
         if(locale!=null){
             ComponentOrientation orientation = ComponentOrientation.getOrientation(locale);
             if(orientation==ComponentOrientation.RIGHT_TO_LEFT){
-                return SWT.RIGHT_TO_LEFT;
+                return SWT.RIGHT;//TODO: SWT.RIGHT_TO_LEFT;
             }
         }
         return SWT.LEFT_TO_RIGHT;
@@ -256,7 +256,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 		Locale l = refDef.length < 3 ? (refDef.length < 2 ? new Locale (refDef[0]) : new Locale(refDef[0], refDef[1])) : new Locale (refDef[0], refDef[1], refDef[2]);
 		
 		this.displayedTranslations.add(referenceLocale);
-		termColumn = new TreeColumn(tree, SWT.RIGHT_TO_LEFT/*getOrientation(l)*/);
+		termColumn = new TreeColumn(tree, SWT.RIGHT);//TODO: SWT.RIGHT_TO_LEFT/*getOrientation(l)*/);
 		
 		termColumn.setText(l.getDisplayName());
 		TreeViewerColumn termCol = new TreeViewerColumn(treeViewer, termColumn);
@@ -531,7 +531,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 	}
 
 	public void addNewItem() {
-		// event.feedback = DND.FEEDBACK_INSERT_BEFORE;
+		//TODO: event.feedback = DND.FEEDBACK_INSERT_BEFORE;
 		Term parentTerm = null;
 
 		ISelection selection = site.getSelectionProvider().getSelection();
@@ -618,13 +618,13 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 	@Override
 	public void dispose() {
 		super.dispose();
-		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
+		//TODO: ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 	}
 
-	@Override
+	/*TODO: @Override
 	public void resourceChanged(IResourceChangeEvent event) {
 		initMatchers();
 		this.refreshViewer();
-	}
+	}*/
 	
 }
