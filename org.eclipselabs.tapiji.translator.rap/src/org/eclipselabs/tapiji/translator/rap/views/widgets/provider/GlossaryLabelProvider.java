@@ -5,11 +5,11 @@ import java.util.List;
 
 //TODO: import org.eclipse.babel.editor.api.EditorUtil;
 //TODO: import org.eclipse.jface.text.Region;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-//TODO: import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 //TODO: import org.eclipse.swt.custom.StyleRange;
@@ -25,7 +25,7 @@ import org.eclipselabs.tapiji.translator.rap.rbe.babel.bundle.IMessage;
 import org.eclipselabs.tapiji.translator.rap.utils.FontUtils;
 import org.eclipselabs.tapiji.translator.rap.views.widgets.filter.FilterInfo;
 
-public class GlossaryLabelProvider /*TODO: extends StyledCellLabelProvider*/ implements
+public class GlossaryLabelProvider extends CellLabelProvider implements
 				ISelectionListener, ISelectionChangedListener {
 
 	private boolean searchEnabled = false;
@@ -91,7 +91,7 @@ public class GlossaryLabelProvider /*TODO: extends StyledCellLabelProvider*/ imp
 		return matching;
 	}
 	
-	/*TODO: @Override
+	@Override
 	public void update(ViewerCell cell) {
 		Object element = cell.getElement();
 		int columnIndex = cell.getColumnIndex();
@@ -108,19 +108,19 @@ public class GlossaryLabelProvider /*TODO: extends StyledCellLabelProvider*/ imp
 		
 		if (isSearchEnabled()) {
 			if (isMatchingToPattern(element, columnIndex) ) {
-				List<StyleRange> styleRanges = new ArrayList<StyleRange>();
+				/*TODO: List<StyleRange> styleRanges = new ArrayList<StyleRange>();
 				FilterInfo filterInfo = (FilterInfo) ((Term)element).getInfo();
 			
 				for (Region reg : filterInfo.getFoundInTranslationRanges(translations.get(columnIndex < referenceColumn ? columnIndex + 1 : columnIndex))) {
 					styleRanges.add(new StyleRange(reg.getOffset(), reg.getLength(), black, info_color, SWT.BOLD));
 				}
 				
-				cell.setStyleRanges(styleRanges.toArray(new StyleRange[styleRanges.size()]));
+				cell.setStyleRanges(styleRanges.toArray(new StyleRange[styleRanges.size()]));*/
 			} else {
 				cell.setForeground(gray);
 			}
 		} 
-	}*/
+	}
 
 	private boolean isCrossRefRegion(String cellText) {
 		if (selectedItem != null) {

@@ -189,7 +189,7 @@ public class GlossaryWidget extends Composite /*TODO: implements IResourceChange
 
 		// init label provider 
 		labelProvider = new GlossaryLabelProvider(this.displayedTranslations.indexOf(referenceLocale), this.displayedTranslations, site.getPage());
-		//treeViewer.setLabelProvider(labelProvider);
+		treeViewer.setLabelProvider(labelProvider);
 
 		setTreeStructure(grouped);
 	}

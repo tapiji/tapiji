@@ -21,9 +21,9 @@ import org.eclipse.ui.application.IActionBarConfigurer;
  * the actions added to a workbench window. Each window will be populated with
  * new actions.
  */
-public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
+public class TranslatorActionBarAdvisor extends ActionBarAdvisor {
 
-	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
+	public TranslatorActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
 	}
 	

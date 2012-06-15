@@ -23,7 +23,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipselabs.tapiji.translator.rap.utils.FileUtils;
 
 
-public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
+public class TranslatorWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
 	/** Workbench state **/
 	private IWorkbenchWindow window;
@@ -36,13 +36,13 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	private final static String COMMAND_ABOUT_ID	= "org.eclipse.ui.help.aboutAction";
 	private final static String COMMAND_EXIT_ID 	= "org.eclipse.ui.file.exit";
 	
-	public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
+	public TranslatorWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
 		super(configurer);
 	}
 
 	public ActionBarAdvisor createActionBarAdvisor(
 			IActionBarConfigurer configurer) {
-		return new ApplicationActionBarAdvisor(configurer);
+		return new TranslatorActionBarAdvisor(configurer);
 	}
 
 	public void preWindowOpen() {
@@ -140,6 +140,10 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	
 	private TrayItem initTrayItem (IWorkbenchWindow window) {
 		final Tray osTray = window.getShell().getDisplay().getSystemTray();
+		
+		if (osTray == null)
+			return null;
+		
 		TrayItem item = new TrayItem (osTray, SWT.None);
 		
 		trayImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/TapiJI_32.png").createImage();
