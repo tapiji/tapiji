@@ -1,5 +1,7 @@
 package org.eclipselabs.tapiji.translator.rap.actions;
 
+import java.io.File;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -10,6 +12,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 //TODO: import org.eclipse.ui.part.FileEditorInput;
+import org.eclipselabs.tapiji.translator.rap.TestEditor;
+import org.eclipselabs.tapiji.translator.rap.TestEditorInput;
 import org.eclipselabs.tapiji.translator.rap.utils.FileUtils;
 
 
@@ -31,13 +35,16 @@ public class FileOpenAction extends Action implements IWorkbenchWindowActionDele
 		
 		if (fileName != null) {
 			IWorkbenchPage page= window.getActivePage();
-			/*TODO: try {
-				page.openEditor(new FileEditorInput(FileUtils.getResourceBundleRef(fileName)), 
-						RESOURCE_BUNDLE_EDITOR);
+			try {
+				System.out.println("Opening file " + fileName );
+				File file = new File(fileName);
+				page.openEditor(new TestEditorInput(file), TestEditor.ID);
+				/*page.openEditor(new FileEditorInput(FileUtils.getResourceBundleRef(fileName)), 
+						RESOURCE_BUNDLE_EDITOR);*/
 			
 			} catch (CoreException e) {
 				e.printStackTrace();
-			}*/
+			}
 		} 
 	}
 	

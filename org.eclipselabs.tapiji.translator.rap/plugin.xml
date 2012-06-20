@@ -32,5 +32,34 @@
             restorable="true">
       </view>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipselabs.tapiji.translator.rap.TestEditor"
+            default="false"
+            id="org.eclipselabs.tapiji.translator.rap.TestEditor"
+            name="TestEditor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="org.eclipselabs.tapiji.translator.rap.fileActionSet"
+            label="File Action Set"
+            visible="true">
+         <action
+               class="org.eclipselabs.tapiji.translator.rap.actions.FileOpenAction"
+               definitionId="org.eclipselabs.tapiji.translator.rap.fileOpen"
+               icon="icons/OpenRB.png"
+               id="FileOpenAction"
+               label="Open Resource-Bundle ..."
+               menubarPath="file_mnu/fileStart"
+               state="false"
+               style="push"
+               toolbarPath="org.eclipse.ui.workbench.file/open.ext"
+               tooltip="Opens a Resource-Bundle">
+         </action>
+      </actionSet>
+   </extension>
 
 </plugin>
