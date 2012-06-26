@@ -9,5 +9,6 @@ Require-Bundle: org.eclipse.rap.ui;bundle-version="1.5.0",
  org.eclipse.rap.rwt.supplemental.filedialog;bundle-version="1.5.0",
  org.junit;bundle-version="3.8.2",
  org.eclipselabs.tapiji.translator.rap.rbe;bundle-version="0.0.2",
- org.eclipse.core.resources;bundle-version="3.7.101"
+ org.eclipse.core.resources;bundle-version="3.7.101",
+ org.eclipselabs.tapiji.translator.rap.wrappers;bundle-version="0.0.2"
 Bundle-ActivationPolicy: lazy
