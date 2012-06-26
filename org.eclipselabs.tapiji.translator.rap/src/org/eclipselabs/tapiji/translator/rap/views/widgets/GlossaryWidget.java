@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-/* TODO: import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.ResourcesPlugin;*/
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.layout.TreeColumnLayout;
@@ -54,7 +54,7 @@ import org.eclipselabs.tapiji.translator.rap.views.widgets.sorter.GlossaryEntryS
 import org.eclipselabs.tapiji.translator.rap.views.widgets.sorter.SortInfo;
 
 
-public class GlossaryWidget extends Composite /*TODO: implements IResourceChangeListener*/ {
+public class GlossaryWidget extends Composite implements IResourceChangeListener {
 
 	private final int TERM_COLUMN_WEIGHT = 1;
 	private final int DESCRIPTION_COLUMN_WEIGHT = 1;
@@ -132,7 +132,7 @@ public class GlossaryWidget extends Composite /*TODO: implements IResourceChange
 		});
 		
 		// Listen resource changes
-		//TODO: ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
 	}
 	
 	protected void initSorters() {
@@ -531,7 +531,7 @@ public class GlossaryWidget extends Composite /*TODO: implements IResourceChange
 	}
 
 	public void addNewItem() {
-		//TODO: event.feedback = DND.FEEDBACK_INSERT_BEFORE;
+		// event.feedback = DND.FEEDBACK_INSERT_BEFORE;
 		Term parentTerm = null;
 
 		ISelection selection = site.getSelectionProvider().getSelection();
@@ -618,13 +618,13 @@ public class GlossaryWidget extends Composite /*TODO: implements IResourceChange
 	@Override
 	public void dispose() {
 		super.dispose();
-		//TODO: ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 	}
 
-	/*TODO: @Override
+	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
 		initMatchers();
 		this.refreshViewer();
-	}*/
+	}
 	
 }

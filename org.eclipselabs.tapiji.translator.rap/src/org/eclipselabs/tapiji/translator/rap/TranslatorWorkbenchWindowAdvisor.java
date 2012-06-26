@@ -53,10 +53,10 @@ public class TranslatorWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setInitialSize(new Point (1024, 768));
 		
 		/** Init workspace and container project */
-		/*TODO: try {
+		try {
 			FileUtils.getProject();
 		} catch (CoreException e) {
-		}*/
+		}
 	}
 	
 	@Override
