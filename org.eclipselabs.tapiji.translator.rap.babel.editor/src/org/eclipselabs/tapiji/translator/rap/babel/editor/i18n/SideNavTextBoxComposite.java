@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.rap.babel.editor.i18n;
 
-import org.eclipse.babel.core.message.tree.IKeyTreeNode;
-import org.eclipse.babel.core.message.tree.visitor.NodePathRegexVisitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -24,6 +22,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.IKeyTreeNode;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.visitor.NodePathRegexVisitor;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.internal.MessagesEditor;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.plugin.MessagesEditorPlugin;

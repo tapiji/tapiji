@@ -10,10 +10,10 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.rap.babel.editor.tree.actions;
 
-import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.internal.MessagesEditor;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.refactoring.RenameKeyProcessor;

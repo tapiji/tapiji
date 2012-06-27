@@ -13,14 +13,14 @@ package org.eclipselabs.tapiji.translator.rap.babel.editor.refactoring;
 import java.text.MessageFormat;
 import java.util.Collection;
 
-import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
-import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.ChangeDescriptor;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessagesBundleGroup;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.internal.KeyTreeNode;
 
 /**
  * {@link Change} that renames a resource bundle key.

@@ -17,8 +17,6 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.eclipse.babel.core.message.internal.MessagesBundle;
-import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -29,6 +27,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.IEditorSite;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessagesBundle;
+import org.eclipselabs.tapiji.translator.rap.babel.core.util.BabelUtils;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.util.UIUtils;
 
 

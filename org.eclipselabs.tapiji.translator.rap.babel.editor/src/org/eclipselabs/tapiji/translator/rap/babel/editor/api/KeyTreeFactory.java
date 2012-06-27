@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.rap.babel.editor.api;
 
-import org.eclipse.babel.core.message.IMessagesBundleGroup;
-import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
-import org.eclipse.babel.core.message.tree.IAbstractKeyTreeModel;
-import org.eclipse.babel.core.message.tree.IKeyTreeNode;
-import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.IMessagesBundleGroup;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessagesBundleGroup;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.IAbstractKeyTreeModel;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.IKeyTreeNode;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.internal.AbstractKeyTreeModel;
 
 
 /**

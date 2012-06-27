@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.rap.babel.editor.tree;
 
-import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.IKeyTreeNode;
 
 public interface IKeyTreeContributor {
 

@@ -11,9 +11,9 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.rap.babel.editor.preferences;
 
-import org.eclipse.babel.core.configuration.ConfigurationManager;
-import org.eclipse.babel.core.message.resource.ser.IPropertiesSerializerConfig;
 import org.eclipse.core.runtime.Preferences;
+import org.eclipselabs.tapiji.translator.rap.babel.core.configuration.ConfigurationManager;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.ser.IPropertiesSerializerConfig;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.plugin.MessagesEditorPlugin;
 
 /**

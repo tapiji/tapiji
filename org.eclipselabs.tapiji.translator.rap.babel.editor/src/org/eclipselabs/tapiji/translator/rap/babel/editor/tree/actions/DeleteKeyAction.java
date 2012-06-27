@@ -10,13 +10,13 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.rap.babel.editor.tree.actions;
 
-import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
-import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessagesBundleGroup;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.internal.MessagesEditor;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.plugin.MessagesEditorPlugin;
 

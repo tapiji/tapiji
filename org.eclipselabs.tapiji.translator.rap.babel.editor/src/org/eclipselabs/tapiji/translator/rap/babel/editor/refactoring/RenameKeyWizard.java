@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.rap.babel.editor.refactoring;
 
-import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.RenameRefactoring;
@@ -27,6 +26,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.internal.KeyTreeNode;
 
 /**
  * A wizard for the rename bundle key refactoring.

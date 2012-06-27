@@ -18,7 +18,6 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -27,6 +26,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.IEditorSite;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.util.UIUtils;
 

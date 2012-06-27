@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.rap.babel.editor.tree.actions;
 
-import org.eclipse.babel.core.message.tree.TreeType;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.TreeType;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.internal.MessagesEditor;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.tree.internal.KeyTreeContentProvider;

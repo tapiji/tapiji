@@ -10,12 +10,12 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.rap.babel.editor.tree.actions;
 
-import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
-import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessagesBundleGroup;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.internal.MessagesEditor;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.util.UIUtils;

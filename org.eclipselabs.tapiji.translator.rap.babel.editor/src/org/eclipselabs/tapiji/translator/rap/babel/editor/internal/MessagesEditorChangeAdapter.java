@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.rap.babel.editor.internal;
 
-import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.internal.AbstractKeyTreeModel;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.IMessagesEditorChangeListener;
 
 /**

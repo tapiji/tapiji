@@ -13,14 +13,14 @@ package org.eclipselabs.tapiji.translator.rap.babel.editor.resource;
 
 import java.util.Locale;
 
-import org.eclipse.babel.core.configuration.DirtyHack;
-import org.eclipse.babel.core.message.resource.internal.AbstractPropertiesResource;
-import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
-import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipselabs.tapiji.translator.rap.babel.core.configuration.DirtyHack;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.internal.AbstractPropertiesResource;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.ser.PropertiesDeserializer;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.ser.PropertiesSerializer;
 
 
 /**

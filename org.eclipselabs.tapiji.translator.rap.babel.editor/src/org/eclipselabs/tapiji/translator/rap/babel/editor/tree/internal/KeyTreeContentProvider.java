@@ -13,14 +13,14 @@ package org.eclipselabs.tapiji.translator.rap.babel.editor.tree.internal;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.eclipse.babel.core.message.tree.IKeyTreeNode;
-import org.eclipse.babel.core.message.tree.IKeyTreeVisitor;
-import org.eclipse.babel.core.message.tree.TreeType;
-import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
-import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.IKeyTreeNode;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.IKeyTreeVisitor;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.TreeType;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.internal.AbstractKeyTreeModel;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.internal.KeyTreeNode;
 
 
 /**

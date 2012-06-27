@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.eclipse.babel.core.message.IMessagesBundleGroup;
-import org.eclipse.babel.core.message.tree.IKeyTreeNode;
-import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.IMessagesBundleGroup;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.IKeyTreeNode;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.internal.KeyTreeNode;
 
 
 public class ValuedKeyTreeNode extends KeyTreeNode implements IValuedKeyTreeNode {

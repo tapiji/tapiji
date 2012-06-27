@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.rap.babel.editor.api;
 
-import org.eclipse.babel.core.message.checks.proximity.LevenshteinDistanceAnalyzer;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.checks.proximity.LevenshteinDistanceAnalyzer;
 
 /**
  * Provides the {@link ILevenshteinDistanceAnalyzer}

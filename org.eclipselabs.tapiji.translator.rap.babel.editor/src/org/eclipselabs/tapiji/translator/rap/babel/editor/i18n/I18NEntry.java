@@ -13,12 +13,6 @@ package org.eclipselabs.tapiji.translator.rap.babel.editor.i18n;
 
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.IMessage;
-import org.eclipse.babel.core.message.IMessagesBundle;
-import org.eclipse.babel.core.message.IMessagesBundleGroup;
-import org.eclipse.babel.core.message.internal.Message;
-import org.eclipse.babel.core.message.manager.RBManager;
-import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CBanner;
 import org.eclipse.swt.events.FocusEvent;
@@ -32,6 +26,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.IMessage;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.IMessagesBundle;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.IMessagesBundleGroup;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.Message;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.manager.RBManager;
+import org.eclipselabs.tapiji.translator.rap.babel.core.util.BabelUtils;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.internal.MessagesEditor;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.util.UIUtils;

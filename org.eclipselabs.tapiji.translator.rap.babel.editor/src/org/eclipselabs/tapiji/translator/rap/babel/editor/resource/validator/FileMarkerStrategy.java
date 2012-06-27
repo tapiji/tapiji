@@ -10,13 +10,13 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.rap.babel.editor.resource.validator;
 
-import org.eclipse.babel.core.message.checks.internal.DuplicateValueCheck;
-import org.eclipse.babel.core.message.checks.internal.MissingValueCheck;
-import org.eclipse.babel.core.message.internal.MessagesBundle;
-import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.checks.internal.DuplicateValueCheck;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.checks.internal.MissingValueCheck;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessagesBundle;
+import org.eclipselabs.tapiji.translator.rap.babel.core.util.BabelUtils;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.preferences.MsgEditorPreferences;
 

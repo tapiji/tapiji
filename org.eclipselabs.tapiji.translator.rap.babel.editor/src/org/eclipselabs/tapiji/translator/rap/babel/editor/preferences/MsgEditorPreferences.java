@@ -14,8 +14,6 @@ package org.eclipselabs.tapiji.translator.rap.babel.editor.preferences;
 
 import java.util.StringTokenizer;
 
-import org.eclipse.babel.core.message.resource.ser.IPropertiesDeserializerConfig;
-import org.eclipse.babel.core.message.resource.ser.IPropertiesSerializerConfig;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -32,6 +30,8 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.misc.StringMatcher;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.ser.IPropertiesDeserializerConfig;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.ser.IPropertiesSerializerConfig;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.IMessagesEditorChangeListener;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.builder.Builder;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.builder.ToggleNatureAction;

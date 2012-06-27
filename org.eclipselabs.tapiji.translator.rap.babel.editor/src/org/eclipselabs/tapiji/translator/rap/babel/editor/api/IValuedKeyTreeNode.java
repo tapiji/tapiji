@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
-import org.eclipse.babel.core.message.tree.IKeyTreeNode;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.IKeyTreeNode;
 
 public interface IValuedKeyTreeNode extends IKeyTreeNode {
 

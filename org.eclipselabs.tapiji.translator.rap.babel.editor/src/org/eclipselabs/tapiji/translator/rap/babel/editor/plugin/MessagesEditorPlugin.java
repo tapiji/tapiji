@@ -22,8 +22,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Stack;
 
-import org.eclipse.babel.core.message.internal.AbstractIFileChangeListener;
-import org.eclipse.babel.core.message.internal.AbstractIFileChangeListener.IFileChangeListenerRegistry;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -42,6 +40,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipselabs.pde.nls.internal.ui.model.ResourceBundleModel;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.AbstractIFileChangeListener;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.AbstractIFileChangeListener.IFileChangeListenerRegistry;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.builder.ToggleNatureAction;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.preferences.MsgEditorPreferences;
 import org.osgi.framework.BundleContext;

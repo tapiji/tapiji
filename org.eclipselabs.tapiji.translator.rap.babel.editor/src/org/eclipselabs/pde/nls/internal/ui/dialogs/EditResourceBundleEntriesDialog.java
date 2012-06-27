@@ -13,12 +13,6 @@ package org.eclipselabs.pde.nls.internal.ui.dialogs;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.internal.Message;
-import org.eclipse.babel.core.message.internal.MessagesBundle;
-import org.eclipse.babel.core.message.resource.IMessagesResource;
-import org.eclipse.babel.core.message.resource.internal.PropertiesIFileResource;
-import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
-import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -47,6 +41,12 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipselabs.pde.nls.internal.ui.model.ResourceBundle;
 import org.eclipselabs.pde.nls.internal.ui.model.ResourceBundleKey;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.Message;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessagesBundle;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.IMessagesResource;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.internal.PropertiesIFileResource;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.ser.PropertiesDeserializer;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.preferences.MsgEditorPreferences;
 

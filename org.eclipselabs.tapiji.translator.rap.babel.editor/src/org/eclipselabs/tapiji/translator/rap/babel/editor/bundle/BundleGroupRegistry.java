@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.rap.babel.editor.bundle;
 
-import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.core.resources.IResource;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessagesBundleGroup;
 
 
 /**

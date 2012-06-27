@@ -12,11 +12,6 @@ package org.eclipselabs.tapiji.translator.rap.babel.editor.tree.internal;
 
 import java.util.Collection;
 
-import org.eclipse.babel.core.message.checks.IMessageCheck;
-import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
-import org.eclipse.babel.core.message.tree.IKeyTreeNode;
-import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
-import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -28,6 +23,11 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.checks.IMessageCheck;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessagesBundleGroup;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.IKeyTreeNode;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.internal.AbstractKeyTreeModel;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.internal.MessagesEditor;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.internal.MessagesEditorMarkers;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.util.OverlayImageIcon;

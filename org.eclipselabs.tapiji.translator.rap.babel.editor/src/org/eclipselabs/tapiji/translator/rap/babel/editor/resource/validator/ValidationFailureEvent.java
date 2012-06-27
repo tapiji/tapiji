@@ -12,8 +12,8 @@ package org.eclipselabs.tapiji.translator.rap.babel.editor.resource.validator;
 
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.checks.IMessageCheck;
-import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.checks.IMessageCheck;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessagesBundleGroup;
 
 
 /**
