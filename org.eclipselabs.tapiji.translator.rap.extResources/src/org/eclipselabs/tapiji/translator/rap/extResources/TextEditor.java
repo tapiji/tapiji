@@ -71,21 +71,7 @@ public class TextEditor extends EditorPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		textField = new Text(parent, SWT.HORIZONTAL);
-		
-		BufferedReader reader;
-		try {
-			reader = new BufferedReader(new FileReader(file));
-			
-			String line = "";		
-			while ((line = reader.readLine()) != null) {
-				textField.setText(textField.getText() + line + "\n");
-			}
-			
-			reader.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		textField.setText(readFile());
 		
 	}
 
@@ -102,8 +88,26 @@ public class TextEditor extends EditorPart {
 	public String getText() {
 		if (textField != null)
 			return textField.getText();
-		else
+		else if (file != null)
+			return readFile();
+		else 
 			return "";
 	}
-
+	
+	private String readFile() {
+		String content = "";		
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(file));		
+			
+			String line = "";
+			while ((line = reader.readLine()) != null) {
+				content = content + line + "\n";
+			}			
+			reader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return content;
+	}
 }
