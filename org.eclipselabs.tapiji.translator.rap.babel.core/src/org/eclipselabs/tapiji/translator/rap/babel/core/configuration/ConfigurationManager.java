@@ -14,6 +14,7 @@ package org.eclipselabs.tapiji.translator.rap.babel.core.configuration;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.ser.IPropertiesDeserializerConfig;
@@ -45,9 +46,9 @@ public class ConfigurationManager {
 	}
 	
 	private IConfiguration getConfig() {
-		
-		IExtensionPoint extp = Platform.getExtensionRegistry().getExtensionPoint(
-                "org.eclipse.babel.core" + ".babelConfiguration");
+		IExtensionRegistry extreg = Platform.getExtensionRegistry();
+		IExtensionPoint extp = extreg.getExtensionPoint(
+                "org.eclipselabs.tapiji.translator.rap.babel.core" + ".babelConfiguration");
         IConfigurationElement[] elements = extp.getConfigurationElements();
         
         if (elements.length != 0) {

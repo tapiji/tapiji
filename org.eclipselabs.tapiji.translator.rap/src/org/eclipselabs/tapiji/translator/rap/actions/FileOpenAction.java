@@ -11,16 +11,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
-//TODO: import org.eclipse.ui.part.FileEditorInput;
-import org.eclipselabs.tapiji.translator.rap.TestEditor;
-import org.eclipselabs.tapiji.translator.rap.TestEditorInput;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipselabs.tapiji.translator.rap.utils.FileUtils;
 
 
 public class FileOpenAction extends Action implements IWorkbenchWindowActionDelegate {
 
 	/** Editor ids **/
-	public static final String RESOURCE_BUNDLE_EDITOR = "com.essiembre.eclipse.rbe.ui.editor.ResourceBundleEditor";
+	public static final String RESOURCE_BUNDLE_EDITOR = "org.eclipse.babel.editor.MessagesEditor";
 	
 	private IWorkbenchWindow window;
 	
@@ -36,11 +34,8 @@ public class FileOpenAction extends Action implements IWorkbenchWindowActionDele
 		if (fileName != null) {
 			IWorkbenchPage page= window.getActivePage();
 			try {
-				System.out.println("Opening file " + fileName );
-				File file = new File(fileName);
-				page.openEditor(new TestEditorInput(file), TestEditor.ID);
-				/*page.openEditor(new FileEditorInput(FileUtils.getResourceBundleRef(fileName)), 
-						RESOURCE_BUNDLE_EDITOR);*/
+				page.openEditor(new FileEditorInput(FileUtils.getResourceBundleRef(fileName)), 
+						RESOURCE_BUNDLE_EDITOR);
 			
 			} catch (CoreException e) {
 				e.printStackTrace();

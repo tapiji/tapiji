@@ -488,12 +488,12 @@ public class LocalizationEditor extends EditorPart {
 		form.setImage(formImage = MessagesEditorPlugin.getImageDescriptor(
 		        "obj16/nls_editor.gif").createImage()); //$NON-NLS-1$
 		toolkit.adapt(form);
-		toolkit.paintBordersFor(form);
+		// TODO [RAP] toolkit.paintBordersFor(form);
 		final Composite body = form.getBody();
 		gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
 		body.setLayout(gridLayout);
-		toolkit.paintBordersFor(body);
+		// TODO [RAP] toolkit.paintBordersFor(body);
 		toolkit.decorateFormHeading(form);
 
 		queryComposite = toolkit.createComposite(body);
@@ -502,7 +502,7 @@ public class LocalizationEditor extends EditorPart {
 		gridLayout = new GridLayout(5, false);
 		gridLayout.marginHeight = 0;
 		queryComposite.setLayout(gridLayout);
-		toolkit.paintBordersFor(queryComposite);
+		// TODO [RAP] toolkit.paintBordersFor(queryComposite);
 
 		// Form toolbar
 		editFiltersAction = new EditFilterOptionsAction();
@@ -577,7 +577,7 @@ public class LocalizationEditor extends EditorPart {
 		        SWT.COLOR_RED));
 		filteredLabel.setText(""); //$NON-NLS-1$
 
-		toolkit.paintBordersFor(resultsComposite);
+		// TODO [RAP] toolkit.paintBordersFor(resultsComposite);
 		resultsSection.setClient(resultsComposite);
 		resultsSection.setTextClient(filteredLabel);
 
@@ -713,7 +713,7 @@ public class LocalizationEditor extends EditorPart {
 		tableViewer = new TableViewer(table);
 		table.setHeaderVisible(true);
 		toolkit.adapt(table);
-		toolkit.paintBordersFor(table);
+		// TODO [RAP] toolkit.paintBordersFor(table);
 		toolkit.adapt(table, true, true);
 
 		tableViewer.setContentProvider(new ILazyContentProvider() {

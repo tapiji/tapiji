@@ -54,7 +54,7 @@ public class ExactMatcher extends ViewerFilter {
 				filterInfo.addSimilarity(locale, 1d);
 				int start = -1;
 				while ((start = value.toLowerCase().indexOf(pattern.toLowerCase(), start+1)) >= 0) {
-					//TODO: filterInfo.addFoundInTranslationRange(locale, start, pattern.length());
+					filterInfo.addFoundInTranslationRange(locale, start, pattern.length());
 				}
 				selected = true;
 			}

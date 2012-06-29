@@ -119,13 +119,14 @@ public final class UIUtils {
     
     
     /** Image registry. */
+    /* TODO [RAP]
     private static final ImageRegistry imageRegistry =
     	//TODO: REMOVE this comment eventually:
     	//necessary to specify the display otherwise Display.getCurrent()
     	//is called and will return null if this is not the UI-thread.
     	//this happens if the builder is called and initialize this class:
     	//the thread will not be the UI-thread.
-    	new ImageRegistry(PlatformUI.getWorkbench().getDisplay());
+    	new ImageRegistry(PlatformUI.getWorkbench().getDisplay()); */
 
     public static final String PDE_NATURE = "org.eclipse.pde.PluginNature"; //$NON-NLS-1$
     public static final String JDT_JAVA_NATURE = "org.eclipse.jdt.core.javanature"; //$NON-NLS-1$
@@ -427,12 +428,13 @@ public final class UIUtils {
      * @return image
      */
     public static Image getImage(String imageName) {
-        Image image = imageRegistry.get(imageName);
+        /* TODO [RAP] Image image = imageRegistry.get(imageName);
         if (image == null) {
             image = getImageDescriptor(imageName).createImage();
             imageRegistry.put(imageName, image);
         }
-        return image;
+        return image;*/
+    	return null;
     }
 
     /**
@@ -503,7 +505,7 @@ public final class UIUtils {
             ComponentOrientation orientation =
                     ComponentOrientation.getOrientation(locale);
             if(orientation==ComponentOrientation.RIGHT_TO_LEFT){
-                return SWT.RIGHT_TO_LEFT;
+                return SWT.RIGHT; //TODO [RAP] SWT.RIGHT_TO_LEFT;
             }
         }
         return SWT.LEFT_TO_RIGHT;

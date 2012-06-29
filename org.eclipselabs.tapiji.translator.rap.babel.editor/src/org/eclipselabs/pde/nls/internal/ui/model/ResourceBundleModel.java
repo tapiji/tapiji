@@ -25,12 +25,12 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jdt.core.IClasspathEntry;
+/* TODO [RAP]import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJarEntryResource;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.IPackageFragmentRoot; */
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.plugin.MessagesEditorPlugin;
 
@@ -181,8 +181,8 @@ public class ResourceBundleModel extends ResourceBundleElement {
 		if (!project.isOpen())
 		    continue;
 
-		IJavaProject javaProject = (IJavaProject) project
-			.getNature(JAVA_NATURE);
+		/* TODO [RAP] IJavaProject javaProject = (IJavaProject) project
+			.getNature(JAVA_NATURE); */
 		String pluginId = null;
 
 		try {
@@ -279,7 +279,7 @@ public class ResourceBundleModel extends ResourceBundleElement {
 			}
 
 			// Collect property files
-			if (isFragment || javaProject == null) {
+			if (isFragment /* TODO [RAP] || javaProject == null */) {
 			    IFile[] propertyFiles = collectPropertyFiles(project);
 			    for (IFile file : propertyFiles) {
 				IPath path = file.getProjectRelativePath();
@@ -322,7 +322,7 @@ public class ResourceBundleModel extends ResourceBundleElement {
 
 		// Look for resource bundles in Java packages (output folders,
 		// e.g. 'bin', will be ignored)
-		if (javaProject != null) {
+		/* TODO [RAP] if (javaProject != null) {
 		    IClasspathEntry[] classpathEntries = javaProject
 			    .getResolvedClasspath(true);
 		    for (IClasspathEntry entry : classpathEntries) {
@@ -434,7 +434,7 @@ public class ResourceBundleModel extends ResourceBundleElement {
 			addBundle(family, getLocale(language, country), file);
 		    }
 
-		}
+		}*/
 	    } catch (Exception e) {
 		MessagesEditorPlugin.log(e);
 	    }

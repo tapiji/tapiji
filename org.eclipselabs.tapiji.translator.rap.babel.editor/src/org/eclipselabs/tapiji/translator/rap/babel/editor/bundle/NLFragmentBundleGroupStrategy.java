@@ -40,7 +40,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.IStorageEditorInput;
-import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessagesBundle;
 import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.internal.PropertiesIFileResource;
@@ -51,6 +50,7 @@ import org.eclipselabs.tapiji.translator.rap.babel.editor.plugin.MessagesEditorP
 import org.eclipselabs.tapiji.translator.rap.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.resource.EclipsePropertiesEditorResource;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.util.UIUtils;
+import org.eclipselabs.tapiji.translator.rap.extResources.TextEditor;
 import org.osgi.framework.Bundle;
 
 /**
@@ -266,7 +266,7 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
         // if we found something that we could factor into a text editor input
         // we create a text editor and the whole MessagesBundle.
         if (newEditorInput != null) {
-            TextEditor textEditor = null;
+        	TextEditor textEditor = null;
             if (site != null) {
             	//during a build the site is not there and we don't edit things
                 //anyways.

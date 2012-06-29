@@ -238,7 +238,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
         if(locale!=null){
             ComponentOrientation orientation = ComponentOrientation.getOrientation(locale);
             if(orientation==ComponentOrientation.RIGHT_TO_LEFT){
-                return SWT.RIGHT;//TODO: SWT.RIGHT_TO_LEFT;
+                return SWT.RIGHT;//TODO [RAP] SWT.RIGHT_TO_LEFT;
             }
         }
         return SWT.LEFT_TO_RIGHT;
@@ -256,7 +256,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 		Locale l = refDef.length < 3 ? (refDef.length < 2 ? new Locale (refDef[0]) : new Locale(refDef[0], refDef[1])) : new Locale (refDef[0], refDef[1], refDef[2]);
 		
 		this.displayedTranslations.add(referenceLocale);
-		termColumn = new TreeColumn(tree, SWT.RIGHT);//TODO: SWT.RIGHT_TO_LEFT/*getOrientation(l)*/);
+		termColumn = new TreeColumn(tree, SWT.RIGHT);//TODO [RAP] SWT.RIGHT_TO_LEFT/*getOrientation(l)*/);
 		
 		termColumn.setText(l.getDisplayName());
 		TreeViewerColumn termCol = new TreeViewerColumn(treeViewer, termColumn);

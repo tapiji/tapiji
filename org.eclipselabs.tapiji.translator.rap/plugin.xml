@@ -32,15 +32,6 @@
             restorable="true">
       </view>
    </extension>
-   <extension
-         point="org.eclipse.ui.editors">
-      <editor
-            class="org.eclipselabs.tapiji.translator.rap.TestEditor"
-            default="false"
-            id="org.eclipselabs.tapiji.translator.rap.TestEditor"
-            name="TestEditor">
-      </editor>
-   </extension>
     <extension
          point="org.eclipse.ui.commands">
       <command

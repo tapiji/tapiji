@@ -16,11 +16,11 @@ import java.util.Locale;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipselabs.tapiji.translator.rap.babel.core.configuration.DirtyHack;
 import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.internal.AbstractPropertiesResource;
 import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipselabs.tapiji.translator.rap.babel.core.message.resource.ser.PropertiesSerializer;
+import org.eclipselabs.tapiji.translator.rap.extResources.TextEditor;
 
 
 /**
@@ -48,6 +48,7 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource 
             Locale locale,
             PropertiesSerializer serializer,
             PropertiesDeserializer deserializer,
+            // TextEditor textEditor) {
             TextEditor textEditor) {
         super(locale, serializer, deserializer);
         this.textEditor = textEditor;
@@ -121,8 +122,7 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource 
      * @see org.eclipse.babel.core.bundle.resource.TextResource#getText()
      */
     public String getText() {
-        return textEditor.getDocumentProvider().getDocument(
-                textEditor.getEditorInput()).get();
+    	return textEditor.getText();
     }
 
     /**
@@ -139,8 +139,7 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource 
 //    	Display.getDefault().asyncExec(new Runnable() {
 //			public void run() {
 		if (DirtyHack.isEditorModificationEnabled()) {
-			textEditor.getDocumentProvider()
-					.getDocument(textEditor.getEditorInput()).set(content);
+			textEditor.setText(content);
 		}
 //			}
 //		});

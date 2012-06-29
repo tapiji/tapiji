@@ -62,7 +62,7 @@ public class TranslatorActionBarAdvisor extends ActionBarAdvisor {
 	private MenuManager helpMenu () {
 		MenuManager helpMenu = new MenuManager ("&Help", IWorkbenchActionConstants.M_HELP);
 		
-		//TODO: helpMenu.add(getAction(ActionFactory.ABOUT.getId()));
+		//TODO [RAP] helpMenu.add(getAction(ActionFactory.ABOUT.getId()));
 		
 		return helpMenu;
 	}
@@ -96,7 +96,7 @@ public class TranslatorActionBarAdvisor extends ActionBarAdvisor {
 		registerAsGlobal(ActionFactory.CLOSE.create(window));
 		registerAsGlobal(ActionFactory.CLOSE_ALL.create(window));
 		registerAsGlobal(ActionFactory.CLOSE_ALL_SAVED.create(window));
-		//TODO: registerAsGlobal(ActionFactory.ABOUT.create(window));
+		//TODO [RAP] registerAsGlobal(ActionFactory.ABOUT.create(window));
 		registerAsGlobal(ActionFactory.QUIT.create(window));
 	}
 	

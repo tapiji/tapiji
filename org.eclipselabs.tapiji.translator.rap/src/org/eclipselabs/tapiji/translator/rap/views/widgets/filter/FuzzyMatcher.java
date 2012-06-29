@@ -1,11 +1,11 @@
 package org.eclipselabs.tapiji.translator.rap.views.widgets.filter;
 
-//TODO: import org.eclipse.babel.rap.editor.api.AnalyzerFactory;
+import org.eclipselabs.tapiji.translator.rap.babel.editor.api.AnalyzerFactory;
+import org.eclipselabs.tapiji.translator.rap.babel.editor.api.ILevenshteinDistanceAnalyzer;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipselabs.tapiji.translator.rap.model.Term;
 import org.eclipselabs.tapiji.translator.rap.model.Translation;
-import org.eclipselabs.tapiji.translator.rap.rbe.model.analyze.ILevenshteinDistanceAnalyzer;
 
 public class FuzzyMatcher extends ExactMatcher {
 
@@ -14,7 +14,7 @@ public class FuzzyMatcher extends ExactMatcher {
 	
 	public FuzzyMatcher(StructuredViewer viewer) {
 		super(viewer);
-		//TODO: lvda = AnalyzerFactory.getLevenshteinDistanceAnalyzer();
+		lvda = AnalyzerFactory.getLevenshteinDistanceAnalyzer();
 	}
 
 	public double getMinimumSimilarity () {
@@ -44,7 +44,7 @@ public class FuzzyMatcher extends ExactMatcher {
 				filterInfo.addFoundInTranslation(locale);
 				filterInfo.addSimilarity(locale, dist);
 				match = true;
-				//TODO: filterInfo.addFoundInTranslationRange(locale, 0, value.length());
+				filterInfo.addFoundInTranslationRange(locale, 0, value.length());
 			}
 		}
 		

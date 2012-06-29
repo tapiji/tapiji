@@ -36,12 +36,10 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
-import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipselabs.tapiji.translator.rap.babel.core.message.IMessagesBundle;
 import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessageException;
@@ -60,6 +58,7 @@ import org.eclipselabs.tapiji.translator.rap.babel.editor.preferences.MsgEditorP
 import org.eclipselabs.tapiji.translator.rap.babel.editor.resource.EclipsePropertiesEditorResource;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.util.UIUtils;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.views.MessagesBundleGroupOutline;
+import org.eclipselabs.tapiji.translator.rap.extResources.TextEditor;
 
 /**
  * Multi-page editor for editing resource bundles.
@@ -68,7 +67,7 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
         IMessagesEditor {
 
 	/** Editor ID, as defined in plugin.xml. */
-	public static final String EDITOR_ID = "org.eclilpse.babel.editor.editor.MessagesEditor"; //$NON-NLS-1$
+	public static final String EDITOR_ID = "org.eclipse.babel.editor.MessagesEditor"; //$NON-NLS-1$
 
 	private String selectedKey;
 	private List<IMessagesEditorChangeListener> changeListeners = new ArrayList<IMessagesEditorChangeListener>(
@@ -80,8 +79,8 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 	/** Page with key tree and text fields for all locales. */
 	private I18NPage i18nPage;
 	private final List<Locale> localesIndex = new ArrayList<Locale>();
-	private final List<ITextEditor> textEditorsIndex = new ArrayList<ITextEditor>();
-
+	private final List<TextEditor> textEditorsIndex = new ArrayList<TextEditor>();
+	
 	private MessagesBundleGroupOutline outline;
 
 	private MessagesEditorMarkers markers;
@@ -211,7 +210,7 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 	 */
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		for (ITextEditor textEditor : textEditorsIndex) {
+		for (TextEditor textEditor : textEditorsIndex) {
 			textEditor.doSave(monitor);
 		}
 
@@ -355,7 +354,7 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 	}
 
 	private void setSelection(int newPageIndex) {
-		ITextEditor editor = textEditorsIndex.get(--newPageIndex);
+		TextEditor editor = textEditorsIndex.get(--newPageIndex);
 		String selectedKey = getSelectedKey();
 		if (selectedKey != null) {
 			if (editor.getEditorInput() instanceof FileEditorInput) {
@@ -381,7 +380,7 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 					}
 
 					if (found) {
-						editor.selectAndReveal(selectionIndex, 0);
+						// TODO [RAP] editor.selectAndReveal(selectionIndex, 0);
 					}
 				} catch (CoreException e) {
 					e.printStackTrace();
@@ -431,8 +430,9 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 		for (IMessagesEditorChangeListener listener : changeListeners) {
 			listener.editorDisposed();
 		}
-		i18nPage.dispose();
-		for (ITextEditor textEditor : textEditorsIndex) {
+		if (i18nPage != null)
+			i18nPage.dispose();
+		for (TextEditor textEditor : textEditorsIndex) {
 			textEditor.dispose();
 		}
 	}
@@ -538,7 +538,7 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 		return (obj);
 	}
 
-	public ITextEditor getTextEditor(Locale locale) {
+	public TextEditor getTextEditor(Locale locale) {
 		int index = localesIndex.indexOf(locale);
 		return textEditorsIndex.get(index);
 	}

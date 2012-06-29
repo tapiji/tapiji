@@ -20,14 +20,15 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionGroup;
-import org.eclipse.ui.ide.IDEActionFactory;
+//TODO [RAP] import org.eclipse.ui.ide.IDEActionFactory;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
-import org.eclipse.ui.texteditor.ITextEditor;
-import org.eclipse.ui.texteditor.ITextEditorActionConstants;
+//TODO [RAP] import org.eclipse.ui.texteditor.ITextEditor;
+//TODO [RAP] import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.IMessagesEditorChangeListener;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.actions.FilterKeysAction;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.actions.KeyTreeVisibleAction;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.actions.NewLocaleAction;
+import org.eclipselabs.tapiji.translator.rap.extResources.TextEditor;
 
 
 /**
@@ -62,8 +63,8 @@ public class MessagesEditorContributor
      * @param actionID action id
 	 * @return IAction or null if editor is null.
 	 */
-	protected IAction getAction(ITextEditor editor, String actionID) {
-		return (editor == null ? null : editor.getAction(actionID));
+	protected IAction getAction(TextEditor editor, String actionID) {
+		return null;//TODO [RAP] return (editor == null ? null : editor.getAction(actionID));
 	}
 
     /**
@@ -80,10 +81,10 @@ public class MessagesEditorContributor
 		IActionBars actionBars = getActionBars();
 		if (actionBars != null) {
 
-			ITextEditor editor = (part instanceof ITextEditor) 
-                               ? (ITextEditor) part : null;
+			TextEditor editor = (part instanceof TextEditor) 
+                               ? (TextEditor) part : null;
 
-			actionBars.setGlobalActionHandler(
+			/* TODO [RAP] actionBars.setGlobalActionHandler(
 				ActionFactory.DELETE.getId(),
 				getAction(editor, ITextEditorActionConstants.DELETE));
 			actionBars.setGlobalActionHandler(
@@ -109,7 +110,7 @@ public class MessagesEditorContributor
 				getAction(editor, ITextEditorActionConstants.FIND));
 			actionBars.setGlobalActionHandler(
 				IDEActionFactory.BOOKMARK.getId(),
-				getAction(editor, IDEActionFactory.BOOKMARK.getId()));
+				getAction(editor, IDEActionFactory.BOOKMARK.getId())); */
 			actionBars.updateActionBars();
 		}
 	}

@@ -13,9 +13,9 @@ package org.eclipselabs.tapiji.translator.rap.babel.core.util;
 import java.util.Locale;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.jdt.core.IJavaElement;
+/* TODO [RAP] import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaCore; */
 
 /**
  * Contains methods, which return names/IDs or Objects by name.
@@ -28,10 +28,10 @@ public class NameUtils {
 	public static String getResourceBundleId(IResource resource) {
 		String packageFragment = "";
 
-		IJavaElement propertyFile = JavaCore.create(resource.getParent());
+		/*IJavaElement propertyFile = JavaCore.create(resource.getParent());
 		if (propertyFile != null && propertyFile instanceof IPackageFragment)
 			packageFragment = ((IPackageFragment) propertyFile)
-					.getElementName();
+					.getElementName();*/
 
 		return (packageFragment.length() > 0 ? packageFragment + "." : "")
 				+ getResourceBundleName(resource);

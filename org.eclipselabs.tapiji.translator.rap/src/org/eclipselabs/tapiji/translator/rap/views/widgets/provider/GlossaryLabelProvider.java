@@ -3,8 +3,10 @@ package org.eclipselabs.tapiji.translator.rap.views.widgets.provider;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: import org.eclipse.babel.editor.api.EditorUtil;
-//TODO: import org.eclipse.jface.text.Region;
+
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.IMessage;
+import org.eclipselabs.tapiji.translator.rap.babel.core.message.tree.IKeyTreeNode;
+import org.eclipselabs.tapiji.translator.rap.babel.editor.api.EditorUtil;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -12,7 +14,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
-//TODO: import org.eclipse.swt.custom.StyleRange;
+//TODO [RAP] import org.eclipse.swt.custom.StyleRange;
+//TODO [RAP] import org.eclipse.jface.text.Region;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.ui.ISelectionListener;
@@ -20,8 +23,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipselabs.tapiji.translator.rap.model.Term;
 import org.eclipselabs.tapiji.translator.rap.model.Translation;
-import org.eclipselabs.tapiji.translator.rap.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipselabs.tapiji.translator.rap.rbe.babel.bundle.IMessage;
 import org.eclipselabs.tapiji.translator.rap.utils.FontUtils;
 import org.eclipselabs.tapiji.translator.rap.views.widgets.filter.FilterInfo;
 
@@ -53,7 +54,7 @@ public class GlossaryLabelProvider extends CellLabelProvider implements
 		this.referenceColumn = referenceColumn;
 		this.translations = translations;
 		if (page.getActiveEditor() != null) {
-			//TODO: selectedItem = EditorUtil.getSelectedKeyTreeNode(page);
+			selectedItem = EditorUtil.getSelectedKeyTreeNode(page);
 		}
 	}
 
@@ -108,7 +109,7 @@ public class GlossaryLabelProvider extends CellLabelProvider implements
 		
 		if (isSearchEnabled()) {
 			if (isMatchingToPattern(element, columnIndex) ) {
-				/*TODO: List<StyleRange> styleRanges = new ArrayList<StyleRange>();
+				/*List<StyleRange> styleRanges = new ArrayList<StyleRange>();
 				FilterInfo filterInfo = (FilterInfo) ((Term)element).getInfo();
 			
 				for (Region reg : filterInfo.getFoundInTranslationRanges(translations.get(columnIndex < referenceColumn ? columnIndex + 1 : columnIndex))) {
@@ -116,6 +117,9 @@ public class GlossaryLabelProvider extends CellLabelProvider implements
 				}
 				
 				cell.setStyleRanges(styleRanges.toArray(new StyleRange[styleRanges.size()]));*/
+				
+				/* RAP workaround for StyleRange  */
+				cell.setForeground(info_color);
 			} else {
 				cell.setForeground(gray);
 			}
@@ -155,7 +159,7 @@ public class GlossaryLabelProvider extends CellLabelProvider implements
 			
 			IStructuredSelection sel = (IStructuredSelection) selection;
 			selectedItem = (IKeyTreeNode) sel.iterator().next();
-			//TODO: this.getViewer().refresh();
+			//TODO [RAP] this.getViewer().refresh();
 		} catch (Exception e) {
 			// silent catch
 		}

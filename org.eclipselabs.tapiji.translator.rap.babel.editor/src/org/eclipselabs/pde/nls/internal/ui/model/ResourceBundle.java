@@ -21,7 +21,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.IJarEntryResource;
+// TODO [RAP] import org.eclipse.jdt.core.IJarEntryResource;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.plugin.MessagesEditorPlugin;
 
 /**
@@ -110,7 +110,7 @@ public class ResourceBundle extends ResourceBundleElement {
 			} catch (IOException e) {
 				MessagesEditorPlugin.log("Error reading property file.", e);
 			}
-		} else if (resource instanceof IJarEntryResource) {
+		/* TODO [RAP] } else if (resource instanceof IJarEntryResource) {
 			IJarEntryResource jarEntryResource = (IJarEntryResource) resource;
 			InputStream inputStream = jarEntryResource.getContents();
 			Properties properties = new Properties();
@@ -119,7 +119,7 @@ public class ResourceBundle extends ResourceBundleElement {
 				putAll(properties);
 			} catch (IOException e) {
 				MessagesEditorPlugin.log("Error reading property file.", e);
-			}
+			}*/
 		} else {
 			MessagesEditorPlugin.log("Unknown resource type.", new RuntimeException());
 		}
@@ -130,8 +130,8 @@ public class ResourceBundle extends ResourceBundleElement {
 	}
 
 	public boolean isReadOnly() {
-		if (resource instanceof IJarEntryResource)
-			return true;
+		/* TODO [RAP] if (resource instanceof IJarEntryResource)
+			return true; */
 		if (resource instanceof IFile) {
 			IFile file = (IFile) resource;
 			return file.isReadOnly() || file.isLinked();

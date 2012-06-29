@@ -20,13 +20,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.IJavaElement;
+/* TODO [RAP] import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaCore;*/
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessageException;
 import org.eclipselabs.tapiji.translator.rap.babel.core.message.internal.MessagesBundle;
@@ -40,6 +39,7 @@ import org.eclipselabs.tapiji.translator.rap.babel.editor.plugin.MessagesEditorP
 import org.eclipselabs.tapiji.translator.rap.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.resource.EclipsePropertiesEditorResource;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.util.UIUtils;
+import org.eclipselabs.tapiji.translator.rap.extResources.TextEditor;
 
 
 /**
@@ -106,9 +106,9 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
     public static String getResourceBundleId (IResource resource) {
 		String packageFragment = "";
 
-		IJavaElement propertyFile = JavaCore.create(resource.getParent());
+		/* TODO [RAP] IJavaElement propertyFile = JavaCore.create(resource.getParent());
 		if (propertyFile != null && propertyFile instanceof IPackageFragment)
-			packageFragment = ((IPackageFragment) propertyFile).getElementName();
+			packageFragment = ((IPackageFragment) propertyFile).getElementName();*/
 		
 		return (packageFragment.length() > 0 ? packageFragment  + "." : "") + 
 				getResourceBundleName(resource);
@@ -218,7 +218,7 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
     protected TextEditor createEditor(IResource resource, Locale locale)
             throws PartInitException {
         
-        TextEditor textEditor = null;
+    	TextEditor textEditor = null;
         if (resource != null && resource instanceof IFile) {
         	try {
 				resource.refreshLocal(IResource.DEPTH_ZERO, null);

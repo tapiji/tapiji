@@ -46,7 +46,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.ContainerSelectionDialog;
+// TODO [RAP] import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipselabs.tapiji.translator.rap.babel.editor.widgets.LocaleSelector;
 
@@ -340,7 +340,7 @@ public class ResourceBundleNewWizardPage extends WizardPage {
      */
 
     /*default*/ void handleBrowse() {
-        ContainerSelectionDialog dialog =
+       /* TODO [RAP] ContainerSelectionDialog dialog =
             new ContainerSelectionDialog(
                 getShell(),
                 ResourcesPlugin.getWorkspace().getRoot(),
@@ -352,7 +352,7 @@ public class ResourceBundleNewWizardPage extends WizardPage {
             if (result.length == 1) {
                 containerText.setText(((Path)result[0]).toOSString());
             }
-        }
+        } */
     }
     
     /**

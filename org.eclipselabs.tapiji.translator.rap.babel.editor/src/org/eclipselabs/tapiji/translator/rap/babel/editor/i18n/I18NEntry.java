@@ -25,7 +25,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipselabs.tapiji.translator.rap.babel.core.message.IMessage;
 import org.eclipselabs.tapiji.translator.rap.babel.core.message.IMessagesBundle;
 import org.eclipselabs.tapiji.translator.rap.babel.core.message.IMessagesBundleGroup;
@@ -153,9 +152,10 @@ public class I18NEntry extends Composite {
     }
     
     public boolean isEditable() {
-    	IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(projectName).getMessagesBundleGroup(bundleGroupId);
+    	/* TODO [RAP] IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(projectName).getMessagesBundleGroup(bundleGroupId);
         IMessagesBundle bundle = messagesBundleGroup.getMessagesBundle(locale);
-    	return ((TextEditor) bundle.getResource().getSource()).isEditable();
+    	return ((TextEditor) bundle.getResource().getSource()).isEditable(); */
+        return true;
     }
     
     public String getResourceLocationLabel() {

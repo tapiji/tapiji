@@ -172,13 +172,13 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChang
         };
         ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener);
         
-        Display.getDefault().asyncExec(new Runnable() {
+        /* TODO [RAP] Display.getDefault().asyncExec(new Runnable() {
 			
 			public void run() {
 				Display.getDefault().addFilter(SWT.KeyUp, new UndoKeyListener());
 				
 			}
-		});
+		}); */
 	}
 
 	/**
