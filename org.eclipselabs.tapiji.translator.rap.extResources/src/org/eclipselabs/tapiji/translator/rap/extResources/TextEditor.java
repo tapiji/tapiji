@@ -1,10 +1,9 @@
 package org.eclipselabs.tapiji.translator.rap.extResources;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -91,23 +90,25 @@ public class TextEditor extends EditorPart {
 		else if (file != null)
 			return readFile();
 		else 
-			return "";
+			return null;
 	}
 	
-	private String readFile() {
-		String content = "";		
+	private String readFile() {		
+		String content = null;		
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(file));		
-			
-			String line = "";
-			while ((line = reader.readLine()) != null) {
-				content = content + line + "\n";
-			}			
-			reader.close();
+			content = FileUtils.readFileToString(file);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return content;
+	}
+	
+	private void writeFile() {
+		String content = getText();		
+		try {
+			FileUtils.writeStringToFile(file, content);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return content;
 	}
 }
