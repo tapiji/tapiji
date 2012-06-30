@@ -10,5 +10,12 @@
             name="TextEditor">
       </editor>
    </extension>
+  <extension
+        point="org.eclipse.ui.elementFactories">
+     <factory
+           class="org.eclipse.ui.part.FileEditorInputFactory"
+           id="org.eclipse.ui.part.FileEditorInputFactory">
+     </factory>
+  </extension>
 
 </plugin>
