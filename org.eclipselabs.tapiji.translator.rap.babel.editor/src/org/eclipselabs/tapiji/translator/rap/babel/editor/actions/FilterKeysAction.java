@@ -75,7 +75,7 @@ public class FilterKeysAction extends Action {
     	}
 		setText(getTextInternal());
 		setToolTipText(getTooltipInternal());
-        // TODO [RAP] setImageDescriptor(ImageDescriptor.createFromImage(getImage()));
+        setImageDescriptor(ImageDescriptor.createFromImage(getImage()));
 
     }
     

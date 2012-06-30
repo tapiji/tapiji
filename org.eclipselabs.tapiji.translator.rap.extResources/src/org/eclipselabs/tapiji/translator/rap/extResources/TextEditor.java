@@ -127,4 +127,9 @@ public class TextEditor extends EditorPart {
 			e.printStackTrace();
 		}
 	}
+
+	public void selectAndReveal(int selectionIndex, int selectionLength) {
+		textField.setSelection(selectionIndex, selectionIndex+selectionLength);
+		textField.setFocus();		
+	}
 }

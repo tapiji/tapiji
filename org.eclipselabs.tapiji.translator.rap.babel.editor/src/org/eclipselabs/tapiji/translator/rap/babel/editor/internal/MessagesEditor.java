@@ -376,11 +376,11 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 								break;
 							}
 						}
-						selectionIndex += line.length() + 2; // + \r\n
+						selectionIndex += line.length() + 1; // + \n
 					}
 
 					if (found) {
-						// TODO [RAP] editor.selectAndReveal(selectionIndex, 0);
+						editor.selectAndReveal(selectionIndex, 0);
 					}
 				} catch (CoreException e) {
 					e.printStackTrace();
