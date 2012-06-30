@@ -7,6 +7,8 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
@@ -22,13 +24,17 @@ public class TextEditor extends EditorPart {
 	private File file;
 	private Text textField;
 	
+	private boolean dirty = false;
+    
 	public TextEditor() {
 	}
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
-
+		monitor.beginTask("Saving file...", 1);
+		writeFile();
+		setDirty(false);
+		monitor.done();
 	}
 
 	@Override
@@ -52,19 +58,21 @@ public class TextEditor extends EditorPart {
 		setSite(site);
 		setInput(input);
 		setPartName(input.getName());
-		
 	}
 
 	@Override
 	public boolean isDirty() {
-		// TODO Auto-generated method stub
-		return false;
+		return dirty;
 	}
 
+	private void setDirty(boolean value) {
+		dirty = value;
+		firePropertyChange( PROP_DIRTY );
+	}
+	
 	@Override
 	public boolean isSaveAsAllowed() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -72,6 +80,14 @@ public class TextEditor extends EditorPart {
 		textField = new Text(parent, SWT.HORIZONTAL);
 		textField.setText(readFile());
 		
+		textField.addModifyListener(new ModifyListener() {			
+			@Override
+			public void modifyText(ModifyEvent event) {
+				if (!dirty) {
+					setDirty(true);
+				}
+			}
+		});		
 	}
 
 	@Override
@@ -104,7 +120,7 @@ public class TextEditor extends EditorPart {
 	}
 	
 	private void writeFile() {
-		String content = getText();		
+		String content = textField.getText();		
 		try {
 			FileUtils.writeStringToFile(file, content);
 		} catch (IOException e) {
