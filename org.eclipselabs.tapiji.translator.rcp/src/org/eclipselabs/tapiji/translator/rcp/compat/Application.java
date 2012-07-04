@@ -8,13 +8,14 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipselabs.tapiji.translator;
+package org.eclipselabs.tapiji.translator.rcp.compat;
 
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+import org.eclipselabs.tapiji.translator.ApplicationWorkbenchAdvisor;
 
 /**
  * This class controls all aspects of the application's execution

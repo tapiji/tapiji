@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.tree.internal;
 
+import java.lang.reflect.Constructor;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -25,7 +26,7 @@ import org.eclipse.babel.editor.internal.MessagesEditorMarkers;
 import org.eclipse.babel.editor.tree.IKeyTreeContributor;
 import org.eclipse.babel.editor.tree.actions.AddKeyAction;
 import org.eclipse.babel.editor.tree.actions.DeleteKeyAction;
-import org.eclipse.babel.editor.tree.actions.RenameKeyAction;
+import org.eclipse.babel.editor.tree.actions.AbstractRenameKeyAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -45,6 +46,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.IWorkbenchWindow;
 
 /**
  * @author Pascal Essiembre
@@ -330,7 +332,18 @@ public class KeyTreeContributor implements IKeyTreeContributor {
         final IAction deleteAction = new DeleteKeyAction(editor, treeViewer);
         menuManager.add(deleteAction);
         // Rename
-        final IAction renameAction = new RenameKeyAction(editor, treeViewer);
+        //final IAction renameAction = new RenameKeyAction(editor, treeViewer);
+        AbstractRenameKeyAction renameKeyAction = null;
+        try {
+        	Class<?> clazz = Class
+        			.forName(AbstractRenameKeyAction.INSTANCE_CLASS);
+			Constructor<?> cons = clazz.getConstructor(MessagesEditor.class, TreeViewer.class);
+			renameKeyAction = (AbstractRenameKeyAction) cons
+					.newInstance(editor, treeViewer);
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+        final IAction renameAction = renameKeyAction;
         menuManager.add(renameAction);
         
         menuManager.update(true);

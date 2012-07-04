@@ -27,10 +27,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.eclipse.babel.editor.compat.MySWT;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -119,13 +121,13 @@ public final class UIUtils {
     
     
     /** Image registry. */
-    private static final ImageRegistry imageRegistry =
+    private static ImageRegistry imageRegistry;
     	//TODO: REMOVE this comment eventually:
     	//necessary to specify the display otherwise Display.getCurrent()
     	//is called and will return null if this is not the UI-thread.
     	//this happens if the builder is called and initialize this class:
     	//the thread will not be the UI-thread.
-    	new ImageRegistry(PlatformUI.getWorkbench().getDisplay());
+    	//new ImageRegistry(PlatformUI.getWorkbench().getDisplay());
 
     public static final String PDE_NATURE = "org.eclipse.pde.PluginNature"; //$NON-NLS-1$
     public static final String JDT_JAVA_NATURE = "org.eclipse.jdt.core.javanature"; //$NON-NLS-1$
@@ -427,7 +429,9 @@ public final class UIUtils {
      * @return image
      */
     public static Image getImage(String imageName) {
-        Image image = imageRegistry.get(imageName);
+        if (imageRegistry == null)
+        	imageRegistry = new ImageRegistry(PlatformUI.getWorkbench().getDisplay());
+    	Image image = imageRegistry.get(imageName);
         if (image == null) {
             image = getImageDescriptor(imageName).createImage();
             imageRegistry.put(imageName, image);
@@ -503,7 +507,7 @@ public final class UIUtils {
             ComponentOrientation orientation =
                     ComponentOrientation.getOrientation(locale);
             if(orientation==ComponentOrientation.RIGHT_TO_LEFT){
-                return SWT.RIGHT_TO_LEFT;
+                return MySWT.RIGHT_TO_LEFT;
             }
         }
         return SWT.LEFT_TO_RIGHT;
@@ -529,11 +533,11 @@ public final class UIUtils {
     	if (!projDescr.exists()) {
     		return false;//a corrupted project
     	}
-    	
-    	//<classpathentry kind="src" path="src"/>
+    	    	//<classpathentry kind="src" path="src"/>
 		InputStream in = null;
 		try {
-			 in = ((IFile)projDescr).getContents();
+			 projDescr.refreshLocal(IResource.DEPTH_ZERO, null);
+			 in = projDescr.getContents();
 			//supposedly in utf-8. should not really matter for us
 			 Reader r = new InputStreamReader(in, "UTF-8");
 			 LineNumberReader lnr = new LineNumberReader(r);

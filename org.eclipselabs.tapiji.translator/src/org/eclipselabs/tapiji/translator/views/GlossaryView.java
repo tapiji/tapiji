@@ -51,7 +51,7 @@ import org.eclipselabs.tapiji.translator.views.dialog.LocaleLabelProvider;
 import org.eclipselabs.tapiji.translator.views.menus.GlossaryEntryMenuContribution;
 import org.eclipselabs.tapiji.translator.views.widgets.GlossaryWidget;
 import org.eclipselabs.tapiji.translator.views.widgets.model.GlossaryViewState;
-import org.eclipselabs.tapiji.translator.views.widgets.provider.GlossaryLabelProvider;
+import org.eclipselabs.tapiji.translator.views.widgets.provider.AbstractGlossaryLabelProvider;
 
 public class GlossaryView extends ViewPart implements ILoadGlossaryListener {
 
@@ -227,12 +227,12 @@ public class GlossaryView extends ViewPart implements ILoadGlossaryListener {
 		if (treeViewer != null
 		        && treeViewer.getViewer() != null
 		        && treeViewer.getViewer().getLabelProvider() != null
-		        && treeViewer.getViewer().getLabelProvider() instanceof GlossaryLabelProvider)
+		        && treeViewer.getViewer().getLabelProvider() instanceof AbstractGlossaryLabelProvider)
 			getSite()
 			        .getWorkbenchWindow()
 			        .getSelectionService()
 			        .removeSelectionListener(
-			                ((GlossaryLabelProvider) treeViewer.getViewer()
+			                ((AbstractGlossaryLabelProvider) treeViewer.getViewer()
 			                        .getLabelProvider()));
 
 		treeViewer = new GlossaryWidget(getSite(), parent, SWT.NONE,
@@ -243,12 +243,12 @@ public class GlossaryView extends ViewPart implements ILoadGlossaryListener {
 		// Register the label provider as selection listener
 		if (treeViewer.getViewer() != null
 		        && treeViewer.getViewer().getLabelProvider() != null
-		        && treeViewer.getViewer().getLabelProvider() instanceof GlossaryLabelProvider)
+		        && treeViewer.getViewer().getLabelProvider() instanceof AbstractGlossaryLabelProvider)
 			getSite()
 			        .getWorkbenchWindow()
 			        .getSelectionService()
 			        .addSelectionListener(
-			                ((GlossaryLabelProvider) treeViewer.getViewer()
+			                ((AbstractGlossaryLabelProvider) treeViewer.getViewer()
 			                        .getLabelProvider()));
 		if (treeViewer != null && this.glossary != null
 		        && this.glossary.getGlossary() != null) {

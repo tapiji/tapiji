@@ -11,6 +11,7 @@
 package org.eclipselabs.tapiji.translator.views.widgets;
 
 import java.awt.ComponentOrientation;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -47,11 +48,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipselabs.tapiji.translator.core.GlossaryManager;
 import org.eclipselabs.tapiji.translator.model.Glossary;
 import org.eclipselabs.tapiji.translator.model.Term;
 import org.eclipselabs.tapiji.translator.model.Translation;
+import org.eclipselabs.tapiji.translator.compat.MySWT;
 import org.eclipselabs.tapiji.translator.views.widgets.dnd.GlossaryDragSource;
 import org.eclipselabs.tapiji.translator.views.widgets.dnd.GlossaryDropTarget;
 import org.eclipselabs.tapiji.translator.views.widgets.dnd.TermTransfer;
@@ -59,7 +62,7 @@ import org.eclipselabs.tapiji.translator.views.widgets.filter.ExactMatcher;
 import org.eclipselabs.tapiji.translator.views.widgets.filter.FuzzyMatcher;
 import org.eclipselabs.tapiji.translator.views.widgets.filter.SelectiveMatcher;
 import org.eclipselabs.tapiji.translator.views.widgets.provider.GlossaryContentProvider;
-import org.eclipselabs.tapiji.translator.views.widgets.provider.GlossaryLabelProvider;
+import org.eclipselabs.tapiji.translator.views.widgets.provider.AbstractGlossaryLabelProvider;
 import org.eclipselabs.tapiji.translator.views.widgets.sorter.GlossaryEntrySorter;
 import org.eclipselabs.tapiji.translator.views.widgets.sorter.SortInfo;
 
@@ -88,7 +91,7 @@ public class GlossaryWidget extends Composite implements
 	private GlossaryManager manager;
 
 	private GlossaryContentProvider contentProvider;
-	private GlossaryLabelProvider labelProvider;
+	private AbstractGlossaryLabelProvider labelProvider;
 
 	/*** MATCHER ***/
 	ExactMatcher matcher;
@@ -198,11 +201,17 @@ public class GlossaryWidget extends Composite implements
 		// init content provider
 		contentProvider = new GlossaryContentProvider(this.glossary);
 		treeViewer.setContentProvider(contentProvider);
-
+		
 		// init label provider
-		labelProvider = new GlossaryLabelProvider(
-		        this.displayedTranslations.indexOf(referenceLocale),
-		        this.displayedTranslations, site.getPage());
+		try {
+			Class<?> clazz = Class.forName(AbstractGlossaryLabelProvider.INSTANCE_CLASS);
+			Constructor<?> constr = clazz.getConstructor(Integer.class, List.class, IWorkbenchPage.class);
+			labelProvider = (AbstractGlossaryLabelProvider) constr.newInstance(
+					this.displayedTranslations.indexOf(referenceLocale),
+					this.displayedTranslations, site.getPage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		treeViewer.setLabelProvider(labelProvider);
 
 		setTreeStructure(grouped);
@@ -256,7 +265,7 @@ public class GlossaryWidget extends Composite implements
 			ComponentOrientation orientation = ComponentOrientation
 			        .getOrientation(locale);
 			if (orientation == ComponentOrientation.RIGHT_TO_LEFT) {
-				return SWT.RIGHT_TO_LEFT;
+				return MySWT.RIGHT_TO_LEFT;
 			}
 		}
 		return SWT.LEFT_TO_RIGHT;
@@ -276,7 +285,7 @@ public class GlossaryWidget extends Composite implements
 		        refDef[0], refDef[1], refDef[2]);
 
 		this.displayedTranslations.add(referenceLocale);
-		termColumn = new TreeColumn(tree, SWT.RIGHT_TO_LEFT/* getOrientation(l) */);
+		termColumn = new TreeColumn(tree, MySWT.RIGHT_TO_LEFT/* getOrientation(l) */);
 
 		termColumn.setText(l.getDisplayName());
 		TreeViewerColumn termCol = new TreeViewerColumn(treeViewer, termColumn);

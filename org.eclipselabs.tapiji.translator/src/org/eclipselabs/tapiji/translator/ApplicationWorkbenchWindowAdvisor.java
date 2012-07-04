@@ -154,6 +154,12 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
 	private TrayItem initTrayItem(IWorkbenchWindow window) {
 		final Tray osTray = window.getShell().getDisplay().getSystemTray();
+		
+		// no support for system tray (RAP) 
+		if (osTray == null) {
+			return null;
+		}
+		
 		TrayItem item = new TrayItem(osTray, SWT.None);
 
 		trayImage = AbstractUIPlugin.imageDescriptorFromPlugin(

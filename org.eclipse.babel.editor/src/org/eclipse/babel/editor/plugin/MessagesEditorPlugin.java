@@ -171,14 +171,17 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChang
         	}
         };
         ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener);
-        
-        Display.getDefault().asyncExec(new Runnable() {
-			
-			public void run() {
-				Display.getDefault().addFilter(SWT.KeyUp, new UndoKeyListener());
+        try {
+	        Display.getDefault().asyncExec(new Runnable() {
 				
-			}
-		});
+				public void run() {
+					Display.getDefault().addFilter(SWT.KeyUp, new UndoKeyListener());
+					
+				}
+			});
+        } catch (NullPointerException e) {
+        	// TODO [RAP] Session not loaded yet -> Display is null
+        }
 	}
 
 	/**

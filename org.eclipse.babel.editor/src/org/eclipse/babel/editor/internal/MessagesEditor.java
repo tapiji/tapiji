@@ -362,8 +362,10 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 				FileEditorInput input = (FileEditorInput) editor
 				        .getEditorInput();
 				try {
+					IFile file = input.getFile();
+					file.refreshLocal(IResource.DEPTH_ZERO, null);
 					BufferedReader reader = new BufferedReader(
-					        new InputStreamReader(input.getFile().getContents()));
+					        new InputStreamReader(file.getContents()));
 					String line = "";
 					int selectionIndex = 0;
 					boolean found = false;

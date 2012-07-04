@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<fragment>
+   
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipselabs.tapiji.application"
+            name="TapiJI Translator">
+         <property
+               name="windowImages"
+               value="platform:/plugin/org.eclipselabs.tapiji.tools.core/icons/TapiJI_16.png,platform:/plugin/at.ac.tuwien.inso.eclipse.i18n/icons/TapiJI_32.png,platform:/plugin/org.eclipselabs.tapiji.tools.core/icons/TapiJI_48.png,platform:/plugin/org.eclipselabs.tapiji.tools.core/icons/TapiJI_64.png,platform:/plugin/org.eclipselabs.tapiji.tools.core/icons/TapiJI_128.png">
+         </property>
+         <property
+               name="appName"
+               value="TapiJI Translator">
+         </property>
+         <property
+               name="aboutImage"
+               value="platform:/plugin/org.eclipselabs.tapiji.tools.core/icons/TapiJI_128.png">
+         </property>
+         <property
+               name="aboutText"
+               value="TapiJI - Translator &#x0A;Version 1.0.0&#x0A;by Stefan Strobl &amp; Martin Reiterer">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+      </product>
+   </extension>
+    <extension
+        id="app"
+        point="org.eclipse.core.runtime.products">
+     <product
+           application="org.eclipselabs.tapiji.translator.application"
+           name="TapiJI Translator">
+        <property
+              name="windowImages"
+              value="icons/TapiJI_16.png,icons/TapiJI_32.png,icons/TapiJI_48.png,icons/TapiJI_64.png,icons/TapiJI_128.png">
+        </property>
+        <property
+              name="aboutText"
+              value="TapiJI - Translator &#x0A;Version 1.0.0&#x0A;by Stefan Strobl &amp; Martin Reiterer">
+        </property>
+        <property
+              name="aboutImage"
+              value="icons/TapiJI_128.png">
+        </property>
+        <property
+              name="appName"
+              value="TapiJI Translator">
+        </property>
+     </product>
+  </extension>
+  <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="org.eclipselabs.tapiji.translator.rcp.compat.Application">
+         </run>
+      </application>
+   </extension>
+</fragment>

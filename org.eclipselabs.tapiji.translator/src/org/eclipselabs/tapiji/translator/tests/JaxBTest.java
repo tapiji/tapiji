@@ -18,16 +18,16 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import junit.framework.Assert;
+import junit.framework.TestCase;
+
 import org.eclipselabs.tapiji.translator.model.Glossary;
 import org.eclipselabs.tapiji.translator.model.Info;
 import org.eclipselabs.tapiji.translator.model.Term;
 import org.eclipselabs.tapiji.translator.model.Translation;
-import org.junit.Assert;
-import org.junit.Test;
 
-public class JaxBTest {
-
-	@Test
+public class JaxBTest extends TestCase {
+	
 	public void testModel() {
 		Glossary glossary = new Glossary();
 		Info info = new Info();
@@ -119,7 +119,6 @@ public class JaxBTest {
 		}
 	}
 
-	@Test
 	public void testReadModel() {
 		Glossary glossary = new Glossary();
 

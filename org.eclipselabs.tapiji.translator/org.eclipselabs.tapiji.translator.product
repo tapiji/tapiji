@@ -228,8 +228,11 @@ litigation.
       <plugin id="javax.transaction" fragment="true"/>
       <plugin id="org.eclipse.ant.core"/>
       <plugin id="org.eclipse.babel.core"/>
+      <plugin id="org.eclipse.babel.core.rcp" fragment="true"/>
       <plugin id="org.eclipse.babel.editor"/>
       <plugin id="org.eclipse.babel.editor.nls" fragment="true"/>
+      <plugin id="org.eclipse.babel.editor.rcp" fragment="true"/>
+      <plugin id="org.eclipse.babel.editor.rcp.compat"/>
       <plugin id="org.eclipse.compare"/>
       <plugin id="org.eclipse.compare.core"/>
       <plugin id="org.eclipse.core.commands"/>
@@ -305,7 +308,9 @@ litigation.
       <plugin id="org.eclipse.ui.workbench.texteditor"/>
       <plugin id="org.eclipse.update.configurator"/>
       <plugin id="org.eclipselabs.tapiji.translator"/>
-      <plugin id="org.eclipselabs.tapiji.translator.rbe"/>
+      <plugin id="org.eclipselabs.tapiji.translator.rbe" fragment=""/>
+      <plugin id="org.eclipselabs.tapiji.translator.rcp" fragment="true"/>
+      <plugin id="org.eclipselabs.tapiji.translator.rcp.compat"/>
       <plugin id="org.hamcrest.core"/>
       <plugin id="org.junit"/>
       <plugin id="org.sat4j.core"/>
