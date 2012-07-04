@@ -4,11 +4,18 @@
   <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.eclipselabs.tapiji.translator.rap.extResources.TextEditor"
+            class="org.eclipse.ui.editors.text.TextEditor"
             default="false"
             id="org.eclipselabs.tapiji.translator.rap.wrappers.TextEditor"
             name="TextEditor">
       </editor>
    </extension>
+  <extension
+        point="org.eclipse.ui.elementFactories">
+     <factory
+           class="org.eclipse.ui.part.FileEditorInputFactory"
+           id="org.eclipse.ui.part.FileEditorInputFactory">
+     </factory>
+  </extension>
 
 </plugin>

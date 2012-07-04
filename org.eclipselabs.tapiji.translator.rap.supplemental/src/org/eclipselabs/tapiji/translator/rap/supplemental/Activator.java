@@ -1,4 +1,4 @@
-package org.eclipselabs.tapiji.translator.rap.extResources;
+package org.eclipselabs.tapiji.translator.rap.supplemental;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
