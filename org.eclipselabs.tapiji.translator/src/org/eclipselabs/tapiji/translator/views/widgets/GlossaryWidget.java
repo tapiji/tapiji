@@ -205,7 +205,7 @@ public class GlossaryWidget extends Composite implements
 		// init label provider
 		try {
 			Class<?> clazz = Class.forName(AbstractGlossaryLabelProvider.INSTANCE_CLASS);
-			Constructor<?> constr = clazz.getConstructor(Integer.class, List.class, IWorkbenchPage.class);
+			Constructor<?> constr = clazz.getConstructor(int.class, List.class, IWorkbenchPage.class);
 			labelProvider = (AbstractGlossaryLabelProvider) constr.newInstance(
 					this.displayedTranslations.indexOf(referenceLocale),
 					this.displayedTranslations, site.getPage());

@@ -235,7 +235,6 @@ litigation.
 
    <plugins>
       <plugin id="com.ibm.icu"/>
-      <plugin id="javax.transaction" fragment="true"/>
       <plugin id="org.eclipse.ant.core"/>
       <plugin id="org.eclipse.babel.core"/>
       <plugin id="org.eclipse.babel.editor"/>
