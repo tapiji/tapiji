@@ -5,4 +5,5 @@ Bundle-SymbolicName: org.eclipse.babel.tapiji.translator.rbe
 Bundle-Version: 0.0.2.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.eclipse.babel.tapiji.translator.rbe.babel.bundle
-Require-Bundle: org.eclipse.jface;bundle-version="3.6.2"
+Require-Bundle: org.eclipse.jface;bundle-version="3.6.2";resolution:=optional,
+ org.eclipse.rap.jface;bundle-version="1.5.0";resolution:=optional
