@@ -7,16 +7,20 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - updateKey
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.Message;
+import org.eclipse.babel.core.message.IMessage;
+import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.IMessagesBundleGroup;
+import org.eclipse.babel.core.message.internal.Message;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.util.BabelUtils;
-import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
+import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.editor.widgets.NullableText;
 import org.eclipse.swt.SWT;
@@ -32,9 +36,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.editors.text.TextEditor;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
 
 /**
  * Tree for displaying and navigating through resource bundle keys.
@@ -277,7 +278,10 @@ public class I18NEntry extends Composite {
                 IMessage entry = messagesBundleGroup.getMessage(key, locale);
                 if (entry == null) {
                     entry = new Message(key, locale);
-                    messagesBundleGroup.getMessagesBundle(locale).addMessage(entry);
+                    IMessagesBundle messagesBundle = messagesBundleGroup.getMessagesBundle(locale);
+                    if (messagesBundle != null) {
+                    	messagesBundle.addMessage(entry);
+                    }
                 }
                 entry.setText(textBox.getText());
             }

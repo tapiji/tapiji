@@ -7,14 +7,15 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - TapJI integration, messagesBundleId
  ******************************************************************************/
 package org.eclipse.babel.core.message.strategy;
 
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.MessageException;
-import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
+import org.eclipse.babel.core.message.internal.MessageException;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
+import org.eclipse.babel.core.message.resource.IMessagesResource;
 
 
 

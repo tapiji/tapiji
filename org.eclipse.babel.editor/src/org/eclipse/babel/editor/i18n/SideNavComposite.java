@@ -10,12 +10,12 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
-import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.tree.KeyTreeContributor;
+import org.eclipse.babel.editor.internal.MessagesEditor;
 import org.eclipse.babel.editor.tree.actions.CollapseAllAction;
 import org.eclipse.babel.editor.tree.actions.ExpandAllAction;
 import org.eclipse.babel.editor.tree.actions.FlatModelAction;
 import org.eclipse.babel.editor.tree.actions.TreeModelAction;
+import org.eclipse.babel.editor.tree.internal.KeyTreeContributor;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.TreeViewer;

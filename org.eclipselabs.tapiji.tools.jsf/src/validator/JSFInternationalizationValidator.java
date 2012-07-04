@@ -1,7 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) 2012 TapiJI.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Martin Reiterer - initial API and implementation
+ ******************************************************************************/
 package validator;
 
 import java.util.List;
 
+import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.util.EditorUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
@@ -13,14 +26,12 @@ import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidationContext;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
-import org.eclipselabs.tapiji.tools.core.extensions.IMarkerConstants;
-import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipselabs.tapiji.tools.core.util.EditorUtils;
 
 import auditor.JSFResourceBundleDetector;
 import auditor.model.SLLocation;
 
-public class JSFInternationalizationValidator implements IValidator, ISourceValidator {
+public class JSFInternationalizationValidator implements IValidator,
+        ISourceValidator {
 
 	private IDocument document;
 
@@ -30,14 +41,15 @@ public class JSFInternationalizationValidator implements IValidator, ISourceVali
 
 	@Override
 	public void validate(IValidationContext context, IReporter reporter)
-			throws ValidationException {
+	        throws ValidationException {
 		if (context.getURIs().length > 0) {
 			IFile file = ResourcesPlugin.getWorkspace().getRoot()
-					.getFile(new Path(context.getURIs()[0]));
+			        .getFile(new Path(context.getURIs()[0]));
 
 			// full document validation
-			EditorUtils.deleteAuditMarkersForResource(file.getProject()
-					.findMember(file.getProjectRelativePath()));
+			org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils
+			        .deleteAuditMarkersForResource(file.getProject()
+			                .findMember(file.getProjectRelativePath()));
 
 			// validate all bundle definitions
 			int pos = document.get().indexOf("loadBundle", 0);
@@ -66,69 +78,68 @@ public class JSFInternationalizationValidator implements IValidator, ISourceVali
 	}
 
 	public void validateRegion(IRegion dirtyRegion, IValidationContext context,
-			IReporter reporter) {
+	        IReporter reporter) {
 		int startPos = dirtyRegion.getOffset();
 		int endPos = dirtyRegion.getOffset() + dirtyRegion.getLength();
 
 		if (context.getURIs().length > 0) {
 			IFile file = ResourcesPlugin.getWorkspace().getRoot()
-					.getFile(new Path(context.getURIs()[0]));
+			        .getFile(new Path(context.getURIs()[0]));
 			ResourceBundleManager manager = ResourceBundleManager
-					.getManager(file.getProject());
+			        .getManager(file.getProject());
 
 			String bundleName = JSFResourceBundleDetector
-					.resolveResourceBundleRefIdentifier(document, startPos);
+			        .resolveResourceBundleRefIdentifier(document, startPos);
 			if (bundleName != null
-					&& !manager.getResourceBundleIdentifiers().contains(
-							bundleName)) {
+			        && !manager.getResourceBundleIdentifiers().contains(
+			                bundleName)) {
 				IRegion reg = JSFResourceBundleDetector.getBasenameRegion(
-						document, startPos);
+				        document, startPos);
 				String ref = document.get().substring(reg.getOffset(),
-						reg.getOffset() + reg.getLength());
+				        reg.getOffset() + reg.getLength());
 
-				EditorUtils
-						.reportToMarker(
-								EditorUtils
-										.getFormattedMessage(
-												EditorUtils.MESSAGE_BROKEN_RESOURCE_BUNDLE_REFERENCE,
-												new String[] { ref }),
-								new SLLocation(file, reg.getOffset(), reg
-										.getOffset() + reg.getLength(), ref),
-								IMarkerConstants.CAUSE_BROKEN_RB_REFERENCE,
-								ref, null, "jsf");
+				org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils
+				        .reportToMarker(
+				                EditorUtils
+				                        .getFormattedMessage(
+				                                EditorUtils.MESSAGE_BROKEN_RESOURCE_BUNDLE_REFERENCE,
+				                                new String[] { ref }),
+				                new SLLocation(file, reg.getOffset(), reg
+				                        .getOffset() + reg.getLength(), ref),
+				                IMarkerConstants.CAUSE_BROKEN_RB_REFERENCE,
+				                ref, null, "jsf");
 				return;
 			}
 
 			IRegion evr = JSFResourceBundleDetector.getElementAttrValueRegion(
-					document, "value", startPos);
+			        document, "value", startPos);
 			if (evr != null) {
 				String elementValue = document.get().substring(evr.getOffset(),
-						evr.getOffset() + evr.getLength());
+				        evr.getOffset() + evr.getLength());
 
 				// check all constant string expressions
 				List<IRegion> regions = JSFResourceBundleDetector
-						.getNonELValueRegions(elementValue);
+				        .getNonELValueRegions(elementValue);
 
 				for (IRegion region : regions) {
 					// report constant string literals
 					String constantLiteral = elementValue.substring(
-							region.getOffset(),
-							region.getOffset() + region.getLength());
+					        region.getOffset(),
+					        region.getOffset() + region.getLength());
 
-					EditorUtils
-							.reportToMarker(
-									EditorUtils
-											.getFormattedMessage(
-													EditorUtils.MESSAGE_NON_LOCALIZED_LITERAL,
-													new String[] { constantLiteral }),
-									new SLLocation(file, region.getOffset()
-											+ evr.getOffset(), evr.getOffset()
-											+ region.getOffset()
-											+ region.getLength(),
-											constantLiteral),
-									IMarkerConstants.CAUSE_CONSTANT_LITERAL,
-									constantLiteral, null,
-									"jsf");
+					org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils
+					        .reportToMarker(
+					                EditorUtils
+					                        .getFormattedMessage(
+					                                EditorUtils.MESSAGE_NON_LOCALIZED_LITERAL,
+					                                new String[] { constantLiteral }),
+					                new SLLocation(file, region.getOffset()
+					                        + evr.getOffset(), evr.getOffset()
+					                        + region.getOffset()
+					                        + region.getLength(),
+					                        constantLiteral),
+					                IMarkerConstants.CAUSE_CONSTANT_LITERAL,
+					                constantLiteral, null, "jsf");
 				}
 
 				// check el expressions
@@ -141,14 +152,14 @@ public class JSFInternationalizationValidator implements IValidator, ISourceVali
 					if ((end - start) > 6) {
 						String def = document.get().substring(start + 2, end);
 						String varName = JSFResourceBundleDetector
-								.getBundleVariableName(def);
+						        .getBundleVariableName(def);
 						String key = JSFResourceBundleDetector
-								.getResourceKey(def);
+						        .getResourceKey(def);
 						if (varName != null && key != null) {
 							if (varName.length() > 0) {
 								IRegion refReg = JSFResourceBundleDetector
-										.resolveResourceBundleRefPos(document,
-												varName);
+								        .resolveResourceBundleRefPos(document,
+								                varName);
 
 								if (refReg == null) {
 									start = document.get().indexOf("#{", end);
@@ -157,31 +168,32 @@ public class JSFInternationalizationValidator implements IValidator, ISourceVali
 
 								int bundleStart = refReg.getOffset();
 								int bundleEnd = refReg.getOffset()
-										+ refReg.getLength();
+								        + refReg.getLength();
 
 								if (manager.isKeyBroken(
-										document.get().substring(
-												refReg.getOffset(),
-												refReg.getOffset()
-														+ refReg.getLength()),
-										key)) {
+								        document.get().substring(
+								                refReg.getOffset(),
+								                refReg.getOffset()
+								                        + refReg.getLength()),
+								        key)) {
 									SLLocation subMarker = new SLLocation(file,
-											bundleStart, bundleEnd, document
-													.get().substring(
-															bundleStart,
-															bundleEnd));
-									EditorUtils
-											.reportToMarker(
-													EditorUtils
-														.getFormattedMessage(
-															EditorUtils.MESSAGE_BROKEN_RESOURCE_REFERENCE,
-															new String[] { key, subMarker.getLiteral() }),
-													new SLLocation(file,
-															start+2, end, key),
-													IMarkerConstants.CAUSE_BROKEN_REFERENCE,
-													key,
-													subMarker,
-													"jsf");
+									        bundleStart, bundleEnd, document
+									                .get().substring(
+									                        bundleStart,
+									                        bundleEnd));
+									org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils
+									        .reportToMarker(
+									                EditorUtils
+									                        .getFormattedMessage(
+									                                EditorUtils.MESSAGE_BROKEN_RESOURCE_REFERENCE,
+									                                new String[] {
+									                                        key,
+									                                        subMarker
+									                                                .getLiteral() }),
+									                new SLLocation(file,
+									                        start + 2, end, key),
+									                IMarkerConstants.CAUSE_BROKEN_REFERENCE,
+									                key, subMarker, "jsf");
 								}
 							}
 						}
@@ -194,6 +206,7 @@ public class JSFInternationalizationValidator implements IValidator, ISourceVali
 	}
 
 	@Override
-	public void validate(IRegion arg0, IValidationContext arg1, IReporter arg2) {}
+	public void validate(IRegion arg0, IValidationContext arg1, IReporter arg2) {
+	}
 
 }

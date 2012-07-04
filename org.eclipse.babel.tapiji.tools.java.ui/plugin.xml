@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.babel.tapiji.tools.core.builderExtension">
+      <i18nResourceAuditor
+            class="org.eclipse.babel.tapiji.tools.java.ui.JavaResourceAuditor">
+      </i18nResourceAuditor>
+   </extension>
+   <extension
+         point="org.eclipse.jdt.ui.javaEditorTextHovers">
+      <hover
+            activate="true"
+            class="org.eclipse.babel.tapiji.tools.java.ui.ConstantStringHover"
+            description="hovers constant strings"
+            id="org.eclipse.babel.tapiji.tools.java.ui.ConstantStringHover"
+            label="Constant Strings">
+      </hover>
+   </extension>
+   <extension
+         id="org.eclipse.babel.tapiji.tools.java.ui.MessageCompletionProcessor"
+         name="org.eclipse.babel.tapiji.tools.java.ui.MessageCompletionProcessor"
+         point="org.eclipse.jdt.ui.javaCompletionProposalComputer">
+      <javaCompletionProposalComputer
+            activate="true"
+            categoryId="org.eclipse.jdt.ui.defaultProposalCategory"
+            class="org.eclipse.babel.tapiji.tools.java.ui.MessageCompletionProposalComputer">
+         <partition
+               type="__java_string">
+         </partition>
+         <partition
+               type="__dftl_partition_content_type">
+         </partition>
+      </javaCompletionProposalComputer>
+         
+   </extension>
+</plugin>

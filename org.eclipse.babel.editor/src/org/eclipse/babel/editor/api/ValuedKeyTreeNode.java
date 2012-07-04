@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2012 TapiJI.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Martin Reiterer - initial API and implementation
+ ******************************************************************************/
 package org.eclipse.babel.editor.api;
 
 import java.util.ArrayList;
@@ -7,10 +17,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.eclipse.babel.core.message.tree.KeyTreeNode;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IKeyTreeNode;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundleGroup;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IValuedKeyTreeNode;
+import org.eclipse.babel.core.message.IMessagesBundleGroup;
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
+import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 
 
 public class ValuedKeyTreeNode extends KeyTreeNode implements IValuedKeyTreeNode {
@@ -33,6 +42,12 @@ public class ValuedKeyTreeNode extends KeyTreeNode implements IValuedKeyTreeNode
     
     public String getValue (Locale locale) {
         return values.get(locale);
+    }
+    
+    public void setValue(Locale locale, String newValue) {
+    	if (values.containsKey(locale))
+    		values.remove(locale);
+    	addValue(locale, newValue);
     }
     
     public Collection<String> getValues () {

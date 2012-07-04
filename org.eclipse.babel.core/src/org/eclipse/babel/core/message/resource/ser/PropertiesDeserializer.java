@@ -16,11 +16,11 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Properties;
 
-import org.eclipse.babel.core.message.Message;
-import org.eclipse.babel.core.message.MessagesBundle;
+import org.eclipse.babel.core.message.IMessage;
+import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.internal.Message;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.util.BabelUtils;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessage;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 
 /**
  * Class responsible for deserializing {@link Properties}-like text into

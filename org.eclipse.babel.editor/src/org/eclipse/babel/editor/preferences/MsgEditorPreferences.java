@@ -7,6 +7,8 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - externalized IPropertiesSerializerConfig and 
+ *    					IPropertiesDeserializerConfig for better reuse
  ******************************************************************************/
 package org.eclipse.babel.editor.preferences;
 
@@ -15,9 +17,9 @@ import java.util.StringTokenizer;
 import org.eclipse.babel.core.message.resource.ser.IPropertiesDeserializerConfig;
 import org.eclipse.babel.core.message.resource.ser.IPropertiesSerializerConfig;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
-import org.eclipse.babel.editor.MessagesEditor;
 import org.eclipse.babel.editor.builder.Builder;
 import org.eclipse.babel.editor.builder.ToggleNatureAction;
+import org.eclipse.babel.editor.internal.MessagesEditor;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;

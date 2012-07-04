@@ -18,8 +18,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
@@ -37,7 +38,6 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 
 /**
  * @author Pascal Essiembre

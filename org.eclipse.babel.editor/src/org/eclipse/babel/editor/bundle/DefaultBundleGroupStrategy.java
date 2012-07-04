@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - TapJI integration, messagesBundleId
  ******************************************************************************/
 package org.eclipse.babel.editor.bundle;
 
@@ -14,9 +15,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.MessageException;
-import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.core.message.resource.PropertiesIFileResource;
+import org.eclipse.babel.core.message.internal.MessageException;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
+import org.eclipse.babel.core.message.resource.IMessagesResource;
+import org.eclipse.babel.core.message.resource.internal.PropertiesIFileResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy;
@@ -38,7 +40,6 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 
 
 /**
@@ -91,11 +92,11 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
     }
 
     /**
-     * @see org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy
+     * @see org.eclipse.babel.core.message.internal.strategy.IMessagesBundleGroupStrategy
      *          #createMessagesBundleGroupName()
      */
     public String createMessagesBundleGroupName() {
-        return baseName + "[...]." + file.getFileExtension(); //$NON-NLS-1$
+    	return getProjectName()+"*.properties";
     }
     
     public String createMessagesBundleId() {

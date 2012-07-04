@@ -4,8 +4,8 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.eclipse.babel.editor.MessagesEditor"
-            contributorClass="org.eclipse.babel.editor.MessagesEditorContributor"
+            class="org.eclipse.babel.editor.internal.MessagesEditor"
+            contributorClass="org.eclipse.babel.editor.internal.MessagesEditorContributor"
             default="true"
             extensions="properties"
             icon="icons/propertiesfile.gif"
@@ -152,9 +152,9 @@
     </category>
     <wizard
           category="org.eclipse.babel.editor.wizards.ResourceBundle"
-          class="org.eclipse.babel.editor.wizards.ResourceBundleWizard"
+          class="org.eclipse.babel.editor.wizards.internal.ResourceBundleWizard"
           icon="icons/resourcebundle.gif"
-          id="org.eclipse.babel.editor.wizards.ResourceBundleWizard"
+          id="org.eclipse.babel.editor.wizards.internal.ResourceBundleWizard"
           name="%wizard.rb.title">
        <description>
           %wizard.rb.description

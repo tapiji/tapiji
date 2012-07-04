@@ -11,12 +11,14 @@
 package org.eclipse.babel.editor.actions;
 
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
-import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
-import org.eclipse.babel.editor.MessagesEditorContributor;
+import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
+import org.eclipse.babel.editor.internal.MessagesEditorContributor;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 
 /**
  * 
@@ -73,11 +75,27 @@ public class FilterKeysAction extends Action {
     	}
 		setText(getTextInternal());
 		setToolTipText(getTooltipInternal());
-        setImageDescriptor(UIUtils.getImageDescriptor(getImageKey()));
+        setImageDescriptor(ImageDescriptor.createFromImage(getImage()));
 
     }
     
-    public String getImageKey() {
+    public Image getImage() {
+    	switch (flagToSet) {
+    	case IMessagesEditorChangeListener.SHOW_ONLY_MISSING:
+    		//return UIUtils.IMAGE_MISSING_TRANSLATION;
+    		return UIUtils.getMissingTranslationImage();
+    	case IMessagesEditorChangeListener.SHOW_ONLY_MISSING_AND_UNUSED:
+    		//return UIUtils.IMAGE_UNUSED_AND_MISSING_TRANSLATIONS;
+    		return UIUtils.getMissingAndUnusedTranslationsImage();
+    	case IMessagesEditorChangeListener.SHOW_ONLY_UNUSED:
+    		//return UIUtils.IMAGE_UNUSED_TRANSLATION;
+    		return UIUtils.getUnusedTranslationsImage();
+    	case IMessagesEditorChangeListener.SHOW_ALL:
+    	default:
+    		return UIUtils.getImage(UIUtils.IMAGE_KEY); 
+    	}
+    }
+    /*public String getImageKey() {
     	switch (flagToSet) {
     	case IMessagesEditorChangeListener.SHOW_ONLY_MISSING:
     		return UIUtils.IMAGE_MISSING_TRANSLATION;
@@ -89,7 +107,7 @@ public class FilterKeysAction extends Action {
     	default:
     		return UIUtils.IMAGE_KEY; 
     	}
-    }
+    }*/
     
     public String getTextInternal() {
     	switch (flagToSet) {

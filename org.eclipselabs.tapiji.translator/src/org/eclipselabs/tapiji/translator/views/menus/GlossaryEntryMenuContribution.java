@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2012 TapiJI.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Martin Reiterer - initial API and implementation
+ ******************************************************************************/
 package org.eclipselabs.tapiji.translator.views.menus;
 
 import org.eclipse.jface.action.ContributionItem;
@@ -12,9 +22,8 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipselabs.tapiji.translator.views.widgets.GlossaryWidget;
 
-
-public class GlossaryEntryMenuContribution  extends ContributionItem implements
-		ISelectionChangedListener {
+public class GlossaryEntryMenuContribution extends ContributionItem implements
+        ISelectionChangedListener {
 
 	private GlossaryWidget parentView;
 	private boolean legalSelection = false;
@@ -23,10 +32,11 @@ public class GlossaryEntryMenuContribution  extends ContributionItem implements
 	private MenuItem addItem;
 	private MenuItem removeItem;
 
-	public GlossaryEntryMenuContribution () {
+	public GlossaryEntryMenuContribution() {
 	}
 
-	public GlossaryEntryMenuContribution (GlossaryWidget view, boolean legalSelection) {
+	public GlossaryEntryMenuContribution(GlossaryWidget view,
+	        boolean legalSelection) {
 		this.legalSelection = legalSelection;
 		this.parentView = view;
 		parentView.addSelectionChangedListener(this);
@@ -39,17 +49,17 @@ public class GlossaryEntryMenuContribution  extends ContributionItem implements
 		addItem = new MenuItem(menu, SWT.NONE, index);
 		addItem.setText("Add ...");
 		addItem.setImage(PlatformUI.getWorkbench().getSharedImages()
-				.getImageDescriptor(ISharedImages.IMG_OBJ_ADD).createImage());
-		addItem.addSelectionListener( new SelectionListener() {
-			
+		        .getImageDescriptor(ISharedImages.IMG_OBJ_ADD).createImage());
+		addItem.addSelectionListener(new SelectionListener() {
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				parentView.addNewItem();
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				
+
 			}
 		});
 
@@ -58,18 +68,18 @@ public class GlossaryEntryMenuContribution  extends ContributionItem implements
 			removeItem = new MenuItem(menu, SWT.NONE, index + 1);
 			removeItem.setText("Remove");
 			removeItem.setImage(PlatformUI.getWorkbench().getSharedImages()
-					.getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE)
-					.createImage());
-			removeItem.addSelectionListener( new SelectionListener() {
-				
+			        .getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE)
+			        .createImage());
+			removeItem.addSelectionListener(new SelectionListener() {
+
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					parentView.deleteSelectedItems();
 				}
-				
+
 				@Override
 				public void widgetDefaultSelected(SelectionEvent e) {
-					
+
 				}
 			});
 			enableMenuItems();
@@ -86,7 +96,7 @@ public class GlossaryEntryMenuContribution  extends ContributionItem implements
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
 		legalSelection = !event.getSelection().isEmpty();
-//		 enableMenuItems ();
+		// enableMenuItems ();
 	}
 
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<fragment>
+   <extension
+         point="org.eclipse.rap.ui.entrypoint">
+      <entrypoint
+            class="org.eclipselabs.tapiji.translator.rap.TranslatorEntryPoint"
+            id="org.eclipselabs.tapiji.translator.rap.entrypoint"
+            parameter="translator">
+      </entrypoint>
+   </extension>
+
+</fragment>

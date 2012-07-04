@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: RAP Compatibility for TapiJI Transaltor
+Bundle-SymbolicName: org.eclipselabs.tapiji.translator.rap.compat
+Bundle-Version: 0.0.2.qualifier
+Bundle-Activator: org.eclipselabs.tapiji.translator.compat.Activator
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.eclipse.rap.ui;bundle-version="1.5.0"
+Export-Package: org.eclipselabs.tapiji.translator.compat

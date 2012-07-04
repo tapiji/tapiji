@@ -13,9 +13,10 @@ package org.eclipse.pde.nls.internal.ui.dialogs;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.Message;
-import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.core.message.resource.PropertiesIFileResource;
+import org.eclipse.babel.core.message.internal.Message;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
+import org.eclipse.babel.core.message.resource.IMessagesResource;
+import org.eclipse.babel.core.message.resource.internal.PropertiesIFileResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
@@ -48,7 +49,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesResource;
 
 public class EditResourceBundleEntriesDialog extends Dialog {
 

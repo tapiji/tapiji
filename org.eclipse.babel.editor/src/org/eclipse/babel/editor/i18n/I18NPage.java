@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - TapiJI integration, fixed issues 37, 48
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
@@ -15,16 +16,18 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.eclipse.babel.core.message.IMessagesBundle;
 import org.eclipse.babel.core.message.manager.IMessagesEditorListener;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
-import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
+import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -32,7 +35,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipselabs.tapiji.translator.rbe.babel.bundle.IMessagesBundle;
 
 /**
  * Internationalization page where one can edit all resource bundle entries 
@@ -219,5 +221,9 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
 
     public void setSelection(ISelection selection) {
         keysComposite.getTreeViewer().setSelection(selection);
+    }
+    
+    public TreeViewer getTreeViewer() {
+    	return keysComposite.getTreeViewer();
     }
 }

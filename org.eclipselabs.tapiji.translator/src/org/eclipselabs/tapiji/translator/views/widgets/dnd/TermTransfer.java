@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2012 TapiJI.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Martin Reiterer - initial API and implementation
+ ******************************************************************************/
 package org.eclipselabs.tapiji.translator.views.widgets.dnd;
 
 import java.io.ByteArrayInputStream;
@@ -13,7 +23,6 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipselabs.tapiji.translator.model.Term;
 
-
 public class TermTransfer extends ByteArrayTransfer {
 
 	private static final String TERM = "term";
@@ -27,7 +36,7 @@ public class TermTransfer extends ByteArrayTransfer {
 	}
 
 	public void javaToNative(Object object, TransferData transferData) {
-		if (!checkType(object)  || !isSupportedType(transferData)) {
+		if (!checkType(object) || !isSupportedType(transferData)) {
 			DND.error(DND.ERROR_INVALID_DATA);
 		}
 		Term[] terms = (Term[]) object;
@@ -39,7 +48,7 @@ public class TermTransfer extends ByteArrayTransfer {
 			}
 			byte[] buffer = out.toByteArray();
 			oOut.close();
-			
+
 			super.javaToNative(buffer, transferData);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -63,10 +72,10 @@ public class TermTransfer extends ByteArrayTransfer {
 			try {
 				ByteArrayInputStream in = new ByteArrayInputStream(buffer);
 				ObjectInputStream readIn = new ObjectInputStream(in);
-				//while (readIn.available() > 0) {
-					Term newTerm = (Term) readIn.readObject();
-					terms.add(newTerm);
-				//}
+				// while (readIn.available() > 0) {
+				Term newTerm = (Term) readIn.readObject();
+				terms.add(newTerm);
+				// }
 				readIn.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -88,7 +97,7 @@ public class TermTransfer extends ByteArrayTransfer {
 
 	boolean checkType(Object object) {
 		if (object == null || !(object instanceof Term[])
-				|| ((Term[]) object).length == 0) {
+		        || ((Term[]) object).length == 0) {
 			return false;
 		}
 		Term[] myTypes = (Term[]) object;

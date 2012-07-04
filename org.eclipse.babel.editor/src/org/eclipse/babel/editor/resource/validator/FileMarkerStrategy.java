@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.resource.validator;
 
-import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.core.message.checks.DuplicateValueCheck;
-import org.eclipse.babel.core.message.checks.MissingValueCheck;
+import org.eclipse.babel.core.message.checks.internal.DuplicateValueCheck;
+import org.eclipse.babel.core.message.checks.internal.MissingValueCheck;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;

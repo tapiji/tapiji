@@ -12,9 +12,9 @@ package org.eclipse.babel.editor.resource.validator;
 
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.MessagesBundleGroup;
-import org.eclipse.babel.core.message.checks.DuplicateValueCheck;
-import org.eclipse.babel.core.message.checks.MissingValueCheck;
+import org.eclipse.babel.core.message.checks.internal.DuplicateValueCheck;
+import org.eclipse.babel.core.message.checks.internal.MissingValueCheck;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 
 

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor;
 
-import org.eclipse.babel.core.message.tree.AbstractKeyTreeModel;
+import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
 
 
 

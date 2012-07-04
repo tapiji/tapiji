@@ -27,16 +27,20 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.eclipse.babel.editor.compat.MySWT;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.viewers.DecorationOverlayIcon;
+import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
@@ -100,22 +104,30 @@ public final class UIUtils {
     public static final String IMAGE_EMPTY =
     		"empty.gif";  //$NON-NLS-1$
     public static final String IMAGE_MISSING_TRANSLATION =
-			"missing_translation.png";  //$NON-NLS-1$
+			"missing_translation.gif";  //$NON-NLS-1$
     public static final String IMAGE_UNUSED_TRANSLATION =
 			"unused_translation.png";  //$NON-NLS-1$
     public static final String IMAGE_UNUSED_AND_MISSING_TRANSLATIONS =
 			"unused_and_missing_translations.png";  //$NON-NLS-1$
     public static final String IMAGE_WARNED_TRANSLATION =
 			"warned_translation.png";  //$NON-NLS-1$
+    public static final String IMAGE_DUPLICATE =
+			"duplicate.gif";  //$NON-NLS-1$
+    
+    public static final String IMAGE_WARNING =
+			"warning.gif";  //$NON-NLS-1$
+    public static final String IMAGE_ERROR =
+			"error_co.gif";  //$NON-NLS-1$
+    
     
     /** Image registry. */
-    private static final ImageRegistry imageRegistry =
+    private static ImageRegistry imageRegistry;
     	//TODO: REMOVE this comment eventually:
     	//necessary to specify the display otherwise Display.getCurrent()
     	//is called and will return null if this is not the UI-thread.
     	//this happens if the builder is called and initialize this class:
     	//the thread will not be the UI-thread.
-    	new ImageRegistry(PlatformUI.getWorkbench().getDisplay());
+    	//new ImageRegistry(PlatformUI.getWorkbench().getDisplay());
 
     public static final String PDE_NATURE = "org.eclipse.pde.PluginNature"; //$NON-NLS-1$
     public static final String JDT_JAVA_NATURE = "org.eclipse.jdt.core.javanature"; //$NON-NLS-1$
@@ -417,7 +429,9 @@ public final class UIUtils {
      * @return image
      */
     public static Image getImage(String imageName) {
-        Image image = imageRegistry.get(imageName);
+        if (imageRegistry == null)
+        	imageRegistry = new ImageRegistry(PlatformUI.getWorkbench().getDisplay());
+    	Image image = imageRegistry.get(imageName);
         if (image == null) {
             image = getImageDescriptor(imageName).createImage();
             imageRegistry.put(imageName, image);
@@ -425,6 +439,64 @@ public final class UIUtils {
         return image;
     }
 
+    /**
+     * @return Image for the icon that indicates a key with no issues
+     */
+    public static Image getKeyImage() {
+    	Image image = UIUtils.getImage(UIUtils.IMAGE_KEY);
+    	return image;
+    }
+    
+    /**
+     * @return Image for the icon which indicates a key that has missing translations
+     */
+    public static Image getMissingTranslationImage() {
+    	Image image = UIUtils.getImage(UIUtils.IMAGE_KEY);
+    	ImageDescriptor missing = ImageDescriptor.createFromImage(UIUtils.getImage(UIUtils.IMAGE_ERROR));
+		image = new DecorationOverlayIcon(image, missing, IDecoration.BOTTOM_RIGHT).createImage();
+    	return image;
+    }
+    
+    /**
+     * @return Image for the icon which indicates a key that is unused
+     */
+    public static Image getUnusedTranslationsImage() {
+    	Image image = UIUtils.getImage(UIUtils.IMAGE_UNUSED_TRANSLATION);
+    	ImageDescriptor warning = ImageDescriptor.createFromImage(UIUtils.getImage(UIUtils.IMAGE_WARNING));
+		image = new DecorationOverlayIcon(image, warning, IDecoration.BOTTOM_RIGHT).createImage();
+    	return image;
+    }
+    
+    /**
+     * @return Image for the icon which indicates a key that has missing translations and is unused
+     */
+    public static Image getMissingAndUnusedTranslationsImage() {
+    	Image image = UIUtils.getImage(UIUtils.IMAGE_UNUSED_TRANSLATION);
+    	ImageDescriptor missing = ImageDescriptor.createFromImage(UIUtils.getImage(UIUtils.IMAGE_ERROR));
+		image = new DecorationOverlayIcon(image, missing, IDecoration.BOTTOM_RIGHT).createImage();
+    	return image;
+    }
+    
+    /**
+     * @return Image for the icon which indicates a key that has duplicate entries
+     */
+    public static Image getDuplicateEntryImage() {
+    	Image image = UIUtils.getImage(UIUtils.IMAGE_KEY);
+    	ImageDescriptor missing = ImageDescriptor.createFromImage(UIUtils.getImage(UIUtils.IMAGE_WARNING));
+		image = new DecorationOverlayIcon(image, missing, IDecoration.BOTTOM_RIGHT).createImage();
+    	return image;
+    }
+    
+    /**
+     * @return Image for the icon which indicates a key that has duplicate entries and is unused
+     */
+    public static Image getDuplicateEntryAndUnusedTranslationsImage() {
+    	Image image = UIUtils.getImage(UIUtils.IMAGE_UNUSED_TRANSLATION);
+    	ImageDescriptor missing = ImageDescriptor.createFromImage(UIUtils.getImage(UIUtils.IMAGE_DUPLICATE));
+		image = new DecorationOverlayIcon(image, missing, IDecoration.BOTTOM_RIGHT).createImage();
+    	return image;
+    }
+    
     /**
      * Gets the orientation suited for a given locale.
      * @param locale the locale
@@ -435,7 +507,7 @@ public final class UIUtils {
             ComponentOrientation orientation =
                     ComponentOrientation.getOrientation(locale);
             if(orientation==ComponentOrientation.RIGHT_TO_LEFT){
-                return SWT.RIGHT_TO_LEFT;
+                return MySWT.RIGHT_TO_LEFT;
             }
         }
         return SWT.LEFT_TO_RIGHT;
@@ -461,11 +533,11 @@ public final class UIUtils {
     	if (!projDescr.exists()) {
     		return false;//a corrupted project
     	}
-    	
-    	//<classpathentry kind="src" path="src"/>
+    	    	//<classpathentry kind="src" path="src"/>
 		InputStream in = null;
 		try {
-			 in = ((IFile)projDescr).getContents();
+			 projDescr.refreshLocal(IResource.DEPTH_ZERO, null);
+			 in = projDescr.getContents();
 			//supposedly in utf-8. should not really matter for us
 			 Reader r = new InputStreamReader(in, "UTF-8");
 			 LineNumberReader lnr = new LineNumberReader(r);

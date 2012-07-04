@@ -1,7 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2012 TapiJI.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Martin Reiterer - initial API and implementation
+ ******************************************************************************/
 package quickfix;
 
 import java.util.Locale;
 
+import org.eclipse.babel.tapiji.tools.core.ui.dialogs.ResourceBundleEntrySelectionDialog;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
@@ -14,8 +25,6 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMarkerResolution2;
-import org.eclipselabs.tapiji.tools.core.model.manager.ResourceBundleManager;
-import org.eclipselabs.tapiji.tools.core.ui.dialogs.ResourceBundleEntrySelectionDialog;
 
 import auditor.JSFResourceBundleDetector;
 
@@ -32,8 +41,8 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 	@Override
 	public String getDescription() {
 		return "Replaces the non-existing Resource-Bundle key '"
-				+ key
-				+ "' with a reference to an already existing localized string literal.";
+		        + key
+		        + "' with a reference to an already existing localized string literal.";
 	}
 
 	@Override
@@ -54,18 +63,20 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 		IResource resource = marker.getResource();
 
 		ITextFileBufferManager bufferManager = FileBuffers
-				.getTextFileBufferManager();
+		        .getTextFileBufferManager();
 		IPath path = resource.getRawLocation();
 		try {
 			bufferManager.connect(path, null);
 			ITextFileBuffer textFileBuffer = bufferManager
-					.getTextFileBuffer(path);
+			        .getTextFileBuffer(path);
 			IDocument document = textFileBuffer.getDocument();
 
 			ResourceBundleEntrySelectionDialog dialog = new ResourceBundleEntrySelectionDialog(
-					Display.getDefault().getActiveShell(),
-					ResourceBundleManager.getManager(resource.getProject()),
-					bundleId);
+			        Display.getDefault().getActiveShell());
+
+			dialog.setProjectName(resource.getProject().getName());
+			dialog.setBundleName(bundleId);
+
 			if (dialog.open() != InputDialog.OK)
 				return;
 
@@ -73,18 +84,18 @@ public class ReplaceResourceBundleReference implements IMarkerResolution2 {
 			Locale locale = dialog.getSelectedLocale();
 
 			String jsfBundleVar = JSFResourceBundleDetector
-					.getBundleVariableName(document.get().substring(startPos,
-							startPos + endPos));
+			        .getBundleVariableName(document.get().substring(startPos,
+			                startPos + endPos));
 
 			if (key.indexOf(".") >= 0) {
 				int quoteDblIdx = document.get().substring(0, startPos)
-						.lastIndexOf("\"");
+				        .lastIndexOf("\"");
 				int quoteSingleIdx = document.get().substring(0, startPos)
-						.lastIndexOf("'");
+				        .lastIndexOf("'");
 				String quoteSign = quoteDblIdx < quoteSingleIdx ? "\"" : "'";
 
 				document.replace(startPos, endPos, jsfBundleVar + "["
-						+ quoteSign + key + quoteSign + "]");
+				        + quoteSign + key + quoteSign + "]");
 			} else {
 				document.replace(startPos, endPos, jsfBundleVar + "." + key);
 			}

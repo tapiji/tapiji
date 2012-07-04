@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: RCP fragment for the Babel Editor
+Bundle-SymbolicName: org.eclipse.babel.editor.rcp
+Bundle-Version: 0.8.0.qualifier
+Fragment-Host: org.eclipse.babel.editor;bundle-version="0.8.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle:  org.eclipse.ltk.core.refactoring,
+ org.eclipse.ltk.ui.refactoring

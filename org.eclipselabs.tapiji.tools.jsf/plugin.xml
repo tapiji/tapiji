@@ -40,7 +40,7 @@
       </validator>
    </extension>
    <extension
-         point="org.eclipselabs.tapiji.tools.core.builderExtension">
+         point="org.eclipse.babel.tapiji.tools.core.builderExtension">
       <i18nResourceAuditor
             class="auditor.JSFResourceAuditor">
       </i18nResourceAuditor>

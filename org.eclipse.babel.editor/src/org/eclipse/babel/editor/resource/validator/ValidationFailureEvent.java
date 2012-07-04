@@ -12,8 +12,8 @@ package org.eclipse.babel.editor.resource.validator;
 
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.MessagesBundleGroup;
 import org.eclipse.babel.core.message.checks.IMessageCheck;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 
 
 /**
