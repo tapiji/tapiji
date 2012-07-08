@@ -30,14 +30,22 @@ import org.eclipse.ui.texteditor.ITextEditor;
  */
 public class TextEditor extends EditorPart implements ITextEditor {
 
-	public static final String ID = "org.eclipselabs.tapiji.translator.rap.wrappers.TextEditor";
+	public static final String ID = "org.eclipse.ui.editors.text.TextEditor";
 	
 	private File file;
 	private Text textField;
 	private boolean editable = true;
 	private boolean dirty = false;
     private DocumentProvider documentProvider;
-	
+	private ModifyListener modifyListener = new ModifyListener() {			
+			@Override
+			public void modifyText(ModifyEvent event) {
+				if (!dirty) {
+					setDirty(true);
+				}
+			}
+		};
+    
 	public TextEditor() {
 	}
 
@@ -90,15 +98,7 @@ public class TextEditor extends EditorPart implements ITextEditor {
 	public void createPartControl(Composite parent) {
 		textField = new Text(parent, SWT.HORIZONTAL);
 		textField.setText(readFile());
-		
-		textField.addModifyListener(new ModifyListener() {			
-			@Override
-			public void modifyText(ModifyEvent event) {
-				if (!dirty) {
-					setDirty(true);
-				}
-			}
-		});		
+		textField.addModifyListener(modifyListener);
 	}
 
 	@Override
@@ -106,12 +106,12 @@ public class TextEditor extends EditorPart implements ITextEditor {
 		textField.setFocus();
 	}
 	
-	private void setText(String text) {
+	public void setText(String text) {
 		if (textField != null)
 			textField.setText(text);
 	}
 	
-	private String getText() {
+	public String getText() {
 		if (textField != null)
 			return textField.getText();
 		else if (file != null)
@@ -119,10 +119,10 @@ public class TextEditor extends EditorPart implements ITextEditor {
 		else 
 			return null;
 	}
-	
+		
 	public DocumentProvider getDocumentProvider() {
 		if (documentProvider == null) {
-			documentProvider = new DocumentProvider(getText());
+			documentProvider = new DocumentProvider(this);
 		}
 		return documentProvider;
 	}
