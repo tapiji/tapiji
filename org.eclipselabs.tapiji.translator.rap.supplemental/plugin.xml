@@ -6,7 +6,7 @@
       <editor
             class="org.eclipse.ui.editors.text.TextEditor"
             default="false"
-            id="org.eclipselabs.tapiji.translator.rap.wrappers.TextEditor"
+            id="org.eclipse.ui.editors.text.TextEditor"
             name="TextEditor">
       </editor>
    </extension>

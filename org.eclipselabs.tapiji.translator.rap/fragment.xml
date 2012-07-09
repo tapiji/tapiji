@@ -9,5 +9,24 @@
             parameter="translator">
       </entrypoint>
    </extension>
+   <extension
+         point="org.eclipse.rap.ui.themes">
+      <theme
+            file="themes/tapiji.css"
+            id="tapiji"
+            name="TapiJI theme">
+      </theme>
+   </extension>
+   <extension
+         point="org.eclipse.rap.ui.branding">
+      <branding
+            defaultEntrypointId="translator"
+            favicon="icons/tapiji_favicon.ico"
+            id="org.eclipselabs.tapiji.translator.rap.branding"
+            servletName="translator"
+            themeId="tapiji"
+            title="TapiJI Translator">
+      </branding>
+   </extension>
 
 </fragment>

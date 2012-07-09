@@ -180,7 +180,7 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChang
 				}
 			});
         } catch (NullPointerException e) {
-        	// TODO [RAP] Session not loaded yet -> Display is null
+        	// TODO [RAP] Non UI-Thread, no default display available, in RAP multiple clients and displays
         }
 	}
 
