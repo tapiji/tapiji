@@ -11,11 +11,10 @@
    </extension>
    <extension
          point="org.eclipse.rap.ui.themes">
-      <theme
+      <themeContribution
             file="themes/tapiji.css"
-            id="tapiji"
-            name="TapiJI theme">
-      </theme>
+            themeId="org.eclipse.rap.rwt.theme.Default">
+      </themeContribution>
    </extension>
    <extension
          point="org.eclipse.rap.ui.branding">
@@ -24,7 +23,7 @@
             favicon="icons/tapiji_favicon.ico"
             id="org.eclipselabs.tapiji.translator.branding"
             servletName="translator"
-            themeId="tapiji"
+            themeId="org.eclipse.rap.rwt.theme.Default"
             title="TapiJI Translator">
       </branding>
    </extension>
