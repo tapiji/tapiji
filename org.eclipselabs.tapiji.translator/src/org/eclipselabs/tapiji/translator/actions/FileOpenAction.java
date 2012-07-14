@@ -35,6 +35,11 @@ public class FileOpenAction extends Action implements
 		String fileName = FileUtils.queryFileName(window.getShell(),
 		        "Open Resource-Bundle", SWT.OPEN,
 		        new String[] { "*.properties" });
+		
+		// cancel option
+		if (fileName == null)
+			return;
+		
 		if (!FileUtils.isResourceBundle(fileName)) {
 			MessageDialog.openError(window.getShell(),
 			        "Cannot open Resource-Bundle",
@@ -42,18 +47,17 @@ public class FileOpenAction extends Action implements
 			return;
 		}
 
-		if (fileName != null) {
-			IWorkbenchPage page = window.getActivePage();
-			try {
-				page.openEditor(
-				        new FileEditorInput(FileUtils
-				                .getResourceBundleRef(fileName)),
-				        RESOURCE_BUNDLE_EDITOR);
+		IWorkbenchPage page = window.getActivePage();
+		try {
+			page.openEditor(
+			        new FileEditorInput(FileUtils
+			                .getResourceBundleRef(fileName)),
+			        RESOURCE_BUNDLE_EDITOR);
 
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
+		} catch (CoreException e) {
+			e.printStackTrace();
 		}
+		
 	}
 
 	@Override

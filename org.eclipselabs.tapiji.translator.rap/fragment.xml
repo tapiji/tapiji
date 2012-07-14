@@ -6,7 +6,7 @@
       <entrypoint
             class="org.eclipselabs.tapiji.translator.rap.TranslatorEntryPoint"
             id="org.eclipselabs.tapiji.translator.rap.entrypoint"
-            parameter="translator">
+            path="/translator">
       </entrypoint>
    </extension>
    <extension
@@ -20,13 +20,47 @@
    <extension
          point="org.eclipse.rap.ui.branding">
       <branding
-            defaultEntrypointId="translator"
+            defaultEntrypointId="org.eclipselabs.tapiji.translator.rap.entrypoint"
             favicon="icons/tapiji_favicon.ico"
-            id="org.eclipselabs.tapiji.translator.rap.branding"
+            id="org.eclipselabs.tapiji.translator.branding"
             servletName="translator"
             themeId="tapiji"
             title="TapiJI Translator">
       </branding>
    </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.eclipselabs.tapiji.translator.downloadPropertiesFile"
+            name="Download ...">
+      </command>
+   </extension>
+  <extension
+	         point="org.eclipse.ui.actionSets">
+	      <actionSet
+	            label="File Action Set"
+	            visible="true"
+	            id="org.eclipselabs.tapiji.translator.fileActionSet2">
+           <action
+                 class="org.eclipselabs.tapiji.translator.actions.DownloadPropertiesFileAction"
+                 definitionId="org.eclipselabs.tapiji.translator.downloadPropertiesFile"
+                 id="DownloadPropertiesFileAction"
+                 label="Download ..."
+                 state="false"
+                 style="push">
+           </action>
+	      </actionSet>
+	   </extension>
 
+  <extension
+        point="org.eclipse.ui.menus">
+     <menuContribution
+           allPopups="false"
+           locationURI="menu:file_mnu?after=saveAll">
+        <command
+              commandId="org.eclipselabs.tapiji.translator.downloadPropertiesFile"
+              style="push">
+        </command>
+     </menuContribution>
+  </extension>
 </fragment>

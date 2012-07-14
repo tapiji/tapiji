@@ -20,4 +20,6 @@ Require-Bundle: org.eclipse.ui;resolution:=optional,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Vienna University of Technology
-Import-Package: org.eclipse.babel.editor.api
+Import-Package: javax.servlet;version="2.6.0",
+ javax.servlet.http;version="2.6.0",
+ org.eclipse.babel.editor.api

@@ -61,7 +61,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowCoolBar(true);
 		configurer.setShowStatusLine(true);
 		configurer.setInitialSize(new Point(1024, 768));
-
+		configurer.setTitle("TapiJI Translator");
 		/** Init workspace and container project */
 		try {
 			FileUtils.getProject();

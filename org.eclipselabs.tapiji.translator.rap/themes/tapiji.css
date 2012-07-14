@@ -1,1 +1,2 @@
-Shell-Titlebar { background-color: rgb(239,112,50); }
+Shell-Titlebar, Menu-Item:hover { background-color: rgb(239,112,50); }
+FileUpload {border: thin;}
