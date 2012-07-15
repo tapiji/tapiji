@@ -24,15 +24,17 @@ import org.eclipse.babel.editor.internal.MessagesEditor;
 import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.internal.MessagesEditorMarkers;
 import org.eclipse.babel.editor.tree.IKeyTreeContributor;
+import org.eclipse.babel.editor.tree.actions.AbstractRenameKeyAction;
 import org.eclipse.babel.editor.tree.actions.AddKeyAction;
 import org.eclipse.babel.editor.tree.actions.DeleteKeyAction;
-import org.eclipse.babel.editor.tree.actions.AbstractRenameKeyAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -46,7 +48,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.IWorkbenchWindow;
 
 /**
  * @author Pascal Essiembre
@@ -100,6 +101,9 @@ public class KeyTreeContributor implements IKeyTreeContributor {
         // Set input model
         treeViewer.setInput(treeModel);
         treeViewer.expandAll();
+        
+        treeViewer.setColumnProperties(new String[]{"column1"});
+        treeViewer.setCellEditors(new CellEditor[] {new TextCellEditor(treeViewer.getTree())} );
     }
 
     private class OnlyUnsuedAndMissingKey extends ViewerFilter implements
