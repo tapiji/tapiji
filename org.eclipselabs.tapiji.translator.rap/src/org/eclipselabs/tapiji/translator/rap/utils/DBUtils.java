@@ -19,14 +19,18 @@ public class DBUtils {
 
 	// DB specific data
 	public static final String DB_NAME = "translatordb";
-	public static final String DB_HOST = "10.0.0.2";
+	public static final String DB_HOST = "127.0.0.1";
 	public static final int DB_PORT = 3306;
+	public static final String DB_DRIVER = "com.mysql.jdbc.Driver";
+	public static final String DB_USER = "root";
+	public static final String DB_PASSWORD = "admin";
 	
 	public static final String DS_NAME = "UserDS";
 	
 	private static HbDataStore userDataStore = null;
 	
 	public static String getEnvironmentURL() {
+		// MySQL url
 		return "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/"+ DB_NAME + "?createDatabaseIfNotExist=true";
 	}
 	
@@ -40,10 +44,10 @@ public class DBUtils {
 		userDataStore = (HbDataStore) HbHelper.INSTANCE.createRegisterDataStore(DS_NAME);
 		// Set Database properties
         Properties props = new Properties();
-        props.setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
-        props.setProperty(Environment.URL, DBUtils.getEnvironmentURL());
-        props.setProperty(Environment.USER, "root");
-        props.setProperty(Environment.PASS, "admin");
+        props.setProperty(Environment.DRIVER, DB_DRIVER);
+        props.setProperty(Environment.URL, getEnvironmentURL());
+        props.setProperty(Environment.USER, DB_USER);
+        props.setProperty(Environment.PASS, DB_PASSWORD);
         props.setProperty(Environment.DIALECT, org.hibernate.dialect.MySQLDialect.class.getName());
         // props.setProperty(Environment.SHOW_SQL, "true");
         // props.setProperty(Environment.HBM2DDL_AUTO, "create");
