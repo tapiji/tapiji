@@ -10,12 +10,10 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
@@ -30,9 +28,8 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipselabs.tapiji.translator.utils.FileUtils;
 
-public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
+public abstract class AbstractWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
 	/** Workbench state **/
 	private IWorkbenchWindow window;
@@ -45,7 +42,10 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	private final static String COMMAND_ABOUT_ID = "org.eclipse.ui.help.aboutAction";
 	private final static String COMMAND_EXIT_ID = "org.eclipse.ui.file.exit";
 
-	public ApplicationWorkbenchWindowAdvisor(
+	public static final String INSTANCE_CLASS = "org.eclipselabs.tapiji.translator.ApplicationWorkbenchWindowAdvisor";
+	
+	
+	public AbstractWorkbenchWindowAdvisor(
 	        IWorkbenchWindowConfigurer configurer) {
 		super(configurer);
 	}
@@ -55,19 +55,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		return new ApplicationActionBarAdvisor(configurer);
 	}
 
-	public void preWindowOpen() {
-		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-		configurer.setShowFastViewBars(true);
-		configurer.setShowCoolBar(true);
-		configurer.setShowStatusLine(true);
-		configurer.setInitialSize(new Point(1024, 768));
-		configurer.setTitle("TapiJI Translator");
-		/** Init workspace and container project */
-		try {
-			FileUtils.getProject();
-		} catch (CoreException e) {
-		}
-	}
+	abstract public void preWindowOpen();
 
 	@Override
 	public void postWindowOpen() {

@@ -33,6 +33,14 @@
             id="org.eclipselabs.tapiji.translator.downloadPropertiesFile"
             name="Download ...">
       </command>
+      <command
+            id="org.eclipselabs.tapiji.translator.login"
+            name="Login ...">
+      </command>
+      <command
+            id="org.eclipselabs.tapiji.translator.logout"
+            name="Logout ...">
+      </command>
    </extension>
   <extension
 	         point="org.eclipse.ui.actionSets">
@@ -45,10 +53,28 @@
                  definitionId="org.eclipselabs.tapiji.translator.downloadPropertiesFile"
                  id="DownloadPropertiesFileAction"
                  label="Download ..."
-                 state="false"
                  style="push">
            </action>
 	      </actionSet>
+       <actionSet
+             id="org.eclipselabs.tapiji.translator.rap.UserActionSet"
+             label="User Action Set"
+             visible="true">
+          <action
+                class="org.eclipselabs.tapiji.translator.actions.LoginAction"
+                definitionId="org.eclipselabs.tapiji.translator.login"
+                id="LoginAction"
+                label="Login ..."
+                style="push">
+          </action>
+          <action
+                class="org.eclipselabs.tapiji.translator.actions.LogoutAction"
+                definitionId="org.eclipselabs.tapiji.translator.logout"
+                id="LogoutAction"
+                label="Logout ..."
+                style="push">
+          </action>
+       </actionSet>
 	   </extension>
 
   <extension
@@ -59,6 +85,65 @@
         <command
               commandId="org.eclipselabs.tapiji.translator.downloadPropertiesFile"
               style="push">
+           <visibleWhen
+                 checkEnabled="false">
+              <with
+                    variable="activeEditorId">
+                 <equals
+                       value="com.essiembre.rbe.eclipse.editor.ResourceBundleEditor">
+                 </equals>
+              </with>
+           </visibleWhen>
+        </command>
+     </menuContribution>
+     <menuContribution
+           allPopups="false"
+           locationURI="menu:org.eclipse.ui.main.menu">
+        <menu
+              id="user"
+              label="User">
+        </menu>
+        <menu
+              id="window"
+              label="Window">
+        </menu>
+     </menuContribution>
+     <menuContribution
+           allPopups="false"
+           locationURI="menu:user">
+        <command
+              commandId="org.eclipselabs.tapiji.translator.login"
+              style="push">
+        	<visibleWhen
+                 checkEnabled="false">
+              <with
+                    variable="activeContexts">
+                 <iterate
+                       operator="and">
+                    <not>
+                       <equals
+                             value="org.eclipselabs.tapiji.translator.userLoggedIn">
+                       </equals>
+                    </not>
+                 </iterate>
+              </with>
+           </visibleWhen>
+        </command>
+        <command
+              commandId="org.eclipselabs.tapiji.translator.logout"
+              style="push">
+           <visibleWhen
+                 checkEnabled="false">
+              <with
+                    variable="activeContexts">
+                 <iterate
+                       operator="or">
+                    <equals
+                          value="org.eclipselabs.tapiji.translator.userLoggedIn">
+                    </equals>
+                 </iterate>
+              </with>
+           </visibleWhen>
         </command>
      </menuContribution>
   </extension>
@@ -67,5 +152,26 @@
      <startup
            class="org.eclipselabs.tapiji.translator.rap.TranslatorRAPStartup">
      </startup>
+  </extension>
+  <extension
+        point="org.eclipse.ui.views">
+     <category
+           id="org.eclipselabs.tapiji"
+           name="Internationalization">
+     </category>
+     <view
+           category="org.eclipselabs.tapiji"
+           class="org.eclipselabs.tapiji.translator.views.StorageView"
+           id="org.eclipselabs.tapiji.translator.views.StorageView"
+           name="Storage"
+           restorable="true">
+     </view>
+  </extension>
+  <extension
+        point="org.eclipse.ui.contexts">
+     <context
+           id="org.eclipselabs.tapiji.translator.userLoggedIn"
+           name="user logged in">
+     </context>
   </extension>
 </fragment>

@@ -10,10 +10,15 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator;
 
+import java.lang.reflect.Constructor;
+import java.util.List;
+
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.eclipselabs.tapiji.translator.views.widgets.provider.AbstractGlossaryLabelProvider;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
@@ -21,7 +26,17 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(
 	        IWorkbenchWindowConfigurer configurer) {
-		return new ApplicationWorkbenchWindowAdvisor(configurer);
+		
+		AbstractWorkbenchWindowAdvisor window = null;		
+		try {
+			Class<?> clazz = Class.forName(AbstractWorkbenchWindowAdvisor.INSTANCE_CLASS);
+			Constructor<?> constr = clazz.getConstructor(IWorkbenchWindowConfigurer.class);
+			window = (AbstractWorkbenchWindowAdvisor) constr.newInstance(configurer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return window;
 	}
 
 	public String getInitialWindowPerspectiveId() {

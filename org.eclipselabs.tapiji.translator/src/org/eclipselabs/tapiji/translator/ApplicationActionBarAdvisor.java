@@ -12,6 +12,7 @@ package org.eclipselabs.tapiji.translator;
 
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -33,6 +34,8 @@ import org.eclipse.ui.application.IActionBarConfigurer;
  */
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
+	private IContributionItem showViewItem;
+	
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
 	}
@@ -68,7 +71,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		super.fillMenuBar(menuBar);
 
 		menuBar.add(fileMenu());
-		menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
+		menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));		
+		menuBar.add(windowMenu());		
 		menuBar.add(helpMenu());
 	}
 
@@ -81,6 +85,16 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		return helpMenu;
 	}
 
+	private MenuManager windowMenu() {
+		MenuManager windowMenu = new MenuManager("&Window",	IWorkbenchActionConstants.M_WINDOW);
+		MenuManager showViewMenuMgr = new MenuManager("Show View", "showView");
+		
+		showViewMenuMgr.add(showViewItem);
+		windowMenu.add(showViewMenuMgr);
+		
+		return windowMenu;
+	}
+	
 	private MenuManager fileMenu() {
 		MenuManager menu = new MenuManager("&File", "file_mnu");
 		menu.add(new GroupMarker(IWorkbenchActionConstants.FILE_START));
@@ -114,6 +128,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		registerAsGlobal(ActionFactory.CLOSE_ALL_SAVED.create(window));
 		//TODO [RAP] registerAsGlobal(ActionFactory.ABOUT.create(window));
 		registerAsGlobal(ActionFactory.QUIT.create(window));
+		
+		showViewItem = ContributionItemFactory.VIEWS_SHORTLIST.create(window);
 	}
 
 	private void registerAsGlobal(IAction action) {

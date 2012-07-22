@@ -2,7 +2,6 @@ package org.eclipselabs.tapiji.translator.rap.utils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.rwt.RWT;
 
 public class RAPUtils {
 
@@ -11,4 +10,6 @@ public class RAPUtils {
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		return projects[0].getLocation().toFile().toString();
 	}
+	
+	
 }

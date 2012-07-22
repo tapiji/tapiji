@@ -1,5 +1,6 @@
 package org.eclipselabs.tapiji.translator.rap.utils;
 
+import java.io.IOException;
 import java.util.Properties;
 
 import org.eclipse.emf.common.util.URI;
@@ -19,13 +20,15 @@ public class DBUtils {
 
 	// DB specific data
 	public static final String DB_NAME = "translatordb";
-	public static final String DB_HOST = "127.0.0.1";
+	public static final String DB_HOST = "10.0.0.2";
 	public static final int DB_PORT = 3306;
 	public static final String DB_DRIVER = "com.mysql.jdbc.Driver";
 	public static final String DB_USER = "root";
 	public static final String DB_PASSWORD = "admin";
 	
 	public static final String DS_NAME = "UserDS";
+	public static final String SESSION_USER_ATT = "org.eclipselabs.tapiji.translator.rap.model.user.User";
+	
 	
 	private static HbDataStore userDataStore = null;
 	
@@ -70,6 +73,15 @@ public class DBUtils {
 		String uriStr = "hibernate://?"+HibernateResource.DS_NAME_PARAM+"="+DS_NAME;
         final URI uri = URI.createURI(uriStr);
         ResourceSet resourceSet = new ResourceSetImpl();
-        return resourceSet.createResource(uri);
+        Resource resource = resourceSet.createResource(uri);
+       
+        try {
+        	// load from database
+			resource.load(null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
+        return resource;
 	}
 }
