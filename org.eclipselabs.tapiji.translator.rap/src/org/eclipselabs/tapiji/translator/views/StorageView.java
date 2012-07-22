@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipselabs.tapiji.translator.rap.dialogs.LoginDialog;
+import org.eclipselabs.tapiji.translator.rap.dialogs.RegisterDialog;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.utils.DBUtils;
 
@@ -43,7 +44,7 @@ public class StorageView extends ViewPart {
 		Label text = new Label(noUserComp, SWT.WRAP);
 		text.setText("You need to be logged in to see your stored files.");
 		
-		GridData gridData = new GridData( SWT.WRAP ) ;
+		GridData gridData = new GridData() ;
 	    gridData.grabExcessHorizontalSpace = true ;
 	    gridData.horizontalAlignment = SWT.FILL;
 
@@ -83,7 +84,12 @@ public class StorageView extends ViewPart {
 			
 			@Override
 			public void mouseUp(MouseEvent e) {
-				// TODO
+				RegisterDialog registerDialog = new RegisterDialog(parent.getShell());
+				registerDialog.open();
+				User user = registerDialog.getRegisteredUser();
+				
+				LoginDialog loginDialog = new LoginDialog(parent.getShell(), user.getUsername());
+				loginDialog.open();
 				
 				refresh();
 			}
@@ -112,10 +118,10 @@ public class StorageView extends ViewPart {
 		layout.numColumns = 1;
 		noFilesComp.setLayout(layout);
 		
-		Label text = new Label(noFilesComp, SWT.NONE);
+		Label text = new Label(noFilesComp, SWT.WRAP);
 		text.setText("There are no files to display.");
 		
-		GridData gridData = new GridData( SWT.WRAP ) ;
+		GridData gridData = new GridData() ;
 	    gridData.grabExcessHorizontalSpace = true ;
 	    gridData.horizontalAlignment = SWT.FILL;
 

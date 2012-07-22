@@ -41,6 +41,10 @@
             id="org.eclipselabs.tapiji.translator.logout"
             name="Logout ...">
       </command>
+      <command
+            id="org.eclipselabs.tapiji.translator.register"
+            name="Register ...">
+      </command>
    </extension>
   <extension
 	         point="org.eclipse.ui.actionSets">
@@ -72,6 +76,13 @@
                 definitionId="org.eclipselabs.tapiji.translator.logout"
                 id="LogoutAction"
                 label="Logout ..."
+                style="push">
+          </action>
+          <action
+                class="org.eclipselabs.tapiji.translator.actions.RegisterAction"
+                definitionId="org.eclipselabs.tapiji.translator.register"
+                id="RegisterAction"
+                label="Register ..."
                 style="push">
           </action>
        </actionSet>
@@ -111,6 +122,24 @@
      <menuContribution
            allPopups="false"
            locationURI="menu:user">
+        <command
+              commandId="org.eclipselabs.tapiji.translator.register"
+              style="push">
+              <visibleWhen
+                 checkEnabled="false">
+              <with
+                    variable="activeContexts">
+                 <iterate
+                       operator="and">
+                    <not>
+                       <equals
+                             value="org.eclipselabs.tapiji.translator.userLoggedIn">
+                       </equals>
+                    </not>
+                 </iterate>
+              </with>
+           </visibleWhen>
+        </command>
         <command
               commandId="org.eclipselabs.tapiji.translator.login"
               style="push">

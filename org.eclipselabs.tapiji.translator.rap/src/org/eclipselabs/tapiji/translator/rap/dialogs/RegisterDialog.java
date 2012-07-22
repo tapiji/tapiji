@@ -1,5 +1,7 @@
 package org.eclipselabs.tapiji.translator.rap.dialogs;
 
+import java.io.IOException;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -12,26 +14,23 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.utils.UserUtil;
 
-public class LoginDialog extends Dialog {
-
+public class RegisterDialog extends Dialog {
+	
 	private Text usernameText;
-	private String username = "";
 	private Text passwordText;
-	private Label incorrectUsernamePassword;
+	private Text passwordConfirmText;
+	private Label errorLabel;
+	private User registeredUser;
 	
-	public LoginDialog(Shell parentShell) {
+	
+	public RegisterDialog(Shell parentShell) {
 		super(parentShell);
-	}
-	
-	public LoginDialog(Shell parentShell, String username) {
-		this(parentShell);
-		this.username = username;
 	}
 	
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Login");
+		newShell.setText("Register");
 	}
 	
 	@Override
@@ -42,45 +41,61 @@ public class LoginDialog extends Dialog {
 	    layout.numColumns = 2;
 		
 		Label usernameLabel = new Label(comp, SWT.RIGHT);
-		usernameLabel.setText("Username: ");
-		
+		usernameLabel.setText("Username: ");		
 		usernameText = new Text(comp, SWT.SINGLE | SWT.BORDER);
 		usernameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		usernameText.setText(username);
 		
 		Label passwordLabel = new Label(comp, SWT.RIGHT);
-		passwordLabel.setText("Password: ");
-		
+		passwordLabel.setText("Password: ");		
 		passwordText = new Text(comp, SWT.SINGLE | SWT.PASSWORD | SWT.BORDER);
 		passwordText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		incorrectUsernamePassword = new Label(comp, SWT.NONE);
-		incorrectUsernamePassword.setForeground(comp.getDisplay().getSystemColor(SWT.COLOR_RED));
-		incorrectUsernamePassword.setVisible(false);
-		incorrectUsernamePassword.setText("Incorrect username and/or password!");
+		Label passwordConfirmLabel = new Label(comp, SWT.RIGHT);
+		passwordConfirmLabel.setText("Password Confirm: ");		
+		passwordConfirmText = new Text(comp, SWT.SINGLE | SWT.PASSWORD | SWT.BORDER);
+		passwordConfirmText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		errorLabel = new Label(comp, SWT.NONE);
+		errorLabel.setForeground(comp.getDisplay().getSystemColor(SWT.COLOR_RED));
+		errorLabel.setVisible(false);
+		errorLabel.setText("The password and the confirmation aren't equal!");
 		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_END);
 	    gridData.horizontalSpan = 2;
 	    gridData.horizontalAlignment = GridData.FILL;
-		incorrectUsernamePassword.setLayoutData(gridData);
+		errorLabel.setLayoutData(gridData);
 		
 		return comp;
 	}
 	
 	@Override
 	protected void okPressed() {
-		incorrectUsernamePassword.setVisible(false);
+		errorLabel.setVisible(false);
 		
 		String username = usernameText.getText();
 		String password = passwordText.getText();
+		String passwordConfirm = passwordConfirmText.getText();
 		
-		User user = UserUtil.loginUser(username, password);
-		
-		if (user == null) {
-			// username, password incorrect
-			incorrectUsernamePassword.setVisible(true);
+		if (! password.equals(passwordConfirm)) {
+			errorLabel.setText("The password and the confirmation aren't equal!");
+			errorLabel.setVisible(true);
 		} else {
-			super.okPressed();
+			try {
+				registeredUser = UserUtil.registerUser(username, password);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			if (registeredUser == null) {
+				// username exists already
+				errorLabel.setText("The username exists already!");
+				errorLabel.setVisible(true);
+			} else {
+				super.okPressed();
+			}
 		}
 	}
-
+	
+	public User getRegisteredUser() {
+		return registeredUser;
+	}
 }
