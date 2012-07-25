@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -42,6 +44,7 @@ import org.eclipselabs.tapiji.translator.rap.model.user.File;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.utils.FileRAPUtils;
 import org.eclipselabs.tapiji.translator.rap.utils.StorageUtils;
+import org.eclipselabs.tapiji.translator.rap.utils.UIUtils;
 import org.eclipselabs.tapiji.translator.rap.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.utils.FileUtils;
 import org.eclipselabs.tapiji.translator.views.menus.StorageMenuEntryContribution;
@@ -292,26 +295,60 @@ public class StorageView extends ViewPart {
 	
 	/*** CONTEXT MENU ***/
 	private void hookContextMenu() {
-		if (tableViewer == null || tableViewer.getTable().isDisposed())
-			return;
+		if (tableViewer != null && ! tableViewer.getControl().isDisposed()) {		
+			MenuManager menuMgr = new MenuManager("#PopupMenu");
 		
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
-		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			public void menuAboutToShow(IMenuManager manager) {
-				fillContextMenu(manager);
-			}
-		});
-		Menu menu = menuMgr.createContextMenu(tableViewer.getControl());
-		tableViewer.getControl().setMenu(menu);
-		getViewSite().registerContextMenu(menuMgr, tableViewer);
+			menuMgr.setRemoveAllWhenShown(true);
+			menuMgr.addMenuListener(new IMenuListener() {
+				public void menuAboutToShow(IMenuManager manager) {
+					fillTableContextMenu(manager);
+				}
+			});
+			Menu menu = menuMgr.createContextMenu(tableViewer.getControl());
+			tableViewer.getControl().setMenu(menu);
+			getViewSite().registerContextMenu(menuMgr, tableViewer);
+		}
+		
+		if (main != null && ! main.isDisposed()) {
+			MenuManager menuMgr = new MenuManager("#PopupMenu");
+			
+			menuMgr.setRemoveAllWhenShown(true);
+			menuMgr.addMenuListener(new IMenuListener() {
+				public void menuAboutToShow(IMenuManager manager) {
+					fillMainContextMenu(manager);
+				}
+			});
+			Menu menu = menuMgr.createContextMenu(main);
+			main.setMenu(menu);
+			//getViewSite().registerContextMenu(menuMgr, main);
+		}
 	}
 	
-	private void fillContextMenu(IMenuManager manager) {
+	private void fillTableContextMenu(IMenuManager manager) {
 		manager.removeAll();
 
 		StorageMenuEntryContribution storageContribution = new StorageMenuEntryContribution(this);		
-			manager.add(storageContribution);
+		manager.add(storageContribution);
+		manager.add(getRefreshAction());
+	}
+	
+	private void fillMainContextMenu(IMenuManager manager) {
+		 manager.removeAll();
+		 manager.add(getRefreshAction());
+	}
+	
+	private IAction getRefreshAction() {
+		IAction refresh = new Action() {
+			public void run() {
+				refresh();
+			}
+		};
+		refresh.setText("Refresh");
+		refresh.setDescription("Refreshing Storage View");
+		refresh.setToolTipText(refresh.getDescription());
+		refresh.setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_REFRESH));
+		
+		return refresh;
 	}
 
 	public void storeSelectedItem() {
@@ -366,11 +403,16 @@ public class StorageView extends ViewPart {
 	}
 	
 	public boolean isSelectionUnstoredFile() {		
-		Object selection = getSelectedItem();
-		
+		Object selection = getSelectedItem();		
 		if (selection instanceof IFile)
 			return true;		
 		return false;
+	}
+	
+	public boolean isValidSelection() {
+		if (getSelectedItem() == null)
+			return false;		
+		return true;
 	}
 
 	public void deleteSelectedItem() {
@@ -447,6 +489,7 @@ public class StorageView extends ViewPart {
 			});
 			
 			tableViewer.editElement(file, 0);
+			refresh();
 		}
 	}
 }
