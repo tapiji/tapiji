@@ -23,7 +23,7 @@ public class ApplicationWorkbenchWindowAdvisor extends AbstractWorkbenchWindowAd
 		configurer.setTitle("TapiJI Translator");
 		/** Init workspace and container project */
 		try {
-			FileUtils.getProject();
+			FileUtils.getProject(FileUtils.EXTERNAL_RB_PROJECT_NAME);
 		} catch (CoreException e) {
 		}
 	}

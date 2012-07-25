@@ -3,7 +3,9 @@ package org.eclipselabs.tapiji.translator.rap.utils;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -12,6 +14,7 @@ import org.eclipse.emf.teneo.PersistenceOptions;
 import org.eclipse.emf.teneo.hibernate.HbDataStore;
 import org.eclipse.emf.teneo.hibernate.HbHelper;
 import org.eclipse.emf.teneo.hibernate.resource.HibernateResource;
+import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserPackage;
 import org.hibernate.cfg.Environment;
 
@@ -27,9 +30,6 @@ public class DBUtils {
 	public static final String DB_PASSWORD = "admin";
 	
 	public static final String DS_NAME = "UserDS";
-	public static final String SESSION_USER_ATT = "org.eclipselabs.tapiji.translator.rap.model.user.User";
-	
-	
 	private static HbDataStore userDataStore = null;
 	
 	public static String getEnvironmentURL() {

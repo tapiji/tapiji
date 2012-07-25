@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
-import org.eclipselabs.tapiji.translator.rap.utils.UserUtil;
+import org.eclipselabs.tapiji.translator.rap.utils.UserUtils;
 
 public class LoginDialog extends Dialog {
 
@@ -73,7 +73,7 @@ public class LoginDialog extends Dialog {
 		String username = usernameText.getText();
 		String password = passwordText.getText();
 		
-		User user = UserUtil.loginUser(username, password);
+		User user = UserUtils.loginUser(username, password);
 		
 		if (user == null) {
 			// username, password incorrect

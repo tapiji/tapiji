@@ -52,6 +52,18 @@
 	            label="File Action Set"
 	            visible="true"
 	            id="org.eclipselabs.tapiji.translator.fileActionSet2">
+	       <action
+                 class="org.eclipselabs.tapiji.translator.actions.FileOpenAction"
+                 definitionId="org.eclipselabs.tapiji.translator.fileOpen"
+                 icon="icons/OpenRB.png"
+                 id="FileOpenAction"
+                 label="Upload Resource-Bundle ..."
+                 menubarPath="file_mnu/fileStart"
+                 state="false"
+                 style="push"
+                 toolbarPath="org.eclipse.ui.workbench.file/open.ext"
+                 tooltip="Uploads a Resource-Bundle">
+           </action>
            <action
                  class="org.eclipselabs.tapiji.translator.actions.DownloadPropertiesFileAction"
                  definitionId="org.eclipselabs.tapiji.translator.downloadPropertiesFile"

@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
-import org.eclipselabs.tapiji.translator.rap.utils.UserUtil;
+import org.eclipselabs.tapiji.translator.rap.utils.UserUtils;
 
 public class RegisterDialog extends Dialog {
 	
@@ -80,7 +80,7 @@ public class RegisterDialog extends Dialog {
 			errorLabel.setVisible(true);
 		} else {
 			try {
-				registeredUser = UserUtil.registerUser(username, password);
+				registeredUser = UserUtils.registerUser(username, password);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

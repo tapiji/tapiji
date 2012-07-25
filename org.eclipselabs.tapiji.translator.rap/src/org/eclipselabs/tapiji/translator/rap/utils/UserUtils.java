@@ -12,7 +12,7 @@ import org.eclipse.ui.contexts.IContextService;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserFactory;
 
-public class UserUtil {
+public class UserUtils {
 	public final static String CONTEXT_ID_USERLOGGEDIN = "org.eclipselabs.tapiji.translator.userLoggedIn";
 	private static IContextActivation loggedIn; 
 	
@@ -51,7 +51,7 @@ public class UserUtil {
 	public static User loginUser(String username, String password) {
 		User user = verifyUser(username, password);
 		if (user != null) {
-			RWT.getSessionStore().setAttribute(DBUtils.SESSION_USER_ATT, user);
+			RWT.getSessionStore().setAttribute(UserUtils.SESSION_USER_ATT, user);
 			setUserLoggedInContext(true);
 		}
 		
@@ -59,8 +59,8 @@ public class UserUtil {
 	}
 
 	public static User logoutUser() {
-		User user = (User) RWT.getSessionStore().getAttribute(DBUtils.SESSION_USER_ATT);
-		RWT.getSessionStore().setAttribute(DBUtils.SESSION_USER_ATT, null);
+		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
+		RWT.getSessionStore().setAttribute(UserUtils.SESSION_USER_ATT, null);
 		setUserLoggedInContext(false);
 		return user;
 	}
@@ -106,4 +106,6 @@ public class UserUtil {
 		
 		resource.save(null);
 	}
+
+	public static final String SESSION_USER_ATT = "org.eclipselabs.tapiji.translator.rap.model.user.User";
 }

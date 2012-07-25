@@ -35,11 +35,11 @@ public class FileUtils {
 	        + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." + TOKEN_FILE_EXTENSION
 	        + ")$";
 
+	/** Project name for external resource bundles */
+	public static final String EXTERNAL_RB_PROJECT_NAME = "ExternalResourceBundles";
+	
 	/** The singleton instance of Workspace */
 	private static IWorkspace workspace;
-
-	/** Wrapper project for external file resources */
-	private static IProject project;
 
 	public static boolean isResourceBundle(String fileName) {
 		return fileName.toLowerCase().endsWith(".properties");
@@ -57,12 +57,10 @@ public class FileUtils {
 		return workspace;
 	}
 
-	public static IProject getProject() throws CoreException {
-		if (project == null) {
-			project = getWorkspace().getRoot().getProject(
-			        "ExternalResourceBundles");
-		}
-
+	public static IProject getProject(String projectName) throws CoreException {
+		IProject project = getWorkspace().getRoot().getProject(
+			        projectName);
+		
 		if (!project.exists())
 			project.create(null);
 		if (!project.isOpen())
@@ -75,7 +73,7 @@ public class FileUtils {
 		IWorkspace workspace = getWorkspace();
 	}
 
-	public static IFile getResourceBundleRef(String location)
+	public static IFile getResourceBundleRef(String location, String projectName)
 	        throws CoreException {
 		IPath path = new Path(location);
 
@@ -85,7 +83,8 @@ public class FileUtils {
 		 */
 		String regex = getPropertiesFileRegEx(path);
 		String projPathName = toProjectRelativePathName(path);
-		IFile file = getProject().getFile(projPathName);
+		IProject project = getProject(projectName);
+		IFile file = project.getFile(projPathName);
 		file.createLink(path, IResource.REPLACE, null);
 
 		File parentDir = new File(path.toFile().getParent());
@@ -108,7 +107,7 @@ public class FileUtils {
 
 		return file;
 	}
-
+	
 	protected static String toProjectRelativePathName(IPath path) {
 		String projectRelativeName = "";
 
@@ -133,16 +132,22 @@ public class FileUtils {
 		        + file.getFileExtension() + ")$";
 		return name.replaceFirst(regex, "$1");
 	}
+	
+	public static String getBundleName(String filePath) {
+		IPath path = new Path(filePath);		
+		return getBundleName(path);
+	}
 
-	public static String queryFileName(Shell shell, String title,
+	public static String[] queryFileName(Shell shell, String title,
 	        int dialogOptions, String[] endings) {
 		FileDialog dialog = new FileDialog(shell, dialogOptions);
 		dialog.setText(title);
 		dialog.setFilterExtensions(endings);
-		String path = dialog.open();
+		dialog.open();
+		String[] paths = dialog.getFileNames();
 
-		if (path != null && path.length() > 0)
-			return path;
+		if (paths.length > 0)
+			return paths;
 		return null;
 	}
 

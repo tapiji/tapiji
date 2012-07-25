@@ -34,7 +34,7 @@
    
    <extension
          point="org.eclipse.ui.commands">
-      <command
+         <command
             categoryId="org.eclipse.ui.category.file"
             description="Open Resource-Bundle ..."
             id="org.eclipselabs.tapiji.translator.fileOpen"
@@ -49,51 +49,6 @@
             name="New Glossary ...">
       </command>
    </extension>
-   
-	 <extension
-	         point="org.eclipse.ui.actionSets">
-	      <actionSet
-	            label="File Action Set"
-	            visible="true"
-	            id="org.eclipselabs.tapiji.translator.fileActionSet">
-          <action
-                class="org.eclipselabs.tapiji.translator.actions.OpenGlossaryAction"
-                definitionId="org.eclipselabs.tapiji.translator.fileOpenGlossary"
-                icon="icons/OpenGlossary5.png"
-                id="OpenGlossaryAction"
-                label="Open Glossary ..."
-                menubarPath="file_mnu/fileStart"
-                state="false"
-                style="push"
-                toolbarPath="org.eclipse.ui.workbench.file/open.ext"
-                tooltip="Opens a Glossary definition">
-          </action>
-	          <action
-	                class="org.eclipselabs.tapiji.translator.actions.NewGlossaryAction"
-	                definitionId="org.eclipselabs.tapiji.translator.fileNewGlossary"
-	                icon="icons/NewGlossary.png"
-	                id="NewGlossaryAction"
-	                label="New Glossary ..."
-	                menubarPath="file_mnu/fileStart"
-	                state="false"
-	                style="push"
-	                toolbarPath="org.eclipse.ui.workbench.file/open.ext"
-	                tooltip="Creates a new Glossary file">
-	          </action>
-           <action
-                 class="org.eclipselabs.tapiji.translator.actions.FileOpenAction"
-                 definitionId="org.eclipselabs.tapiji.translator.fileOpen"
-                 icon="icons/OpenRB.png"
-                 id="FileOpenAction"
-                 label="Open Resource-Bundle ..."
-                 menubarPath="file_mnu/fileStart"
-                 state="false"
-                 style="push"
-                 toolbarPath="org.eclipse.ui.workbench.file/open.ext"
-                 tooltip="Opens a Resource-Bundle">
-           </action>
-	      </actionSet>
-	   </extension>
   <extension
         point="org.eclipse.ui.views">
      <category

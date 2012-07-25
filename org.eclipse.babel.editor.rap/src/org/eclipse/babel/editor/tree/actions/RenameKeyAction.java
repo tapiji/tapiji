@@ -20,11 +20,11 @@ public class RenameKeyAction extends AbstractRenameKeyAction {
 		final KeyTreeNode node = getNodeSelection();
 		
 		treeViewer.setCellModifier(new ICellModifier() {
-			
+			private boolean enableEditing = true;
 			@Override
 			public boolean canModify(Object element, String property) {
 				// only selected element can be modified
-				return element.equals(node);
+				return element.equals(node) && enableEditing;
 			}
 
 			@Override
@@ -63,7 +63,7 @@ public class RenameKeyAction extends AbstractRenameKeyAction {
 				}
 				
 				// rename finished -> disable editing
-				treeViewer.setCellModifier(null);
+				enableEditing = false;
 			}
 		});
 		
