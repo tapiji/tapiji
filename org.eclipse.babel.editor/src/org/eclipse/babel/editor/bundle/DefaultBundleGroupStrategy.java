@@ -11,6 +11,8 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.bundle;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
@@ -32,6 +34,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaCore;
@@ -167,8 +170,22 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
      * @see org.eclipse.babel.core.bundle.IBundleGroupStrategy#createBundle(java.util.Locale)
      */
     public MessagesBundle createMessagesBundle(Locale locale) {
-        // TODO Auto-generated method stub
-        return null;
+        // create new empty locale file
+    	IFile openedFile = getOpenedFile();
+    	IPath path = openedFile.getProjectRelativePath();
+    	String localeStr = locale != null ? "_" + locale.toString() : "";
+    	String newFilename = getBaseName()+localeStr+"."+openedFile.getFileExtension();
+        IFile newFile = openedFile.getProject().getFile(path.removeLastSegments(1).addTrailingSeparator()+newFilename);
+        
+        if (! newFile.exists()) {
+        	try {
+        		// create new ifile with an empty input stream
+				newFile.create(new ByteArrayInputStream(new byte[0]), IResource.NONE, null);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			} 
+        }
+    	return createBundle(locale, newFile);
     }
     
     /**

@@ -74,7 +74,7 @@ public class MessagesEditorContributor
         if (activeEditorPart == part) {
 			return;
         }
-
+     
 		activeEditorPart = part;
 
 		IActionBars actionBars = getActionBars();
@@ -128,7 +128,6 @@ public class MessagesEditorContributor
         
         toggleKeyTreeAction = new KeyTreeVisibleAction();
         newLocaleAction = new NewLocaleAction();
-        
 
 //        toggleKeyTreeAction.setText("Show/Hide Key Tree");
 //        toggleKeyTreeAction.setToolTipText("Click to show/hide the key tree");
@@ -174,6 +173,7 @@ public class MessagesEditorContributor
 			? (MessagesEditor)part : null;
         toggleKeyTreeAction.setEditor(me);
         ((FilterKeysActionGroup) FILTERS).setActiveEditor(part);
+        newLocaleAction.setEditor(me);
     }
     
     /**

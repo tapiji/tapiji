@@ -50,7 +50,7 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
     private final SideNavComposite keysComposite;
     private final Composite valuesComposite;
     private final Map<Locale,I18NEntry> entryComposites = new HashMap<Locale,I18NEntry>(); 
-    
+    private Composite entriesComposite;
 //    private Composite parent;
     private boolean keyTreeVisible = true;
     
@@ -156,8 +156,7 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
         scrolledComposite.setExpandVertical(true);
         scrolledComposite.setSize(SWT.DEFAULT, 100);
 
-        final Composite entriesComposite =
-                new Composite(scrolledComposite, SWT.BORDER);
+        entriesComposite = new Composite(scrolledComposite, SWT.BORDER);
         scrolledComposite.setContent(entriesComposite);
         scrolledComposite.setMinSize(entriesComposite.computeSize(
                 SWT.DEFAULT,
@@ -170,10 +169,7 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
         locales = UIUtils.filterLocales(locales);
         for (int i = 0; i < locales.length; i++) {
             Locale locale = locales[i];
-            I18NEntry i18NEntry = new I18NEntry(
-                    entriesComposite, editor, locale);
-//            entryComposite.addFocusListener(localBehaviour);
-            entryComposites.put(locale, i18NEntry);
+            addI18NEntry(editor, locale);
         }
         
         editor.addChangeListener(new MessagesEditorChangeAdapter() {
@@ -187,6 +183,13 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
         
         
         return scrolledComposite;
+    }
+    
+    public void addI18NEntry(MessagesEditor editor, Locale locale) {
+    	I18NEntry i18NEntry = new I18NEntry(
+                entriesComposite, editor, locale);
+        entryComposites.put(locale, i18NEntry);
+        entriesComposite.layout();
     }
     
     public void selectLocale(Locale locale) {

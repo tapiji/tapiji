@@ -24,6 +24,7 @@ import org.eclipse.babel.core.message.IMessagesBundle;
 import org.eclipse.babel.core.message.internal.MessageException;
 import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroupAdapter;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
@@ -130,6 +131,14 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 			} catch (MessageException e) {
 				throw new PartInitException("Cannot create bundle group.", e); //$NON-NLS-1$
 			}
+			messagesBundleGroup.addMessagesBundleGroupListener(new MessagesBundleGroupAdapter() {
+				@Override
+				public void messagesBundleAdded(MessagesBundle messagesBundle) {
+					addMessagesBundle(messagesBundle, messagesBundle.getLocale());
+					// refresh i18n page
+					i18nPage.addI18NEntry(MessagesEditor.this, messagesBundle.getLocale());
+				}
+			});
 			markers = new MessagesEditorMarkers(messagesBundleGroup);
 			setPartName(messagesBundleGroup.getName());
 			setTitleImage(UIUtils.getImage(UIUtils.IMAGE_RESOURCE_BUNDLE));
@@ -160,33 +169,38 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 		setPageImage(index, UIUtils.getImage(UIUtils.IMAGE_RESOURCE_BUNDLE));
 
 		// Create text editor pages for each locales
+		
+		Locale[] locales = messagesBundleGroup.getLocales();
+		// first: sort the locales.
+		UIUtils.sortLocales(locales);
+		// second: filter+sort them according to the filter preferences.
+		locales = UIUtils.filterLocales(locales);
+		for (int i = 0; i < locales.length; i++) {
+			Locale locale = locales[i];
+			MessagesBundle messagesBundle = (MessagesBundle) messagesBundleGroup
+			        .getMessagesBundle(locale);
+			addMessagesBundle(messagesBundle, locale);
+		}
+	}
+
+	private void addMessagesBundle(MessagesBundle messagesBundle, Locale locale) {
 		try {
-			Locale[] locales = messagesBundleGroup.getLocales();
-			// first: sort the locales.
-			UIUtils.sortLocales(locales);
-			// second: filter+sort them according to the filter preferences.
-			locales = UIUtils.filterLocales(locales);
-			for (int i = 0; i < locales.length; i++) {
-				Locale locale = locales[i];
-				MessagesBundle messagesBundle = (MessagesBundle) messagesBundleGroup
-				        .getMessagesBundle(locale);
-				IMessagesResource resource = messagesBundle.getResource();
-				TextEditor textEditor = (TextEditor) resource.getSource();
-				index = addPage(textEditor, textEditor.getEditorInput());
-				setPageText(index,
-				        UIUtils.getDisplayName(messagesBundle.getLocale()));
-				setPageImage(index,
-				        UIUtils.getImage(UIUtils.IMAGE_PROPERTIES_FILE));
-				localesIndex.add(locale);
-				textEditorsIndex.add(textEditor);
-			}
+			IMessagesResource resource = messagesBundle.getResource();
+			TextEditor textEditor = (TextEditor) resource.getSource();
+			int index = addPage(textEditor, textEditor.getEditorInput());
+			setPageText(index,
+			        UIUtils.getDisplayName(messagesBundle.getLocale()));
+			setPageImage(index,
+			        UIUtils.getImage(UIUtils.IMAGE_PROPERTIES_FILE));
+			localesIndex.add(locale);
+			textEditorsIndex.add(textEditor);
 		} catch (PartInitException e) {
 			ErrorDialog.openError(getSite().getShell(),
 			        "Error creating text editor page.", //$NON-NLS-1$
 			        null, e.getStatus());
-		}
+		} 
 	}
-
+	
 	/**
 	 * Called when the editor's pages need to be reloaded. For example when the
 	 * filters of locale is changed.
