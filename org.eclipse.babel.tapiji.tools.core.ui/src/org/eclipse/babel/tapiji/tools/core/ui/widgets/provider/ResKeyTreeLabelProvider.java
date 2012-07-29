@@ -22,12 +22,16 @@ import org.eclipse.babel.tapiji.tools.core.ui.utils.FontUtils;
 import org.eclipse.babel.tapiji.tools.core.ui.utils.ImageUtils;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.filter.FilterInfo;
 import org.eclipse.jface.text.Region;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerRow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.TreeItem;
 
 public class ResKeyTreeLabelProvider extends KeyTreeLabelProvider {
 
@@ -39,15 +43,14 @@ public class ResKeyTreeLabelProvider extends KeyTreeLabelProvider {
 	private Color black = FontUtils.getSystemColor(SWT.COLOR_BLACK);
 	private Color info_color = FontUtils.getSystemColor(SWT.COLOR_YELLOW);
 
-	/*** FONTS ***/
-	private Font bold = FontUtils.createFont(SWT.BOLD);
-	private Font bold_italic = FontUtils.createFont(SWT.BOLD | SWT.ITALIC);
-
 	public ResKeyTreeLabelProvider(List<Locale> locales) {
 		this.locales = locales;
 	}
 
-	// @Override
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 		if (columnIndex == 0) {
 			IKeyTreeNode kti = (IKeyTreeNode) element;
@@ -68,18 +71,23 @@ public class ResKeyTreeLabelProvider extends KeyTreeLabelProvider {
 				}
 			}
 
-			if (incomplete)
+			if (incomplete) {
 				return ImageUtils.getImage(ImageUtils.ICON_RESOURCE_INCOMPLETE);
-			else
+			} else {
 				return ImageUtils.getImage(ImageUtils.ICON_RESOURCE);
+			}
 		}
 		return null;
 	}
 
-	// @Override
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public String getColumnText(Object element, int columnIndex) {
-		if (columnIndex == 0)
-			return super.getText(element);
+		if (columnIndex == 0) {
+			return ((IKeyTreeNode) element).getName();
+		}
 
 		if (columnIndex <= locales.size()) {
 			IValuedKeyTreeNode item = (IValuedKeyTreeNode) element;
@@ -129,10 +137,23 @@ public class ResKeyTreeLabelProvider extends KeyTreeLabelProvider {
 		return (element instanceof IValuedKeyTreeNode && searchEnabled);
 	}
 
-	@Override
-	public void update(ViewerCell cell) {
+	public void updateTreeViewer(TreeViewer treeViewer) {
+		
+		for (TreeItem item : treeViewer.getTree().getItems()) {
+			Rectangle bounds = item.getBounds();
+			ViewerCell cell = treeViewer.getCell(new Point(bounds.x, bounds.y));
+			ViewerRow viewerRow = cell.getViewerRow();
+			
+			for (int i = 0 ; i < viewerRow.getColumnCount() ; i++) {
+				updateCell(viewerRow.getCell(i));
+			}
+		}
+	}
+	
+	private void updateCell(ViewerCell cell) {
 		Object element = cell.getElement();
 		int columnIndex = cell.getColumnIndex();
+		
 
 		if (isSearchEnabled(element)) {
 			if (isMatchingToPattern(element, columnIndex)) {
@@ -162,12 +183,10 @@ public class ResKeyTreeLabelProvider extends KeyTreeLabelProvider {
 				        .toArray(new StyleRange[styleRanges.size()]));
 			} else {
 				cell.setForeground(gray);
-			}
-		} else if (columnIndex == 0)
+			} 
+		} else if (columnIndex == 0) {
 			super.update(cell);
-
-		cell.setImage(this.getColumnImage(element, columnIndex));
-		cell.setText(this.getColumnText(element, columnIndex));
+		}
 	}
 
 }

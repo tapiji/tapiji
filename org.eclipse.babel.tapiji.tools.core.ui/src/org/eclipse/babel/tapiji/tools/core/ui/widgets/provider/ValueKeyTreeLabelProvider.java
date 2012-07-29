@@ -15,7 +15,6 @@ import org.eclipse.babel.core.message.IMessagesBundle;
 import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableFontProvider;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
@@ -24,17 +23,23 @@ public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
         ITableColorProvider, ITableFontProvider {
 
 	private IMessagesBundle locale;
-
+	
 	public ValueKeyTreeLabelProvider(IMessagesBundle iBundle) {
 		this.locale = iBundle;
 	}
 
-	// @Override
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 		return null;
 	}
 
-	// @Override
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public String getColumnText(Object element, int columnIndex) {
 		try {
 			IKeyTreeNode item = (IKeyTreeNode) element;
@@ -49,30 +54,28 @@ public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
 		return "";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Color getBackground(Object element, int columnIndex) {
 		return null;// return new Color(Display.getDefault(), 255, 0, 0);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Color getForeground(Object element, int columnIndex) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Font getFont(Object element, int columnIndex) {
 		return null; // UIUtils.createFont(SWT.BOLD);
-	}
-
-	@Override
-	public void update(ViewerCell cell) {
-		Object element = cell.getElement();
-		int columnIndex = cell.getColumnIndex();
-		cell.setImage(this.getColumnImage(element, columnIndex));
-		cell.setText(this.getColumnText(element, columnIndex));
-
-		super.update(cell);
 	}
 
 }
