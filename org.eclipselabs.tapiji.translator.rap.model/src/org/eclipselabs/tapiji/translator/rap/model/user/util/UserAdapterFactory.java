@@ -72,8 +72,12 @@ public class UserAdapterFactory extends AdapterFactoryImpl {
 				return createUserAdapter();
 			}
 			@Override
-			public Adapter caseFile(File object) {
-				return createFileAdapter();
+			public Adapter casePropertiesFile(PropertiesFile object) {
+				return createPropertiesFileAdapter();
+			}
+			@Override
+			public Adapter caseResourceBundle(ResourceBundle object) {
+				return createResourceBundleAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -110,16 +114,30 @@ public class UserAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipselabs.tapiji.translator.rap.model.user.File <em>File</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile <em>Properties File</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipselabs.tapiji.translator.rap.model.user.File
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile
 	 * @generated
 	 */
-	public Adapter createFileAdapter() {
+	public Adapter createPropertiesFileAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle <em>Resource Bundle</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle
+	 * @generated
+	 */
+	public Adapter createResourceBundleAdapter() {
 		return null;
 	}
 

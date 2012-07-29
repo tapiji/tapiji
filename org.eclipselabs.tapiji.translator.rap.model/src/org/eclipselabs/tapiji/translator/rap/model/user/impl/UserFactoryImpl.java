@@ -57,7 +57,8 @@ public class UserFactoryImpl extends EFactoryImpl implements UserFactory {
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case UserPackage.USER: return createUser();
-			case UserPackage.FILE: return createFile();
+			case UserPackage.PROPERTIES_FILE: return createPropertiesFile();
+			case UserPackage.RESOURCE_BUNDLE: return createResourceBundle();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -78,9 +79,19 @@ public class UserFactoryImpl extends EFactoryImpl implements UserFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public File createFile() {
-		FileImpl file = new FileImpl();
-		return file;
+	public PropertiesFile createPropertiesFile() {
+		PropertiesFileImpl propertiesFile = new PropertiesFileImpl();
+		return propertiesFile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ResourceBundle createResourceBundle() {
+		ResourceBundleImpl resourceBundle = new ResourceBundleImpl();
+		return resourceBundle;
 	}
 
 	/**

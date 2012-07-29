@@ -84,13 +84,13 @@ public interface UserPackage extends EPackage {
 	int USER__PASSWORD = 1;
 
 	/**
-	 * The feature id for the '<em><b>Stored Files</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Stored RBs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER__STORED_FILES = 2;
+	int USER__STORED_RBS = 2;
 
 	/**
 	 * The number of structural features of the '<em>User</em>' class.
@@ -102,23 +102,14 @@ public interface UserPackage extends EPackage {
 	int USER_FEATURE_COUNT = 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.FileImpl <em>File</em>}' class.
+	 * The meta object id for the '{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.PropertiesFileImpl <em>Properties File</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipselabs.tapiji.translator.rap.model.user.impl.FileImpl
-	 * @see org.eclipselabs.tapiji.translator.rap.model.user.impl.UserPackageImpl#getFile()
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.impl.PropertiesFileImpl
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.impl.UserPackageImpl#getPropertiesFile()
 	 * @generated
 	 */
-	int FILE = 1;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FILE__NAME = 0;
+	int PROPERTIES_FILE = 1;
 
 	/**
 	 * The feature id for the '<em><b>Path</b></em>' attribute.
@@ -127,16 +118,53 @@ public interface UserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FILE__PATH = 1;
+	int PROPERTIES_FILE__PATH = 0;
 
 	/**
-	 * The number of structural features of the '<em>File</em>' class.
+	 * The number of structural features of the '<em>Properties File</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FILE_FEATURE_COUNT = 2;
+	int PROPERTIES_FILE_FEATURE_COUNT = 1;
+
+	/**
+	 * The meta object id for the '{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl <em>Resource Bundle</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.impl.UserPackageImpl#getResourceBundle()
+	 * @generated
+	 */
+	int RESOURCE_BUNDLE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_BUNDLE__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Local Files</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_BUNDLE__LOCAL_FILES = 1;
+
+	/**
+	 * The number of structural features of the '<em>Resource Bundle</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_BUNDLE_FEATURE_COUNT = 2;
 
 
 	/**
@@ -172,47 +200,68 @@ public interface UserPackage extends EPackage {
 	EAttribute getUser_Password();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipselabs.tapiji.translator.rap.model.user.User#getStoredFiles <em>Stored Files</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipselabs.tapiji.translator.rap.model.user.User#getStoredRBs <em>Stored RBs</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Stored Files</em>'.
-	 * @see org.eclipselabs.tapiji.translator.rap.model.user.User#getStoredFiles()
+	 * @return the meta object for the containment reference list '<em>Stored RBs</em>'.
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.User#getStoredRBs()
 	 * @see #getUser()
 	 * @generated
 	 */
-	EReference getUser_StoredFiles();
+	EReference getUser_StoredRBs();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipselabs.tapiji.translator.rap.model.user.File <em>File</em>}'.
+	 * Returns the meta object for class '{@link org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile <em>Properties File</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>File</em>'.
-	 * @see org.eclipselabs.tapiji.translator.rap.model.user.File
+	 * @return the meta object for class '<em>Properties File</em>'.
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile
 	 * @generated
 	 */
-	EClass getFile();
+	EClass getPropertiesFile();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipselabs.tapiji.translator.rap.model.user.File#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipselabs.tapiji.translator.rap.model.user.File#getName()
-	 * @see #getFile()
-	 * @generated
-	 */
-	EAttribute getFile_Name();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipselabs.tapiji.translator.rap.model.user.File#getPath <em>Path</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile#getPath <em>Path</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Path</em>'.
-	 * @see org.eclipselabs.tapiji.translator.rap.model.user.File#getPath()
-	 * @see #getFile()
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile#getPath()
+	 * @see #getPropertiesFile()
 	 * @generated
 	 */
-	EAttribute getFile_Path();
+	EAttribute getPropertiesFile_Path();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle <em>Resource Bundle</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Resource Bundle</em>'.
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle
+	 * @generated
+	 */
+	EClass getResourceBundle();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getName()
+	 * @see #getResourceBundle()
+	 * @generated
+	 */
+	EAttribute getResourceBundle_Name();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getLocalFiles <em>Local Files</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Local Files</em>'.
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getLocalFiles()
+	 * @see #getResourceBundle()
+	 * @generated
+	 */
+	EReference getResourceBundle_LocalFiles();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -263,30 +312,22 @@ public interface UserPackage extends EPackage {
 		EAttribute USER__PASSWORD = eINSTANCE.getUser_Password();
 
 		/**
-		 * The meta object literal for the '<em><b>Stored Files</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Stored RBs</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference USER__STORED_FILES = eINSTANCE.getUser_StoredFiles();
+		EReference USER__STORED_RBS = eINSTANCE.getUser_StoredRBs();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.FileImpl <em>File</em>}' class.
+		 * The meta object literal for the '{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.PropertiesFileImpl <em>Properties File</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipselabs.tapiji.translator.rap.model.user.impl.FileImpl
-		 * @see org.eclipselabs.tapiji.translator.rap.model.user.impl.UserPackageImpl#getFile()
+		 * @see org.eclipselabs.tapiji.translator.rap.model.user.impl.PropertiesFileImpl
+		 * @see org.eclipselabs.tapiji.translator.rap.model.user.impl.UserPackageImpl#getPropertiesFile()
 		 * @generated
 		 */
-		EClass FILE = eINSTANCE.getFile();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute FILE__NAME = eINSTANCE.getFile_Name();
+		EClass PROPERTIES_FILE = eINSTANCE.getPropertiesFile();
 
 		/**
 		 * The meta object literal for the '<em><b>Path</b></em>' attribute feature.
@@ -294,7 +335,33 @@ public interface UserPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute FILE__PATH = eINSTANCE.getFile_Path();
+		EAttribute PROPERTIES_FILE__PATH = eINSTANCE.getPropertiesFile_Path();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl <em>Resource Bundle</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl
+		 * @see org.eclipselabs.tapiji.translator.rap.model.user.impl.UserPackageImpl#getResourceBundle()
+		 * @generated
+		 */
+		EClass RESOURCE_BUNDLE = eINSTANCE.getResourceBundle();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RESOURCE_BUNDLE__NAME = eINSTANCE.getResourceBundle_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Local Files</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RESOURCE_BUNDLE__LOCAL_FILES = eINSTANCE.getResourceBundle_LocalFiles();
 
 	}
 

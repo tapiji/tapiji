@@ -1,6 +1,7 @@
 package org.eclipselabs.tapiji.translator.rap.utils;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,49 +12,79 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.rwt.RWT;
+import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
+import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.utils.FileUtils;
 
 public class FileRAPUtils extends FileUtils {
-	public static IFile getResourceBundleRef(String[] locations, String projectName)
-	        throws CoreException {
-		
+	
+	public static List<ResourceBundle> getResourceBundleRef(String[] locations, IProject project) {		
 		IFile file = null;
 		
+		List<IFile> createdFiles = new ArrayList<IFile>();		
 		for (String location : locations) {
 			IPath path = new Path(location);
-	
-			/**
-			 * Create all files of the Resource-Bundle within the project space and
-			 * link them to the original file
-			 */
-			String filename = path.lastSegment();
-			IProject project = getProject(projectName);
+			
+			// Create all files of the Resource-Bundle within the project space
+			String filename = path.lastSegment();			
 			file = project.getFile(filename);
 			if (! file.exists())
-				file.createLink(path, IResource.REPLACE, null);
+				try {
+					file.create(new FileInputStream(location), IResource.REPLACE, null);					
+					createdFiles.add(file);
+				} catch (FileNotFoundException e) {		
+					e.printStackTrace();
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}			
 		}
 		
-		return file;
+		return StorageUtils.createResourceBundles(createdFiles);
 	}
 	
-	public static List<IFile> getOtherLocalFiles(IFile file) {
+	public static <T> T getContainingRB(List<T> rbFilesOrFilepaths, IFile iFile) {
+		String bundleNameNew = getBundleName(iFile.getFullPath());
+		for (T typ : rbFilesOrFilepaths) {
+			String bundleName = null;
+			if (typ instanceof IFile) {				
+				bundleName = getBundleName(((IFile) typ).getFullPath());
+			} else if (typ instanceof String) {
+				bundleName = getBundleName((String) typ);
+			}
+			
+			if (bundleNameNew.equals(bundleName))
+				return typ;
+		}
+		return null;
+	}
+	
+	public static List<IFile> getFilesFromProject(IProject project) {
 		List<IFile> iFiles = new ArrayList<IFile>();
-		try {
-			IProject project = file.getProject();			
+		try {		
 			IResource[] resources = project.members();		
 			
 			for (IResource resource : resources) {
 				if (resource instanceof IFile) {
 					IFile ifile = (IFile) resource;
-					if (ifile.getName().matches(getPropertiesFileRegEx(file.getLocation())) && ! file.equals(ifile))
-						iFiles.add(ifile);						
+					iFiles.add(ifile);						
 				}
 			}			
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
 		
+		return iFiles;
+	}
+	
+	public static List<IFile> getOtherLocalFiles(IFile file) {
+		List<IFile> iFiles = new ArrayList<IFile>();
+		
+		for (IFile ifile : getFilesFromProject(file.getProject())) {
+			if (ifile.getName().matches(getPropertiesFileRegEx(file.getLocation())) && ! file.equals(ifile))
+				iFiles.add(ifile);
+		}
+			
 		return iFiles;
 	}
 	
@@ -79,25 +110,91 @@ public class FileRAPUtils extends FileUtils {
 		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
 		IProject project = null;
 		
+		String projectName = RWT.getSessionStore().getId();
 		if (user != null)
-			try {
-				project = getProject(user.getUsername());
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			projectName = user.getUsername();
+		
+		try {
+			project = getProject(projectName);
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return project;
 	}
-
-	static IFile renameIFile(IFile file, String newFilename) {
+	
+	public static IProject getUserProject() {
+		if (! UserUtils.isUserLoggedIn())
+			return null;
+		
+		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
+		try {
+			return getProject(user.getUsername());
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static IProject getSessionProject() {
+		try {
+			return getProject(RWT.getSessionStore().getId());
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static IProject getProject(ResourceBundle rb) {
+		if (rb.isTemporary())
+			return getSessionProject();
+		else
+			return getUserProject();
+	}
+	
+	public static IFile renameIFile(IFile file, String newFilename) {
 		IPath oldPath = file.getFullPath();
 		IPath newPath = new Path(oldPath.removeLastSegments(1).toOSString() + java.io.File.separator + newFilename);
 		try {
-			file.move(newPath, false, null);
+			file.move(newPath, IResource.SHALLOW, null);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
 		return file.getProject().getFile(newFilename);
+	}
+
+	public static IFile getIFile(IProject project, String filepath) {
+		IPath path = new Path(filepath);
+		if (project == null)
+			project = getProject();
+		return project.getFile(path.lastSegment());
+	}
+
+	public static IFile getIFile(PropertiesFile file) {
+		IProject project = getProject(file.getResourceBundle());
+		
+		return project.getFile(file.getFilename());
+	}
+
+	public static boolean existsProjectFile(String filename) {		
+		IFile iFile = getProject().getFile(filename);
+		if (! iFile.exists()) {
+			// if filename is bundleName (= has no extension)
+			if (iFile.getFileExtension() == null) {
+				iFile = getProject().getFile(filename + ".properties");
+				if (iFile.exists())
+					return true;
+				List<IFile> iFiles = getOtherLocalFiles(iFile);
+				for (IFile iFile2 : iFiles) {
+					if (iFile2.exists())
+						return true;
+				}								
+			}
+			
+			return false;	
+		} else {
+			return true;
+		}
 	}
 }

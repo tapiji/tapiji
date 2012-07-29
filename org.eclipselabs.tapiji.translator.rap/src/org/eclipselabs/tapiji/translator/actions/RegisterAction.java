@@ -3,12 +3,9 @@ package org.eclipselabs.tapiji.translator.actions;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
-import org.eclipselabs.tapiji.translator.rap.dialogs.LoginDialog;
 import org.eclipselabs.tapiji.translator.rap.dialogs.RegisterDialog;
-import org.eclipselabs.tapiji.translator.views.StorageView;
 
 public class RegisterAction extends Action implements IWorkbenchWindowActionDelegate {
 

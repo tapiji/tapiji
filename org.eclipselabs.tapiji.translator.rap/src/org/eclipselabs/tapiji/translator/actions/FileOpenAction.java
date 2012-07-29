@@ -1,60 +1,91 @@
 package org.eclipselabs.tapiji.translator.actions;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.rwt.RWT;
 import org.eclipse.swt.SWT;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.part.FileEditorInput;
+import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
+import org.eclipselabs.tapiji.translator.rap.utils.EditorUtils;
 import org.eclipselabs.tapiji.translator.rap.utils.FileRAPUtils;
+import org.eclipselabs.tapiji.translator.rap.utils.StorageUtils;
 import org.eclipselabs.tapiji.translator.utils.FileUtils;
 
 public class FileOpenAction extends AbstractFileOpenAction {
 
+	private static final String TOKEN_FILENAME = "FILENAME";
+	private static final String ERROR_MSG_NOT_VALID = "The file \""+ TOKEN_FILENAME +"\" does not represent a properties file!";
+	private static final String ERROR_MSG_ALREADY_EXISTS = "The file \""+ TOKEN_FILENAME +"\" exists already in your session project!";
+	
 	@Override
 	public void run(IAction action) {
-		String[] filenames = FileUtils.queryFileName(window.getShell(),
+		String[] filepaths = FileUtils.queryFileName(window.getShell(),
 		        "Open Resource-Bundle", SWT.OPEN | SWT.MULTI,
 		        new String[] { "*.properties" });
 		
 		// cancel option
-		if (filenames == null)
+		if (filepaths == null)
 			return;
 		
 		List<String> copy = new ArrayList<String>();
-		copy.addAll(Arrays.asList(filenames));
-		boolean showError = false;
-		for (String filename : filenames) {			
-			if (! FileUtils.isResourceBundle(filename)) {
-				showError = true;
-				copy.remove(filename);
+		copy.addAll(Arrays.asList(filepaths));
+		
+		List<String> errorMsgs = new ArrayList<String>();
+		for (String filepath : filepaths) {		
+			File file = new File(filepath);
+			String bundleName = FileRAPUtils.getBundleName(filepath);
+			
+			if (! FileUtils.isResourceBundle(filepath)) {
+				errorMsgs.add(ERROR_MSG_NOT_VALID.replaceFirst(TOKEN_FILENAME, file.getName()));
+				copy.remove(filepath);
+				continue;
+			}
+			
+			// exists file already ?
+			if (FileRAPUtils.existsProjectFile(file.getName())) {
+				errorMsgs.add(ERROR_MSG_ALREADY_EXISTS.replaceFirst(TOKEN_FILENAME, file.getName()));
+			// exists bundle already ?
+			} else {
+				for (ResourceBundle rb : StorageUtils.getSessionRBs()) {
+					if (rb.getName().equals(bundleName)) {
+						// add to existing rb ?
+						if (MessageDialog.openConfirm(window.getShell(), "Duplicated resource bundles", 
+								"You have uploaded a properties file, which has the same bundle name as an already opened resource bundle.\n\n" +
+								"The file \""+file.getName()+"\" will be added to the existing resource bundle \""+bundleName+"\"."))
+							EditorUtils.closeRB(rb, true);
+						else
+							copy.remove(filepath);
+						break;
+					}
+				}
+					
 			}
 		}
-		if (showError) {
-			MessageDialog.openError(window.getShell(),
-			        "Cannot open a messages file",
-			        "At least one of your choosen files does not represent a messages file!\nIt wasn't added to the editor!");
-		}
-		filenames = copy.toArray(new String[0]);
 		
-		if (filenames.length == 0)
+		if (! errorMsgs.isEmpty()) {
+			String errString = "The following error(s) occured:\n\n";
+			for (int i=0; i<errorMsgs.size(); i++) {
+				String errorMsg = errorMsgs.get(i);
+				errString += errorMsg;
+				if (i != errorMsgs.size()-1)
+					errString += "\n";
+			}
+			MessageDialog.openError(window.getShell(), "Error(s) occured", errString);
+		}
+		
+		filepaths = copy.toArray(new String[0]);
+		if (filepaths.length == 0)
 			return;
 		
-		IWorkbenchPage page = window.getActivePage();
-		try {
-			page.openEditor(
-			        new FileEditorInput(FileRAPUtils
-			                .getResourceBundleRef(filenames, RWT.getSessionStore().getId())),
-			        RESOURCE_BUNDLE_EDITOR);
-
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
+		// open editors
+		List<ResourceBundle> rbs = FileRAPUtils
+                .getResourceBundleRef(filepaths, FileRAPUtils.getSessionProject());
+		for (ResourceBundle rb : rbs)
+			EditorUtils.openRB(rb);
+			
 	}
 
 }

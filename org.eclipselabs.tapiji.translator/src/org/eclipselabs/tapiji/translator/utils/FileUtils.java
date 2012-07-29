@@ -20,6 +20,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
@@ -30,7 +31,7 @@ public class FileUtils {
 	/** Token to replace in a regular expression with a file extension. */
 	private static final String TOKEN_FILE_EXTENSION = "FILEEXTENSION";
 	/** Regex to match a properties file. */
-	private static final String PROPERTIES_FILE_REGEX = "^("
+	public static final String PROPERTIES_FILE_REGEX = "^("
 	        + TOKEN_BUNDLE_NAME + ")" + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})"
 	        + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." + TOKEN_FILE_EXTENSION
 	        + ")$";
@@ -143,12 +144,29 @@ public class FileUtils {
 		FileDialog dialog = new FileDialog(shell, dialogOptions);
 		dialog.setText(title);
 		dialog.setFilterExtensions(endings);
-		dialog.open();
-		String[] paths = dialog.getFileNames();
-
-		if (paths.length > 0)
-			return paths;
-		return null;
+		
+		String filepath = dialog.open();
+		
+		// if single option, return path
+		if ((dialogOptions & SWT.SINGLE) == SWT.SINGLE) {
+			return new String[] {filepath};
+		} else {
+			// [RAP] In RAP1.5 getFilterPath is always empty!!!
+			String path = dialog.getFilterPath();
+			// [RAP] In RAP1.5 getFileNames returns full filename (+ path)!!!
+			String[] filenames = dialog.getFileNames();
+	
+			// append filenames to path
+			if (! path.isEmpty()) {
+				for (int i=0; i < filenames.length; i++) {
+					filenames[i] = path + File.separator + filenames[i];
+				}
+					
+			}			
+			if (filenames.length > 0)
+				return filenames;
+			return null;
+		}
 	}
 
 }

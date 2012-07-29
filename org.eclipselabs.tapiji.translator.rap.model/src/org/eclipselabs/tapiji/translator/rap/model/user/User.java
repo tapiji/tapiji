@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.User#getUsername <em>Username</em>}</li>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.User#getPassword <em>Password</em>}</li>
- *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.User#getStoredFiles <em>Stored Files</em>}</li>
+ *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.User#getStoredRBs <em>Stored RBs</em>}</li>
  * </ul>
  * </p>
  *
@@ -79,20 +79,19 @@ public interface User extends EObject {
 	void setPassword(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Stored Files</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipselabs.tapiji.translator.rap.model.user.File}.
+	 * Returns the value of the '<em><b>Stored RBs</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Stored Files</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Stored RBs</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Stored Files</em>' containment reference list.
-	 * @see org.eclipselabs.tapiji.translator.rap.model.user.UserPackage#getUser_StoredFiles()
+	 * @return the value of the '<em>Stored RBs</em>' containment reference list.
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.UserPackage#getUser_StoredRBs()
 	 * @model containment="true"
-	 *        extendedMetaData="name='storedFiles' kind='element'"
 	 * @generated
 	 */
-	EList<File> getStoredFiles();
+	EList<ResourceBundle> getStoredRBs();
 
 } // User

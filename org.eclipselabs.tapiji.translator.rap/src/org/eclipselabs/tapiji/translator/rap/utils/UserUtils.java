@@ -13,8 +13,14 @@ import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserFactory;
 
 public class UserUtils {
+	public static final String SESSION_USER_ATT = "org.eclipselabs.tapiji.translator.rap.model.user.User";
 	public final static String CONTEXT_ID_USERLOGGEDIN = "org.eclipselabs.tapiji.translator.userLoggedIn";
+	
 	private static IContextActivation loggedIn; 
+	
+	public static boolean isUserLoggedIn() {
+		return RWT.getSessionStore().getAttribute(SESSION_USER_ATT) != null;
+	}
 	
 	public static void setUserLoggedInContext(boolean activate) {
 		IContextService contextService = (IContextService)PlatformUI.getWorkbench()
@@ -107,5 +113,5 @@ public class UserUtils {
 		resource.save(null);
 	}
 
-	public static final String SESSION_USER_ATT = "org.eclipselabs.tapiji.translator.rap.model.user.User";
+	
 }

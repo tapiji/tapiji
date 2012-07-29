@@ -4,7 +4,6 @@ import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.rwt.RWT;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -12,10 +11,9 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.commands.ICommandImageService;
 import org.eclipselabs.tapiji.translator.rap.utils.UIUtils;
+import org.eclipselabs.tapiji.translator.rap.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.views.StorageView;
-import org.eclipselabs.tapiji.translator.views.widgets.GlossaryWidget;
 
 public class StorageMenuEntryContribution extends ContributionItem implements
 		ISelectionChangedListener {
@@ -23,7 +21,6 @@ public class StorageMenuEntryContribution extends ContributionItem implements
 	private MenuItem storeItem;
 	private MenuItem removeItem;
 	private MenuItem renameItem;
-	private MenuItem refreshItem;
 	
 	private StorageView parentView;
 	
@@ -35,7 +32,7 @@ public class StorageMenuEntryContribution extends ContributionItem implements
 	public void fill(Menu menu, int index) {
 		
 		if (parentView.isValidSelection()) {
-			if (parentView.isSelectionUnstoredFile()) {
+			if (parentView.isSelectionUnstoredRB() && UserUtils.isUserLoggedIn()) {
 				// MenuItem for adding a new entry to storage
 				storeItem = new MenuItem(menu, SWT.NONE, index);
 				storeItem.setText("Store");
@@ -54,7 +51,8 @@ public class StorageMenuEntryContribution extends ContributionItem implements
 					}
 				});			
 				index++;
-			} else {
+			} 
+			if ((parentView.isSelectionStoredRB() && UserUtils.isUserLoggedIn()) || parentView.isSelectionUnstoredRB()) {		
 				// MenuItem for renaming the currently selected entry
 				renameItem = new MenuItem(menu, SWT.NONE, index);
 				renameItem.setText("Rename");
@@ -72,49 +70,29 @@ public class StorageMenuEntryContribution extends ContributionItem implements
 	
 					}
 				});
-				index++;
-				// MenuItem for deleting the currently selected entry
-				removeItem = new MenuItem(menu, SWT.NONE, index);
-				removeItem.setText("Remove");
-				removeItem.setImage(PlatformUI.getWorkbench().getSharedImages()
-				        .getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE)
-				        .createImage());
-				removeItem.addSelectionListener(new SelectionListener() {
-	
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						parentView.deleteSelectedItem();
-					}
-	
-					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {
-	
-					}
-				});	
-				index++;
+				index++;				
 			}
+			
+			// MenuItem for deleting the currently selected entry
+			removeItem = new MenuItem(menu, SWT.NONE, index);
+			removeItem.setText("Remove");
+			removeItem.setImage(PlatformUI.getWorkbench().getSharedImages()
+			        .getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE)
+			        .createImage());
+			removeItem.addSelectionListener(new SelectionListener() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					parentView.deleteSelectedItem();
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+
+				}
+			});	
+			index++;
 		}
-		// add menu item for refreshing view
-//		refreshItem = new MenuItem(menu, SWT.NONE, index);
-//		refreshItem.setText("Refresh");
-//		
-//		ImageDescriptor descriptor = UIUtils.getImageDescriptor(UIUtils.IMAGE_REFRESH);
-//		refreshItem.setImage(descriptor.createImage());
-//		
-//		refreshItem.addSelectionListener(new SelectionListener() {
-//
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				parentView.refresh();
-//			}
-//
-//			@Override
-//			public void widgetDefaultSelected(SelectionEvent e) {
-//
-//			}
-//		});
-//		index++;
-		
 	}
 	
 	@Override

@@ -10,6 +10,10 @@ public class UIUtils {
 	
 	public static final String IMAGE_REFRESH = "refresh.gif";
 	public static final String IMAGE_RENAME = "rename.gif";
+	public static final String IMAGE_RESOURCE_BUNDLE = "resourcebundle.gif";
+	public static final String IMAGE_PROPERTIES_FILE = "propertiesfile.gif";
+	public static final String IMAGE_RESOURCE_BUNDLE_TEMPORARY = "resourcebundle_grey.gif";
+	public static final String IMAGE_PROPERTIES_FILE_TEMPORARY = "propertiesfile_grey.gif";
 	
 	/**
      * Gets an image descriptor.

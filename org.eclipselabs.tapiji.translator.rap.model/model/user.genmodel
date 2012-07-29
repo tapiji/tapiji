@@ -9,12 +9,21 @@
     <genClasses ecoreClass="user.ecore#//User">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute user.ecore#//User/username"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute user.ecore#//User/password"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference user.ecore#//User/storedFiles"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference user.ecore#//User/storedRBs"/>
     </genClasses>
-    <genClasses ecoreClass="user.ecore#//File">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute user.ecore#//File/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute user.ecore#//File/path"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference user.ecore#//File/owner"/>
+    <genClasses ecoreClass="user.ecore#//PropertiesFile">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute user.ecore#//PropertiesFile/path"/>
+      <genOperations ecoreOperation="user.ecore#//PropertiesFile/getFilename"/>
+      <genOperations ecoreOperation="user.ecore#//PropertiesFile/getResourceBundle"/>
+      <genOperations ecoreOperation="user.ecore#//PropertiesFile/setFilename">
+        <genParameters ecoreParameter="user.ecore#//PropertiesFile/setFilename/filename"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="user.ecore#//ResourceBundle">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute user.ecore#//ResourceBundle/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference user.ecore#//ResourceBundle/localFiles"/>
+      <genOperations ecoreOperation="user.ecore#//ResourceBundle/isTemporary"/>
+      <genOperations ecoreOperation="user.ecore#//ResourceBundle/getUser"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

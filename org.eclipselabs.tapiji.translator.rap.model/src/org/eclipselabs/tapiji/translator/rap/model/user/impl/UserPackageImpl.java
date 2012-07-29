@@ -4,12 +4,14 @@ package org.eclipselabs.tapiji.translator.rap.model.user.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
-import org.eclipselabs.tapiji.translator.rap.model.user.File;
+import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
+import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserFactory;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserPackage;
@@ -33,7 +35,14 @@ public class UserPackageImpl extends EPackageImpl implements UserPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass fileEClass = null;
+	private EClass propertiesFileEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass resourceBundleEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -128,7 +137,7 @@ public class UserPackageImpl extends EPackageImpl implements UserPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getUser_StoredFiles() {
+	public EReference getUser_StoredRBs() {
 		return (EReference)userEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -137,8 +146,8 @@ public class UserPackageImpl extends EPackageImpl implements UserPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getFile() {
-		return fileEClass;
+	public EClass getPropertiesFile() {
+		return propertiesFileEClass;
 	}
 
 	/**
@@ -146,8 +155,8 @@ public class UserPackageImpl extends EPackageImpl implements UserPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getFile_Name() {
-		return (EAttribute)fileEClass.getEStructuralFeatures().get(0);
+	public EAttribute getPropertiesFile_Path() {
+		return (EAttribute)propertiesFileEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -155,8 +164,26 @@ public class UserPackageImpl extends EPackageImpl implements UserPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getFile_Path() {
-		return (EAttribute)fileEClass.getEStructuralFeatures().get(1);
+	public EClass getResourceBundle() {
+		return resourceBundleEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getResourceBundle_Name() {
+		return (EAttribute)resourceBundleEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getResourceBundle_LocalFiles() {
+		return (EReference)resourceBundleEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -190,11 +217,14 @@ public class UserPackageImpl extends EPackageImpl implements UserPackage {
 		userEClass = createEClass(USER);
 		createEAttribute(userEClass, USER__USERNAME);
 		createEAttribute(userEClass, USER__PASSWORD);
-		createEReference(userEClass, USER__STORED_FILES);
+		createEReference(userEClass, USER__STORED_RBS);
 
-		fileEClass = createEClass(FILE);
-		createEAttribute(fileEClass, FILE__NAME);
-		createEAttribute(fileEClass, FILE__PATH);
+		propertiesFileEClass = createEClass(PROPERTIES_FILE);
+		createEAttribute(propertiesFileEClass, PROPERTIES_FILE__PATH);
+
+		resourceBundleEClass = createEClass(RESOURCE_BUNDLE);
+		createEAttribute(resourceBundleEClass, RESOURCE_BUNDLE__NAME);
+		createEReference(resourceBundleEClass, RESOURCE_BUNDLE__LOCAL_FILES);
 	}
 
 	/**
@@ -230,11 +260,25 @@ public class UserPackageImpl extends EPackageImpl implements UserPackage {
 		initEClass(userEClass, User.class, "User", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUser_Username(), ecorePackage.getEString(), "username", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUser_Password(), ecorePackage.getEString(), "password", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getUser_StoredFiles(), this.getFile(), null, "storedFiles", null, 0, -1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getUser_StoredRBs(), this.getResourceBundle(), null, "storedRBs", null, 0, -1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(fileEClass, File.class, "File", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getFile_Name(), ecorePackage.getEString(), "name", null, 0, 1, File.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getFile_Path(), ecorePackage.getEString(), "path", null, 0, 1, File.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(propertiesFileEClass, PropertiesFile.class, "PropertiesFile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPropertiesFile_Path(), ecorePackage.getEString(), "path", null, 0, 1, PropertiesFile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(propertiesFileEClass, ecorePackage.getEString(), "getFilename", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		addEOperation(propertiesFileEClass, this.getResourceBundle(), "getResourceBundle", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		EOperation op = addEOperation(propertiesFileEClass, null, "setFilename", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "filename", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(resourceBundleEClass, ResourceBundle.class, "ResourceBundle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getResourceBundle_Name(), ecorePackage.getEString(), "name", null, 0, 1, ResourceBundle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResourceBundle_LocalFiles(), this.getPropertiesFile(), null, "localFiles", null, 1, -1, ResourceBundle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(resourceBundleEClass, ecorePackage.getEBoolean(), "isTemporary", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		addEOperation(resourceBundleEClass, this.getUser(), "getUser", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -274,28 +318,14 @@ public class UserPackageImpl extends EPackageImpl implements UserPackage {
 			 "kind", "element"
 		   });		
 		addAnnotation
-		  (getUser_StoredFiles(), 
-		   source, 
-		   new String[] {
-			 "name", "storedFiles",
-			 "kind", "element"
-		   });		
-		addAnnotation
-		  (fileEClass, 
+		  (propertiesFileEClass, 
 		   source, 
 		   new String[] {
 			 "name", "File",
 			 "kind", "elementOnly"
 		   });		
 		addAnnotation
-		  (getFile_Name(), 
-		   source, 
-		   new String[] {
-			 "name", "name",
-			 "kind", "element"
-		   });		
-		addAnnotation
-		  (getFile_Path(), 
+		  (getPropertiesFile_Path(), 
 		   source, 
 		   new String[] {
 			 "name", "path",

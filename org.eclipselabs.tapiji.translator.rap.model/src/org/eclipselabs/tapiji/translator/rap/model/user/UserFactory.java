@@ -31,13 +31,22 @@ public interface UserFactory extends EFactory {
 	User createUser();
 
 	/**
-	 * Returns a new object of class '<em>File</em>'.
+	 * Returns a new object of class '<em>Properties File</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>File</em>'.
+	 * @return a new object of class '<em>Properties File</em>'.
 	 * @generated
 	 */
-	File createFile();
+	PropertiesFile createPropertiesFile();
+
+	/**
+	 * Returns a new object of class '<em>Resource Bundle</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Resource Bundle</em>'.
+	 * @generated
+	 */
+	ResourceBundle createResourceBundle();
 
 	/**
 	 * Returns the package supported by this factory.

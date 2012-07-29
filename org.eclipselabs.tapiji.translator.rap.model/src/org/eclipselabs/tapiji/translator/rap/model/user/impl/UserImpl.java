@@ -5,21 +5,21 @@ package org.eclipselabs.tapiji.translator.rap.model.user.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
-import org.eclipselabs.tapiji.translator.rap.model.user.File;
+import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserPackage;
 
@@ -32,7 +32,7 @@ import org.eclipselabs.tapiji.translator.rap.model.user.UserPackage;
  * <ul>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.UserImpl#getUsername <em>Username</em>}</li>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.UserImpl#getPassword <em>Password</em>}</li>
- *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.UserImpl#getStoredFiles <em>Stored Files</em>}</li>
+ *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.UserImpl#getStoredRBs <em>Stored RBs</em>}</li>
  * </ul>
  * </p>
  *
@@ -80,14 +80,14 @@ public class UserImpl extends EObjectImpl implements User {
 	protected String password = PASSWORD_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getStoredFiles() <em>Stored Files</em>}' containment reference list.
+	 * The cached value of the '{@link #getStoredRBs() <em>Stored RBs</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getStoredFiles()
+	 * @see #getStoredRBs()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<File> storedFiles;
+	protected EList<ResourceBundle> storedRBs;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -155,11 +155,11 @@ public class UserImpl extends EObjectImpl implements User {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<File> getStoredFiles() {
-		if (storedFiles == null) {
-			storedFiles = new EObjectContainmentEList<File>(File.class, this, UserPackage.USER__STORED_FILES);
+	public EList<ResourceBundle> getStoredRBs() {
+		if (storedRBs == null) {
+			storedRBs = new EObjectContainmentEList<ResourceBundle>(ResourceBundle.class, this, UserPackage.USER__STORED_RBS);
 		}
-		return storedFiles;
+		return storedRBs;
 	}
 
 	/**
@@ -170,8 +170,8 @@ public class UserImpl extends EObjectImpl implements User {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case UserPackage.USER__STORED_FILES:
-				return ((InternalEList<?>)getStoredFiles()).basicRemove(otherEnd, msgs);
+			case UserPackage.USER__STORED_RBS:
+				return ((InternalEList<?>)getStoredRBs()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -188,8 +188,8 @@ public class UserImpl extends EObjectImpl implements User {
 				return getUsername();
 			case UserPackage.USER__PASSWORD:
 				return getPassword();
-			case UserPackage.USER__STORED_FILES:
-				return getStoredFiles();
+			case UserPackage.USER__STORED_RBS:
+				return getStoredRBs();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -209,9 +209,9 @@ public class UserImpl extends EObjectImpl implements User {
 			case UserPackage.USER__PASSWORD:
 				setPassword((String)newValue);
 				return;
-			case UserPackage.USER__STORED_FILES:
-				getStoredFiles().clear();
-				getStoredFiles().addAll((Collection<? extends File>)newValue);
+			case UserPackage.USER__STORED_RBS:
+				getStoredRBs().clear();
+				getStoredRBs().addAll((Collection<? extends ResourceBundle>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -231,8 +231,8 @@ public class UserImpl extends EObjectImpl implements User {
 			case UserPackage.USER__PASSWORD:
 				setPassword(PASSWORD_EDEFAULT);
 				return;
-			case UserPackage.USER__STORED_FILES:
-				getStoredFiles().clear();
+			case UserPackage.USER__STORED_RBS:
+				getStoredRBs().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -250,8 +250,8 @@ public class UserImpl extends EObjectImpl implements User {
 				return USERNAME_EDEFAULT == null ? username != null : !USERNAME_EDEFAULT.equals(username);
 			case UserPackage.USER__PASSWORD:
 				return PASSWORD_EDEFAULT == null ? password != null : !PASSWORD_EDEFAULT.equals(password);
-			case UserPackage.USER__STORED_FILES:
-				return storedFiles != null && !storedFiles.isEmpty();
+			case UserPackage.USER__STORED_RBS:
+				return storedRBs != null && !storedRBs.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

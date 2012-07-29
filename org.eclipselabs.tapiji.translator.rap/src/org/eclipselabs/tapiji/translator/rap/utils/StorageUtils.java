@@ -2,198 +2,152 @@ package org.eclipselabs.tapiji.translator.rap.utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.rwt.RWT;
-import org.eclipselabs.tapiji.translator.rap.model.user.File;
+import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
+import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserFactory;
 
 public class StorageUtils {
 	
-	public static boolean existsUserFile(String filename) {
+	public static boolean existsRBName(String bundleName) {
+		if (! UserUtils.isUserLoggedIn())
+			return false;
+		
 		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
 		
-		List<File> storedFiles = user.getStoredFiles();
-		
-		for (File file : storedFiles) {
-			if (file.getName().equals(filename))
+		List<ResourceBundle> rbs = user.getStoredRBs();		
+		for (ResourceBundle rb : rbs) {
+			if (rb.getName().equals(bundleName))
 				return true;
 		}
 		
 		return false;
 	}
 	
-	public static boolean existsProjectFile(String filename) {		
-		IFile iFile = getProject().getFile(filename);
-		if (! iFile.exists()) {
-			// if filename is bundleName (= has no extension)
-			if (iFile.getFileExtension() == null) {
-				iFile = getProject().getFile(filename + ".properties");
-				if (iFile.exists())
-					return true;
-				List<IFile> iFiles = FileRAPUtils.getOtherLocalFiles(iFile);
-				for (IFile iFile2 : iFiles) {
-					if (iFile2.exists())
-						return true;
-				}								
-			}
-			
-			return false;	
-		} else {
-			return true;
+	public static boolean existsTempRBName(String bundleName) {
+		for (ResourceBundle rb : getSessionRBs()) {
+			if (rb.getName().equals(bundleName))
+				return true;
 		}
+		
+		return false;
 	}
 	
-	public static void syncUserFilesWithProject() {
-		boolean save = false;
+	public static void syncUserRBsWithProject() {
 		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
-		List<File> files = new ArrayList<File>();
-		files.addAll(user.getStoredFiles());
+		List<ResourceBundle> rbs = new ArrayList<ResourceBundle>(user.getStoredRBs());
 		
-		for (File file : files) {
-			if (! existsProjectFile(file.getName())) {
-				user.getStoredFiles().remove(file);
-				
-				if (save == false)
-					save = true;
-			}
-		}
-		
-		if (save == true)
+		for (ResourceBundle rb : rbs) {
+			List<PropertiesFile> localFiles = new ArrayList<PropertiesFile>(rb.getLocalFiles());
+			for (PropertiesFile file : localFiles)
+				if (! FileRAPUtils.existsProjectFile(file.getFilename())) {
+					rb.getLocalFiles().remove(file);
+				}
 			try {
-				user.eResource().save(null);
+				if (rb.getLocalFiles().isEmpty())
+					user.getStoredRBs().remove(rb);
+				// update database
+				user.eResource().save(null);				
 			} catch (IOException e) {
 				e.printStackTrace();
-			}		
+			}
+		}
 	}
 	
-	public static File storeFile(IFile ifile) {
-		IFile newIFile = getNewFile(ifile);
-		
+	public static ResourceBundle storeRB(ResourceBundle rb) {
+		if (! rb.isTemporary())
+			return null;
+								
 		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
-		File file = UserFactory.eINSTANCE.createFile();
+		user.getStoredRBs().add(rb);
+		
 		try {
-			newIFile.create(ifile.getContents(), false, null);
-			
-			file.setName(newIFile.getName());
-			file.setPath(newIFile.getLocation().toOSString());			
-					
-			user.getStoredFiles().add(file);
-			// update user
 			user.eResource().save(null);
-			
-			// add other local files
-			for (IFile otherLocal : FileRAPUtils.getOtherLocalFiles(ifile)) {
-				String baseName = FileRAPUtils.getBundleName(newIFile.getFullPath());
-				String newLocalFileName = getRenamedLocal(otherLocal, baseName);
-				
-				IFile newLocalIFile = getProject().getFile(newLocalFileName);
-				newLocalIFile.create(otherLocal.getContents(), false, null);
-			}
-		} catch (CoreException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 		
+		} 
+		
+		// move local files into project dir
+		for (PropertiesFile file : rb.getLocalFiles()) {
+			IFile ifile = FileRAPUtils.getIFile(FileRAPUtils.getSessionProject(), file.getPath());
+			ifile.exists();
+			IPath newPath = new Path(FileRAPUtils.getUserProject().getFullPath()+java.io.File.separator+file.getFilename());
+			try {
+				ifile.move(newPath, IResource.KEEP_HISTORY, null);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+			
+			IFile movedIFile = FileRAPUtils.getUserProject().getFile(file.getFilename());
+			file.setPath(movedIFile.getLocation().toOSString());
+		}
+		return rb;
+	}
+	
+	public static void renameRB(ResourceBundle rb, String newBundleName) {
+		rb.setName(newBundleName);
+		
+		for (PropertiesFile file : rb.getLocalFiles()) {
+			IFile ifile = FileRAPUtils.getIFile(file);
+			ifile.exists();
+			String local = FileRAPUtils.getLocal(file.getFilename());			
+			String newFilename = newBundleName+local+"."+ifile.getFileExtension();
+			
+			FileRAPUtils.renameIFile(ifile, newFilename);
+			file.setFilename(newFilename);
+		}
+		
+		if (! rb.isTemporary())
+			try {
+				rb.getUser().eResource().save(null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	}
+	
+	public static List<ResourceBundle> getSessionRBs() {
+		return createResourceBundles(FileRAPUtils.getFilesFromProject(FileRAPUtils.getSessionProject()));
+	}
+	
+	public static List<ResourceBundle> createResourceBundles(List<IFile> ifiles) {
+		Map<String,ResourceBundle> sessionRBs = new HashMap<String,ResourceBundle>();
+		
+		for (IFile ifile : ifiles) {
+			String bundleName = FileRAPUtils.getBundleName(ifile.getFullPath());
+			// ignore .project
+			if (bundleName.equals("") || ifile.getName().equals(".project"))
+				continue;
+			
+			ResourceBundle rb = sessionRBs.get(bundleName);			
+			
+			// create new rb
+			if (rb == null) {
+				rb = UserFactory.eINSTANCE.createResourceBundle();
+				rb.setName(bundleName);				
+				rb.getLocalFiles().add(createFile(ifile));
+				sessionRBs.put(bundleName, rb);
+			// add new local to rb
+			} else {
+				rb.getLocalFiles().add(createFile(ifile));
+			}
+		}
+		
+		return new ArrayList<ResourceBundle>( sessionRBs.values() );
+	}
+	
+	public static PropertiesFile createFile(IFile ifile) {
+		PropertiesFile file = UserFactory.eINSTANCE.createPropertiesFile();
+		file.setPath(ifile.getLocation().toOSString());
 		return file;
-	}
-	
-	public static void unstoreFile(File file) {
-		IFile ifile = getIFile(file.getPath());
-		
-		try {
-			ifile.delete(true, null);
-			User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
-			user.getStoredFiles().remove(file);
-			user.eResource().save(null);
-			// or
-			//file.eResource().delete(null); 
-			
-			// delete other local files
-			for (IFile otherLocal : FileRAPUtils.getOtherLocalFiles(ifile)) {
-				otherLocal.delete(true, null);
-			}
-		} catch (CoreException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void renameFile(File file, String newName) {
-		// rename project files
-		IFile ifile = getIFile(file.getPath());
-		
-		String newFilename = getRenamedLocal(ifile, newName);
-		IFile newIFile = FileRAPUtils.renameIFile(ifile, newFilename);
-		
-		for (IFile otherLocal : FileRAPUtils.getOtherLocalFiles(ifile)) {
-			newFilename = getRenamedLocal(otherLocal, newName);
-			FileRAPUtils.renameIFile(otherLocal, newFilename);
-		}
-		
-		file.setName(newFilename);
-		file.setPath(newIFile.getLocation().toOSString());
-		try {
-			file.eResource().save(null);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static IProject getProject() {
-		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
-		
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(user.getUsername());
-		try {
-			if (!project.exists())
-				project.create(null);
-			if (!project.isOpen())
-				project.open(null);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
-		return project;		
-	}
-	
-	public static IFile getIFile(String filepath) {
-		IPath path = new Path(filepath);
-		return getProject().getFile(path.lastSegment());
-	}
-	
-	private static IFile getNewFile(IFile ifile) {
-		String filename = getNextNonExistingFilename(ifile);
-		return getProject().getFile(filename);
-	}
-	
-	private static String getNextNonExistingFilename(IFile ifile) {
-		int counter = 2;
-		String filenameBase = FileRAPUtils.getBundleName(ifile.getFullPath());
-		String extension = ifile.getFileExtension();
-		String local = FileRAPUtils.getLocal(ifile.getName());
-		String filename = filenameBase + local + "." + extension;
-		
-		while (existsProjectFile(filename)) {
-			filename = filenameBase + "(" + counter + ")" + local + "." + extension;
-			counter++;
-		}
-		
-		return filename;
-	}
-	
-	private static String getRenamedLocal(IFile ifile, String newFileBaseName) {
-		String ext = ifile.getFileExtension();
-		String local = FileRAPUtils.getLocal(ifile.getName());
-		String newLocalFileName = newFileBaseName + local + "." + ext;
-		
-		return newLocalFileName;
 	}
 }

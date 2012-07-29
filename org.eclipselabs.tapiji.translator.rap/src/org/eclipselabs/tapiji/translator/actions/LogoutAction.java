@@ -12,7 +12,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipselabs.tapiji.translator.rap.model.user.File;
+import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
+import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.views.StorageView;
@@ -34,9 +35,10 @@ public class LogoutAction implements IWorkbenchWindowActionDelegate {
 				if (editorInput instanceof IFileEditorInput) {
 					IFileEditorInput fileInput = (IFileEditorInput) editorInput;
 					IFile iFile = fileInput.getFile();
-					for (File userFile : user.getStoredFiles()) {
-						if (iFile.getLocation().toOSString().equals(userFile.getPath()))
-							page.closeEditor(editors[i].getEditor(false), false);
+					for (ResourceBundle rb : user.getStoredRBs()) {
+						for (PropertiesFile userFile : rb.getLocalFiles())
+							if (iFile.getLocation().toOSString().equals(userFile.getPath()))
+								page.closeEditor(editors[i].getEditor(false), false);
 					}	
 				}
 			} catch (PartInitException e) {

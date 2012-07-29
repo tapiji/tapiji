@@ -72,9 +72,15 @@ public class UserSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case UserPackage.FILE: {
-				File file = (File)theEObject;
-				T result = caseFile(file);
+			case UserPackage.PROPERTIES_FILE: {
+				PropertiesFile propertiesFile = (PropertiesFile)theEObject;
+				T result = casePropertiesFile(propertiesFile);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case UserPackage.RESOURCE_BUNDLE: {
+				ResourceBundle resourceBundle = (ResourceBundle)theEObject;
+				T result = caseResourceBundle(resourceBundle);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -98,17 +104,32 @@ public class UserSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>File</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Properties File</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>File</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Properties File</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFile(File object) {
+	public T casePropertiesFile(PropertiesFile object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Resource Bundle</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Resource Bundle</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseResourceBundle(ResourceBundle object) {
 		return null;
 	}
 

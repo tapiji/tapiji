@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.rwt.RWT;
 import org.eclipse.rwt.service.IServiceHandler;
-import org.eclipselabs.tapiji.translator.rap.utils.RAPUtils;
 
 public class DownloadServiceHandler implements IServiceHandler {
  

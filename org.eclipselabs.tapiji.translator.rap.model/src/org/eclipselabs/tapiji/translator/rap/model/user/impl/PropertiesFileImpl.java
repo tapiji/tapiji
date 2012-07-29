@@ -5,50 +5,28 @@ package org.eclipselabs.tapiji.translator.rap.model.user.impl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-import org.eclipselabs.tapiji.translator.rap.model.user.File;
-import org.eclipselabs.tapiji.translator.rap.model.user.User;
+import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
+import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>File</b></em>'.
+ * An implementation of the model object '<em><b>Properties File</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.FileImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.FileImpl#getPath <em>Path</em>}</li>
+ *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.PropertiesFileImpl#getPath <em>Path</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class FileImpl extends EObjectImpl implements File {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
+public class PropertiesFileImpl extends EObjectImpl implements PropertiesFile {
 	/**
 	 * The default value of the '{@link #getPath() <em>Path</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -74,7 +52,7 @@ public class FileImpl extends EObjectImpl implements File {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected FileImpl() {
+	protected PropertiesFileImpl() {
 		super();
 	}
 
@@ -85,28 +63,7 @@ public class FileImpl extends EObjectImpl implements File {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return UserPackage.Literals.FILE;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, UserPackage.FILE__NAME, oldName, name));
+		return UserPackage.Literals.PROPERTIES_FILE;
 	}
 
 	/**
@@ -127,7 +84,44 @@ public class FileImpl extends EObjectImpl implements File {
 		String oldPath = path;
 		path = newPath;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, UserPackage.FILE__PATH, oldPath, path));
+			eNotify(new ENotificationImpl(this, Notification.SET, UserPackage.PROPERTIES_FILE__PATH, oldPath, path));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getFilename() {
+		java.io.File file = new java.io.File(path);
+		return file.getName();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public ResourceBundle getResourceBundle() {
+		 if (eContainer() instanceof ResourceBundle) {
+		        return (ResourceBundle) eContainer();
+		    }
+		 return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public void setFilename(String filename) {
+		if (path != null) {
+			int index = path.lastIndexOf(java.io.File.separatorChar);
+			if (index != -1) {
+				String prePath = path.substring(0, index+1);
+				setPath(prePath + filename);
+			}
+		}
 	}
 
 	/**
@@ -138,9 +132,7 @@ public class FileImpl extends EObjectImpl implements File {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case UserPackage.FILE__NAME:
-				return getName();
-			case UserPackage.FILE__PATH:
+			case UserPackage.PROPERTIES_FILE__PATH:
 				return getPath();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -154,10 +146,7 @@ public class FileImpl extends EObjectImpl implements File {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case UserPackage.FILE__NAME:
-				setName((String)newValue);
-				return;
-			case UserPackage.FILE__PATH:
+			case UserPackage.PROPERTIES_FILE__PATH:
 				setPath((String)newValue);
 				return;
 		}
@@ -172,10 +161,7 @@ public class FileImpl extends EObjectImpl implements File {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case UserPackage.FILE__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case UserPackage.FILE__PATH:
+			case UserPackage.PROPERTIES_FILE__PATH:
 				setPath(PATH_EDEFAULT);
 				return;
 		}
@@ -190,9 +176,7 @@ public class FileImpl extends EObjectImpl implements File {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case UserPackage.FILE__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case UserPackage.FILE__PATH:
+			case UserPackage.PROPERTIES_FILE__PATH:
 				return PATH_EDEFAULT == null ? path != null : !PATH_EDEFAULT.equals(path);
 		}
 		return super.eIsSet(featureID);
@@ -208,12 +192,29 @@ public class FileImpl extends EObjectImpl implements File {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(", path: ");
+		result.append(" (path: ");
 		result.append(path);
 		result.append(')');
 		return result.toString();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
+		if (obj == null)
+			return false;
+		
+		if (obj instanceof PropertiesFile) {
+			PropertiesFile otherFile = (PropertiesFile) obj;
+			
+			if (getPath().equals(otherFile.getPath()))
+				return true
+						;
+			return false;
+		}
+		
+		return super.equals(obj);
+	}
 
-} //FileImpl
+} //PropertiesFileImpl
