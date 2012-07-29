@@ -174,6 +174,7 @@ public class MessagesEditorContributor
 			? (MessagesEditor)part : null;
         toggleKeyTreeAction.setEditor(me);
         ((FilterKeysActionGroup) FILTERS).setActiveEditor(part);
+        newLocaleAction.setEditor(me);
     }
     
     /**
