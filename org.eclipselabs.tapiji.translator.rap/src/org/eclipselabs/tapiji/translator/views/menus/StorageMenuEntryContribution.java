@@ -11,6 +11,8 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipselabs.tapiji.translator.rap.dialogs.DownloadDialog;
+import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.utils.UIUtils;
 import org.eclipselabs.tapiji.translator.rap.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.views.StorageView;
@@ -22,6 +24,7 @@ public class StorageMenuEntryContribution extends ContributionItem implements
 	private MenuItem removeItem;
 	private MenuItem renameItem;
 	private MenuItem addNewLocalItem;
+	private MenuItem downloadItem;
 	
 	private StorageView parentView;
 	
@@ -111,6 +114,21 @@ public class StorageMenuEntryContribution extends ContributionItem implements
 				}
 			});	
 			index++;
+			
+			// MenuItem for downloading the currently selected rb
+			downloadItem = new MenuItem(menu, SWT.NONE, index);
+			downloadItem.setText("Download ...");
+			downloadItem.setImage(UIUtils.getImageDescriptor(UIUtils.IMAGE_DOWNLOAD_RB).createImage());
+			downloadItem.addSelectionListener(new SelectionListener() {				
+				@Override
+				public void widgetSelected(SelectionEvent e) {					
+					parentView.downloadSelectedRB();
+				}
+				
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {					
+				}
+			});
 		}
 	}
 	

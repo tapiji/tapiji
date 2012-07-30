@@ -19,7 +19,7 @@ public class UserUtils {
 	private static IContextActivation loggedIn; 
 	
 	public static boolean isUserLoggedIn() {
-		return RWT.getSessionStore().getAttribute(SESSION_USER_ATT) != null;
+		return getUser() != null;
 	}
 	
 	public static void setUserLoggedInContext(boolean activate) {
@@ -65,7 +65,7 @@ public class UserUtils {
 	}
 
 	public static User logoutUser() {
-		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
+		User user = getUser();
 		RWT.getSessionStore().setAttribute(UserUtils.SESSION_USER_ATT, null);
 		setUserLoggedInContext(false);
 		return user;
@@ -113,5 +113,7 @@ public class UserUtils {
 		resource.save(null);
 	}
 
-	
+	public static User getUser() {
+		return (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
+	}
 }

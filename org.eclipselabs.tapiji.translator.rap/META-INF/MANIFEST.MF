@@ -5,5 +5,6 @@ Bundle-SymbolicName: org.eclipselabs.tapiji.translator.rap;singleton:=true
 Bundle-Version: 0.0.2.qualifier
 Fragment-Host: org.eclipselabs.tapiji.translator;bundle-version="0.0.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.eclipse.rap.ui
+Require-Bundle: org.eclipse.rap.ui,
+ org.apache.commons.io;bundle-version="2.0.1"
 Export-Package: org.eclipselabs.tapiji.translator.views.widgets.provider;uses:="org.eclipse.ui,org.eclipse.jface.viewers"

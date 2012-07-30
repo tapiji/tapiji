@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -23,7 +24,7 @@ import org.eclipselabs.tapiji.translator.views.StorageView;
 
 public class StorageUtils {
 	
-	public static boolean existsRBName(String bundleName) {
+	public static boolean existsUserRBName(String bundleName) {
 		if (! UserUtils.isUserLoggedIn())
 			return false;
 		
@@ -76,20 +77,16 @@ public class StorageUtils {
 		for (IFile ifile : FileRAPUtils.getFilesFromProject(FileRAPUtils.getUserProject())) {
 			PropertiesFile file = createFile(ifile);
 			// file doesn't exists in db yet
-			if (! allUserFiles.contains(file)) {
-				// find resource bundle with bundle name of new file
-				boolean foundRb = false;
+			if (! allUserFiles.contains(file)) {				
 				String bundleName = FileRAPUtils.getBundleName(file.getPath());
-				for (ResourceBundle rb : user.getStoredRBs()) {					
-					// add file to existing rb and persist
-					if (rb.getName().equals(bundleName)) {
-						rb.getLocalFiles().add(file);
-						saveToDB = true;
-						foundRb = true;
-					}
-				}
+				// find resource bundle with bundle name of new file
+				ResourceBundle rb = getResourceBundle(bundleName, false);
+				// add file to existing rb and persist
+				if (rb != null) {
+					rb.getLocalFiles().add(file);
+					saveToDB = true;
 				// rb doesn't exist yet -> create new rb and add file
-				if (! foundRb) {
+				} else {
 					ResourceBundle newRB = createResourceBundle(ifile);
 					if (newRB != null) {
 						user.getStoredRBs().add(newRB);
@@ -211,5 +208,22 @@ public class StorageUtils {
  		IViewPart viewPart = window.getActivePage().findView(StorageView.ID);
  		if (viewPart instanceof StorageView)
  			((StorageView) viewPart).refresh();
+	}
+	
+	public static ResourceBundle getResourceBundle(String bundleName, boolean isTemporary) {
+		List<ResourceBundle> storedRBs;
+		
+		if (isTemporary) {
+			storedRBs = getSessionRBs();
+		} else {
+			storedRBs = UserUtils.getUser().getStoredRBs();
+		}
+		
+		for (ResourceBundle existingRB : storedRBs) {
+			if (existingRB.getName().equals(bundleName))
+				return existingRB;
+		}
+		
+		return null;
 	}
 }

@@ -3,6 +3,9 @@ package org.eclipselabs.tapiji.translator.rap.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.babel.core.util.FileUtils;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
@@ -76,5 +79,18 @@ public class EditorUtils {
 			e.printStackTrace();
 		}
 		return openedRB;
+	}
+	
+	public static ResourceBundle getRBFromEditor(IEditorPart editor) {
+		ResourceBundle rb = null;
+		
+		if (editor.getEditorInput() instanceof IFileEditorInput) {
+			IFile file = ((IFileEditorInput) editor.getEditorInput()).getFile();			
+			String bundleName = FileRAPUtils.getBundleName(file.getFullPath());
+			boolean isFileTemporary = file.getProject().equals(FileRAPUtils.getSessionProject());			
+			rb = StorageUtils.getResourceBundle(bundleName, isFileTemporary);
+		}
+		
+		return rb;
 	}
 }

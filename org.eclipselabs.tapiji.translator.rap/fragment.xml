@@ -27,25 +27,6 @@
             title="TapiJI Translator">
       </branding>
    </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <command
-            id="org.eclipselabs.tapiji.translator.downloadPropertiesFile"
-            name="Download ...">
-      </command>
-      <command
-            id="org.eclipselabs.tapiji.translator.login"
-            name="Login ...">
-      </command>
-      <command
-            id="org.eclipselabs.tapiji.translator.logout"
-            name="Logout ...">
-      </command>
-      <command
-            id="org.eclipselabs.tapiji.translator.register"
-            name="Register ...">
-      </command>
-   </extension>
   <extension
 	         point="org.eclipse.ui.actionSets">
 	      <actionSet
@@ -55,7 +36,7 @@
 	       <action
                  class="org.eclipselabs.tapiji.translator.actions.FileOpenAction"
                  definitionId="org.eclipselabs.tapiji.translator.fileOpen"
-                 icon="icons/OpenRB.png"
+                 icon="icons/uploadRB.gif"
                  id="FileOpenAction"
                  label="Upload Resource-Bundle ..."
                  menubarPath="file_mnu/fileStart"
@@ -68,7 +49,7 @@
                  class="org.eclipselabs.tapiji.translator.actions.DownloadPropertiesFileAction"
                  definitionId="org.eclipselabs.tapiji.translator.downloadPropertiesFile"
                  id="DownloadPropertiesFileAction"
-                 label="Download ..."
+                 label="Download Resource-Bundle ..."
                  style="push">
            </action>
 	      </actionSet>
@@ -90,7 +71,7 @@
                 label="Logout ..."
                 style="push">
           </action>
-          <action
+    <action
                 class="org.eclipselabs.tapiji.translator.actions.RegisterAction"
                 definitionId="org.eclipselabs.tapiji.translator.register"
                 id="RegisterAction"
@@ -104,9 +85,10 @@
         point="org.eclipse.ui.menus">
      <menuContribution
            allPopups="false"
-           locationURI="menu:file_mnu?after=saveAll">
+           locationURI="menu:file_mnu?after=fileStart">
         <command
               commandId="org.eclipselabs.tapiji.translator.downloadPropertiesFile"
+              icon="icons/downloadRB.gif"
               style="push">
            <visibleWhen
                  checkEnabled="false">
@@ -154,6 +136,7 @@
         </command>
         <command
               commandId="org.eclipselabs.tapiji.translator.login"
+              icon="icons/login.png"
               style="push">
         	<visibleWhen
                  checkEnabled="false">
@@ -172,6 +155,7 @@
         </command>
         <command
               commandId="org.eclipselabs.tapiji.translator.logout"
+              icon="icons/logout.png"
               style="push">
            <visibleWhen
                  checkEnabled="false">
@@ -214,5 +198,24 @@
            id="org.eclipselabs.tapiji.translator.userLoggedIn"
            name="user logged in">
      </context>
+  </extension>
+  <extension
+        point="org.eclipse.ui.commands">
+        <command
+            id="org.eclipselabs.tapiji.translator.downloadPropertiesFile"
+  			name="Download Resource-Bundle ...">
+      </command>
+      <command
+            id="org.eclipselabs.tapiji.translator.login"
+            name="Login ...">
+      </command>
+      <command
+            id="org.eclipselabs.tapiji.translator.logout"
+            name="Logout ...">
+      </command>
+      <command
+            id="org.eclipselabs.tapiji.translator.register"
+            name="Register ...">
+      </command>
   </extension>
 </fragment>

@@ -40,6 +40,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipselabs.tapiji.translator.actions.LogoutAction;
+import org.eclipselabs.tapiji.translator.rap.dialogs.DownloadDialog;
 import org.eclipselabs.tapiji.translator.rap.dialogs.LoginDialog;
 import org.eclipselabs.tapiji.translator.rap.dialogs.NewLocaleDialog;
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
@@ -277,7 +278,7 @@ public class StorageView extends ViewPart {
 		login.setText("Login ...");
 		login.setDescription("Login ...");
 		login.setToolTipText(login.getDescription());
-		
+		login.setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_LOGIN));
 		return login;
 	}
 	
@@ -294,7 +295,7 @@ public class StorageView extends ViewPart {
 		logout.setText("Logout ...");
 		logout.setDescription("Logout ...");
 		logout.setToolTipText(logout.getDescription());
-		
+		logout.setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_LOGOUT));
 		return logout;
 	}
 	
@@ -303,7 +304,7 @@ public class StorageView extends ViewPart {
 		if (selectedItem instanceof ResourceBundle) {
 			ResourceBundle rb = (ResourceBundle) selectedItem;
 			
-			if (StorageUtils.existsRBName(rb.getName()))
+			if (StorageUtils.existsUserRBName(rb.getName()))
 				// TODO
 				return;
 			
@@ -455,7 +456,7 @@ public class StorageView extends ViewPart {
 					// filename exists already
 					if ( newBundleName.isEmpty() || 
 							( rb.isTemporary() ? StorageUtils.existsTempRBName(newBundleName) : 
-								StorageUtils.existsRBName(newBundleName) )) {
+								StorageUtils.existsUserRBName(newBundleName) )) {
 						enableEditing = false;
 						return;
 					}
@@ -528,8 +529,10 @@ public class StorageView extends ViewPart {
 			
 			refresh();
 		}
-		
-		
-		 
+	}
+	
+	public void downloadSelectedRB() {
+		DownloadDialog dialog = new DownloadDialog(getSite().getShell(), getSelectedRB());
+		dialog.open();
 	}
 }

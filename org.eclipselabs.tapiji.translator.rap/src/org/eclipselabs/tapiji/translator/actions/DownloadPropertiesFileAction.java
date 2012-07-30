@@ -10,9 +10,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipselabs.tapiji.translator.handler.DownloadServiceHandler;
+import org.eclipselabs.tapiji.translator.rap.dialogs.DownloadDialog;
+import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
+import org.eclipselabs.tapiji.translator.rap.utils.EditorUtils;
+import org.eclipselabs.tapiji.translator.views.StorageView;
 
 public class DownloadPropertiesFileAction extends Action implements IWorkbenchWindowActionDelegate {
 	
@@ -23,24 +28,18 @@ public class DownloadPropertiesFileAction extends Action implements IWorkbenchWi
 	
 	@Override
 	public void run(IAction action) {
-		// register service handler
-		if (handler == null) {
-			IServiceManager manager = RWT.getServiceManager();
-			handler = new DownloadServiceHandler();
-			manager.registerServiceHandler( DownloadServiceHandler.DOWNLOAD_HANDLER_ID, handler );
+		// open download dialog
+		if (window != null) {
+			DownloadDialog dialog = new DownloadDialog(window.getShell());
+			
+			IWorkbenchPage activePage = window.getActivePage();
+			IEditorPart activeEditor = null;
+			if (activePage != null && (activeEditor = activePage.getActiveEditor()) != null) {
+				ResourceBundle rb = EditorUtils.getRBFromEditor(activeEditor);
+				dialog.setRB(rb);
+				dialog.open();			
+			}
 		}
-		
-		
-		IEditorPart activeEditor = window.getActivePage().getActiveEditor();
-		// no file editor active
-		if (activeEditor == null || ! (activeEditor.getEditorInput() instanceof IFileEditorInput))
-			return;
-		
-		IFileEditorInput activeFei = (IFileEditorInput) activeEditor.getEditorInput();
-		
-		String fileName = activeFei.getFile().getLocation().toString();
-		Browser browser = new Browser(window.getShell(), SWT.NONE);
-		browser.setUrl(createDownloadUrl(fileName));
 			
 	}
 	
@@ -58,16 +57,5 @@ public class DownloadPropertiesFileAction extends Action implements IWorkbenchWi
 	@Override
 	public void dispose() {
 		window = null;
-	}
-	
-	private String createDownloadUrl( String filename ) {
-		  StringBuilder url = new StringBuilder();
-		  url.append( RWT.getRequest().getRequestURL() );
-		  url.append( "?" );
-		  url.append( IServiceHandler.REQUEST_PARAM );
-		  url.append( "=" + DownloadServiceHandler.DOWNLOAD_HANDLER_ID );
-		  url.append( "&filename=" );
-		  url.append( filename );
-		  return RWT.getResponse().encodeURL( url.toString() );
 	}
 }
