@@ -12,10 +12,14 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.rwt.RWT;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserFactory;
+import org.eclipselabs.tapiji.translator.views.StorageView;
 
 public class StorageUtils {
 	
@@ -46,22 +50,61 @@ public class StorageUtils {
 	public static void syncUserRBsWithProject() {
 		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
 		List<ResourceBundle> rbs = new ArrayList<ResourceBundle>(user.getStoredRBs());
+		List<PropertiesFile> allUserFiles = new ArrayList<PropertiesFile>();
+		boolean saveToDB = false;
 		
+		// delete non existing properties files from db
 		for (ResourceBundle rb : rbs) {
-			List<PropertiesFile> localFiles = new ArrayList<PropertiesFile>(rb.getLocalFiles());
-			for (PropertiesFile file : localFiles)
-				if (! FileRAPUtils.existsProjectFile(file.getFilename())) {
+			List<PropertiesFile> localFiles = new ArrayList<PropertiesFile>(rb.getLocalFiles());			
+			for (PropertiesFile file : localFiles) {
+				if (! FileRAPUtils.existsProjectFile(FileRAPUtils.getUserProject(), file.getFilename())) {
 					rb.getLocalFiles().remove(file);
+					saveToDB = true;
 				}
+			}
+			
+			if (rb.getLocalFiles().isEmpty()) {
+				user.getStoredRBs().remove(rb);
+				saveToDB = true;
+			}
+								
+			
+			allUserFiles.addAll(rb.getLocalFiles());
+		}
+		
+		// add existing properties files which are not in db to resource bundle
+		for (IFile ifile : FileRAPUtils.getFilesFromProject(FileRAPUtils.getUserProject())) {
+			PropertiesFile file = createFile(ifile);
+			// file doesn't exists in db yet
+			if (! allUserFiles.contains(file)) {
+				// find resource bundle with bundle name of new file
+				boolean foundRb = false;
+				String bundleName = FileRAPUtils.getBundleName(file.getPath());
+				for (ResourceBundle rb : user.getStoredRBs()) {					
+					// add file to existing rb and persist
+					if (rb.getName().equals(bundleName)) {
+						rb.getLocalFiles().add(file);
+						saveToDB = true;
+						foundRb = true;
+					}
+				}
+				// rb doesn't exist yet -> create new rb and add file
+				if (! foundRb) {
+					ResourceBundle newRB = createResourceBundle(ifile);
+					if (newRB != null) {
+						user.getStoredRBs().add(newRB);
+						saveToDB = true;
+					}
+				}
+			}
+		}
+		
+		if (saveToDB)
 			try {
-				if (rb.getLocalFiles().isEmpty())
-					user.getStoredRBs().remove(rb);
-				// update database
-				user.eResource().save(null);				
+				user.eResource().save(null);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
 	}
 	
 	public static ResourceBundle storeRB(ResourceBundle rb) {
@@ -70,12 +113,6 @@ public class StorageUtils {
 								
 		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
 		user.getStoredRBs().add(rb);
-		
-		try {
-			user.eResource().save(null);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
 		
 		// move local files into project dir
 		for (PropertiesFile file : rb.getLocalFiles()) {
@@ -91,6 +128,14 @@ public class StorageUtils {
 			IFile movedIFile = FileRAPUtils.getUserProject().getFile(file.getFilename());
 			file.setPath(movedIFile.getLocation().toOSString());
 		}
+		
+		// persist rb and properties files
+		try {
+			user.eResource().save(null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		return rb;
 	}
 	
@@ -117,6 +162,15 @@ public class StorageUtils {
 	
 	public static List<ResourceBundle> getSessionRBs() {
 		return createResourceBundles(FileRAPUtils.getFilesFromProject(FileRAPUtils.getSessionProject()));
+	}
+	
+	public static ResourceBundle createResourceBundle(IFile ifile) {
+		List<IFile> list = new ArrayList<IFile>();
+		list.add(ifile);
+		List<ResourceBundle> result = createResourceBundles(list);
+		if (result.isEmpty())
+			return null;
+		return result.get(0);
 	}
 	
 	public static List<ResourceBundle> createResourceBundles(List<IFile> ifiles) {
@@ -149,5 +203,13 @@ public class StorageUtils {
 		PropertiesFile file = UserFactory.eINSTANCE.createPropertiesFile();
 		file.setPath(ifile.getLocation().toOSString());
 		return file;
+	}
+	
+	public static void refreshStorageView() {
+		// refreshing storage view
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+ 		IViewPart viewPart = window.getActivePage().findView(StorageView.ID);
+ 		if (viewPart instanceof StorageView)
+ 			((StorageView) viewPart).refresh();
 	}
 }

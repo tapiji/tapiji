@@ -209,8 +209,8 @@ public class PropertiesFileImpl extends EObjectImpl implements PropertiesFile {
 			PropertiesFile otherFile = (PropertiesFile) obj;
 			
 			if (getPath().equals(otherFile.getPath()))
-				return true
-						;
+				return true;
+			
 			return false;
 		}
 		

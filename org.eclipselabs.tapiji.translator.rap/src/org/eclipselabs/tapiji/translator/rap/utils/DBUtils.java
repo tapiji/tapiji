@@ -40,7 +40,10 @@ public class DBUtils {
 	    return userDataStore;
 	}
 	
-	public static void initDataStore() {		
+	public static void initDataStore() {
+		if (userDataStore != null)
+			return;
+		
 		userDataStore = (HbDataStore) HbHelper.INSTANCE.createRegisterDataStore(DS_NAME);
 		// Set Database properties
         Properties props = new Properties();

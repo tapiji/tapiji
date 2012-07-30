@@ -43,22 +43,6 @@ public class FileRAPUtils extends FileUtils {
 		return StorageUtils.createResourceBundles(createdFiles);
 	}
 	
-	public static <T> T getContainingRB(List<T> rbFilesOrFilepaths, IFile iFile) {
-		String bundleNameNew = getBundleName(iFile.getFullPath());
-		for (T typ : rbFilesOrFilepaths) {
-			String bundleName = null;
-			if (typ instanceof IFile) {				
-				bundleName = getBundleName(((IFile) typ).getFullPath());
-			} else if (typ instanceof String) {
-				bundleName = getBundleName((String) typ);
-			}
-			
-			if (bundleNameNew.equals(bundleName))
-				return typ;
-		}
-		return null;
-	}
-	
 	public static List<IFile> getFilesFromProject(IProject project) {
 		List<IFile> iFiles = new ArrayList<IFile>();
 		try {		
@@ -177,12 +161,12 @@ public class FileRAPUtils extends FileUtils {
 		return project.getFile(file.getFilename());
 	}
 
-	public static boolean existsProjectFile(String filename) {		
-		IFile iFile = getProject().getFile(filename);
+	public static boolean existsProjectFile(IProject project, String filename) {
+		IFile iFile = project.getFile(filename);
 		if (! iFile.exists()) {
 			// if filename is bundleName (= has no extension)
 			if (iFile.getFileExtension() == null) {
-				iFile = getProject().getFile(filename + ".properties");
+				iFile = project.getFile(filename + ".properties");
 				if (iFile.exists())
 					return true;
 				List<IFile> iFiles = getOtherLocalFiles(iFile);

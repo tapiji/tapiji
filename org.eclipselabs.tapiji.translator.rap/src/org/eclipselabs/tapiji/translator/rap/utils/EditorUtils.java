@@ -16,7 +16,7 @@ import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 public class EditorUtils {
 	public static final String MSG_EDITOR_ID = FileOpenAction.RESOURCE_BUNDLE_EDITOR;
 	
-	public static void openRB(ResourceBundle rb) {
+	public static void openEditorOfRB(ResourceBundle rb) {
 		if (isRBOpened(rb) || rb.getLocalFiles().isEmpty())
 			return;
 		
@@ -28,13 +28,25 @@ public class EditorUtils {
 		}	
 	}
 	
-	public static boolean closeRB(ResourceBundle rb, boolean save) {
+	public static boolean closeEditorOfRB(ResourceBundle rb, boolean save) {
 		List<IEditorReference> openedEditors = getOpenedEditors(rb);
 		
 		if (openedEditors.isEmpty())
 			return false;
 		
 		return getActivePage().closeEditor(openedEditors.get(0).getEditor(false), save);		
+	}
+	
+	public static void closeAllEditorsOfRB(ResourceBundle rb, boolean save) {
+		List<IEditorReference> openedEditors = getOpenedEditors(rb);
+		
+		if (openedEditors.isEmpty())
+			return;
+		
+		// close all opened editors
+		for (IEditorReference editorRef : openedEditors) {
+			getActivePage().closeEditor(editorRef.getEditor(false), save);
+		}
 	}
 	
 	public static IWorkbenchPage getActivePage() {

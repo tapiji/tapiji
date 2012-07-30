@@ -243,5 +243,41 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 		result.append(')');
 		return result.toString();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
+		if (obj == null)
+			return false;
+		
+		if (obj instanceof ResourceBundle) {
+			ResourceBundle otherRB = (ResourceBundle) obj;
+			
+			if (getName().equals(otherRB.getName()) && equalsLocalFiles(otherRB.getLocalFiles()) ) {
+				if (getUser() == null) {
+					if (otherRB.getUser() == null)
+						return true;
+				} else if (getUser().equals(otherRB.getUser())) {
+					return true;
+				}				
+			}			
+			return false;
+		}
+		
+		return super.equals(obj);
+	}
+	
+	private boolean equalsLocalFiles(EList<PropertiesFile> otherFiles) {
+		if (getLocalFiles().size() != otherFiles.size())
+			return false;
+		
+		for (int i=0; i < getLocalFiles().size(); i++) {
+			PropertiesFile file = getLocalFiles().get(i);
+			if (! file.equals(otherFiles.get(i)))
+				return false;
+		}
+		return true;
+	}
 
 } //ResourceBundleImpl

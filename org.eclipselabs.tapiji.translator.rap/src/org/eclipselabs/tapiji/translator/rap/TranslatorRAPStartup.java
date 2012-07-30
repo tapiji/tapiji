@@ -18,9 +18,6 @@ public class TranslatorRAPStartup implements IStartup {
 		// *************** Initialize Teneo Hibernate DataStore *************************************
         DBUtils.initDataStore();
         
-        // *************** Initialize Database Content Data *************************************
-        Resource resource = DBUtils.getPersistentData();
-        
         // delete unregistered user project (name = sessionID) when session ends
     	RWT.getSessionStore().addSessionStoreListener( new SessionStoreListener() {
     		  public void beforeDestroy( SessionStoreEvent event ) {

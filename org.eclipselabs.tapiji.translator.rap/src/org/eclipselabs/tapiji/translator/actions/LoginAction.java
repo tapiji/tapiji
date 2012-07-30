@@ -7,6 +7,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipselabs.tapiji.translator.rap.dialogs.LoginDialog;
+import org.eclipselabs.tapiji.translator.rap.utils.StorageUtils;
 import org.eclipselabs.tapiji.translator.views.StorageView;
 
 public class LoginAction extends Action implements IWorkbenchWindowActionDelegate {
@@ -18,10 +19,7 @@ public class LoginAction extends Action implements IWorkbenchWindowActionDelegat
         LoginDialog login = new LoginDialog(window.getShell());
         login.open();
         
-        // refreshing storage view
- 		IViewPart viewPart = window.getActivePage().findView(StorageView.ID);
- 		if (viewPart instanceof StorageView)
- 			((StorageView) viewPart).refresh();
+        StorageUtils.refreshStorageView();
 	}
 
 	@Override

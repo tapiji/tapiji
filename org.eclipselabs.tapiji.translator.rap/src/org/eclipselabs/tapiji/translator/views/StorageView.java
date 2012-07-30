@@ -1,17 +1,25 @@
 package org.eclipselabs.tapiji.translator.views;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -19,6 +27,7 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.rwt.RWT;
 import org.eclipse.swt.SWT;
@@ -32,6 +41,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipselabs.tapiji.translator.actions.LogoutAction;
 import org.eclipselabs.tapiji.translator.rap.dialogs.LoginDialog;
+import org.eclipselabs.tapiji.translator.rap.dialogs.NewLocaleDialog;
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
@@ -51,8 +61,9 @@ public class StorageView extends ViewPart {
 	private IWorkbenchPage page;
 	
 	private List<ResourceBundle> model = new ArrayList<ResourceBundle>();
-//	
-//	private Map<String,ResourceBundle> resourceBundles = new HashMap<String,ResourceBundle>();
+	
+	private Map<String,ResourceBundle> sessionRBsMap = new HashMap<String,ResourceBundle>();
+	private Map<String,ResourceBundle> userRBsMap = new HashMap<String,ResourceBundle>();
 	
 	public final static String ID = "org.eclipselabs.tapiji.translator.views.StorageView";
 	
@@ -94,7 +105,7 @@ public class StorageView extends ViewPart {
         treeViewer.addDoubleClickListener(new IDoubleClickListener() {			
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
-				EditorUtils.openRB(getSelectedRB());
+				EditorUtils.openEditorOfRB(getSelectedRB());
 			}
 		});
     }
@@ -112,20 +123,35 @@ public class StorageView extends ViewPart {
 	    User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);	    
 	    if (user != null) {
 		    StorageUtils.syncUserRBsWithProject();
-			model.addAll(user.getStoredRBs());
+		    for (ResourceBundle userRB : user.getStoredRBs()) {
+		    	model.add(userRB);
+		    	userRBsMap.put(userRB.getName(), userRB);
+		    }
 	    }
 		
 	    // add session rbs
-	    model.addAll(StorageUtils.getSessionRBs());
+	    for (ResourceBundle userRB : StorageUtils.getSessionRBs()) {
+	    	model.add(userRB);
+	    	sessionRBsMap.put(userRB.getName(), userRB);
+	    }
 	    
 	    treeViewer.setInput(model);   
 	}
 	
 	public void refresh() {		
 		
+		// sync maps with model, because rb changes (i.e. storing rb) are direct
+		userRBsMap.clear(); sessionRBsMap.clear();
+		for (ResourceBundle rb : model) {
+			if (rb.isTemporary())
+				sessionRBsMap.put(rb.getName(), rb);
+			else
+				userRBsMap.put(rb.getName(), rb);
+		}
+		
 		// refresh RBs
 		List<ResourceBundle> rbs = StorageUtils.getSessionRBs();
-		List<ResourceBundle> unstoredRBs = new ArrayList<ResourceBundle>(model);
+		List<ResourceBundle> rbsToRemove = new ArrayList<ResourceBundle>(model);
 
 		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
 	    if (user != null) {	 
@@ -137,56 +163,42 @@ public class StorageView extends ViewPart {
 	   
 	    // update model rbs
 	    for (ResourceBundle rb : rbs) {
+	    	Map<String, ResourceBundle> rbMap = rb.isTemporary() ? sessionRBsMap : userRBsMap;
 	    	// rb out of date
-    		if (! model.contains(rb)) {  	
-    			model.add(rb);
-//    			ResourceBundle modelRB = null;
+    		if (! model.contains(rb)) {  
+    			ResourceBundle modelRB = rbMap.get(rb.getName());    			
     			// rb exist already, but local files have changed
-//    			if ((modelRB = resourceBundles.get(rb.getName())) != null) {
-//    				// update model files
-//    				List<File> modelFiles = modelRB.getLocalFiles();
-//    				for (File file : rb.getLocalFiles()) {
-//    					// file out of date    					
-//    					if (! modelRB.getLocalFiles().contains(file)) {
-//    						model.add(file);
-//    					// file up to date
-//    					} else {
-//    						unstoredFiles.remove(rb);
-//    					}
-//    				}
-//    			// rb doesn't exists yet
-//    			} else {
-//    				model.add(rb);
-//    			}
+    			if (modelRB != null) {    				
+    				// update model files
+    				modelRB.getLocalFiles().clear();
+    				modelRB.getLocalFiles().addAll(rb.getLocalFiles());
+    				
+    				rbsToRemove.remove(modelRB);
+    			// rb doesn't exists yet
+    			} else {
+    				model.add(rb);
+    				rbMap.put(rb.getName(), rb);
+    			}
     		// rb is up to date
     		} else {
-    			unstoredRBs.remove(rb);
+    			rbsToRemove.remove(rb);
     		}
 	    }
 	    
-	    for (ResourceBundle rb : unstoredRBs)
+	    // remove old rbs from model
+	    for (ResourceBundle rb : rbsToRemove) {
 	    	model.remove(rb);
-	    	
-	  
-//	    
-//    	// refresh temp rbs	    	    
-// 		for (IFile ifile : FileRAPUtils.getFilesFromProject(FileRAPUtils.getSessionProject())) {
-// 			if (model.contains(ifile))
-// 				unstoredFiles.remove(ifile);
-// 			else {
-// 				if (! ifile.getName().equals(".project"))
-// 					model.add(ifile);
-// 			}
-// 		}
-// 		// remove files from model which aren't in project anymore
-//		for (Object file : unstoredFiles) {
-//			if (file instanceof File)
-//				model.remove(file);
-//		}
-		
-		/*model.clear();
-		model.addAll(rbs);*/
+	    	if (rb.isTemporary())
+	    		sessionRBsMap.remove(rb.getName());
+	    	else
+	    		userRBsMap.remove(rb.getName());	    		
+	    }
+	   
+	    
+	    // refresh tree viewer and keep expanded nodes
+	    //TreePath[] expandedTreePaths = treeViewer.getExpandedTreePaths();
 		treeViewer.refresh();
+		//treeViewer.setExpandedTreePaths(expandedTreePaths);
 		
 		hookContextMenu();
 	}
@@ -295,13 +307,13 @@ public class StorageView extends ViewPart {
 				// TODO
 				return;
 			
-			EditorUtils.closeRB(rb, true);
+			EditorUtils.closeEditorOfRB(rb, true);
 			
 			StorageUtils.storeRB(rb);	
 			
 			refreshSelectedRB(rb);
 			
-			EditorUtils.openRB(rb);			
+			EditorUtils.openEditorOfRB(rb);			
 		}
 	}
 	
@@ -318,7 +330,7 @@ public class StorageView extends ViewPart {
 		return selection;
 	}
 	
-	private ResourceBundle getSelectedRB() {
+	public ResourceBundle getSelectedRB() {
 		TreeItem item = treeViewer.getTree().getSelection()[0];
 		// get resourceBundle item
 		if (! (item.getData() instanceof ResourceBundle))
@@ -377,7 +389,7 @@ public class StorageView extends ViewPart {
 		}
 		
 		// close editor if still opened
-		openEditor = EditorUtils.closeRB(rb, true);
+		openEditor = EditorUtils.closeEditorOfRB(rb, true);
 		
 		try {
 			// delete files
@@ -409,7 +421,7 @@ public class StorageView extends ViewPart {
 		
 		// reopen editor if it was closed before
 		if (openEditor && ! rb.getLocalFiles().isEmpty()) {
-			EditorUtils.openRB(rb);
+			EditorUtils.openEditorOfRB(rb);
 		}
 		
 		// refresh tree
@@ -449,13 +461,13 @@ public class StorageView extends ViewPart {
 					}
 					
 					if (! rb.getName().equals(newBundleName)) {								
-						boolean reopenEditor = EditorUtils.closeRB(rb, true);
+						boolean reopenEditor = EditorUtils.closeEditorOfRB(rb, true);
 						
 						StorageUtils.renameRB(rb, newBundleName);						
 						refreshSelectedRB(rb);
 						
 						if (reopenEditor)
-							EditorUtils.openRB(rb);
+							EditorUtils.openEditorOfRB(rb);
 					}
 					
 					// rename finished -> disable editing
@@ -466,5 +478,58 @@ public class StorageView extends ViewPart {
 			treeViewer.editElement(rb, 0);
 			//refresh();
 		}
+	}
+	
+	public void addNewLocaleToSelectedRB() {
+		NewLocaleDialog newLocaleDialog = new NewLocaleDialog(getSite().getShell());
+		if (newLocaleDialog.open() == Dialog.CANCEL)
+			return;
+		
+		// create new properties file in project space
+		Locale newLocal = newLocaleDialog.getSelectedLocal();	
+		ResourceBundle rb = getSelectedRB();
+		
+		IFile ifile = FileRAPUtils.getIFile(rb.getLocalFiles().get(0));
+		IPath path = ifile.getProjectRelativePath();
+		
+		String bundleName = rb.getName();
+		String localeStr = newLocal != null ? "_" + newLocal.toString() : "";
+		String newFilename = bundleName + localeStr + "." + ifile.getFileExtension();
+		
+		IFile newFile = ifile.getProject().getFile(path.removeLastSegments(1).addTrailingSeparator()+newFilename);
+		
+		// exists locale already ?
+		if (! newFile.exists()) {
+			try {
+				// create new ifile with an empty input stream
+				newFile.create(new ByteArrayInputStream(new byte[0]), IResource.NONE, null);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+			
+			// add file to rb
+			PropertiesFile propFile = StorageUtils.createFile(newFile);
+			rb.getLocalFiles().add(propFile);
+			
+			// store in db
+			if (! rb.isTemporary()) {
+				try {
+					rb.getUser().eResource().save(null);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			// reopen editor if opened
+			if (EditorUtils.isRBOpened(rb)) {
+				EditorUtils.closeEditorOfRB(rb, true);
+				EditorUtils.openEditorOfRB(rb);
+			}
+			
+			refresh();
+		}
+		
+		
+		 
 	}
 }

@@ -45,7 +45,7 @@ public class FileOpenAction extends AbstractFileOpenAction {
 			}
 			
 			// exists file already ?
-			if (FileRAPUtils.existsProjectFile(file.getName())) {
+			if (FileRAPUtils.existsProjectFile(FileRAPUtils.getSessionProject(), file.getName())) {
 				errorMsgs.add(ERROR_MSG_ALREADY_EXISTS.replaceFirst(TOKEN_FILENAME, file.getName()));
 			// exists bundle already ?
 			} else {
@@ -55,7 +55,7 @@ public class FileOpenAction extends AbstractFileOpenAction {
 						if (MessageDialog.openConfirm(window.getShell(), "Duplicated resource bundles", 
 								"You have uploaded a properties file, which has the same bundle name as an already opened resource bundle.\n\n" +
 								"The file \""+file.getName()+"\" will be added to the existing resource bundle \""+bundleName+"\"."))
-							EditorUtils.closeRB(rb, true);
+							EditorUtils.closeEditorOfRB(rb, true);
 						else
 							copy.remove(filepath);
 						break;
@@ -84,8 +84,9 @@ public class FileOpenAction extends AbstractFileOpenAction {
 		List<ResourceBundle> rbs = FileRAPUtils
                 .getResourceBundleRef(filepaths, FileRAPUtils.getSessionProject());
 		for (ResourceBundle rb : rbs)
-			EditorUtils.openRB(rb);
-			
+			EditorUtils.openEditorOfRB(rb);
+		
+		StorageUtils.refreshStorageView();			
 	}
 
 }

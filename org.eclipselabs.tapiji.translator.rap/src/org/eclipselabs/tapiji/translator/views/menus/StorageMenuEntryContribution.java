@@ -21,6 +21,7 @@ public class StorageMenuEntryContribution extends ContributionItem implements
 	private MenuItem storeItem;
 	private MenuItem removeItem;
 	private MenuItem renameItem;
+	private MenuItem addNewLocalItem;
 	
 	private StorageView parentView;
 	
@@ -51,12 +52,30 @@ public class StorageMenuEntryContribution extends ContributionItem implements
 					}
 				});			
 				index++;
-			} 
+			}
+			// MenuItem for adding a new locale to the currently selected rb
+			addNewLocalItem = new MenuItem(menu, SWT.NONE, index);
+			addNewLocalItem.setText("Add New Locale ...");
+			ImageDescriptor descriptor = UIUtils.getImageDescriptor(UIUtils.IMAGE_NEW_PROPERTIES_FILE);
+			addNewLocalItem.setImage(descriptor.createImage());
+			addNewLocalItem.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					parentView.addNewLocaleToSelectedRB();
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+
+				}
+			});	
+			index++;
+						
 			if ((parentView.isSelectionStoredRB() && UserUtils.isUserLoggedIn()) || parentView.isSelectionUnstoredRB()) {		
 				// MenuItem for renaming the currently selected entry
 				renameItem = new MenuItem(menu, SWT.NONE, index);
 				renameItem.setText("Rename");
-				ImageDescriptor descriptor = UIUtils.getImageDescriptor(UIUtils.IMAGE_RENAME);
+				descriptor = UIUtils.getImageDescriptor(UIUtils.IMAGE_RENAME);
 				renameItem.setImage(descriptor.createImage());
 				renameItem.addSelectionListener(new SelectionListener() {
 	

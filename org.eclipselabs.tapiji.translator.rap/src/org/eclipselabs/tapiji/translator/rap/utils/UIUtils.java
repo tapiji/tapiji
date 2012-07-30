@@ -14,6 +14,7 @@ public class UIUtils {
 	public static final String IMAGE_PROPERTIES_FILE = "propertiesfile.gif";
 	public static final String IMAGE_RESOURCE_BUNDLE_TEMPORARY = "resourcebundle_grey.gif";
 	public static final String IMAGE_PROPERTIES_FILE_TEMPORARY = "propertiesfile_grey.gif";
+	public static final String IMAGE_NEW_PROPERTIES_FILE = "newpropertiesfile.gif";
 	
 	/**
      * Gets an image descriptor.

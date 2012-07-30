@@ -32,4 +32,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
 Export-Package: org.eclipse.babel.editor,
  org.eclipse.babel.editor.api,
+ org.eclipse.babel.editor.widgets,
  org.eclipse.babel.editor.wizards
