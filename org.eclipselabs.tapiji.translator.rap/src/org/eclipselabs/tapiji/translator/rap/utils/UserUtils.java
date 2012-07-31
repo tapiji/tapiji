@@ -14,8 +14,8 @@ import org.eclipselabs.tapiji.translator.rap.model.user.UserFactory;
 
 public class UserUtils {
 	public static final String SESSION_USER_ATT = "org.eclipselabs.tapiji.translator.rap.model.user.User";
-	public final static String CONTEXT_ID_USERLOGGEDIN = "org.eclipselabs.tapiji.translator.userLoggedIn";
-	
+	public static final String CONTEXT_ID_USERLOGGEDIN = "org.eclipselabs.tapiji.translator.userLoggedIn";
+		
 	private static IContextActivation loggedIn; 
 	
 	public static boolean isUserLoggedIn() {
@@ -43,7 +43,8 @@ public class UserUtils {
 			if (obj instanceof User) {
 				User user = (User) obj;
 				if (user.getUsername().equals(username)) {
-					if (user.getPassword().equals(password))
+					// password + username correct
+					if (user.getPasswordDecrypted().equals(password))
 						return user;
 					// password is incorrect
 					return null;
@@ -93,7 +94,7 @@ public class UserUtils {
 		
 		User newUser = UserFactory.eINSTANCE.createUser();
 		newUser.setUsername(username);
-		newUser.setPassword(password);
+		newUser.setPasswordEncrypted(password);
 		
 		Resource resource = DBUtils.getPersistentData();
 		resource.getContents().add(newUser);

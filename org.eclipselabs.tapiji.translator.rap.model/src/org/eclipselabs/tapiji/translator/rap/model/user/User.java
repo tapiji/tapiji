@@ -3,7 +3,6 @@
 package org.eclipselabs.tapiji.translator.rap.model.user;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -68,6 +67,8 @@ public interface User extends EObject {
 	 */
 	String getPassword();
 
+	String getPasswordDecrypted();
+	
 	/**
 	 * Sets the value of the '{@link org.eclipselabs.tapiji.translator.rap.model.user.User#getPassword <em>Password</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -78,6 +79,8 @@ public interface User extends EObject {
 	 */
 	void setPassword(String value);
 
+	void setPasswordEncrypted(String password);
+	
 	/**
 	 * Returns the value of the '<em><b>Stored RBs</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle}.

@@ -2,7 +2,6 @@ package org.eclipselabs.tapiji.translator.rap;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.rwt.RWT;
 import org.eclipse.rwt.service.SessionStoreEvent;
 import org.eclipse.rwt.service.SessionStoreListener;
