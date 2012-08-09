@@ -12,16 +12,31 @@ import org.eclipse.ui.contexts.IContextService;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserFactory;
 
+/**
+ * Utility methods for user management
+ * @author Matthias Lettmayer
+ *
+ */
 public class UserUtils {
+	/** user session attribute id */
 	public static final String SESSION_USER_ATT = "org.eclipselabs.tapiji.translator.rap.model.user.User";
+	/** context id, which indicates if user is logged in or logout */
 	public static final String CONTEXT_ID_USERLOGGEDIN = "org.eclipselabs.tapiji.translator.userLoggedIn";
 		
 	private static IContextActivation loggedIn; 
 	
+	/**
+	 * Checks if a user is logged in, in this session. 
+	 * @return true if user is logged in, false if user is logged out
+	 */
 	public static boolean isUserLoggedIn() {
 		return getUser() != null;
 	}
 	
+	/**
+	 * Sets the context variable to control menu items.
+	 * @param activate true to activate context variable, otherwise deactivates context variable
+	 */
 	public static void setUserLoggedInContext(boolean activate) {
 		IContextService contextService = (IContextService)PlatformUI.getWorkbench()
 				.getService(IContextService.class);
@@ -35,6 +50,13 @@ public class UserUtils {
 		}
 	}
 
+	/** 
+	 * Checks if user is allowed to log in. Returns user object, if username exists in database 
+	 * and password is correct
+	 * @param username name of the user
+	 * @param password password of the user
+	 * @return The existing user object if username and password correct, otherwise null.
+	 */
 	public static User verifyUser(String username, String password) {
 		Resource resource = DBUtils.getPersistentData();
 		EList<EObject> registeredObjects = resource.getContents();
@@ -55,6 +77,12 @@ public class UserUtils {
 		return null;
 	}
 
+	/**
+	 * The given user will be logged in. Session attribute and context variable will be set.
+	 * @param username name of user
+	 * @param password password of user
+	 * @return The logged in user or null if username or passwor incorrect.
+	 */
 	public static User loginUser(String username, String password) {
 		User user = verifyUser(username, password);
 		if (user != null) {
@@ -65,6 +93,10 @@ public class UserUtils {
 		return user;
 	}
 
+	/**
+	 * The user stored in the session will be logged out. No exception will be thrown if no user is logged in.
+	 * @return The user who was logged in or null if no user was logged in.
+	 */
 	public static User logoutUser() {
 		User user = getUser();
 		RWT.getSessionStore().setAttribute(UserUtils.SESSION_USER_ATT, null);
@@ -72,6 +104,11 @@ public class UserUtils {
 		return user;
 	}
 
+	/**
+	 * Checks if the given username matches an existing user, stored in database.
+	 * @param username name of a user
+	 * @return true if the user exists or false if not.
+	 */
 	public static boolean existsUser(String username) {
 		Resource resource = DBUtils.getPersistentData();
 		EList<EObject> registeredObjects = resource.getContents();
@@ -88,6 +125,13 @@ public class UserUtils {
 		return false;
 	}
 
+	/**
+	 * Stores a new user in database. Does nothing if username exists already.
+	 * @param username name of user
+	 * @param password password of user
+	 * @return The stored user or null if username exists already.
+	 * @throws IOException if database write error occurs
+	 */
 	public static User registerUser(String username, String password) throws IOException {
 		if (existsUser(username))
 			return null;
@@ -104,6 +148,11 @@ public class UserUtils {
 		return newUser;		
 	}
 
+	/**
+	 * Deletes an existing user from database.
+	 * @param user user that will be deleted
+	 * @throws IOException if database delete error occurs
+	 */
 	public static void unregisterUser(User user) throws IOException {
 		if (! existsUser(user.getUsername()))
 			return;
@@ -114,6 +163,10 @@ public class UserUtils {
 		resource.save(null);
 	}
 
+	/**
+	 * Returns the user from the session attribute.
+	 * @return the stored user from session or null if no user is stored.
+	 */
 	public static User getUser() {
 		return (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
 	}

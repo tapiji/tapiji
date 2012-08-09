@@ -3,14 +3,16 @@ package org.eclipselabs.tapiji.translator.rap.utils;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Plugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.osgi.framework.internal.core.BundleFragment;
 import org.eclipse.osgi.framework.internal.core.BundleHost;
 import org.eclipselabs.tapiji.translator.Activator;
-import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 
+/**
+ * Utility methods to handle icons and images.
+ * @author Matthias Lettmayer
+ *
+ */
 public class UIUtils {
 	
 	public static final String IMAGE_REFRESH = "refresh.gif";
@@ -27,13 +29,14 @@ public class UIUtils {
 	
 	public static final String PLUGIN_NAME = "org.eclipselabs.tapiji.translator.rap";
 	/**
-     * Gets an image descriptor.
+     * Gets an image descriptor of this fragment.
      * @param name image name
      * @return image descriptor
      */
     public static ImageDescriptor getImageDescriptor(String name) {
         String iconPath = "icons/"; //$NON-NLS-1$
         try {
+        	// get this fragment
         	BundleFragment[] fragments = ((BundleHost) Activator.getDefault().getBundle()).getFragments();
         	BundleFragment rapFragment = null;
         	

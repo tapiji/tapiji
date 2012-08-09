@@ -47,6 +47,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -557,5 +558,14 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 	public ITextEditor getTextEditor(Locale locale) {
 		int index = localesIndex.indexOf(locale);
 		return textEditorsIndex.get(index);
+	}
+	
+	// Needed for RAP, otherwise super implementation of getTitleImage always returns 
+	// same image with same device and same session context, and when this session ends 
+	// -> NPE at org.eclipse.swt.graphics.Image.getImageData(Image.java:348)
+	@Override
+	public Image getTitleImage() {
+		// create new image with current display		
+		return UIUtils.getImageDescriptor(UIUtils.IMAGE_RESOURCE_BUNDLE).createImage();
 	}
 }

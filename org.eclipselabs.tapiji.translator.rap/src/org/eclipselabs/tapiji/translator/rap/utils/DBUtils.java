@@ -16,30 +16,68 @@ import org.eclipselabs.tapiji.translator.rap.model.user.UserPackage;
 import org.hibernate.cfg.Environment;
 
 
+/**
+ * Utility methods for database access
+ * @author Matthias Lettmayer
+ *
+ */
 public class DBUtils {
 
-	// DB specific data
-	public static final String DB_NAME = "translatordb";
-	public static final String DB_HOST = "10.0.0.2";
-	public static final int DB_PORT = 3306;
-	public static final String DB_DRIVER = "com.mysql.jdbc.Driver";
-	public static final String DB_USER = "root";
-	public static final String DB_PASSWORD = "admin";
 	
+	public static final String DB_NAME = "translator";	
+	public static final String DB_HOST = "127.8.159.1";	
+	public static final int DB_PORT = 3306;	
+	public static final String DB_DRIVER = "com.mysql.jdbc.Driver";	
+	public static final String DB_USER = "admin";
+	public static final String DB_PASSWORD = "mPReTZK_-5Qd";
+	
+//	/** Database schema name */
+//	public static final String DB_NAME = "translatordb";
+//	/** Database host */
+//	public static final String DB_HOST = "10.0.0.2";
+//	/** Database port */
+//	public static final int DB_PORT = 3306;
+//	/** Database driver */
+//	public static final String DB_DRIVER = "com.mysql.jdbc.Driver";
+//	/** Username for logging into database */
+//	public static final String DB_USER = "root";
+//	/** Password for logging into database */
+//	public static final String DB_PASSWORD = "admin";
+	
+	/** Data store identifier name */
 	public static final String DS_NAME = "UserDS";
+	/** Hibernate data store */
 	private static HbDataStore userDataStore = null;
 	
+	/**
+	 * Creates an environment URL for connection to database. 
+	 * Uses defined host name, port and schema name of database for creating the url and 
+	 * adds a query, which creates the database if it doesn't exist yet (createDatabaseIfNotExist=true).
+	 * 
+	 * @return created environment URL
+	 */
 	public static String getEnvironmentURL() {
 		// MySQL url
 		return "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/"+ DB_NAME + "?createDatabaseIfNotExist=true";
 	}
 	
+	/**
+	 * Returns the hibernate data store, which will be created and initialized, if it hasn't been done yet.
+	 * 
+	 * @return hibernate data store
+	 */
 	public static HbDataStore getDataStore() {
 		if (userDataStore == null)
 			initDataStore();
 	    return userDataStore;
 	}
 	
+	/**
+	 * Initializes hibernate data store. Sets environment properties, such as driver, URL, username, 
+	 * password and dialect.
+	 * Also initializes (UserPackage.eINSTANCE) and registers the EMF User Package.
+	 * 
+	 */
 	public static void initDataStore() {
 		if (userDataStore != null)
 			return;
@@ -69,6 +107,11 @@ public class DBUtils {
         userDataStore.getSessionFactory();
 	}
 	
+	/**
+	 * Creates a new resource and loads the persistent data from database through hibernate data store. 
+	 * Therefore the hibernate data store must be initialized before using this method (see {@link #initDataStore()}. 
+	 * @return resource persisted in database
+	 */
 	public static Resource getPersistentData() {
 		String uriStr = "hibernate://?"+HibernateResource.DS_NAME_PARAM+"="+DS_NAME;
         final URI uri = URI.createURI(uriStr);

@@ -3,7 +3,6 @@ package org.eclipselabs.tapiji.translator.rap.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.babel.core.util.FileUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -16,21 +15,40 @@ import org.eclipselabs.tapiji.translator.actions.FileOpenAction;
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 
+
+/**
+ * Utility methods handle resource bundles in editors
+ * @author Matthias Lettmayer
+ *
+ */
 public class EditorUtils {
+	/** Messages Editor ID */
 	public static final String MSG_EDITOR_ID = FileOpenAction.RESOURCE_BUNDLE_EDITOR;
 	
+	/**
+	 * Opens a given resource bundle in a new editor only if it's not already opened. 
+	 * Uses the first local file of resource bundle for creating a FileEditorInput as input for the Messages Editor.
+	 * @param rb The resource bundle will be opened
+	 */
 	public static void openEditorOfRB(ResourceBundle rb) {
 		if (isRBOpened(rb) || rb.getLocalFiles().isEmpty())
 			return;
 		
 		try {
-			getActivePage().openEditor( new FileEditorInput(FileRAPUtils.getIFile(rb.getLocalFiles().get(0))), 
+			getActivePage().openEditor( new FileEditorInput(FileRAPUtils.getFile(rb.getLocalFiles().get(0))), 
 					MSG_EDITOR_ID);
 		} catch (PartInitException e) {
 			e.printStackTrace();
 		}	
 	}
 	
+	/** 
+	 * Closes an opened editor of a given resource bundle. If multiple editors of the same resource bundle are opened, 
+	 * only one will be closed.
+	 * @param rb The resource bundle that will be closed.
+	 * @param save True to give the user a chance to save the resource bundle before it will be closed.
+	 * @return True if an editor was closed, otherwise false.
+	 */
 	public static boolean closeEditorOfRB(ResourceBundle rb, boolean save) {
 		List<IEditorReference> openedEditors = getOpenedEditors(rb);
 		
@@ -40,6 +58,12 @@ public class EditorUtils {
 		return getActivePage().closeEditor(openedEditors.get(0).getEditor(false), save);		
 	}
 	
+	/**
+	 * Similar to {@link #closeEditorOfRB(ResourceBundle, boolean)}, but closes all opened editors of given resource bundle,
+	 * instead of only one.
+	 * @param rb The resource bundle that will be closed.
+	 * @param save True to give the user a chance to save the resource bundle before it will be closed.
+	 */
 	public static void closeAllEditorsOfRB(ResourceBundle rb, boolean save) {
 		List<IEditorReference> openedEditors = getOpenedEditors(rb);
 		
@@ -52,16 +76,34 @@ public class EditorUtils {
 		}
 	}
 	
+	/**
+	 * Returns the active page of the workbench.
+	 * @return active page
+	 */
 	public static IWorkbenchPage getActivePage() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 	}
 		
+	/**
+	 * Returns true if an editor of a given resource bundle is already opened.
+	 * @param rb resource bundle
+	 * @return True if resource bundle is opened.
+	 */
 	public static boolean isRBOpened(ResourceBundle rb) {
 		if (getOpenedEditors(rb).isEmpty())
 			return false;
 		return true;
 	}
 	
+	/**
+	 * Returns a list of opened editors of a given resource bundle. 
+	 * Searches through all opened editor references and compares the file path of the opened 
+	 * editor with the path of the local files of resource bundle.
+	 * If a local file of resource bundle matches the editor file, then the resource bundle is 
+	 * opened and added to the return list.
+	 * @param rb resource bundle
+	 * @return a list of opened resource bundles
+	 */
 	public static List<IEditorReference> getOpenedEditors(ResourceBundle rb) {
 		List<IEditorReference> openedRB = new ArrayList<IEditorReference>();
 		try {
@@ -81,6 +123,11 @@ public class EditorUtils {
 		return openedRB;
 	}
 	
+	/**
+	 * Returns the resource bundle from a given editor. 
+	 * @param editor
+	 * @return resource bundle from editor or null if editor doesn't hold a resource bundle.
+	 */
 	public static ResourceBundle getRBFromEditor(IEditorPart editor) {
 		ResourceBundle rb = null;
 		

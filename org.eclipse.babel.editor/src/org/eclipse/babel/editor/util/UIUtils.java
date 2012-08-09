@@ -16,6 +16,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.Reader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -429,15 +432,36 @@ public final class UIUtils {
      * @return image
      */
     public static Image getImage(String imageName) {
-        if (imageRegistry == null)
-        	imageRegistry = new ImageRegistry(PlatformUI.getWorkbench().getDisplay());
-    	Image image = imageRegistry.get(imageName);
-        if (image == null) {
-            image = getImageDescriptor(imageName).createImage();
-            imageRegistry.put(imageName, image);
-        }
-        return image;
+        Image image = null;
+    	try {
+        	// [RAP] In RAP multiple displays could exist (multiple user), 
+        	// therefore image needs to be created every time with the current display
+			Method getImageRAP = Class.forName("org.eclipse.babel.editor.util.UIUtilsRAP").
+					getMethod("getImage", String.class);
+			image = (Image) getImageRAP.invoke(null, imageName);
+		} catch (Exception e) {
+			// RAP fragment not running --> invoke rcp version
+			image = getImageRCP(imageName);
+		}
+    	
+    	return image;
     }
+    
+    /**
+    * Gets an image from image registry or creates a new one if it the first time.
+    * @param imageName image name
+    * @return image
+    */
+   private static Image getImageRCP(String imageName) {
+	   if (imageRegistry == null)
+       	imageRegistry = new ImageRegistry(PlatformUI.getWorkbench().getDisplay());
+   	Image image = imageRegistry.get(imageName);
+       if (image == null) {
+           image = getImageDescriptor(imageName).createImage();
+           imageRegistry.put(imageName, image);
+       }
+       return image;	   
+   }
 
     /**
      * @return Image for the icon that indicates a key with no issues

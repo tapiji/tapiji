@@ -45,7 +45,6 @@ Export-Package: com.ibm.icu.impl,
  org.jasypt.util.password.rfc2307,
  org.jasypt.util.text,
  org.jasypt.web.pbeconfig
-Require-Bundle: javax.servlet,
- org.hibernate,
+Require-Bundle: org.hibernate,
  org.eclipse.core.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

@@ -10,17 +10,11 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.actions;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.SWT;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
-import org.eclipse.ui.part.FileEditorInput;
-import org.eclipselabs.tapiji.translator.utils.FileUtils;
 
 public abstract class AbstractFileOpenAction extends Action implements
         IWorkbenchWindowActionDelegate {

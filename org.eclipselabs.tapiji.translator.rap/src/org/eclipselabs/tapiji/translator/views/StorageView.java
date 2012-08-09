@@ -123,7 +123,7 @@ public class StorageView extends ViewPart {
 		// add user rbs
 	    User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);	    
 	    if (user != null) {
-		    StorageUtils.syncUserRBsWithProject();
+		    StorageUtils.syncStorageWithDatabase();
 		    for (ResourceBundle userRB : user.getStoredRBs()) {
 		    	model.add(userRB);
 		    	userRBsMap.put(userRB.getName(), userRB);
@@ -156,7 +156,7 @@ public class StorageView extends ViewPart {
 
 		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
 	    if (user != null) {	 
-	    	StorageUtils.syncUserRBsWithProject();	    	 
+	    	StorageUtils.syncStorageWithDatabase();	    	 
 			rbs.addAll(user.getStoredRBs());						
 	    }
     
@@ -285,10 +285,7 @@ public class StorageView extends ViewPart {
 	private IAction getLogoutAction() {
 		IAction logout = new Action() {
 			public void run() {
-				LogoutAction action = new LogoutAction();
-				action.init(page.getWorkbenchWindow());
-				action.run(null);
-				action.dispose();
+				new LogoutAction().run(null);
 				refresh();
 			}
 		};
@@ -396,8 +393,8 @@ public class StorageView extends ViewPart {
 			// delete files
 			for (PropertiesFile file : deleteFiles) {
 				// delete file from hd 
-				IFile ifile = FileRAPUtils.getIFile(file);
-				ifile.delete(false, null);
+				IFile ifile = FileRAPUtils.getFile(file);
+				ifile.delete(true, null);
 				
 				// remove file from resource bundle
 				rb.getLocalFiles().remove(file);				
@@ -416,7 +413,6 @@ public class StorageView extends ViewPart {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -490,7 +486,7 @@ public class StorageView extends ViewPart {
 		Locale newLocal = newLocaleDialog.getSelectedLocal();	
 		ResourceBundle rb = getSelectedRB();
 		
-		IFile ifile = FileRAPUtils.getIFile(rb.getLocalFiles().get(0));
+		IFile ifile = FileRAPUtils.getFile(rb.getLocalFiles().get(0));
 		IPath path = ifile.getProjectRelativePath();
 		
 		String bundleName = rb.getName();
@@ -509,7 +505,7 @@ public class StorageView extends ViewPart {
 			}
 			
 			// add file to rb
-			PropertiesFile propFile = StorageUtils.createFile(newFile);
+			PropertiesFile propFile = StorageUtils.createPropertiesFile(newFile);
 			rb.getLocalFiles().add(propFile);
 			
 			// store in db
