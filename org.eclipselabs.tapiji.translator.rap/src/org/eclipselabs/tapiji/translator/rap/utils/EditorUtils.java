@@ -3,6 +3,10 @@ package org.eclipselabs.tapiji.translator.rap.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.babel.core.message.internal.MessagesBundle;
+import org.eclipse.babel.core.message.internal.MessagesBundleAdapter;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroupAdapter;
+import org.eclipse.babel.editor.IMessagesEditor;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -35,8 +39,27 @@ public class EditorUtils {
 			return;
 		
 		try {
-			getActivePage().openEditor( new FileEditorInput(FileRAPUtils.getFile(rb.getLocalFiles().get(0))), 
+			IEditorPart openedEditor = getActivePage().openEditor( new FileEditorInput(FileRAPUtils.getFile(rb.getLocalFiles().get(0))), 
 					MSG_EDITOR_ID);
+			
+			
+			if (openedEditor instanceof IMessagesEditor) {
+				// add msg bundle group listener to opened editor which refreshes storage view if new local is added
+				IMessagesEditor msgEditor = (IMessagesEditor) openedEditor;
+				msgEditor.getBundleGroup().addMessagesBundleGroupListener(new MessagesBundleGroupAdapter() {
+					@Override
+					public void messagesBundleAdded(
+							MessagesBundle messagesBundle) {
+						StorageUtils.refreshStorageView();
+					}
+				});
+				
+				// override title name of opened messages editor
+				String titleName = rb.getName();
+				if (rb.isTemporary())
+					titleName += " (temp)";
+				msgEditor.setTitleName(titleName);
+			}
 		} catch (PartInitException e) {
 			e.printStackTrace();
 		}	
@@ -140,4 +163,5 @@ public class EditorUtils {
 		
 		return rb;
 	}
+	
 }

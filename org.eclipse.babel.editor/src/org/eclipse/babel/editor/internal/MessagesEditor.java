@@ -568,4 +568,8 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 		// create new image with current display		
 		return UIUtils.getImageDescriptor(UIUtils.IMAGE_RESOURCE_BUNDLE).createImage();
 	}
+	
+	public void setTitleName(String name) {
+		setPartName(name);
+	}
 }

@@ -26,6 +26,8 @@ public class StorageTreeLabelProvider extends ColumnLabelProvider implements IFo
 		if (element instanceof ResourceBundle) {
 			ResourceBundle rb = (ResourceBundle) element;
 			text = rb.getName();
+			if (rb.isTemporary())
+				text += " (temp)";
 		} else if (element instanceof PropertiesFile){
 			PropertiesFile file = (PropertiesFile) element;
 			text = file.getFilename();

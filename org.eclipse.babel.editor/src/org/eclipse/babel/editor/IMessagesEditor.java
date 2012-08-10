@@ -10,8 +10,14 @@
  ******************************************************************************/
 package org.eclipse.babel.editor;
 
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
+
 public interface IMessagesEditor {
 	String getSelectedKey();
 
 	void setSelectedKey(String key);
+	
+	MessagesBundleGroup getBundleGroup();
+
+	void setTitleName(String string);
 }

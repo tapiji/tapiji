@@ -9,6 +9,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.eclipse.babel.core.message.IMessagesBundleGroup;
+import org.eclipse.babel.core.message.internal.IMessagesBundleGroupListener;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
+import org.eclipse.babel.core.message.internal.MessagesBundleAdapter;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroupAdapter;
+import org.eclipse.babel.editor.IMessagesEditor;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -29,6 +36,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.osgi.framework.internal.core.Msg;
 import org.eclipse.rwt.RWT;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -36,7 +44,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipselabs.tapiji.translator.actions.LogoutAction;
@@ -68,13 +81,18 @@ public class StorageView extends ViewPart {
 	
 	public final static String ID = "org.eclipselabs.tapiji.translator.views.StorageView";
 	
+
 	public StorageView() {
+		
+		
 	}
 
 	@Override
 	public void createPartControl(Composite parent) {
 		this.parent = parent;
-		page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		
+		if (page == null)
+			page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		
 		main = new Composite(parent, SWT.NONE);
 		main.setLayout(new GridLayout());

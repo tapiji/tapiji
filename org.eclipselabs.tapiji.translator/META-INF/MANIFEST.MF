@@ -27,5 +27,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Vienna University of Technology
 Import-Package: javax.servlet;resolution:=optional,
  javax.servlet.http;resolution:=optional,
+ org.eclipse.babel.editor,
  org.eclipse.babel.editor.api,
  org.eclipse.babel.editor.widgets
