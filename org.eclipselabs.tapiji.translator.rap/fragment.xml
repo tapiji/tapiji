@@ -58,10 +58,12 @@
              label="User Action Set"
              visible="true">
           <action
+                allowLabelUpdate="true"
                 class="org.eclipselabs.tapiji.translator.actions.LoginAction"
                 definitionId="org.eclipselabs.tapiji.translator.login"
+                icon="icons/login.png"
                 id="LoginAction"
-                label="Login ..."
+                label="Login"
                 style="push">
           </action>
           <action
@@ -170,6 +172,52 @@
               </with>
            </visibleWhen>
         </command>
+     </menuContribution>
+     <menuContribution
+           allPopups="false"
+           locationURI="toolbar:org.eclipse.ui.main.toolbar">
+        <toolbar
+              id="user">
+        </toolbar>
+     </menuContribution>
+     <menuContribution
+           allPopups="false"
+           locationURI="toolbar:user">
+        <command
+              commandId="org.eclipselabs.tapiji.translator.login"
+              icon="icons/login.png"
+              label="Login">
+           <visibleWhen
+                 checkEnabled="false">
+             <with
+                    variable="activeContexts">
+                <iterate
+                       operator="and">
+                   	<not>
+                       	<equals
+                          	   value="org.eclipselabs.tapiji.translator.userLoggedIn">
+                       	</equals>
+                    </not>
+                 </iterate>
+              </with>
+           </visibleWhen>
+        </command>
+        <dynamic
+              class="org.eclipselabs.tapiji.translator.rap.widgets.UserInfoContributionItem"
+              id="org.eclipselabs.tapiji.translator.rap.userItem">
+              <visibleWhen
+                 checkEnabled="false">
+              <with
+                    variable="activeContexts">
+                 <iterate
+                       operator="or">
+                    <equals
+                          value="org.eclipselabs.tapiji.translator.userLoggedIn">
+                    </equals>
+                 </iterate>
+              </with>
+           </visibleWhen>
+        </dynamic>
      </menuContribution>
   </extension>
   <extension

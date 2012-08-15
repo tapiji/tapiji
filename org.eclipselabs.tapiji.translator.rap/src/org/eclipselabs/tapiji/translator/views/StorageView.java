@@ -9,15 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.eclipse.babel.core.message.IMessagesBundleGroup;
-import org.eclipse.babel.core.message.internal.IMessagesBundleGroupListener;
-import org.eclipse.babel.core.message.internal.MessagesBundle;
-import org.eclipse.babel.core.message.internal.MessagesBundleAdapter;
-import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
-import org.eclipse.babel.core.message.internal.MessagesBundleGroupAdapter;
-import org.eclipse.babel.editor.IMessagesEditor;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -34,9 +26,7 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.osgi.framework.internal.core.Msg;
 import org.eclipse.rwt.RWT;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -44,12 +34,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipselabs.tapiji.translator.actions.LogoutAction;
@@ -81,39 +66,44 @@ public class StorageView extends ViewPart {
 	
 	public final static String ID = "org.eclipselabs.tapiji.translator.views.StorageView";
 	
-
-	public StorageView() {
-		
-		
-	}
+	public StorageView() {}
 
 	@Override
 	public void createPartControl(Composite parent) {
 		this.parent = parent;
+		parent.setLayout(new GridLayout());
 		
 		if (page == null)
 			page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		
 		main = new Composite(parent, SWT.NONE);
-		main.setLayout(new GridLayout());
+		GridLayout layout = new GridLayout();
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		main.setLayout(layout);
+		GridData gridData = new GridData(SWT.FILL,SWT.FILL,true,true);
+		main.setLayoutData(gridData);
 		
-		createStoragePart(parent);
+		createStoragePart();
 		hookContextMenu();
 	}
 	
-	private void createStoragePart(Composite parent) {				
+	private void createStoragePart() {				
 		createTree();		
 	    fillTree();
 	}
 	
 	private void createTree() {
-        treeViewer = new TreeViewer(main, SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL);
+        treeViewer = new TreeViewer(main, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		
 		treeViewer.setLabelProvider(new StorageTreeLabelProvider());
 		treeViewer.setContentProvider(new StorageTreeContentProvider()); 
 		treeViewer.setColumnProperties(new String[]{"column1"});
 		treeViewer.setCellEditors( new CellEditor[] {new TextCellEditor(treeViewer.getTree())} );
 	    
+		
+	    treeViewer.getTree().setData(RWT.MARKUP_ENABLED, Boolean.TRUE);
+	    treeViewer.getTree().setLayout(new GridLayout());	    
 	    GridData gridData = new GridData();
         gridData.verticalAlignment = GridData.FILL;
         gridData.grabExcessVerticalSpace = true;
@@ -157,7 +147,7 @@ public class StorageView extends ViewPart {
 	    treeViewer.setInput(model);   
 	}
 	
-	public void refresh() {		
+	public void refresh() {
 		
 		// sync maps with model, because rb changes (i.e. storing rb) are direct
 		userRBsMap.clear(); sessionRBsMap.clear();
@@ -213,12 +203,7 @@ public class StorageView extends ViewPart {
 	    		userRBsMap.remove(rb.getName());	    		
 	    }
 	   
-	    
-	    // refresh tree viewer and keep expanded nodes
-	    //TreePath[] expandedTreePaths = treeViewer.getExpandedTreePaths();
-		treeViewer.refresh();
-		//treeViewer.setExpandedTreePaths(expandedTreePaths);
-		
+		treeViewer.refresh();		
 		hookContextMenu();
 	}
 	
@@ -245,7 +230,6 @@ public class StorageView extends ViewPart {
 	private void hookContextMenu() {
 		if (treeViewer != null && ! treeViewer.getControl().isDisposed()) {		
 			MenuManager menuMgr = new MenuManager("#PopupMenu");
-		
 			menuMgr.setRemoveAllWhenShown(true);
 			menuMgr.addMenuListener(new IMenuListener() {
 				public void menuAboutToShow(IMenuManager manager) {
@@ -261,10 +245,10 @@ public class StorageView extends ViewPart {
 	private void fillTreeContextMenu(IMenuManager manager) {
 		manager.removeAll();
 
-		if (UserUtils.isUserLoggedIn())
-			 manager.add(getLogoutAction());
-		else
-			 manager.add(getLoginAction());
+//		if (UserUtils.isUserLoggedIn())
+//			 manager.add(getLogoutAction());
+//		else
+//			 manager.add(getLoginAction());
 		
 		StorageMenuEntryContribution storageContribution = new StorageMenuEntryContribution(this);		
 		manager.add(storageContribution);		
