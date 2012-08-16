@@ -32,6 +32,7 @@ public class UserInfoContributionItem extends ContributionItem {
 			final ToolItem userItem = new ToolItem(toolBar, SWT.DROP_DOWN | SWT.BORDER, index);
 			userItem.setText(UserUtils.getUser().getUsername());
 			userItem.setData(WidgetUtil.CUSTOM_VARIANT, "userItem");
+			userItem.setImage(UIUtils.getImageDescriptor(UIUtils.IMAGE_HOME).createImage());
 		    userItem.addSelectionListener(new SelectionAdapter() {
 			    @Override
 			    public void widgetSelected( SelectionEvent event ) {

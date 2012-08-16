@@ -26,6 +26,8 @@ public class UIUtils {
 	public static final String IMAGE_LOGOUT = "logout.png";
 	public static final String IMAGE_DOWNLOAD_RB = "downloadRB.gif";
 	public static final String IMAGE_UPLOAD_RB = "uploadRB.gif";
+	public static final String IMAGE_HOME = "home.png";
+	public static final String IMAGE_DATABASE = "database.png";
 	
 	public static final String PLUGIN_NAME = "org.eclipselabs.tapiji.translator.rap";
 	/**

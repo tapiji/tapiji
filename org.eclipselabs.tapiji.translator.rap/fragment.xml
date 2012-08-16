@@ -175,7 +175,7 @@
      </menuContribution>
      <menuContribution
            allPopups="false"
-           locationURI="toolbar:org.eclipse.ui.main.toolbar">
+           locationURI="toolbar:org.eclipse.ui.trim.command2">
         <toolbar
               id="user">
         </toolbar>
@@ -183,10 +183,12 @@
      <menuContribution
            allPopups="false"
            locationURI="toolbar:user">
-        <command
-              commandId="org.eclipselabs.tapiji.translator.login"
-              icon="icons/login.png"
-              label="Login">
+       <command
+             commandId="org.eclipselabs.tapiji.translator.login"
+             icon="icons/login.png"
+             label="Login"
+             mode="FORCE_TEXT"
+             style="push">
            <visibleWhen
                  checkEnabled="false">
              <with
@@ -202,6 +204,26 @@
               </with>
            </visibleWhen>
         </command>
+       <command
+             commandId="org.eclipselabs.tapiji.translator.register"
+             label="Register"
+             mode="FORCE_TEXT"
+             style="push">
+             <visibleWhen
+                 checkEnabled="false">
+             <with
+                    variable="activeContexts">
+                <iterate
+                       operator="and">
+                   	<not>
+                       	<equals
+                          	   value="org.eclipselabs.tapiji.translator.userLoggedIn">
+                       	</equals>
+                    </not>
+                 </iterate>
+              </with>
+           </visibleWhen>
+       </command>
         <dynamic
               class="org.eclipselabs.tapiji.translator.rap.widgets.UserInfoContributionItem"
               id="org.eclipselabs.tapiji.translator.rap.userItem">
@@ -235,6 +257,7 @@
      <view
            category="org.eclipselabs.tapiji"
            class="org.eclipselabs.tapiji.translator.views.StorageView"
+           icon="icons/database.png"
            id="org.eclipselabs.tapiji.translator.views.StorageView"
            name="Storage"
            restorable="true">

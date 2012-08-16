@@ -32,7 +32,3 @@ ToolItem.userItem {
   );
   border: 1px solid #bdbdbd;
 }
-
-TreeItem {
-	vertical-align: middle;
-}

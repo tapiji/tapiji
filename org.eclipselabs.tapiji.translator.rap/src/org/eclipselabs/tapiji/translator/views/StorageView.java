@@ -15,10 +15,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -29,9 +32,12 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.rwt.RWT;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.HelpListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchPage;
@@ -86,6 +92,24 @@ public class StorageView extends ViewPart {
 		
 		createStoragePart();
 		hookContextMenu();
+		
+		// add refresh action to toolbar
+		getViewSite().getActionBars().getToolBarManager().add(new Action() {
+			@Override
+			public ImageDescriptor getImageDescriptor() {
+				return UIUtils.getImageDescriptor(UIUtils.IMAGE_REFRESH);
+			}
+			
+			@Override
+			public void run() {
+				refresh();
+			}
+			
+			@Override
+			public String getText() {
+				return "Refresh storage view";
+			}
+		});
 	}
 	
 	private void createStoragePart() {				
@@ -121,8 +145,6 @@ public class StorageView extends ViewPart {
 	
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
-
 	}
 
 	private void fillTree() {
@@ -147,8 +169,7 @@ public class StorageView extends ViewPart {
 	    treeViewer.setInput(model);   
 	}
 	
-	public void refresh() {
-		
+	public void refresh() {		
 		// sync maps with model, because rb changes (i.e. storing rb) are direct
 		userRBsMap.clear(); sessionRBsMap.clear();
 		for (ResourceBundle rb : model) {
@@ -167,9 +188,7 @@ public class StorageView extends ViewPart {
 	    	StorageUtils.syncStorageWithDatabase();	    	 
 			rbs.addAll(user.getStoredRBs());						
 	    }
-    
-	    //List<ResourceBundle> iter = new ArrayList<ResourceBundle>(rbs);
-	   
+    	   
 	    // update model rbs
 	    for (ResourceBundle rb : rbs) {
 	    	Map<String, ResourceBundle> rbMap = rb.isTemporary() ? sessionRBsMap : userRBsMap;
@@ -222,7 +241,7 @@ public class StorageView extends ViewPart {
 		// update rb
 		else
 			model.set(index, updatedRB);
-//		((List) treeViewer.getInput()).set(index, updatedRB);
+		
 		treeViewer.refresh();
 	}
 		
@@ -244,11 +263,6 @@ public class StorageView extends ViewPart {
 	
 	private void fillTreeContextMenu(IMenuManager manager) {
 		manager.removeAll();
-
-//		if (UserUtils.isUserLoggedIn())
-//			 manager.add(getLogoutAction());
-//		else
-//			 manager.add(getLoginAction());
 		
 		StorageMenuEntryContribution storageContribution = new StorageMenuEntryContribution(this);		
 		manager.add(storageContribution);		
