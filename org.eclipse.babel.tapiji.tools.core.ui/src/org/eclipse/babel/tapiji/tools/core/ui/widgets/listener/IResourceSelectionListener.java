@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,6 +14,6 @@ import org.eclipse.babel.tapiji.tools.core.ui.widgets.event.ResourceSelectionEve
 
 public interface IResourceSelectionListener {
 
-	public void selectionChanged(ResourceSelectionEvent e);
+    public void selectionChanged(ResourceSelectionEvent e);
 
 }

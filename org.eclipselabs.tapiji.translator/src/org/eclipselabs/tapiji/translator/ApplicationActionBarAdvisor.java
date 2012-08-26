@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -33,92 +33,92 @@ import org.eclipse.ui.application.IActionBarConfigurer;
  */
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
-	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
-		super(configurer);
+    public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
+	super(configurer);
+    }
+
+    @Override
+    protected void fillCoolBar(ICoolBarManager coolBar) {
+	super.fillCoolBar(coolBar);
+
+	coolBar.add(new GroupMarker("group.file"));
+	{
+	    // File Group
+	    IToolBarManager fileToolBar = new ToolBarManager(coolBar.getStyle());
+
+	    fileToolBar.add(new Separator(IWorkbenchActionConstants.NEW_GROUP));
+	    fileToolBar
+		    .add(new GroupMarker(IWorkbenchActionConstants.OPEN_EXT));
+
+	    fileToolBar.add(new GroupMarker(
+		    IWorkbenchActionConstants.SAVE_GROUP));
+	    fileToolBar.add(getAction(ActionFactory.SAVE.getId()));
+
+	    // Add to the cool bar manager
+	    coolBar.add(new ToolBarContributionItem(fileToolBar,
+		    IWorkbenchActionConstants.TOOLBAR_FILE));
 	}
 
-	@Override
-	protected void fillCoolBar(ICoolBarManager coolBar) {
-		super.fillCoolBar(coolBar);
+	coolBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
+	coolBar.add(new GroupMarker(IWorkbenchActionConstants.GROUP_EDITOR));
+    }
 
-		coolBar.add(new GroupMarker("group.file"));
-		{
-			// File Group
-			IToolBarManager fileToolBar = new ToolBarManager(coolBar.getStyle());
+    @Override
+    protected void fillMenuBar(IMenuManager menuBar) {
+	super.fillMenuBar(menuBar);
 
-			fileToolBar.add(new Separator(IWorkbenchActionConstants.NEW_GROUP));
-			fileToolBar
-			        .add(new GroupMarker(IWorkbenchActionConstants.OPEN_EXT));
+	menuBar.add(fileMenu());
+	menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
+	menuBar.add(helpMenu());
+    }
 
-			fileToolBar.add(new GroupMarker(
-			        IWorkbenchActionConstants.SAVE_GROUP));
-			fileToolBar.add(getAction(ActionFactory.SAVE.getId()));
+    private MenuManager helpMenu() {
+	MenuManager helpMenu = new MenuManager("&Help",
+		IWorkbenchActionConstants.M_HELP);
 
-			// Add to the cool bar manager
-			coolBar.add(new ToolBarContributionItem(fileToolBar,
-			        IWorkbenchActionConstants.TOOLBAR_FILE));
-		}
+	helpMenu.add(getAction(ActionFactory.ABOUT.getId()));
 
-		coolBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
-		coolBar.add(new GroupMarker(IWorkbenchActionConstants.GROUP_EDITOR));
-	}
+	return helpMenu;
+    }
 
-	@Override
-	protected void fillMenuBar(IMenuManager menuBar) {
-		super.fillMenuBar(menuBar);
+    private MenuManager fileMenu() {
+	MenuManager menu = new MenuManager("&File", "file_mnu");
+	menu.add(new GroupMarker(IWorkbenchActionConstants.FILE_START));
 
-		menuBar.add(fileMenu());
-		menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
-		menuBar.add(helpMenu());
-	}
+	menu.add(getAction(ActionFactory.CLOSE.getId()));
+	menu.add(getAction(ActionFactory.CLOSE_ALL.getId()));
 
-	private MenuManager helpMenu() {
-		MenuManager helpMenu = new MenuManager("&Help",
-		        IWorkbenchActionConstants.M_HELP);
+	menu.add(new GroupMarker(IWorkbenchActionConstants.CLOSE_EXT));
+	menu.add(new Separator());
+	menu.add(getAction(ActionFactory.SAVE.getId()));
+	menu.add(getAction(ActionFactory.SAVE_ALL.getId()));
 
-		helpMenu.add(getAction(ActionFactory.ABOUT.getId()));
+	menu.add(ContributionItemFactory.REOPEN_EDITORS
+		.create(getActionBarConfigurer().getWindowConfigurer()
+			.getWindow()));
+	menu.add(new GroupMarker(IWorkbenchActionConstants.MRU));
+	menu.add(new Separator());
+	menu.add(getAction(ActionFactory.QUIT.getId()));
+	return menu;
+    }
 
-		return helpMenu;
-	}
+    @Override
+    protected void makeActions(IWorkbenchWindow window) {
+	super.makeActions(window);
 
-	private MenuManager fileMenu() {
-		MenuManager menu = new MenuManager("&File", "file_mnu");
-		menu.add(new GroupMarker(IWorkbenchActionConstants.FILE_START));
+	registerAsGlobal(ActionFactory.SAVE.create(window));
+	registerAsGlobal(ActionFactory.SAVE_AS.create(window));
+	registerAsGlobal(ActionFactory.SAVE_ALL.create(window));
+	registerAsGlobal(ActionFactory.CLOSE.create(window));
+	registerAsGlobal(ActionFactory.CLOSE_ALL.create(window));
+	registerAsGlobal(ActionFactory.CLOSE_ALL_SAVED.create(window));
+	registerAsGlobal(ActionFactory.ABOUT.create(window));
+	registerAsGlobal(ActionFactory.QUIT.create(window));
+    }
 
-		menu.add(getAction(ActionFactory.CLOSE.getId()));
-		menu.add(getAction(ActionFactory.CLOSE_ALL.getId()));
-
-		menu.add(new GroupMarker(IWorkbenchActionConstants.CLOSE_EXT));
-		menu.add(new Separator());
-		menu.add(getAction(ActionFactory.SAVE.getId()));
-		menu.add(getAction(ActionFactory.SAVE_ALL.getId()));
-
-		menu.add(ContributionItemFactory.REOPEN_EDITORS
-		        .create(getActionBarConfigurer().getWindowConfigurer()
-		                .getWindow()));
-		menu.add(new GroupMarker(IWorkbenchActionConstants.MRU));
-		menu.add(new Separator());
-		menu.add(getAction(ActionFactory.QUIT.getId()));
-		return menu;
-	}
-
-	@Override
-	protected void makeActions(IWorkbenchWindow window) {
-		super.makeActions(window);
-
-		registerAsGlobal(ActionFactory.SAVE.create(window));
-		registerAsGlobal(ActionFactory.SAVE_AS.create(window));
-		registerAsGlobal(ActionFactory.SAVE_ALL.create(window));
-		registerAsGlobal(ActionFactory.CLOSE.create(window));
-		registerAsGlobal(ActionFactory.CLOSE_ALL.create(window));
-		registerAsGlobal(ActionFactory.CLOSE_ALL_SAVED.create(window));
-		registerAsGlobal(ActionFactory.ABOUT.create(window));
-		registerAsGlobal(ActionFactory.QUIT.create(window));
-	}
-
-	private void registerAsGlobal(IAction action) {
-		getActionBarConfigurer().registerGlobalAction(action);
-		register(action);
-	}
+    private void registerAsGlobal(IAction action) {
+	getActionBarConfigurer().registerGlobalAction(action);
+	register(action);
+    }
 
 }

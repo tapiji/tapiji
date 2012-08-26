@@ -1,9 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.java.ui.model;
 
@@ -14,60 +17,60 @@ import org.eclipse.core.resources.IFile;
 
 public class SLLocation implements Serializable, ILocation {
 
-	private static final long serialVersionUID = 1L;
-	private IFile file = null;
-	private int startPos = -1;
-	private int endPos = -1;
-	private String literal;
-	private Serializable data;
+    private static final long serialVersionUID = 1L;
+    private IFile file = null;
+    private int startPos = -1;
+    private int endPos = -1;
+    private String literal;
+    private Serializable data;
 
-	public SLLocation(IFile file, int startPos, int endPos, String literal) {
-		super();
-		this.file = file;
-		this.startPos = startPos;
-		this.endPos = endPos;
-		this.literal = literal;
-	}
+    public SLLocation(IFile file, int startPos, int endPos, String literal) {
+	super();
+	this.file = file;
+	this.startPos = startPos;
+	this.endPos = endPos;
+	this.literal = literal;
+    }
 
-	@Override
-	public IFile getFile() {
-		return file;
-	}
+    @Override
+    public IFile getFile() {
+	return file;
+    }
 
-	public void setFile(IFile file) {
-		this.file = file;
-	}
+    public void setFile(IFile file) {
+	this.file = file;
+    }
 
-	@Override
-	public int getStartPos() {
-		return startPos;
-	}
+    @Override
+    public int getStartPos() {
+	return startPos;
+    }
 
-	public void setStartPos(int startPos) {
-		this.startPos = startPos;
-	}
+    public void setStartPos(int startPos) {
+	this.startPos = startPos;
+    }
 
-	@Override
-	public int getEndPos() {
-		return endPos;
-	}
+    @Override
+    public int getEndPos() {
+	return endPos;
+    }
 
-	public void setEndPos(int endPos) {
-		this.endPos = endPos;
-	}
+    public void setEndPos(int endPos) {
+	this.endPos = endPos;
+    }
 
-	@Override
-	public String getLiteral() {
-		return literal;
-	}
+    @Override
+    public String getLiteral() {
+	return literal;
+    }
 
-	@Override
-	public Serializable getData() {
-		return data;
-	}
+    @Override
+    public Serializable getData() {
+	return data;
+    }
 
-	public void setData(Serializable data) {
-		this.data = data;
-	}
+    public void setData(Serializable data) {
+	this.data = data;
+    }
 
 }

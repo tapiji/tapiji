@@ -239,7 +239,7 @@ public class PDEUtils {
 		}
 	}
 
-    private static String getManifestEntryValue(IResource manifest, String entryKey) {
+	private static String getManifestEntryValue(IResource manifest, String entryKey) {
     	if (manifest instanceof IFile) {
     		String content = getFileContent((IFile) manifest, "UTF8"); //$NON-NLS-1$
     		int index = content.indexOf(entryKey);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -26,69 +26,69 @@ import org.eclipse.ui.IMarkerResolution2;
 
 public class ReplaceResourceBundleDefReference implements IMarkerResolution2 {
 
-	private String key;
-	private int start;
-	private int end;
+    private String key;
+    private int start;
+    private int end;
 
-	public ReplaceResourceBundleDefReference(String key, int start, int end) {
-		this.key = key;
-		this.start = start;
-		this.end = end;
+    public ReplaceResourceBundleDefReference(String key, int start, int end) {
+	this.key = key;
+	this.start = start;
+	this.end = end;
+    }
+
+    @Override
+    public String getDescription() {
+	return "Replaces the non-existing Resource-Bundle reference '" + key
+		+ "' with a reference to an already existing Resource-Bundle.";
+    }
+
+    @Override
+    public Image getImage() {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public String getLabel() {
+	return "Select an alternative Resource-Bundle";
+    }
+
+    @Override
+    public void run(IMarker marker) {
+	int startPos = start;
+	int endPos = end - start;
+	IResource resource = marker.getResource();
+
+	ITextFileBufferManager bufferManager = FileBuffers
+		.getTextFileBufferManager();
+	IPath path = resource.getRawLocation();
+	try {
+	    bufferManager.connect(path, null);
+	    ITextFileBuffer textFileBuffer = bufferManager
+		    .getTextFileBuffer(path);
+	    IDocument document = textFileBuffer.getDocument();
+
+	    ResourceBundleSelectionDialog dialog = new ResourceBundleSelectionDialog(
+		    Display.getDefault().getActiveShell(),
+		    resource.getProject());
+
+	    if (dialog.open() != InputDialog.OK)
+		return;
+
+	    key = dialog.getSelectedBundleId();
+
+	    document.replace(startPos, endPos, key);
+
+	    textFileBuffer.commit(null, false);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	} finally {
+	    try {
+		bufferManager.disconnect(path, null);
+	    } catch (CoreException e) {
+		e.printStackTrace();
+	    }
 	}
-
-	@Override
-	public String getDescription() {
-		return "Replaces the non-existing Resource-Bundle reference '" + key
-		        + "' with a reference to an already existing Resource-Bundle.";
-	}
-
-	@Override
-	public Image getImage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getLabel() {
-		return "Select an alternative Resource-Bundle";
-	}
-
-	@Override
-	public void run(IMarker marker) {
-		int startPos = start;
-		int endPos = end - start;
-		IResource resource = marker.getResource();
-
-		ITextFileBufferManager bufferManager = FileBuffers
-		        .getTextFileBufferManager();
-		IPath path = resource.getRawLocation();
-		try {
-			bufferManager.connect(path, null);
-			ITextFileBuffer textFileBuffer = bufferManager
-			        .getTextFileBuffer(path);
-			IDocument document = textFileBuffer.getDocument();
-
-			ResourceBundleSelectionDialog dialog = new ResourceBundleSelectionDialog(
-			        Display.getDefault().getActiveShell(),
-			        resource.getProject());
-
-			if (dialog.open() != InputDialog.OK)
-				return;
-
-			key = dialog.getSelectedBundleId();
-
-			document.replace(startPos, endPos, key);
-
-			textFileBuffer.commit(null, false);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				bufferManager.disconnect(path, null);
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    }
 
 }

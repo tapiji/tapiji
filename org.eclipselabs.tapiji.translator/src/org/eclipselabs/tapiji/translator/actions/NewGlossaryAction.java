@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -25,50 +25,50 @@ import org.eclipselabs.tapiji.translator.utils.FileUtils;
 
 public class NewGlossaryAction implements IWorkbenchWindowActionDelegate {
 
-	/** The workbench window */
-	private IWorkbenchWindow window;
+    /** The workbench window */
+    private IWorkbenchWindow window;
 
-	@Override
-	public void run(IAction action) {
-		String fileName = FileUtils.queryFileName(window.getShell(),
-		        "New Glossary", SWT.SAVE, new String[] { "*.xml" });
+    @Override
+    public void run(IAction action) {
+	String fileName = FileUtils.queryFileName(window.getShell(),
+		"New Glossary", SWT.SAVE, new String[] { "*.xml" });
 
-		if (!fileName.endsWith(".xml")) {
-			if (fileName.endsWith("."))
-				fileName += "xml";
-			else
-				fileName += ".xml";
-		}
-
-		if (new File(fileName).exists()) {
-			String recallPattern = "The file \"{0}\" already exists. Do you want to replace this file with an empty translation glossary?";
-			MessageFormat mf = new MessageFormat(recallPattern);
-
-			if (!MessageDialog.openQuestion(window.getShell(),
-			        "File already exists!",
-			        mf.format(new String[] { fileName })))
-				return;
-		}
-
-		if (fileName != null) {
-			IWorkbenchPage page = window.getActivePage();
-			GlossaryManager.newGlossary(new File(fileName));
-		}
+	if (!fileName.endsWith(".xml")) {
+	    if (fileName.endsWith("."))
+		fileName += "xml";
+	    else
+		fileName += ".xml";
 	}
 
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
+	if (new File(fileName).exists()) {
+	    String recallPattern = "The file \"{0}\" already exists. Do you want to replace this file with an empty translation glossary?";
+	    MessageFormat mf = new MessageFormat(recallPattern);
 
+	    if (!MessageDialog.openQuestion(window.getShell(),
+		    "File already exists!",
+		    mf.format(new String[] { fileName })))
+		return;
 	}
 
-	@Override
-	public void dispose() {
-		this.window = null;
+	if (fileName != null) {
+	    IWorkbenchPage page = window.getActivePage();
+	    GlossaryManager.newGlossary(new File(fileName));
 	}
+    }
 
-	@Override
-	public void init(IWorkbenchWindow window) {
-		this.window = window;
-	}
+    @Override
+    public void selectionChanged(IAction action, ISelection selection) {
+
+    }
+
+    @Override
+    public void dispose() {
+	this.window = null;
+    }
+
+    @Override
+    public void init(IWorkbenchWindow window) {
+	this.window = window;
+    }
 
 }

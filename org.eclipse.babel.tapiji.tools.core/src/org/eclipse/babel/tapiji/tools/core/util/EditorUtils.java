@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer, Matthias Lettmayer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,7 +8,7 @@
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  *     Matthias Lettmayer - added update marker utils to update and get right position of marker (fixed issue 8)
- *     					  - fixed openEditor() to open an editor and selecting a key (fixed issue 59)
+ *                        - fixed openEditor() to open an editor and selecting a key (fixed issue 59)
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.util;
 

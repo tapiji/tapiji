@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Michael Gasser.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -25,25 +25,25 @@ import org.eclipse.ui.navigator.ILinkHelper;
  */
 public class LinkHelper implements ILinkHelper {
 
-	public static IStructuredSelection viewer;
+    public static IStructuredSelection viewer;
 
-	@Override
-	public IStructuredSelection findSelection(IEditorInput anInput) {
-		IFile file = ResourceUtil.getFile(anInput);
-		if (file != null) {
-			return new StructuredSelection(file);
-		}
-		return StructuredSelection.EMPTY;
+    @Override
+    public IStructuredSelection findSelection(IEditorInput anInput) {
+	IFile file = ResourceUtil.getFile(anInput);
+	if (file != null) {
+	    return new StructuredSelection(file);
 	}
+	return StructuredSelection.EMPTY;
+    }
 
-	@Override
-	public void activateEditor(IWorkbenchPage aPage,
-	        IStructuredSelection aSelection) {
-		if (aSelection.getFirstElement() instanceof IFile)
-			try {
-				IDE.openEditor(aPage, (IFile) aSelection.getFirstElement());
-			} catch (PartInitException e) {/**/
-			}
-	}
+    @Override
+    public void activateEditor(IWorkbenchPage aPage,
+	    IStructuredSelection aSelection) {
+	if (aSelection.getFirstElement() instanceof IFile)
+	    try {
+		IDE.openEditor(aPage, (IFile) aSelection.getFirstElement());
+	    } catch (PartInitException e) {/**/
+	    }
+    }
 
 }

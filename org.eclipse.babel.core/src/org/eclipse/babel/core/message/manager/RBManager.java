@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Alexej Strelzow.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -520,6 +520,7 @@ public class RBManager {
 				for (IProject p : fragments) {
 					p.accept(new ResourceBundleDetectionVisitor(this));
 				}
+				
 			}
 		} catch (CoreException e) {
 			logger.log(Level.SEVERE, "detectResourceBundles: accept failed!", e);

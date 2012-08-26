@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -32,47 +32,47 @@ import auditor.JSFResourceBundleDetector;
  */
 public class JSFELMessageHover implements ITextHover {
 
-	private String expressionValue = "";
-	private IProject project = null;
+    private String expressionValue = "";
+    private IProject project = null;
 
-	public final String getHoverInfo(final ITextViewer textViewer,
-	        final IRegion hoverRegion) {
-		String bundleName = JSFResourceBundleDetector.resolveResourceBundleId(
-		        textViewer.getDocument(), JSFResourceBundleDetector
-		                .getBundleVariableName(expressionValue));
-		String resourceKey = JSFResourceBundleDetector
-		        .getResourceKey(expressionValue);
+    public final String getHoverInfo(final ITextViewer textViewer,
+	    final IRegion hoverRegion) {
+	String bundleName = JSFResourceBundleDetector.resolveResourceBundleId(
+		textViewer.getDocument(), JSFResourceBundleDetector
+			.getBundleVariableName(expressionValue));
+	String resourceKey = JSFResourceBundleDetector
+		.getResourceKey(expressionValue);
 
-		return ELUtils.getResource(project, bundleName, resourceKey);
-	}
+	return ELUtils.getResource(project, bundleName, resourceKey);
+    }
 
-	public final IRegion getHoverRegion(final ITextViewer textViewer,
-	        final int documentPosition) {
-		final IStructuredDocumentContext context = IStructuredDocumentContextFactory.INSTANCE
-		        .getContext(textViewer, documentPosition);
+    public final IRegion getHoverRegion(final ITextViewer textViewer,
+	    final int documentPosition) {
+	final IStructuredDocumentContext context = IStructuredDocumentContextFactory.INSTANCE
+		.getContext(textViewer, documentPosition);
 
-		IWorkspaceContextResolver workspaceResolver = IStructuredDocumentContextResolverFactory.INSTANCE
-		        .getWorkspaceContextResolver(context);
+	IWorkspaceContextResolver workspaceResolver = IStructuredDocumentContextResolverFactory.INSTANCE
+		.getWorkspaceContextResolver(context);
 
-		project = workspaceResolver.getProject();
+	project = workspaceResolver.getProject();
 
-		if (project != null) {
-			if (!InternationalizationNature.hasNature(project))
-				return null;
-		} else
-			return null;
+	if (project != null) {
+	    if (!InternationalizationNature.hasNature(project))
+		return null;
+	} else
+	    return null;
 
-		final ITextRegionContextResolver symbolResolver = IStructuredDocumentContextResolverFactory.INSTANCE
-		        .getTextRegionResolver(context);
+	final ITextRegionContextResolver symbolResolver = IStructuredDocumentContextResolverFactory.INSTANCE
+		.getTextRegionResolver(context);
 
-		if (!symbolResolver.getRegionType().equals(
-		        DOMJSPRegionContexts.JSP_VBL_CONTENT))
-			return null;
-		expressionValue = symbolResolver.getRegionText();
+	if (!symbolResolver.getRegionType().equals(
+		DOMJSPRegionContexts.JSP_VBL_CONTENT))
+	    return null;
+	expressionValue = symbolResolver.getRegionText();
 
-		return new Region(symbolResolver.getStartOffset(),
-		        symbolResolver.getLength());
+	return new Region(symbolResolver.getStartOffset(),
+		symbolResolver.getLength());
 
-	}
+    }
 
 }

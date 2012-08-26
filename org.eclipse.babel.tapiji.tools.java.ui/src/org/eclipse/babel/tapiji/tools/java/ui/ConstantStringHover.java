@@ -1,9 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.java.ui;
 
@@ -20,75 +23,75 @@ import org.eclipse.ui.IEditorPart;
 
 public class ConstantStringHover implements IJavaEditorTextHover {
 
-	IEditorPart editor = null;
-	ResourceAuditVisitor csf = null;
-	ResourceBundleManager manager = null;
+    IEditorPart editor = null;
+    ResourceAuditVisitor csf = null;
+    ResourceBundleManager manager = null;
 
-	@Override
-	public void setEditor(IEditorPart editor) {
-		this.editor = editor;
-		initConstantStringAuditor();
+    @Override
+    public void setEditor(IEditorPart editor) {
+	this.editor = editor;
+	initConstantStringAuditor();
+    }
+
+    protected void initConstantStringAuditor() {
+	// parse editor content and extract resource-bundle access strings
+
+	// get the type of the currently loaded resource
+	ITypeRoot typeRoot = JavaUI.getEditorInputTypeRoot(editor
+		.getEditorInput());
+
+	if (typeRoot == null) {
+	    return;
 	}
 
-	protected void initConstantStringAuditor() {
-		// parse editor content and extract resource-bundle access strings
+	CompilationUnit cu = ASTutilsUI.getCompilationUnit(typeRoot);
 
-		// get the type of the currently loaded resource
-		ITypeRoot typeRoot = JavaUI.getEditorInputTypeRoot(editor
-		        .getEditorInput());
-
-		if (typeRoot == null) {
-			return;
-		}
-
-		CompilationUnit cu = ASTutilsUI.getCompilationUnit(typeRoot);
-
-		if (cu == null) {
-			return;
-		}
-
-		manager = ResourceBundleManager.getManager(cu.getJavaElement()
-		        .getResource().getProject());
-
-		// determine the element at the position of the cursur
-		csf = new ResourceAuditVisitor(null, manager.getProject().getName());
-		cu.accept(csf);
+	if (cu == null) {
+	    return;
 	}
 
-	@Override
-	public String getHoverInfo(ITextViewer textViewer, IRegion hoverRegion) {
-		initConstantStringAuditor();
-		if (hoverRegion == null) {
-			return null;
-		}
+	manager = ResourceBundleManager.getManager(cu.getJavaElement()
+		.getResource().getProject());
 
-		// get region for string literals
-		hoverRegion = getHoverRegion(textViewer, hoverRegion.getOffset());
+	// determine the element at the position of the cursur
+	csf = new ResourceAuditVisitor(null, manager.getProject().getName());
+	cu.accept(csf);
+    }
 
-		if (hoverRegion == null) {
-			return null;
-		}
-
-		String bundleName = csf.getBundleReference(hoverRegion);
-		String key = csf.getKeyAt(hoverRegion);
-
-		String hoverText = manager.getKeyHoverString(bundleName, key);
-		if (hoverText == null || hoverText.equals("")) {
-			return null;
-		} else {
-			return hoverText;
-		}
+    @Override
+    public String getHoverInfo(ITextViewer textViewer, IRegion hoverRegion) {
+	initConstantStringAuditor();
+	if (hoverRegion == null) {
+	    return null;
 	}
 
-	@Override
-	public IRegion getHoverRegion(ITextViewer textViewer, int offset) {
-		if (editor == null) {
-			return null;
-		}
+	// get region for string literals
+	hoverRegion = getHoverRegion(textViewer, hoverRegion.getOffset());
 
-		// Retrieve the property key at this position. Otherwise, null is
-		// returned.
-		return csf.getKeyAt(Long.valueOf(offset));
+	if (hoverRegion == null) {
+	    return null;
 	}
+
+	String bundleName = csf.getBundleReference(hoverRegion);
+	String key = csf.getKeyAt(hoverRegion);
+
+	String hoverText = manager.getKeyHoverString(bundleName, key);
+	if (hoverText == null || hoverText.equals("")) {
+	    return null;
+	} else {
+	    return hoverText;
+	}
+    }
+
+    @Override
+    public IRegion getHoverRegion(ITextViewer textViewer, int offset) {
+	if (editor == null) {
+	    return null;
+	}
+
+	// Retrieve the property key at this position. Otherwise, null is
+	// returned.
+	return csf.getKeyAt(Long.valueOf(offset));
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -34,92 +34,92 @@ import auditor.JSFResourceBundleDetector;
 
 public class MessageCompletionProposal implements IContentAssistProcessor {
 
-	@Override
-	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer,
-	        int offset) {
-		List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
+    @Override
+    public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer,
+	    int offset) {
+	List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
 
-		final IStructuredDocumentContext context = IStructuredDocumentContextFactory.INSTANCE
-		        .getContext(viewer, offset);
+	final IStructuredDocumentContext context = IStructuredDocumentContextFactory.INSTANCE
+		.getContext(viewer, offset);
 
-		IWorkspaceContextResolver workspaceResolver = IStructuredDocumentContextResolverFactory.INSTANCE
-		        .getWorkspaceContextResolver(context);
+	IWorkspaceContextResolver workspaceResolver = IStructuredDocumentContextResolverFactory.INSTANCE
+		.getWorkspaceContextResolver(context);
 
-		IProject project = workspaceResolver.getProject();
-		IResource resource = workspaceResolver.getResource();
+	IProject project = workspaceResolver.getProject();
+	IResource resource = workspaceResolver.getResource();
 
-		if (project != null) {
-			if (!InternationalizationNature.hasNature(project))
-				return proposals.toArray(new CompletionProposal[proposals
-				        .size()]);
-		} else
-			return proposals.toArray(new CompletionProposal[proposals.size()]);
+	if (project != null) {
+	    if (!InternationalizationNature.hasNature(project))
+		return proposals.toArray(new CompletionProposal[proposals
+			.size()]);
+	} else
+	    return proposals.toArray(new CompletionProposal[proposals.size()]);
 
-		// Compute proposals
-		String expression = getProposalPrefix(viewer.getDocument(), offset);
-		String bundleId = JSFResourceBundleDetector.resolveResourceBundleId(
-		        viewer.getDocument(),
-		        JSFResourceBundleDetector.getBundleVariableName(expression));
-		String key = JSFResourceBundleDetector.getResourceKey(expression);
+	// Compute proposals
+	String expression = getProposalPrefix(viewer.getDocument(), offset);
+	String bundleId = JSFResourceBundleDetector.resolveResourceBundleId(
+		viewer.getDocument(),
+		JSFResourceBundleDetector.getBundleVariableName(expression));
+	String key = JSFResourceBundleDetector.getResourceKey(expression);
 
-		if (expression.trim().length() > 0 && bundleId.trim().length() > 0
-		        && isNonExistingKey(project, bundleId, key)) {
-			// Add 'New Resource' proposal
-			int startpos = offset - key.length();
-			int length = key.length();
+	if (expression.trim().length() > 0 && bundleId.trim().length() > 0
+		&& isNonExistingKey(project, bundleId, key)) {
+	    // Add 'New Resource' proposal
+	    int startpos = offset - key.length();
+	    int length = key.length();
 
-			proposals.add(new NewResourceBundleEntryProposal(resource, key,
-			        startpos, length,
-			        ResourceBundleManager.getManager(project), bundleId, true));
-		}
-
-		return proposals.toArray(new ICompletionProposal[proposals.size()]);
+	    proposals.add(new NewResourceBundleEntryProposal(resource, key,
+		    startpos, length,
+		    ResourceBundleManager.getManager(project), bundleId, true));
 	}
 
-	private String getProposalPrefix(IDocument document, int offset) {
-		String content = document.get().substring(0, offset);
-		int expIntro = content.lastIndexOf("#{");
+	return proposals.toArray(new ICompletionProposal[proposals.size()]);
+    }
 
-		return content.substring(expIntro + 2, offset);
-	}
+    private String getProposalPrefix(IDocument document, int offset) {
+	String content = document.get().substring(0, offset);
+	int expIntro = content.lastIndexOf("#{");
 
-	protected boolean isNonExistingKey(IProject project, String bundleId,
-	        String key) {
-		ResourceBundleManager manager = ResourceBundleManager
-		        .getManager(project);
+	return content.substring(expIntro + 2, offset);
+    }
 
-		return !manager.isResourceExisting(bundleId, key);
-	}
+    protected boolean isNonExistingKey(IProject project, String bundleId,
+	    String key) {
+	ResourceBundleManager manager = ResourceBundleManager
+		.getManager(project);
 
-	@Override
-	public IContextInformation[] computeContextInformation(ITextViewer viewer,
-	        int offset) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	return !manager.isResourceExisting(bundleId, key);
+    }
 
-	@Override
-	public char[] getCompletionProposalAutoActivationCharacters() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public IContextInformation[] computeContextInformation(ITextViewer viewer,
+	    int offset) {
+	// TODO Auto-generated method stub
+	return null;
+    }
 
-	@Override
-	public char[] getContextInformationAutoActivationCharacters() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public char[] getCompletionProposalAutoActivationCharacters() {
+	// TODO Auto-generated method stub
+	return null;
+    }
 
-	@Override
-	public String getErrorMessage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public char[] getContextInformationAutoActivationCharacters() {
+	// TODO Auto-generated method stub
+	return null;
+    }
 
-	@Override
-	public IContextInformationValidator getContextInformationValidator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getErrorMessage() {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public IContextInformationValidator getContextInformationValidator() {
+	// TODO Auto-generated method stub
+	return null;
+    }
 
 }

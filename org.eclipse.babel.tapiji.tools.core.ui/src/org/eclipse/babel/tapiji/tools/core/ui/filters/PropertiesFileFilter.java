@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,26 +16,26 @@ import org.eclipse.jface.viewers.ViewerFilter;
 
 public class PropertiesFileFilter extends ViewerFilter {
 
-	private boolean debugEnabled = true;
+    private boolean debugEnabled = true;
 
-	public PropertiesFileFilter() {
+    public PropertiesFileFilter() {
 
-	}
+    }
 
-	@Override
-	public boolean select(Viewer viewer, Object parentElement, Object element) {
-		if (debugEnabled)
-			return true;
+    @Override
+    public boolean select(Viewer viewer, Object parentElement, Object element) {
+	if (debugEnabled)
+	    return true;
 
-		if (element.getClass().getSimpleName().equals("CompilationUnit"))
-			return false;
+	if (element.getClass().getSimpleName().equals("CompilationUnit"))
+	    return false;
 
-		if (!(element instanceof IFile))
-			return true;
+	if (!(element instanceof IFile))
+	    return true;
 
-		IFile file = (IFile) element;
+	IFile file = (IFile) element;
 
-		return file.getFileExtension().equalsIgnoreCase("properties");
-	}
+	return file.getFileExtension().equalsIgnoreCase("properties");
+    }
 
 }

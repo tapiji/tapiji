@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Michael Gasser.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,22 +20,22 @@ import org.eclipse.ui.navigator.ICommonActionExtensionSite;
  * Will be only active for VirtualResourceBundeles
  */
 public class VirtualRBActionProvider extends CommonActionProvider {
-	private IAction openAction;
+    private IAction openAction;
 
-	public VirtualRBActionProvider() {
-		// TODO Auto-generated constructor stub
-	}
+    public VirtualRBActionProvider() {
+	// TODO Auto-generated constructor stub
+    }
 
-	@Override
-	public void init(ICommonActionExtensionSite aSite) {
-		super.init(aSite);
-		openAction = new OpenVRBAction(aSite.getViewSite()
-		        .getSelectionProvider());
-	}
+    @Override
+    public void init(ICommonActionExtensionSite aSite) {
+	super.init(aSite);
+	openAction = new OpenVRBAction(aSite.getViewSite()
+		.getSelectionProvider());
+    }
 
-	@Override
-	public void fillActionBars(IActionBars actionBars) {
-		actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN,
-		        openAction);
-	}
+    @Override
+    public void fillActionBars(IActionBars actionBars) {
+	actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN,
+		openAction);
+    }
 }
