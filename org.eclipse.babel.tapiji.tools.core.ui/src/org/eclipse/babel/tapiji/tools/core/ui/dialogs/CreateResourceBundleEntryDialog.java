@@ -474,7 +474,7 @@ public class CreateResourceBundleEntryDialog extends TitleAreaDialog {
 	    }
 	});
 
-	okButton.setEnabled(true);
+	okButton.setEnabled(this.getErrorMessage() == null);
 	cancelButton.setEnabled(true);
     }
 
