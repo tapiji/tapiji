@@ -174,9 +174,8 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 	    IMessagesBundleGroup bundlegroup) {
 	Locale l1 = RBFileUtils.getLocale(f1);
 	Locale l2 = RBFileUtils.getLocale(f2);
-
-	if (!l2.equals(l1)
-		&& !(l1.toString().equals("") || l2.toString().equals(""))) {
+	
+	if (l1 != null && l2 != null && !l2.equals(l1)) {
 	    IMessage message = bundlegroup.getMessage(key, l2);
 
 	    if (message != null) {
