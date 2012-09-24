@@ -53,7 +53,7 @@ public class Activator extends Plugin {
 	super.start(context);
 	plugin = this;
 	
-	// detect 
+	// detect resource bundles 
 	RBManager.getAllMessagesBundleGroupNames();
     }
 

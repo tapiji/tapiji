@@ -482,24 +482,6 @@ public class MessagesView extends ViewPart implements
 		return;
 
 	    switch (event.getType()) {
-	    /*
-	     * case ResourceBundleChangedEvent.ADDED: if (
-	     * viewState.getSelectedProjectName().trim().length() > 0 ) { try {
-	     * ResourceBundleManager
-	     * .getManager(viewState.getSelectedProjectName())
-	     * .unregisterResourceBundleChangeListener
-	     * (viewState.getSelectedBundleId(), this); } catch (Exception e) {}
-	     * }
-	     * 
-	     * new Thread(new Runnable() {
-	     * 
-	     * public void run() { try { Thread.sleep(500); } catch (Exception
-	     * e) { } Display.getDefault().asyncExec(new Runnable() { public
-	     * void run() { try { redrawTreeViewer(); } catch (Exception e) {
-	     * e.printStackTrace(); } } });
-	     * 
-	     * } }).start(); break;
-	     */
 	    case ResourceBundleChangedEvent.ADDED:
 		// update visible locales within the context menu
 		makeVisibleLocalesActions();

@@ -42,6 +42,7 @@ public class ResourceBundleDetectionVisitor implements IResourceVisitor,
 	    } else
 		return true;
 	} catch (Exception e) {
+	    e.printStackTrace();
 	    return false;
 	}
     }

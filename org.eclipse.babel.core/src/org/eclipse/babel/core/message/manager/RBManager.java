@@ -110,7 +110,11 @@ public class RBManager {
 
 	for (IProject project : getAllSupportedProjects()) {
 	    RBManager manager = getInstance(project);
-	    bundleGroupNames.addAll(manager.getMessagesBundleGroupNames());
+	    for (String name : manager.getMessagesBundleGroupNames()) {
+		if (!bundleGroupNames.contains(name)) {
+		    bundleGroupNames.add(name);
+		}
+	    }
 	}
 	return bundleGroupNames;
     }
@@ -427,7 +431,7 @@ public class RBManager {
 
 	for (IProject p : projects) {
 	    try {
-		if (ignoreNature || p.hasNature(TAPIJI_NATURE)) {
+		if (p.isOpen() && (ignoreNature || p.hasNature(TAPIJI_NATURE))) {
 		    projs.add(p);
 		}
 	    } catch (CoreException e) {
