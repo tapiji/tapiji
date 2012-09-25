@@ -132,6 +132,7 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 			} catch (MessageException e) {
 				throw new PartInitException("Cannot create bundle group.", e); //$NON-NLS-1$
 			}
+			// register bundle group listener to refresh editor when new a bundle is added
 			messagesBundleGroup.addMessagesBundleGroupListener(new MessagesBundleGroupAdapter() {
 				@Override
 				public void messagesBundleAdded(MessagesBundle messagesBundle) {
@@ -170,7 +171,6 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 		setPageImage(index, UIUtils.getImage(UIUtils.IMAGE_RESOURCE_BUNDLE));
 
 		// Create text editor pages for each locales
-		
 		Locale[] locales = messagesBundleGroup.getLocales();
 		// first: sort the locales.
 		UIUtils.sortLocales(locales);
@@ -184,6 +184,9 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
 		}
 	}
 
+	/**
+	 * Creates a new text editor for the messages bundle and locale, which gets added to a new page
+	 */
 	private void addMessagesBundle(MessagesBundle messagesBundle, Locale locale) {
 		try {
 			IMessagesResource resource = messagesBundle.getResource();

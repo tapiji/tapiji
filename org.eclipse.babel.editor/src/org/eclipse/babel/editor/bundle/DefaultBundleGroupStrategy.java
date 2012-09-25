@@ -12,7 +12,6 @@
 package org.eclipse.babel.editor.bundle;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
@@ -170,7 +169,7 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
      * @see org.eclipse.babel.core.bundle.IBundleGroupStrategy#createBundle(java.util.Locale)
      */
     public MessagesBundle createMessagesBundle(Locale locale) {
-        // create new empty locale file
+    	// create new empty locale file
     	IFile openedFile = getOpenedFile();
     	IPath path = openedFile.getProjectRelativePath();
     	String localeStr = locale != null ? "_" + locale.toString() : "";

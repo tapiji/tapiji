@@ -649,7 +649,12 @@ public class PropertyKeySelectionTree extends Composite implements
 		        && sorter.getSortInfo().getColIdx() == 0 ? TreeType.Tree
 		        : TreeType.Flat;
 		treeViewer.refresh();
+		
+		
 		this.refreshContent(null);
+		
+		// highlight the search results
+		labelProvider.updateTreeViewer(treeViewer);
 	}
 
 	public SortInfo getSortInfo() {

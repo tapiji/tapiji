@@ -51,6 +51,7 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
     private final Composite valuesComposite;
     private final Map<Locale,I18NEntry> entryComposites = new HashMap<Locale,I18NEntry>(); 
     private Composite entriesComposite;
+    
 //    private Composite parent;
     private boolean keyTreeVisible = true;
     
@@ -188,6 +189,7 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
     public void addI18NEntry(MessagesEditor editor, Locale locale) {
     	I18NEntry i18NEntry = new I18NEntry(
                 entriesComposite, editor, locale);
+//      entryComposite.addFocusListener(localBehaviour);
         entryComposites.put(locale, i18NEntry);
         entriesComposite.layout();
     }
@@ -230,3 +232,4 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
     	return keysComposite.getTreeViewer();
     }
 }
+

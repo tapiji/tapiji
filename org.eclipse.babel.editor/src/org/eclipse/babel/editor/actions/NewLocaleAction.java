@@ -96,6 +96,4 @@ public class NewLocaleAction extends Action {
 		// open dialog
     	localeDialog.open();    	
     }
-    
-    
 }
