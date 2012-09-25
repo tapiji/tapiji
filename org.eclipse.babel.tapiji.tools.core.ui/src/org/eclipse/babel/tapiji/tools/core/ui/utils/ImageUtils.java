@@ -1,12 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2007 Pascal Essiembre.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
- *     Martin Reiterer - initial API and implementation
+ *    Pascal Essiembre - initial API and implementation
+ *    Martin Reiterer - extracting image handling from UIUtils
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.utils;
 
@@ -14,12 +15,6 @@ import org.eclipse.babel.tapiji.tools.core.ui.Activator;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
 
-/**
- * Utility methods related to application UI.
- * 
- * @author Pascal Essiembre (essiembre@users.sourceforge.net)
- * @version $Author: nl_carnage $ $Revision: 1.12 $ $Date: 2007/09/11 16:11:10 $
- */
 public final class ImageUtils {
 
 	/** Name of resource bundle image. */

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,12 +15,12 @@ import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator;
 
 public class JSFViolationResolutionGenerator implements
-        IMarkerResolutionGenerator {
+	IMarkerResolutionGenerator {
 
-	@Override
-	public IMarkerResolution[] getResolutions(IMarker marker) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public IMarkerResolution[] getResolutions(IMarker marker) {
+	// TODO Auto-generated method stub
+	return null;
+    }
 
 }

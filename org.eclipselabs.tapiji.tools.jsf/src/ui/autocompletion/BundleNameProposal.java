@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -36,126 +36,126 @@ import org.w3c.dom.Node;
 
 public class BundleNameProposal implements IContentAssistProcessor {
 
-	@Override
-	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer,
-	        int offset) {
-		List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
+    @Override
+    public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer,
+	    int offset) {
+	List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
 
-		final IStructuredDocumentContext context = IStructuredDocumentContextFactory.INSTANCE
-		        .getContext(viewer, offset);
+	final IStructuredDocumentContext context = IStructuredDocumentContextFactory.INSTANCE
+		.getContext(viewer, offset);
 
-		IWorkspaceContextResolver workspaceResolver = IStructuredDocumentContextResolverFactory.INSTANCE
-		        .getWorkspaceContextResolver(context);
+	IWorkspaceContextResolver workspaceResolver = IStructuredDocumentContextResolverFactory.INSTANCE
+		.getWorkspaceContextResolver(context);
 
-		IProject project = workspaceResolver.getProject();
-		IResource resource = workspaceResolver.getResource();
+	IProject project = workspaceResolver.getProject();
+	IResource resource = workspaceResolver.getResource();
 
-		if (project != null) {
-			if (!InternationalizationNature.hasNature(project))
-				return proposals.toArray(new ICompletionProposal[proposals
-				        .size()]);
-		} else
-			return proposals.toArray(new ICompletionProposal[proposals.size()]);
+	if (project != null) {
+	    if (!InternationalizationNature.hasNature(project))
+		return proposals.toArray(new ICompletionProposal[proposals
+			.size()]);
+	} else
+	    return proposals.toArray(new ICompletionProposal[proposals.size()]);
 
-		addBundleProposals(proposals, context, offset, viewer.getDocument(),
-		        resource);
+	addBundleProposals(proposals, context, offset, viewer.getDocument(),
+		resource);
 
-		return proposals.toArray(new ICompletionProposal[proposals.size()]);
-	}
+	return proposals.toArray(new ICompletionProposal[proposals.size()]);
+    }
 
-	private void addBundleProposals(List<ICompletionProposal> proposals,
-	        final IStructuredDocumentContext context, int startPos,
-	        IDocument document, IResource resource) {
-		final ITextRegionContextResolver resolver = IStructuredDocumentContextResolverFactory.INSTANCE
-		        .getTextRegionResolver(context);
+    private void addBundleProposals(List<ICompletionProposal> proposals,
+	    final IStructuredDocumentContext context, int startPos,
+	    IDocument document, IResource resource) {
+	final ITextRegionContextResolver resolver = IStructuredDocumentContextResolverFactory.INSTANCE
+		.getTextRegionResolver(context);
 
-		if (resolver != null) {
-			final String regionType = resolver.getRegionType();
-			startPos = resolver.getStartOffset() + 1;
+	if (resolver != null) {
+	    final String regionType = resolver.getRegionType();
+	    startPos = resolver.getStartOffset() + 1;
 
-			if (regionType != null
-			        && regionType
-			                .equals(DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE)) {
+	    if (regionType != null
+		    && regionType
+			    .equals(DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE)) {
 
-				final ITaglibContextResolver tlResolver = IStructuredDocumentContextResolverFactory.INSTANCE
-				        .getTaglibContextResolver(context);
+		final ITaglibContextResolver tlResolver = IStructuredDocumentContextResolverFactory.INSTANCE
+			.getTaglibContextResolver(context);
 
-				if (tlResolver != null) {
-					Attr attr = getAttribute(context);
-					String startString = attr.getValue();
+		if (tlResolver != null) {
+		    Attr attr = getAttribute(context);
+		    String startString = attr.getValue();
 
-					int length = startString.length();
+		    int length = startString.length();
 
-					if (attr != null) {
-						Node tagElement = attr.getOwnerElement();
-						if (tagElement == null)
-							return;
+		    if (attr != null) {
+			Node tagElement = attr.getOwnerElement();
+			if (tagElement == null)
+			    return;
 
-						String nodeName = tagElement.getNodeName();
-						if (nodeName.substring(nodeName.indexOf(":") + 1)
-						        .toLowerCase().equals("loadbundle")) {
-							ResourceBundleManager manager = ResourceBundleManager
-							        .getManager(resource.getProject());
-							for (String id : manager
-							        .getResourceBundleIdentifiers()) {
-								if (id.startsWith(startString)
-								        && id.length() != startString.length()) {
-									proposals
-									        .add(new ui.autocompletion.MessageCompletionProposal(
-									                startPos, length, id, true));
-								}
-							}
-						}
-					}
+			String nodeName = tagElement.getNodeName();
+			if (nodeName.substring(nodeName.indexOf(":") + 1)
+				.toLowerCase().equals("loadbundle")) {
+			    ResourceBundleManager manager = ResourceBundleManager
+				    .getManager(resource.getProject());
+			    for (String id : manager
+				    .getResourceBundleIdentifiers()) {
+				if (id.startsWith(startString)
+					&& id.length() != startString.length()) {
+				    proposals
+					    .add(new ui.autocompletion.MessageCompletionProposal(
+						    startPos, length, id, true));
 				}
+			    }
 			}
+		    }
 		}
+	    }
 	}
+    }
 
-	private Attr getAttribute(IStructuredDocumentContext context) {
-		final IDOMContextResolver domResolver = IStructuredDocumentContextResolverFactory.INSTANCE
-		        .getDOMContextResolver(context);
+    private Attr getAttribute(IStructuredDocumentContext context) {
+	final IDOMContextResolver domResolver = IStructuredDocumentContextResolverFactory.INSTANCE
+		.getDOMContextResolver(context);
 
-		if (domResolver != null) {
-			final Node curNode = domResolver.getNode();
+	if (domResolver != null) {
+	    final Node curNode = domResolver.getNode();
 
-			if (curNode instanceof Attr) {
-				return (Attr) curNode;
-			}
-		}
-		return null;
-
+	    if (curNode instanceof Attr) {
+		return (Attr) curNode;
+	    }
 	}
+	return null;
 
-	@Override
-	public IContextInformation[] computeContextInformation(ITextViewer viewer,
-	        int offset) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    }
 
-	@Override
-	public char[] getCompletionProposalAutoActivationCharacters() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public IContextInformation[] computeContextInformation(ITextViewer viewer,
+	    int offset) {
+	// TODO Auto-generated method stub
+	return null;
+    }
 
-	@Override
-	public char[] getContextInformationAutoActivationCharacters() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public char[] getCompletionProposalAutoActivationCharacters() {
+	// TODO Auto-generated method stub
+	return null;
+    }
 
-	@Override
-	public String getErrorMessage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public char[] getContextInformationAutoActivationCharacters() {
+	// TODO Auto-generated method stub
+	return null;
+    }
 
-	@Override
-	public IContextInformationValidator getContextInformationValidator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getErrorMessage() {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public IContextInformationValidator getContextInformationValidator() {
+	// TODO Auto-generated method stub
+	return null;
+    }
 
 }

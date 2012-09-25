@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -31,107 +31,107 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 public class LanguageUtils {
-	private static final String INITIALISATION_STRING = PropertiesSerializer.GENERATED_BY;
+    private static final String INITIALISATION_STRING = PropertiesSerializer.GENERATED_BY;
 
-	private static IFile createFile(IContainer container, String fileName,
-	        IProgressMonitor monitor) throws CoreException, IOException {
-		if (!container.exists()) {
-			if (container instanceof IFolder) {
-				((IFolder) container).create(false, false, monitor);
-			}
-		}
-
-		IFile file = container.getFile(new Path(fileName));
-		if (!file.exists()) {
-			InputStream s = new StringBufferInputStream(INITIALISATION_STRING);
-			file.create(s, true, monitor);
-			s.close();
-		}
-
-		return file;
+    private static IFile createFile(IContainer container, String fileName,
+	    IProgressMonitor monitor) throws CoreException, IOException {
+	if (!container.exists()) {
+	    if (container instanceof IFolder) {
+		((IFolder) container).create(false, false, monitor);
+	    }
 	}
 
-	/**
-	 * Checks if ResourceBundle provides a given locale. If the locale is not
-	 * provided, creates a new properties-file with the ResourceBundle-basename
-	 * and the index of the given locale.
-	 * 
-	 * @param project
-	 * @param rbId
-	 * @param locale
-	 */
-	public static void addLanguageToResourceBundle(IProject project,
-	        final String rbId, final Locale locale) {
-		ResourceBundleManager rbManager = ResourceBundleManager
-		        .getManager(project);
-
-		if (rbManager.getProvidedLocales(rbId).contains(locale)) {
-			return;
-		}
-
-		final IResource file = rbManager.getRandomFile(rbId);
-		final IContainer c = ResourceUtils.getCorrespondingFolders(
-		        file.getParent(), project);
-
-		new Job("create new propertfile") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					String newFilename = ResourceBundleManager
-					        .getResourceBundleName(file);
-					if (locale.getLanguage() != null
-					        && !locale.getLanguage().equalsIgnoreCase(
-					                ResourceBundleManager.defaultLocaleTag)
-					        && !locale.getLanguage().equals("")) {
-						newFilename += "_" + locale.getLanguage();
-					}
-					if (locale.getCountry() != null
-					        && !locale.getCountry().equals("")) {
-						newFilename += "_" + locale.getCountry();
-					}
-					if (locale.getVariant() != null
-					        && !locale.getCountry().equals("")) {
-						newFilename += "_" + locale.getVariant();
-					}
-					newFilename += ".properties";
-
-					createFile(c, newFilename, monitor);
-				} catch (CoreException e) {
-					Logger.logError(
-					        "File for locale "
-					                + locale
-					                + " could not be created in ResourceBundle "
-					                + rbId, e);
-				} catch (IOException e) {
-					Logger.logError(
-					        "File for locale "
-					                + locale
-					                + " could not be created in ResourceBundle "
-					                + rbId, e);
-				}
-				monitor.done();
-				return Status.OK_STATUS;
-			}
-		}.schedule();
+	IFile file = container.getFile(new Path(fileName));
+	if (!file.exists()) {
+	    InputStream s = new StringBufferInputStream(INITIALISATION_STRING);
+	    file.create(s, true, monitor);
+	    s.close();
 	}
 
-	/**
-	 * Adds new properties-files for a given locale to all ResourceBundles of a
-	 * project. If a ResourceBundle already contains the language, happens
-	 * nothing.
-	 * 
-	 * @param project
-	 * @param locale
-	 */
-	public static void addLanguageToProject(IProject project, Locale locale) {
-		ResourceBundleManager rbManager = ResourceBundleManager
-		        .getManager(project);
+	return file;
+    }
 
-		// Audit if all resourecbundles provide this locale. if not - add new
-		// file
-		for (String rbId : rbManager.getResourceBundleIdentifiers()) {
-			addLanguageToResourceBundle(project, rbId, locale);
-		}
+    /**
+     * Checks if ResourceBundle provides a given locale. If the locale is not
+     * provided, creates a new properties-file with the ResourceBundle-basename
+     * and the index of the given locale.
+     * 
+     * @param project
+     * @param rbId
+     * @param locale
+     */
+    public static void addLanguageToResourceBundle(IProject project,
+	    final String rbId, final Locale locale) {
+	ResourceBundleManager rbManager = ResourceBundleManager
+		.getManager(project);
+
+	if (rbManager.getProvidedLocales(rbId).contains(locale)) {
+	    return;
 	}
+
+	final IResource file = rbManager.getRandomFile(rbId);
+	final IContainer c = ResourceUtils.getCorrespondingFolders(
+		file.getParent(), project);
+
+	new Job("create new propertfile") {
+	    @Override
+	    protected IStatus run(IProgressMonitor monitor) {
+		try {
+		    String newFilename = ResourceBundleManager
+			    .getResourceBundleName(file);
+		    if (locale.getLanguage() != null
+			    && !locale.getLanguage().equalsIgnoreCase(
+				    ResourceBundleManager.defaultLocaleTag)
+			    && !locale.getLanguage().equals("")) {
+			newFilename += "_" + locale.getLanguage();
+		    }
+		    if (locale.getCountry() != null
+			    && !locale.getCountry().equals("")) {
+			newFilename += "_" + locale.getCountry();
+		    }
+		    if (locale.getVariant() != null
+			    && !locale.getCountry().equals("")) {
+			newFilename += "_" + locale.getVariant();
+		    }
+		    newFilename += ".properties";
+
+		    createFile(c, newFilename, monitor);
+		} catch (CoreException e) {
+		    Logger.logError(
+			    "File for locale "
+				    + locale
+				    + " could not be created in ResourceBundle "
+				    + rbId, e);
+		} catch (IOException e) {
+		    Logger.logError(
+			    "File for locale "
+				    + locale
+				    + " could not be created in ResourceBundle "
+				    + rbId, e);
+		}
+		monitor.done();
+		return Status.OK_STATUS;
+	    }
+	}.schedule();
+    }
+
+    /**
+     * Adds new properties-files for a given locale to all ResourceBundles of a
+     * project. If a ResourceBundle already contains the language, happens
+     * nothing.
+     * 
+     * @param project
+     * @param locale
+     */
+    public static void addLanguageToProject(IProject project, Locale locale) {
+	ResourceBundleManager rbManager = ResourceBundleManager
+		.getManager(project);
+
+	// Audit if all resourecbundles provide this locale. if not - add new
+	// file
+	for (String rbId : rbManager.getResourceBundleIdentifiers()) {
+	    addLanguageToResourceBundle(project, rbId, locale);
+	}
+    }
 
 }

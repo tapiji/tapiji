@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -24,33 +24,33 @@ import org.eclipse.core.runtime.CoreException;
 
 public class ResourceFinder implements IResourceVisitor, IResourceDeltaVisitor {
 
-	List<IResource> javaResources = null;
-	Set<String> supportedExtensions = null;
+    List<IResource> javaResources = null;
+    Set<String> supportedExtensions = null;
 
-	public ResourceFinder(Set<String> ext) {
-		javaResources = new ArrayList<IResource>();
-		supportedExtensions = ext;
-	}
+    public ResourceFinder(Set<String> ext) {
+	javaResources = new ArrayList<IResource>();
+	supportedExtensions = ext;
+    }
 
-	@Override
-	public boolean visit(IResource resource) throws CoreException {
-		if (I18nBuilder.isResourceAuditable(resource, supportedExtensions)) {
-			Logger.logInfo("Audit necessary for resource '"
-			        + resource.getFullPath().toOSString() + "'");
-			javaResources.add(resource);
-			return false;
-		} else
-			return true;
-	}
+    @Override
+    public boolean visit(IResource resource) throws CoreException {
+	if (I18nBuilder.isResourceAuditable(resource, supportedExtensions)) {
+	    Logger.logInfo("Audit necessary for resource '"
+		    + resource.getFullPath().toOSString() + "'");
+	    javaResources.add(resource);
+	    return false;
+	} else
+	    return true;
+    }
 
-	public List<IResource> getResources() {
-		return javaResources;
-	}
+    public List<IResource> getResources() {
+	return javaResources;
+    }
 
-	@Override
-	public boolean visit(IResourceDelta delta) throws CoreException {
-		visit(delta.getResource());
-		return true;
-	}
+    @Override
+    public boolean visit(IResourceDelta delta) throws CoreException {
+	visit(delta.getResource());
+	return true;
+    }
 
 }

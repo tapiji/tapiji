@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -21,43 +21,43 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 
 public class ResourceBundleDetectionVisitor implements IResourceVisitor,
-        IResourceDeltaVisitor {
+	IResourceDeltaVisitor {
 
-	private IProject project = null;
+    private IProject project = null;
 
-	public ResourceBundleDetectionVisitor(IProject project) {
-		this.project = project;
-	}
+    public ResourceBundleDetectionVisitor(IProject project) {
+	this.project = project;
+    }
 
-	@Override
-	public boolean visit(IResource resource) throws CoreException {
-		try {
-			if (RBFileUtils.isResourceBundleFile(resource)) {
-				Logger.logInfo("Loading Resource-Bundle file '"
-				        + resource.getName() + "'");
-				if (!ResourceBundleManager.isResourceExcluded(resource)) {
-					ResourceBundleManager.getManager(project)
-					        .addBundleResource(resource);
-				}
-				return false;
-			} else {
-				return true;
-			}
-		} catch (Exception e) {
-			return false;
+    @Override
+    public boolean visit(IResource resource) throws CoreException {
+	try {
+	    if (RBFileUtils.isResourceBundleFile(resource)) {
+		Logger.logInfo("Loading Resource-Bundle file '"
+			+ resource.getName() + "'");
+		if (!ResourceBundleManager.isResourceExcluded(resource)) {
+		    ResourceBundleManager.getManager(project)
+			    .addBundleResource(resource);
 		}
-	}
-
-	@Override
-	public boolean visit(IResourceDelta delta) throws CoreException {
-		IResource resource = delta.getResource();
-
-		if (RBFileUtils.isResourceBundleFile(resource)) {
-			// ResourceBundleManager.getManager(resource.getProject()).bundleResourceModified(delta);
-			return false;
-		}
-
+		return false;
+	    } else {
 		return true;
+	    }
+	} catch (Exception e) {
+	    return false;
 	}
+    }
+
+    @Override
+    public boolean visit(IResourceDelta delta) throws CoreException {
+	IResource resource = delta.getResource();
+
+	if (RBFileUtils.isResourceBundleFile(resource)) {
+	    // ResourceBundleManager.getManager(resource.getProject()).bundleResourceModified(delta);
+	    return false;
+	}
+
+	return true;
+    }
 
 }

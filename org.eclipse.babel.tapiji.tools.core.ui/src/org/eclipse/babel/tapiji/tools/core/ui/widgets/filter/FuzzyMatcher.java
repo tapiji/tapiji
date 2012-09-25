@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,46 +20,46 @@ import org.eclipse.jface.viewers.Viewer;
 
 public class FuzzyMatcher extends ExactMatcher {
 
-	protected ILevenshteinDistanceAnalyzer lvda;
-	protected float minimumSimilarity = 0.75f;
+    protected ILevenshteinDistanceAnalyzer lvda;
+    protected float minimumSimilarity = 0.75f;
 
-	public FuzzyMatcher(StructuredViewer viewer) {
-		super(viewer);
-		lvda = AnalyzerFactory.getLevenshteinDistanceAnalyzer();
-		;
+    public FuzzyMatcher(StructuredViewer viewer) {
+	super(viewer);
+	lvda = AnalyzerFactory.getLevenshteinDistanceAnalyzer();
+	;
+    }
+
+    public double getMinimumSimilarity() {
+	return minimumSimilarity;
+    }
+
+    public void setMinimumSimilarity(float similarity) {
+	this.minimumSimilarity = similarity;
+    }
+
+    @Override
+    public boolean select(Viewer viewer, Object parentElement, Object element) {
+	boolean exactMatch = super.select(viewer, parentElement, element);
+	boolean match = exactMatch;
+
+	IValuedKeyTreeNode vkti = (IValuedKeyTreeNode) element;
+	FilterInfo filterInfo = (FilterInfo) vkti.getInfo();
+
+	for (Locale l : vkti.getLocales()) {
+	    String value = vkti.getValue(l);
+	    if (filterInfo.hasFoundInLocale(l))
+		continue;
+	    double dist = lvda.analyse(value, getPattern());
+	    if (dist >= minimumSimilarity) {
+		filterInfo.addFoundInLocale(l);
+		filterInfo.addSimilarity(l, dist);
+		match = true;
+		filterInfo.addFoundInLocaleRange(l, 0, value.length());
+	    }
 	}
 
-	public double getMinimumSimilarity() {
-		return minimumSimilarity;
-	}
-
-	public void setMinimumSimilarity(float similarity) {
-		this.minimumSimilarity = similarity;
-	}
-
-	@Override
-	public boolean select(Viewer viewer, Object parentElement, Object element) {
-		boolean exactMatch = super.select(viewer, parentElement, element);
-		boolean match = exactMatch;
-
-		IValuedKeyTreeNode vkti = (IValuedKeyTreeNode) element;
-		FilterInfo filterInfo = (FilterInfo) vkti.getInfo();
-
-		for (Locale l : vkti.getLocales()) {
-			String value = vkti.getValue(l);
-			if (filterInfo.hasFoundInLocale(l))
-				continue;
-			double dist = lvda.analyse(value, getPattern());
-			if (dist >= minimumSimilarity) {
-				filterInfo.addFoundInLocale(l);
-				filterInfo.addSimilarity(l, dist);
-				match = true;
-				filterInfo.addFoundInLocaleRange(l, 0, value.length());
-			}
-		}
-
-		vkti.setInfo(filterInfo);
-		return match;
-	}
+	vkti.setInfo(filterInfo);
+	return match;
+    }
 
 }

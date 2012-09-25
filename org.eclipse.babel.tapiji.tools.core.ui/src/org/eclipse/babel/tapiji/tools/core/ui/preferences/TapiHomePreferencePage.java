@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -21,24 +21,24 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class TapiHomePreferencePage extends PreferencePage implements
-        IWorkbenchPreferencePage {
+	IWorkbenchPreferencePage {
 
-	@Override
-	public void init(IWorkbench workbench) {
-		// TODO Auto-generated method stub
+    @Override
+    public void init(IWorkbench workbench) {
+	// TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	protected Control createContents(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(1, true));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    @Override
+    protected Control createContents(Composite parent) {
+	Composite composite = new Composite(parent, SWT.NONE);
+	composite.setLayout(new GridLayout(1, true));
+	composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		Label description = new Label(composite, SWT.WRAP);
-		description.setText("See sub-pages for settings.");
+	Label description = new Label(composite, SWT.WRAP);
+	description.setText("See sub-pages for settings.");
 
-		return parent;
-	}
+	return parent;
+    }
 
 }

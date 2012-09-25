@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,22 +18,22 @@ import org.eclipse.jface.viewers.Viewer;
 
 public class LocaleContentProvider implements IStructuredContentProvider {
 
-	@Override
-	public void dispose() {
-	}
+    @Override
+    public void dispose() {
+    }
 
-	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+    @Override
+    public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 
-	}
+    }
 
-	@Override
-	public Object[] getElements(Object inputElement) {
-		if (inputElement instanceof List) {
-			List<Locale> locales = (List<Locale>) inputElement;
-			return locales.toArray(new Locale[locales.size()]);
-		}
-		return null;
+    @Override
+    public Object[] getElements(Object inputElement) {
+	if (inputElement instanceof List) {
+	    List<Locale> locales = (List<Locale>) inputElement;
+	    return locales.toArray(new Locale[locales.size()]);
 	}
+	return null;
+    }
 
 }

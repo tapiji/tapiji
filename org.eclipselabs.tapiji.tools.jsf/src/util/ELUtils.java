@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,13 +15,13 @@ import org.eclipse.core.resources.IProject;
 
 public class ELUtils {
 
-	public static String getResource(IProject project, String bundleName,
-	        String key) {
-		ResourceBundleManager manager = ResourceBundleManager
-		        .getManager(project);
-		if (manager.isResourceExisting(bundleName, key))
-			return manager.getKeyHoverString(bundleName, key);
-		else
-			return null;
-	}
+    public static String getResource(IProject project, String bundleName,
+	    String key) {
+	ResourceBundleManager manager = ResourceBundleManager
+		.getManager(project);
+	if (manager.isResourceExisting(bundleName, key))
+	    return manager.getKeyHoverString(bundleName, key);
+	else
+	    return null;
+    }
 }

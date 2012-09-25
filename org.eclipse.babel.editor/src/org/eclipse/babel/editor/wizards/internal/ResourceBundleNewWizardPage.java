@@ -1,23 +1,15 @@
-/*
- * Copyright (C) 2003, 2004  Pascal Essiembre, Essiembre Consultant Inc.
- * 
- * This file is part of Essiembre ResourceBundle Editor.
- * 
- * Essiembre ResourceBundle Editor is free software; you can redistribute it 
- * and/or modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * Essiembre ResourceBundle Editor is distributed in the hope that it will be 
- * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with Essiembre ResourceBundle Editor; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
- * Boston, MA  02111-1307  USA
- */
+/*******************************************************************************
+ * Copyright (c) 2007 Pascal Essiembre.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Pascal Essiembre - initial API and implementation
+ *    Clemente Lodi-Fè - fixing bugs and setting dialog defaults
+ ******************************************************************************/
+
 package org.eclipse.babel.editor.wizards.internal;
 
 import java.util.Locale;
@@ -55,7 +47,7 @@ import org.eclipse.ui.dialogs.ContainerSelectionDialog;
  * the new bundle group as well as the bundle group common base name. The page
  * will only accept file name without the extension.
  * @author Pascal Essiembre (essiembre@users.sourceforge.net)
- * @version $Author: pessiembr $ $Revision: 1.1 $ $Date: 2008/01/11 04:17:06 $
+ * @version $Author: droy $ $Revision: 1.2 $ $Date: 2012/07/18 20:13:09 $
  */
 public class ResourceBundleNewWizardPage extends WizardPage {
 

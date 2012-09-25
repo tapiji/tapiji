@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
+ * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,62 +20,62 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 
 public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
-        ITableColorProvider, ITableFontProvider {
+	ITableColorProvider, ITableFontProvider {
 
-	private IMessagesBundle locale;
-	
-	public ValueKeyTreeLabelProvider(IMessagesBundle iBundle) {
-		this.locale = iBundle;
-	}
+    private IMessagesBundle locale;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Image getColumnImage(Object element, int columnIndex) {
-		return null;
-	}
+    public ValueKeyTreeLabelProvider(IMessagesBundle iBundle) {
+	this.locale = iBundle;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getColumnText(Object element, int columnIndex) {
-		try {
-			IKeyTreeNode item = (IKeyTreeNode) element;
-			IMessage entry = locale.getMessage(item.getMessageKey());
-			if (entry != null) {
-				String value = entry.getValue();
-				if (value.length() > 40)
-					value = value.substring(0, 39) + "...";
-			}
-		} catch (Exception e) {
-		}
-		return "";
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Image getColumnImage(Object element, int columnIndex) {
+	return null;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Color getBackground(Object element, int columnIndex) {
-		return null;// return new Color(Display.getDefault(), 255, 0, 0);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getColumnText(Object element, int columnIndex) {
+	try {
+	    IKeyTreeNode item = (IKeyTreeNode) element;
+	    IMessage entry = locale.getMessage(item.getMessageKey());
+	    if (entry != null) {
+		String value = entry.getValue();
+		if (value.length() > 40)
+		    value = value.substring(0, 39) + "...";
+	    }
+	} catch (Exception e) {
 	}
+	return "";
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Color getForeground(Object element, int columnIndex) {
-		return null;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Color getBackground(Object element, int columnIndex) {
+	return null;// return new Color(Display.getDefault(), 255, 0, 0);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Font getFont(Object element, int columnIndex) {
-		return null; // UIUtils.createFont(SWT.BOLD);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Color getForeground(Object element, int columnIndex) {
+	return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Font getFont(Object element, int columnIndex) {
+	return null; // UIUtils.createFont(SWT.BOLD);
+    }
 
 }
