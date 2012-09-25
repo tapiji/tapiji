@@ -69,7 +69,7 @@ public class ExportToResourceBundleResolution implements IMarkerResolution2 {
 	    DialogConfiguration config = dialog.new DialogConfiguration();
 	    config.setPreselectedKey("");
 	    config.setPreselectedMessage("");
-	    config.setPreselectedBundle((startPos + 1 < document.getLength() && endPos > 1) ? document
+	    config.setPreselectedMessage((startPos + 1 < document.getLength() && endPos > 1) ? document
 		    .get(startPos + 1, endPos - 2) : "");
 	    config.setPreselectedLocale("");
 	    config.setProjectName(resource.getProject().getName());
