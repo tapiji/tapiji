@@ -14,6 +14,7 @@ import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
@@ -22,134 +23,137 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends Plugin {
 
-	// The plug-in ID
-	public static final String PLUGIN_ID = "org.eclipse.babel.tapiji.tools.core";
+    // The plug-in ID
+    public static final String PLUGIN_ID = "org.eclipse.babel.tapiji.tools.core";
 
-	// The builder extension id
-	public static final String BUILDER_EXTENSION_ID = "org.eclipse.babel.tapiji.tools.core.builderExtension";
+    // The builder extension id
+    public static final String BUILDER_EXTENSION_ID = "org.eclipse.babel.tapiji.tools.core.builderExtension";
 
-	// The shared instance
-	private static Activator plugin;
+    // The shared instance
+    private static Activator plugin;
 
-	// Resource bundle.
-	private ResourceBundle resourceBundle;
+    // Resource bundle.
+    private ResourceBundle resourceBundle;
 
-	/**
-	 * The constructor
-	 */
-	public Activator() {
+    /**
+     * The constructor
+     */
+    public Activator() {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
+     * )
+     */
+    @Override
+    public void start(BundleContext context) throws Exception {
+	super.start(context);
+	plugin = this;
+	
+	// detect resource bundles 
+	RBManager.getAllMessagesBundleGroupNames();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
+     * )
+     */
+    @Override
+    public void stop(BundleContext context) throws Exception {
+	plugin = null;
+	super.stop(context);
+    }
+
+    /**
+     * Returns the shared instance
+     * 
+     * @return the shared instance
+     */
+    public static Activator getDefault() {
+	return plugin;
+    }
+
+    /**
+     * Returns the string from the plugin's resource bundle, or 'key' if not
+     * found.
+     * 
+     * @param key
+     *            the key for which to fetch a localized text
+     * @return localized string corresponding to key
+     */
+    public static String getString(String key) {
+	ResourceBundle bundle = Activator.getDefault().getResourceBundle();
+	try {
+	    return (bundle != null) ? bundle.getString(key) : key;
+	} catch (MissingResourceException e) {
+	    return key;
 	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-	 * )
-	 */
-	@Override
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-		plugin = this;
-	}
+    /**
+     * Returns the string from the plugin's resource bundle, or 'key' if not
+     * found.
+     * 
+     * @param key
+     *            the key for which to fetch a localized text
+     * @param arg1
+     *            runtime argument to replace in key value
+     * @return localized string corresponding to key
+     */
+    public static String getString(String key, String arg1) {
+	return MessageFormat.format(getString(key), new String[] { arg1 });
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
-	 * )
-	 */
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		plugin = null;
-		super.stop(context);
-	}
+    /**
+     * Returns the string from the plugin's resource bundle, or 'key' if not
+     * found.
+     * 
+     * @param key
+     *            the key for which to fetch a localized text
+     * @param arg1
+     *            runtime first argument to replace in key value
+     * @param arg2
+     *            runtime second argument to replace in key value
+     * @return localized string corresponding to key
+     */
+    public static String getString(String key, String arg1, String arg2) {
+	return MessageFormat
+		.format(getString(key), new String[] { arg1, arg2 });
+    }
 
-	/**
-	 * Returns the shared instance
-	 * 
-	 * @return the shared instance
-	 */
-	public static Activator getDefault() {
-		return plugin;
-	}
+    /**
+     * Returns the string from the plugin's resource bundle, or 'key' if not
+     * found.
+     * 
+     * @param key
+     *            the key for which to fetch a localized text
+     * @param arg1
+     *            runtime argument to replace in key value
+     * @param arg2
+     *            runtime second argument to replace in key value
+     * @param arg3
+     *            runtime third argument to replace in key value
+     * @return localized string corresponding to key
+     */
+    public static String getString(String key, String arg1, String arg2,
+	    String arg3) {
+	return MessageFormat.format(getString(key), new String[] { arg1, arg2,
+		arg3 });
+    }
 
-	/**
-	 * Returns the string from the plugin's resource bundle, or 'key' if not
-	 * found.
-	 * 
-	 * @param key
-	 *            the key for which to fetch a localized text
-	 * @return localized string corresponding to key
-	 */
-	public static String getString(String key) {
-		ResourceBundle bundle = Activator.getDefault().getResourceBundle();
-		try {
-			return (bundle != null) ? bundle.getString(key) : key;
-		} catch (MissingResourceException e) {
-			return key;
-		}
-	}
-
-	/**
-	 * Returns the string from the plugin's resource bundle, or 'key' if not
-	 * found.
-	 * 
-	 * @param key
-	 *            the key for which to fetch a localized text
-	 * @param arg1
-	 *            runtime argument to replace in key value
-	 * @return localized string corresponding to key
-	 */
-	public static String getString(String key, String arg1) {
-		return MessageFormat.format(getString(key), new String[] { arg1 });
-	}
-
-	/**
-	 * Returns the string from the plugin's resource bundle, or 'key' if not
-	 * found.
-	 * 
-	 * @param key
-	 *            the key for which to fetch a localized text
-	 * @param arg1
-	 *            runtime first argument to replace in key value
-	 * @param arg2
-	 *            runtime second argument to replace in key value
-	 * @return localized string corresponding to key
-	 */
-	public static String getString(String key, String arg1, String arg2) {
-		return MessageFormat
-		        .format(getString(key), new String[] { arg1, arg2 });
-	}
-
-	/**
-	 * Returns the string from the plugin's resource bundle, or 'key' if not
-	 * found.
-	 * 
-	 * @param key
-	 *            the key for which to fetch a localized text
-	 * @param arg1
-	 *            runtime argument to replace in key value
-	 * @param arg2
-	 *            runtime second argument to replace in key value
-	 * @param arg3
-	 *            runtime third argument to replace in key value
-	 * @return localized string corresponding to key
-	 */
-	public static String getString(String key, String arg1, String arg2,
-	        String arg3) {
-		return MessageFormat.format(getString(key), new String[] { arg1, arg2,
-		        arg3 });
-	}
-
-	/**
-	 * Returns the plugin's resource bundle.
-	 * 
-	 * @return resource bundle
-	 */
-	protected ResourceBundle getResourceBundle() {
-		return resourceBundle;
-	}
+    /**
+     * Returns the plugin's resource bundle.
+     * 
+     * @return resource bundle
+     */
+    protected ResourceBundle getResourceBundle() {
+	return resourceBundle;
+    }
 
 }

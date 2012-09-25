@@ -62,9 +62,11 @@ public final class MessagesBundleGroupFactory {
 
     	//check we are inside an eclipse plugin project where NL is supported at runtime:
 		IProject proj = file.getProject();
-		if (proj == null || !UIUtils.hasNature(proj, UIUtils.PDE_NATURE)) { //$NON-NLS-1$
-			return createDefaultBundleGroup(site, file);
-		}
+		try {
+		    if (proj == null || !proj.hasNature(UIUtils.PDE_NATURE)) { //$NON-NLS-1$
+		    	return createDefaultBundleGroup(site, file);
+		    }
+		} catch (CoreException e) { }
 
     	IFolder nl = getNLFolder(file);
     	

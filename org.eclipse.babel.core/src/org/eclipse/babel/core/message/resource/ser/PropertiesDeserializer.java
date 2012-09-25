@@ -117,7 +117,7 @@ public class PropertiesDeserializer {
                     value = value.substring(1);
                 }
                 
-                if (config.isUnicodeUnescapeEnabled()) {
+                if (this.config != null && config.isUnicodeUnescapeEnabled()) {
                     key = convertEncodedToUnicode(key);
                     value = convertEncodedToUnicode(value);
                 } else {
