@@ -25,7 +25,9 @@ Require-Bundle: org.eclipse.ui;resolution:=optional,
  org.eclipse.rap.ui.views;bundle-version="1.5.0";resolution:=optional,
  org.eclipse.rap.rwt.supplemental.filedialog;bundle-version="1.5.0";resolution:=optional,
  org.eclipse.rap.ui.forms;bundle-version="1.5.0";resolution:=optional,
- org.eclipse.ui.forms;bundle-version="3.5.101";resolution:=optional
+ org.eclipse.ui.forms;bundle-version="3.5.101";resolution:=optional,
+ org.eclipselabs.tapiji.translator.rap.model;bundle-version="0.0.2";resolution:=optional,
+ org.eclipselabs.tapiji.translator.rap.helpers;resolution:=optional
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %plugin.provider
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

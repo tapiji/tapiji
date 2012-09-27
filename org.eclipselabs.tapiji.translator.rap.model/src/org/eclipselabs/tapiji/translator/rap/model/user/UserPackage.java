@@ -84,7 +84,7 @@ public interface UserPackage extends EPackage {
 	int USER__PASSWORD = 1;
 
 	/**
-	 * The feature id for the '<em><b>Stored RBs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Stored RBs</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -112,13 +112,22 @@ public interface UserPackage extends EPackage {
 	int PROPERTIES_FILE = 1;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTIES_FILE__ID = 0;
+
+	/**
 	 * The feature id for the '<em><b>Path</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROPERTIES_FILE__PATH = 0;
+	int PROPERTIES_FILE__PATH = 1;
 
 	/**
 	 * The number of structural features of the '<em>Properties File</em>' class.
@@ -127,7 +136,7 @@ public interface UserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROPERTIES_FILE_FEATURE_COUNT = 1;
+	int PROPERTIES_FILE_FEATURE_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl <em>Resource Bundle</em>}' class.
@@ -140,13 +149,22 @@ public interface UserPackage extends EPackage {
 	int RESOURCE_BUNDLE = 2;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_BUNDLE__ID = 0;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_BUNDLE__NAME = 0;
+	int RESOURCE_BUNDLE__NAME = 1;
 
 	/**
 	 * The feature id for the '<em><b>Local Files</b></em>' containment reference list.
@@ -155,7 +173,25 @@ public interface UserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_BUNDLE__LOCAL_FILES = 1;
+	int RESOURCE_BUNDLE__LOCAL_FILES = 2;
+
+	/**
+	 * The feature id for the '<em><b>Shared Users</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_BUNDLE__SHARED_USERS = 3;
+
+	/**
+	 * The feature id for the '<em><b>Owner</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_BUNDLE__OWNER = 4;
 
 	/**
 	 * The number of structural features of the '<em>Resource Bundle</em>' class.
@@ -164,7 +200,7 @@ public interface UserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_BUNDLE_FEATURE_COUNT = 2;
+	int RESOURCE_BUNDLE_FEATURE_COUNT = 5;
 
 
 	/**
@@ -200,10 +236,10 @@ public interface UserPackage extends EPackage {
 	EAttribute getUser_Password();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipselabs.tapiji.translator.rap.model.user.User#getStoredRBs <em>Stored RBs</em>}'.
+	 * Returns the meta object for the reference list '{@link org.eclipselabs.tapiji.translator.rap.model.user.User#getStoredRBs <em>Stored RBs</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Stored RBs</em>'.
+	 * @return the meta object for the reference list '<em>Stored RBs</em>'.
 	 * @see org.eclipselabs.tapiji.translator.rap.model.user.User#getStoredRBs()
 	 * @see #getUser()
 	 * @generated
@@ -219,6 +255,17 @@ public interface UserPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getPropertiesFile();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile#getId()
+	 * @see #getPropertiesFile()
+	 * @generated
+	 */
+	EAttribute getPropertiesFile_Id();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile#getPath <em>Path</em>}'.
@@ -242,6 +289,17 @@ public interface UserPackage extends EPackage {
 	EClass getResourceBundle();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getId()
+	 * @see #getResourceBundle()
+	 * @generated
+	 */
+	EAttribute getResourceBundle_Id();
+
+	/**
 	 * Returns the meta object for the attribute '{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -262,6 +320,28 @@ public interface UserPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getResourceBundle_LocalFiles();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getSharedUsers <em>Shared Users</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Shared Users</em>'.
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getSharedUsers()
+	 * @see #getResourceBundle()
+	 * @generated
+	 */
+	EReference getResourceBundle_SharedUsers();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getOwner <em>Owner</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Owner</em>'.
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getOwner()
+	 * @see #getResourceBundle()
+	 * @generated
+	 */
+	EReference getResourceBundle_Owner();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -312,7 +392,7 @@ public interface UserPackage extends EPackage {
 		EAttribute USER__PASSWORD = eINSTANCE.getUser_Password();
 
 		/**
-		 * The meta object literal for the '<em><b>Stored RBs</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Stored RBs</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -328,6 +408,14 @@ public interface UserPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PROPERTIES_FILE = eINSTANCE.getPropertiesFile();
+
+		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROPERTIES_FILE__ID = eINSTANCE.getPropertiesFile_Id();
 
 		/**
 		 * The meta object literal for the '<em><b>Path</b></em>' attribute feature.
@@ -348,6 +436,14 @@ public interface UserPackage extends EPackage {
 		EClass RESOURCE_BUNDLE = eINSTANCE.getResourceBundle();
 
 		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RESOURCE_BUNDLE__ID = eINSTANCE.getResourceBundle_Id();
+
+		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -362,6 +458,22 @@ public interface UserPackage extends EPackage {
 		 * @generated
 		 */
 		EReference RESOURCE_BUNDLE__LOCAL_FILES = eINSTANCE.getResourceBundle_LocalFiles();
+
+		/**
+		 * The meta object literal for the '<em><b>Shared Users</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RESOURCE_BUNDLE__SHARED_USERS = eINSTANCE.getResourceBundle_SharedUsers();
+
+		/**
+		 * The meta object literal for the '<em><b>Owner</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RESOURCE_BUNDLE__OWNER = eINSTANCE.getResourceBundle_Owner();
 
 	}
 

@@ -6,11 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.internal.resources.Project;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.rwt.RWT;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -20,6 +23,7 @@ import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserFactory;
 import org.eclipselabs.tapiji.translator.views.StorageView;
+import org.hibernate.criterion.Projection;
 
 /**
  * Utility methods to handle the storage of resource bundles. 
@@ -29,7 +33,7 @@ import org.eclipselabs.tapiji.translator.views.StorageView;
 public class StorageUtils {
 	
 	/**
-	 * Checks if the given resource bundle name existe already in the storage of the logged in user.
+	 * Checks if the given resource bundle name exists already in the storage of the logged in user.
 	 * @param bundleName A resource bundle name.
 	 * @return Returns true if the resource bundle with the given name exists already in user storage, otherwise false.
 	 */
@@ -76,15 +80,23 @@ public class StorageUtils {
 		
 		// delete non existing properties files from db
 		for (ResourceBundle rb : rbs) {
-			List<PropertiesFile> localFiles = new ArrayList<PropertiesFile>(rb.getLocalFiles());			
+			List<PropertiesFile> localFiles = new ArrayList<PropertiesFile>(rb.getLocalFiles());
+			IProject project = null;
+			try {
+				project = FileRAPUtils.getProject(rb.getOwner().getUsername());
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}			
 			for (PropertiesFile file : localFiles) {
-				if (! FileRAPUtils.existsProjectFile(FileRAPUtils.getUserProject(), file.getFilename())) {
+				if (! FileRAPUtils.existsProjectFile(project, file.getFilename())) {
 					rb.getLocalFiles().remove(file);
 					saveToDB = true;
 				}
 			}
 			if (rb.getLocalFiles().isEmpty()) {
+				EcoreUtil.delete(rb);
 				user.getStoredRBs().remove(rb);
+				// TODO remove resource bundle from DB				
 				saveToDB = true;
 			}							
 			allUserFiles.addAll(rb.getLocalFiles());
@@ -107,6 +119,7 @@ public class StorageUtils {
 					ResourceBundle newRB = createResourceBundle(ifile);
 					if (newRB != null) {
 						user.getStoredRBs().add(newRB);
+						newRB.setOwner(user);
 						saveToDB = true;
 					}
 				}
@@ -147,8 +160,10 @@ public class StorageUtils {
 		}
 		
 		// add rb to user (set rb to non temporary)
-		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
+		User user = UserUtils.getUser();
 		user.getStoredRBs().add(rb);
+		// set owner (set rb to non temporary)
+		rb.setOwner(user);
 		
 		// persist rb and properties files
 		try {
@@ -180,7 +195,7 @@ public class StorageUtils {
 		
 		if (! rb.isTemporary())
 			try {
-				rb.getUser().eResource().save(null);
+				rb.getOwner().eResource().save(null);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -232,7 +247,7 @@ public class StorageUtils {
 			// create new rb
 			if (rb == null) {
 				rb = UserFactory.eINSTANCE.createResourceBundle();
-				rb.setName(bundleName);				
+				rb.setName(bundleName);
 				rb.getLocalFiles().add(createPropertiesFile(ifile));
 				sessionRBs.put(bundleName, rb);
 			// add new local to rb

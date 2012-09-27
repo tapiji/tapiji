@@ -9,19 +9,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.eclipse.babel.editor.IMessagesEditor;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -32,12 +32,9 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.rwt.RWT;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.HelpListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchPage;
@@ -47,6 +44,7 @@ import org.eclipselabs.tapiji.translator.actions.LogoutAction;
 import org.eclipselabs.tapiji.translator.rap.dialogs.DownloadDialog;
 import org.eclipselabs.tapiji.translator.rap.dialogs.LoginDialog;
 import org.eclipselabs.tapiji.translator.rap.dialogs.NewLocaleDialog;
+import org.eclipselabs.tapiji.translator.rap.dialogs.ShareDialog;
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
@@ -345,7 +343,10 @@ public class StorageView extends ViewPart {
 	}
 	
 	public ResourceBundle getSelectedRB() {
-		TreeItem item = treeViewer.getTree().getSelection()[0];
+		TreeItem[] items = treeViewer.getTree().getSelection();
+		if (items.length == 0)
+			return null;
+		TreeItem item = items[0];
 		// get resourceBundle item
 		if (! (item.getData() instanceof ResourceBundle))
 			item = item.getParentItem();
@@ -392,6 +393,7 @@ public class StorageView extends ViewPart {
 		List<PropertiesFile> deleteFiles = new ArrayList<PropertiesFile>();
 		boolean openEditor = false;
 		
+		
 		if (selectedItem instanceof ResourceBundle) {
 			rb = (ResourceBundle) selectedItem;
 			deleteFiles.addAll(rb.getLocalFiles());
@@ -402,28 +404,58 @@ public class StorageView extends ViewPart {
 			deleteFiles.add(file);
 		}
 		
-		// close editor if still opened
-		openEditor = EditorUtils.closeEditorOfRB(rb, true);
-		
 		try {
-			// delete files
-			for (PropertiesFile file : deleteFiles) {
-				// delete file from hd 
-				IFile ifile = FileRAPUtils.getFile(file);
-				ifile.delete(true, null);
-				
-				// remove file from resource bundle
-				rb.getLocalFiles().remove(file);				
-			}
+			User currentUser = UserUtils.getUser();
+			User ownerUser = rb.getOwner();
 			
-			// update database
-			if (! rb.isTemporary()) {
-				User user = rb.getUser();
-				// delete rb if all locals were deleted
-				if (rb.getLocalFiles().isEmpty())
-					user.getStoredRBs().remove(rb);
-				// update/remove rb				
-				user.eResource().save(null);
+			// shared Resource Bundle, user not owner of RB
+			if (! currentUser.equals(ownerUser)) {
+				// delete RB
+				if (deleteFiles.size() > 1) {
+					// remove user relation to rb
+					currentUser.getStoredRBs().remove(rb);
+					currentUser.eResource().save(null);
+				// delete properties file	
+				} else {
+					// currently not allowed for not owned RBs
+				}
+			// user owner of RB
+			} else {			
+				// delete files
+				for (PropertiesFile file : deleteFiles) {
+					// delete file from hd 
+					IFile ifile = FileRAPUtils.getFile(file);
+					ifile.delete(true, null);
+					
+					// remove file from resource bundle
+					rb.getLocalFiles().remove(file);				
+				}
+				
+				// update database
+				if (! rb.isTemporary()) {					
+					// delete rb if all locals were deleted
+					if (rb.getLocalFiles().isEmpty()) {
+						EcoreUtil.delete(rb);
+						ownerUser.getStoredRBs().remove(rb);
+					}
+					// update/remove rb				
+					ownerUser.eResource().save(null);
+				}
+				
+				// refresh msg editor if opened
+				IMessagesEditor msgEditor = EditorUtils.getMessagesEditor(rb);
+				if (msgEditor != null) {
+					// rb is deleted -> close editor
+					if (rb.getLocalFiles().isEmpty())
+						EditorUtils.closeEditorOfRB(rb, false);
+					// properties file is deleted -> remove message bundle
+					else {
+						PropertiesFile propsFile = deleteFiles.get(0);
+						Locale deletedLocale = new Locale(propsFile.getLocale());
+						msgEditor.getBundleGroup().removeMessagesBundle(deletedLocale);
+					}
+						
+				}
 			}
 			
 		} catch (IOException e) {
@@ -432,10 +464,7 @@ public class StorageView extends ViewPart {
 			e.printStackTrace();
 		}
 		
-		// reopen editor if it was closed before
-		if (openEditor && ! rb.getLocalFiles().isEmpty()) {
-			EditorUtils.openEditorOfRB(rb);
-		}
+		
 		
 		// refresh tree
 		refreshSelectedRB(rb);
@@ -527,17 +556,16 @@ public class StorageView extends ViewPart {
 			// store in db
 			if (! rb.isTemporary()) {
 				try {
-					rb.getUser().eResource().save(null);
+					rb.getOwner().eResource().save(null);					
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 			
-			// reopen editor if opened
-			if (EditorUtils.isRBOpened(rb)) {
-				EditorUtils.closeEditorOfRB(rb, true);
-				EditorUtils.openEditorOfRB(rb);
-			}
+			// refresh msg editor if opened
+			IMessagesEditor msgEditor = EditorUtils.getMessagesEditor(rb);
+			if (msgEditor != null)
+				msgEditor.getBundleGroup().addMessagesBundle(newLocal);			
 			
 			refresh();
 		}
@@ -545,6 +573,11 @@ public class StorageView extends ViewPart {
 	
 	public void downloadSelectedRB() {
 		DownloadDialog dialog = new DownloadDialog(getSite().getShell(), getSelectedRB());
+		dialog.open();
+	}
+	
+	public void shareSelectedRB() {
+		ShareDialog dialog = new ShareDialog(getSite().getShell(), getSelectedRB());
 		dialog.open();
 	}
 }

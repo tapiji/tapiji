@@ -20,7 +20,7 @@ import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
 import org.eclipse.babel.core.message.tree.internal.IKeyTreeModelListener;
 import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.internal.MessagesEditorMarkers;
 import org.eclipse.babel.editor.tree.IKeyTreeContributor;
@@ -55,14 +55,14 @@ import org.eclipse.swt.widgets.Tree;
  */
 public class KeyTreeContributor implements IKeyTreeContributor {
 
-	private MessagesEditor editor;
+	private AbstractMessagesEditor editor;
     private AbstractKeyTreeModel treeModel;
     private TreeType treeType;
     
     /**
      * 
      */
-    public KeyTreeContributor(final MessagesEditor editor) {
+    public KeyTreeContributor(final AbstractMessagesEditor editor) {
         super();
         this.editor = editor;
         this.treeModel = new AbstractKeyTreeModel(editor.getBundleGroup());
@@ -163,11 +163,15 @@ public class KeyTreeContributor implements IKeyTreeContributor {
     private void contributeMarkers(final TreeViewer treeViewer) {
         editor.getMarkers().addObserver(new Observer() {
             public void update(Observable o, Object arg) {
-            	Display.getDefault().asyncExec(new Runnable(){
-					public void run() {
-		                treeViewer.refresh();
-					}
-				});
+            	Display display = treeViewer.getTree().getDisplay();
+            	// [RAP] only refresh tree viewer in this UIThread
+            	if (display.equals(Display.getCurrent())) {
+	            	display.asyncExec(new Runnable(){
+						public void run() {
+			                treeViewer.refresh();
+						}
+					});
+            	}
             }
         });
 //      editor.addChangeListener(new MessagesEditorChangeAdapter() {
@@ -341,7 +345,7 @@ public class KeyTreeContributor implements IKeyTreeContributor {
         try {
         	Class<?> clazz = Class
         			.forName(AbstractRenameKeyAction.INSTANCE_CLASS);
-			Constructor<?> cons = clazz.getConstructor(MessagesEditor.class, TreeViewer.class);
+			Constructor<?> cons = clazz.getConstructor(AbstractMessagesEditor.class, TreeViewer.class);
 			renameKeyAction = (AbstractRenameKeyAction) cons
 					.newInstance(editor, treeViewer);
         } catch (Exception e) {

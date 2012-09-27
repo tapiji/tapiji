@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.babel.core.message.internal.MessagesBundle;
-import org.eclipse.babel.core.message.internal.MessagesBundleAdapter;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroupAdapter;
 import org.eclipse.babel.editor.IMessagesEditor;
 import org.eclipse.core.resources.IFile;
@@ -29,6 +28,7 @@ public class EditorUtils {
 	/** Messages Editor ID */
 	public static final String MSG_EDITOR_ID = FileOpenAction.RESOURCE_BUNDLE_EDITOR;
 	
+	
 	/**
 	 * Opens a given resource bundle in a new editor only if it's not already opened. 
 	 * Uses the first local file of resource bundle for creating a FileEditorInput as input for the Messages Editor.
@@ -42,7 +42,6 @@ public class EditorUtils {
 			IEditorPart openedEditor = getActivePage().openEditor( new FileEditorInput(FileRAPUtils.getFile(rb.getLocalFiles().get(0))), 
 					MSG_EDITOR_ID);
 			
-			
 			if (openedEditor instanceof IMessagesEditor) {
 				// add msg bundle group listener to opened editor which refreshes storage view if new local is added
 				IMessagesEditor msgEditor = (IMessagesEditor) openedEditor;
@@ -51,6 +50,8 @@ public class EditorUtils {
 					public void messagesBundleAdded(
 							MessagesBundle messagesBundle) {
 						StorageUtils.refreshStorageView();
+						
+						// TODO inform other storage views which share resource bundle
 					}
 				});
 				
@@ -119,7 +120,7 @@ public class EditorUtils {
 	}
 	
 	/**
-	 * Returns a list of opened editors of a given resource bundle. 
+	 * Returns a list of opened editors of a given resource bundle (ONLY in this UIThread). 
 	 * Searches through all opened editor references and compares the file path of the opened 
 	 * editor with the path of the local files of resource bundle.
 	 * If a local file of resource bundle matches the editor file, then the resource bundle is 
@@ -164,4 +165,15 @@ public class EditorUtils {
 		return rb;
 	}
 	
+	public static IMessagesEditor getMessagesEditor(ResourceBundle rb) {
+		List<IEditorReference> editorRefs = getOpenedEditors(rb);
+		if (editorRefs.isEmpty())
+			return null;
+		
+		IEditorPart openedEditor = editorRefs.get(0).getEditor(false);
+		if (openedEditor instanceof IMessagesEditor)
+			return (IMessagesEditor) openedEditor;
+		
+		return null;
+	}
 }

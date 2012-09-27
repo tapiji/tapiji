@@ -13,7 +13,7 @@ package org.eclipse.babel.editor.tree.actions;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
 import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -30,13 +30,13 @@ public abstract class AbstractTreeAction extends Action {
 //    private static final KeyTreeNode[] EMPTY_TREE_NODES = new KeyTreeNode[]{};
     
     protected final TreeViewer treeViewer;
-    protected final MessagesEditor editor;
+    protected final AbstractMessagesEditor editor;
     
     /**
      * 
      */
     public AbstractTreeAction(
-            MessagesEditor editor, TreeViewer treeViewer) {
+            AbstractMessagesEditor editor, TreeViewer treeViewer) {
         super();
         this.treeViewer = treeViewer;
         this.editor = editor;
@@ -45,7 +45,7 @@ public abstract class AbstractTreeAction extends Action {
      * 
      */
     public AbstractTreeAction(
-            MessagesEditor editor, TreeViewer treeViewer, int style) {
+            AbstractMessagesEditor editor, TreeViewer treeViewer, int style) {
         super("", style);
         this.treeViewer = treeViewer;
         this.editor = editor;
@@ -81,7 +81,7 @@ public abstract class AbstractTreeAction extends Action {
         return treeViewer;
     }
     
-    protected MessagesEditor getEditor() {
+    protected AbstractMessagesEditor getEditor() {
         return editor;
     }
     

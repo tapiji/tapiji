@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.actions;
 
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.action.Action;
@@ -22,7 +22,7 @@ import org.eclipse.jface.action.IAction;
  */
 public class KeyTreeVisibleAction extends Action {
 
-    private MessagesEditor editor;
+    private AbstractMessagesEditor editor;
     
     /**
      * 
@@ -35,7 +35,7 @@ public class KeyTreeVisibleAction extends Action {
     }
 
     //TODO RBEditor hold such an action registry.  Then move this method to constructor
-    public void setEditor(MessagesEditor editor) {
+    public void setEditor(AbstractMessagesEditor editor) {
         this.editor = editor;
         editor.addChangeListener(new MessagesEditorChangeAdapter() {
             public void keyTreeVisibleChanged(boolean visible) {

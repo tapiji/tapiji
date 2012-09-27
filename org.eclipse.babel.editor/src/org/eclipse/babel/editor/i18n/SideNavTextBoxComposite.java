@@ -12,7 +12,7 @@ package org.eclipse.babel.editor.i18n;
 
 import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.babel.core.message.tree.visitor.NodePathRegexVisitor;
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.swt.SWT;
@@ -40,8 +40,8 @@ public class SideNavTextBoxComposite extends Composite {
     
     /** Text box to add a new key. */
     private Text addTextBox;
-
-    private MessagesEditor editor;
+    private Button addButton;
+    private AbstractMessagesEditor editor;
     
     /**
      * Constructor.
@@ -50,7 +50,7 @@ public class SideNavTextBoxComposite extends Composite {
      */
     public SideNavTextBoxComposite(
             Composite parent,
-            final MessagesEditor editor) {
+            final AbstractMessagesEditor editor) {
         super(parent, SWT.NONE);
         this.editor = editor;
 
@@ -75,7 +75,7 @@ public class SideNavTextBoxComposite extends Composite {
         addTextBox.setLayoutData(gridData);
 
         // Add button
-        final Button addButton = new Button(this, SWT.PUSH);
+        addButton = new Button(this, SWT.PUSH);
         addButton.setText(MessagesEditorPlugin.getString("key.add")); //$NON-NLS-1$
         addButton.setEnabled(false);
         addButton.addSelectionListener(new SelectionAdapter() {
@@ -124,5 +124,11 @@ public class SideNavTextBoxComposite extends Composite {
     
     private boolean isNewKey(String key) {
         return !editor.getBundleGroup().isMessageKey(key) && key.length() > 0;
+    }
+    
+    @Override
+    public void setEnabled(boolean enabled) {
+    	super.setEnabled(enabled);
+    	addButton.setEnabled(enabled);
     }
 }

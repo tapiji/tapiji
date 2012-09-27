@@ -155,15 +155,21 @@ public class FileRAPUtils extends FileUtils {
 	/**
 	 * Returns the corresponding project of a given resource bundle. If the resource 
 	 * bundle is temporary, it's stored in the session project, otherwise it's stored
-	 * in the user project.
+	 * in the user project of resource bundle's owner (project name = username).
 	 * @param rb resource bundle
 	 * @return The project of resource bundle.
 	 */
 	public static IProject getProject(ResourceBundle rb) {
+		IProject project = null;
 		if (rb.isTemporary())
-			return getSessionProject();
+			project = getSessionProject();
 		else
-			return getUserProject();
+			try {
+				project = getProject(rb.getOwner().getUsername());
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		return project;
 	}
 	
 	/**

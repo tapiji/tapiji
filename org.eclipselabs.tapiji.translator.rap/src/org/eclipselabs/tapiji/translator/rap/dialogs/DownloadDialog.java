@@ -47,7 +47,7 @@ public class DownloadDialog extends Dialog {
 		resourceBundle = rb;
 	}
 	
-	public ResourceBundle getFiles() {
+	public ResourceBundle getRB() {
 		return resourceBundle;
 	}
 	

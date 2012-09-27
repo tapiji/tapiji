@@ -2,6 +2,8 @@
  */
 package org.eclipselabs.tapiji.translator.rap.model.user.impl;
 
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -20,6 +22,7 @@ import org.eclipselabs.tapiji.translator.rap.model.user.UserPackage;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.PropertiesFileImpl#getId <em>Id</em>}</li>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.PropertiesFileImpl#getPath <em>Path</em>}</li>
  * </ul>
  * </p>
@@ -27,6 +30,26 @@ import org.eclipselabs.tapiji.translator.rap.model.user.UserPackage;
  * @generated
  */
 public class PropertiesFileImpl extends EObjectImpl implements PropertiesFile {
+	/**
+	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getId()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final long ID_EDEFAULT = 0L;
+
+	/**
+	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getId()
+	 * @generated
+	 * @ordered
+	 */
+	protected long id = ID_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getPath() <em>Path</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -71,6 +94,27 @@ public class PropertiesFileImpl extends EObjectImpl implements PropertiesFile {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setId(long newId) {
+		long oldId = id;
+		id = newId;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, UserPackage.PROPERTIES_FILE__ID, oldId, id));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getPath() {
 		return path;
 	}
@@ -93,8 +137,12 @@ public class PropertiesFileImpl extends EObjectImpl implements PropertiesFile {
 	 * @generated NOT
 	 */
 	public String getFilename() {
-		java.io.File file = new java.io.File(path);
-		return file.getName();
+		if (path != null) {
+			java.io.File file = new java.io.File(path);
+			return file.getName();
+		}
+		
+		return null;
 	}
 
 	/**
@@ -127,11 +175,31 @@ public class PropertiesFileImpl extends EObjectImpl implements PropertiesFile {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getLocale() {
+		String filename = getFilename();
+		String locale = null;
+		if (filename != null) {
+			// filename -> BUNDLENAME_LOCAL.EXT			
+			int indexOfPoint = filename.lastIndexOf('.');			
+			int indexOfUnderscore = filename.lastIndexOf('_');
+			if (indexOfPoint != -1 && indexOfUnderscore != -1)			
+				locale = filename.substring(indexOfUnderscore+1,indexOfPoint);
+		}
+		return locale;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case UserPackage.PROPERTIES_FILE__ID:
+				return getId();
 			case UserPackage.PROPERTIES_FILE__PATH:
 				return getPath();
 		}
@@ -146,6 +214,9 @@ public class PropertiesFileImpl extends EObjectImpl implements PropertiesFile {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case UserPackage.PROPERTIES_FILE__ID:
+				setId((Long)newValue);
+				return;
 			case UserPackage.PROPERTIES_FILE__PATH:
 				setPath((String)newValue);
 				return;
@@ -161,6 +232,9 @@ public class PropertiesFileImpl extends EObjectImpl implements PropertiesFile {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case UserPackage.PROPERTIES_FILE__ID:
+				setId(ID_EDEFAULT);
+				return;
 			case UserPackage.PROPERTIES_FILE__PATH:
 				setPath(PATH_EDEFAULT);
 				return;
@@ -176,6 +250,8 @@ public class PropertiesFileImpl extends EObjectImpl implements PropertiesFile {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case UserPackage.PROPERTIES_FILE__ID:
+				return id != ID_EDEFAULT;
 			case UserPackage.PROPERTIES_FILE__PATH:
 				return PATH_EDEFAULT == null ? path != null : !PATH_EDEFAULT.equals(path);
 		}
@@ -192,12 +268,20 @@ public class PropertiesFileImpl extends EObjectImpl implements PropertiesFile {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (path: ");
+		result.append(" (id: ");
+		result.append(id);
+		result.append(", path: ");
 		result.append(path);
 		result.append(')');
 		return result.toString();
 	}
 	
+	// don't override (Teneo/EMF restriction) see http://www.eclipse.org/forums/index.php?t=msg&goto=71909&
+	@Override
+	public final int hashCode() {
+		return super.hashCode();
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)
@@ -216,5 +300,5 @@ public class PropertiesFileImpl extends EObjectImpl implements PropertiesFile {
 		
 		return super.equals(obj);
 	}
-
+	
 } //PropertiesFileImpl

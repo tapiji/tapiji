@@ -14,7 +14,7 @@ package org.eclipse.babel.editor.actions;
 import java.util.Locale;
 
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.editor.widgets.LocaleSelector;
 import org.eclipse.jface.action.Action;
@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class NewLocaleAction extends Action {
 
-    private MessagesEditor editor;
+    private AbstractMessagesEditor editor;
     
     /**
      * 
@@ -41,7 +41,7 @@ public class NewLocaleAction extends Action {
     }
 
     //TODO RBEditor hold such an action registry.  Then move this method to constructor
-    public void setEditor(MessagesEditor editor) {
+    public void setEditor(AbstractMessagesEditor editor) {
         this.editor = editor;
     }
 

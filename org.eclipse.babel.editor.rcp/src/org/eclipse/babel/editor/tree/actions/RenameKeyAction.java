@@ -1,7 +1,7 @@
 package org.eclipse.babel.editor.tree.actions;
 
 import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.refactoring.RenameKeyProcessor;
 import org.eclipse.babel.editor.refactoring.RenameKeyWizard;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -10,7 +10,7 @@ import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
 
 public class RenameKeyAction extends AbstractRenameKeyAction {
 	
-	public RenameKeyAction(MessagesEditor editor, TreeViewer treeViewer) {
+	public RenameKeyAction(AbstractMessagesEditor editor, TreeViewer treeViewer) {
 		super(editor, treeViewer);
 	}
 

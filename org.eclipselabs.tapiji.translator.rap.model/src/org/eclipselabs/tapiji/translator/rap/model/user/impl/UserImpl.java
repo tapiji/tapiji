@@ -11,8 +11,10 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserPackage;
@@ -76,7 +78,7 @@ public class UserImpl extends EObjectImpl implements User {
 	protected String password = PASSWORD_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getStoredRBs() <em>Stored RBs</em>}' containment reference list.
+	 * The cached value of the '{@link #getStoredRBs() <em>Stored RBs</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getStoredRBs()
@@ -164,23 +166,9 @@ public class UserImpl extends EObjectImpl implements User {
 	 */
 	public EList<ResourceBundle> getStoredRBs() {
 		if (storedRBs == null) {
-			storedRBs = new EObjectContainmentEList<ResourceBundle>(ResourceBundle.class, this, UserPackage.USER__STORED_RBS);
+			storedRBs = new EObjectResolvingEList<ResourceBundle>(ResourceBundle.class, this, UserPackage.USER__STORED_RBS);
 		}
 		return storedRBs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case UserPackage.USER__STORED_RBS:
-				return ((InternalEList<?>)getStoredRBs()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -281,4 +269,29 @@ public class UserImpl extends EObjectImpl implements User {
 		return result.toString();
 	}
 
+	// don't override (Teneo/EMF restriction) see http://www.eclipse.org/forums/index.php?t=msg&goto=71909&
+	@Override
+	public final int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
+		if (obj == null)
+			return false;
+		
+		if (obj instanceof User) {
+			User otherUser = (User) obj;
+			
+			if (getUsername().equals(otherUser.getUsername()))
+					return true;
+			
+			return false;
+		}
+		
+		return super.equals(obj);
+	}
+	
 } //UserImpl

@@ -4,14 +4,14 @@ import java.util.Collection;
 
 import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.TreeItem;
 
 public class RenameKeyAction extends AbstractRenameKeyAction {
 	
-	public RenameKeyAction(MessagesEditor editor, TreeViewer treeViewer) {
+	public RenameKeyAction(AbstractMessagesEditor editor, TreeViewer treeViewer) {
 		super(editor, treeViewer);
 	}
 

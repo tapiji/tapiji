@@ -12,7 +12,7 @@ package org.eclipse.babel.editor.views;
 
 
 
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.tree.actions.CollapseAllAction;
 import org.eclipse.babel.editor.tree.actions.ExpandAllAction;
 import org.eclipse.babel.editor.tree.actions.FlatModelAction;
@@ -31,9 +31,9 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
  */
 public class MessagesBundleGroupOutline extends ContentOutlinePage {
 
-    private final MessagesEditor editor;
+    private final AbstractMessagesEditor editor;
 	
-	public MessagesBundleGroupOutline(MessagesEditor editor) {
+	public MessagesBundleGroupOutline(AbstractMessagesEditor editor) {
 		super();
         this.editor = editor;
 	}

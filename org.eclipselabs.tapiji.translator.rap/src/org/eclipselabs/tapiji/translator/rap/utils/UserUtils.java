@@ -9,6 +9,7 @@ import org.eclipse.rwt.RWT;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextActivation;
 import org.eclipse.ui.contexts.IContextService;
+import org.eclipselabs.tapiji.translator.rap.helpers.utils.DBUtils;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserFactory;
 
@@ -169,5 +170,23 @@ public class UserUtils {
 	 */
 	public static User getUser() {
 		return (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
+	}
+	
+	public static User getUser(String username) {
+		
+		//DBUtils.getDataStore().
+		Resource resource = DBUtils.getPersistentData();
+		EList<EObject> registeredObjects = resource.getContents();
+		
+		for (EObject obj : registeredObjects) {
+			if (obj instanceof User) {
+				User user = (User) obj;
+				if (user.getUsername().equals(username)) {
+					return user;
+				}
+			}
+		}
+		// username not found
+		return null;
 	}
 }

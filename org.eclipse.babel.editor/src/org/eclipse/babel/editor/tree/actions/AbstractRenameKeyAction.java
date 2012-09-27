@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.tree.actions;
 
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -24,7 +24,7 @@ public abstract class AbstractRenameKeyAction extends AbstractTreeAction {
 	
 	public static final String INSTANCE_CLASS = "org.eclipse.babel.editor.tree.actions.RenameKeyAction";
 	
-    public AbstractRenameKeyAction(MessagesEditor editor, TreeViewer treeViewer) {
+    public AbstractRenameKeyAction(AbstractMessagesEditor editor, TreeViewer treeViewer) {
 		super(editor, treeViewer);
 		setText(MessagesEditorPlugin.getString("key.rename") + " ..."); //$NON-NLS-1$
 		setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_RENAME));

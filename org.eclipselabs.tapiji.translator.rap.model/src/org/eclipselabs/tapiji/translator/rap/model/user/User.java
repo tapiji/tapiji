@@ -35,7 +35,8 @@ public interface User extends EObject {
 	 * @return the value of the '<em>Username</em>' attribute.
 	 * @see #setUsername(String)
 	 * @see org.eclipselabs.tapiji.translator.rap.model.user.UserPackage#getUser_Username()
-	 * @model extendedMetaData="name='username' kind='element'"
+	 * @model id="true"
+	 *        extendedMetaData="name='username' kind='elementWildcard'"
 	 * @generated
 	 */
 	String getUsername();
@@ -82,7 +83,7 @@ public interface User extends EObject {
 	void setPasswordEncrypted(String password);
 	
 	/**
-	 * Returns the value of the '<em><b>Stored RBs</b></em>' containment reference list.
+	 * Returns the value of the '<em><b>Stored RBs</b></em>' reference list.
 	 * The list contents are of type {@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -90,9 +91,9 @@ public interface User extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Stored RBs</em>' containment reference list.
+	 * @return the value of the '<em>Stored RBs</em>' reference list.
 	 * @see org.eclipselabs.tapiji.translator.rap.model.user.UserPackage#getUser_StoredRBs()
-	 * @model containment="true"
+	 * @model
 	 * @generated
 	 */
 	EList<ResourceBundle> getStoredRBs();

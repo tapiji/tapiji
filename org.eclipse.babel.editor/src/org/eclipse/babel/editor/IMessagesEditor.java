@@ -20,4 +20,6 @@ public interface IMessagesEditor {
 	MessagesBundleGroup getBundleGroup();
 
 	void setTitleName(String string);
+	
+	void setEnabled(boolean enabled);
 }

@@ -159,7 +159,9 @@ public class PropertiesFileGroupStrategy implements IMessagesBundleGroupStrategy
     
     public String createMessagesBundleId() {
     	String path = file.getAbsolutePath();
-    	int index = path.indexOf("src");
+    	int index = path.indexOf("src");    	
+    	if (index == -1 )
+    		return "";
     	String pathBeforeSrc = path.substring(0, index - 1);
     	int lastIndexOf = pathBeforeSrc.lastIndexOf(File.separatorChar);
     	String projectName = path.substring(lastIndexOf + 1, index - 1);

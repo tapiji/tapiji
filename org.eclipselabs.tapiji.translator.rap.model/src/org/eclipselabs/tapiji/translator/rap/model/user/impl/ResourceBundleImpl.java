@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
@@ -30,14 +31,37 @@ import org.eclipselabs.tapiji.translator.rap.model.user.UserPackage;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl#getId <em>Id</em>}</li>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl#getLocalFiles <em>Local Files</em>}</li>
+ *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl#getSharedUsers <em>Shared Users</em>}</li>
+ *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl#getOwner <em>Owner</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
+	/**
+	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getId()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final long ID_EDEFAULT = 0L;
+
+	/**
+	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getId()
+	 * @generated
+	 * @ordered
+	 */
+	protected long id = ID_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -69,6 +93,26 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 	protected EList<PropertiesFile> localFiles;
 		
 	/**
+	 * The cached value of the '{@link #getSharedUsers() <em>Shared Users</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSharedUsers()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<User> sharedUsers;
+
+	/**
+	 * The cached value of the '{@link #getOwner() <em>Owner</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOwner()
+	 * @generated
+	 * @ordered
+	 */
+	protected User owner;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -85,6 +129,27 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 	@Override
 	protected EClass eStaticClass() {
 		return UserPackage.Literals.RESOURCE_BUNDLE;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setId(long newId) {
+		long oldId = id;
+		id = newId;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, UserPackage.RESOURCE_BUNDLE__ID, oldId, id));
 	}
 
 	/**
@@ -115,9 +180,59 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 	 */
 	public EList<PropertiesFile> getLocalFiles() {
 		if (localFiles == null) {
-			localFiles = new EObjectContainmentEList<PropertiesFile>(PropertiesFile.class, this, UserPackage.RESOURCE_BUNDLE__LOCAL_FILES);
+			localFiles = new EObjectContainmentEList.Resolving<PropertiesFile>(PropertiesFile.class, this, UserPackage.RESOURCE_BUNDLE__LOCAL_FILES);
 		}
 		return localFiles;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<User> getSharedUsers() {
+		if (sharedUsers == null) {
+			sharedUsers = new EObjectResolvingEList<User>(User.class, this, UserPackage.RESOURCE_BUNDLE__SHARED_USERS);
+		}
+		return sharedUsers;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public User getOwner() {
+		if (owner != null && owner.eIsProxy()) {
+			InternalEObject oldOwner = (InternalEObject)owner;
+			owner = (User)eResolveProxy(oldOwner);
+			if (owner != oldOwner) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, UserPackage.RESOURCE_BUNDLE__OWNER, oldOwner, owner));
+			}
+		}
+		return owner;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public User basicGetOwner() {
+		return owner;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOwner(User newOwner) {
+		User oldOwner = owner;
+		owner = newOwner;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, UserPackage.RESOURCE_BUNDLE__OWNER, oldOwner, owner));
 	}
 
 	/**
@@ -126,23 +241,23 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 	 * @generated NOT
 	 */
 	public boolean isTemporary() {
-		if (getUser() != null)
+		if (getOwner() != null)
 			return false;
 		
 		return true;
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public User getUser() {
-		if (eContainer() instanceof User) {
-	        return (User) eContainer();
-	    }
-		return null;
-	}
+//	/**
+//	 * <!-- begin-user-doc -->
+//	 * <!-- end-user-doc -->
+//	 * @generated NOT
+//	 */
+//	public User getUser() {
+//		if (eContainer() instanceof User) {
+//	        return (User) eContainer();
+//	    }
+//		return null;
+//	}
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -166,10 +281,17 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case UserPackage.RESOURCE_BUNDLE__ID:
+				return getId();
 			case UserPackage.RESOURCE_BUNDLE__NAME:
 				return getName();
 			case UserPackage.RESOURCE_BUNDLE__LOCAL_FILES:
 				return getLocalFiles();
+			case UserPackage.RESOURCE_BUNDLE__SHARED_USERS:
+				return getSharedUsers();
+			case UserPackage.RESOURCE_BUNDLE__OWNER:
+				if (resolve) return getOwner();
+				return basicGetOwner();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -183,12 +305,22 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case UserPackage.RESOURCE_BUNDLE__ID:
+				setId((Long)newValue);
+				return;
 			case UserPackage.RESOURCE_BUNDLE__NAME:
 				setName((String)newValue);
 				return;
 			case UserPackage.RESOURCE_BUNDLE__LOCAL_FILES:
 				getLocalFiles().clear();
 				getLocalFiles().addAll((Collection<? extends PropertiesFile>)newValue);
+				return;
+			case UserPackage.RESOURCE_BUNDLE__SHARED_USERS:
+				getSharedUsers().clear();
+				getSharedUsers().addAll((Collection<? extends User>)newValue);
+				return;
+			case UserPackage.RESOURCE_BUNDLE__OWNER:
+				setOwner((User)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -202,11 +334,20 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case UserPackage.RESOURCE_BUNDLE__ID:
+				setId(ID_EDEFAULT);
+				return;
 			case UserPackage.RESOURCE_BUNDLE__NAME:
 				setName(NAME_EDEFAULT);
 				return;
 			case UserPackage.RESOURCE_BUNDLE__LOCAL_FILES:
 				getLocalFiles().clear();
+				return;
+			case UserPackage.RESOURCE_BUNDLE__SHARED_USERS:
+				getSharedUsers().clear();
+				return;
+			case UserPackage.RESOURCE_BUNDLE__OWNER:
+				setOwner((User)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -220,10 +361,16 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case UserPackage.RESOURCE_BUNDLE__ID:
+				return id != ID_EDEFAULT;
 			case UserPackage.RESOURCE_BUNDLE__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case UserPackage.RESOURCE_BUNDLE__LOCAL_FILES:
 				return localFiles != null && !localFiles.isEmpty();
+			case UserPackage.RESOURCE_BUNDLE__SHARED_USERS:
+				return sharedUsers != null && !sharedUsers.isEmpty();
+			case UserPackage.RESOURCE_BUNDLE__OWNER:
+				return owner != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -238,7 +385,9 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		result.append(" (id: ");
+		result.append(id);
+		result.append(", name: ");
 		result.append(name);
 		result.append(')');
 		return result.toString();
@@ -255,10 +404,10 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 			ResourceBundle otherRB = (ResourceBundle) obj;
 			
 			if (getName().equals(otherRB.getName()) && equalsLocalFiles(otherRB.getLocalFiles()) ) {
-				if (getUser() == null) {
-					if (otherRB.getUser() == null)
+				if (getOwner() == null) {
+					if (otherRB.getOwner() == null)
 						return true;
-				} else if (getUser().equals(otherRB.getUser())) {
+				} else if (getOwner().equals(otherRB.getOwner())) {
 					return true;
 				}				
 			}			
@@ -280,4 +429,9 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 		return true;
 	}
 
+	// don't override (Teneo/EMF restriction) see http://www.eclipse.org/forums/index.php?t=msg&goto=71909&
+	@Override
+	public final int hashCode() {
+		return super.hashCode();
+	}
 } //ResourceBundleImpl

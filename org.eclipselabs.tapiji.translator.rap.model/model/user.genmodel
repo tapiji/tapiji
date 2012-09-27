@@ -2,7 +2,7 @@
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipselabs.tapiji.translator.rap.model/src"
     modelPluginID="org.eclipselabs.tapiji.translator.rap.model" modelName="User" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="6.0" copyrightFields="false" runtimePlatform="RAP">
+    containmentProxies="true" complianceLevel="6.0" copyrightFields="false" runtimePlatform="RAP">
   <foreignModel>user.ecore</foreignModel>
   <genPackages prefix="User" basePackage="org.eclipselabs.tapiji.translator.rap.model"
       disposableProviderFactory="true" ecorePackage="user.ecore#/">
@@ -22,8 +22,9 @@
     <genClasses ecoreClass="user.ecore#//ResourceBundle">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute user.ecore#//ResourceBundle/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference user.ecore#//ResourceBundle/localFiles"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference user.ecore#//ResourceBundle/sharedUsers"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference user.ecore#//ResourceBundle/owner"/>
       <genOperations ecoreOperation="user.ecore#//ResourceBundle/isTemporary"/>
-      <genOperations ecoreOperation="user.ecore#//ResourceBundle/getUser"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -17,7 +17,7 @@ import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
 import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.internal.MessagesEditorMarkers;
 import org.eclipse.babel.editor.util.OverlayImageIcon;
 import org.eclipse.babel.editor.util.UIUtils;
@@ -50,7 +50,7 @@ public class KeyTreeLabelProvider
     private static ImageRegistry imageRegistry = new ImageRegistry();
 
     
-    private MessagesEditor editor;
+    private AbstractMessagesEditor editor;
     private MessagesBundleGroup messagesBundleGroup;
 
     /**
@@ -68,7 +68,7 @@ public class KeyTreeLabelProvider
      * 
      */
     public KeyTreeLabelProvider(
-            MessagesEditor editor,
+            AbstractMessagesEditor editor,
             AbstractKeyTreeModel treeModel,
             KeyTreeContentProvider contentProvider) {
         super();

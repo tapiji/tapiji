@@ -1,26 +1,57 @@
 package org.eclipse.ui.editors.text;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.channels.OverlappingFileLockException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Semaphore;
+
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.rwt.RWT;
+import org.eclipse.rwt.lifecycle.UICallBack;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.part.IMultiPageEditorSiteHolder;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.DocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipselabs.tapiji.translator.rap.helpers.managers.RBLockManager;
+import org.eclipselabs.tapiji.translator.rap.helpers.utils.DBUtils;
+import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
+import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
+import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
+import org.eclipselabs.tapiji.translator.rap.model.user.User;
 
 /**
  * Simple text editor, which operates on a file and uses a text widget as interface. 
@@ -31,20 +62,15 @@ import org.eclipse.ui.texteditor.ITextEditor;
 public class TextEditor extends EditorPart implements ITextEditor {
 
 	public static final String ID = "org.eclipse.ui.editors.text.TextEditor";
-	
+		
 	private File file;
+	private ResourceBundle rb;
 	private Text textField;
 	private boolean editable = true;
 	private boolean dirty = false;
     private DocumentProvider documentProvider;
-	private ModifyListener modifyListener = new ModifyListener() {			
-			@Override
-			public void modifyText(ModifyEvent event) {
-				if (!dirty) {
-					setDirty(true);
-				}
-			}
-		};
+    private String fileContent;
+    private IStatusLineManager statusLineManager;
     
 	public TextEditor() {
 	}
@@ -77,15 +103,38 @@ public class TextEditor extends EditorPart implements ITextEditor {
 		setSite(site);
 		setInput(input);
 		setPartName(input.getName());
+		
+		if (rb == null) {
+			PropertiesFile propsFile = DBUtils.getPropertiesFile(file.getAbsolutePath());
+			rb = propsFile != null ? propsFile.getResourceBundle() : null;
+		}
+		if (statusLineManager == null)
+			statusLineManager = site.getActionBars().getStatusLineManager();
 	}
-
+	
 	@Override
 	public boolean isDirty() {
 		return dirty;
 	}
 
-	private void setDirty(boolean value) {
+	public void setDirty(boolean value) {		
 		dirty = value;
+		
+		if (dirty == true && rb != null) {
+			// try to lock RB, returns current user if locking was successfully
+			User ownerOfLock = RBLockManager.INSTANCE.tryLock(rb.getId());
+			User currentUser = UserUtils.getUser();
+			// if RB is locked by another user and UIThread hasn't disabled editor yet
+			if (! ownerOfLock.equals(currentUser)) {
+				// undo typed key
+				doRevertToSaved();
+				// avoid that editor will be dirty
+				return;
+			} 
+		} else if (dirty == false && rb != null && RBLockManager.INSTANCE.isLocked(rb.getId())) {
+			RBLockManager.INSTANCE.release(rb.getId());				
+		}
+		
 		firePropertyChange( PROP_DIRTY );
 	}
 	
@@ -98,7 +147,18 @@ public class TextEditor extends EditorPart implements ITextEditor {
 	public void createPartControl(Composite parent) {
 		textField = new Text(parent, SWT.HORIZONTAL);
 		textField.setText(readFile());
-		textField.addModifyListener(modifyListener);
+		textField.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent event) {
+				if (textField.getText().equals(fileContent)) {
+					if (dirty)
+						setDirty(false);
+				} else {
+					if (!dirty)		
+						setDirty(true);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -106,9 +166,14 @@ public class TextEditor extends EditorPart implements ITextEditor {
 		textField.setFocus();
 	}
 	
-	public void setText(String text) {
-		if (textField != null)
-			textField.setText(text);
+	public void setText(final String text) {
+		if (textField != null) {	
+			Display display = textField.getDisplay();
+			// only set text widget, which belongs to current running UIThread (saved in display)
+			if (display.equals(Display.getCurrent())) {
+				textField.setText(text);
+			}
+		}
 	}
 	
 	public String getText() {
@@ -127,25 +192,25 @@ public class TextEditor extends EditorPart implements ITextEditor {
 		return documentProvider;
 	}
 	
-	private String readFile() {		
-		String content = null;		
+	private String readFile() {			
 		try {
-			content = FileUtils.readFileToString(file);
+			fileContent = FileUtils.readFileToString(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
-		return content;
+		return fileContent;
 	}
 	
 	private void writeFile() {
 		String content = textField.getText();		
 		try {
 			FileUtils.writeStringToFile(file, content);
+			fileContent = content;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void selectAndReveal(int selectionIndex, int selectionLength) {
 		textField.setSelection(selectionIndex, selectionIndex+selectionLength);
 		textField.setFocus();		
@@ -157,8 +222,17 @@ public class TextEditor extends EditorPart implements ITextEditor {
 
 	public void setEditable(boolean editable) {
 		this.editable = editable;
+		textField.setEditable(editable);
 	}
 
+	public boolean isEnabled() {
+		return textField.isEnabled();
+	}
+	
+    public void setEnabled(boolean enabled) {
+    	textField.setEnabled(enabled);
+    }
+	
 	@Override
 	public void doRevertToSaved() {
 		textField.setText(readFile());		
@@ -170,6 +244,14 @@ public class TextEditor extends EditorPart implements ITextEditor {
 			doSave(null);
 	}
 
+	public void addKeyistener(KeyListener keyListener) {
+		textField.addKeyListener(keyListener);
+	}
+	
+	public ResourceBundle getResourceBundle() {
+		return rb;
+	}
+	
 	@Override
 	public void setAction(String actionID, IAction action) {
 		// TODO Auto-generated method stub

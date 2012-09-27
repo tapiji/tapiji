@@ -13,27 +13,27 @@ import org.eclipse.ui.editors.text.TextEditor;
  */
 public class TextDocument implements IDocument {
 
-	private String content;
+	//private String content;
 	private TextEditor owner;
 	
 	public TextDocument(TextEditor owner) {
 		this.owner = owner;
-		content = owner.getText();
+		//content = owner.getText();
 	}
 	
 	@Override
 	public String get() {
-		return content;
+		return owner.getText();
 	}
 	
 	@Override
 	public void set(String text) {
-		content = text;
+		//content = text;
 		owner.setText(text);
 	}
 
 	@Override
 	public int getLength() {
-		return content.length();
+		return get().length();
 	}
 }

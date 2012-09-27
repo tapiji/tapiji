@@ -169,8 +169,8 @@ public class MessagesEditorContributor
      */
     public void setActiveEditor(IEditorPart part) {
         super.setActiveEditor(part);
-    	MessagesEditor me = part instanceof MessagesEditor
-			? (MessagesEditor)part : null;
+    	AbstractMessagesEditor me = part instanceof AbstractMessagesEditor
+			? (AbstractMessagesEditor)part : null;
         toggleKeyTreeAction.setEditor(me);
         ((FilterKeysActionGroup) FILTERS).setActiveEditor(part);
         newLocaleAction.setEditor(me);
@@ -209,8 +209,8 @@ public class MessagesEditorContributor
 			}
 		}
 	    public void setActiveEditor(IEditorPart part) {
-	    	MessagesEditor me = part instanceof MessagesEditor
-	    		? (MessagesEditor)part : null;
+	    	AbstractMessagesEditor me = part instanceof AbstractMessagesEditor
+	    		? (AbstractMessagesEditor)part : null;
 	    	for (int i = 0; i < filtersAction.length; i++) {
 	        	filtersAction[i].setEditor(me);
 	        }

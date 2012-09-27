@@ -19,7 +19,8 @@ import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.core.message.internal.Message;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.util.BabelUtils;
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.IMessagesEditorChangeListener;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.editor.widgets.NullableText;
@@ -29,6 +30,7 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
@@ -43,7 +45,7 @@ import org.eclipse.ui.editors.text.TextEditor;
  */
 public class I18NEntry extends Composite {
 
-    private final MessagesEditor editor;
+    private final AbstractMessagesEditor editor;
     private final String bundleGroupId;
     private final String projectName;
     private final Locale locale;
@@ -53,6 +55,12 @@ public class I18NEntry extends Composite {
     private CBanner banner;
     private String focusGainedText;
     
+    private IMessagesEditorChangeListener msgEditorUpdateKey = new MessagesEditorChangeAdapter() {
+        public void selectedKeyChanged(String oldKey, String newKey) {
+        	updateKey(newKey);
+        }
+    };
+    
     /**
      * Constructor.
      * @param parent parent composite
@@ -60,7 +68,7 @@ public class I18NEntry extends Composite {
      */
     public I18NEntry(
             Composite parent,
-            final MessagesEditor editor,
+            final AbstractMessagesEditor editor,
             final Locale locale) {
         super(parent, SWT.NONE);
         this.editor = editor;
@@ -102,7 +110,7 @@ public class I18NEntry extends Composite {
 
 
 
-    public MessagesEditor getResourceBundleEditor() {
+    public AbstractMessagesEditor getResourceBundleEditor() {
         return editor;
     }
     
@@ -153,13 +161,13 @@ public class I18NEntry extends Composite {
     }
     
     public boolean isEditable() {
-    	IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(projectName).getMessagesBundleGroup(bundleGroupId);
+    	IMessagesBundleGroup messagesBundleGroup = editor.getBundleGroup();
         IMessagesBundle bundle = messagesBundleGroup.getMessagesBundle(locale);
     	return ((TextEditor) bundle.getResource().getSource()).isEditable();
     }
     
     public String getResourceLocationLabel() {
-    	IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(projectName).getMessagesBundleGroup(bundleGroupId);
+    	IMessagesBundleGroup messagesBundleGroup = editor.getBundleGroup();
     	IMessagesBundle bundle = messagesBundleGroup.getMessagesBundle(locale);
     	return bundle.getResource().getResourceLocationLabel();
     }
@@ -243,17 +251,12 @@ public class I18NEntry extends Composite {
         
         
         
-        editor.addChangeListener(new MessagesEditorChangeAdapter() {
-            public void selectedKeyChanged(String oldKey, String newKey) {
-            	updateKey(newKey);
-            }
-        });
+        editor.addChangeListener(msgEditorUpdateKey);
 
     }
     
 	void updateKey(String key) {
-		IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(
-				projectName).getMessagesBundleGroup(bundleGroupId);
+		IMessagesBundleGroup messagesBundleGroup = editor.getBundleGroup();
 		boolean isKey = key != null && messagesBundleGroup.isMessageKey(key);
 		textBox.setEnabled(isKey);
 		if (isKey) {
@@ -273,7 +276,8 @@ public class I18NEntry extends Composite {
     private void updateModel() {
         if (editor.getSelectedKey() != null) {
             if (!BabelUtils.equals(focusGainedText, textBox.getText())) {
-            	IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(projectName).getMessagesBundleGroup(bundleGroupId);
+            	//IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(projectName).getMessagesBundleGroup(bundleGroupId);
+            	IMessagesBundleGroup messagesBundleGroup = editor.getBundleGroup();
                 String key = editor.getSelectedKey();
                 IMessage entry = messagesBundleGroup.getMessage(key, locale);
                 if (entry == null) {
@@ -287,6 +291,19 @@ public class I18NEntry extends Composite {
             }
         }
     }
+    
+    @Override
+    public void setEnabled(boolean enabled) {
+    	super.setEnabled(enabled);
+    	textBox.setEnabled(enabled);
+    }
+    
+    @Override
+    public void dispose() {
+    	editor.removeChangeListener(msgEditorUpdateKey);
+    	super.dispose();
+    }
+   
 }
 
 

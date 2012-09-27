@@ -4,7 +4,7 @@ import org.eclipse.rwt.RWT;
 import org.eclipse.rwt.service.SessionStoreEvent;
 import org.eclipse.rwt.service.SessionStoreListener;
 import org.eclipse.ui.IStartup;
-import org.eclipselabs.tapiji.translator.rap.utils.DBUtils;
+import org.eclipselabs.tapiji.translator.rap.helpers.utils.DBUtils;
 
 
 public class TranslatorRAPStartup implements IStartup {

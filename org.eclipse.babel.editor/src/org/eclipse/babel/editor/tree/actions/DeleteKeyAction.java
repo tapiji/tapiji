@@ -12,7 +12,7 @@ package org.eclipse.babel.editor.tree.actions;
 
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -29,7 +29,7 @@ public class DeleteKeyAction extends AbstractTreeAction {
     /**
      * 
      */
-    public DeleteKeyAction(MessagesEditor editor, TreeViewer treeViewer) {
+    public DeleteKeyAction(AbstractMessagesEditor editor, TreeViewer treeViewer) {
         super(editor, treeViewer);
         setText(MessagesEditorPlugin.getString("key.delete")); //$NON-NLS-1$
         setImageDescriptor(

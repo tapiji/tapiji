@@ -24,7 +24,7 @@ public class StorageTreeLabelProvider extends ColumnLabelProvider {
 				// italic
 				text += "<i>" + rb.getName() + " (temp)</i>";
 			else
-				text += rb.getName() + " ("+rb.getUser().getUsername()+")";
+				text += rb.getName() + " ("+rb.getOwner().getUsername()+")";
 			//text += "</span>";
 		} else if (element instanceof PropertiesFile){
 			PropertiesFile file = (PropertiesFile) element;

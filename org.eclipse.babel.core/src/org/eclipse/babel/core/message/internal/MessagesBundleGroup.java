@@ -252,10 +252,14 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 	 */
 	@Override
 	public void removeMessagesBundle(IMessagesBundle messagesBundle) {
-		Locale locale = messagesBundle.getLocale();
-
-		if (localeBundles.containsKey(locale)) {
-			localeBundles.remove(locale);
+		MessagesBundle mb = (MessagesBundle) messagesBundle;
+		if (localeBundles.containsKey(mb.getLocale())) {
+			int oldBundleCount = localeBundles.size();
+			
+			localeBundles.remove(mb.getLocale());
+			firePropertyChange(PROPERTY_MESSAGES_BUNDLE_COUNT, oldBundleCount,
+					localeBundles.size());			
+			fireMessagesBundleRemoved(mb);
 		}
 
 		// which keys should I not remove?
@@ -272,11 +276,18 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 		// remove keys
 		for (String keyToRemove : messagesBundle.getKeys()) {
 			if (!keysNotToRemove.contains(keyToRemove)) { // we can remove
-				keys.remove(keyToRemove);
+				int oldKeyCount = keys.size();
+				keys.remove(keyToRemove);	
+				firePropertyChange(PROPERTY_KEY_COUNT, oldKeyCount, keys.size());
+				fireKeyRemoved(keyToRemove);
 			}
 		}
 	}
 
+	public void removeMessagesBundle(Locale locale) {
+		removeMessagesBundle(getMessagesBundle(locale));
+	}
+	
     /**
      * Gets this messages bundle group name. That is the name, which is used
      * for the tab of the MultiPageEditorPart
@@ -603,4 +614,6 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 	public boolean hasPropertiesFileGroupStrategy() {
 		return groupStrategy instanceof PropertiesFileGroupStrategy;
 	}
+
+	
 }

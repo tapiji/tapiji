@@ -11,7 +11,7 @@
 package org.eclipse.babel.editor.actions;
 
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.internal.MessagesEditorContributor;
 import org.eclipse.babel.editor.util.UIUtils;
@@ -26,7 +26,7 @@ import org.eclipse.swt.graphics.Image;
  */
 public class FilterKeysAction extends Action {
 
-    private MessagesEditor editor;
+    private AbstractMessagesEditor editor;
 	private final int flagToSet;
 	private ChangeListener listener;
     /**
@@ -141,7 +141,7 @@ public class FilterKeysAction extends Action {
 //    	}
     }
     
-    public void setEditor(MessagesEditor editor) {
+    public void setEditor(AbstractMessagesEditor editor) {
     	if (editor == this.editor) {
     		return;//no change
     	}

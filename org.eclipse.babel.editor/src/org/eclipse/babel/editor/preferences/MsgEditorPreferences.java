@@ -19,7 +19,7 @@ import org.eclipse.babel.core.message.resource.ser.IPropertiesSerializerConfig;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 import org.eclipse.babel.editor.builder.Builder;
 import org.eclipse.babel.editor.builder.ToggleNatureAction;
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
@@ -507,9 +507,9 @@ public final class MsgEditorPreferences
 			for (int j = 0; j < edRefs.length; j++) {
 				IEditorReference ref = edRefs[j];
 				IEditorPart edPart = ref.getEditor(false);
-				if (edPart != null && edPart instanceof MessagesEditor) {
+				if (edPart != null && edPart instanceof AbstractMessagesEditor) {
 					//the editor was loaded. reload it:
-					MessagesEditor meToReload = (MessagesEditor)edPart;
+					AbstractMessagesEditor meToReload = (AbstractMessagesEditor)edPart;
 					meToReload.reloadDisplayedContents();
 				}
 			}

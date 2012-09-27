@@ -11,7 +11,7 @@
 package org.eclipse.babel.editor.tree.actions;
 
 import org.eclipse.babel.core.message.tree.TreeType;
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.tree.internal.KeyTreeContentProvider;
 import org.eclipse.babel.editor.util.UIUtils;
@@ -28,7 +28,7 @@ public class FlatModelAction extends AbstractTreeAction {
      * @param editor
      * @param treeViewer
      */
-    public FlatModelAction(MessagesEditor editor, TreeViewer treeViewer) {
+    public FlatModelAction(AbstractMessagesEditor editor, TreeViewer treeViewer) {
         super(editor, treeViewer, IAction.AS_RADIO_BUTTON);
         setText(MessagesEditorPlugin.getString("key.layout.flat")); //$NON-NLS-1$
         setImageDescriptor(

@@ -40,6 +40,38 @@ public class ConfigurationManager {
 	
 	private IPropertiesDeserializerConfig deserializerConfig;
 	
+	private final static IConfiguration DEFAULT_CONFIG = new IConfiguration() {		
+		@Override
+		public String getNonRbPattern() {
+			return "^(.)*/build\\.properties:true;^(.)*/config\\.properties:true;^(.)*/targetplatform/(.)*:true";
+		}
+		
+		@Override
+		public boolean getAuditSameValue() {
+			return false;
+		}
+		
+		@Override
+		public boolean getAuditResource() {
+			return false;
+		}
+		
+		@Override
+		public boolean getAuditRb() {
+			return false;
+		}
+		
+		@Override
+		public boolean getAuditMissingValue() {
+			return false;
+		}
+		
+		@Override
+		public boolean getAuditMissingLanguage() {
+			return false;
+		}
+	};
+	
 	private ConfigurationManager() {
 		config = getConfig();
 	}
@@ -57,7 +89,7 @@ public class ConfigurationManager {
 				e.printStackTrace();
 			}
         } 
-    	return null;
+    	return DEFAULT_CONFIG;
 	}
 
 	/**
