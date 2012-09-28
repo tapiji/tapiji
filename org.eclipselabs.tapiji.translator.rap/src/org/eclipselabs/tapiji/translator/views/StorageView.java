@@ -409,7 +409,7 @@ public class StorageView extends ViewPart {
 			User ownerUser = rb.getOwner();
 			
 			// shared Resource Bundle, user not owner of RB
-			if (! currentUser.equals(ownerUser)) {
+			if (! rb.isTemporary() && ! currentUser.equals(ownerUser)) {
 				// delete RB
 				if (deleteFiles.size() > 1) {
 					// remove user relation to rb
@@ -419,7 +419,7 @@ public class StorageView extends ViewPart {
 				} else {
 					// currently not allowed for not owned RBs
 				}
-			// user owner of RB
+			// user owner of RB or tmp RB
 			} else {			
 				// delete files
 				for (PropertiesFile file : deleteFiles) {

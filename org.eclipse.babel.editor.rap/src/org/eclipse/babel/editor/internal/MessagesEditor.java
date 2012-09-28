@@ -144,7 +144,7 @@ public class MessagesEditor extends AbstractMessagesEditor {
 				
 				// inform other msg editors which have opened same resource bundle
 				// only owner thread of display, should initiate this, otherwise endless loop
-				if (Display.getCurrent().equals(display)) {
+				if (Display.getCurrent().equals(display) && resourceBundle != null) {
 					List<IMessagesEditor> sharedEditors = SharedMsgEditorsManager.INSTANCE.
 							getSharedMessagesEditors(resourceBundle.getId());
 					for (IMessagesEditor sharedEditor : sharedEditors) {

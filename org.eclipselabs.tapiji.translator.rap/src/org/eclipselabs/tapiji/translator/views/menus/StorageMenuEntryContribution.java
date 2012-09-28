@@ -45,13 +45,15 @@ public class StorageMenuEntryContribution extends ContributionItem implements
 			ResourceBundle selectedRB = parentView.getSelectedRB();
 			boolean isRBLocked = RBLockManager.INSTANCE.isLocked(selectedRB.getId());
 			RBLock rbLock = RBLockManager.INSTANCE.getRBLock(selectedRB.getId());
-			User ownerOfLock = rbLock != null ? rbLock.getOwner() : null;
 			
 			User currentUser = UserUtils.getUser();
+			User ownerOfLock = rbLock != null ? rbLock.getOwner() : null;	
+			User owernOfRB = selectedRB.getOwner();
+			
 			boolean isUserLoggedIn = UserUtils.isUserLoggedIn();
 			boolean isRBUnstored = parentView.isSelectionUnstoredRB();
 			boolean isRBStored = parentView.isSelectionStoredRB();
-			boolean isCurrentUserOwnerOfRB = selectedRB.getOwner().equals(currentUser);
+			boolean isCurrentUserOwnerOfRB = owernOfRB != null ? owernOfRB.equals(currentUser) : false;
 			
 			if (isRBUnstored && isUserLoggedIn) {
 				// MenuItem for adding a new entry to storage
@@ -114,8 +116,11 @@ public class StorageMenuEntryContribution extends ContributionItem implements
 			}
 			// MenuItem for deleting the currently selected entry
 			// only visible if RB isn't locked or user is owner of the lock
-			if (! isUserLoggedIn || isCurrentUserOwnerOfRB && 
-					(! isRBLocked || currentUser.equals(ownerOfLock))) {
+			if (! isUserLoggedIn || selectedRB.isTemporary() || 
+					// owner of the rb are allowed to remove their rb if it isn't currently locked by another user
+					isCurrentUserOwnerOfRB && (! isRBLocked || currentUser.equals(ownerOfLock)) || 
+					// shared user are allowed to remove their link to the original rb
+					! isCurrentUserOwnerOfRB && isRBStored) {
 				removeItem = new MenuItem(menu, SWT.NONE, index);
 				removeItem.setText("Remove");
 				removeItem.setImage(PlatformUI.getWorkbench().getSharedImages()
