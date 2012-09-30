@@ -12,18 +12,39 @@
 
 package org.eclipse.babel.tapiji.tools.java.ui.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.IMessagesBundleGroup;
+import org.eclipse.babel.core.message.manager.RBManager;
+import org.eclipse.babel.tapiji.tools.core.Logger;
+import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
+import org.eclipse.babel.tapiji.tools.core.ui.dialogs.KeyRefactoringDialog;
+import org.eclipse.babel.tapiji.tools.core.ui.dialogs.KeyRefactoringDialog.DialogConfiguration;
+import org.eclipse.babel.tapiji.tools.core.ui.dialogs.KeyRefactoringSummaryDialog;
+import org.eclipse.babel.tapiji.tools.core.ui.utils.LocaleUtils;
+import org.eclipse.babel.tapiji.tools.java.ui.refactoring.Cal10nEnumRefactoringVisitor;
+import org.eclipse.babel.tapiji.tools.java.ui.refactoring.Cal10nRefactoringVisitor;
+import org.eclipse.babel.tapiji.tools.java.ui.refactoring.PrimitiveRefactoringVisitor;
 import org.eclipse.babel.tapiji.tools.java.util.ASTutils;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.ui.SharedASTProvider;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.swt.widgets.Display;
 
 public class ASTutilsUI {
 
@@ -149,4 +170,105 @@ public class ASTutilsUI {
 	return reference;
     }
 
+    /**
+	 * Performs the refactoring of messages key. The key can be a {@link String} or an
+	 * Enumeration! If it is an enumeration, then the enumPath needs to be provided!
+	 * 
+	 * @param projectName The name of the project, where the resource bundle file is in
+	 * @param resourceBundleId The Id of the resource bundle, which contains the old key
+	 * @param selectedLocale The {@link Locale} to change
+	 * @param oldKey The name of the key to change
+	 * @param newKey The name of the key, which replaces the old one
+	 * @param enumPath The path of the enum file (needs: {@link IPath#toPortableString()})
+	 */
+	public static void refactorKey(final String projectName, final String resourceBundleId, 
+			final String selectedLocale, final String oldKey, final String newKey, final String enumPath) {
+		
+		// contains file and line
+		final List<String> changeSet = new ArrayList<String>();
+		
+		ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
+		IProject project = manager.getProject();
+		
+		try {
+			project.accept(new IResourceVisitor() {
+				
+				/**
+				 * First step of filtering. Only classes, which import java.util.ResourceBundle
+				 * or ch.qos.cal10n.MessageConveyor will be changed. An exception is the
+				 * enum file, which gets referenced by the Cal10n framework.
+				 * 
+				 * {@inheritDoc}
+				 */
+				@Override
+				public boolean visit(IResource resource) throws CoreException {
+					if (!(resource instanceof IFile) || !resource.getFileExtension().equals("java")) {
+						return true;
+					}
+					
+					final CompilationUnit cu = getCompilationUnit(resource);
+					
+					// step 1: import filter
+					for (Object obj : cu.imports()) {
+						ImportDeclaration imp = (ImportDeclaration) obj;
+						String importName = imp.getName().toString();
+						if ("java.util.ResourceBundle".equals(importName)) {
+							PrimitiveRefactoringVisitor prv = new PrimitiveRefactoringVisitor(cu,
+									resourceBundleId, oldKey, newKey, changeSet);
+							cu.accept(prv);
+							prv.saveChanges();
+							break;
+						} else if ("ch.qos.cal10n.MessageConveyor".equals(importName)) { // Cal10n
+							Cal10nRefactoringVisitor crv = new Cal10nRefactoringVisitor(cu,
+									oldKey, newKey, enumPath, changeSet);
+							cu.accept(crv);
+							crv.saveChanges();
+							break;
+						}
+					}
+					
+					return false;
+				}
+			});
+		} catch (CoreException e) {
+			Logger.logError(e);
+		}
+		
+		if (enumPath != null) { // Cal10n support, change the enum file
+			IFile file = project.getFile(enumPath.substring(project.getName().length() + 1));
+			final CompilationUnit enumCu = getCompilationUnit(file);
+			
+			Cal10nEnumRefactoringVisitor enumVisitor = new Cal10nEnumRefactoringVisitor(enumCu, oldKey, newKey, changeSet);
+			enumCu.accept(enumVisitor);
+		}
+		
+		// change backend
+		RBManager rbManager = RBManager.getInstance(projectName);
+		IMessagesBundleGroup messagesBundleGroup = rbManager.getMessagesBundleGroup(resourceBundleId);
+		
+		if (KeyRefactoringDialog.ALL_LOCALES.equals(selectedLocale)) {
+			messagesBundleGroup.renameMessageKeys(oldKey, newKey);
+		} else {
+			IMessagesBundle messagesBundle = messagesBundleGroup.getMessagesBundle(LocaleUtils
+					.getLocaleByDisplayName(manager.getProvidedLocales(resourceBundleId), selectedLocale));
+			messagesBundle.renameMessageKey(oldKey, newKey);
+//			rbManager.fireResourceChanged(messagesBundle); ??
+		}
+		rbManager.fireEditorChanged(); // notify Resource Bundle View
+		
+		// show the summary dialog
+		KeyRefactoringSummaryDialog summaryDialog = new KeyRefactoringSummaryDialog(Display.getDefault().getActiveShell());
+		
+		DialogConfiguration config = summaryDialog.new DialogConfiguration();
+		config.setPreselectedKey(oldKey);
+		config.setNewKey(newKey);
+		config.setPreselectedBundle(resourceBundleId);
+		config.setProjectName(projectName);
+		
+		summaryDialog.setDialogConfiguration(config);
+		summaryDialog.setChangeSet(changeSet);
+		
+		summaryDialog.open();
+	}
+    
 }

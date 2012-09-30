@@ -86,6 +86,8 @@ public final class UIUtils {
     /** Name of edit icon. */
     public static final String IMAGE_RENAME = "rename.gif";  //$NON-NLS-1$
     /** Name of "view left" icon. */
+    /** Name of refactoring icon. */
+    public static final String IMAGE_REFACTORING = "refactoring.png";  //$NON-NLS-1$
     public static final String IMAGE_VIEW_LEFT = "viewLeft.gif";  //$NON-NLS-1$
     /** Name of locale icon. */
     public static final String IMAGE_LOCALE = "locale.gif";  //$NON-NLS-1$

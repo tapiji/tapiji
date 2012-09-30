@@ -34,4 +34,10 @@
       </javaCompletionProposalComputer>
          
    </extension>
+   <extension
+         point="org.eclipse.babel.core.refactoringService">
+      <IRefactoringService
+            class="org.eclipse.babel.tapiji.tools.java.ui.refactoring.RefactoringService">
+      </IRefactoringService>
+   </extension>
 </plugin>

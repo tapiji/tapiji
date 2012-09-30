@@ -714,6 +714,23 @@ public class PropertyKeySelectionTree extends Composite implements
 		EditorUtils.RESOURCE_BUNDLE_EDITOR, key);
     }
 
+    public void refactorSelectedItem() {
+		String key = "";
+		String bundleId = "";
+		ISelection selection = treeViewer.getSelection();
+		if (selection instanceof IStructuredSelection) {
+			IStructuredSelection structSel = (IStructuredSelection) selection;
+			if (structSel.getFirstElement() instanceof IKeyTreeNode) {
+				IKeyTreeNode keyTreeNode = (IKeyTreeNode) structSel
+				        .getFirstElement();
+				key = keyTreeNode.getMessageKey();
+				bundleId = keyTreeNode.getMessagesBundleGroup().getResourceBundleId();
+				
+				RBManager.getRefactorService().openRefactorDialog(projectName, bundleId, key, null);
+			}
+		}
+	}
+    
     public void deleteSelectedItems() {
 	List<String> keys = new ArrayList<String>();
 

@@ -27,6 +27,7 @@ import org.eclipse.babel.editor.tree.IKeyTreeContributor;
 import org.eclipse.babel.editor.tree.actions.AbstractRenameKeyAction;
 import org.eclipse.babel.editor.tree.actions.AddKeyAction;
 import org.eclipse.babel.editor.tree.actions.DeleteKeyAction;
+import org.eclipse.babel.editor.tree.actions.RefactorKeyAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.CellEditor;
@@ -353,6 +354,10 @@ public class KeyTreeContributor implements IKeyTreeContributor {
         }
         final IAction renameAction = renameKeyAction;
         menuManager.add(renameAction);
+        
+        // Refactor
+        final IAction refactorAction = new RefactorKeyAction(editor, treeViewer);
+        menuManager.add(refactorAction);
         
         menuManager.update(true);
         tree.setMenu(menu);

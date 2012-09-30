@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.eclipse.babel.core.message.IMessagesBundleGroup;
+import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.model.SLLocation;
 import org.eclipse.babel.tapiji.tools.java.visitor.MethodParameterDescriptor;
@@ -32,12 +34,14 @@ import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.IAnnotationBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.StringLiteral;
@@ -941,4 +945,110 @@ public class ASTutils {
 	    return true;
 	}
     }
+    
+    /**
+	 * Decides if an enumeration can be refactored or not.
+	 * In other words, gives the OK for the Proposal to display.
+	 * 
+	 * @author Alexej Strelzow
+	 */
+	static class Cal10nEnumLiteralFinder extends ASTVisitor {
+		private int position;
+		private String projectName;
+		
+		private String[] metaData;
+		// [0] resourceBunldeId
+		// [1] key value
+		// [2] relative path (to the project) of the enum file
+		
+		/**
+		 * Constructor.
+		 * @param position The position of the CTRL + Shift + Space operation
+		 */
+		public Cal10nEnumLiteralFinder(String projectName, int position) {
+			this.position = position;
+			this.projectName = projectName;
+		}
+		
+		/**
+		 * Following constraints must be fulfilled to make an enum "refactorable":<br>
+		 * <ol>
+		 * <li>It must be known by the system (stored in a resource bundle file)</li>
+		 * <li>It must be used by the class ch.qos.cal10n.IMessageConveyor (Cal10n framework)</li>
+		 * </ol>
+		 * 
+		 * {@inheritDoc}
+		 */
+		public boolean visit(MethodInvocation node) {
+			
+			boolean isCal10nCall = "ch.qos.cal10n.IMessageConveyor".equals(node.resolveMethodBinding().getDeclaringClass().getQualifiedName());
+			
+			if (!isCal10nCall) {
+				if (node.arguments().size() == 0) {
+					return false;
+				} else {
+					return true; // because the Cal10n call may be an argument!
+				}
+			} else {
+				int startPosition = node.getStartPosition();
+				int length = startPosition + node.getLength();
+				if (startPosition < this.position && length > position &&
+						!node.arguments().isEmpty() && 
+						node.arguments().get(0) instanceof QualifiedName) {
+					QualifiedName qName = (QualifiedName) node.arguments().get(0);
+					startPosition = qName.getStartPosition();
+					length = startPosition + qName.getLength();
+					
+					if (startPosition < this.position && length > position) {
+						String resourceBundleId = getResourceBundleId(qName);
+						String keyName = qName.getName().toString();
+						
+						if (isKnownBySystem(resourceBundleId, keyName)) {
+							String path = qName.resolveTypeBinding().getJavaElement().getResource().getFullPath().toPortableString();
+							this.metaData = new String[3];
+							this.metaData[0] = resourceBundleId;
+							this.metaData[1] = keyName;
+							this.metaData[2] = path;
+						}
+					}
+				}
+			}
+			
+			return false;
+		}
+		
+		private boolean isKnownBySystem(String resourceBundleId, String keyName) {
+			IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(this.projectName)
+					.getMessagesBundleGroup(resourceBundleId);
+			return messagesBundleGroup.containsKey(keyName);
+		}
+		
+		private String getResourceBundleId(QualifiedName qName) {
+			IAnnotationBinding[] annotations = qName.resolveTypeBinding().getAnnotations();
+			for (IAnnotationBinding annotation : annotations) {
+				if ("BaseName".equals(annotation.getName())) {
+					return (String) annotation.getAllMemberValuePairs()[0].getValue();
+				} 
+			}
+			
+			return null;
+		}
+		
+		public String[] getMetaData() {
+			return metaData;
+		}
+	}
+
+	/**
+	 * Returns whether a refactoring proposal will be shown or not.
+	 * @param projectName The name of the project the cu is in
+	 * @param cu The {@link CompilationUnit} to analyze
+	 * @param i The starting point to begin the analysis
+	 * @return Meta data of the enum key to refactor or null
+	 */
+	public static String[] getCal10nEnumLiteralDataAtPos(String projectName, CompilationUnit cu, int i) {
+		Cal10nEnumLiteralFinder enumFinder = new Cal10nEnumLiteralFinder(projectName, i);
+		cu.accept(enumFinder);
+		return enumFinder.getMetaData();
+	}
 }

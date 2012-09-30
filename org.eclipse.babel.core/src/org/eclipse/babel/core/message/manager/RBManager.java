@@ -28,6 +28,7 @@ import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.core.message.internal.Message;
 import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
+import org.eclipse.babel.core.refactoring.IRefactoringService;
 import org.eclipse.babel.core.util.FileUtils;
 import org.eclipse.babel.core.util.NameUtils;
 import org.eclipse.babel.core.util.PDEUtils;
@@ -35,6 +36,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.Platform;
 
 /**
  * Manages all {@link MessagesBundleGroup}s. That is: <li>Hold map with projects
@@ -66,6 +70,8 @@ public class RBManager {
     private static Logger logger = Logger.getLogger(RBManager.class
 	    .getSimpleName());
 
+    private static IRefactoringService refactorService;
+    
     private RBManager() {
 	resourceBundles = new HashMap<String, IMessagesBundleGroup>();
 	editorListeners = new ArrayList<IMessagesEditorListener>(3);
@@ -391,6 +397,8 @@ public class RBManager {
 	    INSTANCE.project = project;
 	    managerMap.put(project, INSTANCE);
 	    INSTANCE.detectResourceBundles();
+	    
+	    refactorService = getRefactoringService();
 	}
 
 	return INSTANCE;
@@ -558,4 +566,25 @@ public class RBManager {
 	    fireResourceChanged(bundle);
 	}
     }
+    
+    private static IRefactoringService getRefactoringService() {
+		IExtensionPoint extp = Platform.getExtensionRegistry()
+				.getExtensionPoint(
+						"org.eclipse.babel.core" + ".refactoringService");
+		IConfigurationElement[] elements = extp.getConfigurationElements();
+
+		if (elements.length != 0) {
+			try {
+				return (IRefactoringService) elements[0]
+						.createExecutableExtension("class");
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	public static IRefactoringService getRefactorService() {
+		return refactorService;
+	}
 }
