@@ -12,9 +12,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.rwt.RWT;
+import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
-import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.utils.FileUtils;
 
 /**
@@ -128,9 +128,8 @@ public class FileRAPUtils extends FileUtils {
 		if (! UserUtils.isUserLoggedIn())
 			return null;
 		
-		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
 		try {
-			return getProject(user.getUsername());
+			return getProject(UserUtils.getUser().getUsername());
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}

@@ -11,8 +11,8 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipselabs.tapiji.translator.actions.LogoutAction;
+import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.rap.utils.UIUtils;
-import org.eclipselabs.tapiji.translator.rap.utils.UserUtils;
 
 public class UserInfoContributionItem extends ContributionItem {
 	

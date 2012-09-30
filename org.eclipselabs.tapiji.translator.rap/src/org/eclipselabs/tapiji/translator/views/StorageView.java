@@ -45,6 +45,7 @@ import org.eclipselabs.tapiji.translator.rap.dialogs.DownloadDialog;
 import org.eclipselabs.tapiji.translator.rap.dialogs.LoginDialog;
 import org.eclipselabs.tapiji.translator.rap.dialogs.NewLocaleDialog;
 import org.eclipselabs.tapiji.translator.rap.dialogs.ShareDialog;
+import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
@@ -52,7 +53,6 @@ import org.eclipselabs.tapiji.translator.rap.utils.EditorUtils;
 import org.eclipselabs.tapiji.translator.rap.utils.FileRAPUtils;
 import org.eclipselabs.tapiji.translator.rap.utils.StorageUtils;
 import org.eclipselabs.tapiji.translator.rap.utils.UIUtils;
-import org.eclipselabs.tapiji.translator.rap.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.views.menus.StorageMenuEntryContribution;
 import org.eclipselabs.tapiji.translator.views.widgets.provider.StorageTreeContentProvider;
 import org.eclipselabs.tapiji.translator.views.widgets.provider.StorageTreeLabelProvider;
@@ -148,11 +148,10 @@ public class StorageView extends ViewPart {
 	private void fillTree() {
 		model.clear();
 		
-		// add user rbs
-	    User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);	    
-	    if (user != null) {
+		// add user rbs  
+	    if (UserUtils.isUserLoggedIn()) {
 		    StorageUtils.syncStorageWithDatabase();
-		    for (ResourceBundle userRB : user.getStoredRBs()) {
+		    for (ResourceBundle userRB : UserUtils.getUser().getStoredRBs()) {
 		    	model.add(userRB);
 		    	userRBsMap.put(userRB.getName(), userRB);
 		    }
@@ -181,10 +180,9 @@ public class StorageView extends ViewPart {
 		List<ResourceBundle> rbs = StorageUtils.getSessionRBs();
 		List<ResourceBundle> rbsToRemove = new ArrayList<ResourceBundle>(model);
 
-		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
-	    if (user != null) {	 
+		if (UserUtils.isUserLoggedIn()) {	 
 	    	StorageUtils.syncStorageWithDatabase();	    	 
-			rbs.addAll(user.getStoredRBs());						
+			rbs.addAll(UserUtils.getUser().getStoredRBs());						
 	    }
     	   
 	    // update model rbs

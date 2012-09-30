@@ -26,6 +26,12 @@ import org.hibernate.cfg.Environment;
  *
  */
 public class DBUtils {
+//	public static final String DB_NAME = "translatordb";      
+//    public static final String DB_HOST = "127.8.159.1";    
+//    public static final int DB_PORT = 3306;
+//    public static final String DB_DRIVER = "com.mysql.jdbc.Driver";
+//    public static final String DB_USER = "admin";
+//    public static final String DB_PASSWORD = "mPReTZK_-5Qd";
 
 	/** Database schema name */
 	public static final String DB_NAME = "translatordb";
@@ -87,12 +93,11 @@ public class DBUtils {
         props.setProperty(Environment.URL, getEnvironmentURL());
         props.setProperty(Environment.USER, DB_USER);
         props.setProperty(Environment.PASS, DB_PASSWORD);
-        props.setProperty(Environment.DIALECT, org.hibernate.dialect.MySQLDialect.class.getName());
-        // props.setProperty(Environment.SHOW_SQL, "true");
-        // props.setProperty(Environment.HBM2DDL_AUTO, "create");
+        props.setProperty(Environment.DIALECT, org.hibernate.dialect.MySQL5InnoDBDialect.class.getName());
+//        props.setProperty(Environment.SHOW_SQL, "true");        
+//        props.setProperty(Environment.HBM2DDL_AUTO, "create");
         props.setProperty(PersistenceOptions.CASCADE_POLICY_ON_NON_CONTAINMENT,
 				"REFRESH,PERSIST,MERGE");
-        props.setProperty(PersistenceOptions.ID_FEATURE_AS_PRIMARY_KEY, "true");
         userDataStore.setDataStoreProperties(props);
         // Register EMF package
         userDataStore.setEPackages(new EPackage[] { UserPackage.eINSTANCE });

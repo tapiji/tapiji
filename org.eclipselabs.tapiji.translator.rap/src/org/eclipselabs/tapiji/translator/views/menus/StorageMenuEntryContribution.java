@@ -15,10 +15,10 @@ import org.eclipselabs.tapiji.translator.rap.dialogs.DownloadDialog;
 import org.eclipselabs.tapiji.translator.rap.dialogs.ShareDialog;
 import org.eclipselabs.tapiji.translator.rap.helpers.managers.RBLock;
 import org.eclipselabs.tapiji.translator.rap.helpers.managers.RBLockManager;
+import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.utils.UIUtils;
-import org.eclipselabs.tapiji.translator.rap.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.views.StorageView;
 
 public class StorageMenuEntryContribution extends ContributionItem implements

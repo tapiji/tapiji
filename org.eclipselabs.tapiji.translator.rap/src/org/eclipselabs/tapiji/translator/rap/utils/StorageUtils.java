@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.internal.resources.Project;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -14,16 +13,15 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.rwt.RWT;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserFactory;
 import org.eclipselabs.tapiji.translator.views.StorageView;
-import org.hibernate.criterion.Projection;
 
 /**
  * Utility methods to handle the storage of resource bundles. 
@@ -41,9 +39,7 @@ public class StorageUtils {
 		if (! UserUtils.isUserLoggedIn())
 			return false;
 		
-		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
-		
-		List<ResourceBundle> rbs = user.getStoredRBs();		
+		List<ResourceBundle> rbs = UserUtils.getUser().getStoredRBs();		
 		for (ResourceBundle rb : rbs) {
 			if (rb.getName().equals(bundleName))
 				return true;
@@ -73,7 +69,7 @@ public class StorageUtils {
 	 *  on file system, to database.
 	 */
 	public static void syncStorageWithDatabase() {
-		User user = (User) RWT.getSessionStore().getAttribute(UserUtils.SESSION_USER_ATT);
+		User user = UserUtils.getUser();
 		List<ResourceBundle> rbs = new ArrayList<ResourceBundle>(user.getStoredRBs());
 		List<PropertiesFile> allUserFiles = new ArrayList<PropertiesFile>();
 		boolean saveToDB = false;

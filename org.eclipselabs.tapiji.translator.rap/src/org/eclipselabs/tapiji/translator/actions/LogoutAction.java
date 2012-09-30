@@ -4,11 +4,11 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
+import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.utils.EditorUtils;
 import org.eclipselabs.tapiji.translator.rap.utils.StorageUtils;
-import org.eclipselabs.tapiji.translator.rap.utils.UserUtils;
 
 public class LogoutAction implements IWorkbenchWindowActionDelegate {
 

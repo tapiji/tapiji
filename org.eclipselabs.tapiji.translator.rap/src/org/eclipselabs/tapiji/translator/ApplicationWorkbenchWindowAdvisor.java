@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
+import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
 
 public class ApplicationWorkbenchWindowAdvisor extends
 		AbstractWorkbenchWindowAdvisor {
@@ -33,6 +34,11 @@ public class ApplicationWorkbenchWindowAdvisor extends
 		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
 		// maximize shell
 		configurer.getWindow().getShell().setMaximized(true);
+		
+		// set user logged in context if refresh was pressed
+		// user object is stored in http session that will not be destroyed when refresh will be pressed
+		if (UserUtils.getUser() != null)
+			UserUtils.setUserLoggedInContext(true);
 	}
 	
 }
