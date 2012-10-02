@@ -11,12 +11,15 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -52,19 +55,6 @@ public class ShareDialog extends Dialog {
 	    // rename ok button to save
 	    Button ok = getButton(IDialogConstants.OK_ID);
 	    ok.setText("Save");
-	    
-//	    GridData data = new GridData(GridData.HORIZONTAL_ALIGN_END);
-//		int widthHint = convertHorizontalDLUsToPixels(IDialogConstants.BUTTON_WIDTH);
-//		Point minSize = ok.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
-//		data.widthHint = Math.max(widthHint, minSize.x);
-//		data.horizontalSpan = 2;
-//		ok.setLayoutData(data);
-//		
-//	    //setButtonLayoutData(ok);
-//	    // dispose cancel button
-//	    Button cancel = getButton(IDialogConstants.CANCEL_ID);
-//	    cancel.dispose();
-//	    //setButtonLayoutData(cancel);
 	 }
 	
 	@Override
@@ -77,64 +67,58 @@ public class ShareDialog extends Dialog {
 	    Label usernameLabel = new Label(comp, SWT.NONE);
 	    usernameLabel.setText("Username:");
 	    
-	    final Text usernameText = new Text(comp, SWT.SINGLE | SWT.BORDER);
-		usernameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		final ControlDecoration decorationErrUsername = new ControlDecoration(usernameText, SWT.TOP | SWT.LEFT);
-	    decorationErrUsername.setImage(FieldDecorationRegistry.getDefault().
-				getFieldDecoration(FieldDecorationRegistry.DEC_ERROR).getImage());
-	    decorationErrUsername.hide();
-	    
-		usernameText.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				decorationErrUsername.hide();
-				usernameText.setBackground(null);
-			}
-		});		
-		
-		Button addButton = new Button(comp, SWT.PUSH);
+	    final Combo usernameCombo = new Combo(comp, SWT.READ_ONLY | SWT.DROP_DOWN);	    
+	    usernameCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
+	    fillCombo(usernameCombo);
+	    		
+		final Button addButton = new Button(comp, SWT.PUSH);
 		addButton.setText("Add");
 		addButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// verify username exists
-				String username = usernameText.getText();
-				if (! UserUtils.existsUser(username)) {
-					decorationErrUsername.show();
-					decorationErrUsername.setDescriptionText("The username doesn't exist!");
-					usernameText.setBackground(new Color(usernameText.getDisplay(), 250, 200, 150));
-				} else if (username.equals(UserUtils.getUser().getUsername())) {
-					decorationErrUsername.show();
-					decorationErrUsername.setDescriptionText("You can't add yourself to the share list!");
-					usernameText.setBackground(new Color(usernameText.getDisplay(), 250, 200, 150));
-				} else {
-					boolean existsInTable = false;
-					for (TableItem item : userTable.getItems()) {
-						if (item.getText(USERNAME_COLUMN_INDEX).equals(username)) {
-							existsInTable = true;
-							break;
-						}
-					}
-					if (! existsInTable) {
-						// add user to table
-						TableItem tableItem = new TableItem(userTable, SWT.NONE);
-						tableItem.setChecked(true);
-						tableItem.setText(USERNAME_COLUMN_INDEX, username);					
-						//userTable.update();
-					}
+				String username = usernameCombo.getText();
+				if (! username.isEmpty()) {
+					// add user to table
+					TableItem tableItem = new TableItem(userTable, SWT.NONE);
+					tableItem.setChecked(true);
+					tableItem.setText(USERNAME_COLUMN_INDEX, username);		
+					// remove user from combo
+					usernameCombo.remove(username);
 				}
 			}
 		});
 	    
+		usernameCombo.addModifyListener(new ModifyListener() {			
+			@Override
+			public void modifyText(ModifyEvent event) {
+				String username = usernameCombo.getText();
+				if (username.isEmpty()) {
+					addButton.setEnabled(false);
+				} else {
+					addButton.setEnabled(true);
+				}
+			}
+		});
+
 	    createTable(comp);
 	    fillTable();
 	    
 		return comp;
 	}
 	
-	private void createTable(Composite comp) {
-		userTable = new Table(comp, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.SINGLE);
+    private void fillCombo(Combo combo) {
+    	List<User> sharedUsers = resourceBundle.getSharedUsers();
+    	for (User user : UserUtils.getAllRegisteredUsers()) {
+    		// don't add already shared users and owner of rb
+    		if (! sharedUsers.contains(user) && ! user.equals(resourceBundle.getOwner()))
+    			combo.add(user.getUsername());
+    	}
+    		
+    }
+
+	private void createTable(Composite parent) {
+		userTable = new Table(parent, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.SINGLE);
 	    userTable.setHeaderVisible(true);
 	    userTable.setLayout(new GridLayout());	    
 	    GridData gridData = new GridData();
@@ -165,8 +149,7 @@ public class ShareDialog extends Dialog {
 	}
 	
 	@Override
-	protected void okPressed() {
-		
+	protected void okPressed() {		
 		List<User> sharedUsers = resourceBundle.getSharedUsers();
 		
 		for (TableItem item : userTable.getItems()) {

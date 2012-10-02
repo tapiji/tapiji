@@ -1,6 +1,8 @@
 package org.eclipselabs.tapiji.translator.rap.helpers.utils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -172,8 +174,6 @@ public class UserUtils {
 	}
 	
 	public static User getUser(String username) {
-		
-		//DBUtils.getDataStore().
 		Resource resource = DBUtils.getPersistentData();
 		EList<EObject> registeredObjects = resource.getContents();
 		
@@ -187,5 +187,18 @@ public class UserUtils {
 		}
 		// username not found
 		return null;
+	}
+	
+	public static List<User> getAllRegisteredUsers() {
+		Resource resource = DBUtils.getPersistentData();
+		EList<EObject> registeredObjects = resource.getContents();
+		
+		List<User> users = new ArrayList<User>();
+				
+		for (EObject obj : registeredObjects)
+			if (obj instanceof User)
+				users.add((User) obj);			
+		
+		return users;
 	}
 }

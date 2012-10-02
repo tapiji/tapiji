@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator;
 
+import java.lang.reflect.Constructor;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
@@ -52,7 +54,15 @@ public abstract class AbstractWorkbenchWindowAdvisor extends WorkbenchWindowAdvi
 
 	public ActionBarAdvisor createActionBarAdvisor(
 	        IActionBarConfigurer configurer) {
-		return new ApplicationActionBarAdvisor(configurer);
+		AbstractApplicationActionBarAdvisor actionBar = null;		
+		try {
+			Class<?> clazz = Class.forName(AbstractApplicationActionBarAdvisor.INSTANCE_CLASS);
+			Constructor<?> constr = clazz.getConstructor(IActionBarConfigurer.class);
+			actionBar = (AbstractApplicationActionBarAdvisor) constr.newInstance(configurer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return actionBar;
 	}
 
 	abstract public void preWindowOpen();
