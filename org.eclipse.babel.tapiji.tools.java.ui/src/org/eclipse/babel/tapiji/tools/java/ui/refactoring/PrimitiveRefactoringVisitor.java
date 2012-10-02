@@ -12,6 +12,7 @@ package org.eclipse.babel.tapiji.tools.java.ui.refactoring;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -102,16 +103,41 @@ public class PrimitiveRefactoringVisitor extends ASTVisitor {
 	 * 
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean visit(VariableDeclarationStatement node) {
 		for (Object obj : node.fragments()) {
 			String val = getVarNameOfBundle((VariableDeclarationFragment) obj, resourceBundleId);
-
+			
 			if (val != null) {
 				varNameOfBundle = val;
 			}
+			
+			// [alst] because visit(MethodInvocation node) does not work when the MethodInvocation is embedded
+			// in an Initializer (I don't know why...)
+			if (!node.fragments().isEmpty()) {
+				List fragments = node.fragments();
+				ListIterator listIterator = fragments.listIterator();
+				while (listIterator.hasNext()) {
+					Object element = listIterator.next();
+					if (element instanceof VariableDeclarationFragment) {
+						VariableDeclarationFragment fragment = (VariableDeclarationFragment) element;
+						Expression initializer = fragment.getInitializer();
+						if (initializer != null && initializer instanceof MethodInvocation) {
+							visit((MethodInvocation)initializer);
+						}
+					}
+				}
+			}
+			
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean visit(StringLiteral node) {
+		// TODO Auto-generated method stub
+		return super.visit(node);
 	}
 	
 	/**
@@ -124,6 +150,7 @@ public class PrimitiveRefactoringVisitor extends ASTVisitor {
 	 * </pre>
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public boolean visit(MethodInvocation node) {
 		if (varNameOfBundle == null) {
 			return false;
