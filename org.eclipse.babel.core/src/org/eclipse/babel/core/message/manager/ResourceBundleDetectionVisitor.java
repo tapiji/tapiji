@@ -12,6 +12,7 @@
 
 package org.eclipse.babel.core.message.manager;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -94,7 +95,11 @@ public class ResourceBundleDetectionVisitor implements IResourceVisitor,
     private List<CheckItem> getBlacklistItems() {
 	IConfiguration configuration = ConfigurationManager.getInstance()
 		.getConfiguration();
-	return convertStringToList(configuration.getNonRbPattern());
+	if (configuration != null) {
+	    return convertStringToList(configuration.getNonRbPattern());
+	} else {
+	    return new ArrayList<CheckItem>();
+	}
     }
 
     private static final String DELIMITER = ";";

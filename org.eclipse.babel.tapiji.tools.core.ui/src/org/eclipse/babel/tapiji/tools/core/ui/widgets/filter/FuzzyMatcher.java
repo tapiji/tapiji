@@ -12,15 +12,15 @@ package org.eclipse.babel.tapiji.tools.core.ui.widgets.filter;
 
 import java.util.Locale;
 
+import org.eclipse.babel.core.message.checks.proximity.IProximityAnalyzer;
 import org.eclipse.babel.editor.api.AnalyzerFactory;
-import org.eclipse.babel.editor.api.ILevenshteinDistanceAnalyzer;
 import org.eclipse.babel.editor.api.IValuedKeyTreeNode;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 
 public class FuzzyMatcher extends ExactMatcher {
 
-    protected ILevenshteinDistanceAnalyzer lvda;
+    protected IProximityAnalyzer lvda;
     protected float minimumSimilarity = 0.75f;
 
     public FuzzyMatcher(StructuredViewer viewer) {

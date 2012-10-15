@@ -31,20 +31,19 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
-
 /**
  * MessagesBundleGroup strategy for standard Java properties file structure.
  * That is, all *.properties files of the same base name within the same
- * directory.  This implementation works on files outside the Eclipse
- * workspace.
+ * directory. This implementation works on files outside the Eclipse workspace.
+ * 
  * @author Pascal Essiembre
  */
-public class PropertiesFileGroupStrategy implements IMessagesBundleGroupStrategy {
+public class PropertiesFileGroupStrategy implements
+	IMessagesBundleGroupStrategy {
 
     /** Empty bundle array. */
-    private static final MessagesBundle[] EMPTY_MESSAGES =
-    		new MessagesBundle[] {};
-    
+    private static final MessagesBundle[] EMPTY_MESSAGES = new MessagesBundle[] {};
+
     /** File being open, triggering the creation of a bundle group. */
     private File file;
     /** MessagesBundle group base name. */
@@ -57,153 +56,153 @@ public class PropertiesFileGroupStrategy implements IMessagesBundleGroupStrategy
     private final IPropertiesSerializerConfig serializerConfig;
     /** Properties file deserializer configuration. */
     private final IPropertiesDeserializerConfig deserializerConfig;
-    
-    
+
     /**
      * Constructor.
-     * @param file file from which to derive the group
+     * 
+     * @param file
+     *            file from which to derive the group
      */
-    public PropertiesFileGroupStrategy(
-            File file,
-            IPropertiesSerializerConfig serializerConfig,
-            IPropertiesDeserializerConfig deserializerConfig) {
-        super();
-        this.serializerConfig = serializerConfig;
-        this.deserializerConfig = deserializerConfig;
-        this.file = file;
-        this.fileExtension = file.getName().replaceFirst(
-                "(.*\\.)(.*)", "$2"); //$NON-NLS-1$ //$NON-NLS-2$
+    public PropertiesFileGroupStrategy(File file,
+	    IPropertiesSerializerConfig serializerConfig,
+	    IPropertiesDeserializerConfig deserializerConfig) {
+	super();
+	this.serializerConfig = serializerConfig;
+	this.deserializerConfig = deserializerConfig;
+	this.file = file;
+	this.fileExtension = file.getName().replaceFirst("(.*\\.)(.*)", "$2"); //$NON-NLS-1$ //$NON-NLS-2$
 
-        String patternCore =
-                "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" //$NON-NLS-1$
-              + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." //$NON-NLS-1$
-              + fileExtension + ")$"; //$NON-NLS-1$
+	String patternCore = "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" //$NON-NLS-1$
+		+ "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." //$NON-NLS-1$
+		+ fileExtension + ")$"; //$NON-NLS-1$
 
-        // Compute and cache name
-        String namePattern = "^(.*?)" + patternCore; //$NON-NLS-1$
-        this.baseName = file.getName().replaceFirst(
-                namePattern, "$1"); //$NON-NLS-1$
-        
-        // File matching pattern
-        this.fileMatchPattern =
-                "^(" + baseName + ")" + patternCore;  //$NON-NLS-1$//$NON-NLS-2$
+	// Compute and cache name
+	String namePattern = "^(.*?)" + patternCore; //$NON-NLS-1$
+	this.baseName = file.getName().replaceFirst(namePattern, "$1"); //$NON-NLS-1$
+
+	// File matching pattern
+	this.fileMatchPattern = "^(" + baseName + ")" + patternCore; //$NON-NLS-1$//$NON-NLS-2$
     }
 
     /**
      * @see org.eclipse.babel.core.bundle.IMessagesBundleGroupStrategy
-     * 			#getMessagesBundleGroupName()
+     *      #getMessagesBundleGroupName()
      */
     public String createMessagesBundleGroupName() {
-        return baseName + "[...]." + fileExtension; //$NON-NLS-1$
+	return baseName + "[...]." + fileExtension; //$NON-NLS-1$
     }
 
     /**
      * @see org.eclipse.babel.core.bundle.IMessagesBundleGroupStrategy
-     *          #loadMessagesBundles()
+     *      #loadMessagesBundles()
      */
     public MessagesBundle[] loadMessagesBundles() throws MessageException {
-        File[] resources = null;
-        File parentDir = file.getParentFile();
-        if (parentDir != null) {
-            resources = parentDir.listFiles();
-        }
-        Collection<MessagesBundle> bundles = new ArrayList<MessagesBundle>();
-        if (resources != null) {
-            for (int i = 0; i < resources.length; i++) {
-                File resource = resources[i];
-                String resourceName = resource.getName();
-                if (resource.isFile()
-                        && resourceName.matches(fileMatchPattern)) {
-                    // Build local title
-                    String localeText = resourceName.replaceFirst(
-                            fileMatchPattern, "$2"); //$NON-NLS-1$
-                    Locale locale = BabelUtils.parseLocale(localeText);
-                    bundles.add(createBundle(locale, resource));
-                }
-            }
-        }
-        return bundles.toArray(EMPTY_MESSAGES);
+	File[] resources = null;
+	File parentDir = file.getParentFile();
+	if (parentDir != null) {
+	    resources = parentDir.listFiles();
+	}
+	Collection<MessagesBundle> bundles = new ArrayList<MessagesBundle>();
+	if (resources != null) {
+	    for (int i = 0; i < resources.length; i++) {
+		File resource = resources[i];
+		String resourceName = resource.getName();
+		if (resource.isFile() && resourceName.matches(fileMatchPattern)) {
+		    // Build local title
+		    String localeText = resourceName.replaceFirst(
+			    fileMatchPattern, "$2"); //$NON-NLS-1$
+		    Locale locale = BabelUtils.parseLocale(localeText);
+		    bundles.add(createBundle(locale, resource));
+		}
+	    }
+	}
+	return bundles.toArray(EMPTY_MESSAGES);
     }
 
     /**
      * @see org.eclipse.babel.core.bundle.IBundleGroupStrategy
-     *          #createBundle(java.util.Locale)
+     *      #createBundle(java.util.Locale)
      */
     public MessagesBundle createMessagesBundle(Locale locale) {
-        // TODO Implement me (code exists in SourceForge version)
-        return null;
+	// TODO Implement me (code exists in SourceForge version)
+	return null;
     }
-    
+
     /**
      * Creates a resource bundle for an existing resource.
-     * @param locale locale for which to create a bundle
-     * @param resource resource used to create bundle
+     * 
+     * @param locale
+     *            locale for which to create a bundle
+     * @param resource
+     *            resource used to create bundle
      * @return an initialized bundle
      */
     protected MessagesBundle createBundle(Locale locale, File resource)
-            throws MessageException {
-        try {
-            //TODO have the text de/serializer tied to Eclipse preferences,
-            //singleton per project, and listening for changes
-            return new MessagesBundle(new PropertiesFileResource(
-                    locale,
-                    new PropertiesSerializer(serializerConfig),
-                    new PropertiesDeserializer(deserializerConfig),
-                    resource));
-        } catch (FileNotFoundException e) {
-            throw new MessageException(
-                    "Cannot create bundle for locale " //$NON-NLS-1$
-                  + locale + " and resource " + resource, e); //$NON-NLS-1$
-        }
+	    throws MessageException {
+	try {
+	    // TODO have the text de/serializer tied to Eclipse preferences,
+	    // singleton per project, and listening for changes
+	    return new MessagesBundle(new PropertiesFileResource(locale,
+		    new PropertiesSerializer(serializerConfig),
+		    new PropertiesDeserializer(deserializerConfig), resource));
+	} catch (FileNotFoundException e) {
+	    throw new MessageException("Cannot create bundle for locale " //$NON-NLS-1$
+		    + locale + " and resource " + resource, e); //$NON-NLS-1$
+	}
     }
-    
+
     public String createMessagesBundleId() {
-    	String path = file.getAbsolutePath();
-    	int index = path.indexOf("src");
-    	String pathBeforeSrc = path.substring(0, index - 1);
-    	int lastIndexOf = pathBeforeSrc.lastIndexOf(File.separatorChar);
-    	String projectName = path.substring(lastIndexOf + 1, index - 1);
-    	String relativeFilePath = path.substring(index, path.length());
-    	
-    	IFile f = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).getFile(relativeFilePath);
-    	
-    	return NameUtils.getResourceBundleId(f);
+	String path = file.getAbsolutePath();
+	int index = path.indexOf("src");
+	String pathBeforeSrc = path.substring(0, index - 1);
+	int lastIndexOf = pathBeforeSrc.lastIndexOf(File.separatorChar);
+	String projectName = path.substring(lastIndexOf + 1, index - 1);
+	String relativeFilePath = path.substring(index, path.length());
+
+	IFile f = ResourcesPlugin.getWorkspace().getRoot()
+		.getProject(projectName).getFile(relativeFilePath);
+
+	return NameUtils.getResourceBundleId(f);
     }
-    
+
     public String getProjectName() {
-		IPath path = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-		IPath fullPath = null;
-		if (this.file.getAbsolutePath().contains(path.toOSString())) {
-			fullPath = new Path(this.file.getAbsolutePath());
-		} else {
-			fullPath = new Path(path.toOSString() + this.file.getAbsolutePath());
-		}
-		
-		IFile file = ResourcesPlugin
-				.getWorkspace()
-				.getRoot()
-				.getFileForLocation(fullPath);
-    
-		return ResourcesPlugin.getWorkspace().getRoot().getProject(file.getFullPath().segments()[0]).getName();
+	IPath path = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+	IPath fullPath = null;
+	if (this.file.getAbsolutePath().contains(path.toOSString())) {
+	    fullPath = new Path(this.file.getAbsolutePath());
+	} else {
+	    fullPath = new Path(path.toOSString() + this.file.getAbsolutePath());
+	}
+
+	IFile file = ResourcesPlugin.getWorkspace().getRoot()
+		.getFileForLocation(fullPath);
+
+	if (file != null) {
+	    return ResourcesPlugin.getWorkspace().getRoot()
+		    .getProject(file.getFullPath().segments()[0]).getName();
+	} else {
+	    return null;
+	}
+	
     }
-    
-//    public static String getResourceBundleId (IResource resource) {
-//		String packageFragment = "";
-//
-//		IJavaElement propertyFile = JavaCore.create(resource.getParent());
-//		if (propertyFile != null && propertyFile instanceof IPackageFragment)
-//			packageFragment = ((IPackageFragment) propertyFile).getElementName();
-//		
-//		return (packageFragment.length() > 0 ? packageFragment  + "." : "") + 
-//				getResourceBundleName(resource);
-//	}
-//    
-//    public static String getResourceBundleName(IResource res) {
-//        String name = res.getName();
-//    	String regex = "^(.*?)" //$NON-NLS-1$
-//                + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" //$NON-NLS-1$
-//                + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." //$NON-NLS-1$
-//                + res.getFileExtension() + ")$"; //$NON-NLS-1$
-//        return name.replaceFirst(regex, "$1"); //$NON-NLS-1$
-//    }
+
+    // public static String getResourceBundleId (IResource resource) {
+    // String packageFragment = "";
+    //
+    // IJavaElement propertyFile = JavaCore.create(resource.getParent());
+    // if (propertyFile != null && propertyFile instanceof IPackageFragment)
+    // packageFragment = ((IPackageFragment) propertyFile).getElementName();
+    //
+    // return (packageFragment.length() > 0 ? packageFragment + "." : "") +
+    // getResourceBundleName(resource);
+    // }
+    //
+    // public static String getResourceBundleName(IResource res) {
+    // String name = res.getName();
+    //    	String regex = "^(.*?)" //$NON-NLS-1$
+    //                + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" //$NON-NLS-1$
+    //                + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." //$NON-NLS-1$
+    //                + res.getFileExtension() + ")$"; //$NON-NLS-1$
+    //        return name.replaceFirst(regex, "$1"); //$NON-NLS-1$
+    // }
 }
