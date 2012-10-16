@@ -205,7 +205,8 @@ public abstract class I18nResourceAuditor {
       <documentation>
          &lt;ul&gt;
  &lt;li&gt;Java Internationalization help: &lt;span style=&quot;font-family:monospace&quot;&gt;org.eclipselabs.tapiji.tools.java&lt;/span&gt;&lt;/li&gt;
- &lt;li&gt;JSF Internaization help: &lt;span style=&quot;font-family:monospace&quot;&gt;org.eclipselabs.tapiji.tools.jsf&lt;/span&gt;&lt;/li&gt;
+ &lt;li&gt;JSF Internaization help: &lt;span style=&quot;font-family:monospace&quot;&gt;org.eclipselabs.tapiji.tools.jsf&lt;/span&gt;
+ &lt;/li&gt;
 &lt;/ul&gt;
       </documentation>
    </annotation>
