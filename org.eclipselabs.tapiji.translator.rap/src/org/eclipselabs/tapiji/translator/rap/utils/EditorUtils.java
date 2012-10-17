@@ -15,6 +15,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipselabs.tapiji.translator.actions.FileOpenAction;
+import org.eclipselabs.tapiji.translator.rap.helpers.managers.RBLockManager;
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 
@@ -79,6 +80,8 @@ public class EditorUtils {
 		if (openedEditors.isEmpty())
 			return false;
 		
+		releaseLock(rb.getId());
+		
 		return getActivePage().closeEditor(openedEditors.get(0).getEditor(false), save);		
 	}
 	
@@ -93,6 +96,8 @@ public class EditorUtils {
 		
 		if (openedEditors.isEmpty())
 			return;
+		
+		releaseLock(rb.getId());
 		
 		// close all opened editors
 		for (IEditorReference editorRef : openedEditors) {
@@ -175,5 +180,13 @@ public class EditorUtils {
 			return (IMessagesEditor) openedEditor;
 		
 		return null;
+	}
+	
+	private static boolean releaseLock(long rbID) {		
+		boolean locked = RBLockManager.INSTANCE.isLocked(rbID);
+		if (locked) {
+			RBLockManager.INSTANCE.release(rbID);
+		}
+		return locked;
 	}
 }

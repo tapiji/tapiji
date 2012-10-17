@@ -6,26 +6,14 @@ import java.util.Locale;
 import org.eclipse.babel.core.message.IMessagesBundle;
 import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.core.message.internal.IMessagesBundleGroupListener;
-import org.eclipse.babel.core.message.internal.MessageException;
 import org.eclipse.babel.core.message.internal.MessagesBundle;
-import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroupAdapter;
-import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
 import org.eclipse.babel.editor.IMessagesEditor;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
-import org.eclipse.babel.editor.builder.ToggleNatureAction;
-import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
-import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.util.SharedMsgEditorsManager;
-import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipselabs.tapiji.translator.rap.helpers.managers.IResourceBundleLockListener;
@@ -124,6 +112,7 @@ public class MessagesEditor extends AbstractMessagesEditor {
 			// disable editor if resource bundle is already opened by another user
 			if (RBLockManager.INSTANCE.isLocked(resourceBundle.getId()))
 				rbLockListener.lockAcquired(RBLockManager.INSTANCE.getRBLock(resourceBundle.getId()));
+			
 		}
 	}
 
@@ -191,4 +180,6 @@ public class MessagesEditor extends AbstractMessagesEditor {
 			((TextEditor) textEditor).setEnabled(enabled);
 		}
 	}
+	
+	
 }

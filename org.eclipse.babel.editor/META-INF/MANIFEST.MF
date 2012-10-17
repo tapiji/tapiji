@@ -37,5 +37,4 @@ Export-Package: org.eclipse.babel.editor,
  org.eclipse.babel.editor.util,
  org.eclipse.babel.editor.widgets,
  org.eclipse.babel.editor.wizards
-Import-Package: org.eclipse.babel.editor.internal,
- org.eclipse.ui.forms.widgets
+Import-Package: org.eclipse.ui.forms.widgets

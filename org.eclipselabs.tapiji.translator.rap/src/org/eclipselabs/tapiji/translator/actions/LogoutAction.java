@@ -15,12 +15,15 @@ public class LogoutAction implements IWorkbenchWindowActionDelegate {
 	IWorkbenchWindow window;
 	
 	@Override
-	public void run(IAction action) {
-		User user = UserUtils.logoutUser();
+	public void run(IAction action) {	
+		User user = UserUtils.getUser();
 		
 		// close all opened editors with user resource bundles
 		for (ResourceBundle userRB : user.getStoredRBs())
 			EditorUtils.closeAllEditorsOfRB(userRB, true);
+		
+		// logout
+		UserUtils.logoutUser();
 		
 		StorageUtils.refreshStorageView();
 	}
