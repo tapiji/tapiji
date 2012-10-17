@@ -1,11 +1,11 @@
 package org.eclipselabs.tapiji.translator.rap.widgets;
 
 import org.eclipse.jface.action.ContributionItem;
-import org.eclipse.rwt.lifecycle.WidgetUtil;
+import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rap.rwt.lifecycle.WidgetUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
@@ -31,7 +31,7 @@ public class UserInfoContributionItem extends ContributionItem {
 					
 			final ToolItem userItem = new ToolItem(toolBar, SWT.DROP_DOWN | SWT.BORDER, index);
 			userItem.setText(UserUtils.getUser().getUsername());
-			userItem.setData(WidgetUtil.CUSTOM_VARIANT, "userItem");
+			userItem.setData(RWT.CUSTOM_VARIANT, "userItem");
 			userItem.setImage(UIUtils.getImageDescriptor(UIUtils.IMAGE_HOME).createImage());
 		    userItem.addSelectionListener(new SelectionAdapter() {
 			    @Override

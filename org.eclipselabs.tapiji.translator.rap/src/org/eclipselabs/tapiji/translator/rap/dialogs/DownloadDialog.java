@@ -10,9 +10,9 @@ import java.util.zip.ZipOutputStream;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.rwt.RWT;
-import org.eclipse.rwt.service.IServiceHandler;
-import org.eclipse.rwt.service.IServiceManager;
+import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rap.rwt.service.IServiceHandler;
+import org.eclipse.rap.rwt.service.IServiceManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.MouseAdapter;

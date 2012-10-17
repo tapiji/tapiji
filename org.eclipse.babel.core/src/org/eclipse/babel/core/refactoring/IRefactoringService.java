@@ -14,7 +14,6 @@ import java.util.Locale;
 
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.jdt.core.dom.CompilationUnit;
 
 /**
  * Service class, which can be used to execute key refactorings.
