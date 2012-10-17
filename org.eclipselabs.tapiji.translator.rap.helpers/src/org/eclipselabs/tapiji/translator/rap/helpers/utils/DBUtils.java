@@ -36,7 +36,7 @@ public class DBUtils {
 	/** Database schema name */
 	public static final String DB_NAME = "translatordb";
 	/** Database host */
-	public static final String DB_HOST = "10.0.0.2";
+	public static final String DB_HOST = "127.0.0.1";
 	/** Database port */
 	public static final int DB_PORT = 3306;
 	/** Database driver */

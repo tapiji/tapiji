@@ -11,7 +11,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rwt.RWT;
 import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
