@@ -598,3 +598,4 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart impleme
 	abstract protected void disposeRAP();
 	abstract protected IMessagesBundleGroupListener getMsgBundleGroupListner();
 }
+

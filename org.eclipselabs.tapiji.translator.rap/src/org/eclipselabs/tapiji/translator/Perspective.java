@@ -8,7 +8,7 @@ public class Perspective extends AbstractPerspective {
 	@Override
 	protected void initViewsArea(IPageLayout layout) {
 		layout.addShowViewShortcut(StorageView.ID);
-		layout.addView(StorageView.ID, IPageLayout.LEFT, .2f, IPageLayout.ID_EDITOR_AREA);
+		layout.addView(StorageView.ID, IPageLayout.LEFT, .25f, IPageLayout.ID_EDITOR_AREA);
 		layout.getViewLayout(StorageView.ID).setCloseable(true);
 		/*layout.addStandaloneView(GlossaryView.ID, false, IPageLayout.BOTTOM,
 		        .6f, IPageLayout.ID_EDITOR_AREA);*/

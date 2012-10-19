@@ -46,7 +46,7 @@ public class EntryRightBanner extends Composite {
     private final Map actionByMarkerIds = new HashMap();
     private final ToolBarManager toolBarMgr = new ToolBarManager(SWT.FLAT);
     private final AbstractMessagesEditor editor;
-    private final I18NEntry i18nEntry;
+    private final AbstractI18NEntry i18nEntry;
     private final Locale locale;
     private final Observer observer = new Observer() {
         public void update(Observable o, Object arg) {
@@ -66,7 +66,7 @@ public class EntryRightBanner extends Composite {
      */
     public EntryRightBanner(
             Composite parent,
-            final I18NEntry i18nEntry) {
+            final AbstractI18NEntry i18nEntry) {
         super(parent, SWT.NONE);
         this.i18nEntry = i18nEntry;
         this.locale = i18nEntry.getLocale();

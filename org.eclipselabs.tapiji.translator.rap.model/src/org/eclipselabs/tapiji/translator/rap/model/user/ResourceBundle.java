@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getId <em>Id</em>}</li>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getLocalFiles <em>Local Files</em>}</li>
+ *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getPropertiesFiles <em>Properties Files</em>}</li>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getSharedUsers <em>Shared Users</em>}</li>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getOwner <em>Owner</em>}</li>
  * </ul>
@@ -80,7 +80,7 @@ public interface ResourceBundle extends EObject {
 	void setName(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Local Files</b></em>' containment reference list.
+	 * Returns the value of the '<em><b>Properties Files</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -88,12 +88,12 @@ public interface ResourceBundle extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Local Files</em>' containment reference list.
-	 * @see org.eclipselabs.tapiji.translator.rap.model.user.UserPackage#getResourceBundle_LocalFiles()
+	 * @return the value of the '<em>Properties Files</em>' containment reference list.
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.UserPackage#getResourceBundle_PropertiesFiles()
 	 * @model containment="true" resolveProxies="true" required="true"
 	 * @generated
 	 */
-	EList<PropertiesFile> getLocalFiles();
+	EList<PropertiesFile> getPropertiesFiles();
 
 	/**
 	 * Returns the value of the '<em><b>Shared Users</b></em>' reference list.

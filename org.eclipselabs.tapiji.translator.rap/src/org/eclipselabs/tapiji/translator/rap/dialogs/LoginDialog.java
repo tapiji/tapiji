@@ -58,7 +58,7 @@ public class LoginDialog extends Dialog {
 		incorrectUsernamePassword.setForeground(comp.getDisplay().getSystemColor(SWT.COLOR_RED));
 		incorrectUsernamePassword.setVisible(false);
 		incorrectUsernamePassword.setText("Incorrect username and/or password!");
-		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_END);
+		GridData gridData = new GridData();
 	    gridData.horizontalSpan = 2;
 	    gridData.horizontalAlignment = GridData.FILL;
 		incorrectUsernamePassword.setLayoutData(gridData);
@@ -73,7 +73,8 @@ public class LoginDialog extends Dialog {
 		String username = usernameText.getText();
 		String password = passwordText.getText();
 		
-		User user = UserUtils.loginUser(username, password);
+		User user = ! username.isEmpty() && ! password.isEmpty() ? 
+				UserUtils.loginUser(username, password) : null;
 		
 		if (user == null) {
 			// username, password incorrect

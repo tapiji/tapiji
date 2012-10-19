@@ -2,26 +2,25 @@ package org.eclipselabs.tapiji.translator.rap.helpers.managers;
 
 import java.util.concurrent.Semaphore;
 
-import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 
-public class RBLock {
-	private long rbID;
+public class PFLock {
+	private long propsID;
 	private User owner;
 	private Semaphore sema = new Semaphore(1);
 	private boolean locked = false;
 	
-	public RBLock(long rbID, User owner) {
-		this.rbID = rbID;
+	public PFLock(long rbID, User owner) {
+		this.propsID = rbID;
 		this.owner = owner;
 	}
 
-	public long getResourceBundleID() {
-		return rbID;
+	public long getPropertiesFileID() {
+		return propsID;
 	}
 
-	public void setResourceBundleID(long rbID) {
-		this.rbID = rbID;
+	public void setPropertiesFileID(long rbID) {
+		this.propsID = rbID;
 	}
 
 	public User getOwner() {

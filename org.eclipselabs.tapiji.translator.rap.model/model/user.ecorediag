@@ -103,7 +103,7 @@
     </children>
     <styles xmi:type="notation:ConnectorStyle" xmi:id="_lUEe0dfeEeGiD7hfZDuE-g" lineColor="4210752"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_lUEe0tfeEeGiD7hfZDuE-g" fontColor="4210752" fontName="Sans" fontHeight="10"/>
-    <element xmi:type="ecore:EReference" href="user.ecore#//ResourceBundle/localFiles"/>
+    <element xmi:type="ecore:EReference" href="user.ecore#//ResourceBundle/propertiesFiles"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_lUEe09feEeGiD7hfZDuE-g" points="[-5, 19, 53, -200]$[-54, 204, 4, -15]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_iAYEANffEeGiD7hfZDuE-g" id="(0.9449152542372882,0.44075829383886256)"/>
   </edges>

@@ -15,6 +15,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -30,6 +31,7 @@ public class RegisterDialog extends Dialog {
 	private Text passwordConfirmText;
 	private Label errorLabel;
 	private User registeredUser;
+	private Button loginCheckBox;
 	
 	private Image errorImage = FieldDecorationRegistry.getDefault().
 			getFieldDecoration(FieldDecorationRegistry.DEC_ERROR).getImage();
@@ -55,8 +57,6 @@ public class RegisterDialog extends Dialog {
 		
 		GridLayout layout = (GridLayout) comp.getLayout();
 	    layout.numColumns = 2;
-		
-	    
 	    
 		Label usernameLabel = new Label(comp, SWT.RIGHT);
 		usernameLabel.setText("Username: ");		
@@ -73,11 +73,16 @@ public class RegisterDialog extends Dialog {
 		passwordConfirmText = new Text(comp, SWT.SINGLE | SWT.PASSWORD | SWT.BORDER);
 		passwordConfirmText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
+		loginCheckBox = new Button(comp, SWT.CHECK);
+		loginCheckBox.setText("Login");
+		loginCheckBox.setSelection(true);
+		//loginCheckBox.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		errorLabel = new Label(comp, SWT.NONE);
 		errorLabel.setForeground(comp.getDisplay().getSystemColor(SWT.COLOR_RED));
 		errorLabel.setVisible(false);
 		errorLabel.setText("The password and the confirmation aren't equal!");
-		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_END);
+		GridData gridData = new GridData();
 	    gridData.horizontalSpan = 2;
 	    gridData.horizontalAlignment = GridData.FILL;
 		errorLabel.setLayoutData(gridData);
@@ -192,6 +197,8 @@ public class RegisterDialog extends Dialog {
 				errorLabel.setText("The username exists already!");
 				errorLabel.setVisible(true);
 			} else {
+				if (loginCheckBox.getSelection())
+					UserUtils.loginUser(username, password);
 				super.okPressed();
 			}
 		}

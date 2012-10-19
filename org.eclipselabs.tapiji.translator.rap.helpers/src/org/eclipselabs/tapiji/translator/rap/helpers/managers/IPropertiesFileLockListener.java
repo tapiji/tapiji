@@ -4,7 +4,7 @@ import java.util.EventListener;
 
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 
-public interface IResourceBundleLockListener extends EventListener {
-	void lockReleased(RBLock lock);
-	void lockAcquired(RBLock lock);
+public interface IPropertiesFileLockListener extends EventListener {
+	void lockReleased(PFLock lock);
+	void lockAcquired(PFLock lock);
 }

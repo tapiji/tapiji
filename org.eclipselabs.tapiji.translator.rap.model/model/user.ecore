@@ -48,7 +48,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
         iD="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="localFiles" lowerBound="1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propertiesFiles" lowerBound="1"
         upperBound="-1" eType="#//PropertiesFile" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sharedUsers" upperBound="-1"
         eType="#//User"/>

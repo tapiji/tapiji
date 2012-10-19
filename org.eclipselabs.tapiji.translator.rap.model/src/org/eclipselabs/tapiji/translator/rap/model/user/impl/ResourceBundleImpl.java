@@ -33,7 +33,7 @@ import org.eclipselabs.tapiji.translator.rap.model.user.UserPackage;
  * <ul>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl#getId <em>Id</em>}</li>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl#getLocalFiles <em>Local Files</em>}</li>
+ *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl#getPropertiesFiles <em>Properties Files</em>}</li>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl#getSharedUsers <em>Shared Users</em>}</li>
  *   <li>{@link org.eclipselabs.tapiji.translator.rap.model.user.impl.ResourceBundleImpl#getOwner <em>Owner</em>}</li>
  * </ul>
@@ -83,15 +83,15 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getLocalFiles() <em>Local Files</em>}' containment reference list.
+	 * The cached value of the '{@link #getPropertiesFiles() <em>Properties Files</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLocalFiles()
+	 * @see #getPropertiesFiles()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<PropertiesFile> localFiles;
-		
+	protected EList<PropertiesFile> propertiesFiles;
+
 	/**
 	 * The cached value of the '{@link #getSharedUsers() <em>Shared Users</em>}' reference list.
 	 * <!-- begin-user-doc -->
@@ -178,11 +178,11 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<PropertiesFile> getLocalFiles() {
-		if (localFiles == null) {
-			localFiles = new EObjectContainmentEList.Resolving<PropertiesFile>(PropertiesFile.class, this, UserPackage.RESOURCE_BUNDLE__LOCAL_FILES);
+	public EList<PropertiesFile> getPropertiesFiles() {
+		if (propertiesFiles == null) {
+			propertiesFiles = new EObjectContainmentEList.Resolving<PropertiesFile>(PropertiesFile.class, this, UserPackage.RESOURCE_BUNDLE__PROPERTIES_FILES);
 		}
-		return localFiles;
+		return propertiesFiles;
 	}
 
 	/**
@@ -267,8 +267,8 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case UserPackage.RESOURCE_BUNDLE__LOCAL_FILES:
-				return ((InternalEList<?>)getLocalFiles()).basicRemove(otherEnd, msgs);
+			case UserPackage.RESOURCE_BUNDLE__PROPERTIES_FILES:
+				return ((InternalEList<?>)getPropertiesFiles()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -285,8 +285,8 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 				return getId();
 			case UserPackage.RESOURCE_BUNDLE__NAME:
 				return getName();
-			case UserPackage.RESOURCE_BUNDLE__LOCAL_FILES:
-				return getLocalFiles();
+			case UserPackage.RESOURCE_BUNDLE__PROPERTIES_FILES:
+				return getPropertiesFiles();
 			case UserPackage.RESOURCE_BUNDLE__SHARED_USERS:
 				return getSharedUsers();
 			case UserPackage.RESOURCE_BUNDLE__OWNER:
@@ -311,9 +311,9 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 			case UserPackage.RESOURCE_BUNDLE__NAME:
 				setName((String)newValue);
 				return;
-			case UserPackage.RESOURCE_BUNDLE__LOCAL_FILES:
-				getLocalFiles().clear();
-				getLocalFiles().addAll((Collection<? extends PropertiesFile>)newValue);
+			case UserPackage.RESOURCE_BUNDLE__PROPERTIES_FILES:
+				getPropertiesFiles().clear();
+				getPropertiesFiles().addAll((Collection<? extends PropertiesFile>)newValue);
 				return;
 			case UserPackage.RESOURCE_BUNDLE__SHARED_USERS:
 				getSharedUsers().clear();
@@ -340,8 +340,8 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 			case UserPackage.RESOURCE_BUNDLE__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case UserPackage.RESOURCE_BUNDLE__LOCAL_FILES:
-				getLocalFiles().clear();
+			case UserPackage.RESOURCE_BUNDLE__PROPERTIES_FILES:
+				getPropertiesFiles().clear();
 				return;
 			case UserPackage.RESOURCE_BUNDLE__SHARED_USERS:
 				getSharedUsers().clear();
@@ -365,8 +365,8 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 				return id != ID_EDEFAULT;
 			case UserPackage.RESOURCE_BUNDLE__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case UserPackage.RESOURCE_BUNDLE__LOCAL_FILES:
-				return localFiles != null && !localFiles.isEmpty();
+			case UserPackage.RESOURCE_BUNDLE__PROPERTIES_FILES:
+				return propertiesFiles != null && !propertiesFiles.isEmpty();
 			case UserPackage.RESOURCE_BUNDLE__SHARED_USERS:
 				return sharedUsers != null && !sharedUsers.isEmpty();
 			case UserPackage.RESOURCE_BUNDLE__OWNER:
@@ -403,7 +403,7 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 		if (obj instanceof ResourceBundle) {
 			ResourceBundle otherRB = (ResourceBundle) obj;
 			
-			if (getName().equals(otherRB.getName()) && equalsLocalFiles(otherRB.getLocalFiles()) ) {
+			if (getName().equals(otherRB.getName()) && equalsLocalFiles(otherRB.getPropertiesFiles()) ) {
 				if (getOwner() == null) {
 					if (otherRB.getOwner() == null)
 						return true;
@@ -418,11 +418,11 @@ public class ResourceBundleImpl extends EObjectImpl implements ResourceBundle {
 	}
 	
 	private boolean equalsLocalFiles(EList<PropertiesFile> otherFiles) {
-		if (getLocalFiles().size() != otherFiles.size())
+		if (getPropertiesFiles().size() != otherFiles.size())
 			return false;
 		
-		for (int i=0; i < getLocalFiles().size(); i++) {
-			PropertiesFile file = getLocalFiles().get(i);
+		for (int i=0; i < getPropertiesFiles().size(); i++) {
+			PropertiesFile file = getPropertiesFiles().get(i);
 			if (! file.equals(otherFiles.get(i)))
 				return false;
 		}

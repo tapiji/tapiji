@@ -35,6 +35,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchPage;
@@ -45,6 +46,9 @@ import org.eclipselabs.tapiji.translator.rap.dialogs.DownloadDialog;
 import org.eclipselabs.tapiji.translator.rap.dialogs.LoginDialog;
 import org.eclipselabs.tapiji.translator.rap.dialogs.NewLocaleDialog;
 import org.eclipselabs.tapiji.translator.rap.dialogs.ShareDialog;
+import org.eclipselabs.tapiji.translator.rap.helpers.managers.IPropertiesFileLockListener;
+import org.eclipselabs.tapiji.translator.rap.helpers.managers.PFLock;
+import org.eclipselabs.tapiji.translator.rap.helpers.managers.RBLockManager;
 import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
@@ -68,12 +72,47 @@ public class StorageView extends ViewPart {
 	private Map<String,ResourceBundle> sessionRBsMap = new HashMap<String,ResourceBundle>();
 	private Map<String,ResourceBundle> userRBsMap = new HashMap<String,ResourceBundle>();
 	
+	private IPropertiesFileLockListener pfLockListener = new IPropertiesFileLockListener() {		
+		private Display display;
+		
+		private void init() {
+			display = treeViewer.getTree().getDisplay();
+		}
+		
+		@Override
+		public void lockReleased(PFLock lock) {
+			if (display == null)
+				init();
+			display.asyncExec(new Runnable() {				
+				@Override
+				public void run() {
+					treeViewer.refresh();
+				}
+			});			
+		}
+		
+		@Override
+		public void lockAcquired(PFLock lock) {
+			if (display == null)
+				init();
+			display.asyncExec(new Runnable() {				
+				@Override
+				public void run() {
+					treeViewer.refresh();
+				}
+			});
+		}
+	};
+	
 	public final static String ID = "org.eclipselabs.tapiji.translator.views.StorageView";
 	
 	public StorageView() {}
 
 	@Override
 	public void createPartControl(Composite parent) {
+		// register lock listener
+		RBLockManager.INSTANCE.addGlobalLockListener(pfLockListener);
+		
 		this.parent = parent;
 		parent.setLayout(new GridLayout());
 		
@@ -110,6 +149,8 @@ public class StorageView extends ViewPart {
 		});
 	}
 	
+	
+	
 	private void createStoragePart() {				
 		createTree();		
 	    fillTree();
@@ -140,6 +181,12 @@ public class StorageView extends ViewPart {
 			}
 		});
     }
+	
+	@Override
+	public void dispose() {
+		RBLockManager.INSTANCE.removeGlobalLockListener(pfLockListener);
+		super.dispose();
+	}
 	
 	@Override
 	public void setFocus() {
@@ -194,8 +241,8 @@ public class StorageView extends ViewPart {
     			// rb exist already, but local files have changed
     			if (modelRB != null) {    				
     				// update model files
-    				modelRB.getLocalFiles().clear();
-    				modelRB.getLocalFiles().addAll(rb.getLocalFiles());
+    				modelRB.getPropertiesFiles().clear();
+    				modelRB.getPropertiesFiles().addAll(rb.getPropertiesFiles());
     				
     				rbsToRemove.remove(modelRB);
     			// rb doesn't exists yet
@@ -232,7 +279,7 @@ public class StorageView extends ViewPart {
 		int index = treeViewer.getTree().indexOf(item);
 		
 		// remove rb from tree if empty
-		if (updatedRB.getLocalFiles().isEmpty())
+		if (updatedRB.getPropertiesFiles().isEmpty())
 			model.remove(index);
 		// update rb
 		else
@@ -394,7 +441,7 @@ public class StorageView extends ViewPart {
 		
 		if (selectedItem instanceof ResourceBundle) {
 			rb = (ResourceBundle) selectedItem;
-			deleteFiles.addAll(rb.getLocalFiles());
+			deleteFiles.addAll(rb.getPropertiesFiles());
 			
 		} else if (selectedItem instanceof PropertiesFile) {
 			PropertiesFile file = (PropertiesFile) selectedItem;
@@ -426,13 +473,13 @@ public class StorageView extends ViewPart {
 					ifile.delete(true, null);
 					
 					// remove file from resource bundle
-					rb.getLocalFiles().remove(file);				
+					rb.getPropertiesFiles().remove(file);				
 				}
 				
 				// update database
 				if (! rb.isTemporary()) {					
 					// delete rb if all locals were deleted
-					if (rb.getLocalFiles().isEmpty()) {
+					if (rb.getPropertiesFiles().isEmpty()) {
 						EcoreUtil.delete(rb);
 						ownerUser.getStoredRBs().remove(rb);
 					}
@@ -444,7 +491,7 @@ public class StorageView extends ViewPart {
 				IMessagesEditor msgEditor = EditorUtils.getMessagesEditor(rb);
 				if (msgEditor != null) {
 					// rb is deleted -> close editor
-					if (rb.getLocalFiles().isEmpty())
+					if (rb.getPropertiesFiles().isEmpty())
 						EditorUtils.closeEditorOfRB(rb, false);
 					// properties file is deleted -> remove message bundle
 					else {
@@ -529,7 +576,7 @@ public class StorageView extends ViewPart {
 		Locale newLocal = newLocaleDialog.getSelectedLocal();	
 		ResourceBundle rb = getSelectedRB();
 		
-		IFile ifile = FileRAPUtils.getFile(rb.getLocalFiles().get(0));
+		IFile ifile = FileRAPUtils.getFile(rb.getPropertiesFiles().get(0));
 		IPath path = ifile.getProjectRelativePath();
 		
 		String bundleName = rb.getName();
@@ -549,7 +596,7 @@ public class StorageView extends ViewPart {
 			
 			// add file to rb
 			PropertiesFile propFile = StorageUtils.createPropertiesFile(newFile);
-			rb.getLocalFiles().add(propFile);
+			rb.getPropertiesFiles().add(propFile);
 			
 			// store in db
 			if (! rb.isTemporary()) {

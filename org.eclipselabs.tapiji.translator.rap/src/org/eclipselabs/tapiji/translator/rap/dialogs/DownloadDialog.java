@@ -82,7 +82,7 @@ public class DownloadDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite comp = (Composite) super.createDialogArea(parent);
-		List<PropertiesFile> files = resourceBundle.getLocalFiles();
+		List<PropertiesFile> files = resourceBundle.getPropertiesFiles();
 		
 		GridLayout layout = (GridLayout) comp.getLayout();
 	    layout.numColumns = 1;
@@ -172,7 +172,7 @@ public class DownloadDialog extends Dialog {
 		    ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFilename));
 
 		    // Compress the files
-		    for (PropertiesFile file : resourceBundle.getLocalFiles()) {
+		    for (PropertiesFile file : resourceBundle.getPropertiesFiles()) {
 		        FileInputStream in = new FileInputStream(file.getPath());
 
 		        // Add ZIP entry to output stream.

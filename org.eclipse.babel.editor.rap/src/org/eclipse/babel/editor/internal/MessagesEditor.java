@@ -1,23 +1,32 @@
 package org.eclipse.babel.editor.internal;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.eclipse.babel.core.message.IMessagesBundle;
 import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.core.message.internal.IMessagesBundleGroupListener;
 import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroupAdapter;
+import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.babel.editor.IMessagesEditor;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 import org.eclipse.babel.editor.util.SharedMsgEditorsManager;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.swt.events.MenuDetectEvent;
+import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.eclipselabs.tapiji.translator.rap.helpers.managers.IResourceBundleLockListener;
-import org.eclipselabs.tapiji.translator.rap.helpers.managers.RBLock;
+import org.eclipselabs.tapiji.translator.rap.helpers.managers.IPropertiesFileLockListener;
+import org.eclipselabs.tapiji.translator.rap.helpers.managers.PFLock;
 import org.eclipselabs.tapiji.translator.rap.helpers.managers.RBLockManager;
 import org.eclipselabs.tapiji.translator.rap.helpers.utils.DBUtils;
 import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
@@ -29,13 +38,15 @@ public class MessagesEditor extends AbstractMessagesEditor {
 	
 	private ResourceBundle resourceBundle;
 	private Display display;
-	private IResourceBundleLockListener rbLockListener;
+	private Map<PropertiesFile, IPropertiesFileLockListener> pfLockListeners = 
+			new HashMap<PropertiesFile, IPropertiesFileLockListener>();
 		
 	@Override
 	public void disposeRAP() {		
-		
-		if (resourceBundle != null) {
-			RBLockManager.INSTANCE.removeRBLockListener(resourceBundle.getId(), rbLockListener);
+		if (resourceBundle != null && ! pfLockListeners.isEmpty()) {
+			for (PropertiesFile propertiesFile : pfLockListeners.keySet()) {
+				RBLockManager.INSTANCE.removePFLockListener(propertiesFile.getId(), pfLockListeners.get(propertiesFile));
+			}
 			SharedMsgEditorsManager.INSTANCE.removeMessagesEditor(resourceBundle.getId(), this);
 		}
 	}	
@@ -53,66 +64,98 @@ public class MessagesEditor extends AbstractMessagesEditor {
 		// add locking mechanism only for stored resource bundles
 		if (resourceBundle != null) {				
 			SharedMsgEditorsManager.INSTANCE.addMessagesEditor(resourceBundle.getId(), this);
-			
-			rbLockListener = new IResourceBundleLockListener() {		
-				IStatusLineManager statusLineManager;
-				
-				private void initStatusLine() {
-					if (statusLineManager == null && getEditorSite() != null)
-						statusLineManager = getEditorSite().getActionBars().getStatusLineManager();
-				}
-				@Override
-				public void lockAcquired(final RBLock lock) {
-					display.asyncExec(new Runnable() {									
-						@Override
-						public void run() {
-							User currentUser = UserUtils.getUser();
-							if (currentUser != null && ! currentUser.equals(lock.getOwner())) {						
-								initStatusLine();
-								// disable editor								
-								setEnabled(false);
-								statusLineManager.setErrorMessage("Resource bundle is currently locked by \""+
-										lock.getOwner().getUsername()+"\"!");
-							}
-						}
-					});		
-				}	
-				
-				@Override
-				public void lockReleased(final RBLock lock) {
-					display.asyncExec(new Runnable() {									
-						@Override
-						public void run() {
-							User currentUser = UserUtils.getUser();
-							if (currentUser != null && ! currentUser.equals(lock.getOwner())) {
-								initStatusLine();
-								setEnabled(true);
-								// refresh text-editors
-								for (ITextEditor textEditor : textEditorsIndex)
-									textEditor.doRevertToSaved();
-								// update message bundles with underlying resource
-								for (IMessagesBundle bundle : messagesBundleGroup.getMessagesBundles())
-									bundle.getResource().deserialize(bundle);
-								// refresh tree model
-								refreshKeyTreeModel();
-								// refresh selected key's entries
-								for (IMessagesEditorChangeListener listener : changeListeners) {
-									listener.selectedKeyChanged(getSelectedKey(), getSelectedKey());
+			for (PropertiesFile propertiesFile : resourceBundle.getPropertiesFiles()) {
+				IPropertiesFileLockListener pfLockListener = new IPropertiesFileLockListener() {		
+//					IStatusLineManager statusLineManager;
+					
+//					private void initStatusLine() {
+//						if (statusLineManager == null && getEditorSite() != null)
+//							statusLineManager = getEditorSite().getActionBars().getStatusLineManager();
+//					}
+					
+					// return locale from properties file ID
+					private Locale idToLocale(long pfID) {						
+						PropertiesFile propertiesFile = DBUtils.getPropertiesFile(pfID);
+						return propertiesFile.getLocale() != null ? 
+								new Locale(propertiesFile.getLocale()) : null;						
+					}
+					
+					@Override
+					public void lockAcquired(final PFLock lock) {
+						display.asyncExec(new Runnable() {									
+							@Override
+							public void run() {
+								User currentUser = UserUtils.getUser();
+								if (currentUser != null && ! currentUser.equals(lock.getOwner())) {										
+									Locale locale = idToLocale(lock.getPropertiesFileID());									
+									
+									// disable i18n-Page + text-editor								
+									setEnabled(false, locale);
+									// disable add button
+									i18nPage.getSidNavTextBoxComposite().setEnabled(false);
+									// disable context menu
+									i18nPage.getTreeViewer().getTree().getMenu().setEnabled(false);
 								}
-								
-								// clear status bar
-								statusLineManager.setErrorMessage(null);											
 							}
-						}
-					});
-				}
-			};				
-			
-			RBLockManager.INSTANCE.addRBLockListener(resourceBundle.getId(), rbLockListener);
-			// disable editor if resource bundle is already opened by another user
-			if (RBLockManager.INSTANCE.isLocked(resourceBundle.getId()))
-				rbLockListener.lockAcquired(RBLockManager.INSTANCE.getRBLock(resourceBundle.getId()));
-			
+						});		
+					}	
+					
+					@Override
+					public void lockReleased(final PFLock lock) {
+						display.asyncExec(new Runnable() {									
+							@Override
+							public void run() {
+								User currentUser = UserUtils.getUser();
+								if (currentUser != null && ! currentUser.equals(lock.getOwner())) {
+									Locale locale = idToLocale(lock.getPropertiesFileID());
+									
+									// enable i18n-entry + text-editor
+									setEnabled(true, locale);
+									
+									if (RBLockManager.INSTANCE.isOwnerOfRBLock(currentUser, resourceBundle)) {
+										// enable add button if rb isn't locked
+										i18nPage.getSidNavTextBoxComposite().setEnabled(true);
+										// enable context menu
+										i18nPage.getTreeViewer().getTree().getMenu().setEnabled(true);
+									}
+									
+									
+									
+									// refresh the text-editor of the locale
+									for (int i=0; i < localesIndex.size(); i++) {
+										Locale l = localesIndex.get(i);
+										if (BabelUtils.equals(l, locale)) {
+											textEditorsIndex.get(i).doRevertToSaved();
+											break;
+										}				
+									}									
+									// update message bundle of the locale with underlying resource
+									for (IMessagesBundle bundle : messagesBundleGroup.getMessagesBundles()) {
+										if (BabelUtils.equals(locale, bundle.getLocale())) {
+											bundle.getResource().deserialize(bundle);
+											break;
+										}
+									}
+									
+//									// refresh tree model
+//									refreshKeyTreeModel();
+									// refresh selected key's entries
+									for (IMessagesEditorChangeListener listener : changeListeners) {
+										listener.selectedKeyChanged(getSelectedKey(), getSelectedKey());
+									}										
+								}
+							}
+						});
+					}
+				};				
+				
+				RBLockManager.INSTANCE.addPFLockListener(propertiesFile.getId(), pfLockListener);
+				// disable editor if resource bundle is already opened by another user
+				if (RBLockManager.INSTANCE.isPFLocked(propertiesFile.getId()))
+					pfLockListener.lockAcquired(RBLockManager.INSTANCE.getPFLock(propertiesFile.getId()));
+				
+				pfLockListeners.put(propertiesFile, pfLockListener);
+			}
 		}
 	}
 
@@ -128,6 +171,8 @@ public class MessagesEditor extends AbstractMessagesEditor {
 						addMessagesBundle(messagesBundle, newLocal);
 						// add entry to i18n page
 						i18nPage.addI18NEntry(MessagesEditor.this, newLocal);
+						// update resource bundle
+						resourceBundle = getRBFromFile(file);
 					}
 				});
 				
@@ -151,7 +196,9 @@ public class MessagesEditor extends AbstractMessagesEditor {
 				display.asyncExec(new Runnable() {
 					@Override
 					public void run() {											
-						removeMessagesBundle(messagesBundle, locale);							
+						removeMessagesBundle(messagesBundle, locale);						
+						// update resource bundle
+						resourceBundle = getRBFromFile(file);
 					}
 				});					
 				
@@ -181,5 +228,19 @@ public class MessagesEditor extends AbstractMessagesEditor {
 		}
 	}
 	
+	public void setEnabled(boolean enabled, Locale locale) {
+		i18nPage.setEnabled(enabled, locale);
+		
+		for (int i=0; i < localesIndex.size(); i++) {
+			Locale l = localesIndex.get(i);
+			if (BabelUtils.equals(l, locale)) {
+				((TextEditor)textEditorsIndex.get(i)).setEnabled(enabled);
+				break;
+			}				
+		}
+	}
 	
+	public ResourceBundle getResourceBundle() {
+		return resourceBundle;
+	}	
 }

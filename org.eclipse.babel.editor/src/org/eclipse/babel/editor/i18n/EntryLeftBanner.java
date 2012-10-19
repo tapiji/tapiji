@@ -39,7 +39,7 @@ public class EntryLeftBanner extends Composite {
      */
     public EntryLeftBanner(
             Composite parent,
-            final I18NEntry i18NEntry) {
+            final AbstractI18NEntry i18NEntry) {
         super(parent, SWT.NONE);
         
         RowLayout layout = new RowLayout();

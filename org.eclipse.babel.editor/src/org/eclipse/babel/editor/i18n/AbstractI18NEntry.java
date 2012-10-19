@@ -24,6 +24,7 @@ import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.editor.widgets.NullableText;
+import org.eclipse.jface.bindings.keys.IKeyLookup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CBanner;
 import org.eclipse.swt.events.FocusEvent;
@@ -43,17 +44,19 @@ import org.eclipse.ui.editors.text.TextEditor;
  * Tree for displaying and navigating through resource bundle keys.
  * @author Pascal Essiembre
  */
-public class I18NEntry extends Composite {
+public abstract class AbstractI18NEntry extends Composite {
 
-    private final AbstractMessagesEditor editor;
+    protected final AbstractMessagesEditor editor;
     private final String bundleGroupId;
     private final String projectName;
-    private final Locale locale;
+    protected final Locale locale;
 
     private boolean expanded = true;
-    private NullableText textBox;
+    protected NullableText textBox;
     private CBanner banner;
-    private String focusGainedText;
+    protected String focusGainedText;
+    
+    public static final String INSTANCE_CLASS = "org.eclipse.babel.editor.i18n.I18NEntry";
     
     private IMessagesEditorChangeListener msgEditorUpdateKey = new MessagesEditorChangeAdapter() {
         public void selectedKeyChanged(String oldKey, String newKey) {
@@ -66,7 +69,7 @@ public class I18NEntry extends Composite {
      * @param parent parent composite
      * @param keyTree key tree
      */
-    public I18NEntry(
+    public AbstractI18NEntry(
             Composite parent,
             final AbstractMessagesEditor editor,
             final Locale locale) {
@@ -215,65 +218,16 @@ public class I18NEntry extends Composite {
         });
 
         // Handle dirtyness
-        textBox.addKeyListener(new KeyAdapter() {
-          public void keyReleased(KeyEvent event) {
-              // Text field has changed: make editor dirty if not already
-              if (!BabelUtils.equals(focusGainedText, textBox.getText())) {
-                  // Make the editor dirty if not already.  If it is, 
-                  // we wait until field focus lost (or save) to 
-                  // update it completely.
-                  if (!editor.isDirty()) {
-//                      textEditor.isDirty();
-                      updateModel();
-//                      int caretPosition = eventBox.getCaretPosition();
-//                      updateBundleOnChanges();
-//                      eventBox.setSelection(caretPosition);
-                  }
-                  //autoDetectRequiredFont(eventBox.getText());
-              }
-          }
-      });
-//  // Eric Fettweis : new listener to automatically change the font 
-//  textBox.addModifyListener(new ModifyListener() {
-//  
-//      public void modifyText(ModifyEvent e) {
-//          String text = textBox.getText();
-//          Font f = textBox.getFont();
-//          String fontName = getBestFont(f.getFontData()[0].getName(), text);
-//          if(fontName!=null){
-//              f = getSWTFont(f, fontName);
-//              textBox.setFont(f);
-//          }
-//      }
-//  
-//  });
-
-        
-        
+        textBox.addKeyListener(getKeyListener());
         
         editor.addChangeListener(msgEditorUpdateKey);
-
     }
     
-	void updateKey(String key) {
-		IMessagesBundleGroup messagesBundleGroup = editor.getBundleGroup();
-		boolean isKey = key != null && messagesBundleGroup.isMessageKey(key);
-		textBox.setEnabled(isKey);
-		if (isKey) {
-			IMessage entry = messagesBundleGroup.getMessage(key, locale);
-			if (entry == null || entry.getValue() == null) {
-				textBox.setText(null);
-				// commentedCheckbox.setSelection(false);
-			} else {
-				// commentedCheckbox.setSelection(bundleEntry.isCommented());
-				textBox.setText(entry.getValue());
-			}
-		} else {
-			textBox.setText(null);
-		}
-	}
+	abstract void updateKey(String key);
+	
+	abstract KeyListener getKeyListener();
 
-    private void updateModel() {
+    protected void updateModel() {
         if (editor.getSelectedKey() != null) {
             if (!BabelUtils.equals(focusGainedText, textBox.getText())) {
             	//IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(projectName).getMessagesBundleGroup(bundleGroupId);

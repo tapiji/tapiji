@@ -13,7 +13,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipselabs.tapiji.translator.rap.dialogs.DownloadDialog;
 import org.eclipselabs.tapiji.translator.rap.dialogs.ShareDialog;
-import org.eclipselabs.tapiji.translator.rap.helpers.managers.RBLock;
+import org.eclipselabs.tapiji.translator.rap.helpers.managers.PFLock;
 import org.eclipselabs.tapiji.translator.rap.helpers.managers.RBLockManager;
 import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
@@ -43,8 +43,8 @@ public class StorageMenuEntryContribution extends ContributionItem implements
 		
 		if (parentView.isValidSelection()) {
 			ResourceBundle selectedRB = parentView.getSelectedRB();
-			boolean isRBLocked = RBLockManager.INSTANCE.isLocked(selectedRB.getId());
-			RBLock rbLock = RBLockManager.INSTANCE.getRBLock(selectedRB.getId());
+			boolean isRBLocked = RBLockManager.INSTANCE.isPFLocked(selectedRB.getId());
+			PFLock rbLock = RBLockManager.INSTANCE.getPFLock(selectedRB.getId());
 			
 			User currentUser = UserUtils.getUser();
 			User ownerOfLock = rbLock != null ? rbLock.getOwner() : null;	

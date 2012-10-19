@@ -36,6 +36,7 @@ public class SideNavComposite extends Composite {
         
     private AbstractMessagesEditor editor;
     
+    private SideNavTextBoxComposite textBoxComp;
     /**
      * Constructor.
      * @param parent parent composite
@@ -76,7 +77,7 @@ public class SideNavComposite extends Composite {
         
 //        createTopSection();
         createKeyTree();
-        new SideNavTextBoxComposite(this, editor);
+        textBoxComp = new SideNavTextBoxComposite(this, editor);
     }
 
 //    private void initListener() {
@@ -126,4 +127,7 @@ public class SideNavComposite extends Composite {
 
     }
     
+    public SideNavTextBoxComposite getSidNavTextBoxComposite() {
+    	return textBoxComp;
+    }
 }

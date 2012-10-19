@@ -43,7 +43,7 @@ public class UserUtils {
 		IContextService contextService = (IContextService)PlatformUI.getWorkbench()
 				.getService(IContextService.class);
 		if (activate) {
-			loggedIn = contextService.activateContext(CONTEXT_ID_USERLOGGEDIN);
+			loggedIn = contextService.activateContext(CONTEXT_ID_USERLOGGEDIN+getUser().getUsername());
 		} else {
 			if (loggedIn != null) {
 				contextService.deactivateContext(loggedIn);

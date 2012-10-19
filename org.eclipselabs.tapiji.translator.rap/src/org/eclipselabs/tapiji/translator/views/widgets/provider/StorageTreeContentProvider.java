@@ -33,7 +33,7 @@ public class StorageTreeContentProvider implements ITreeContentProvider {
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof ResourceBundle) {
 			ResourceBundle rb = (ResourceBundle) parentElement;
-			return rb.getLocalFiles().toArray();
+			return rb.getPropertiesFiles().toArray();
 		} else {
 			return null;
 		}

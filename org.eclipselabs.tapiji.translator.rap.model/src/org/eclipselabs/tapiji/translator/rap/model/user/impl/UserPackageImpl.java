@@ -200,7 +200,7 @@ public class UserPackageImpl extends EPackageImpl implements UserPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getResourceBundle_LocalFiles() {
+	public EReference getResourceBundle_PropertiesFiles() {
 		return (EReference)resourceBundleEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -262,7 +262,7 @@ public class UserPackageImpl extends EPackageImpl implements UserPackage {
 		resourceBundleEClass = createEClass(RESOURCE_BUNDLE);
 		createEAttribute(resourceBundleEClass, RESOURCE_BUNDLE__ID);
 		createEAttribute(resourceBundleEClass, RESOURCE_BUNDLE__NAME);
-		createEReference(resourceBundleEClass, RESOURCE_BUNDLE__LOCAL_FILES);
+		createEReference(resourceBundleEClass, RESOURCE_BUNDLE__PROPERTIES_FILES);
 		createEReference(resourceBundleEClass, RESOURCE_BUNDLE__SHARED_USERS);
 		createEReference(resourceBundleEClass, RESOURCE_BUNDLE__OWNER);
 	}
@@ -318,7 +318,7 @@ public class UserPackageImpl extends EPackageImpl implements UserPackage {
 		initEClass(resourceBundleEClass, ResourceBundle.class, "ResourceBundle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getResourceBundle_Id(), ecorePackage.getELong(), "id", null, 0, 1, ResourceBundle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getResourceBundle_Name(), ecorePackage.getEString(), "name", null, 0, 1, ResourceBundle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getResourceBundle_LocalFiles(), this.getPropertiesFile(), null, "localFiles", null, 1, -1, ResourceBundle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResourceBundle_PropertiesFiles(), this.getPropertiesFile(), null, "propertiesFiles", null, 1, -1, ResourceBundle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getResourceBundle_SharedUsers(), this.getUser(), null, "sharedUsers", null, 0, -1, ResourceBundle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getResourceBundle_Owner(), this.getUser(), null, "owner", null, 0, 1, ResourceBundle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

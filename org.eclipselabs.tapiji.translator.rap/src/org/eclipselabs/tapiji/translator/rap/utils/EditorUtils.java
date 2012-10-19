@@ -36,11 +36,11 @@ public class EditorUtils {
 	 * @param rb The resource bundle will be opened
 	 */
 	public static void openEditorOfRB(ResourceBundle rb) {
-		if (isRBOpened(rb) || rb.getLocalFiles().isEmpty())
+		if (isRBOpened(rb) || rb.getPropertiesFiles().isEmpty())
 			return;
 		
 		try {
-			IEditorPart openedEditor = getActivePage().openEditor( new FileEditorInput(FileRAPUtils.getFile(rb.getLocalFiles().get(0))), 
+			IEditorPart openedEditor = getActivePage().openEditor( new FileEditorInput(FileRAPUtils.getFile(rb.getPropertiesFiles().get(0))), 
 					MSG_EDITOR_ID);
 			
 			if (openedEditor instanceof IMessagesEditor) {
@@ -141,7 +141,7 @@ public class EditorUtils {
 					IFileEditorInput editorInput = (IFileEditorInput) editor.getEditorInput();
 					String ifilePath = editorInput.getFile().getLocation().toOSString();
 					
-					for (PropertiesFile file : rb.getLocalFiles())
+					for (PropertiesFile file : rb.getPropertiesFiles())
 						if (ifilePath.equals(file.getPath()))
 								openedRB.add(editor);
 				}
@@ -183,7 +183,7 @@ public class EditorUtils {
 	}
 	
 	private static boolean releaseLock(long rbID) {		
-		boolean locked = RBLockManager.INSTANCE.isLocked(rbID);
+		boolean locked = RBLockManager.INSTANCE.isPFLocked(rbID);
 		if (locked) {
 			RBLockManager.INSTANCE.release(rbID);
 		}

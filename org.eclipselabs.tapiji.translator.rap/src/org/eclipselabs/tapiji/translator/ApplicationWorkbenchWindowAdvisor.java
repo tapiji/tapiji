@@ -9,7 +9,7 @@ import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
-import org.eclipselabs.tapiji.translator.rap.helpers.managers.RBLock;
+import org.eclipselabs.tapiji.translator.rap.helpers.managers.PFLock;
 import org.eclipselabs.tapiji.translator.rap.helpers.managers.RBLockManager;
 import org.eclipselabs.tapiji.translator.rap.helpers.utils.DBUtils;
 import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
@@ -74,25 +74,23 @@ public class ApplicationWorkbenchWindowAdvisor extends
 			
 			@Override
 			public void partClosed(IWorkbenchPartReference partRef) {
-				IWorkbenchPart workbenchPart = partRef.getPart(false);
-				IEditorPart editor = null;
-				
-				if (workbenchPart instanceof IEditorPart)
-					editor = (IEditorPart) workbenchPart;
-				
-				if (editor != null && editor instanceof IMessagesEditor) {
-					// release resource bundle locks
-					IFileEditorInput editorInput = (IFileEditorInput) editor.getEditorInput();
-					String ifilePath = editorInput.getFile().getLocation().toOSString();
+				if (UserUtils.isUserLoggedIn()){
+					IWorkbenchPart workbenchPart = partRef.getPart(false);
+					IEditorPart editor = null;
 					
-					PropertiesFile propsFile = DBUtils.getPropertiesFile(ifilePath);
-					if (propsFile != null) {
-						ResourceBundle rb = propsFile.getResourceBundle();
+					if (workbenchPart instanceof IEditorPart)
+						editor = (IEditorPart) workbenchPart;
+					
+					if (editor != null && editor instanceof IMessagesEditor) {
+						// release resource bundle locks
+						IFileEditorInput editorInput = (IFileEditorInput) editor.getEditorInput();
+						String ifilePath = editorInput.getFile().getLocation().toOSString();
 						
-						RBLock lock = RBLockManager.INSTANCE.getRBLock(rb.getId());
-						// is rb locked by this user --> release lock
-						if (lock.isLocked() && lock.getOwner().equals(UserUtils.getUser())) {
-							RBLockManager.INSTANCE.release(rb.getId());
+						PropertiesFile propsFile = DBUtils.getPropertiesFile(ifilePath);
+						if (propsFile != null) {
+							ResourceBundle rb = propsFile.getResourceBundle();
+							// release only user locks
+							RBLockManager.INSTANCE.releaseLocksOfUser(UserUtils.getUser(), rb);
 						}
 					}
 				}

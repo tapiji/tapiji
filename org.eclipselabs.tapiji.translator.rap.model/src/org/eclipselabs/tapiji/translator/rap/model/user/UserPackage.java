@@ -167,13 +167,13 @@ public interface UserPackage extends EPackage {
 	int RESOURCE_BUNDLE__NAME = 1;
 
 	/**
-	 * The feature id for the '<em><b>Local Files</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties Files</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_BUNDLE__LOCAL_FILES = 2;
+	int RESOURCE_BUNDLE__PROPERTIES_FILES = 2;
 
 	/**
 	 * The feature id for the '<em><b>Shared Users</b></em>' reference list.
@@ -311,15 +311,15 @@ public interface UserPackage extends EPackage {
 	EAttribute getResourceBundle_Name();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getLocalFiles <em>Local Files</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getPropertiesFiles <em>Properties Files</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Local Files</em>'.
-	 * @see org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getLocalFiles()
+	 * @return the meta object for the containment reference list '<em>Properties Files</em>'.
+	 * @see org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getPropertiesFiles()
 	 * @see #getResourceBundle()
 	 * @generated
 	 */
-	EReference getResourceBundle_LocalFiles();
+	EReference getResourceBundle_PropertiesFiles();
 
 	/**
 	 * Returns the meta object for the reference list '{@link org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle#getSharedUsers <em>Shared Users</em>}'.
@@ -452,12 +452,12 @@ public interface UserPackage extends EPackage {
 		EAttribute RESOURCE_BUNDLE__NAME = eINSTANCE.getResourceBundle_Name();
 
 		/**
-		 * The meta object literal for the '<em><b>Local Files</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Properties Files</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference RESOURCE_BUNDLE__LOCAL_FILES = eINSTANCE.getResourceBundle_LocalFiles();
+		EReference RESOURCE_BUNDLE__PROPERTIES_FILES = eINSTANCE.getResourceBundle_PropertiesFiles();
 
 		/**
 		 * The meta object literal for the '<em><b>Shared Users</b></em>' reference list feature.

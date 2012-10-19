@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n.actions;
 
-import org.eclipse.babel.editor.i18n.I18NEntry;
+import org.eclipse.babel.editor.i18n.AbstractI18NEntry;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.action.Action;
 
@@ -20,13 +20,13 @@ import org.eclipse.jface.action.Action;
  */
 public class FoldingAction extends Action {
 
-    private final I18NEntry i18NEntry;
+    private final AbstractI18NEntry i18NEntry;
     private boolean expanded;
     
     /**
      * 
      */
-    public FoldingAction(I18NEntry i18NEntry) {
+    public FoldingAction(AbstractI18NEntry i18NEntry) {
         super();
         this.i18NEntry = i18NEntry;
         this.expanded = i18NEntry.getExpanded();

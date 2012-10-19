@@ -11,6 +11,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
+import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
@@ -22,6 +23,7 @@ import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
+import org.eclipse.babel.editor.tree.actions.AbstractRenameKeyAction;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -44,8 +46,6 @@ import org.eclipse.ui.IWorkbenchPart;
  * @author Pascal Essiembre
  */
 public class I18NPage extends ScrolledComposite implements ISelectionProvider {
-
-	public static final String INSTANCE_CLASS = "org.eclipse.babel.editor.i18n.I18NPage";
 	
     /** Minimum height of text fields. */
     private static final int TEXT_MIN_HEIGHT = 90;
@@ -53,7 +53,7 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
     protected final AbstractMessagesEditor editor;
     protected final SideNavComposite keysComposite;
     private final Composite valuesComposite;
-    private final Map<Locale,I18NEntry> entryComposites = new HashMap<Locale,I18NEntry>(); 
+    private final Map<Locale,AbstractI18NEntry> entryComposites = new HashMap<Locale,AbstractI18NEntry>(); 
     private Composite entriesComposite;
     
 //    private Composite parent;
@@ -123,7 +123,7 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
 				// [RAP] only update tree, which belongs to this UIThread
 				Display display = keysComposite.getTreeViewer().getTree().getDisplay();
 				if (display.equals(Display.getCurrent())) {
-					I18NEntry i18nEntry = entryComposites.get(bundle.getLocale());
+					AbstractI18NEntry i18nEntry = entryComposites.get(bundle.getLocale());
 					if (i18nEntry != null && !getSelection().isEmpty()) {
 						i18nEntry.updateKey(String.valueOf(((IStructuredSelection)getSelection()).getFirstElement()));
 					}
@@ -195,15 +195,23 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
     }
     
     public void addI18NEntry(AbstractMessagesEditor editor, Locale locale) {
-    	I18NEntry i18NEntry = new I18NEntry(
-                entriesComposite, editor, locale);    	
+    	AbstractI18NEntry i18NEntry = null;
+         try {
+         	Class<?> clazz = Class
+         			.forName(AbstractI18NEntry.INSTANCE_CLASS);
+ 			Constructor<?> cons = clazz.getConstructor(Composite.class, AbstractMessagesEditor.class, Locale.class);
+ 			i18NEntry = (AbstractI18NEntry) cons
+ 					.newInstance(entriesComposite, editor, locale);
+         } catch (Exception e) {
+         	e.printStackTrace();
+         }
 //      entryComposite.addFocusListener(localBehaviour);
         entryComposites.put(locale, i18NEntry);
         entriesComposite.layout();
     }
     
     public void removeI18NEntry(Locale locale) {
-    	I18NEntry i18NEntry = entryComposites.get(locale);
+    	AbstractI18NEntry i18NEntry = entryComposites.get(locale);
     	if (i18NEntry != null) {
     		i18NEntry.dispose();
 	    	entryComposites.remove(locale);
@@ -214,7 +222,7 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
     public void selectLocale(Locale locale) {
         Collection<Locale> locales = entryComposites.keySet();
         for (Locale entryLocale : locales) {
-            I18NEntry entry =
+            AbstractI18NEntry entry =
                     entryComposites.get(entryLocale);
 
             //TODO add equivalent method on entry composite
@@ -252,8 +260,22 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
     @Override
     public void setEnabled(boolean enabled) {
     	super.setEnabled(enabled);
-    	for (I18NEntry entry : entryComposites.values())
+    	for (AbstractI18NEntry entry : entryComposites.values())
     		entry.setEnabled(enabled);
+    }
+    
+    public void setEnabled(boolean enabled, Locale locale) {
+    	//super.setEnabled(enabled);
+    	for (AbstractI18NEntry entry : entryComposites.values()) {
+    		if ( locale == entry.getLocale() || (locale != null && locale.equals(entry.getLocale())) ) {    		
+    			entry.setEnabled(enabled);
+    			break;
+    		}
+    	}
+    }
+    
+    public SideNavTextBoxComposite getSidNavTextBoxComposite() {
+    	return keysComposite.getSidNavTextBoxComposite();
     }
 }
 

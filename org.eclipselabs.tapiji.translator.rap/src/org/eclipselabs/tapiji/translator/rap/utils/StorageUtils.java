@@ -76,7 +76,7 @@ public class StorageUtils {
 		
 		// delete non existing properties files from db
 		for (ResourceBundle rb : rbs) {
-			List<PropertiesFile> localFiles = new ArrayList<PropertiesFile>(rb.getLocalFiles());
+			List<PropertiesFile> localFiles = new ArrayList<PropertiesFile>(rb.getPropertiesFiles());
 			IProject project = null;
 			try {
 				project = FileRAPUtils.getProject(rb.getOwner().getUsername());
@@ -85,17 +85,17 @@ public class StorageUtils {
 			}			
 			for (PropertiesFile file : localFiles) {
 				if (! FileRAPUtils.existsProjectFile(project, file.getFilename())) {
-					rb.getLocalFiles().remove(file);
+					rb.getPropertiesFiles().remove(file);
 					saveToDB = true;
 				}
 			}
-			if (rb.getLocalFiles().isEmpty()) {
+			if (rb.getPropertiesFiles().isEmpty()) {
 				EcoreUtil.delete(rb);
 				user.getStoredRBs().remove(rb);
 				// TODO remove resource bundle from DB				
 				saveToDB = true;
 			}							
-			allUserFiles.addAll(rb.getLocalFiles());
+			allUserFiles.addAll(rb.getPropertiesFiles());
 		}
 		
 		// add existing properties files which are not in db to resource bundle
@@ -108,7 +108,7 @@ public class StorageUtils {
 				ResourceBundle rb = getResourceBundle(bundleName, false);
 				// add file to existing rb and persist
 				if (rb != null) {
-					rb.getLocalFiles().add(file);
+					rb.getPropertiesFiles().add(file);
 					saveToDB = true;
 				// rb doesn't exist yet -> create new rb and add file
 				} else {
@@ -141,7 +141,7 @@ public class StorageUtils {
 			return null;
 		
 		// move local files into project dir
-		for (PropertiesFile file : rb.getLocalFiles()) {
+		for (PropertiesFile file : rb.getPropertiesFiles()) {
 			IFile ifile = FileRAPUtils.getFile(file);
 			IPath newPath = new Path(FileRAPUtils.getUserProject().getFullPath()+java.io.File.separator+file.getFilename());
 			try {
@@ -179,7 +179,7 @@ public class StorageUtils {
 	public static void renameRB(ResourceBundle rb, String newBundleName) {
 		rb.setName(newBundleName);
 		
-		for (PropertiesFile file : rb.getLocalFiles()) {
+		for (PropertiesFile file : rb.getPropertiesFiles()) {
 			IFile ifile = FileRAPUtils.getFile(file);
 			ifile.exists();
 			String local = FileRAPUtils.getLocal(file.getFilename());			
@@ -244,11 +244,11 @@ public class StorageUtils {
 			if (rb == null) {
 				rb = UserFactory.eINSTANCE.createResourceBundle();
 				rb.setName(bundleName);
-				rb.getLocalFiles().add(createPropertiesFile(ifile));
+				rb.getPropertiesFiles().add(createPropertiesFile(ifile));
 				sessionRBs.put(bundleName, rb);
 			// add new local to rb
 			} else {
-				rb.getLocalFiles().add(createPropertiesFile(ifile));
+				rb.getPropertiesFiles().add(createPropertiesFile(ifile));
 			}
 		}
 		

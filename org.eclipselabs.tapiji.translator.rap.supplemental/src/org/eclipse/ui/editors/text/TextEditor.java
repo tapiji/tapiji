@@ -42,13 +42,13 @@ public class TextEditor extends EditorPart implements ITextEditor {
 	public static final String ID = "org.eclipse.ui.editors.text.TextEditor";
 		
 	private File file;
-	private ResourceBundle rb;
+	private PropertiesFile propsFile;
 	private Text textField;
 	private boolean editable = true;
 	private boolean dirty = false;
     private DocumentProvider documentProvider;
     private String fileContent;
-    private IStatusLineManager statusLineManager;
+//    private IStatusLineManager statusLineManager;
     
 	public TextEditor() {
 	}
@@ -82,12 +82,10 @@ public class TextEditor extends EditorPart implements ITextEditor {
 		setInput(input);
 		setPartName(input.getName());
 		
-		if (rb == null) {
-			PropertiesFile propsFile = DBUtils.getPropertiesFile(file.getAbsolutePath());
-			rb = propsFile != null ? propsFile.getResourceBundle() : null;
-		}
-		if (statusLineManager == null)
-			statusLineManager = site.getActionBars().getStatusLineManager();
+		if (propsFile == null) 
+			propsFile = DBUtils.getPropertiesFile(file.getAbsolutePath());		
+//		if (statusLineManager == null)
+//			statusLineManager = site.getActionBars().getStatusLineManager();
 	}
 	
 	@Override
@@ -98,19 +96,21 @@ public class TextEditor extends EditorPart implements ITextEditor {
 	public void setDirty(boolean value) {		
 		dirty = value;
 		
-		if (dirty == true && rb != null) {
-			// try to lock RB, returns current user if locking was successfully
-			User ownerOfLock = RBLockManager.INSTANCE.tryLock(rb.getId());
-			User currentUser = UserUtils.getUser();
-			// if RB is locked by another user and UIThread hasn't disabled editor yet
-			if (! ownerOfLock.equals(currentUser)) {
-				// undo typed key
-				doRevertToSaved();
-				// avoid that editor will be dirty
-				return;
-			} 
-		} else if (dirty == false && rb != null && RBLockManager.INSTANCE.isLocked(rb.getId())) {
-			RBLockManager.INSTANCE.release(rb.getId());				
+		if (propsFile != null) {
+			if (dirty == true) {
+				// try to lock RB, returns current user if locking was successfully
+				User ownerOfLock = RBLockManager.INSTANCE.tryLock(propsFile.getId());
+				User currentUser = UserUtils.getUser();
+				// if RB is locked by another user and UIThread hasn't disabled editor yet
+				if (! ownerOfLock.equals(currentUser)) {
+					// undo typed key
+					doRevertToSaved();
+					// avoid that editor will be dirty
+					return;
+				} 
+			} else if (dirty == false && RBLockManager.INSTANCE.isPFLocked(propsFile.getId())) {
+				RBLockManager.INSTANCE.release(propsFile.getId());				
+			}
 		}
 		
 		firePropertyChange( PROP_DIRTY );
@@ -226,8 +226,8 @@ public class TextEditor extends EditorPart implements ITextEditor {
 		textField.addKeyListener(keyListener);
 	}
 	
-	public ResourceBundle getResourceBundle() {
-		return rb;
+	public PropertiesFile getPropertiesFile() {
+		return propsFile;
 	}
 	
 	@Override

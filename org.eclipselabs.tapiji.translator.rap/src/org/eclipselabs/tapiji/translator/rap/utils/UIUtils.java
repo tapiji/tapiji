@@ -28,6 +28,8 @@ public class UIUtils {
 	public static final String IMAGE_UPLOAD_RB = "uploadRB.gif";
 	public static final String IMAGE_HOME = "home.png";
 	public static final String IMAGE_DATABASE = "database.png";
+	public static final String IMAGE_LOCKED_RB = "lockedRB.png";
+	public static final String IMAGE_LOCKED_PF = "lockedPF.png";
 	
 	public static final String PLUGIN_NAME = "org.eclipselabs.tapiji.translator.rap";
 	/**

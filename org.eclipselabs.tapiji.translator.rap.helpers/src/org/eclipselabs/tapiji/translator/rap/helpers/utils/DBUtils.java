@@ -36,7 +36,7 @@ public class DBUtils {
 	/** Database schema name */
 	public static final String DB_NAME = "translatordb";
 	/** Database host */
-	public static final String DB_HOST = "127.0.0.1";
+	public static final String DB_HOST = "10.0.0.2";
 	/** Database port */
 	public static final int DB_PORT = 3306;
 	/** Database driver */
@@ -152,7 +152,17 @@ public class DBUtils {
 	public static PropertiesFile getPropertiesFile(String filePath) {
 		PropertiesFile propFile = null;
 		String query = "FROM PropertiesFile p WHERE p.path='" + filePath+"'";
-		Resource resource = DBUtils.query(query);
+		Resource resource = query(query);
+		List<EObject> results = resource.getContents();
+		if (! results.isEmpty() && results.get(0) instanceof PropertiesFile)
+			propFile = (PropertiesFile) results.get(0);
+		return propFile;
+	}
+	
+	public static PropertiesFile getPropertiesFile(long pfID) {
+		PropertiesFile propFile = null;
+		String query = "FROM PropertiesFile p WHERE p.id='" + pfID+"'";
+		Resource resource = query(query);
 		List<EObject> results = resource.getContents();
 		if (! results.isEmpty() && results.get(0) instanceof PropertiesFile)
 			propFile = (PropertiesFile) results.get(0);

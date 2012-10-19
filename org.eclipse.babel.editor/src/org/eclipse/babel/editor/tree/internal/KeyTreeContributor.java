@@ -90,8 +90,9 @@ public class KeyTreeContributor implements IKeyTreeContributor {
 //        service.setScopes(new String[]{"org.eclilpse.babel.editor.editor.tree"});
         
         contributeActions(treeViewer);
-
+        
         contributeKeySync(treeViewer);
+        
         
         contributeModelChanges(treeViewer);
 
