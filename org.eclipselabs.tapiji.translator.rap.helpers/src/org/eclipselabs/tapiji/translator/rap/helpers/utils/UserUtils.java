@@ -2,7 +2,9 @@ package org.eclipselabs.tapiji.translator.rap.helpers.utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -24,9 +26,11 @@ public class UserUtils {
 	public static final String SESSION_USER_ATT = "org.eclipselabs.tapiji.translator.rap.model.user.User";
 	/** context id, which indicates if user is logged in or logout */
 	public static final String CONTEXT_ID_USERLOGGEDIN = "org.eclipselabs.tapiji.translator.userLoggedIn";
+	/** A map that stores the user login context information. 
+	 * Contains all logged in usernames (as keys) and their context activations (as values) */
+	public static final Map<String, IContextActivation> loginContextMap = 
+			new HashMap<String, IContextActivation>();
 		
-	private static IContextActivation loggedIn; 
-	
 	/**
 	 * Checks if a user is logged in, in this session. 
 	 * @return true if user is logged in, false if user is logged out
@@ -41,13 +45,19 @@ public class UserUtils {
 	 */
 	public static void setUserLoggedInContext(boolean activate) {
 		IContextService contextService = (IContextService)PlatformUI.getWorkbench()
-				.getService(IContextService.class);
-		if (activate) {
-			loggedIn = contextService.activateContext(CONTEXT_ID_USERLOGGEDIN+getUser().getUsername());
+				.getService(IContextService.class);		
+		String username = getUser().getUsername();		
+		
+		// user login -> activate context variable
+		if (activate) {						
+			IContextActivation contextActivation = contextService.activateContext(CONTEXT_ID_USERLOGGEDIN);
+			loginContextMap.put(username, contextActivation);
+		// user logout -> deactivate context variable
 		} else {
-			if (loggedIn != null) {
-				contextService.deactivateContext(loggedIn);
-				loggedIn = null;
+			IContextActivation contextActivation = loginContextMap.get(username);
+			if (contextActivation != null) {
+				contextService.deactivateContext(contextActivation);
+				loginContextMap.remove(username);
 			}
 		}
 	}
@@ -101,8 +111,8 @@ public class UserUtils {
 	 */
 	public static User logoutUser() {
 		User user = getUser();
-		RWT.getSessionStore().getHttpSession().setAttribute(UserUtils.SESSION_USER_ATT, null);
 		setUserLoggedInContext(false);
+		RWT.getSessionStore().getHttpSession().setAttribute(UserUtils.SESSION_USER_ATT, null);		
 		return user;
 	}
 
