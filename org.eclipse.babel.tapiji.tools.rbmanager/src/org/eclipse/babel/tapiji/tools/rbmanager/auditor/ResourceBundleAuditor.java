@@ -245,15 +245,15 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
 
     @Override
     public List<IMarkerResolution> getMarkerResolutions(IMarker marker) {
-	List<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
-
-	switch (marker.getAttribute("cause", -1)) {
-	case IMarkerConstants.CAUSE_MISSING_LANGUAGE:
-	    Locale l = new Locale(marker.getAttribute(LANGUAGE_ATTRIBUTE, "")); // TODO
-										// change
-										// Name
-	    resolutions.add(new MissingLanguageResolution(l));
-	    break;
+		List<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
+	
+		switch (marker.getAttribute("cause", -1)) {
+		case IMarkerConstants.CAUSE_MISSING_LANGUAGE:
+		    Locale l = new Locale(marker.getAttribute(LANGUAGE_ATTRIBUTE, "")); // TODO
+											// change
+											// Name
+		    resolutions.add(new MissingLanguageResolution(l));
+		    break;
 	}
 
 	return resolutions;
