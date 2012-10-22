@@ -10,10 +10,11 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.api;
 
+import org.eclipse.babel.core.message.checks.proximity.IProximityAnalyzer;
 import org.eclipse.babel.core.message.checks.proximity.LevenshteinDistanceAnalyzer;
 
 /**
- * Provides the {@link ILevenshteinDistanceAnalyzer}
+ * Provides the {@link IProximityAnalyzer}
  * <br><br>
  * 
  * @author Alexej Strelzow
@@ -23,7 +24,7 @@ public class AnalyzerFactory {
 	/**
 	 * @return An instance of the {@link LevenshteinDistanceAnalyzer}
 	 */
-	public static ILevenshteinDistanceAnalyzer getLevenshteinDistanceAnalyzer () {
-		return (ILevenshteinDistanceAnalyzer) LevenshteinDistanceAnalyzer.getInstance();
+	public static IProximityAnalyzer getLevenshteinDistanceAnalyzer () {
+		return (IProximityAnalyzer) LevenshteinDistanceAnalyzer.getInstance();
 	}
 }

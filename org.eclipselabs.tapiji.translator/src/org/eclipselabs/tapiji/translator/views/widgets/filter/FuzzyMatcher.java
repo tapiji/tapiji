@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.views.widgets.filter;
 
+import org.eclipse.babel.core.message.checks.proximity.IProximityAnalyzer;
 import org.eclipse.babel.editor.api.AnalyzerFactory;
-import org.eclipse.babel.editor.api.ILevenshteinDistanceAnalyzer;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipselabs.tapiji.translator.model.Term;
@@ -19,7 +19,7 @@ import org.eclipselabs.tapiji.translator.model.Translation;
 
 public class FuzzyMatcher extends ExactMatcher {
 
-    protected ILevenshteinDistanceAnalyzer lvda;
+    protected IProximityAnalyzer lvda;
     protected float minimumSimilarity = 0.75f;
 
     public FuzzyMatcher(StructuredViewer viewer) {

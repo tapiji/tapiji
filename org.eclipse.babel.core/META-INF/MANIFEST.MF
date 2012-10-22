@@ -27,6 +27,7 @@ Export-Package: org.eclipse.babel.core.configuration;uses:="org.eclipse.babel.co
 Require-Bundle: org.eclipse.core.databinding,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
+ org.eclipse.pde.core;bundle-version="3.7.1",
  org.eclipse.jdt.core;bundle-version="3.6.2";resolution:=optional,
  org.eclipselabs.tapiji.translator.rap.supplemental;bundle-version="0.0.2";resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
