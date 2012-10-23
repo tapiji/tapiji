@@ -25,18 +25,25 @@ import org.hibernate.cfg.Environment;
  *
  */
 public class DBUtils {
-	/** Database schema name */
-	public static final String DB_NAME = "translatordb";
-	/** Database host */
-	public static final String DB_HOST = "10.0.0.2";
-	/** Database port */
-	public static final int DB_PORT = 3306;
-	/** Database driver */
-	public static final String DB_DRIVER = "com.mysql.jdbc.Driver";
-	/** Username for logging into database */
-	public static final String DB_USER = "root";
-	/** Password for logging into database */
-	public static final String DB_PASSWORD = "admin";
+	public static final String DB_NAME = "translatordb";      
+    public static final String DB_HOST = "127.8.159.1";    
+    public static final int DB_PORT = 3306;
+    public static final String DB_DRIVER = "com.mysql.jdbc.Driver";
+    public static final String DB_USER = "admin";
+    public static final String DB_PASSWORD = "mPReTZK_-5Qd";
+
+//	/** Database schema name */
+//	public static final String DB_NAME = "translatordb";
+//	/** Database host */
+//	public static final String DB_HOST = "10.0.0.2";
+//	/** Database port */
+//	public static final int DB_PORT = 3306;
+//	/** Database driver */
+//	public static final String DB_DRIVER = "com.mysql.jdbc.Driver";
+//	/** Username for logging into database */
+//	public static final String DB_USER = "root";
+//	/** Password for logging into database */
+//	public static final String DB_PASSWORD = "admin";
 	
 	/** Data store identifier name */
 	public static final String DS_NAME = "UserDS";

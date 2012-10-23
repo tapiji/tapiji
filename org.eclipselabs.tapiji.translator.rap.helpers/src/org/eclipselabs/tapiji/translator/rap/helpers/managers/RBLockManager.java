@@ -27,6 +27,10 @@ public class RBLockManager {
 	
 	public static final RBLockManager INSTANCE = new RBLockManager();
 		
+	public RBLockManager() {
+		
+	}
+	
 	public synchronized PFLock getPFLock(long propsID) {
 		return pfLockMap.get(propsID);
 	}
@@ -56,7 +60,7 @@ public class RBLockManager {
 		return true;
 	}
 	
-	public void releaseLocksHeldbyUser(User user, ResourceBundle rb) {
+	public void releaseLocksHeldByUser(User user, ResourceBundle rb) {
 		for (PropertiesFile pf : rb.getPropertiesFiles()) {							
 			PFLock lock = getPFLock(pf.getId());
 			// is properties file locked by this user --> release lock
@@ -68,12 +72,14 @@ public class RBLockManager {
 	}
 	
 	public void releaseLocksHeldBySessionID(String sessionID) {
-		List<PFLock> locks = sessionLockMap.get(sessionID);
-		for (PFLock lock : locks) {
-			lock.release();
-			firePFLockReleased(lock);
+		List<PFLock> locks = sessionLockMap.get(sessionID);		
+		if (locks != null) {			
+			for (PFLock lock : locks) {
+				lock.release();
+				firePFLockReleased(lock);
+			}
+			sessionLockMap.remove(sessionID);
 		}
-		sessionLockMap.remove(sessionID);
 	}
 	
 	
@@ -113,6 +119,7 @@ public class RBLockManager {
 		List<PFLock> locks = sessionLockMap.get(sessionId);
 		if (locks == null) {
 			locks = new ArrayList<PFLock>();
+			sessionLockMap.put(sessionId, locks);
 		}
 		locks.add(lock);
 	}
@@ -120,8 +127,10 @@ public class RBLockManager {
 	private void removeSessionLock(PFLock lock) {
 		String sessionId = RWT.getSessionStore().getId();
 		List<PFLock> locks = sessionLockMap.get(sessionId);
-		if (locks == null) {
+		if (locks != null) {
 			locks.remove(lock);
+			if (locks.isEmpty())
+				sessionLockMap.remove(sessionId);
 		}
 	}
 	

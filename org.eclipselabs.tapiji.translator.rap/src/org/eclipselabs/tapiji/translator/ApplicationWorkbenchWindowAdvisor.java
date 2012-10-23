@@ -89,7 +89,7 @@ public class ApplicationWorkbenchWindowAdvisor extends
 						if (propsFile != null) {
 							ResourceBundle rb = propsFile.getResourceBundle();
 							// release only user locks
-							RBLockManager.INSTANCE.releaseLocksHeldbyUser(UserUtils.getUser(), rb);
+							RBLockManager.INSTANCE.releaseLocksHeldByUser(UserUtils.getUser(), rb);
 						}
 					}
 				}
