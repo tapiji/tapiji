@@ -1,6 +1,5 @@
 package org.eclipselabs.tapiji.translator.rap.helpers.utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
@@ -26,13 +25,6 @@ import org.hibernate.cfg.Environment;
  *
  */
 public class DBUtils {
-//	public static final String DB_NAME = "translatordb";      
-//    public static final String DB_HOST = "127.8.159.1";    
-//    public static final int DB_PORT = 3306;
-//    public static final String DB_DRIVER = "com.mysql.jdbc.Driver";
-//    public static final String DB_USER = "admin";
-//    public static final String DB_PASSWORD = "mPReTZK_-5Qd";
-
 	/** Database schema name */
 	public static final String DB_NAME = "translatordb";
 	/** Database host */
@@ -94,6 +86,12 @@ public class DBUtils {
         props.setProperty(Environment.USER, DB_USER);
         props.setProperty(Environment.PASS, DB_PASSWORD);
         props.setProperty(Environment.DIALECT, org.hibernate.dialect.MySQL5InnoDBDialect.class.getName());
+        // use C3P0 as connection pool
+        props.setProperty(Environment.C3P0_MIN_SIZE, "5");
+        props.setProperty(Environment.C3P0_MAX_SIZE, "20");
+        props.setProperty(Environment.C3P0_TIMEOUT, "300");
+        props.setProperty(Environment.C3P0_MAX_STATEMENTS, "50");
+        props.setProperty(Environment.C3P0_IDLE_TEST_PERIOD, "3000");
 //        props.setProperty(Environment.SHOW_SQL, "true");        
 //        props.setProperty(Environment.HBM2DDL_AUTO, "create");
         props.setProperty(PersistenceOptions.CASCADE_POLICY_ON_NON_CONTAINMENT,
@@ -107,7 +105,7 @@ public class DBUtils {
         	// print the generated mapping
         	System.err.println(userDataStore.getMappingXML());			
         }
-        // creates tables if db empty
+        // creates tables if db is empty
         userDataStore.getSessionFactory();
 	}
 	

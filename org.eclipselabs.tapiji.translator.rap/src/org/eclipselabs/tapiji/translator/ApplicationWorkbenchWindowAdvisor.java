@@ -9,7 +9,6 @@ import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
-import org.eclipselabs.tapiji.translator.rap.helpers.managers.PFLock;
 import org.eclipselabs.tapiji.translator.rap.helpers.managers.RBLockManager;
 import org.eclipselabs.tapiji.translator.rap.helpers.utils.DBUtils;
 import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
@@ -90,7 +89,7 @@ public class ApplicationWorkbenchWindowAdvisor extends
 						if (propsFile != null) {
 							ResourceBundle rb = propsFile.getResourceBundle();
 							// release only user locks
-							RBLockManager.INSTANCE.releaseLocksOfUser(UserUtils.getUser(), rb);
+							RBLockManager.INSTANCE.releaseLocksHeldbyUser(UserUtils.getUser(), rb);
 						}
 					}
 				}

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.eclipse.rwt.RWT;
 import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
@@ -16,7 +17,7 @@ import org.eclipselabs.tapiji.translator.rap.model.user.User;
 public class RBLockManager {
 
 	private static Map<Long, PFLock> pfLockMap = new ConcurrentHashMap<Long, PFLock>();
-	
+	private static Map<String, List<PFLock>> sessionLockMap = new ConcurrentHashMap<String, List<PFLock>>();
 	
 	private static Map<Long, Set<IPropertiesFileLockListener>> lockListenerMap = 
 			new HashMap<Long, Set<IPropertiesFileLockListener>>();
@@ -55,7 +56,7 @@ public class RBLockManager {
 		return true;
 	}
 	
-	public void releaseLocksOfUser(User user, ResourceBundle rb) {
+	public void releaseLocksHeldbyUser(User user, ResourceBundle rb) {
 		for (PropertiesFile pf : rb.getPropertiesFiles()) {							
 			PFLock lock = getPFLock(pf.getId());
 			// is properties file locked by this user --> release lock
@@ -65,6 +66,16 @@ public class RBLockManager {
 			}
 		}
 	}
+	
+	public void releaseLocksHeldBySessionID(String sessionID) {
+		List<PFLock> locks = sessionLockMap.get(sessionID);
+		for (PFLock lock : locks) {
+			lock.release();
+			firePFLockReleased(lock);
+		}
+		sessionLockMap.remove(sessionID);
+	}
+	
 	
 	public synchronized boolean isPFLocked(long propsID) {
 		PFLock lock = pfLockMap.get(propsID);
@@ -90,10 +101,28 @@ public class RBLockManager {
 		try {
 			lock.lock();
 			lock.setOwner(currentUser);
+			addSessionLock(lock);
 			firePFLockAcquired(lock);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}		
+	}
+	
+	private void addSessionLock(PFLock lock) {
+		String sessionId = RWT.getSessionStore().getId();
+		List<PFLock> locks = sessionLockMap.get(sessionId);
+		if (locks == null) {
+			locks = new ArrayList<PFLock>();
+		}
+		locks.add(lock);
+	}
+	
+	private void removeSessionLock(PFLock lock) {
+		String sessionId = RWT.getSessionStore().getId();
+		List<PFLock> locks = sessionLockMap.get(sessionId);
+		if (locks == null) {
+			locks.remove(lock);
+		}
 	}
 	
 	public synchronized User tryLock(long propsID) {
@@ -114,6 +143,7 @@ public class RBLockManager {
 		// only owner can release lock
 		if (lock != null && lock.getOwner().equals(currentUser)) {
 			lock.release();
+			removeSessionLock(lock);
 			firePFLockReleased(lock);
 		}
 	}

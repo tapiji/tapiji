@@ -6,11 +6,10 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     id="TranslatorRAP" version="2.5">
 
- <!-- tomcat: not in classpath -> class not found
   <listener>
     <listener-class>org.eclipselabs.tapiji.translator.rap.session.TranslatorHTTPSessionListener</listener-class>
   </listener>
-  -->
+  
   <servlet id="bridge">  
     <servlet-name>equinoxbridgeservlet</servlet-name>
     <display-name>Equinox Bridge Servlet</display-name>

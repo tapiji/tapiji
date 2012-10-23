@@ -147,7 +147,6 @@
    <warConfiguration webXml="/org.eclipselabs.tapiji.translator.rap/WEB-INF/web.xml" launchIni="/org.eclipselabs.tapiji.translator.rap/WEB-INF/launch.ini">
    <libraries>
       <library path="org.eclipse.equinox.servletbridge_1.2.200.v20120522-2049.jar" fromTarget="true"/>
-      <library path="/org.eclipselabs.tapiji.translator.rap/WEB-INF/TranslatorHTTPSessionListener.jar" fromTarget="false"/>
    </libraries>
    </warConfiguration>
 </product>
