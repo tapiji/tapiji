@@ -19,8 +19,12 @@ public class LogoutAction implements IWorkbenchWindowActionDelegate {
 		User user = UserUtils.getUser();
 		
 		// close all opened editors with user resource bundles
-		for (ResourceBundle userRB : user.getStoredRBs())
-			EditorUtils.closeAllEditorsOfRB(userRB, true);
+		for (ResourceBundle userRB : user.getStoredRBs()) {			
+			boolean closed = EditorUtils.closeEditorOfRB(userRB, true);
+			// abort logout if user cancels editor closing and editor is still opened
+			if (! closed && EditorUtils.isRBOpened(userRB))
+				return;
+		}
 		
 		// logout
 		UserUtils.logoutUser();
@@ -36,8 +40,7 @@ public class LogoutAction implements IWorkbenchWindowActionDelegate {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		window = null;
 	}
 
 	@Override

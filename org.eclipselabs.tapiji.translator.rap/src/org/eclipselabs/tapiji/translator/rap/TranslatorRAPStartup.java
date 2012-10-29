@@ -11,16 +11,14 @@ import org.eclipselabs.tapiji.translator.rap.helpers.utils.DBUtils;
 public class TranslatorRAPStartup implements IStartup {
 	@Override
 	public void earlyStartup() {
-		// Initialize Teneo Hibernate DataStore
+		// initialize Teneo Hibernate DataStore
         DBUtils.initDataStore();
         
-        // RAP session expires listener
+        // release locks when RAP session expires
     	RWT.getSessionStore().addSessionStoreListener( new SessionStoreListener() {
     		  public void beforeDestroy( SessionStoreEvent event ) {
-    			  // release locks
     			  RBLockManager.INSTANCE.releaseLocksHeldBySessionID(event.getSessionStore().getId());
     		  }
     	});
-    	
 	}
 }

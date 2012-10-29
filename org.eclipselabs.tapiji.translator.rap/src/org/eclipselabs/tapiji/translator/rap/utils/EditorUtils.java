@@ -82,7 +82,12 @@ public class EditorUtils {
 		
 		releaseLock(rb.getId());
 		
-		return getActivePage().closeEditor(openedEditors.get(0).getEditor(false), save);		
+		boolean closed = getActivePage().closeEditor(openedEditors.get(0).getEditor(false), save);		
+		
+		if (closed)
+			releaseLock(rb.getId());
+		
+		return closed;
 	}
 	
 	/**
@@ -90,20 +95,24 @@ public class EditorUtils {
 	 * instead of only one.
 	 * @param rb The resource bundle that will be closed.
 	 * @param save True to give the user a chance to save the resource bundle before it will be closed.
+	 * @return true if editors were closed successfully, false if at least one editor is still opened.
 	 */
-	public static void closeAllEditorsOfRB(ResourceBundle rb, boolean save) {
-		List<IEditorReference> openedEditors = getOpenedEditors(rb);
-		
-		if (openedEditors.isEmpty())
-			return;
-		
-		releaseLock(rb.getId());
-		
-		// close all opened editors
-		for (IEditorReference editorRef : openedEditors) {
-			getActivePage().closeEditor(editorRef.getEditor(false), save);
-		}
-	}
+//	public static boolean closeAllEditorsOfRB(ResourceBundle rb, boolean save) {
+//		List<IEditorReference> openedEditors = getOpenedEditors(rb);
+//		
+//		if (openedEditors.isEmpty())
+//			return true;
+//		
+//		// close all opened editors
+//		for (IEditorReference editorRef : openedEditors) {
+//			if (! getActivePage().closeEditor(editorRef.getEditor(false), save))
+//				return false;
+//		}
+//		
+//		releaseLock(rb.getId());
+//		
+//		return true;
+//	}
 	
 	/**
 	 * Returns the active page of the workbench.
@@ -127,8 +136,8 @@ public class EditorUtils {
 	/**
 	 * Returns a list of opened editors of a given resource bundle (ONLY in this UIThread). 
 	 * Searches through all opened editor references and compares the file path of the opened 
-	 * editor with the path of the local files of resource bundle.
-	 * If a local file of resource bundle matches the editor file, then the resource bundle is 
+	 * editor with the path of the locale files of resource bundle.
+	 * If a locale file of resource bundle matches the editor file, then the resource bundle is 
 	 * opened and added to the return list.
 	 * @param rb resource bundle
 	 * @return a list of opened resource bundles

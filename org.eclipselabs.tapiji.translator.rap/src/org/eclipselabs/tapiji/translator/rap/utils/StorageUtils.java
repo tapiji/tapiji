@@ -75,24 +75,29 @@ public class StorageUtils {
 		boolean saveToDB = false;
 		
 		// delete non existing properties files from db
-		for (ResourceBundle rb : rbs) {
-			List<PropertiesFile> localFiles = new ArrayList<PropertiesFile>(rb.getPropertiesFiles());
-			IProject project = null;
-			try {
-				project = FileRAPUtils.getProject(rb.getOwner().getUsername());
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}			
-			for (PropertiesFile file : localFiles) {
-				if (! FileRAPUtils.existsProjectFile(project, file.getFilename())) {
-					rb.getPropertiesFiles().remove(file);
-					saveToDB = true;
+		for (ResourceBundle rb : rbs) {	
+			
+			if (rb.getPropertiesFiles() != null && ! rb.getPropertiesFiles().isEmpty()) {
+				List<PropertiesFile> propsFiles = new ArrayList<PropertiesFile>(rb.getPropertiesFiles());
+				IProject project = null;
+				try {
+					project = FileRAPUtils.getProject(rb.getOwner().getUsername());
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}			
+				for (PropertiesFile file : propsFiles) {
+					if (! FileRAPUtils.existsProjectFile(project, file.getFilename())) {
+						rb.getPropertiesFiles().remove(file);
+						saveToDB = true;
+					}
 				}
 			}
-			if (rb.getPropertiesFiles().isEmpty()) {
+			
+			// remove empty rbs
+			if (rb.getPropertiesFiles() == null || rb.getPropertiesFiles().isEmpty()) {
 				EcoreUtil.delete(rb);
 				user.getStoredRBs().remove(rb);
-				// TODO remove resource bundle from DB				
+				// TODO? remove resource bundle from DB				
 				saveToDB = true;
 			}							
 			allUserFiles.addAll(rb.getPropertiesFiles());
@@ -140,7 +145,7 @@ public class StorageUtils {
 		if (! rb.isTemporary())
 			return null;
 		
-		// move local files into project dir
+		// move properties files to user project
 		for (PropertiesFile file : rb.getPropertiesFiles()) {
 			IFile ifile = FileRAPUtils.getFile(file);
 			IPath newPath = new Path(FileRAPUtils.getUserProject().getFullPath()+java.io.File.separator+file.getFilename());
@@ -155,10 +160,10 @@ public class StorageUtils {
 			file.setPath(movedIFile.getLocation().toOSString());
 		}
 		
-		// add rb to user (set rb to non temporary)
+		// add rb to user
 		User user = UserUtils.getUser();
 		user.getStoredRBs().add(rb);
-		// set owner (set rb to non temporary)
+		// set owner (-> sets rb to non temporary)
 		rb.setOwner(user);
 		
 		// persist rb and properties files

@@ -5,21 +5,15 @@ package org.eclipselabs.tapiji.translator.rap.model.user.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
+import org.eclipse.persistence.internal.security.SecurableObjectHolder;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserPackage;
-import org.eclipselabs.tapiji.translator.rap.model.user.util.EncryptionUtils;
-import org.jasypt.encryption.pbe.PBEStringEncryptor;
 
 /**
  * <!-- begin-user-doc -->
@@ -138,7 +132,7 @@ public class UserImpl extends EObjectImpl implements User {
 
 	public String getPasswordDecrypted() {
 		// decrypt password from db
-		return EncryptionUtils.getStringEcryptor().decrypt(password);
+		return new SecurableObjectHolder().getSecurableObject().decryptPassword(password);
 	}
 	
 	/**
@@ -155,7 +149,7 @@ public class UserImpl extends EObjectImpl implements User {
 	
 	public void setPasswordEncrypted(String newPassword) {
 		// encrypt password before persist
-		newPassword = EncryptionUtils.getStringEcryptor().encrypt(newPassword);		
+		newPassword =  new SecurableObjectHolder().getSecurableObject().encryptPassword(newPassword);		
 		setPassword(newPassword);
 	}
 
