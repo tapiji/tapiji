@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
+import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.utils.EditorUtils;
 import org.eclipselabs.tapiji.translator.rap.utils.FileRAPUtils;
@@ -44,10 +47,10 @@ public class FileOpenAction extends AbstractFileOpenAction {
 				continue;
 			}
 			
-			// exists file already ?
+			// exists file already in session project
 			if (FileRAPUtils.existsProjectFile(FileRAPUtils.getSessionProject(), file.getName())) {
-				errorMsgs.add(ERROR_MSG_ALREADY_EXISTS.replaceFirst(TOKEN_FILENAME, file.getName()));
-			// exists bundle already ?
+				errorMsgs.add(ERROR_MSG_ALREADY_EXISTS.replaceFirst(TOKEN_FILENAME, file.getName()));			
+			// exists bundle already
 			} else {
 				for (ResourceBundle rb : StorageUtils.getSessionRBs()) {
 					if (rb.getName().equals(bundleName)) {
@@ -80,9 +83,27 @@ public class FileOpenAction extends AbstractFileOpenAction {
 		if (filepaths.length == 0)
 			return;
 		
-		// open editors
-		List<ResourceBundle> rbs = FileRAPUtils
-                .getResourceBundleRef(filepaths, FileRAPUtils.getSessionProject());
+		// copy files into workspace to temp/session project
+		List<ResourceBundle> rbs = FileRAPUtils.getResourceBundleRef(filepaths, FileRAPUtils.getSessionProject());		
+		
+		// if user is logged in store rbs directly
+		// move rbs to user project and store them persistently to db 
+		if (UserUtils.isUserLoggedIn()) {			
+			for (ResourceBundle rb : rbs) {
+				// abort if a properties file with same name exists already
+				boolean existsPF = false;
+				for (PropertiesFile pf : rb.getPropertiesFiles()) {
+					if (FileRAPUtils.existsProjectFile(FileRAPUtils.getUserProject(), pf.getFilename())) {
+						existsPF = true;
+						break;
+					}	
+				}
+				if (! existsPF)
+					StorageUtils.storeRB(rb);
+			}
+		} 
+		
+		// open editor(s) for resource bundle(s)
 		for (ResourceBundle rb : rbs)
 			EditorUtils.openEditorOfRB(rb);
 		
