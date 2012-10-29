@@ -30,7 +30,7 @@ public class ApplicationWorkbenchWindowAdvisor extends
 		// TODO [RAP] not yet supported (RAP 1.5)
 		//configurer.setShowFastViewBars(true);
 		configurer.setShowCoolBar(true);
-		configurer.setShowStatusLine(true);
+		configurer.setShowStatusLine(false);
 		configurer.setInitialSize(new Point(1024, 768));
 		configurer.setTitle("TapiJI Translator");
 		// show only title (no minimize, maximize or close button)
@@ -44,7 +44,7 @@ public class ApplicationWorkbenchWindowAdvisor extends
 		// maximize shell
 		configurer.getWindow().getShell().setMaximized(true);
 		
-		// set user logged in context if refresh was pressed
+		// set user logged in context
 		// user object is stored in http session that will not be destroyed when refresh will be pressed
 		if (UserUtils.getUser() != null)
 			UserUtils.setUserLoggedInContext(true);

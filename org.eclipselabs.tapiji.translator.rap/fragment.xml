@@ -289,4 +289,16 @@
             name="Register ...">
       </command>
   </extension>
+  <extension
+        point="org.eclipse.ui.activities">
+     <activity
+           id="org.eclipselabs.tapiji.translator.hiddenView"
+           name="Hidden View Activity">
+     </activity>
+     <activityPatternBinding
+           activityId="org.eclipselabs.tapiji.translator.hiddenView"
+           isEqualityPattern="true"
+           pattern="org.eclipse.rap.ui.views/org.eclipse.ui.views.PropertySheet">
+     </activityPatternBinding>
+  </extension>
 </fragment>

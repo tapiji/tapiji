@@ -107,4 +107,14 @@
 	          </action>
 	      </actionSet>
 	   </extension>
+	   <extension
+	        point="org.eclipse.ui.views">     
+		     <view
+		           category="org.eclipselabs.tapiji"
+		           class="org.eclipselabs.tapiji.translator.views.GlossaryView"
+		           icon="icons/sample.gif"
+		           id="org.eclipselabs.tapiji.translator.views.GlossaryView"
+		           name="Glossary">
+		     </view>
+	  </extension>
 </fragment>
