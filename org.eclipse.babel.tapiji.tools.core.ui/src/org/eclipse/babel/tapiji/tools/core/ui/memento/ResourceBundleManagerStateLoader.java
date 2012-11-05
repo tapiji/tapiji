@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.memento;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashSet;
@@ -49,14 +50,16 @@ public class ResourceBundleManagerStateLoader implements IStateLoader {
     @Override
     public void loadState() {
 
-        excludedResources = new HashSet<IResourceDescriptor>();
-        FileReader reader = null;
-        try {
-            reader = new FileReader(FileUtils.getRBManagerStateFile());
-            loadManagerState(XMLMemento.createReadRoot(reader));
-        } catch (Exception e) {
-            Logger.logError(e);
-        }
+	excludedResources = new HashSet<IResourceDescriptor>();
+	FileReader reader = null;
+	try {
+	    reader = new FileReader(FileUtils.getRBManagerStateFile());
+	    loadManagerState(XMLMemento.createReadRoot(reader));
+	} catch (FileNotFoundException e) {
+		Logger.logInfo("Unable to restore internationalization state. Reason: internationalization.xml not found!");
+	} catch (Exception e) {
+	    Logger.logError(e);
+	}
     }
 
     private void loadManagerState(XMLMemento memento) {

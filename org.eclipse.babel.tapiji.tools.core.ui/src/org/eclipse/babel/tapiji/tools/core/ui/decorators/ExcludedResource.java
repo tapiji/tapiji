@@ -1,12 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2012 Martin Reiterer.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
+ * Copyright (c) 2012 Martin Reiterer. All rights reserved. This program and the
+ * accompanying materials are made available under the terms of the Eclipse
+ * Public License v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Martin Reiterer - initial API and implementation
+ * Contributors: Martin Reiterer - initial API and implementation
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.decorators;
 
@@ -34,10 +32,6 @@ public class ExcludedResource implements ILabelDecorator,
         IResourceExclusionListener {
 
     private static final String ENTRY_SUFFIX = "[no i18n]";
-    private static final Image OVERLAY_IMAGE_ON = ImageUtils
-            .getImage(ImageUtils.IMAGE_EXCLUDED_RESOURCE_ON);
-    private static final Image OVERLAY_IMAGE_OFF = ImageUtils
-            .getImage(ImageUtils.IMAGE_EXCLUDED_RESOURCE_OFF);
     private final List<ILabelProviderListener> label_provider_listener = new ArrayList<ILabelProviderListener>();
 
     public boolean decorate(Object element) {
