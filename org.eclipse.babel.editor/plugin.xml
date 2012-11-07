@@ -212,11 +212,4 @@
             sequence="M1+R">
       </key>
    </extension>
-   <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="org.eclipse.babel.editor.refactoring.RefactoringHandler"
-            commandId="org.eclipse.babel.editor.command.refactoring">
-      </handler>
-   </extension>
 </plugin>
