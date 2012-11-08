@@ -13,4 +13,3 @@ Export-Package: org.eclipselabs.tapiji.translator.rap.model.user,
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.persistence.internal.security;version="2.4.0"

@@ -78,7 +78,7 @@ public class UserUtils {
 				User user = (User) obj;
 				if (user.getUsername().equals(username)) {
 					// password + username correct
-					if (user.getPasswordDecrypted().equals(password))
+					if (user.equalsPassword(password))
 						return user;
 					// password is incorrect
 					return null;

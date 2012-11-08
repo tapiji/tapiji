@@ -10,10 +10,10 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.eclipse.persistence.internal.security.SecurableObjectHolder;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.model.user.UserPackage;
+import org.eclipselabs.tapiji.translator.rap.model.user.util.EncryptionUtils;
 
 /**
  * <!-- begin-user-doc -->
@@ -129,10 +129,12 @@ public class UserImpl extends EObjectImpl implements User {
 	public String getPassword() {
 		return password;
 	}
-
-	public String getPasswordDecrypted() {
-		// decrypt password from db
-		return new SecurableObjectHolder().getSecurableObject().decryptPassword(password);
+	
+	public boolean equalsPassword(String otherPlainPassword) {
+		String otherPassword = EncryptionUtils.encryptPassword(otherPlainPassword);
+		if (password.equals(otherPassword))
+			return true;
+		return false;
 	}
 	
 	/**
@@ -147,10 +149,12 @@ public class UserImpl extends EObjectImpl implements User {
 			eNotify(new ENotificationImpl(this, Notification.SET, UserPackage.USER__PASSWORD, oldPassword, password));
 	}
 	
-	public void setPasswordEncrypted(String newPassword) {
-		// encrypt password before persist
-		newPassword =  new SecurableObjectHolder().getSecurableObject().encryptPassword(newPassword);		
-		setPassword(newPassword);
+	/**
+	 * encrypt password before persisting
+	 * @param newPlainPassword
+	 */
+	public void setPasswordEncrypted(String newPlainPassword) {		
+		setPassword( EncryptionUtils.encryptPassword(newPlainPassword) );
 	}
 
 	/**

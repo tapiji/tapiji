@@ -67,8 +67,6 @@ public interface User extends EObject {
 	 * @generated
 	 */
 	String getPassword();
-
-	String getPasswordDecrypted();
 	
 	/**
 	 * Sets the value of the '{@link org.eclipselabs.tapiji.translator.rap.model.user.User#getPassword <em>Password</em>}' attribute.
@@ -79,8 +77,6 @@ public interface User extends EObject {
 	 * @generated
 	 */
 	void setPassword(String value);
-
-	void setPasswordEncrypted(String password);
 	
 	/**
 	 * Returns the value of the '<em><b>Stored RBs</b></em>' reference list.
@@ -97,5 +93,19 @@ public interface User extends EObject {
 	 * @generated
 	 */
 	EList<ResourceBundle> getStoredRBs();
+	
+	/**
+	 * Compares the saved encrypted user password with the given password. Encrypts the given password 
+	 * and looks if the password are equal.
+	 * @param otherPassword plain password
+	 * @return true if passwords are equal, false otherwise
+	 */
+	boolean equalsPassword(String otherPassword);
 
+	/**
+	 * Encrypts the given password and sets it as new password for the user.
+	 * @param plainPassword new plain password
+	 */
+	void setPasswordEncrypted(String plainPassword);
+	
 } // User
