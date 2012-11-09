@@ -6,11 +6,11 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class MyFormToolkit extends FormToolkit {
 
-	public MyFormToolkit(FormColors colors) {
-		super(colors);
-	}
+    public MyFormToolkit(FormColors colors) {
+        super(colors);
+    }
 
-	public MyFormToolkit(Display display) {
-		super(display);
-	}
+    public MyFormToolkit(Display display) {
+        super(display);
+    }
 }

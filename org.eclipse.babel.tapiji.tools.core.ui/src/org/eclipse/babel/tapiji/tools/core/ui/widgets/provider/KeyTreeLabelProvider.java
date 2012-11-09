@@ -23,46 +23,46 @@ import org.eclipse.swt.graphics.Image;
  * 
  * @author Alexej Strelzow
  */
-public abstract class KeyTreeLabelProvider extends StyledCellLabelProvider implements
-		IFontProvider, IColorProvider {
+public abstract class KeyTreeLabelProvider extends StyledCellLabelProvider
+        implements IFontProvider, IColorProvider {
 
-	public KeyTreeLabelProvider() {
-		setOwnerDrawEnabled(true);
-	}
-	
-	/**
-	 * @see org.eclipse.jface.viewers.IFontProvider#getFont(java.lang.Object)
-	 */
-	public Font getFont(Object element) {
-		return null;
-	}
+    public KeyTreeLabelProvider() {
+        setOwnerDrawEnabled(true);
+    }
 
-	/**
-	 * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
-	 */
-	public Color getForeground(Object element) {
-		return null;
-	}
+    /**
+     * @see org.eclipse.jface.viewers.IFontProvider#getFont(java.lang.Object)
+     */
+    public Font getFont(Object element) {
+        return null;
+    }
 
-	/**
-	 * @see org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
-	 */
-	public Color getBackground(Object element) {
-		return null;
-	}
-	
-	public abstract String getColumnText(Object element, int columnIndex);
-	
-	public abstract Image getColumnImage(Object element, int columnIndex);
+    /**
+     * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
+     */
+    public Color getForeground(Object element) {
+        return null;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void update(ViewerCell cell) {
-		cell.setText(getColumnText(cell.getElement(), cell.getColumnIndex()));
-		cell.setImage(getColumnImage(cell.getElement(), cell.getColumnIndex()));
-		super.update(cell);
-	}
-	
+    /**
+     * @see org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
+     */
+    public Color getBackground(Object element) {
+        return null;
+    }
+
+    public abstract String getColumnText(Object element, int columnIndex);
+
+    public abstract Image getColumnImage(Object element, int columnIndex);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ViewerCell cell) {
+        cell.setText(getColumnText(cell.getElement(), cell.getColumnIndex()));
+        cell.setImage(getColumnImage(cell.getElement(), cell.getColumnIndex()));
+        super.update(cell);
+    }
+
 }

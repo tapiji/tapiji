@@ -49,26 +49,26 @@ public class ResourceBundleManagerStateLoader implements IStateLoader {
     @Override
     public void loadState() {
 
-	excludedResources = new HashSet<IResourceDescriptor>();
-	FileReader reader = null;
-	try {
-	    reader = new FileReader(FileUtils.getRBManagerStateFile());
-	    loadManagerState(XMLMemento.createReadRoot(reader));
-	} catch (Exception e) {
-	    Logger.logError(e);
-	}
+        excludedResources = new HashSet<IResourceDescriptor>();
+        FileReader reader = null;
+        try {
+            reader = new FileReader(FileUtils.getRBManagerStateFile());
+            loadManagerState(XMLMemento.createReadRoot(reader));
+        } catch (Exception e) {
+            Logger.logError(e);
+        }
     }
 
     private void loadManagerState(XMLMemento memento) {
-	IMemento excludedChild = memento.getChild(TAG_EXCLUDED);
-	for (IMemento excluded : excludedChild.getChildren(TAG_RES_DESC)) {
-	    IResourceDescriptor descriptor = new ResourceDescriptor();
-	    descriptor.setAbsolutePath(excluded.getString(TAG_RES_DESC_ABS));
-	    descriptor.setRelativePath(excluded.getString(TAG_RES_DESC_REL));
-	    descriptor.setProjectName(excluded.getString(TAB_RES_DESC_PRO));
-	    descriptor.setBundleId(excluded.getString(TAB_RES_DESC_BID));
-	    excludedResources.add(descriptor);
-	}
+        IMemento excludedChild = memento.getChild(TAG_EXCLUDED);
+        for (IMemento excluded : excludedChild.getChildren(TAG_RES_DESC)) {
+            IResourceDescriptor descriptor = new ResourceDescriptor();
+            descriptor.setAbsolutePath(excluded.getString(TAG_RES_DESC_ABS));
+            descriptor.setRelativePath(excluded.getString(TAG_RES_DESC_REL));
+            descriptor.setProjectName(excluded.getString(TAB_RES_DESC_PRO));
+            descriptor.setBundleId(excluded.getString(TAB_RES_DESC_BID));
+            excludedResources.add(descriptor);
+        }
     }
 
     /**
@@ -76,7 +76,7 @@ public class ResourceBundleManagerStateLoader implements IStateLoader {
      */
     @Override
     public Set<IResourceDescriptor> getExcludedResources() {
-	return excludedResources;
+        return excludedResources;
     }
 
     /**
@@ -84,37 +84,37 @@ public class ResourceBundleManagerStateLoader implements IStateLoader {
      */
     @Override
     public void saveState() {
-	if (excludedResources == null) {
-	    return;
-	}
-	XMLMemento memento = XMLMemento
-		.createWriteRoot(TAG_INTERNATIONALIZATION);
-	IMemento exclChild = memento.createChild(TAG_EXCLUDED);
+        if (excludedResources == null) {
+            return;
+        }
+        XMLMemento memento = XMLMemento
+                .createWriteRoot(TAG_INTERNATIONALIZATION);
+        IMemento exclChild = memento.createChild(TAG_EXCLUDED);
 
-	Iterator<IResourceDescriptor> itExcl = excludedResources.iterator();
-	while (itExcl.hasNext()) {
-	    IResourceDescriptor desc = itExcl.next();
-	    IMemento resDesc = exclChild.createChild(TAG_RES_DESC);
-	    resDesc.putString(TAB_RES_DESC_PRO, desc.getProjectName());
-	    resDesc.putString(TAG_RES_DESC_ABS, desc.getAbsolutePath());
-	    resDesc.putString(TAG_RES_DESC_REL, desc.getRelativePath());
-	    resDesc.putString(TAB_RES_DESC_BID, desc.getBundleId());
-	}
-	FileWriter writer = null;
-	try {
-	    writer = new FileWriter(FileUtils.getRBManagerStateFile());
-	    memento.save(writer);
-	} catch (Exception e) {
-	    Logger.logError(e);
-	} finally {
-	    try {
-		if (writer != null) {
-		    writer.close();
-		}
-	    } catch (Exception e) {
-		Logger.logError(e);
-	    }
-	}
+        Iterator<IResourceDescriptor> itExcl = excludedResources.iterator();
+        while (itExcl.hasNext()) {
+            IResourceDescriptor desc = itExcl.next();
+            IMemento resDesc = exclChild.createChild(TAG_RES_DESC);
+            resDesc.putString(TAB_RES_DESC_PRO, desc.getProjectName());
+            resDesc.putString(TAG_RES_DESC_ABS, desc.getAbsolutePath());
+            resDesc.putString(TAG_RES_DESC_REL, desc.getRelativePath());
+            resDesc.putString(TAB_RES_DESC_BID, desc.getBundleId());
+        }
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(FileUtils.getRBManagerStateFile());
+            memento.save(writer);
+        } catch (Exception e) {
+            Logger.logError(e);
+        } finally {
+            try {
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (Exception e) {
+                Logger.logError(e);
+            }
+        }
     }
 
 }

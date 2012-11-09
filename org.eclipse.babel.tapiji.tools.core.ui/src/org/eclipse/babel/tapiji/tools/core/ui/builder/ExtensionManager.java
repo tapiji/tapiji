@@ -38,43 +38,43 @@ public class ExtensionManager {
     private static Set<String> supportedFileEndings = new HashSet<String>();
 
     public static List<I18nAuditor> getRegisteredI18nAuditors() {
-	if (extensions == null) {
-	    extensions = new ArrayList<I18nAuditor>();
+        if (extensions == null) {
+            extensions = new ArrayList<I18nAuditor>();
 
-	    // init default auditors
-	    extensions.add(new RBAuditor());
+            // init default auditors
+            extensions.add(new RBAuditor());
 
-	    // lookup registered auditor extensions
-	    IConfigurationElement[] config = Platform
-		    .getExtensionRegistry()
-		    .getConfigurationElementsFor(Activator.BUILDER_EXTENSION_ID);
+            // lookup registered auditor extensions
+            IConfigurationElement[] config = Platform
+                    .getExtensionRegistry()
+                    .getConfigurationElementsFor(Activator.BUILDER_EXTENSION_ID);
 
-	    try {
-		for (IConfigurationElement e : config) {
-		    addExtensionPlugIn((I18nAuditor) e
-			    .createExecutableExtension("class"));
-		}
-	    } catch (CoreException ex) {
-		Logger.logError(ex);
-	    }
-	}
+            try {
+                for (IConfigurationElement e : config) {
+                    addExtensionPlugIn((I18nAuditor) e
+                            .createExecutableExtension("class"));
+                }
+            } catch (CoreException ex) {
+                Logger.logError(ex);
+            }
+        }
 
-	// init builder property change listener
-	if (propertyChangeListener == null) {
-	    propertyChangeListener = new BuilderPropertyChangeListener();
-	    TapiJIPreferences.addPropertyChangeListener(propertyChangeListener);
-	}
+        // init builder property change listener
+        if (propertyChangeListener == null) {
+            propertyChangeListener = new BuilderPropertyChangeListener();
+            TapiJIPreferences.addPropertyChangeListener(propertyChangeListener);
+        }
 
-	return extensions;
+        return extensions;
     }
 
     public static Set<String> getSupportedFileEndings() {
-	return supportedFileEndings;
+        return supportedFileEndings;
     }
 
     private static void addExtensionPlugIn(I18nAuditor extension) {
-	I18nAuditor a = extension;
-	extensions.add(a);
-	supportedFileEndings.addAll(Arrays.asList(a.getFileEndings()));
+        I18nAuditor a = extension;
+        extensions.add(a);
+        supportedFileEndings.addAll(Arrays.asList(a.getFileEndings()));
     }
 }

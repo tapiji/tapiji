@@ -14,6 +14,7 @@ import java.beans.PropertyChangeEvent;
 
 /**
  * A listener for changes on a {@link MessagesBundleGroup}.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  * @see MessagesBundleGroup
  */
@@ -21,29 +22,43 @@ public interface IMessagesBundleGroupListener extends IMessagesBundleListener {
 
     /**
      * A message key has been added.
-     * @param key the added key
+     * 
+     * @param key
+     *            the added key
      */
     void keyAdded(String key);
+
     /**
      * A message key has been removed.
-     * @param key the removed key
+     * 
+     * @param key
+     *            the removed key
      */
     void keyRemoved(String key);
+
     /**
      * A messages bundle has been added.
-     * @param messagesBundle the messages bundle
+     * 
+     * @param messagesBundle
+     *            the messages bundle
      */
     void messagesBundleAdded(MessagesBundle messagesBundle);
+
     /**
      * A messages bundle has been removed.
-     * @param messagesBundle the messages bundle
+     * 
+     * @param messagesBundle
+     *            the messages bundle
      */
     void messagesBundleRemoved(MessagesBundle messagesBundle);
+
     /**
      * A messages bundle was modified.
-     * @param messagesBundle the messages bundle
+     * 
+     * @param messagesBundle
+     *            the messages bundle
      */
-    void messagesBundleChanged(
-            MessagesBundle messagesBundle, PropertyChangeEvent changeEvent);
+    void messagesBundleChanged(MessagesBundle messagesBundle,
+            PropertyChangeEvent changeEvent);
 
 }

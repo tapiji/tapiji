@@ -22,8 +22,8 @@ public class MessagesDragSource implements DragSourceListener {
     private String bundleId;
 
     public MessagesDragSource(TreeViewer sourceView, String bundleId) {
-	source = sourceView;
-	this.bundleId = bundleId;
+        source = sourceView;
+        this.bundleId = bundleId;
     }
 
     @Override
@@ -33,22 +33,22 @@ public class MessagesDragSource implements DragSourceListener {
 
     @Override
     public void dragSetData(DragSourceEvent event) {
-	IKeyTreeNode selectionObject = (IKeyTreeNode) ((IStructuredSelection) source
-		.getSelection()).toList().get(0);
+        IKeyTreeNode selectionObject = (IKeyTreeNode) ((IStructuredSelection) source
+                .getSelection()).toList().get(0);
 
-	String key = selectionObject.getMessageKey();
+        String key = selectionObject.getMessageKey();
 
-	// TODO Solve the problem that its not possible to retrieve the editor
-	// position of the drop event
+        // TODO Solve the problem that its not possible to retrieve the editor
+        // position of the drop event
 
-	// event.data = "(new ResourceBundle(\"" + bundleId +
-	// "\")).getString(\"" + key + "\")";
-	event.data = "\"" + key + "\"";
+        // event.data = "(new ResourceBundle(\"" + bundleId +
+        // "\")).getString(\"" + key + "\")";
+        event.data = "\"" + key + "\"";
     }
 
     @Override
     public void dragStart(DragSourceEvent event) {
-	event.doit = !source.getSelection().isEmpty();
+        event.doit = !source.getSelection().isEmpty();
     }
 
 }

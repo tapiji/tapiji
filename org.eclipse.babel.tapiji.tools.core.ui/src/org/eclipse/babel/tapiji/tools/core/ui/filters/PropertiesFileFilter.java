@@ -24,18 +24,18 @@ public class PropertiesFileFilter extends ViewerFilter {
 
     @Override
     public boolean select(Viewer viewer, Object parentElement, Object element) {
-	if (debugEnabled)
-	    return true;
+        if (debugEnabled)
+            return true;
 
-	if (element.getClass().getSimpleName().equals("CompilationUnit"))
-	    return false;
+        if (element.getClass().getSimpleName().equals("CompilationUnit"))
+            return false;
 
-	if (!(element instanceof IFile))
-	    return true;
+        if (!(element instanceof IFile))
+            return true;
 
-	IFile file = (IFile) element;
+        IFile file = (IFile) element;
 
-	return file.getFileExtension().equalsIgnoreCase("properties");
+        return file.getFileExtension().equalsIgnoreCase("properties");
     }
 
 }

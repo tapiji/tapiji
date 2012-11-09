@@ -54,16 +54,16 @@ public class PropertiesFileResource extends AbstractPropertiesResource {
      * @throws FileNotFoundException
      */
     public PropertiesFileResource(Locale locale,
-	    PropertiesSerializer serializer,
-	    PropertiesDeserializer deserializer, File file)
-	    throws FileNotFoundException {
-	super(locale, serializer, deserializer);
-	this.file = file;
-	this.fileChangeListener = new FileChangeListenerImpl();
+            PropertiesSerializer serializer,
+            PropertiesDeserializer deserializer, File file)
+            throws FileNotFoundException {
+        super(locale, serializer, deserializer);
+        this.file = file;
+        this.fileChangeListener = new FileChangeListenerImpl();
 
-	FileMonitor.getInstance().addFileChangeListener(
-		this.fileChangeListener, file, 2000); // TODO make file scan
-						      // delay configurable
+        FileMonitor.getInstance().addFileChangeListener(
+                this.fileChangeListener, file, 2000); // TODO make file scan
+        // delay configurable
     }
 
     /**
@@ -72,27 +72,27 @@ public class PropertiesFileResource extends AbstractPropertiesResource {
      */
     @Override
     public String getText() {
-	FileReader inputStream = null;
-	StringWriter outputStream = null;
-	try {
-	    if (!file.exists()) {
-		return "";
-	    }
-	    inputStream = new FileReader(file);
-	    outputStream = new StringWriter();
-	    int c;
-	    while ((c = inputStream.read()) != -1) {
-		outputStream.write(c);
-	    }
-	} catch (IOException e) {
-	    // TODO handle better.
-	    throw new RuntimeException(
-		    "Cannot get properties file text. Handle better.", e);
-	} finally {
-	    closeReader(inputStream);
-	    closeWriter(outputStream);
-	}
-	return outputStream.toString();
+        FileReader inputStream = null;
+        StringWriter outputStream = null;
+        try {
+            if (!file.exists()) {
+                return "";
+            }
+            inputStream = new FileReader(file);
+            outputStream = new StringWriter();
+            int c;
+            while ((c = inputStream.read()) != -1) {
+                outputStream.write(c);
+            }
+        } catch (IOException e) {
+            // TODO handle better.
+            throw new RuntimeException(
+                    "Cannot get properties file text. Handle better.", e);
+        } finally {
+            closeReader(inputStream);
+            closeWriter(outputStream);
+        }
+        return outputStream.toString();
     }
 
     /**
@@ -101,33 +101,33 @@ public class PropertiesFileResource extends AbstractPropertiesResource {
      */
     @Override
     public void setText(String content) {
-	StringReader inputStream = null;
-	FileWriter outputStream = null;
-	try {
-	    inputStream = new StringReader(content);
-	    outputStream = new FileWriter(file);
-	    int c;
-	    while ((c = inputStream.read()) != -1) {
-		outputStream.write(c);
-	    }
-	} catch (IOException e) {
-	    // TODO handle better.
-	    throw new RuntimeException(
-		    "Cannot get properties file text. Handle better.", e);
-	} finally {
-	    closeReader(inputStream);
-	    closeWriter(outputStream);
+        StringReader inputStream = null;
+        FileWriter outputStream = null;
+        try {
+            inputStream = new StringReader(content);
+            outputStream = new FileWriter(file);
+            int c;
+            while ((c = inputStream.read()) != -1) {
+                outputStream.write(c);
+            }
+        } catch (IOException e) {
+            // TODO handle better.
+            throw new RuntimeException(
+                    "Cannot get properties file text. Handle better.", e);
+        } finally {
+            closeReader(inputStream);
+            closeWriter(outputStream);
 
-	    // IFile file =
-	    // ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( new
-	    // Path(getResourceLocationLabel()));
-	    // try {
-	    // file.refreshLocal(IResource.DEPTH_ZERO, null);
-	    // } catch (CoreException e) {
-	    // // TODO Auto-generated catch block
-	    // e.printStackTrace();
-	    // }
-	}
+            // IFile file =
+            // ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( new
+            // Path(getResourceLocationLabel()));
+            // try {
+            // file.refreshLocal(IResource.DEPTH_ZERO, null);
+            // } catch (CoreException e) {
+            // // TODO Auto-generated catch block
+            // e.printStackTrace();
+            // }
+        }
     }
 
     /**
@@ -136,7 +136,7 @@ public class PropertiesFileResource extends AbstractPropertiesResource {
      */
     @Override
     public Object getSource() {
-	return file;
+        return file;
     }
 
     /**
@@ -144,31 +144,31 @@ public class PropertiesFileResource extends AbstractPropertiesResource {
      */
     @Override
     public String getResourceLocationLabel() {
-	return file.getAbsolutePath();
+        return file.getAbsolutePath();
     }
 
     // TODO move to util class for convinience???
     private void closeWriter(Writer writer) {
-	if (writer != null) {
-	    try {
-		writer.close();
-	    } catch (IOException e) {
-		// TODO handle better.
-		throw new RuntimeException("Cannot close writer stream.", e);
-	    }
-	}
+        if (writer != null) {
+            try {
+                writer.close();
+            } catch (IOException e) {
+                // TODO handle better.
+                throw new RuntimeException("Cannot close writer stream.", e);
+            }
+        }
     }
 
     // TODO move to util class for convinience???
     public void closeReader(Reader reader) {
-	if (reader != null) {
-	    try {
-		reader.close();
-	    } catch (IOException e) {
-		// TODO handle better.
-		throw new RuntimeException("Cannot close reader.", e);
-	    }
-	}
+        if (reader != null) {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                // TODO handle better.
+                throw new RuntimeException("Cannot close reader.", e);
+            }
+        }
     }
 
     /**
@@ -177,16 +177,16 @@ public class PropertiesFileResource extends AbstractPropertiesResource {
      */
     @Override
     public void dispose() {
-	FileMonitor.getInstance().removeFileChangeListener(
-		this.fileChangeListener, file);
+        FileMonitor.getInstance().removeFileChangeListener(
+                this.fileChangeListener, file);
     }
 
     private class FileChangeListenerImpl implements FileChangeListener {
 
-	@Override
-	public void fileChanged(final File changedFile) {
-	    fireResourceChange(PropertiesFileResource.this);
-	}
+        @Override
+        public void fileChanged(final File changedFile) {
+            fireResourceChange(PropertiesFileResource.this);
+        }
 
     }
 }

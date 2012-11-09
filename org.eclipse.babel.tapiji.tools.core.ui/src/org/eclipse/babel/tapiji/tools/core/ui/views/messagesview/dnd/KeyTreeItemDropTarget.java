@@ -36,145 +36,145 @@ public class KeyTreeItemDropTarget extends DropTargetAdapter {
     private final TreeViewer target;
 
     public KeyTreeItemDropTarget(TreeViewer viewer) {
-	super();
-	this.target = viewer;
+        super();
+        this.target = viewer;
     }
 
     public void dragEnter(DropTargetEvent event) {
-	// if (((DropTarget)event.getSource()).getControl() instanceof Tree)
-	// event.detail = DND.DROP_MOVE;
+        // if (((DropTarget)event.getSource()).getControl() instanceof Tree)
+        // event.detail = DND.DROP_MOVE;
     }
 
     private void addBundleEntries(final String keyPrefix, // new prefix
-	    final IKeyTreeNode children, final IMessagesBundleGroup bundleGroup) {
+            final IKeyTreeNode children, final IMessagesBundleGroup bundleGroup) {
 
-	try {
-	    String oldKey = children.getMessageKey();
-	    String key = children.getName();
-	    String newKey = keyPrefix + "." + key;
+        try {
+            String oldKey = children.getMessageKey();
+            String key = children.getName();
+            String newKey = keyPrefix + "." + key;
 
-	    IMessage[] messages = bundleGroup.getMessages(oldKey);
-	    for (IMessage message : messages) {
-		IMessagesBundle messagesBundle = bundleGroup
-			.getMessagesBundle(message.getLocale());
-		IMessage m = MessageFactory.createMessage(newKey,
-			message.getLocale());
-		m.setText(message.getValue());
-		m.setComment(message.getComment());
-		messagesBundle.addMessage(m);
-	    }
+            IMessage[] messages = bundleGroup.getMessages(oldKey);
+            for (IMessage message : messages) {
+                IMessagesBundle messagesBundle = bundleGroup
+                        .getMessagesBundle(message.getLocale());
+                IMessage m = MessageFactory.createMessage(newKey,
+                        message.getLocale());
+                m.setText(message.getValue());
+                m.setComment(message.getComment());
+                messagesBundle.addMessage(m);
+            }
 
-	    if (messages.length == 0) {
-		bundleGroup.addMessages(newKey);
-	    }
+            if (messages.length == 0) {
+                bundleGroup.addMessages(newKey);
+            }
 
-	    for (IKeyTreeNode childs : children.getChildren()) {
-		addBundleEntries(keyPrefix + "." + key, childs, bundleGroup);
-	    }
+            for (IKeyTreeNode childs : children.getChildren()) {
+                addBundleEntries(keyPrefix + "." + key, childs, bundleGroup);
+            }
 
-	} catch (Exception e) {
-	    Logger.logError(e);
-	}
+        } catch (Exception e) {
+            Logger.logError(e);
+        }
 
     }
 
     private void remBundleEntries(IKeyTreeNode children,
-	    IMessagesBundleGroup group) {
-	String key = children.getMessageKey();
+            IMessagesBundleGroup group) {
+        String key = children.getMessageKey();
 
-	for (IKeyTreeNode childs : children.getChildren()) {
-	    remBundleEntries(childs, group);
-	}
+        for (IKeyTreeNode childs : children.getChildren()) {
+            remBundleEntries(childs, group);
+        }
 
-	group.removeMessagesAddParentKey(key);
+        group.removeMessagesAddParentKey(key);
     }
 
     public void drop(final DropTargetEvent event) {
-	Display.getDefault().asyncExec(new Runnable() {
-	    public void run() {
-		try {
+        Display.getDefault().asyncExec(new Runnable() {
+            public void run() {
+                try {
 
-		    if (TextTransfer.getInstance().isSupportedType(
-			    event.currentDataType)) {
-			String newKeyPrefix = "";
+                    if (TextTransfer.getInstance().isSupportedType(
+                            event.currentDataType)) {
+                        String newKeyPrefix = "";
 
-			if (event.item instanceof TreeItem
-				&& ((TreeItem) event.item).getData() instanceof IValuedKeyTreeNode) {
-			    IValuedKeyTreeNode targetTreeNode = (IValuedKeyTreeNode) ((TreeItem) event.item)
-				    .getData();
-			    newKeyPrefix = targetTreeNode.getMessageKey();
-			}
+                        if (event.item instanceof TreeItem
+                                && ((TreeItem) event.item).getData() instanceof IValuedKeyTreeNode) {
+                            IValuedKeyTreeNode targetTreeNode = (IValuedKeyTreeNode) ((TreeItem) event.item)
+                                    .getData();
+                            newKeyPrefix = targetTreeNode.getMessageKey();
+                        }
 
-			String message = (String) event.data;
-			String oldKey = message.replaceAll("\"", "");
+                        String message = (String) event.data;
+                        String oldKey = message.replaceAll("\"", "");
 
-			String[] keyArr = (oldKey).split("\\.");
-			String key = keyArr[keyArr.length - 1];
+                        String[] keyArr = (oldKey).split("\\.");
+                        String key = keyArr[keyArr.length - 1];
 
-			ResKeyTreeContentProvider contentProvider = (ResKeyTreeContentProvider) target
-				.getContentProvider();
-			IAbstractKeyTreeModel keyTree = (IAbstractKeyTreeModel) target
-				.getInput();
+                        ResKeyTreeContentProvider contentProvider = (ResKeyTreeContentProvider) target
+                                .getContentProvider();
+                        IAbstractKeyTreeModel keyTree = (IAbstractKeyTreeModel) target
+                                .getInput();
 
-			// key gets dropped into it's parent node
-			if (oldKey.equals(newKeyPrefix + "." + key))
-			    return; // TODO: give user feedback
+                        // key gets dropped into it's parent node
+                        if (oldKey.equals(newKeyPrefix + "." + key))
+                            return; // TODO: give user feedback
 
-			// prevent cycle loop if key gets dropped into its child
-			// node
-			if (newKeyPrefix.contains(oldKey))
-			    return; // TODO: give user feedback
+                        // prevent cycle loop if key gets dropped into its child
+                        // node
+                        if (newKeyPrefix.contains(oldKey))
+                            return; // TODO: give user feedback
 
-			// source node already exists in target
-			IKeyTreeNode targetTreeNode = keyTree
-				.getChild(newKeyPrefix);
-			for (IKeyTreeNode targetChild : targetTreeNode
-				.getChildren()) {
-			    if (targetChild.getName().equals(key))
-				return; // TODO: give user feedback
-			}
+                        // source node already exists in target
+                        IKeyTreeNode targetTreeNode = keyTree
+                                .getChild(newKeyPrefix);
+                        for (IKeyTreeNode targetChild : targetTreeNode
+                                .getChildren()) {
+                            if (targetChild.getName().equals(key))
+                                return; // TODO: give user feedback
+                        }
 
-			IKeyTreeNode sourceTreeNode = keyTree.getChild(oldKey);
+                        IKeyTreeNode sourceTreeNode = keyTree.getChild(oldKey);
 
-			IMessagesBundleGroup bundleGroup = contentProvider
-				.getBundle();
+                        IMessagesBundleGroup bundleGroup = contentProvider
+                                .getBundle();
 
-			DirtyHack.setFireEnabled(false);
-			DirtyHack.setEditorModificationEnabled(false); // editor
-								       // won't
-								       // get
-								       // dirty
+                        DirtyHack.setFireEnabled(false);
+                        DirtyHack.setEditorModificationEnabled(false); // editor
+                        // won't
+                        // get
+                        // dirty
 
-			// add new bundle entries of source node + all children
-			addBundleEntries(newKeyPrefix, sourceTreeNode,
-				bundleGroup);
+                        // add new bundle entries of source node + all children
+                        addBundleEntries(newKeyPrefix, sourceTreeNode,
+                                bundleGroup);
 
-			// if drag & drop is move event, delete source entry +
-			// it's children
-			if (event.detail == DND.DROP_MOVE) {
-			    remBundleEntries(sourceTreeNode, bundleGroup);
-			}
+                        // if drag & drop is move event, delete source entry +
+                        // it's children
+                        if (event.detail == DND.DROP_MOVE) {
+                            remBundleEntries(sourceTreeNode, bundleGroup);
+                        }
 
-			// Store changes
-			RBManager manager = RBManager
-				.getInstance(((MessagesBundleGroup) bundleGroup)
-					.getProjectName());
+                        // Store changes
+                        RBManager manager = RBManager
+                                .getInstance(((MessagesBundleGroup) bundleGroup)
+                                        .getProjectName());
 
-			manager.writeToFile(bundleGroup);
-			manager.fireEditorChanged(); // refresh the View
+                        manager.writeToFile(bundleGroup);
+                        manager.fireEditorChanged(); // refresh the View
 
-			target.refresh();
-		    } else {
-			event.detail = DND.DROP_NONE;
-		    }
+                        target.refresh();
+                    } else {
+                        event.detail = DND.DROP_NONE;
+                    }
 
-		} catch (Exception e) {
-		    Logger.logError(e);
-		} finally {
-		    DirtyHack.setFireEnabled(true);
-		    DirtyHack.setEditorModificationEnabled(true);
-		}
-	    }
-	});
+                } catch (Exception e) {
+                    Logger.logError(e);
+                } finally {
+                    DirtyHack.setFireEnabled(true);
+                    DirtyHack.setEditorModificationEnabled(true);
+                }
+            }
+        });
     }
 }

@@ -17,17 +17,16 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public class ShowSimilarAction extends Action {
 
     private final String[] keys;
     private final String key;
     private final Locale locale;
-    
+
     /**
      * 
      */
@@ -37,30 +36,30 @@ public class ShowSimilarAction extends Action {
         this.key = key;
         this.locale = locale;
         setText("Show similar keys.");
-        setImageDescriptor(
-                UIUtils.getImageDescriptor("similar.gif"));
-        setToolTipText("TODO put something here"); //TODO put tooltip
+        setImageDescriptor(UIUtils.getImageDescriptor("similar.gif"));
+        setToolTipText("TODO put something here"); // TODO put tooltip
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
-        StringBuffer buf = new StringBuffer("\"" + key + "\" (" + UIUtils.getDisplayName(locale) + ") has similar "
+        StringBuffer buf = new StringBuffer("\"" + key + "\" ("
+                + UIUtils.getDisplayName(locale) + ") has similar "
                 + "value as the following key(s): \n\n");
         for (int i = 0; i < keys.length; i++) {
             String similarKey = keys[i];
             if (!key.equals(similarKey)) {
-                buf.append("    · ");
+                buf.append("    ï¿½ ");
                 buf.append(similarKey);
                 buf.append(" (" + UIUtils.getDisplayName(locale) + ")");
                 buf.append("\n");
             }
         }
-        MessageDialog.openInformation(
-                Display.getDefault().getActiveShell(),
-                "Similar value",
-                buf.toString());
+        MessageDialog.openInformation(Display.getDefault().getActiveShell(),
+                "Similar value", buf.toString());
     }
 
 }

@@ -24,13 +24,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-
 /**
- * Special text control that regognized the difference between a 
- * <code>null</code> values and an empty string.  When a <code>null</code>
- * value is supplied, the control background is of a different color.
- * Pressing the backspace button when the field is currently empty will
- * change its value from empty string to <code>null</code>.
+ * Special text control that regognized the difference between a
+ * <code>null</code> values and an empty string. When a <code>null</code> value
+ * is supplied, the control background is of a different color. Pressing the
+ * backspace button when the field is currently empty will change its value from
+ * empty string to <code>null</code>.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public class NullableText extends Composite {
@@ -40,7 +40,7 @@ public class NullableText extends Composite {
     private final Color nullColor;
 
     private boolean isnull;
-    
+
     private KeyListener keyListener = new KeyAdapter() {
         public void keyPressed(KeyEvent e) {
             if (SWT.BS == e.character) {
@@ -49,13 +49,14 @@ public class NullableText extends Composite {
                 }
             }
         }
+
         public void keyReleased(KeyEvent e) {
             if (text.getText().length() > 0) {
                 renderNormal();
             }
         }
     };
-    
+
     /**
      * Constructor.
      */
@@ -66,8 +67,8 @@ public class NullableText extends Composite {
         text.setData("REDO", new Stack<String>());
         defaultColor = text.getBackground();
         nullColor = UIUtils.getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
-        
-        GridLayout gridLayout = new GridLayout(1, false);        
+
+        GridLayout gridLayout = new GridLayout(1, false);
         gridLayout.horizontalSpacing = 0;
         gridLayout.verticalSpacing = 0;
         gridLayout.marginWidth = 0;
@@ -82,7 +83,7 @@ public class NullableText extends Composite {
     public void setOrientation(int orientation) {
         text.setOrientation(orientation);
     }
-    
+
     public void setText(String text) {
         isnull = text == null;
         if (isnull) {
@@ -95,13 +96,14 @@ public class NullableText extends Composite {
         Stack<String> undoCache = (Stack<String>) this.text.getData("UNDO");
         undoCache.push(this.text.getText());
     }
+
     public String getText() {
         if (isnull) {
             return null;
         }
         return this.text.getText();
     }
-    
+
     /**
      * @see org.eclipse.swt.widgets.Control#setEnabled(boolean)
      */
@@ -111,95 +113,95 @@ public class NullableText extends Composite {
     }
 
     private void initComponents() {
-        GridData gridData = new GridData(
-                GridData.FILL, GridData.FILL, true, true);
+        GridData gridData = new GridData(GridData.FILL, GridData.FILL, true,
+                true);
         text.setLayoutData(gridData);
 
         text.addKeyListener(keyListener);
-        
+
     }
-    
 
     private void renderNull() {
         isnull = true;
         if (isEnabled()) {
             text.setBackground(nullColor);
-//            try {
-//                text.setBackgroundImage(UIUtils.getImage("null.bmp"));
-//            } catch (Throwable t) {
-//                t.printStackTrace();
-//            }
+            // try {
+            // text.setBackgroundImage(UIUtils.getImage("null.bmp"));
+            // } catch (Throwable t) {
+            // t.printStackTrace();
+            // }
         } else {
-            text.setBackground(UIUtils.getSystemColor(
-                    SWT.COLOR_WIDGET_BACKGROUND));
-//            text.setBackgroundImage(null);
+            text.setBackground(UIUtils
+                    .getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+            // text.setBackgroundImage(null);
         }
     }
+
     private void renderNormal() {
         isnull = false;
         if (isEnabled()) {
             text.setBackground(defaultColor);
         } else {
-            text.setBackground(UIUtils.getSystemColor(
-                    SWT.COLOR_WIDGET_BACKGROUND));
+            text.setBackground(UIUtils
+                    .getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
         }
-//          text.setBackgroundImage(null);
+        // text.setBackgroundImage(null);
     }
 
     /**
-     * @see org.eclipse.swt.widgets.Control#addFocusListener(
-     *              org.eclipse.swt.events.FocusListener)
+     * @see org.eclipse.swt.widgets.Control#addFocusListener(org.eclipse.swt.events.FocusListener)
      */
     public void addFocusListener(FocusListener listener) {
         text.addFocusListener(listener);
     }
+
     /**
-     * @see org.eclipse.swt.widgets.Control#addKeyListener(
-     *              org.eclipse.swt.events.KeyListener)
+     * @see org.eclipse.swt.widgets.Control#addKeyListener(org.eclipse.swt.events.KeyListener)
      */
     public void addKeyListener(KeyListener listener) {
         text.addKeyListener(listener);
     }
+
     /**
-     * @see org.eclipse.swt.widgets.Control#removeFocusListener(
-     *              org.eclipse.swt.events.FocusListener)
+     * @see org.eclipse.swt.widgets.Control#removeFocusListener(org.eclipse.swt.events.FocusListener)
      */
     public void removeFocusListener(FocusListener listener) {
         text.removeFocusListener(listener);
     }
+
     /**
-     * @see org.eclipse.swt.widgets.Control#removeKeyListener(
-     *              org.eclipse.swt.events.KeyListener)
+     * @see org.eclipse.swt.widgets.Control#removeKeyListener(org.eclipse.swt.events.KeyListener)
      */
     public void removeKeyListener(KeyListener listener) {
         text.removeKeyListener(listener);
     }
 
     /**
-     * @param editable true if editable false otherwise.
-     * If never called it is editable by default.
+     * @param editable
+     *            true if editable false otherwise. If never called it is
+     *            editable by default.
      */
     public void setEditable(boolean editable) {
         text.setEditable(editable);
     }
-    
-//    private class SaveListener implements IMessagesEditorListener {
-//
-//		public void onSave() {
-//			Stack<String> undoCache = (Stack<String>) text.getData("UNDO");
-//			undoCache.clear();
-//		}
-//
-//		public void onModify() {
-//			// TODO Auto-generated method stub
-//			
-//		}
-//
-//		public void onResourceChanged(IMessagesBundle bundle) {
-//			// TODO Auto-generated method stub
-//			
-//		}
-//    	
-//    }
-    
+
+    // private class SaveListener implements IMessagesEditorListener {
+    //
+    // public void onSave() {
+    // Stack<String> undoCache = (Stack<String>) text.getData("UNDO");
+    // undoCache.clear();
+    // }
+    //
+    // public void onModify() {
+    // // TODO Auto-generated method stub
+    //
+    // }
+    //
+    // public void onResourceChanged(IMessagesBundle bundle) {
+    // // TODO Auto-generated method stub
+    //
+    // }
+    //
+    // }
+
 }

@@ -37,6 +37,7 @@ import org.eclipse.ui.PlatformUI;
 
 /**
  * Tree for displaying and navigating through resource bundle keys.
+ * 
  * @author Pascal Essiembre
  */
 public class EntryRightBanner extends Composite {
@@ -58,20 +59,21 @@ public class EntryRightBanner extends Composite {
             updateMarkers();
         }
     };
-    
+
     /**
      * Constructor.
-     * @param parent parent composite
-     * @param keyTree key tree
+     * 
+     * @param parent
+     *            parent composite
+     * @param keyTree
+     *            key tree
      */
-    public EntryRightBanner(
-            Composite parent,
-            final AbstractI18NEntry i18nEntry) {
+    public EntryRightBanner(Composite parent, final AbstractI18NEntry i18nEntry) {
         super(parent, SWT.NONE);
         this.i18nEntry = i18nEntry;
         this.locale = i18nEntry.getLocale();
         this.editor = i18nEntry.getResourceBundleEditor();
-        
+
         RowLayout layout = new RowLayout();
         setLayout(layout);
         layout.marginBottom = 0;
@@ -80,19 +82,18 @@ public class EntryRightBanner extends Composite {
         layout.marginTop = 0;
 
         warningIcon = new Label(this, SWT.NONE);
-        warningIcon.setImage(
-                PlatformUI.getWorkbench().getSharedImages().getImage(
-                        ISharedImages.IMG_OBJS_WARN_TSK));
+        warningIcon.setImage(PlatformUI.getWorkbench().getSharedImages()
+                .getImage(ISharedImages.IMG_OBJS_WARN_TSK));
         warningIcon.setVisible(false);
         warningIcon.setToolTipText("This locale has warnings.");
-        
+
         colon = new Label(this, SWT.NONE);
         colon.setText(":");
         colon.setVisible(false);
 
         toolBarMgr.createControl(this);
         toolBarMgr.update(true);
-        
+
         editor.addChangeListener(msgEditorChangeListener);
         editor.getMarkers().addObserver(observer);
     }
@@ -102,60 +103,59 @@ public class EntryRightBanner extends Composite {
      * @param colon
      */
     private void updateMarkers() {
-    	Display display = toolBarMgr.getControl().getDisplay();
-    	// [RAP] only update markers, which belong to this UIThread
-        if (display.equals(Display.getCurrent()) && ! isDisposed()) {
-	    	display.asyncExec(new Runnable () {
-	            public void run() {
-	            	if (isDisposed())
-	            		return;
-	//                if (!PlatformUI.getWorkbench().getDisplay().isDisposed()
-	//                        && !editor.getMarkerManager().isDisposed()) {
-	                    boolean isMarked = false;
-	                    toolBarMgr.removeAll();
-	                    actionByMarkerIds.clear();
-	                    String key = editor.getSelectedKey();
-	                    Collection<IMessageCheck> checks = editor.getMarkers().getFailedChecks(
-	                            key, locale);
-	                    if (checks != null) {
-	                    	for (IMessageCheck check : checks) {
-	                    		Action action = getCheckAction(key, check);
-	                    		if (action != null) {
-	                    			toolBarMgr.add(action);
-	                    			toolBarMgr.update(true);
-	                    			getParent().layout(true, true);
-	                    			isMarked = true;
-	                    		}
-	                    	}
-	                    }
-	                    toolBarMgr.update(true);
-	                    getParent().layout(true, true);
-	
-	                    warningIcon.setVisible(isMarked);
-	                    colon.setVisible(isMarked);
-	                }
-	//            }
-	        });
+        Display display = toolBarMgr.getControl().getDisplay();
+        // [RAP] only update markers, which belong to this UIThread
+        if (display.equals(Display.getCurrent()) && !isDisposed()) {
+            display.asyncExec(new Runnable() {
+                public void run() {
+                    if (isDisposed())
+                        return;
+                    // if (!PlatformUI.getWorkbench().getDisplay().isDisposed()
+                    // && !editor.getMarkerManager().isDisposed()) {
+                    boolean isMarked = false;
+                    toolBarMgr.removeAll();
+                    actionByMarkerIds.clear();
+                    String key = editor.getSelectedKey();
+                    Collection<IMessageCheck> checks = editor.getMarkers()
+                            .getFailedChecks(key, locale);
+                    if (checks != null) {
+                        for (IMessageCheck check : checks) {
+                            Action action = getCheckAction(key, check);
+                            if (action != null) {
+                                toolBarMgr.add(action);
+                                toolBarMgr.update(true);
+                                getParent().layout(true, true);
+                                isMarked = true;
+                            }
+                        }
+                    }
+                    toolBarMgr.update(true);
+                    getParent().layout(true, true);
+
+                    warningIcon.setVisible(isMarked);
+                    colon.setVisible(isMarked);
+                }
+                // }
+            });
         }
-        
+
     }
-    
-    private Action getCheckAction(
-            String key, IMessageCheck check) {
+
+    private Action getCheckAction(String key, IMessageCheck check) {
         if (check instanceof MissingValueCheck) {
             return new ShowMissingAction(key, locale);
         } else if (check instanceof DuplicateValueCheck) {
             return new ShowDuplicateAction(
-                    ((DuplicateValueCheck) check).getDuplicateKeys(),
-                    key, locale);
+                    ((DuplicateValueCheck) check).getDuplicateKeys(), key,
+                    locale);
         }
         return null;
     }
-    
+
     @Override
     public void dispose() {
-    	editor.removeChangeListener(msgEditorChangeListener);
-    	editor.getMarkers().deleteObserver(observer);
-    	super.dispose();    	
+        editor.removeChangeListener(msgEditorChangeListener);
+        editor.getMarkers().deleteObserver(observer);
+        super.dispose();
     }
 }

@@ -16,18 +16,22 @@ import org.eclipse.babel.core.message.internal.Message;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 
 /**
- * All purpose {@link Message} testing.   Use this interface to establish 
- * whether a message within a {@link MessagesBundleGroup} is answering
- * successfully to any condition. 
+ * All purpose {@link Message} testing. Use this interface to establish whether
+ * a message within a {@link MessagesBundleGroup} is answering successfully to
+ * any condition.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public interface IMessageCheck {
 
-	/**
-	 * Checks whether a {@link Message} meets the implemented condition.
-	 * @param messagesBundleGroup messages bundle group
-	 * @param message the message being tested
-	 * @return <code>true</code> if condition is successfully tested
-	 */
+    /**
+     * Checks whether a {@link Message} meets the implemented condition.
+     * 
+     * @param messagesBundleGroup
+     *            messages bundle group
+     * @param message
+     *            the message being tested
+     * @return <code>true</code> if condition is successfully tested
+     */
     boolean checkKey(IMessagesBundleGroup messagesBundleGroup, IMessage message);
 }

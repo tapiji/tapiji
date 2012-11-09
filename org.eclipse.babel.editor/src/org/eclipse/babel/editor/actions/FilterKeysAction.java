@@ -27,10 +27,12 @@ import org.eclipse.swt.graphics.Image;
 public class FilterKeysAction extends Action {
 
     private AbstractMessagesEditor editor;
-	private final int flagToSet;
-	private ChangeListener listener;
+    private final int flagToSet;
+    private ChangeListener listener;
+
     /**
-     * @param flagToSet The flag that will be set on unset
+     * @param flagToSet
+     *            The flag that will be set on unset
      */
     public FilterKeysAction(int flagToSet) {
         super("", IAction.AS_CHECK_BOX);
@@ -38,120 +40,121 @@ public class FilterKeysAction extends Action {
         listener = new ChangeListener();
         update();
     }
-    
+
     private class ChangeListener extends MessagesEditorChangeAdapter {
         public void showOnlyUnusedAndMissingChanged(int hideEverythingElse) {
-    		MessagesEditorContributor.FILTERS.updateActionBars();
+            MessagesEditorContributor.FILTERS.updateActionBars();
         }
     }
-    
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.eclipse.jface.action.Action#run()
      */
     public void run() {
-    	if (editor != null) {
-	    	if (editor.isShowOnlyUnusedAndMissingKeys() != flagToSet) {
-	    		editor.setShowOnlyUnusedMissingKeys(flagToSet);
-	    		//listener.showOnlyUnusedAndMissingChanged(flagToSet)
-	    	} else {
-	    		editor.setShowOnlyUnusedMissingKeys(IMessagesEditorChangeListener.SHOW_ALL);
-	    		//listener.showOnlyUnusedAndMissingChanged(IMessagesEditorChangeListener.SHOW_ALL)
-	    	}
-    	}
+        if (editor != null) {
+            if (editor.isShowOnlyUnusedAndMissingKeys() != flagToSet) {
+                editor.setShowOnlyUnusedMissingKeys(flagToSet);
+                // listener.showOnlyUnusedAndMissingChanged(flagToSet)
+            } else {
+                editor.setShowOnlyUnusedMissingKeys(IMessagesEditorChangeListener.SHOW_ALL);
+                // listener.showOnlyUnusedAndMissingChanged(IMessagesEditorChangeListener.SHOW_ALL)
+            }
+        }
     }
-    
-    public void update() {
-    	if (editor == null) {
-    		super.setEnabled(false);
-    	} else {
-    		super.setEnabled(true);
-    	}
 
-    	if (editor != null && editor.isShowOnlyUnusedAndMissingKeys() == flagToSet) {
-    		setChecked(true);
-    	} else {
-    		setChecked(false);
-    	}
-		setText(getTextInternal());
-		setToolTipText(getTooltipInternal());
+    public void update() {
+        if (editor == null) {
+            super.setEnabled(false);
+        } else {
+            super.setEnabled(true);
+        }
+
+        if (editor != null
+                && editor.isShowOnlyUnusedAndMissingKeys() == flagToSet) {
+            setChecked(true);
+        } else {
+            setChecked(false);
+        }
+        setText(getTextInternal());
+        setToolTipText(getTooltipInternal());
         setImageDescriptor(ImageDescriptor.createFromImage(getImage()));
 
     }
-    
+
     public Image getImage() {
-    	switch (flagToSet) {
-    	case IMessagesEditorChangeListener.SHOW_ONLY_MISSING:
-    		//return UIUtils.IMAGE_MISSING_TRANSLATION;
-    		return UIUtils.getMissingTranslationImage();
-    	case IMessagesEditorChangeListener.SHOW_ONLY_MISSING_AND_UNUSED:
-    		//return UIUtils.IMAGE_UNUSED_AND_MISSING_TRANSLATIONS;
-    		return UIUtils.getMissingAndUnusedTranslationsImage();
-    	case IMessagesEditorChangeListener.SHOW_ONLY_UNUSED:
-    		//return UIUtils.IMAGE_UNUSED_TRANSLATION;
-    		return UIUtils.getUnusedTranslationsImage();
-    	case IMessagesEditorChangeListener.SHOW_ALL:
-    	default:
-    		return UIUtils.getImage(UIUtils.IMAGE_KEY); 
-    	}
+        switch (flagToSet) {
+        case IMessagesEditorChangeListener.SHOW_ONLY_MISSING:
+            // return UIUtils.IMAGE_MISSING_TRANSLATION;
+            return UIUtils.getMissingTranslationImage();
+        case IMessagesEditorChangeListener.SHOW_ONLY_MISSING_AND_UNUSED:
+            // return UIUtils.IMAGE_UNUSED_AND_MISSING_TRANSLATIONS;
+            return UIUtils.getMissingAndUnusedTranslationsImage();
+        case IMessagesEditorChangeListener.SHOW_ONLY_UNUSED:
+            // return UIUtils.IMAGE_UNUSED_TRANSLATION;
+            return UIUtils.getUnusedTranslationsImage();
+        case IMessagesEditorChangeListener.SHOW_ALL:
+        default:
+            return UIUtils.getImage(UIUtils.IMAGE_KEY);
+        }
     }
-    /*public String getImageKey() {
-    	switch (flagToSet) {
-    	case IMessagesEditorChangeListener.SHOW_ONLY_MISSING:
-    		return UIUtils.IMAGE_MISSING_TRANSLATION;
-    	case IMessagesEditorChangeListener.SHOW_ONLY_MISSING_AND_UNUSED:
-    		return UIUtils.IMAGE_UNUSED_AND_MISSING_TRANSLATIONS; 
-    	case IMessagesEditorChangeListener.SHOW_ONLY_UNUSED:
-    		return UIUtils.IMAGE_UNUSED_TRANSLATION;
-    	case IMessagesEditorChangeListener.SHOW_ALL:
-    	default:
-    		return UIUtils.IMAGE_KEY; 
-    	}
-    }*/
-    
+
+    /*
+     * public String getImageKey() { switch (flagToSet) { case
+     * IMessagesEditorChangeListener.SHOW_ONLY_MISSING: return
+     * UIUtils.IMAGE_MISSING_TRANSLATION; case
+     * IMessagesEditorChangeListener.SHOW_ONLY_MISSING_AND_UNUSED: return
+     * UIUtils.IMAGE_UNUSED_AND_MISSING_TRANSLATIONS; case
+     * IMessagesEditorChangeListener.SHOW_ONLY_UNUSED: return
+     * UIUtils.IMAGE_UNUSED_TRANSLATION; case
+     * IMessagesEditorChangeListener.SHOW_ALL: default: return
+     * UIUtils.IMAGE_KEY; } }
+     */
+
     public String getTextInternal() {
-    	switch (flagToSet) {
-    	case IMessagesEditorChangeListener.SHOW_ONLY_MISSING:
-    		return "Show only missing translations"; 
-    	case IMessagesEditorChangeListener.SHOW_ONLY_MISSING_AND_UNUSED:
-    		return "Show only missing or unused translations"; 
-    	case IMessagesEditorChangeListener.SHOW_ONLY_UNUSED:
-    		return "Show only unused translations"; 
-    	case IMessagesEditorChangeListener.SHOW_ALL:
-    	default:
-    		return "Show all"; 
-    	}
+        switch (flagToSet) {
+        case IMessagesEditorChangeListener.SHOW_ONLY_MISSING:
+            return "Show only missing translations";
+        case IMessagesEditorChangeListener.SHOW_ONLY_MISSING_AND_UNUSED:
+            return "Show only missing or unused translations";
+        case IMessagesEditorChangeListener.SHOW_ONLY_UNUSED:
+            return "Show only unused translations";
+        case IMessagesEditorChangeListener.SHOW_ALL:
+        default:
+            return "Show all";
+        }
     }
-    
+
     private String getTooltipInternal() {
-    	return getTextInternal();
-//    	if (editor == null) {
-//    		return "no active editor";
-//    	}
-//    	switch (editor.isShowOnlyUnusedAndMissingKeys()) {
-//    	case IMessagesEditorChangeListener.SHOW_ONLY_MISSING:
-//    		return "Showing only keys with missing translation"; 
-//    	case IMessagesEditorChangeListener.SHOW_ONLY_MISSING_AND_UNUSED:
-//    		return "Showing only keys with missing or unused translation"; 
-//    	case IMessagesEditorChangeListener.SHOW_ONLY_UNUSED:
-//    		return "Showing only  keys with missing translation"; 
-//    	case IMessagesEditorChangeListener.SHOW_ALL:
-//    	default:
-//    		return "Showing all keys"; 
-//    	}
+        return getTextInternal();
+        // if (editor == null) {
+        // return "no active editor";
+        // }
+        // switch (editor.isShowOnlyUnusedAndMissingKeys()) {
+        // case IMessagesEditorChangeListener.SHOW_ONLY_MISSING:
+        // return "Showing only keys with missing translation";
+        // case IMessagesEditorChangeListener.SHOW_ONLY_MISSING_AND_UNUSED:
+        // return "Showing only keys with missing or unused translation";
+        // case IMessagesEditorChangeListener.SHOW_ONLY_UNUSED:
+        // return "Showing only  keys with missing translation";
+        // case IMessagesEditorChangeListener.SHOW_ALL:
+        // default:
+        // return "Showing all keys";
+        // }
     }
-    
+
     public void setEditor(AbstractMessagesEditor editor) {
-    	if (editor == this.editor) {
-    		return;//no change
-    	}
+        if (editor == this.editor) {
+            return;// no change
+        }
         if (this.editor != null) {
-        	this.editor.removeChangeListener(listener);
+            this.editor.removeChangeListener(listener);
         }
         this.editor = editor;
         update();
         if (editor != null) {
-        	editor.addChangeListener(listener);
+            editor.addChangeListener(listener);
         }
     }
 

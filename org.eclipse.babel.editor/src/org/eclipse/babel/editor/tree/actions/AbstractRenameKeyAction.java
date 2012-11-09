@@ -21,16 +21,16 @@ import org.eclipse.jface.viewers.TreeViewer;
  */
 public abstract class AbstractRenameKeyAction extends AbstractTreeAction {
 
-	
-	public static final String INSTANCE_CLASS = "org.eclipse.babel.editor.tree.actions.RenameKeyAction";
-	
-    public AbstractRenameKeyAction(AbstractMessagesEditor editor, TreeViewer treeViewer) {
-		super(editor, treeViewer);
-		setText(MessagesEditorPlugin.getString("key.rename") + " ..."); //$NON-NLS-1$
-		setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_RENAME));
-		setToolTipText("TODO put something here"); // TODO put tooltip
+    public static final String INSTANCE_CLASS = "org.eclipse.babel.editor.tree.actions.RenameKeyAction";
+
+    public AbstractRenameKeyAction(AbstractMessagesEditor editor,
+            TreeViewer treeViewer) {
+        super(editor, treeViewer);
+        setText(MessagesEditorPlugin.getString("key.rename") + " ..."); //$NON-NLS-1$
+        setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_RENAME));
+        setToolTipText("TODO put something here"); // TODO put tooltip
     }
-    
+
     /**
      * @see org.eclipse.jface.action.Action#run()
      */

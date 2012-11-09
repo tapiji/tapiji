@@ -22,32 +22,32 @@ public class OpenVRBAction extends Action {
     private ISelectionProvider selectionProvider;
 
     public OpenVRBAction(ISelectionProvider selectionProvider) {
-	this.selectionProvider = selectionProvider;
+        this.selectionProvider = selectionProvider;
     }
 
     @Override
     public boolean isEnabled() {
-	IStructuredSelection sSelection = (IStructuredSelection) selectionProvider
-		.getSelection();
-	if (sSelection.size() == 1)
-	    return true;
-	else
-	    return false;
+        IStructuredSelection sSelection = (IStructuredSelection) selectionProvider
+                .getSelection();
+        if (sSelection.size() == 1)
+            return true;
+        else
+            return false;
     }
 
     @Override
     public void run() {
-	IStructuredSelection sSelection = (IStructuredSelection) selectionProvider
-		.getSelection();
-	if (sSelection.size() == 1
-		&& sSelection.getFirstElement() instanceof VirtualResourceBundle) {
-	    VirtualResourceBundle vRB = (VirtualResourceBundle) sSelection
-		    .getFirstElement();
-	    IWorkbenchPage wp = RBManagerActivator.getDefault().getWorkbench()
-		    .getActiveWorkbenchWindow().getActivePage();
+        IStructuredSelection sSelection = (IStructuredSelection) selectionProvider
+                .getSelection();
+        if (sSelection.size() == 1
+                && sSelection.getFirstElement() instanceof VirtualResourceBundle) {
+            VirtualResourceBundle vRB = (VirtualResourceBundle) sSelection
+                    .getFirstElement();
+            IWorkbenchPage wp = RBManagerActivator.getDefault().getWorkbench()
+                    .getActiveWorkbenchWindow().getActivePage();
 
-	    EditorUtils.openEditor(wp, vRB.getRandomFile(),
-		    EditorUtils.RESOURCE_BUNDLE_EDITOR);
-	}
+            EditorUtils.openEditor(wp, vRB.getRandomFile(),
+                    EditorUtils.RESOURCE_BUNDLE_EDITOR);
+        }
     }
 }

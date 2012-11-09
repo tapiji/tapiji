@@ -18,16 +18,16 @@ package org.eclipse.babel.core.configuration;
  */
 public interface IConfiguration {
 
-	boolean getAuditSameValue();
+    boolean getAuditSameValue();
 
-	boolean getAuditMissingValue();
+    boolean getAuditMissingValue();
 
-	boolean getAuditMissingLanguage();
+    boolean getAuditMissingLanguage();
 
-	boolean getAuditRb();
+    boolean getAuditRb();
 
-	boolean getAuditResource();
+    boolean getAuditResource();
 
-	String getNonRbPattern();
+    String getNonRbPattern();
 
 }

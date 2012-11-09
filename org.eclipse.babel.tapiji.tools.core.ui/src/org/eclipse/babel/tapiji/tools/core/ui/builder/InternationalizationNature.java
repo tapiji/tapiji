@@ -33,110 +33,110 @@ public class InternationalizationNature implements IProjectNature {
 
     @Override
     public void configure() throws CoreException {
-	I18nBuilder.addBuilderToProject(project);
-	new Job("Audit source files") {
+        I18nBuilder.addBuilderToProject(project);
+        new Job("Audit source files") {
 
-	    @Override
-	    protected IStatus run(IProgressMonitor monitor) {
-		try {
-		    project.build(I18nBuilder.FULL_BUILD,
-			    I18nBuilder.BUILDER_ID, null, monitor);
-		} catch (CoreException e) {
-		    Logger.logError(e);
-		}
-		return Status.OK_STATUS;
-	    }
+            @Override
+            protected IStatus run(IProgressMonitor monitor) {
+                try {
+                    project.build(I18nBuilder.FULL_BUILD,
+                            I18nBuilder.BUILDER_ID, null, monitor);
+                } catch (CoreException e) {
+                    Logger.logError(e);
+                }
+                return Status.OK_STATUS;
+            }
 
-	}.schedule();
+        }.schedule();
     }
 
     @Override
     public void deconfigure() throws CoreException {
-	I18nBuilder.removeBuilderFromProject(project);
+        I18nBuilder.removeBuilderFromProject(project);
     }
 
     @Override
     public IProject getProject() {
-	return project;
+        return project;
     }
 
     @Override
     public void setProject(IProject project) {
-	this.project = project;
+        this.project = project;
     }
 
     public static void addNature(IProject project) {
-	if (!project.isOpen())
-	    return;
+        if (!project.isOpen())
+            return;
 
-	IProjectDescription description = null;
+        IProjectDescription description = null;
 
-	try {
-	    description = project.getDescription();
-	} catch (CoreException e) {
-	    Logger.logError(e);
-	    return;
-	}
+        try {
+            description = project.getDescription();
+        } catch (CoreException e) {
+            Logger.logError(e);
+            return;
+        }
 
-	// Check if the project has already this nature
-	List<String> newIds = new ArrayList<String>();
-	newIds.addAll(Arrays.asList(description.getNatureIds()));
-	int index = newIds.indexOf(NATURE_ID);
-	if (index != -1)
-	    return;
+        // Check if the project has already this nature
+        List<String> newIds = new ArrayList<String>();
+        newIds.addAll(Arrays.asList(description.getNatureIds()));
+        int index = newIds.indexOf(NATURE_ID);
+        if (index != -1)
+            return;
 
-	// Add the nature
-	newIds.add(NATURE_ID);
-	description.setNatureIds(newIds.toArray(new String[newIds.size()]));
+        // Add the nature
+        newIds.add(NATURE_ID);
+        description.setNatureIds(newIds.toArray(new String[newIds.size()]));
 
-	try {
-	    project.setDescription(description, null);
-	} catch (CoreException e) {
-	    Logger.logError(e);
-	}
+        try {
+            project.setDescription(description, null);
+        } catch (CoreException e) {
+            Logger.logError(e);
+        }
     }
 
     public static boolean supportsNature(IProject project) {
-	return project.isOpen();
+        return project.isOpen();
     }
 
     public static boolean hasNature(IProject project) {
-	try {
-	    return project.isOpen() && project.hasNature(NATURE_ID);
-	} catch (CoreException e) {
-	    Logger.logError(e);
-	    return false;
-	}
+        try {
+            return project.isOpen() && project.hasNature(NATURE_ID);
+        } catch (CoreException e) {
+            Logger.logError(e);
+            return false;
+        }
     }
 
     public static void removeNature(IProject project) {
-	if (!project.isOpen())
-	    return;
+        if (!project.isOpen())
+            return;
 
-	IProjectDescription description = null;
+        IProjectDescription description = null;
 
-	try {
-	    description = project.getDescription();
-	} catch (CoreException e) {
-	    Logger.logError(e);
-	    return;
-	}
+        try {
+            description = project.getDescription();
+        } catch (CoreException e) {
+            Logger.logError(e);
+            return;
+        }
 
-	// Check if the project has already this nature
-	List<String> newIds = new ArrayList<String>();
-	newIds.addAll(Arrays.asList(description.getNatureIds()));
-	int index = newIds.indexOf(NATURE_ID);
-	if (index == -1)
-	    return;
+        // Check if the project has already this nature
+        List<String> newIds = new ArrayList<String>();
+        newIds.addAll(Arrays.asList(description.getNatureIds()));
+        int index = newIds.indexOf(NATURE_ID);
+        if (index == -1)
+            return;
 
-	// remove the nature
-	newIds.remove(NATURE_ID);
-	description.setNatureIds(newIds.toArray(new String[newIds.size()]));
+        // remove the nature
+        newIds.remove(NATURE_ID);
+        description.setNatureIds(newIds.toArray(new String[newIds.size()]));
 
-	try {
-	    project.setDescription(description, null);
-	} catch (CoreException e) {
-	    Logger.logError(e);
-	}
+        try {
+            project.setDescription(description, null);
+        } catch (CoreException e) {
+            Logger.logError(e);
+        }
     }
 }

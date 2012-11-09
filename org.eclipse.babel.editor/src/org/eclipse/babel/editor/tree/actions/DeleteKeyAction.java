@@ -22,7 +22,7 @@ import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public class DeleteKeyAction extends AbstractTreeAction {
 
@@ -32,17 +32,17 @@ public class DeleteKeyAction extends AbstractTreeAction {
     public DeleteKeyAction(AbstractMessagesEditor editor, TreeViewer treeViewer) {
         super(editor, treeViewer);
         setText(MessagesEditorPlugin.getString("key.delete")); //$NON-NLS-1$
-        setImageDescriptor(
-                PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(
-                        ISharedImages.IMG_TOOL_DELETE));
-        setToolTipText("TODO put something here"); //TODO put tooltip
-//        setActionDefinitionId("org.eclilpse.babel.editor.editor.tree.delete");
-//      setActionDefinitionId("org.eclipse.ui.edit.delete");
-//        editor.getSite().getKeyBindingService().registerAction(this);
+        setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
+                .getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+        setToolTipText("TODO put something here"); // TODO put tooltip
+        // setActionDefinitionId("org.eclilpse.babel.editor.editor.tree.delete");
+        // setActionDefinitionId("org.eclipse.ui.edit.delete");
+        // editor.getSite().getKeyBindingService().registerAction(this);
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.eclipse.jface.action.Action#run()
      */
     public void run() {
@@ -51,18 +51,18 @@ public class DeleteKeyAction extends AbstractTreeAction {
         String msgHead = null;
         String msgBody = null;
         if (getContentProvider().hasChildren(node)) {
-            msgHead = MessagesEditorPlugin.getString(
-                    "dialog.delete.head.multiple"); //$NON-NLS-1$
+            msgHead = MessagesEditorPlugin
+                    .getString("dialog.delete.head.multiple"); //$NON-NLS-1$
             msgBody = MessagesEditorPlugin.getString(
                     "dialog.delete.body.multiple", key);//$NON-NLS-1$ 
         } else {
-            msgHead = MessagesEditorPlugin.getString(
-                    "dialog.delete.head.single"); //$NON-NLS-1$
+            msgHead = MessagesEditorPlugin
+                    .getString("dialog.delete.head.single"); //$NON-NLS-1$
             msgBody = MessagesEditorPlugin.getString(
                     "dialog.delete.body.single", key); //$NON-NLS-1$
         }
-        MessageBox msgBox = new MessageBox(
-                getShell(), SWT.ICON_QUESTION|SWT.OK|SWT.CANCEL);
+        MessageBox msgBox = new MessageBox(getShell(), SWT.ICON_QUESTION
+                | SWT.OK | SWT.CANCEL);
         msgBox.setMessage(msgBody);
         msgBox.setText(msgHead);
         if (msgBox.open() == SWT.OK) {
@@ -70,10 +70,10 @@ public class DeleteKeyAction extends AbstractTreeAction {
             KeyTreeNode[] nodesToDelete = getBranchNodes(node);
             for (int i = 0; i < nodesToDelete.length; i++) {
                 KeyTreeNode nodeToDelete = nodesToDelete[i];
-                messagesBundleGroup.removeMessages(nodeToDelete.getMessageKey());
+                messagesBundleGroup
+                        .removeMessages(nodeToDelete.getMessageKey());
             }
         }
     }
-    
-    
+
 }

@@ -13,16 +13,14 @@ package org.eclipse.babel.editor.bundle;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.core.resources.IResource;
 
-
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public class BundleGroupRegistry {
 
-    
     public static MessagesBundleGroup getBundleGroup(IResource resource) {
-        return null;//MessagesBundleGroupFactory.
+        return null;// MessagesBundleGroupFactory.
     }
-    
+
 }

@@ -9,26 +9,26 @@ import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
 
 public class RenameKeyAction extends AbstractRenameKeyAction {
-	
-	public RenameKeyAction(AbstractMessagesEditor editor, TreeViewer treeViewer) {
-		super(editor, treeViewer);
-	}
+
+    public RenameKeyAction(AbstractMessagesEditor editor, TreeViewer treeViewer) {
+        super(editor, treeViewer);
+    }
 
     @Override
     public void run() {
-		KeyTreeNode node = getNodeSelection();
-	
-		// Rename single item
-		RenameKeyProcessor refactoring = new RenameKeyProcessor(node,
-			getBundleGroup());
-	
-		RefactoringWizard wizard = new RenameKeyWizard(node, refactoring);
-		try {
-		    RefactoringWizardOpenOperation operation = new RefactoringWizardOpenOperation(
-			    wizard);
-		    operation.run(getShell(), "Introduce Indirection");
-		} catch (InterruptedException exception) {
-		    // Do nothing
-		}
+        KeyTreeNode node = getNodeSelection();
+
+        // Rename single item
+        RenameKeyProcessor refactoring = new RenameKeyProcessor(node,
+                getBundleGroup());
+
+        RefactoringWizard wizard = new RenameKeyWizard(node, refactoring);
+        try {
+            RefactoringWizardOpenOperation operation = new RefactoringWizardOpenOperation(
+                    wizard);
+            operation.run(getShell(), "Introduce Indirection");
+        } catch (InterruptedException exception) {
+            // Do nothing
+        }
     }
 }

@@ -13,18 +13,22 @@ package org.eclipse.babel.core.message.tree.visitor;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 
 /**
- * All purpose key testing.   Use this interface to establish whether
- * a message key within a {@link MessagesBundleGroup} is answering
- * successfully to any condition. 
+ * All purpose key testing. Use this interface to establish whether a message
+ * key within a {@link MessagesBundleGroup} is answering successfully to any
+ * condition.
+ * 
  * @author Pascal Essiembre
  */
 public interface IKeyCheck {
 
-	/**
-	 * Checks whether a key meets the implemented condition.
-	 * @param messagesBundleGroup messages bundle group
-	 * @param key message key to test
-	 * @return <code>true</code> if condition is successfully tested
-	 */
+    /**
+     * Checks whether a key meets the implemented condition.
+     * 
+     * @param messagesBundleGroup
+     *            messages bundle group
+     * @param key
+     *            message key to test
+     * @return <code>true</code> if condition is successfully tested
+     */
     boolean checkKey(MessagesBundleGroup messagesBundleGroup, String key);
 }

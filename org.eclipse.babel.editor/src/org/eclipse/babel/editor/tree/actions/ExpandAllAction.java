@@ -17,7 +17,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public class ExpandAllAction extends AbstractTreeAction {
 
@@ -28,9 +28,8 @@ public class ExpandAllAction extends AbstractTreeAction {
     public ExpandAllAction(AbstractMessagesEditor editor, TreeViewer treeViewer) {
         super(editor, treeViewer);
         setText(MessagesEditorPlugin.getString("key.expandAll")); //$NON-NLS-1$
-        setImageDescriptor(
-                UIUtils.getImageDescriptor(UIUtils.IMAGE_EXPAND_ALL));
-        setToolTipText("Expand All"); //TODO put tooltip
+        setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_EXPAND_ALL));
+        setToolTipText("Expand All"); // TODO put tooltip
     }
 
     /**

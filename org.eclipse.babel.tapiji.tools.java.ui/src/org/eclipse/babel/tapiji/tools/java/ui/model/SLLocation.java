@@ -25,52 +25,52 @@ public class SLLocation implements Serializable, ILocation {
     private Serializable data;
 
     public SLLocation(IFile file, int startPos, int endPos, String literal) {
-	super();
-	this.file = file;
-	this.startPos = startPos;
-	this.endPos = endPos;
-	this.literal = literal;
+        super();
+        this.file = file;
+        this.startPos = startPos;
+        this.endPos = endPos;
+        this.literal = literal;
     }
 
     @Override
     public IFile getFile() {
-	return file;
+        return file;
     }
 
     public void setFile(IFile file) {
-	this.file = file;
+        this.file = file;
     }
 
     @Override
     public int getStartPos() {
-	return startPos;
+        return startPos;
     }
 
     public void setStartPos(int startPos) {
-	this.startPos = startPos;
+        this.startPos = startPos;
     }
 
     @Override
     public int getEndPos() {
-	return endPos;
+        return endPos;
     }
 
     public void setEndPos(int endPos) {
-	this.endPos = endPos;
+        this.endPos = endPos;
     }
 
     @Override
     public String getLiteral() {
-	return literal;
+        return literal;
     }
 
     @Override
     public Serializable getData() {
-	return data;
+        return data;
     }
 
     public void setData(Serializable data) {
-	this.data = data;
+        this.data = data;
     }
 
 }

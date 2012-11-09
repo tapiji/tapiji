@@ -40,11 +40,11 @@ public class Activator extends AbstractUIPlugin {
      * @return the image descriptor
      */
     public static ImageDescriptor getImageDescriptor(String path) {
-	if (path.indexOf("icons/") < 0) {
-	    path = "icons/" + path;
-	}
+        if (path.indexOf("icons/") < 0) {
+            path = "icons/" + path;
+        }
 
-	return imageDescriptorFromPlugin(PLUGIN_ID, path);
+        return imageDescriptorFromPlugin(PLUGIN_ID, path);
     }
 
     /*
@@ -56,8 +56,8 @@ public class Activator extends AbstractUIPlugin {
      */
     @Override
     public void start(BundleContext context) throws Exception {
-	super.start(context);
-	plugin = this;
+        super.start(context);
+        plugin = this;
     }
 
     /*
@@ -69,11 +69,11 @@ public class Activator extends AbstractUIPlugin {
      */
     @Override
     public void stop(BundleContext context) throws Exception {
-	// save state of ResourceBundleManager
-	ResourceBundleManager.saveManagerState();
+        // save state of ResourceBundleManager
+        ResourceBundleManager.saveManagerState();
 
-	plugin = null;
-	super.stop(context);
+        plugin = null;
+        super.stop(context);
     }
 
     /**
@@ -82,7 +82,7 @@ public class Activator extends AbstractUIPlugin {
      * @return the shared instance
      */
     public static Activator getDefault() {
-	return plugin;
+        return plugin;
     }
 
 }

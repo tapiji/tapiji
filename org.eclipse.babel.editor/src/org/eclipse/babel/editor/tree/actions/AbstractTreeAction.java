@@ -20,71 +20,73 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Shell;
 
-
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public abstract class AbstractTreeAction extends Action {
 
-//    private static final KeyTreeNode[] EMPTY_TREE_NODES = new KeyTreeNode[]{};
-    
+    // private static final KeyTreeNode[] EMPTY_TREE_NODES = new
+    // KeyTreeNode[]{};
+
     protected final TreeViewer treeViewer;
     protected final AbstractMessagesEditor editor;
-    
+
     /**
      * 
      */
-    public AbstractTreeAction(
-            AbstractMessagesEditor editor, TreeViewer treeViewer) {
+    public AbstractTreeAction(AbstractMessagesEditor editor,
+            TreeViewer treeViewer) {
         super();
         this.treeViewer = treeViewer;
         this.editor = editor;
     }
+
     /**
      * 
      */
-    public AbstractTreeAction(
-            AbstractMessagesEditor editor, TreeViewer treeViewer, int style) {
+    public AbstractTreeAction(AbstractMessagesEditor editor,
+            TreeViewer treeViewer, int style) {
         super("", style);
         this.treeViewer = treeViewer;
         this.editor = editor;
     }
 
     protected KeyTreeNode getNodeSelection() {
-        IStructuredSelection selection = 
-                (IStructuredSelection) treeViewer.getSelection();
+        IStructuredSelection selection = (IStructuredSelection) treeViewer
+                .getSelection();
         return (KeyTreeNode) selection.getFirstElement();
     }
+
     protected KeyTreeNode[] getBranchNodes(KeyTreeNode node) {
         return ((AbstractKeyTreeModel) treeViewer.getInput()).getBranch(node);
-//        
-//        Set childNodes = new TreeSet();
-//        childNodes.add(node);
-//        Object[] nodes = getContentProvider().getChildren(node);
-//        for (int i = 0; i < nodes.length; i++) {
-//            childNodes.addAll(
-//                    Arrays.asList(getBranchNodes((KeyTreeNode) nodes[i])));
-//        }
-//        return (KeyTreeNode[]) childNodes.toArray(EMPTY_TREE_NODES);
+        //
+        // Set childNodes = new TreeSet();
+        // childNodes.add(node);
+        // Object[] nodes = getContentProvider().getChildren(node);
+        // for (int i = 0; i < nodes.length; i++) {
+        // childNodes.addAll(
+        // Arrays.asList(getBranchNodes((KeyTreeNode) nodes[i])));
+        // }
+        // return (KeyTreeNode[]) childNodes.toArray(EMPTY_TREE_NODES);
     }
 
     protected ITreeContentProvider getContentProvider() {
         return (ITreeContentProvider) treeViewer.getContentProvider();
     }
-    
+
     protected MessagesBundleGroup getBundleGroup() {
         return editor.getBundleGroup();
     }
-    
+
     protected TreeViewer getTreeViewer() {
         return treeViewer;
     }
-    
+
     protected AbstractMessagesEditor getEditor() {
         return editor;
     }
-    
+
     protected Shell getShell() {
         return treeViewer.getTree().getShell();
     }

@@ -43,7 +43,7 @@ import org.eclipse.jface.text.Region;
  * 
  */
 public class ResourceAuditVisitor extends ASTVisitor implements
-	IResourceVisitor {
+        IResourceVisitor {
 
     private List<SLLocation> constants;
     private List<SLLocation> brokenStrings;
@@ -57,205 +57,205 @@ public class ResourceAuditVisitor extends ASTVisitor implements
     private String projectName;
 
     public ResourceAuditVisitor(IFile file, String projectName) {
-	constants = new ArrayList<SLLocation>();
-	brokenStrings = new ArrayList<SLLocation>();
-	brokenRBReferences = new ArrayList<SLLocation>();
-	this.file = file;
-	this.projectName = projectName;
+        constants = new ArrayList<SLLocation>();
+        brokenStrings = new ArrayList<SLLocation>();
+        brokenRBReferences = new ArrayList<SLLocation>();
+        this.file = file;
+        this.projectName = projectName;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean visit(VariableDeclarationStatement varDeclaration) {
-	for (Iterator<VariableDeclarationFragment> itFrag = varDeclaration
-		.fragments().iterator(); itFrag.hasNext();) {
-	    VariableDeclarationFragment fragment = itFrag.next();
-	    parseVariableDeclarationFragment(fragment);
-	}
-	return true;
+        for (Iterator<VariableDeclarationFragment> itFrag = varDeclaration
+                .fragments().iterator(); itFrag.hasNext();) {
+            VariableDeclarationFragment fragment = itFrag.next();
+            parseVariableDeclarationFragment(fragment);
+        }
+        return true;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean visit(FieldDeclaration fieldDeclaration) {
-	for (Iterator<VariableDeclarationFragment> itFrag = fieldDeclaration
-		.fragments().iterator(); itFrag.hasNext();) {
-	    VariableDeclarationFragment fragment = itFrag.next();
-	    parseVariableDeclarationFragment(fragment);
-	}
-	return true;
+        for (Iterator<VariableDeclarationFragment> itFrag = fieldDeclaration
+                .fragments().iterator(); itFrag.hasNext();) {
+            VariableDeclarationFragment fragment = itFrag.next();
+            parseVariableDeclarationFragment(fragment);
+        }
+        return true;
     }
 
     protected void parseVariableDeclarationFragment(
-	    VariableDeclarationFragment fragment) {
-	IVariableBinding vBinding = fragment.resolveBinding();
-	this.variableBindingManagers.put(vBinding, fragment);
+            VariableDeclarationFragment fragment) {
+        IVariableBinding vBinding = fragment.resolveBinding();
+        this.variableBindingManagers.put(vBinding, fragment);
     }
 
     @Override
     public boolean visit(StringLiteral stringLiteral) {
-	try {
-	    ASTNode parent = stringLiteral.getParent();
-	    ResourceBundleManager manager = ResourceBundleManager
-		    .getManager(projectName);
+        try {
+            ASTNode parent = stringLiteral.getParent();
+            ResourceBundleManager manager = ResourceBundleManager
+                    .getManager(projectName);
 
-	    if (manager == null) {
-		return false;
-	    }
+            if (manager == null) {
+                return false;
+            }
 
-	    if (parent instanceof MethodInvocation) {
-		MethodInvocation methodInvocation = (MethodInvocation) parent;
+            if (parent instanceof MethodInvocation) {
+                MethodInvocation methodInvocation = (MethodInvocation) parent;
 
-		IRegion region = new Region(stringLiteral.getStartPosition(),
-			stringLiteral.getLength());
+                IRegion region = new Region(stringLiteral.getStartPosition(),
+                        stringLiteral.getLength());
 
-		// Check if this method invokes the getString-Method on a
-		// ResourceBundle Implementation
-		if (ASTutils.isMatchingMethodParamDesc(methodInvocation,
-			stringLiteral, ASTutils.getRBAccessorDesc())) {
-		    // Check if the given Resource-Bundle reference is broken
-		    SLLocation rbName = ASTutils.resolveResourceBundleLocation(
-			    methodInvocation, ASTutils.getRBDefinitionDesc(),
-			    variableBindingManagers);
-		    if (rbName == null
-			    || manager.isKeyBroken(rbName.getLiteral(),
-				    stringLiteral.getLiteralValue())) {
-			// report new problem
-			SLLocation desc = new SLLocation(file,
-				stringLiteral.getStartPosition(),
-				stringLiteral.getStartPosition()
-					+ stringLiteral.getLength(),
-				stringLiteral.getLiteralValue());
-			desc.setData(rbName);
-			brokenStrings.add(desc);
-		    }
+                // Check if this method invokes the getString-Method on a
+                // ResourceBundle Implementation
+                if (ASTutils.isMatchingMethodParamDesc(methodInvocation,
+                        stringLiteral, ASTutils.getRBAccessorDesc())) {
+                    // Check if the given Resource-Bundle reference is broken
+                    SLLocation rbName = ASTutils.resolveResourceBundleLocation(
+                            methodInvocation, ASTutils.getRBDefinitionDesc(),
+                            variableBindingManagers);
+                    if (rbName == null
+                            || manager.isKeyBroken(rbName.getLiteral(),
+                                    stringLiteral.getLiteralValue())) {
+                        // report new problem
+                        SLLocation desc = new SLLocation(file,
+                                stringLiteral.getStartPosition(),
+                                stringLiteral.getStartPosition()
+                                        + stringLiteral.getLength(),
+                                stringLiteral.getLiteralValue());
+                        desc.setData(rbName);
+                        brokenStrings.add(desc);
+                    }
 
-		    // store position of resource-bundle access
-		    keyPositions.put(
-			    Long.valueOf(stringLiteral.getStartPosition()),
-			    region);
-		    bundleKeys.put(region, stringLiteral.getLiteralValue());
-		    bundleReferences.put(region, rbName.getLiteral());
-		    return false;
-		} else if (ASTutils.isMatchingMethodParamDesc(methodInvocation,
-			stringLiteral, ASTutils.getRBDefinitionDesc())) {
-		    rbDefReferences.put(
-			    Long.valueOf(stringLiteral.getStartPosition()),
-			    region);
-		    boolean referenceBroken = true;
-		    for (String bundle : manager.getResourceBundleIdentifiers()) {
-			if (bundle.trim().equals(
-				stringLiteral.getLiteralValue())) {
-			    referenceBroken = false;
-			}
-		    }
-		    if (referenceBroken) {
-			this.brokenRBReferences.add(new SLLocation(file,
-				stringLiteral.getStartPosition(), stringLiteral
-					.getStartPosition()
-					+ stringLiteral.getLength(),
-				stringLiteral.getLiteralValue()));
-		    }
+                    // store position of resource-bundle access
+                    keyPositions.put(
+                            Long.valueOf(stringLiteral.getStartPosition()),
+                            region);
+                    bundleKeys.put(region, stringLiteral.getLiteralValue());
+                    bundleReferences.put(region, rbName.getLiteral());
+                    return false;
+                } else if (ASTutils.isMatchingMethodParamDesc(methodInvocation,
+                        stringLiteral, ASTutils.getRBDefinitionDesc())) {
+                    rbDefReferences.put(
+                            Long.valueOf(stringLiteral.getStartPosition()),
+                            region);
+                    boolean referenceBroken = true;
+                    for (String bundle : manager.getResourceBundleIdentifiers()) {
+                        if (bundle.trim().equals(
+                                stringLiteral.getLiteralValue())) {
+                            referenceBroken = false;
+                        }
+                    }
+                    if (referenceBroken) {
+                        this.brokenRBReferences.add(new SLLocation(file,
+                                stringLiteral.getStartPosition(), stringLiteral
+                                        .getStartPosition()
+                                        + stringLiteral.getLength(),
+                                stringLiteral.getLiteralValue()));
+                    }
 
-		    return false;
-		}
-	    }
+                    return false;
+                }
+            }
 
-	    // check if string is followed by a "$NON-NLS$" line comment
-	    if (ASTutils.existsNonInternationalisationComment(stringLiteral)) {
-		return false;
-	    }
+            // check if string is followed by a "$NON-NLS$" line comment
+            if (ASTutils.existsNonInternationalisationComment(stringLiteral)) {
+                return false;
+            }
 
-	    // constant string literal found
-	    constants.add(new SLLocation(file,
-		    stringLiteral.getStartPosition(), stringLiteral
-			    .getStartPosition() + stringLiteral.getLength(),
-		    stringLiteral.getLiteralValue()));
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
-	return false;
+            // constant string literal found
+            constants.add(new SLLocation(file,
+                    stringLiteral.getStartPosition(), stringLiteral
+                            .getStartPosition() + stringLiteral.getLength(),
+                    stringLiteral.getLiteralValue()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public List<SLLocation> getConstantStringLiterals() {
-	return constants;
+        return constants;
     }
 
     public List<SLLocation> getBrokenResourceReferences() {
-	return brokenStrings;
+        return brokenStrings;
     }
 
     public List<SLLocation> getBrokenRBReferences() {
-	return this.brokenRBReferences;
+        return this.brokenRBReferences;
     }
 
     public IRegion getKeyAt(Long position) {
-	IRegion reg = null;
+        IRegion reg = null;
 
-	Iterator<Long> keys = keyPositions.keySet().iterator();
-	while (keys.hasNext()) {
-	    Long startPos = keys.next();
-	    if (startPos > position) {
-		break;
-	    }
+        Iterator<Long> keys = keyPositions.keySet().iterator();
+        while (keys.hasNext()) {
+            Long startPos = keys.next();
+            if (startPos > position) {
+                break;
+            }
 
-	    IRegion region = keyPositions.get(startPos);
-	    if (region.getOffset() <= position
-		    && (region.getOffset() + region.getLength()) >= position) {
-		reg = region;
-		break;
-	    }
-	}
+            IRegion region = keyPositions.get(startPos);
+            if (region.getOffset() <= position
+                    && (region.getOffset() + region.getLength()) >= position) {
+                reg = region;
+                break;
+            }
+        }
 
-	return reg;
+        return reg;
     }
 
     public String getKeyAt(IRegion region) {
-	if (bundleKeys.containsKey(region)) {
-	    return bundleKeys.get(region);
-	} else {
-	    return "";
-	}
+        if (bundleKeys.containsKey(region)) {
+            return bundleKeys.get(region);
+        } else {
+            return "";
+        }
     }
 
     public String getBundleReference(IRegion region) {
-	return bundleReferences.get(region);
+        return bundleReferences.get(region);
     }
 
     @Override
     public boolean visit(IResource resource) throws CoreException {
-	// TODO Auto-generated method stub
-	return false;
+        // TODO Auto-generated method stub
+        return false;
     }
 
     public Collection<String> getDefinedResourceBundles(int offset) {
-	Collection<String> result = new HashSet<String>();
-	for (String s : bundleReferences.values()) {
-	    if (s != null) {
-		result.add(s);
-	    }
-	}
-	return result;
+        Collection<String> result = new HashSet<String>();
+        for (String s : bundleReferences.values()) {
+            if (s != null) {
+                result.add(s);
+            }
+        }
+        return result;
     }
 
     public IRegion getRBReferenceAt(Long offset) {
-	IRegion reg = null;
+        IRegion reg = null;
 
-	Iterator<Long> keys = rbDefReferences.keySet().iterator();
-	while (keys.hasNext()) {
-	    Long startPos = keys.next();
-	    if (startPos > offset) {
-		break;
-	    }
+        Iterator<Long> keys = rbDefReferences.keySet().iterator();
+        while (keys.hasNext()) {
+            Long startPos = keys.next();
+            if (startPos > offset) {
+                break;
+            }
 
-	    IRegion region = rbDefReferences.get(startPos);
-	    if (region != null && region.getOffset() <= offset
-		    && (region.getOffset() + region.getLength()) >= offset) {
-		reg = region;
-		break;
-	    }
-	}
+            IRegion region = rbDefReferences.get(startPos);
+            if (region != null && region.getOffset() <= offset
+                    && (region.getOffset() + region.getLength()) >= offset) {
+                reg = region;
+                break;
+            }
+        }
 
-	return reg;
+        return reg;
     }
 }

@@ -21,18 +21,18 @@ import org.eclipse.babel.tapiji.tools.core.model.IResourceDescriptor;
  */
 public interface IStateLoader {
 
-	/**
-	 * Loads the state from a xml-file
-	 */
-	void loadState();
+    /**
+     * Loads the state from a xml-file
+     */
+    void loadState();
 
-	/**
-	 * Stores the state into a xml-file
-	 */
-	void saveState();
+    /**
+     * Stores the state into a xml-file
+     */
+    void saveState();
 
-	/**
-	 * @return The excluded resources
-	 */
-	Set<IResourceDescriptor> getExcludedResources();
+    /**
+     * @return The excluded resources
+     */
+    Set<IResourceDescriptor> getExcludedResources();
 }

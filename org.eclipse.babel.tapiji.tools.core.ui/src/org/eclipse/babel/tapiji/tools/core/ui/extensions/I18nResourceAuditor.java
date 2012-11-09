@@ -98,10 +98,10 @@ public abstract class I18nResourceAuditor extends I18nAuditor {
      *         resource
      */
     public boolean isResourceOfType(IResource resource) {
-	for (String ending : getFileEndings()) {
-	    if (resource.getFileExtension().equalsIgnoreCase(ending))
-		return true;
-	}
-	return false;
+        for (String ending : getFileEndings()) {
+            if (resource.getFileExtension().equalsIgnoreCase(ending))
+                return true;
+        }
+        return false;
     }
 }

@@ -50,11 +50,11 @@ public class Activator extends Plugin {
      */
     @Override
     public void start(BundleContext context) throws Exception {
-	super.start(context);
-	plugin = this;
-	
-	// detect resource bundles 
-	RBManager.getAllMessagesBundleGroupNames();
+        super.start(context);
+        plugin = this;
+
+        // detect resource bundles
+        RBManager.getAllMessagesBundleGroupNames();
     }
 
     /*
@@ -66,8 +66,8 @@ public class Activator extends Plugin {
      */
     @Override
     public void stop(BundleContext context) throws Exception {
-	plugin = null;
-	super.stop(context);
+        plugin = null;
+        super.stop(context);
     }
 
     /**
@@ -76,7 +76,7 @@ public class Activator extends Plugin {
      * @return the shared instance
      */
     public static Activator getDefault() {
-	return plugin;
+        return plugin;
     }
 
     /**
@@ -88,12 +88,12 @@ public class Activator extends Plugin {
      * @return localized string corresponding to key
      */
     public static String getString(String key) {
-	ResourceBundle bundle = Activator.getDefault().getResourceBundle();
-	try {
-	    return (bundle != null) ? bundle.getString(key) : key;
-	} catch (MissingResourceException e) {
-	    return key;
-	}
+        ResourceBundle bundle = Activator.getDefault().getResourceBundle();
+        try {
+            return (bundle != null) ? bundle.getString(key) : key;
+        } catch (MissingResourceException e) {
+            return key;
+        }
     }
 
     /**
@@ -107,7 +107,7 @@ public class Activator extends Plugin {
      * @return localized string corresponding to key
      */
     public static String getString(String key, String arg1) {
-	return MessageFormat.format(getString(key), new String[] { arg1 });
+        return MessageFormat.format(getString(key), new String[] { arg1 });
     }
 
     /**
@@ -123,8 +123,8 @@ public class Activator extends Plugin {
      * @return localized string corresponding to key
      */
     public static String getString(String key, String arg1, String arg2) {
-	return MessageFormat
-		.format(getString(key), new String[] { arg1, arg2 });
+        return MessageFormat
+                .format(getString(key), new String[] { arg1, arg2 });
     }
 
     /**
@@ -142,9 +142,9 @@ public class Activator extends Plugin {
      * @return localized string corresponding to key
      */
     public static String getString(String key, String arg1, String arg2,
-	    String arg3) {
-	return MessageFormat.format(getString(key), new String[] { arg1, arg2,
-		arg3 });
+            String arg3) {
+        return MessageFormat.format(getString(key), new String[] { arg1, arg2,
+                arg3 });
     }
 
     /**
@@ -153,7 +153,7 @@ public class Activator extends Plugin {
      * @return resource bundle
      */
     protected ResourceBundle getResourceBundle() {
-	return resourceBundle;
+        return resourceBundle;
     }
 
 }

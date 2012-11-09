@@ -19,63 +19,64 @@ import org.eclipse.ltk.core.refactoring.participants.RefactoringArguments;
  */
 public class RenameKeyArguments extends RefactoringArguments {
 
-	private String fNewName;
+    private String fNewName;
 
-	private boolean fRenameChildKeys;
+    private boolean fRenameChildKeys;
 
-	private boolean fUpdateReferences;
+    private boolean fUpdateReferences;
 
-	/**
-	 * Creates new rename arguments.
-	 * 
-	 * @param newName
-	 *            the new name of the element to be renamed
-	 * @param renameChildKeys
-	 *            <code>true</code> if child keys are to be renamed;
-	 *            <code>false</code> otherwise
-	 * @param updateReferences
-	 *            <code>true</code> if reference updating is requested;
-	 *            <code>false</code> otherwise
-	 */
-	public RenameKeyArguments(String newName, boolean renameChildKeys, boolean updateReferences) {
-		Assert.isNotNull(newName);
-		fNewName= newName;
-		fRenameChildKeys = renameChildKeys;
-		fUpdateReferences= updateReferences;
-	}
+    /**
+     * Creates new rename arguments.
+     * 
+     * @param newName
+     *            the new name of the element to be renamed
+     * @param renameChildKeys
+     *            <code>true</code> if child keys are to be renamed;
+     *            <code>false</code> otherwise
+     * @param updateReferences
+     *            <code>true</code> if reference updating is requested;
+     *            <code>false</code> otherwise
+     */
+    public RenameKeyArguments(String newName, boolean renameChildKeys,
+            boolean updateReferences) {
+        Assert.isNotNull(newName);
+        fNewName = newName;
+        fRenameChildKeys = renameChildKeys;
+        fUpdateReferences = updateReferences;
+    }
 
-	/**
-	 * Returns the new element name.
-	 *
-	 * @return the new element name
-	 */
-	public String getNewName() {
-		return fNewName;
-	}
+    /**
+     * Returns the new element name.
+     * 
+     * @return the new element name
+     */
+    public String getNewName() {
+        return fNewName;
+    }
 
-	/**
-	 * Returns whether child keys are to be renamed or not.
-	 * 
-	 * @return returns <code>true</code> if child keys are to be renamed;
-	 *         <code>false</code> otherwise
-	 */
-	public boolean getRenameChildKeys() {
-		return fRenameChildKeys;
-	}
+    /**
+     * Returns whether child keys are to be renamed or not.
+     * 
+     * @return returns <code>true</code> if child keys are to be renamed;
+     *         <code>false</code> otherwise
+     */
+    public boolean getRenameChildKeys() {
+        return fRenameChildKeys;
+    }
 
-	/**
-	 * Returns whether reference updating is requested or not.
-	 * 
-	 * @return returns <code>true</code> if reference updating is requested;
-	 *         <code>false</code> otherwise
-	 */
-	public boolean getUpdateReferences() {
-		return fUpdateReferences;
-	}
+    /**
+     * Returns whether reference updating is requested or not.
+     * 
+     * @return returns <code>true</code> if reference updating is requested;
+     *         <code>false</code> otherwise
+     */
+    public boolean getUpdateReferences() {
+        return fUpdateReferences;
+    }
 
-	public String toString() {
-		return "rename to " + fNewName //$NON-NLS-1$
-		+ (fRenameChildKeys ? " (rename child keys)" : " (don't rename child keys)") //$NON-NLS-1$//$NON-NLS-2$
-		+ (fUpdateReferences ? " (update references)" : " (don't update references)"); //$NON-NLS-1$//$NON-NLS-2$
-	}
+    public String toString() {
+        return "rename to " + fNewName //$NON-NLS-1$
+                + (fRenameChildKeys ? " (rename child keys)" : " (don't rename child keys)") //$NON-NLS-1$//$NON-NLS-2$
+                + (fUpdateReferences ? " (update references)" : " (don't update references)"); //$NON-NLS-1$//$NON-NLS-2$
+    }
 }

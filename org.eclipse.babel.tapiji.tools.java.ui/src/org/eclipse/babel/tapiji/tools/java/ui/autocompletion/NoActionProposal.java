@@ -19,49 +19,49 @@ import org.eclipse.swt.graphics.Point;
 public class NoActionProposal implements IJavaCompletionProposal {
 
     public NoActionProposal() {
-	super();
+        super();
     }
 
     @Override
     public void apply(IDocument document) {
-	// TODO Auto-generated method stub
+        // TODO Auto-generated method stub
 
     }
 
     @Override
     public String getAdditionalProposalInfo() {
-	// TODO Auto-generated method stub
-	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public IContextInformation getContextInformation() {
-	// TODO Auto-generated method stub
-	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public String getDisplayString() {
-	// TODO Auto-generated method stub
-	return "No Default Proposals";
+        // TODO Auto-generated method stub
+        return "No Default Proposals";
     }
 
     @Override
     public Image getImage() {
-	// TODO Auto-generated method stub
-	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public Point getSelection(IDocument document) {
-	// TODO Auto-generated method stub
-	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public int getRelevance() {
-	// TODO Auto-generated method stub
-	return 100;
+        // TODO Auto-generated method stub
+        return 100;
     }
 
 }

@@ -18,31 +18,32 @@ import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.babel.core.message.tree.IKeyTreeVisitor;
 import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 
-
 /**
  * Visitor for going to a tree (or tree branch), and aggregating information
  * about executed checks.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public class KeyCheckVisitor implements IKeyTreeVisitor {
 
     private static final KeyTreeNode[] EMPTY_NODES = new KeyTreeNode[] {};
-    
+
     private IKeyCheck keyCheck;
     private final MessagesBundleGroup messagesBundleGroup;
-    
+
     private final Collection<IKeyTreeNode> passedNodes = new ArrayList<IKeyTreeNode>();
     private final Collection<IKeyTreeNode> failedNodes = new ArrayList<IKeyTreeNode>();
-    
+
     /**
      * Constructor.
      */
-    public KeyCheckVisitor(
-    		MessagesBundleGroup messagesBundleGroup, IKeyCheck keyCheck) {
+    public KeyCheckVisitor(MessagesBundleGroup messagesBundleGroup,
+            IKeyCheck keyCheck) {
         super();
         this.keyCheck = keyCheck;
         this.messagesBundleGroup = messagesBundleGroup;
     }
+
     /**
      * Constructor.
      */
@@ -50,11 +51,10 @@ public class KeyCheckVisitor implements IKeyTreeVisitor {
         super();
         this.messagesBundleGroup = messagesBundleGroup;
     }
-    
+
     /**
      * @see org.eclipse.babel.core.message.internal.tree.visitor.IKeyTreeVisitor
-     *      #visitKeyTreeNode(
-     *              org.eclipse.babel.core.message.internal.tree.internal.KeyTreeNode)
+     *      #visitKeyTreeNode(org.eclipse.babel.core.message.internal.tree.internal.KeyTreeNode)
      */
     public void visitKeyTreeNode(IKeyTreeNode node) {
         if (keyCheck == null) {
@@ -69,19 +69,22 @@ public class KeyCheckVisitor implements IKeyTreeVisitor {
 
     /**
      * Gets all nodes that returned true upon invoking a {@link IKeyCheck}.
+     * 
      * @return all successful nodes
      */
     public KeyTreeNode[] getPassedNodes() {
         return passedNodes.toArray(EMPTY_NODES);
     }
+
     /**
      * Gets all nodes that returned false upon invoking a {@link IKeyCheck}.
+     * 
      * @return all failing nodes
      */
     public KeyTreeNode[] getFailedNodes() {
         return failedNodes.toArray(EMPTY_NODES);
     }
-    
+
     /**
      * Resets all passed and failed nodes.
      */
@@ -92,8 +95,11 @@ public class KeyCheckVisitor implements IKeyTreeVisitor {
 
     /**
      * Sets the key check for this visitor.
-     * @param newKeyCheck new key check
-     * @param reset whether to reset the passed and failed nodes.
+     * 
+     * @param newKeyCheck
+     *            new key check
+     * @param reset
+     *            whether to reset the passed and failed nodes.
      */
     public void setKeyCheck(IKeyCheck newKeyCheck, boolean reset) {
         if (reset) {

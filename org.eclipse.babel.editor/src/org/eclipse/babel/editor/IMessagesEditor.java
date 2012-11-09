@@ -13,13 +13,13 @@ package org.eclipse.babel.editor;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 
 public interface IMessagesEditor {
-	String getSelectedKey();
+    String getSelectedKey();
 
-	void setSelectedKey(String key);
-	
-	MessagesBundleGroup getBundleGroup();
+    void setSelectedKey(String key);
 
-	void setTitleName(String string);
-	
-	void setEnabled(boolean enabled);
+    MessagesBundleGroup getBundleGroup();
+
+    void setTitleName(String string);
+
+    void setEnabled(boolean enabled);
 }

@@ -24,30 +24,36 @@ import org.eclipse.jface.viewers.TreeViewer;
  */
 public class RefactorKeyAction extends AbstractTreeAction {
 
-	/**
-	 * Constructor.
-	 * @param editor The {@link MessagesEditor}
-	 * @param treeViewer The {@link TreeViewer}
-	 */
-	public RefactorKeyAction(AbstractMessagesEditor editor, TreeViewer treeViewer) {
-		super(editor, treeViewer);
-		setText(MessagesEditorPlugin.getString("key.refactor") + " ..."); //$NON-NLS-1$
-		setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_REFACTORING));
-		setToolTipText("Refactor the name of the key");
-	}
+    /**
+     * Constructor.
+     * 
+     * @param editor
+     *            The {@link MessagesEditor}
+     * @param treeViewer
+     *            The {@link TreeViewer}
+     */
+    public RefactorKeyAction(AbstractMessagesEditor editor,
+            TreeViewer treeViewer) {
+        super(editor, treeViewer);
+        setText(MessagesEditorPlugin.getString("key.refactor") + " ..."); //$NON-NLS-1$
+        setImageDescriptor(UIUtils
+                .getImageDescriptor(UIUtils.IMAGE_REFACTORING));
+        setToolTipText("Refactor the name of the key");
+    }
 
-	/**
-	 * @see org.eclipse.jface.action.Action#run()
-	 */
-	@Override
-	public void run() {
-		KeyTreeNode node = getNodeSelection();
+    /**
+     * @see org.eclipse.jface.action.Action#run()
+     */
+    @Override
+    public void run() {
+        KeyTreeNode node = getNodeSelection();
 
-		String key = node.getMessageKey();
-		String bundleId = node.getMessagesBundleGroup().getResourceBundleId();
-		String projectName = node.getMessagesBundleGroup().getProjectName();
+        String key = node.getMessageKey();
+        String bundleId = node.getMessagesBundleGroup().getResourceBundleId();
+        String projectName = node.getMessagesBundleGroup().getProjectName();
 
-		RBManager.getRefactorService().openRefactorDialog(projectName, bundleId, key, null);
+        RBManager.getRefactorService().openRefactorDialog(projectName,
+                bundleId, key, null);
 
-	}
+    }
 }

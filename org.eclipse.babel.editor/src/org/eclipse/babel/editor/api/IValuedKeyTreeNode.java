@@ -18,20 +18,20 @@ import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 
 public interface IValuedKeyTreeNode extends IKeyTreeNode {
 
-	public void initValues(Map<Locale, String> values);
+    public void initValues(Map<Locale, String> values);
 
-	public void addValue(Locale locale, String value);
+    public void addValue(Locale locale, String value);
 
-	public void setValue(Locale locale, String newValue);
+    public void setValue(Locale locale, String newValue);
 
-	public String getValue(Locale locale);
+    public String getValue(Locale locale);
 
-	public Collection<String> getValues();
+    public Collection<String> getValues();
 
-	public void setInfo(Object info);
+    public void setInfo(Object info);
 
-	public Object getInfo();
+    public Object getInfo();
 
-	public Collection<Locale> getLocales();
+    public Collection<Locale> getLocales();
 
 }

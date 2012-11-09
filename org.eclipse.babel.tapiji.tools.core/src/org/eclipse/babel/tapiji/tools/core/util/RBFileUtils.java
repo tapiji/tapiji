@@ -21,16 +21,16 @@ public class RBFileUtils extends Action {
      * Checks whether a RB-file has a problem-marker
      */
     public static boolean hasResourceBundleMarker(IResource r) {
-	try {
-	    if (r.findMarkers(EditorUtils.RB_MARKER_ID, true,
-		    IResource.DEPTH_INFINITE).length > 0) {
-		return true;
-	    } else {
-		return false;
-	    }
-	} catch (CoreException e) {
-	    return false;
-	}
+        try {
+            if (r.findMarkers(EditorUtils.RB_MARKER_ID, true,
+                    IResource.DEPTH_INFINITE).length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (CoreException e) {
+            return false;
+        }
     }
 
 }

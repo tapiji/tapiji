@@ -24,44 +24,44 @@ public class ToggleFilterActionDelegate implements IViewActionDelegate {
     private INavigatorFilterService filterService;
     private boolean active;
     private static final String[] FILTER = { RBManagerActivator.PLUGIN_ID
-	    + ".filter.ProblematicResourceBundleFiles" };
+            + ".filter.ProblematicResourceBundleFiles" };
 
     @Override
     public void run(IAction action) {
-	if (active == true) {
-	    filterService.activateFilterIdsAndUpdateViewer(new String[0]);
-	    active = false;
-	} else {
-	    filterService.activateFilterIdsAndUpdateViewer(FILTER);
-	    active = true;
-	}
+        if (active == true) {
+            filterService.activateFilterIdsAndUpdateViewer(new String[0]);
+            active = false;
+        } else {
+            filterService.activateFilterIdsAndUpdateViewer(FILTER);
+            active = true;
+        }
     }
 
     @Override
     public void selectionChanged(IAction action, ISelection selection) {
-	// Active when content change
+        // Active when content change
     }
 
     @Override
     public void init(IViewPart view) {
-	INavigatorContentService contentService = ((CommonNavigator) view)
-		.getCommonViewer().getNavigatorContentService();
+        INavigatorContentService contentService = ((CommonNavigator) view)
+                .getCommonViewer().getNavigatorContentService();
 
-	filterService = contentService.getFilterService();
-	filterService.activateFilterIdsAndUpdateViewer(new String[0]);
-	active = false;
+        filterService = contentService.getFilterService();
+        filterService.activateFilterIdsAndUpdateViewer(new String[0]);
+        active = false;
     }
 
     @SuppressWarnings("unused")
     private String[] getActiveFilterIds() {
-	ICommonFilterDescriptor[] fds = filterService
-		.getVisibleFilterDescriptors();
-	String activeFilterIds[] = new String[fds.length];
+        ICommonFilterDescriptor[] fds = filterService
+                .getVisibleFilterDescriptors();
+        String activeFilterIds[] = new String[fds.length];
 
-	for (int i = 0; i < fds.length; i++)
-	    activeFilterIds[i] = fds[i].getId();
+        for (int i = 0; i < fds.length; i++)
+            activeFilterIds[i] = fds[i].getId();
 
-	return activeFilterIds;
+        return activeFilterIds;
     }
 
 }

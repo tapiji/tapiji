@@ -17,10 +17,9 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public class ShowMissingAction extends Action {
 
@@ -30,19 +29,18 @@ public class ShowMissingAction extends Action {
     public ShowMissingAction(String key, Locale locale) {
         super();
         setText("Key missing a value.");
-        setImageDescriptor(
-                UIUtils.getImageDescriptor("empty.gif"));
-        setToolTipText("TODO put something here"); //TODO put tooltip
+        setImageDescriptor(UIUtils.getImageDescriptor("empty.gif"));
+        setToolTipText("TODO put something here"); // TODO put tooltip
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
-        MessageDialog.openInformation(
-                Display.getDefault().getActiveShell(),
-                "Missing value",
-                "Key missing a value");
+        MessageDialog.openInformation(Display.getDefault().getActiveShell(),
+                "Missing value", "Key missing a value");
     }
 
 }

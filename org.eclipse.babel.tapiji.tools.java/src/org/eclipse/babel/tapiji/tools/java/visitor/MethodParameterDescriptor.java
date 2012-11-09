@@ -20,44 +20,44 @@ public class MethodParameterDescriptor {
     private int position;
 
     public MethodParameterDescriptor(List<String> methodName,
-	    String declaringClass, boolean considerSuperclass, int position) {
-	super();
-	this.setMethodName(methodName);
-	this.declaringClass = declaringClass;
-	this.considerSuperclass = considerSuperclass;
-	this.position = position;
+            String declaringClass, boolean considerSuperclass, int position) {
+        super();
+        this.setMethodName(methodName);
+        this.declaringClass = declaringClass;
+        this.considerSuperclass = considerSuperclass;
+        this.position = position;
     }
 
     public String getDeclaringClass() {
-	return declaringClass;
+        return declaringClass;
     }
 
     public void setDeclaringClass(String declaringClass) {
-	this.declaringClass = declaringClass;
+        this.declaringClass = declaringClass;
     }
 
     public boolean isConsiderSuperclass() {
-	return considerSuperclass;
+        return considerSuperclass;
     }
 
     public void setConsiderSuperclass(boolean considerSuperclass) {
-	this.considerSuperclass = considerSuperclass;
+        this.considerSuperclass = considerSuperclass;
     }
 
     public int getPosition() {
-	return position;
+        return position;
     }
 
     public void setPosition(int position) {
-	this.position = position;
+        this.position = position;
     }
 
     public void setMethodName(List<String> methodName) {
-	this.methodName = methodName;
+        this.methodName = methodName;
     }
 
     public List<String> getMethodName() {
-	return methodName;
+        return methodName;
     }
 
 }

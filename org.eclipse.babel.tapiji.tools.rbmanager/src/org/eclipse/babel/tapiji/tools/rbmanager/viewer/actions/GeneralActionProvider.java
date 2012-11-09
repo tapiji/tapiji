@@ -28,29 +28,29 @@ public class GeneralActionProvider extends CommonActionProvider {
     private IAction expandAction;
 
     public GeneralActionProvider() {
-	// TODO Auto-generated constructor stub
+        // TODO Auto-generated constructor stub
     }
 
     @Override
     public void init(ICommonActionExtensionSite aSite) {
-	super.init(aSite);
-	// init Expand-Action
-	expandAction = new ExpandAction(
-		(CommonViewer) aSite.getStructuredViewer());
+        super.init(aSite);
+        // init Expand-Action
+        expandAction = new ExpandAction(
+                (CommonViewer) aSite.getStructuredViewer());
 
-	// activate View-Hover
-	List<HoverInformant> informants = new ArrayList<HoverInformant>();
-	informants.add(new I18NProjectInformant());
-	informants.add(new RBMarkerInformant());
+        // activate View-Hover
+        List<HoverInformant> informants = new ArrayList<HoverInformant>();
+        informants.add(new I18NProjectInformant());
+        informants.add(new RBMarkerInformant());
 
-	Hover hover = new Hover(Display.getCurrent().getActiveShell(),
-		informants);
-	hover.activateHoverHelp(((CommonViewer) aSite.getStructuredViewer())
-		.getTree());
+        Hover hover = new Hover(Display.getCurrent().getActiveShell(),
+                informants);
+        hover.activateHoverHelp(((CommonViewer) aSite.getStructuredViewer())
+                .getTree());
     }
 
     @Override
     public void fillContextMenu(IMenuManager menu) {
-	menu.appendToGroup("expand", expandAction);
+        menu.appendToGroup("expand", expandAction);
     }
 }

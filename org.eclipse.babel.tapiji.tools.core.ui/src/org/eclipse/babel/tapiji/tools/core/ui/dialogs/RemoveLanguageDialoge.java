@@ -28,96 +28,96 @@ public class RemoveLanguageDialoge extends ListDialog {
     private IProject project;
 
     public RemoveLanguageDialoge(IProject project, Shell shell) {
-	super(shell);
-	this.project = project;
+        super(shell);
+        this.project = project;
 
-	initDialog();
+        initDialog();
     }
 
     protected void initDialog() {
-	this.setAddCancelButton(true);
-	this.setMessage("Select one of the following languages to delete:");
-	this.setTitle("Language Selector");
-	this.setContentProvider(new RBContentProvider());
-	this.setLabelProvider(new RBLabelProvider());
+        this.setAddCancelButton(true);
+        this.setMessage("Select one of the following languages to delete:");
+        this.setTitle("Language Selector");
+        this.setContentProvider(new RBContentProvider());
+        this.setLabelProvider(new RBLabelProvider());
 
-	this.setInput(ResourceBundleManager.getManager(project)
-		.getProjectProvidedLocales());
+        this.setInput(ResourceBundleManager.getManager(project)
+                .getProjectProvidedLocales());
     }
 
     public Locale getSelectedLanguage() {
-	Object[] selection = this.getResult();
-	if (selection != null && selection.length > 0)
-	    return (Locale) selection[0];
-	return null;
+        Object[] selection = this.getResult();
+        if (selection != null && selection.length > 0)
+            return (Locale) selection[0];
+        return null;
     }
 
     // private
     // classes-------------------------------------------------------------------------------------
     class RBContentProvider implements IStructuredContentProvider {
 
-	@Override
-	public Object[] getElements(Object inputElement) {
-	    Set<Locale> resources = (Set<Locale>) inputElement;
-	    return resources.toArray();
-	}
+        @Override
+        public Object[] getElements(Object inputElement) {
+            Set<Locale> resources = (Set<Locale>) inputElement;
+            return resources.toArray();
+        }
 
-	@Override
-	public void dispose() {
-	    // TODO Auto-generated method stub
+        @Override
+        public void dispose() {
+            // TODO Auto-generated method stub
 
-	}
+        }
 
-	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-	    // TODO Auto-generated method stub
+        @Override
+        public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+            // TODO Auto-generated method stub
 
-	}
+        }
 
     }
 
     class RBLabelProvider implements ILabelProvider {
 
-	@Override
-	public Image getImage(Object element) {
-	    return ImageUtils.getImage(ImageUtils.IMAGE_RESOURCE_BUNDLE);
-	}
+        @Override
+        public Image getImage(Object element) {
+            return ImageUtils.getImage(ImageUtils.IMAGE_RESOURCE_BUNDLE);
+        }
 
-	@Override
-	public String getText(Object element) {
-	    Locale l = ((Locale) element);
-	    String text = l.getDisplayName();
-	    if (text == null || text.equals(""))
-		text = "default";
-	    else
-		text += " - " + l.getLanguage() + " " + l.getCountry() + " "
-			+ l.getVariant();
-	    return text;
-	}
+        @Override
+        public String getText(Object element) {
+            Locale l = ((Locale) element);
+            String text = l.getDisplayName();
+            if (text == null || text.equals(""))
+                text = "default";
+            else
+                text += " - " + l.getLanguage() + " " + l.getCountry() + " "
+                        + l.getVariant();
+            return text;
+        }
 
-	@Override
-	public void addListener(ILabelProviderListener listener) {
-	    // TODO Auto-generated method stub
+        @Override
+        public void addListener(ILabelProviderListener listener) {
+            // TODO Auto-generated method stub
 
-	}
+        }
 
-	@Override
-	public void dispose() {
-	    // TODO Auto-generated method stub
+        @Override
+        public void dispose() {
+            // TODO Auto-generated method stub
 
-	}
+        }
 
-	@Override
-	public boolean isLabelProperty(Object element, String property) {
-	    // TODO Auto-generated method stub
-	    return false;
-	}
+        @Override
+        public boolean isLabelProperty(Object element, String property) {
+            // TODO Auto-generated method stub
+            return false;
+        }
 
-	@Override
-	public void removeListener(ILabelProviderListener listener) {
-	    // TODO Auto-generated method stub
+        @Override
+        public void removeListener(ILabelProviderListener listener) {
+            // TODO Auto-generated method stub
 
-	}
+        }
 
     }
 }

@@ -15,28 +15,29 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Compares two strings (case insensitive) and returns a proximity level
- * based on how many words there are, and how many words are the same 
- * in both strings.  Non-string objects are converted to strings using
- * the <code>toString()</code> method.
+ * Compares two strings (case insensitive) and returns a proximity level based
+ * on how many words there are, and how many words are the same in both strings.
+ * Non-string objects are converted to strings using the <code>toString()</code>
+ * method.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public class WordCountAnalyzer implements IProximityAnalyzer {
 
     private static final IProximityAnalyzer INSTANCE = new WordCountAnalyzer();
-    private static final String WORD_SPLIT_PATTERN =
-            "\r\n|\r|\n|\\s"; //$NON-NLS-1$
+    private static final String WORD_SPLIT_PATTERN = "\r\n|\r|\n|\\s"; //$NON-NLS-1$
 
     /**
      * Constructor.
      */
     private WordCountAnalyzer() {
-        //TODO add case sensitivity?
+        // TODO add case sensitivity?
         super();
     }
 
     /**
      * Gets the unique instance.
+     * 
      * @return a proximity analyzer
      */
     public static IProximityAnalyzer getInstance() {
@@ -45,19 +46,19 @@ public class WordCountAnalyzer implements IProximityAnalyzer {
 
     /**
      * @see com.essiembre.eclipse.rbe.model.utils.IProximityAnalyzer
-     *         #analyse(java.lang.Object, java.lang.Object)
+     *      #analyse(java.lang.Object, java.lang.Object)
      */
     public double analyse(String words1, String words2) {
-        Collection<String> str1 = new ArrayList<String>(
-                Arrays.asList(words1.split(WORD_SPLIT_PATTERN)));
-        Collection<String> str2 = new ArrayList<String>(
-                Arrays.asList(words2.split(WORD_SPLIT_PATTERN)));
-        
+        Collection<String> str1 = new ArrayList<String>(Arrays.asList(words1
+                .split(WORD_SPLIT_PATTERN)));
+        Collection<String> str2 = new ArrayList<String>(Arrays.asList(words2
+                .split(WORD_SPLIT_PATTERN)));
+
         int maxWords = Math.max(str1.size(), str2.size());
         if (maxWords == 0) {
             return 0;
         }
-        
+
         int matchedWords = 0;
         for (String str : str1) {
             if (str2.remove(str)) {

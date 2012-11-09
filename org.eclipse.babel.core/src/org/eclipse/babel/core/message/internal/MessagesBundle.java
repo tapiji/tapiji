@@ -28,44 +28,43 @@ import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.util.BabelUtils;
 
 /**
- * For a given scope, all messages for a national language.  
+ * For a given scope, all messages for a national language.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
-public class MessagesBundle extends AbstractMessageModel
-		implements IMessagesResourceChangeListener, IMessagesBundle {
+public class MessagesBundle extends AbstractMessageModel implements
+        IMessagesResourceChangeListener, IMessagesBundle {
 
     private static final long serialVersionUID = -331515196227475652L;
 
     public static final String PROPERTY_COMMENT = "comment"; //$NON-NLS-1$
-    public static final String PROPERTY_MESSAGES_COUNT =
-            "messagesCount"; //$NON-NLS-1$
+    public static final String PROPERTY_MESSAGES_COUNT = "messagesCount"; //$NON-NLS-1$
 
-    private static final IMessagesBundleListener[] EMPTY_MSG_BUNDLE_LISTENERS =
-        new IMessagesBundleListener[] {};
+    private static final IMessagesBundleListener[] EMPTY_MSG_BUNDLE_LISTENERS = new IMessagesBundleListener[] {};
     private final Collection<String> orderedKeys = new ArrayList<String>();
     private final Map<String, IMessage> keyedMessages = new HashMap<String, IMessage>();
 
     private final IMessagesResource resource;
-    
-    private final PropertyChangeListener messageListener =
-        new PropertyChangeListener(){
-                public void propertyChange(PropertyChangeEvent event) {
-                    fireMessageChanged(event);
-                }
+
+    private final PropertyChangeListener messageListener = new PropertyChangeListener() {
+        public void propertyChange(PropertyChangeEvent event) {
+            fireMessageChanged(event);
+        }
     };
     private String comment;
 
     /**
      * Creates a new <code>MessagesBundle</code>.
-     * @param resource the messages bundle resource
+     * 
+     * @param resource
+     *            the messages bundle resource
      */
     public MessagesBundle(IMessagesResource resource) {
         super();
         this.resource = resource;
         readFromResource();
         // Handle resource changes
-        resource.addMessagesResourceChangeListener(
-        		new IMessagesResourceChangeListener(){
+        resource.addMessagesResourceChangeListener(new IMessagesResourceChangeListener() {
             public void resourceChanged(IMessagesResource changedResource) {
                 readFromResource();
             }
@@ -76,6 +75,7 @@ public class MessagesBundle extends AbstractMessageModel
                     PropertyChangeEvent changeEvent) {
                 writetoResource();
             }
+
             public void propertyChange(PropertyChangeEvent evt) {
                 writetoResource();
             }
@@ -86,24 +86,26 @@ public class MessagesBundle extends AbstractMessageModel
      * Called before this object will be discarded.
      */
     public void dispose() {
-    	this.resource.dispose();
+        this.resource.dispose();
     }
-    
+
     /**
      * Gets the underlying messages resource implementation.
+     * 
      * @return
      */
     public IMessagesResource getResource() {
         return resource;
     }
-    
+
     public int getMessagesCount() {
         return keyedMessages.size();
     }
-    
+
     /**
-     * Gets the locale for the messages bundle (<code>null</code> assumes
-     * the default system locale).
+     * Gets the locale for the messages bundle (<code>null</code> assumes the
+     * default system locale).
+     * 
      * @return Returns the locale.
      */
     public Locale getLocale() {
@@ -112,6 +114,7 @@ public class MessagesBundle extends AbstractMessageModel
 
     /**
      * Gets the overall comment, or description, for this messages bundle..
+     * 
      * @return Returns the comment.
      */
     public String getComment() {
@@ -120,7 +123,9 @@ public class MessagesBundle extends AbstractMessageModel
 
     /**
      * Sets the comment for this messages bundle.
-     * @param comment The comment to set.
+     * 
+     * @param comment
+     *            The comment to set.
      */
     public void setComment(String comment) {
         Object oldValue = this.comment;
@@ -130,17 +135,18 @@ public class MessagesBundle extends AbstractMessageModel
 
     /**
      * @see org.eclipse.babel.core.message.resource
-     * 		.IMessagesResourceChangeListener#resourceChanged(
-     * 				org.eclipse.babel.core.message.internal.resource.IMessagesResource)
+     *      .IMessagesResourceChangeListener#resourceChanged(org.eclipse.babel.core.message.internal.resource.IMessagesResource)
      */
     public void resourceChanged(IMessagesResource changedResource) {
         this.resource.deserialize(this);
     }
 
     /**
-     * Adds a message to this messages bundle.  If the message already exists
-     * its properties are updated and no new message is added.
-     * @param message the message to add
+     * Adds a message to this messages bundle. If the message already exists its
+     * properties are updated and no new message is added.
+     * 
+     * @param message
+     *            the message to add
      */
     public void addMessage(IMessage message) {
         Message m = (Message) message;
@@ -151,8 +157,8 @@ public class MessagesBundle extends AbstractMessageModel
         if (!keyedMessages.containsKey(m.getKey())) {
             keyedMessages.put(m.getKey(), m);
             m.addMessageListener(messageListener);
-            firePropertyChange(
-                    PROPERTY_MESSAGES_COUNT, oldCount, getMessagesCount());
+            firePropertyChange(PROPERTY_MESSAGES_COUNT, oldCount,
+                    getMessagesCount());
             fireMessageAdded(m);
         } else {
             // Entry already exists, update it.
@@ -160,9 +166,12 @@ public class MessagesBundle extends AbstractMessageModel
             matchingEntry.copyFrom(m);
         }
     }
+
     /**
      * Removes a message from this messages bundle.
-     * @param messageKey the key of the message to remove
+     * 
+     * @param messageKey
+     *            the key of the message to remove
      */
     public void removeMessage(String messageKey) {
         int oldCount = getMessagesCount();
@@ -171,31 +180,36 @@ public class MessagesBundle extends AbstractMessageModel
         if (message != null) {
             message.removePropertyChangeListener(messageListener);
             keyedMessages.remove(messageKey);
-            firePropertyChange(
-                    PROPERTY_MESSAGES_COUNT, oldCount, getMessagesCount());
+            firePropertyChange(PROPERTY_MESSAGES_COUNT, oldCount,
+                    getMessagesCount());
             fireMessageRemoved(message);
         }
     }
-    
+
     /**
-     * Removes a message from this messages bundle and adds it's parent key to bundle.
-     * E.g.: key = a.b.c gets deleted, a.b gets added with a default message
-     * @param messageKey the key of the message to remove
+     * Removes a message from this messages bundle and adds it's parent key to
+     * bundle. E.g.: key = a.b.c gets deleted, a.b gets added with a default
+     * message
+     * 
+     * @param messageKey
+     *            the key of the message to remove
      */
     public void removeMessageAddParentKey(String messageKey) {
-    	removeMessage(messageKey);   	
-            
+        removeMessage(messageKey);
+
         // add parent key
         int index = messageKey.lastIndexOf(".");
         messageKey = (index == -1 ? "" : messageKey.substring(0, index));
-        
-        if (! messageKey.isEmpty())
-        	addMessage(new Message(messageKey, getLocale()));        
+
+        if (!messageKey.isEmpty())
+            addMessage(new Message(messageKey, getLocale()));
     }
-    
+
     /**
      * Removes messages from this messages bundle.
-     * @param messageKeys the keys of the messages to remove
+     * 
+     * @param messageKeys
+     *            the keys of the messages to remove
      */
     public void removeMessages(String[] messageKeys) {
         for (int i = 0; i < messageKeys.length; i++) {
@@ -205,14 +219,18 @@ public class MessagesBundle extends AbstractMessageModel
 
     /**
      * Renames a message key.
-     * @param sourceKey the message key to rename
-     * @param targetKey the new key for the message
-     * @throws MessageException if the target key already exists
+     * 
+     * @param sourceKey
+     *            the message key to rename
+     * @param targetKey
+     *            the new key for the message
+     * @throws MessageException
+     *             if the target key already exists
      */
     public void renameMessageKey(String sourceKey, String targetKey) {
         if (getMessage(targetKey) != null) {
             throw new MessageException(
-            		"Cannot rename: target key already exists."); //$NON-NLS-1$
+                    "Cannot rename: target key already exists."); //$NON-NLS-1$
         }
         IMessage sourceEntry = getMessage(sourceKey);
         if (sourceEntry != null) {
@@ -222,16 +240,21 @@ public class MessagesBundle extends AbstractMessageModel
             addMessage(targetEntry);
         }
     }
+
     /**
      * Duplicates a message.
-     * @param sourceKey the message key to duplicate
-     * @param targetKey the new message key
-     * @throws MessageException if the target key already exists
+     * 
+     * @param sourceKey
+     *            the message key to duplicate
+     * @param targetKey
+     *            the new message key
+     * @throws MessageException
+     *             if the target key already exists
      */
     public void duplicateMessage(String sourceKey, String targetKey) {
         if (getMessage(sourceKey) != null) {
             throw new MessageException(
-            	"Cannot duplicate: target key already exists."); //$NON-NLS-1$
+                    "Cannot duplicate: target key already exists."); //$NON-NLS-1$
         }
         IMessage sourceEntry = getMessage(sourceKey);
         if (sourceEntry != null) {
@@ -243,7 +266,9 @@ public class MessagesBundle extends AbstractMessageModel
 
     /**
      * Gets a message.
-     * @param key a message key
+     * 
+     * @param key
+     *            a message key
      * @return a message
      */
     public IMessage getMessage(String key) {
@@ -252,7 +277,9 @@ public class MessagesBundle extends AbstractMessageModel
 
     /**
      * Adds an empty message.
-     * @param key the new message key
+     * 
+     * @param key
+     *            the new message key
      */
     public void addMessage(String key) {
         addMessage(new Message(key, getLocale()));
@@ -260,14 +287,16 @@ public class MessagesBundle extends AbstractMessageModel
 
     /**
      * Gets all message keys making up this messages bundle.
+     * 
      * @return message keys
      */
     public String[] getKeys() {
         return orderedKeys.toArray(BabelUtils.EMPTY_STRINGS);
     }
-    
+
     /**
      * Obtains the set of <code>Message</code> objects in this bundle.
+     * 
      * @return a collection of <code>Message</code> objects in this bundle
      */
     public Collection<IMessage> getMessages() {
@@ -279,8 +308,8 @@ public class MessagesBundle extends AbstractMessageModel
      */
     public String toString() {
         String str = "MessagesBundle=[[locale=" + getLocale() //$NON-NLS-1$
-                   + "][comment=" + comment //$NON-NLS-1$
-                   + "][entries="; //$NON-NLS-1$
+                + "][comment=" + comment //$NON-NLS-1$
+                + "][entries="; //$NON-NLS-1$
         for (IMessage message : getMessages()) {
             str += message.toString();
         }
@@ -295,14 +324,14 @@ public class MessagesBundle extends AbstractMessageModel
         final int PRIME = 31;
         int result = 1;
         result = PRIME * result + ((comment == null) ? 0 : comment.hashCode());
-        result = PRIME * result + ((messageListener == null)
-        		? 0 : messageListener.hashCode());
-        result = PRIME * result + ((keyedMessages == null)
-        		? 0 : keyedMessages.hashCode());
-        result = PRIME * result + ((orderedKeys == null)
-        		? 0 : orderedKeys.hashCode());
-        result = PRIME * result + ((resource == null)
-        		? 0 : resource.hashCode());
+        result = PRIME * result
+                + ((messageListener == null) ? 0 : messageListener.hashCode());
+        result = PRIME * result
+                + ((keyedMessages == null) ? 0 : keyedMessages.hashCode());
+        result = PRIME * result
+                + ((orderedKeys == null) ? 0 : orderedKeys.hashCode());
+        result = PRIME * result
+                + ((resource == null) ? 0 : resource.hashCode());
         return result;
     }
 
@@ -315,33 +344,33 @@ public class MessagesBundle extends AbstractMessageModel
         }
         MessagesBundle messagesBundle = (MessagesBundle) obj;
         return equals(comment, messagesBundle.comment)
-            && equals(keyedMessages, messagesBundle.keyedMessages);
-    }    
+                && equals(keyedMessages, messagesBundle.keyedMessages);
+    }
 
     public final synchronized void addMessagesBundleListener(
             final IMessagesBundleListener listener) {
         addPropertyChangeListener(listener);
     }
+
     public final synchronized void removeMessagesBundleListener(
             final IMessagesBundleListener listener) {
         removePropertyChangeListener(listener);
     }
-    public final synchronized IMessagesBundleListener[] 
-                getMessagesBundleListeners() {
-        //TODO find more efficient way to avoid class cast.
-        return Arrays.asList(
-                getPropertyChangeListeners()).toArray(
-                        EMPTY_MSG_BUNDLE_LISTENERS);
+
+    public final synchronized IMessagesBundleListener[] getMessagesBundleListeners() {
+        // TODO find more efficient way to avoid class cast.
+        return Arrays.asList(getPropertyChangeListeners()).toArray(
+                EMPTY_MSG_BUNDLE_LISTENERS);
     }
 
-    
     private void readFromResource() {
         this.resource.deserialize(this);
     }
+
     private void writetoResource() {
         this.resource.serialize(this);
     }
-    
+
     private void fireMessageAdded(Message message) {
         IMessagesBundleListener[] listeners = getMessagesBundleListeners();
         for (int i = 0; i < listeners.length; i++) {
@@ -349,6 +378,7 @@ public class MessagesBundle extends AbstractMessageModel
             listener.messageAdded(this, message);
         }
     }
+
     private void fireMessageRemoved(Message message) {
         IMessagesBundleListener[] listeners = getMessagesBundleListeners();
         for (int i = 0; i < listeners.length; i++) {
@@ -356,6 +386,7 @@ public class MessagesBundle extends AbstractMessageModel
             listener.messageRemoved(this, message);
         }
     }
+
     private void fireMessageChanged(PropertyChangeEvent event) {
         IMessagesBundleListener[] listeners = getMessagesBundleListeners();
         for (int i = 0; i < listeners.length; i++) {
@@ -363,11 +394,13 @@ public class MessagesBundle extends AbstractMessageModel
             listener.messageChanged(this, event);
         }
     }
-    
+
     /**
-     * Returns the value to the given key, if the key exists.
-     * Otherwise may throw a NPE.
-     * @param key, the key of a message.
+     * Returns the value to the given key, if the key exists. Otherwise may
+     * throw a NPE.
+     * 
+     * @param key
+     *            , the key of a message.
      * @return The value to the given key.
      */
     public String getValue(String key) {

@@ -12,18 +12,24 @@ package org.eclipse.babel.core.message.tree.internal;
 
 /**
  * Listener notified of changes to a {@link IKeyTreeModel}.
+ * 
  * @author Pascal Essiembre
  */
 public interface IKeyTreeModelListener {
 
-	/**
-	 * Invoked when a key tree node is added.
-	 * @param node key tree node
-	 */
+    /**
+     * Invoked when a key tree node is added.
+     * 
+     * @param node
+     *            key tree node
+     */
     void nodeAdded(KeyTreeNode node);
-	/**
-	 * Invoked when a key tree node is remove.
-	 * @param node key tree node
-	 */
+
+    /**
+     * Invoked when a key tree node is remove.
+     * 
+     * @param node
+     *            key tree node
+     */
     void nodeRemoved(KeyTreeNode node);
 }

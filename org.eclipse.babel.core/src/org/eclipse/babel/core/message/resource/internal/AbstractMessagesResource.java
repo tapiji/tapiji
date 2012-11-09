@@ -18,19 +18,22 @@ import org.eclipse.babel.core.message.IMessagesResourceChangeListener;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
 
 /**
- * Base implementation of a {@link IMessagesResource} bound to a locale
- * and providing ways to add and remove {@link IMessagesResourceChangeListener}
+ * Base implementation of a {@link IMessagesResource} bound to a locale and
+ * providing ways to add and remove {@link IMessagesResourceChangeListener}
  * instances.
+ * 
  * @author Pascal Essiembre
  */
 public abstract class AbstractMessagesResource implements IMessagesResource {
 
     private Locale locale;
     private List<IMessagesResourceChangeListener> listeners = new ArrayList<IMessagesResourceChangeListener>();
-    
+
     /**
      * Constructor.
-     * @param locale bound locale
+     * 
+     * @param locale
+     *            bound locale
      */
     public AbstractMessagesResource(Locale locale) {
         super();
@@ -46,18 +49,17 @@ public abstract class AbstractMessagesResource implements IMessagesResource {
 
     /**
      * @see org.eclipse.babel.core.message.internal.resource.IMessagesResource#
-     *          addMessagesResourceChangeListener(
-     *          		org.eclipse.babel.core.message.resource
-     *                  		.IMessagesResourceChangeListener)
+     *      addMessagesResourceChangeListener(org.eclipse.babel.core.message.resource
+     *      .IMessagesResourceChangeListener)
      */
     public void addMessagesResourceChangeListener(
             IMessagesResourceChangeListener listener) {
         listeners.add(0, listener);
     }
+
     /**
      * @see org.eclipse.babel.core.message.internal.resource.IMessagesResource#
-     *          removeMessagesResourceChangeListener(
-     *          		org.eclipse.babel.core.message.resource.IMessagesResourceChangeListener)
+     *      removeMessagesResourceChangeListener(org.eclipse.babel.core.message.resource.IMessagesResourceChangeListener)
      */
     public void removeMessagesResourceChangeListener(
             IMessagesResourceChangeListener listener) {
@@ -66,9 +68,11 @@ public abstract class AbstractMessagesResource implements IMessagesResource {
 
     /**
      * Fires notification that a {@link IMessagesResource} changed.
-     * @param resource {@link IMessagesResource}
+     * 
+     * @param resource
+     *            {@link IMessagesResource}
      */
-    protected void fireResourceChange(IMessagesResource resource)  {
+    protected void fireResourceChange(IMessagesResource resource) {
         for (IMessagesResourceChangeListener listener : listeners) {
             listener.resourceChanged(resource);
         }

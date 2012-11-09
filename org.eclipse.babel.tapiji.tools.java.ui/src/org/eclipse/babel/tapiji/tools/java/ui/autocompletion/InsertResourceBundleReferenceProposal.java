@@ -27,7 +27,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 public class InsertResourceBundleReferenceProposal implements
-	IJavaCompletionProposal {
+        IJavaCompletionProposal {
 
     private int offset = 0;
     private int length = 0;
@@ -36,69 +36,69 @@ public class InsertResourceBundleReferenceProposal implements
     private String projectName;
 
     public InsertResourceBundleReferenceProposal(int offset, int length,
-	    String projectName, IResource resource,
-	    Collection<String> availableBundles) {
-	this.offset = offset;
-	this.length = length;
-	this.resource = resource;
-	this.projectName = projectName;
+            String projectName, IResource resource,
+            Collection<String> availableBundles) {
+        this.offset = offset;
+        this.length = length;
+        this.resource = resource;
+        this.projectName = projectName;
     }
 
     @Override
     public void apply(IDocument document) {
-	ResourceBundleEntrySelectionDialog dialog = new ResourceBundleEntrySelectionDialog(
-		Display.getDefault().getActiveShell());
-	dialog.setProjectName(projectName);
+        ResourceBundleEntrySelectionDialog dialog = new ResourceBundleEntrySelectionDialog(
+                Display.getDefault().getActiveShell());
+        dialog.setProjectName(projectName);
 
-	if (dialog.open() != InputDialog.OK) {
-	    return;
-	}
+        if (dialog.open() != InputDialog.OK) {
+            return;
+        }
 
-	String resourceBundleId = dialog.getSelectedResourceBundle();
-	String key = dialog.getSelectedResource();
-	Locale locale = dialog.getSelectedLocale();
+        String resourceBundleId = dialog.getSelectedResourceBundle();
+        String key = dialog.getSelectedResource();
+        Locale locale = dialog.getSelectedLocale();
 
-	reference = ASTutilsUI.insertExistingBundleRef(document, resource,
-		offset, length, resourceBundleId, key, locale);
+        reference = ASTutilsUI.insertExistingBundleRef(document, resource,
+                offset, length, resourceBundleId, key, locale);
     }
 
     @Override
     public String getAdditionalProposalInfo() {
-	// TODO Auto-generated method stub
-	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public IContextInformation getContextInformation() {
-	return null;
+        return null;
     }
 
     @Override
     public String getDisplayString() {
-	return "Insert reference to a localized string literal";
+        return "Insert reference to a localized string literal";
     }
 
     @Override
     public Image getImage() {
-	return PlatformUI.getWorkbench().getSharedImages()
-		.getImageDescriptor(ISharedImages.IMG_OBJ_ADD).createImage();
+        return PlatformUI.getWorkbench().getSharedImages()
+                .getImageDescriptor(ISharedImages.IMG_OBJ_ADD).createImage();
     }
 
     @Override
     public Point getSelection(IDocument document) {
-	// TODO Auto-generated method stub
-	int referenceLength = reference == null ? 0 : reference.length();
-	return new Point(offset + referenceLength, 0);
+        // TODO Auto-generated method stub
+        int referenceLength = reference == null ? 0 : reference.length();
+        return new Point(offset + referenceLength, 0);
     }
 
     @Override
     public int getRelevance() {
-	// TODO Auto-generated method stub
-	if (this.length == 0) {
-	    return 97;
-	} else {
-	    return 1097;
-	}
+        // TODO Auto-generated method stub
+        if (this.length == 0) {
+            return 97;
+        } else {
+            return 1097;
+        }
     }
 
 }

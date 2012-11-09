@@ -26,36 +26,36 @@ import org.eclipse.core.runtime.OperationCanceledException;
 public class FileUtils {
 
     public static String readFile(IResource resource) {
-	return readFileAsString(resource.getRawLocation().toFile());
+        return readFileAsString(resource.getRawLocation().toFile());
     }
 
     protected static String readFileAsString(File filePath) {
-	String content = "";
+        String content = "";
 
-	if (!filePath.exists())
-	    return content;
-	try {
-	    BufferedReader fileReader = new BufferedReader(new FileReader(
-		    filePath));
-	    String line = "";
+        if (!filePath.exists())
+            return content;
+        try {
+            BufferedReader fileReader = new BufferedReader(new FileReader(
+                    filePath));
+            String line = "";
 
-	    while ((line = fileReader.readLine()) != null) {
-		content += line + "\n";
-	    }
+            while ((line = fileReader.readLine()) != null) {
+                content += line + "\n";
+            }
 
-	    // close filereader
-	    fileReader.close();
-	} catch (Exception e) {
-	    // TODO log error output
-	    Logger.logError(e);
-	}
+            // close filereader
+            fileReader.close();
+        } catch (Exception e) {
+            // TODO log error output
+            Logger.logError(e);
+        }
 
-	return content;
+        return content;
     }
 
     public static File getRBManagerStateFile() {
-	return Activator.getDefault().getStateLocation()
-		.append("internationalization.xml").toFile();
+        return Activator.getDefault().getStateLocation()
+                .append("internationalization.xml").toFile();
     }
 
     /**
@@ -68,14 +68,14 @@ public class FileUtils {
      * @throws OperationCanceledException
      */
     public synchronized void saveTextFile(IFile file, String editorContent)
-	    throws CoreException, OperationCanceledException {
-	try {
-	    file.setContents(
-		    new ByteArrayInputStream(editorContent.getBytes()), false,
-		    true, null);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
+            throws CoreException, OperationCanceledException {
+        try {
+            file.setContents(
+                    new ByteArrayInputStream(editorContent.getBytes()), false,
+                    true, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

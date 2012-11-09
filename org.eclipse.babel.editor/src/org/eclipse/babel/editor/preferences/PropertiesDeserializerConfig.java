@@ -22,19 +22,21 @@ import org.eclipse.core.runtime.Preferences;
  * @author Alexej Strelzow
  */
 public class PropertiesDeserializerConfig implements
-		IPropertiesDeserializerConfig { //  Moved from MsgEditorPreferences, to make it more flexible.
+        IPropertiesDeserializerConfig { // Moved from MsgEditorPreferences, to
+                                        // make it more flexible.
 
     /** MsgEditorPreferences. */
-    private static final Preferences PREFS = 
-            MessagesEditorPlugin.getDefault().getPluginPreferences();
+    private static final Preferences PREFS = MessagesEditorPlugin.getDefault()
+            .getPluginPreferences();
 
     PropertiesDeserializerConfig() {
-    	ConfigurationManager.getInstance().setDeserializerConfig(this);
+        ConfigurationManager.getInstance().setDeserializerConfig(this);
     }
-    
+
     /**
      * Gets whether to convert encoded strings to unicode characters when
      * reading file.
+     * 
      * @return <code>true</code> if converting
      */
     public boolean isUnicodeUnescapeEnabled() {

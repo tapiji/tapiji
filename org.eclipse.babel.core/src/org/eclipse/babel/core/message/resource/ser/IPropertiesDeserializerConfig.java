@@ -19,6 +19,7 @@ public interface IPropertiesDeserializerConfig {
 
     /**
      * Defaults true.
+     * 
      * @return Returns the unicodeUnescapeEnabled.
      */
     boolean isUnicodeUnescapeEnabled();

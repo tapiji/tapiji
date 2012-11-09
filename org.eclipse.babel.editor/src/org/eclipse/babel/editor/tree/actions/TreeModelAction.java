@@ -20,7 +20,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public class TreeModelAction extends AbstractTreeAction {
 
@@ -31,9 +31,9 @@ public class TreeModelAction extends AbstractTreeAction {
     public TreeModelAction(AbstractMessagesEditor editor, TreeViewer treeViewer) {
         super(editor, treeViewer, IAction.AS_RADIO_BUTTON);
         setText(MessagesEditorPlugin.getString("key.layout.tree")); //$NON-NLS-1$
-        setImageDescriptor(
-                UIUtils.getImageDescriptor(UIUtils.IMAGE_LAYOUT_HIERARCHICAL));
-        setToolTipText("Display as in a Tree"); //TODO put tooltip
+        setImageDescriptor(UIUtils
+                .getImageDescriptor(UIUtils.IMAGE_LAYOUT_HIERARCHICAL));
+        setToolTipText("Display as in a Tree"); // TODO put tooltip
         setChecked(true);
     }
 
@@ -41,7 +41,8 @@ public class TreeModelAction extends AbstractTreeAction {
      * @see org.eclipse.jface.action.Action#run()
      */
     public void run() {
-    	KeyTreeContentProvider contentProvider = (KeyTreeContentProvider)treeViewer.getContentProvider();
-    	contentProvider.setTreeType(TreeType.Tree);
+        KeyTreeContentProvider contentProvider = (KeyTreeContentProvider) treeViewer
+                .getContentProvider();
+        contentProvider.setTreeType(TreeType.Tree);
     }
 }

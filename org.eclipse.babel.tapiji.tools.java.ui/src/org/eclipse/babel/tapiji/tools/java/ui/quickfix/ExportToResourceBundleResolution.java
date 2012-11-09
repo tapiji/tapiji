@@ -34,66 +34,66 @@ public class ExportToResourceBundleResolution implements IMarkerResolution2 {
 
     @Override
     public String getDescription() {
-	return "Export constant string literal to a resource bundle.";
+        return "Export constant string literal to a resource bundle.";
     }
 
     @Override
     public Image getImage() {
-	// TODO Auto-generated method stub
-	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public String getLabel() {
-	return "Export to Resource-Bundle";
+        return "Export to Resource-Bundle";
     }
 
     @Override
     public void run(IMarker marker) {
-	int startPos = marker.getAttribute(IMarker.CHAR_START, 0);
-	int endPos = marker.getAttribute(IMarker.CHAR_END, 0) - startPos;
-	IResource resource = marker.getResource();
+        int startPos = marker.getAttribute(IMarker.CHAR_START, 0);
+        int endPos = marker.getAttribute(IMarker.CHAR_END, 0) - startPos;
+        IResource resource = marker.getResource();
 
-	ITextFileBufferManager bufferManager = FileBuffers
-		.getTextFileBufferManager();
-	IPath path = resource.getRawLocation();
-	try {
-	    bufferManager.connect(path, LocationKind.NORMALIZE, null);
-	    ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(
-		    path, LocationKind.NORMALIZE);
-	    IDocument document = textFileBuffer.getDocument();
+        ITextFileBufferManager bufferManager = FileBuffers
+                .getTextFileBufferManager();
+        IPath path = resource.getRawLocation();
+        try {
+            bufferManager.connect(path, LocationKind.NORMALIZE, null);
+            ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(
+                    path, LocationKind.NORMALIZE);
+            IDocument document = textFileBuffer.getDocument();
 
-	    CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
-		    Display.getDefault().getActiveShell());
+            CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
+                    Display.getDefault().getActiveShell());
 
-	    DialogConfiguration config = dialog.new DialogConfiguration();
-	    config.setPreselectedKey("");
-	    config.setPreselectedMessage("");
-	    config.setPreselectedMessage((startPos + 1 < document.getLength() && endPos > 1) ? document
-		    .get(startPos + 1, endPos - 2) : "");
-	    config.setPreselectedLocale("");
-	    config.setProjectName(resource.getProject().getName());
+            DialogConfiguration config = dialog.new DialogConfiguration();
+            config.setPreselectedKey("");
+            config.setPreselectedMessage("");
+            config.setPreselectedMessage((startPos + 1 < document.getLength() && endPos > 1) ? document
+                    .get(startPos + 1, endPos - 2) : "");
+            config.setPreselectedLocale("");
+            config.setProjectName(resource.getProject().getName());
 
-	    dialog.setDialogConfiguration(config);
+            dialog.setDialogConfiguration(config);
 
-	    if (dialog.open() != InputDialog.OK)
-		return;
+            if (dialog.open() != InputDialog.OK)
+                return;
 
-	    ASTutilsUI
-		    .insertNewBundleRef(document, resource, startPos, endPos,
-			    dialog.getSelectedResourceBundle(),
-			    dialog.getSelectedKey());
+            ASTutilsUI
+                    .insertNewBundleRef(document, resource, startPos, endPos,
+                            dialog.getSelectedResourceBundle(),
+                            dialog.getSelectedKey());
 
-	    textFileBuffer.commit(null, false);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	} finally {
-	    try {
-		bufferManager.disconnect(path, null);
-	    } catch (CoreException e) {
-		e.printStackTrace();
-	    }
-	}
+            textFileBuffer.commit(null, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                bufferManager.disconnect(path, null);
+            } catch (CoreException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Text;
 /**
  * Composite for dynamically selecting a locale from a list of available
  * locales.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public class LocaleSelector extends Composite {
@@ -42,7 +43,7 @@ public class LocaleSelector extends Composite {
     private static final String DEFAULT_LOCALE = "[" //$NON-NLS-1$
             + MessagesEditorPlugin.getString("editor.default") //$NON-NLS-1$ 
             + "]"; //$NON-NLS-1$
-    
+
     private Locale[] availableLocales;
 
     private Combo localesCombo;
@@ -50,10 +51,11 @@ public class LocaleSelector extends Composite {
     private Text countryText;
     private Text variantText;
 
-    
     /**
      * Constructor.
-     * @param parent parent composite
+     * 
+     * @param parent
+     *            parent composite
      */
     public LocaleSelector(Composite parent) {
         super(parent, SWT.NONE);
@@ -62,25 +64,24 @@ public class LocaleSelector extends Composite {
         availableLocales = Locale.getAvailableLocales();
         Arrays.sort(availableLocales, new Comparator<Locale>() {
             public int compare(Locale locale1, Locale locale2) {
-                return Collator.getInstance().compare(
-                        locale1.getDisplayName(),
+                return Collator.getInstance().compare(locale1.getDisplayName(),
                         locale2.getDisplayName());
             }
         });
-        
+
         // This layout
         GridLayout layout = new GridLayout();
         setLayout(layout);
         layout.numColumns = 1;
         layout.verticalSpacing = 20;
-        
+
         // Group settings
         Group selectionGroup = new Group(this, SWT.NULL);
         layout = new GridLayout(3, false);
         selectionGroup.setLayout(layout);
-        selectionGroup.setText(MessagesEditorPlugin.getString(
-                "selector.title")); //$NON-NLS-1$
-        
+        selectionGroup
+                .setText(MessagesEditorPlugin.getString("selector.title")); //$NON-NLS-1$
+
         // Set locales drop-down
         GridData gd = new GridData(GridData.FILL_HORIZONTAL);
         gd.horizontalSpan = 3;
@@ -97,7 +98,7 @@ public class LocaleSelector extends Composite {
                     langText.setText(""); //$NON-NLS-1$
                     countryText.setText(""); //$NON-NLS-1$
                 } else {
-                    Locale locale = availableLocales[index -1];
+                    Locale locale = availableLocales[index - 1];
                     langText.setText(locale.getLanguage());
                     countryText.setText(locale.getCountry());
                 }
@@ -126,8 +127,7 @@ public class LocaleSelector extends Composite {
         countryText.setLayoutData(gd);
         countryText.addFocusListener(new FocusAdapter() {
             public void focusLost(FocusEvent e) {
-                countryText.setText(
-                        countryText.getText().toUpperCase());
+                countryText.setText(countryText.getText().toUpperCase());
                 setLocaleOnlocalesCombo();
             }
         });
@@ -142,7 +142,7 @@ public class LocaleSelector extends Composite {
                 setLocaleOnlocalesCombo();
             }
         });
-        
+
         // Labels
         gd = new GridData();
         gd.horizontalAlignment = GridData.CENTER;
@@ -153,28 +153,27 @@ public class LocaleSelector extends Composite {
         gd = new GridData();
         gd.horizontalAlignment = GridData.CENTER;
         Label lblCountry = new Label(selectionGroup, SWT.NULL);
-        lblCountry.setText(MessagesEditorPlugin.getString(
-                "selector.country")); //$NON-NLS-1$
+        lblCountry.setText(MessagesEditorPlugin.getString("selector.country")); //$NON-NLS-1$
         lblCountry.setLayoutData(gd);
 
         gd = new GridData();
         gd.horizontalAlignment = GridData.CENTER;
         Label lblVariant = new Label(selectionGroup, SWT.NULL);
-        lblVariant.setText(MessagesEditorPlugin.getString(
-                "selector.variant")); //$NON-NLS-1$
+        lblVariant.setText(MessagesEditorPlugin.getString("selector.variant")); //$NON-NLS-1$
         lblVariant.setLayoutData(gd);
     }
 
     /**
-     * Gets the selected locale.  Default locale is represented by a 
+     * Gets the selected locale. Default locale is represented by a
      * <code>null</code> value.
+     * 
      * @return selected locale
      */
     public Locale getSelectedLocale() {
         String lang = langText.getText().trim();
         String country = countryText.getText().trim();
         String variant = variantText.getText().trim();
-        
+
         if (lang.length() > 0 && country.length() > 0 && variant.length() > 0) {
             return new Locale(lang, country, variant);
         } else if (lang.length() > 0 && country.length() > 0) {
@@ -189,10 +188,8 @@ public class LocaleSelector extends Composite {
     /**
      * Sets an available locale on the available locales combo box.
      */
-    /*default*/ void setLocaleOnlocalesCombo() {
-        Locale locale = new Locale(
-                langText.getText(),
-                countryText.getText(),
+    /* default */void setLocaleOnlocalesCombo() {
+        Locale locale = new Locale(langText.getText(), countryText.getText(),
                 variantText.getText());
         int index = -1;
         for (int i = 0; i < availableLocales.length; i++) {
@@ -207,23 +204,25 @@ public class LocaleSelector extends Composite {
             localesCombo.clearSelection();
         }
     }
-    
+
     /**
      * Adds a modify listener.
-     * @param listener modify listener
+     * 
+     * @param listener
+     *            modify listener
      */
     public void addModifyListener(final ModifyListener listener) {
-        langText.addModifyListener(new ModifyListener(){
+        langText.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
                 listener.modifyText(e);
             }
         });
-        countryText.addModifyListener(new ModifyListener(){
+        countryText.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
                 listener.modifyText(e);
             }
         });
-        variantText.addModifyListener(new ModifyListener(){
+        variantText.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
                 listener.modifyText(e);
             }

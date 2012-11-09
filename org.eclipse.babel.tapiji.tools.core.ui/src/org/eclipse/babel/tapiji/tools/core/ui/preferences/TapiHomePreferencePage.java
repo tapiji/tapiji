@@ -21,24 +21,24 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class TapiHomePreferencePage extends PreferencePage implements
-	IWorkbenchPreferencePage {
+        IWorkbenchPreferencePage {
 
     @Override
     public void init(IWorkbench workbench) {
-	// TODO Auto-generated method stub
+        // TODO Auto-generated method stub
 
     }
 
     @Override
     protected Control createContents(Composite parent) {
-	Composite composite = new Composite(parent, SWT.NONE);
-	composite.setLayout(new GridLayout(1, true));
-	composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        Composite composite = new Composite(parent, SWT.NONE);
+        composite.setLayout(new GridLayout(1, true));
+        composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-	Label description = new Label(composite, SWT.WRAP);
-	description.setText("See sub-pages for settings.");
+        Label description = new Label(composite, SWT.WRAP);
+        description.setText("See sub-pages for settings.");
 
-	return parent;
+        return parent;
     }
 
 }

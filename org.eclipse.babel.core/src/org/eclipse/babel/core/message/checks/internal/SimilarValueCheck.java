@@ -20,16 +20,16 @@ import org.eclipse.babel.core.message.checks.IMessageCheck;
 import org.eclipse.babel.core.message.checks.proximity.IProximityAnalyzer;
 import org.eclipse.babel.core.util.BabelUtils;
 
-
 /**
  * Checks if key as a duplicate value.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public class SimilarValueCheck implements IMessageCheck {
 
     private String[] similarKeys;
     private IProximityAnalyzer analyzer;
-    
+
     /**
      * Constructor.
      */
@@ -39,26 +39,26 @@ public class SimilarValueCheck implements IMessageCheck {
     }
 
     /**
-     * @see org.eclipse.babel.core.message.internal.checks.IMessageCheck#checkKey(
-     * 			org.eclipse.babel.core.message.internal.MessagesBundleGroup,
-     *			org.eclipse.babel.core.message.internal.Message)
+     * @see org.eclipse.babel.core.message.internal.checks.IMessageCheck#checkKey(org.eclipse.babel.core.message.internal.MessagesBundleGroup,
+     *      org.eclipse.babel.core.message.internal.Message)
      */
-    public boolean checkKey(
-            IMessagesBundleGroup messagesBundleGroup, IMessage message) {
+    public boolean checkKey(IMessagesBundleGroup messagesBundleGroup,
+            IMessage message) {
         Collection<String> keys = new ArrayList<String>();
         if (message != null) {
-            //TODO have case as preference
+            // TODO have case as preference
             String value1 = message.getValue().toLowerCase();
-            IMessagesBundle messagesBundle =
-            		messagesBundleGroup.getMessagesBundle(message.getLocale());
+            IMessagesBundle messagesBundle = messagesBundleGroup
+                    .getMessagesBundle(message.getLocale());
             for (IMessage similarEntry : messagesBundle.getMessages()) {
                 if (!message.getKey().equals(similarEntry.getKey())) {
                     String value2 = similarEntry.getValue().toLowerCase();
-                    //TODO have preference to report identical as similar
+                    // TODO have preference to report identical as similar
                     if (!BabelUtils.equals(value1, value2)
                             && analyzer.analyse(value1, value2) >= 0.75) {
-                        //TODO use preferences
-//                        >= RBEPreferences.getReportSimilarValuesPrecision()) {
+                        // TODO use preferences
+                        // >= RBEPreferences.getReportSimilarValuesPrecision())
+                        // {
                         keys.add(similarEntry.getKey());
                     }
                 }
@@ -67,12 +67,13 @@ public class SimilarValueCheck implements IMessageCheck {
                 keys.add(message.getKey());
             }
         }
-        similarKeys = keys.toArray(new String[]{});
+        similarKeys = keys.toArray(new String[] {});
         return !keys.isEmpty();
     }
-    
+
     /**
      * Gets similar keys.
+     * 
      * @return similar keys
      */
     public String[] getSimilarMessageKeys() {

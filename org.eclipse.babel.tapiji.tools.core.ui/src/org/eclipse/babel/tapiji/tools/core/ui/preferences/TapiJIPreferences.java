@@ -30,95 +30,95 @@ public class TapiJIPreferences implements IConfiguration {
     public static final String NON_RB_PATTERN = "NoRBPattern";
 
     private static final IPreferenceStore PREF = Activator.getDefault()
-	    .getPreferenceStore();
+            .getPreferenceStore();
 
     private static final String DELIMITER = ";";
     private static final String ATTRIBUTE_DELIMITER = ":";
 
     @Override
     public boolean getAuditSameValue() {
-	return PREF.getBoolean(AUDIT_SAME_VALUE);
+        return PREF.getBoolean(AUDIT_SAME_VALUE);
     }
 
     @Override
     public boolean getAuditMissingValue() {
-	return PREF.getBoolean(AUDIT_UNSPEZIFIED_KEY);
+        return PREF.getBoolean(AUDIT_UNSPEZIFIED_KEY);
     }
 
     @Override
     public boolean getAuditMissingLanguage() {
-	return PREF.getBoolean(AUDIT_MISSING_LANGUAGE);
+        return PREF.getBoolean(AUDIT_MISSING_LANGUAGE);
     }
 
     @Override
     public boolean getAuditRb() {
-	return PREF.getBoolean(AUDIT_RB);
+        return PREF.getBoolean(AUDIT_RB);
     }
 
     @Override
     public boolean getAuditResource() {
-	return PREF.getBoolean(AUDIT_RESOURCE);
+        return PREF.getBoolean(AUDIT_RESOURCE);
     }
 
     @Override
     public String getNonRbPattern() {
-	return PREF.getString(NON_RB_PATTERN);
+        return PREF.getString(NON_RB_PATTERN);
     }
 
     public static List<CheckItem> getNonRbPatternAsList() {
-	return convertStringToList(PREF.getString(NON_RB_PATTERN));
+        return convertStringToList(PREF.getString(NON_RB_PATTERN));
     }
 
     public static List<CheckItem> convertStringToList(String string) {
-	StringTokenizer tokenizer = new StringTokenizer(string, DELIMITER);
-	int tokenCount = tokenizer.countTokens();
-	List<CheckItem> elements = new LinkedList<CheckItem>();
+        StringTokenizer tokenizer = new StringTokenizer(string, DELIMITER);
+        int tokenCount = tokenizer.countTokens();
+        List<CheckItem> elements = new LinkedList<CheckItem>();
 
-	for (int i = 0; i < tokenCount; i++) {
-	    StringTokenizer attribute = new StringTokenizer(
-		    tokenizer.nextToken(), ATTRIBUTE_DELIMITER);
-	    String name = attribute.nextToken();
-	    boolean checked;
-	    if (attribute.nextToken().equals("true")) {
-		checked = true;
-	    } else {
-		checked = false;
-	    }
+        for (int i = 0; i < tokenCount; i++) {
+            StringTokenizer attribute = new StringTokenizer(
+                    tokenizer.nextToken(), ATTRIBUTE_DELIMITER);
+            String name = attribute.nextToken();
+            boolean checked;
+            if (attribute.nextToken().equals("true")) {
+                checked = true;
+            } else {
+                checked = false;
+            }
 
-	    elements.add(new CheckItem(name, checked));
-	}
-	return elements;
+            elements.add(new CheckItem(name, checked));
+        }
+        return elements;
     }
 
     public static String convertListToString(List<CheckItem> patterns) {
-	StringBuilder sb = new StringBuilder();
-	int tokenCount = 0;
+        StringBuilder sb = new StringBuilder();
+        int tokenCount = 0;
 
-	for (CheckItem s : patterns) {
-	    sb.append(s.getName());
-	    sb.append(ATTRIBUTE_DELIMITER);
-	    if (s.checked) {
-		sb.append("true");
-	    } else {
-		sb.append("false");
-	    }
+        for (CheckItem s : patterns) {
+            sb.append(s.getName());
+            sb.append(ATTRIBUTE_DELIMITER);
+            if (s.checked) {
+                sb.append("true");
+            } else {
+                sb.append("false");
+            }
 
-	    if (++tokenCount != patterns.size()) {
-		sb.append(DELIMITER);
-	    }
-	}
-	return sb.toString();
+            if (++tokenCount != patterns.size()) {
+                sb.append(DELIMITER);
+            }
+        }
+        return sb.toString();
     }
 
     public static void addPropertyChangeListener(
-	    IPropertyChangeListener listener) {
-	Activator.getDefault().getPreferenceStore()
-		.addPropertyChangeListener(listener);
+            IPropertyChangeListener listener) {
+        Activator.getDefault().getPreferenceStore()
+                .addPropertyChangeListener(listener);
     }
 
     public static void removePropertyChangeListener(
-	    IPropertyChangeListener listener) {
-	Activator.getDefault().getPreferenceStore()
-		.removePropertyChangeListener(listener);
+            IPropertyChangeListener listener) {
+        Activator.getDefault().getPreferenceStore()
+                .removePropertyChangeListener(listener);
     }
 }

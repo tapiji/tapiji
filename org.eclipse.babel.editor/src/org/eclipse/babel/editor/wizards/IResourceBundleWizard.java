@@ -12,8 +12,8 @@ package org.eclipse.babel.editor.wizards;
 
 public interface IResourceBundleWizard {
 
-	void setBundleId(String rbName);
+    void setBundleId(String rbName);
 
-	void setDefaultPath(String pathName);
+    void setDefaultPath(String pathName);
 
 }

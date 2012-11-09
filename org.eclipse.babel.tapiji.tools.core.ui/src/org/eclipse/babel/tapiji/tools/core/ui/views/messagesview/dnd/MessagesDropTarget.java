@@ -28,48 +28,48 @@ public class MessagesDropTarget extends DropTargetAdapter {
     private String bundleName;
 
     public MessagesDropTarget(TreeViewer viewer, String projectName,
-	    String bundleName) {
-	super();
-	this.projectName = projectName;
-	this.bundleName = bundleName;
+            String bundleName) {
+        super();
+        this.projectName = projectName;
+        this.bundleName = bundleName;
     }
 
     public void dragEnter(DropTargetEvent event) {
     }
 
     public void drop(DropTargetEvent event) {
-	if (event.detail != DND.DROP_COPY)
-	    return;
+        if (event.detail != DND.DROP_COPY)
+            return;
 
-	if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) {
-	    // event.feedback = DND.FEEDBACK_INSERT_BEFORE;
-	    String newKeyPrefix = "";
+        if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) {
+            // event.feedback = DND.FEEDBACK_INSERT_BEFORE;
+            String newKeyPrefix = "";
 
-	    if (event.item instanceof TreeItem
-		    && ((TreeItem) event.item).getData() instanceof IValuedKeyTreeNode) {
-		newKeyPrefix = ((IValuedKeyTreeNode) ((TreeItem) event.item)
-			.getData()).getMessageKey();
-	    }
+            if (event.item instanceof TreeItem
+                    && ((TreeItem) event.item).getData() instanceof IValuedKeyTreeNode) {
+                newKeyPrefix = ((IValuedKeyTreeNode) ((TreeItem) event.item)
+                        .getData()).getMessageKey();
+            }
 
-	    String message = (String) event.data;
+            String message = (String) event.data;
 
-	    CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
-		    Display.getDefault().getActiveShell());
+            CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
+                    Display.getDefault().getActiveShell());
 
-	    DialogConfiguration config = dialog.new DialogConfiguration();
-	    config.setPreselectedKey(newKeyPrefix.trim().length() > 0 ? newKeyPrefix
-		    + "." + "[Platzhalter]"
-		    : "");
-	    config.setPreselectedMessage(message);
-	    config.setPreselectedBundle(bundleName);
-	    config.setPreselectedLocale("");
-	    config.setProjectName(projectName);
+            DialogConfiguration config = dialog.new DialogConfiguration();
+            config.setPreselectedKey(newKeyPrefix.trim().length() > 0 ? newKeyPrefix
+                    + "." + "[Platzhalter]"
+                    : "");
+            config.setPreselectedMessage(message);
+            config.setPreselectedBundle(bundleName);
+            config.setPreselectedLocale("");
+            config.setProjectName(projectName);
 
-	    dialog.setDialogConfiguration(config);
+            dialog.setDialogConfiguration(config);
 
-	    if (dialog.open() != InputDialog.OK)
-		return;
-	} else
-	    event.detail = DND.DROP_NONE;
+            if (dialog.open() != InputDialog.OK)
+                return;
+        } else
+            event.detail = DND.DROP_NONE;
     }
 }

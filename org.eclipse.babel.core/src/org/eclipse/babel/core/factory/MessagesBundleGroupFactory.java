@@ -20,20 +20,21 @@ import org.eclipse.babel.core.message.strategy.PropertiesFileGroupStrategy;
 import org.eclipse.core.resources.IResource;
 
 /**
- * Factory class for creating a {@link MessagesBundleGroup} with a {@link PropertiesFileGroupStrategy}.
- * This is in use when we work with TapiJI only and not with <code>EclipsePropertiesEditorResource</code>.
- * <br><br>
+ * Factory class for creating a {@link MessagesBundleGroup} with a
+ * {@link PropertiesFileGroupStrategy}. This is in use when we work with TapiJI
+ * only and not with <code>EclipsePropertiesEditorResource</code>. <br>
+ * <br>
  * 
  * @author Alexej Strelzow
  */
 public class MessagesBundleGroupFactory {
-	
+
     public static IMessagesBundleGroup createBundleGroup(IResource resource) {
-    	
-            File ioFile = new File(resource.getRawLocation().toFile().getPath());
-            
-            return new MessagesBundleGroup(new PropertiesFileGroupStrategy(ioFile, 
-            		ConfigurationManager.getInstance().getSerializerConfig(), 
-            		ConfigurationManager.getInstance().getDeserializerConfig()));
+
+        File ioFile = new File(resource.getRawLocation().toFile().getPath());
+
+        return new MessagesBundleGroup(new PropertiesFileGroupStrategy(ioFile,
+                ConfigurationManager.getInstance().getSerializerConfig(),
+                ConfigurationManager.getInstance().getDeserializerConfig()));
     }
 }

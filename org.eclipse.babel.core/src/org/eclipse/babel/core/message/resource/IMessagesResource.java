@@ -24,63 +24,63 @@ import org.eclipse.babel.core.message.internal.MessagesBundle;
  */
 public interface IMessagesResource {
 
-	/**
-	 * Gets the resource locale.
-	 * 
-	 * @return locale
-	 */
-	Locale getLocale();
+    /**
+     * Gets the resource locale.
+     * 
+     * @return locale
+     */
+    Locale getLocale();
 
-	/**
-	 * Gets the underlying object abstracted by this resource (e.g. a File).
-	 * 
-	 * @return source object
-	 */
-	Object getSource();
+    /**
+     * Gets the underlying object abstracted by this resource (e.g. a File).
+     * 
+     * @return source object
+     */
+    Object getSource();
 
-	/**
-	 * Serializes a {@link MessagesBundle} instance to its native format.
-	 * 
-	 * @param messagesBundle
-	 *            the MessagesBundle to serialize
-	 */
-	void serialize(IMessagesBundle messagesBundle);
+    /**
+     * Serializes a {@link MessagesBundle} instance to its native format.
+     * 
+     * @param messagesBundle
+     *            the MessagesBundle to serialize
+     */
+    void serialize(IMessagesBundle messagesBundle);
 
-	/**
-	 * Deserializes a {@link MessagesBundle} instance from its native format.
-	 * 
-	 * @param messagesBundle
-	 *            the MessagesBundle to deserialize
-	 */
-	void deserialize(IMessagesBundle messagesBundle);
+    /**
+     * Deserializes a {@link MessagesBundle} instance from its native format.
+     * 
+     * @param messagesBundle
+     *            the MessagesBundle to deserialize
+     */
+    void deserialize(IMessagesBundle messagesBundle);
 
-	/**
-	 * Adds a messages resource listener. Implementors are required to notify
-	 * listeners of changes within the native implementation.
-	 * 
-	 * @param listener
-	 *            the listener
-	 */
-	void addMessagesResourceChangeListener(
-	        IMessagesResourceChangeListener listener);
+    /**
+     * Adds a messages resource listener. Implementors are required to notify
+     * listeners of changes within the native implementation.
+     * 
+     * @param listener
+     *            the listener
+     */
+    void addMessagesResourceChangeListener(
+            IMessagesResourceChangeListener listener);
 
-	/**
-	 * Removes a messages resource listener.
-	 * 
-	 * @param listener
-	 *            the listener
-	 */
-	void removeMessagesResourceChangeListener(
-	        IMessagesResourceChangeListener listener);
+    /**
+     * Removes a messages resource listener.
+     * 
+     * @param listener
+     *            the listener
+     */
+    void removeMessagesResourceChangeListener(
+            IMessagesResourceChangeListener listener);
 
-	/**
-	 * @return The resource location label. or null if unknown.
-	 */
-	String getResourceLocationLabel();
+    /**
+     * @return The resource location label. or null if unknown.
+     */
+    String getResourceLocationLabel();
 
-	/**
-	 * Called when the group it belongs to is disposed.
-	 */
-	void dispose();
+    /**
+     * Called when the group it belongs to is disposed.
+     */
+    void dispose();
 
 }

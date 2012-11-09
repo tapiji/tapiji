@@ -17,53 +17,49 @@ import org.eclipse.babel.core.message.checks.internal.MissingValueCheck;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 
-
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
-public class MessagesBundleGroupValidator {    
-    
-    //TODO Re-think... ??
+public class MessagesBundleGroupValidator {
 
-    public static void validate(
-            MessagesBundleGroup messagesBundleGroup,
-            Locale locale,
-            IValidationMarkerStrategy markerStrategy) {
-        //TODO check if there is a matching EclipsePropertiesEditorResource already open.
-        //else, create MessagesBundle from PropertiesIFileResource
-        
-    	DuplicateValueCheck duplicateCheck =
-    		MsgEditorPreferences.getInstance().getReportDuplicateValues()
-	    		? new DuplicateValueCheck()
-	    		: null;
-    	String[] keys = messagesBundleGroup.getMessageKeys();
-    	for (int i = 0; i < keys.length; i++) {
-			String key = keys[i];
+    // TODO Re-think... ??
+
+    public static void validate(MessagesBundleGroup messagesBundleGroup,
+            Locale locale, IValidationMarkerStrategy markerStrategy) {
+        // TODO check if there is a matching EclipsePropertiesEditorResource
+        // already open.
+        // else, create MessagesBundle from PropertiesIFileResource
+
+        DuplicateValueCheck duplicateCheck = MsgEditorPreferences.getInstance()
+                .getReportDuplicateValues() ? new DuplicateValueCheck() : null;
+        String[] keys = messagesBundleGroup.getMessageKeys();
+        for (int i = 0; i < keys.length; i++) {
+            String key = keys[i];
             if (MsgEditorPreferences.getInstance().getReportMissingValues()) {
-	            if (MissingValueCheck.MISSING_KEY.checkKey(
-	                    messagesBundleGroup,
-	                    messagesBundleGroup.getMessage(key, locale))) {
-	                markerStrategy.markFailed(new ValidationFailureEvent(
-	                        messagesBundleGroup, locale, key,
-	                        MissingValueCheck.MISSING_KEY));
-	            }
+                if (MissingValueCheck.MISSING_KEY.checkKey(messagesBundleGroup,
+                        messagesBundleGroup.getMessage(key, locale))) {
+                    markerStrategy.markFailed(new ValidationFailureEvent(
+                            messagesBundleGroup, locale, key,
+                            MissingValueCheck.MISSING_KEY));
+                }
             }
             if (duplicateCheck != null) {
-            	if (!MsgEditorPreferences.getInstance().getReportDuplicateValuesOnlyInRootLocales()
-            			|| (locale == null || locale.toString().length() == 0)) {
-            		//either the locale is the root locale either
-            		//we report duplicated on all the locales anyways.
-		            if (duplicateCheck.checkKey(
-		                    messagesBundleGroup,
-		                    messagesBundleGroup.getMessage(key, locale))) {
-		                markerStrategy.markFailed(new ValidationFailureEvent(
-		                        messagesBundleGroup, locale, key, duplicateCheck));
-		            }
-	            	duplicateCheck.reset();
-            	}
+                if (!MsgEditorPreferences.getInstance()
+                        .getReportDuplicateValuesOnlyInRootLocales()
+                        || (locale == null || locale.toString().length() == 0)) {
+                    // either the locale is the root locale either
+                    // we report duplicated on all the locales anyways.
+                    if (duplicateCheck.checkKey(messagesBundleGroup,
+                            messagesBundleGroup.getMessage(key, locale))) {
+                        markerStrategy.markFailed(new ValidationFailureEvent(
+                                messagesBundleGroup, locale, key,
+                                duplicateCheck));
+                    }
+                    duplicateCheck.reset();
+                }
             }
         }
     }
-    
+
 }

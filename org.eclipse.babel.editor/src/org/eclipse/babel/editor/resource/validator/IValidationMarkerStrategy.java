@@ -10,10 +10,9 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.resource.validator;
 
-
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public interface IValidationMarkerStrategy {
 

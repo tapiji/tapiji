@@ -20,7 +20,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public class FlatModelAction extends AbstractTreeAction {
 
@@ -31,18 +31,19 @@ public class FlatModelAction extends AbstractTreeAction {
     public FlatModelAction(AbstractMessagesEditor editor, TreeViewer treeViewer) {
         super(editor, treeViewer, IAction.AS_RADIO_BUTTON);
         setText(MessagesEditorPlugin.getString("key.layout.flat")); //$NON-NLS-1$
-        setImageDescriptor(
-                UIUtils.getImageDescriptor(UIUtils.IMAGE_LAYOUT_FLAT));
-        setDisabledImageDescriptor(
-                UIUtils.getImageDescriptor(UIUtils.IMAGE_LAYOUT_FLAT));
-        setToolTipText("Display in a list"); //TODO put tooltip
+        setImageDescriptor(UIUtils
+                .getImageDescriptor(UIUtils.IMAGE_LAYOUT_FLAT));
+        setDisabledImageDescriptor(UIUtils
+                .getImageDescriptor(UIUtils.IMAGE_LAYOUT_FLAT));
+        setToolTipText("Display in a list"); // TODO put tooltip
     }
 
     /**
      * @see org.eclipse.jface.action.Action#run()
      */
     public void run() {
-    	KeyTreeContentProvider contentProvider = (KeyTreeContentProvider)treeViewer.getContentProvider();
-    	contentProvider.setTreeType(TreeType.Flat);
+        KeyTreeContentProvider contentProvider = (KeyTreeContentProvider) treeViewer
+                .getContentProvider();
+        contentProvider.setTreeType(TreeType.Flat);
     }
 }

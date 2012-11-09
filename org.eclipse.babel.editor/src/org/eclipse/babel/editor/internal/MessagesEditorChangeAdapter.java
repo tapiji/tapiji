@@ -15,9 +15,10 @@ import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
-public class MessagesEditorChangeAdapter implements IMessagesEditorChangeListener {
+public class MessagesEditorChangeAdapter implements
+        IMessagesEditorChangeListener {
 
     /**
      * 
@@ -32,6 +33,7 @@ public class MessagesEditorChangeAdapter implements IMessagesEditorChangeListene
     public void keyTreeVisibleChanged(boolean visible) {
         // do nothing
     }
+
     /**
      * @see org.eclipse.babel.editor.IMessagesEditorChangeListener#keyTreeVisibleChanged(boolean)
      */
@@ -40,19 +42,26 @@ public class MessagesEditorChangeAdapter implements IMessagesEditorChangeListene
     }
 
     /**
-     * @see org.eclipse.babel.editor.IMessagesEditorChangeListener#selectedKeyChanged(java.lang.String, java.lang.String)
+     * @see org.eclipse.babel.editor.IMessagesEditorChangeListener#selectedKeyChanged(java.lang.String,
+     *      java.lang.String)
      */
     public void selectedKeyChanged(String oldKey, String newKey) {
         // do nothing
     }
 
-    /* (non-Javadoc)
-     * @see org.eclilpse.babel.editor.editor.IMessagesEditorChangeListener#keyTreeModelChanged(org.eclipse.babel.core.message.internal.tree.internal.IKeyTreeModel, org.eclipse.babel.core.message.internal.tree.internal.IKeyTreeModel)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclilpse.babel.editor.editor.IMessagesEditorChangeListener#
+     * keyTreeModelChanged
+     * (org.eclipse.babel.core.message.internal.tree.internal.IKeyTreeModel,
+     * org.eclipse.babel.core.message.internal.tree.internal.IKeyTreeModel)
      */
-    public void keyTreeModelChanged(AbstractKeyTreeModel oldModel, AbstractKeyTreeModel newModel) {
+    public void keyTreeModelChanged(AbstractKeyTreeModel oldModel,
+            AbstractKeyTreeModel newModel) {
         // do nothing
     }
-    
+
     /**
      * @see org.eclipse.babel.editor.IMessagesEditorChangeListener#editorDisposed()
      */

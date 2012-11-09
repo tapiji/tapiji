@@ -26,40 +26,40 @@ public class SortInfo {
     private List<Locale> visibleLocales;
 
     public void setDESC(boolean dESC) {
-	DESC = dESC;
+        DESC = dESC;
     }
 
     public boolean isDESC() {
-	return DESC;
+        return DESC;
     }
 
     public void setColIdx(int colIdx) {
-	this.colIdx = colIdx;
+        this.colIdx = colIdx;
     }
 
     public int getColIdx() {
-	return colIdx;
+        return colIdx;
     }
 
     public void setVisibleLocales(List<Locale> visibleLocales) {
-	this.visibleLocales = visibleLocales;
+        this.visibleLocales = visibleLocales;
     }
 
     public List<Locale> getVisibleLocales() {
-	return visibleLocales;
+        return visibleLocales;
     }
 
     public void saveState(IMemento memento) {
-	IMemento mCI = memento.createChild(TAG_SORT_INFO);
-	mCI.putInteger(TAG_COLUMN_INDEX, colIdx);
-	mCI.putBoolean(TAG_ORDER, DESC);
+        IMemento mCI = memento.createChild(TAG_SORT_INFO);
+        mCI.putInteger(TAG_COLUMN_INDEX, colIdx);
+        mCI.putBoolean(TAG_ORDER, DESC);
     }
 
     public void init(IMemento memento) {
-	IMemento mCI = memento.getChild(TAG_SORT_INFO);
-	if (mCI == null)
-	    return;
-	colIdx = mCI.getInteger(TAG_COLUMN_INDEX);
-	DESC = mCI.getBoolean(TAG_ORDER);
+        IMemento mCI = memento.getChild(TAG_SORT_INFO);
+        if (mCI == null)
+            return;
+        colIdx = mCI.getInteger(TAG_COLUMN_INDEX);
+        DESC = mCI.getBoolean(TAG_ORDER);
     }
 }

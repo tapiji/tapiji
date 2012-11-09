@@ -32,63 +32,63 @@ public class FilterInfo {
     }
 
     public void setKeySimilarity(Double similarity) {
-	keySimilarity = similarity;
+        keySimilarity = similarity;
     }
 
     public Double getKeySimilarity() {
-	return keySimilarity;
+        return keySimilarity;
     }
 
     public void addSimilarity(Locale l, Double similarity) {
-	localeSimilarity.put(l, similarity);
+        localeSimilarity.put(l, similarity);
     }
 
     public Double getSimilarityLevel(Locale l) {
-	return localeSimilarity.get(l);
+        return localeSimilarity.get(l);
     }
 
     public void setFoundInKey(boolean foundInKey) {
-	this.foundInKey = foundInKey;
+        this.foundInKey = foundInKey;
     }
 
     public boolean isFoundInKey() {
-	return foundInKey;
+        return foundInKey;
     }
 
     public void addFoundInLocale(Locale loc) {
-	foundInLocales.add(loc);
+        foundInLocales.add(loc);
     }
 
     public void removeFoundInLocale(Locale loc) {
-	foundInLocales.remove(loc);
+        foundInLocales.remove(loc);
     }
 
     public void clearFoundInLocale() {
-	foundInLocales.clear();
+        foundInLocales.clear();
     }
 
     public boolean hasFoundInLocale(Locale l) {
-	return foundInLocales.contains(l);
+        return foundInLocales.contains(l);
     }
 
     public List<Region> getFoundInLocaleRanges(Locale locale) {
-	List<Region> reg = occurrences.get(locale);
-	return (reg == null ? new ArrayList<Region>() : reg);
+        List<Region> reg = occurrences.get(locale);
+        return (reg == null ? new ArrayList<Region>() : reg);
     }
 
     public void addFoundInLocaleRange(Locale locale, int start, int length) {
-	List<Region> regions = occurrences.get(locale);
-	if (regions == null)
-	    regions = new ArrayList<Region>();
-	regions.add(new Region(start, length));
-	occurrences.put(locale, regions);
+        List<Region> regions = occurrences.get(locale);
+        if (regions == null)
+            regions = new ArrayList<Region>();
+        regions.add(new Region(start, length));
+        occurrences.put(locale, regions);
     }
 
     public List<Region> getKeyOccurrences() {
-	return keyOccurrences;
+        return keyOccurrences;
     }
 
     public void addKeyOccurrence(int start, int length) {
-	keyOccurrences.add(new Region(start, length));
+        keyOccurrences.add(new Region(start, length));
     }
 }

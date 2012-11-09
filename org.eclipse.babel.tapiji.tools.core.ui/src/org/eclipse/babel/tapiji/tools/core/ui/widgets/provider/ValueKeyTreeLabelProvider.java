@@ -20,12 +20,12 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 
 public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
-	ITableColorProvider, ITableFontProvider {
+        ITableColorProvider, ITableFontProvider {
 
     private IMessagesBundle locale;
 
     public ValueKeyTreeLabelProvider(IMessagesBundle iBundle) {
-	this.locale = iBundle;
+        this.locale = iBundle;
     }
 
     /**
@@ -33,7 +33,7 @@ public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
      */
     @Override
     public Image getColumnImage(Object element, int columnIndex) {
-	return null;
+        return null;
     }
 
     /**
@@ -41,17 +41,17 @@ public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
      */
     @Override
     public String getColumnText(Object element, int columnIndex) {
-	try {
-	    IKeyTreeNode item = (IKeyTreeNode) element;
-	    IMessage entry = locale.getMessage(item.getMessageKey());
-	    if (entry != null) {
-		String value = entry.getValue();
-		if (value.length() > 40)
-		    value = value.substring(0, 39) + "...";
-	    }
-	} catch (Exception e) {
-	}
-	return "";
+        try {
+            IKeyTreeNode item = (IKeyTreeNode) element;
+            IMessage entry = locale.getMessage(item.getMessageKey());
+            if (entry != null) {
+                String value = entry.getValue();
+                if (value.length() > 40)
+                    value = value.substring(0, 39) + "...";
+            }
+        } catch (Exception e) {
+        }
+        return "";
     }
 
     /**
@@ -59,7 +59,7 @@ public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
      */
     @Override
     public Color getBackground(Object element, int columnIndex) {
-	return null;// return new Color(Display.getDefault(), 255, 0, 0);
+        return null;// return new Color(Display.getDefault(), 255, 0, 0);
     }
 
     /**
@@ -67,7 +67,7 @@ public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
      */
     @Override
     public Color getForeground(Object element, int columnIndex) {
-	return null;
+        return null;
     }
 
     /**
@@ -75,7 +75,7 @@ public class ValueKeyTreeLabelProvider extends KeyTreeLabelProvider implements
      */
     @Override
     public Font getFont(Object element, int columnIndex) {
-	return null; // UIUtils.createFont(SWT.BOLD);
+        return null; // UIUtils.createFont(SWT.BOLD);
     }
 
 }

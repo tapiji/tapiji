@@ -28,29 +28,29 @@ public class ResourceFinder implements IResourceVisitor, IResourceDeltaVisitor {
     Set<String> supportedExtensions = null;
 
     public ResourceFinder(Set<String> ext) {
-	javaResources = new ArrayList<IResource>();
-	supportedExtensions = ext;
+        javaResources = new ArrayList<IResource>();
+        supportedExtensions = ext;
     }
 
     @Override
     public boolean visit(IResource resource) throws CoreException {
-	if (I18nBuilder.isResourceAuditable(resource, supportedExtensions)) {
-	    Logger.logInfo("Audit necessary for resource '"
-		    + resource.getFullPath().toOSString() + "'");
-	    javaResources.add(resource);
-	    return false;
-	} else
-	    return true;
+        if (I18nBuilder.isResourceAuditable(resource, supportedExtensions)) {
+            Logger.logInfo("Audit necessary for resource '"
+                    + resource.getFullPath().toOSString() + "'");
+            javaResources.add(resource);
+            return false;
+        } else
+            return true;
     }
 
     public List<IResource> getResources() {
-	return javaResources;
+        return javaResources;
     }
 
     @Override
     public boolean visit(IResourceDelta delta) throws CoreException {
-	visit(delta.getResource());
-	return true;
+        visit(delta.getResource());
+        return true;
     }
 
 }

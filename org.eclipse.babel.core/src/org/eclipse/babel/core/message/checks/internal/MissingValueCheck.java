@@ -15,15 +15,16 @@ import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.core.message.checks.IMessageCheck;
 
 /**
- * Visitor for finding if a key has at least one corresponding bundle entry
- * with a missing value.
+ * Visitor for finding if a key has at least one corresponding bundle entry with
+ * a missing value.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public class MissingValueCheck implements IMessageCheck {
 
-	/** The singleton */
-	public static MissingValueCheck MISSING_KEY = new MissingValueCheck();
-	
+    /** The singleton */
+    public static MissingValueCheck MISSING_KEY = new MissingValueCheck();
+
     /**
      * Constructor.
      */
@@ -32,12 +33,11 @@ public class MissingValueCheck implements IMessageCheck {
     }
 
     /**
-     * @see org.eclipse.babel.core.message.internal.checks.IMessageCheck#checkKey(
-     * 	        org.eclipse.babel.core.message.internal.MessagesBundleGroup,
-     * 		    org.eclipse.babel.core.message.internal.Message)
+     * @see org.eclipse.babel.core.message.internal.checks.IMessageCheck#checkKey(org.eclipse.babel.core.message.internal.MessagesBundleGroup,
+     *      org.eclipse.babel.core.message.internal.Message)
      */
-    public boolean checkKey(
-            IMessagesBundleGroup messagesBundleGroup, IMessage message) {
+    public boolean checkKey(IMessagesBundleGroup messagesBundleGroup,
+            IMessage message) {
         if (message == null || message.getValue() == null
                 || message.getValue().length() == 0) {
             return true;

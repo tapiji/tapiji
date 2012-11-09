@@ -28,47 +28,50 @@ import org.eclipse.swt.widgets.Link;
 
 /**
  * Tree for displaying and navigating through resource bundle keys.
+ * 
  * @author Pascal Essiembre
  */
 public class EntryLeftBanner extends Composite {
 
     /**
      * Constructor.
-     * @param parent parent composite
-     * @param keyTree key tree
+     * 
+     * @param parent
+     *            parent composite
+     * @param keyTree
+     *            key tree
      */
-    public EntryLeftBanner(
-            Composite parent,
-            final AbstractI18NEntry i18NEntry) {
+    public EntryLeftBanner(Composite parent, final AbstractI18NEntry i18NEntry) {
         super(parent, SWT.NONE);
-        
+
         RowLayout layout = new RowLayout();
         setLayout(layout);
         layout.marginBottom = 0;
         layout.marginLeft = 0;
         layout.marginRight = 0;
         layout.marginTop = 0;
-        
+
         final IAction foldAction = new FoldingAction(i18NEntry);
         new ActionButton(this, foldAction);
 
-//        Button commentButton = new Button(compos, SWT.TOGGLE);
-//        commentButton.setImage(UIUtils.getImage("comment.gif"));
-        
-        
+        // Button commentButton = new Button(compos, SWT.TOGGLE);
+        // commentButton.setImage(UIUtils.getImage("comment.gif"));
+
         Link localeLabel = new Link(this, SWT.NONE);
         localeLabel.setFont(UIUtils.createFont(localeLabel, SWT.BOLD));
-        
+
         boolean isEditable = i18NEntry.isEditable();
-        localeLabel.setText("<a>" + UIUtils.getDisplayName(
-                i18NEntry.getLocale()) + "</a>" + (!isEditable
-                        ? " (" +  MessagesEditorPlugin.getString(
-                                "editor.readOnly") + ")" : ""));
-        
-        localeLabel.setToolTipText(
-    			MessagesEditorPlugin.getString("editor.i18nentry.resourcelocation",
-    					i18NEntry.getResourceLocationLabel())); //$NON-NLS-1$
-        
+        localeLabel.setText("<a>"
+                + UIUtils.getDisplayName(i18NEntry.getLocale())
+                + "</a>"
+                + (!isEditable ? " ("
+                        + MessagesEditorPlugin.getString("editor.readOnly")
+                        + ")" : ""));
+
+        localeLabel.setToolTipText(MessagesEditorPlugin.getString(
+                "editor.i18nentry.resourcelocation",
+                i18NEntry.getResourceLocationLabel())); //$NON-NLS-1$
+
         localeLabel.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent e) {
                 i18NEntry.getResourceBundleEditor().setActivePage(
@@ -76,8 +79,8 @@ public class EntryLeftBanner extends Composite {
             }
         });
 
-        //TODO have "show country flags" in preferences.
-        //TODO have text aligned bottom next to flag icon.
+        // TODO have "show country flags" in preferences.
+        // TODO have text aligned bottom next to flag icon.
         Image countryIcon = loadCountryIcon(i18NEntry.getLocale());
         if (countryIcon != null) {
             Label imgLabel = new Label(this, SWT.NONE);
@@ -85,10 +88,11 @@ public class EntryLeftBanner extends Composite {
         }
     }
 
-    
     /**
      * Loads country icon based on locale country.
-     * @param countryLocale the locale on which to grab the country
+     * 
+     * @param countryLocale
+     *            the locale on which to grab the country
      * @return an image, or <code>null</code> if no match could be made
      */
     private Image loadCountryIcon(Locale countryLocale) {
@@ -102,9 +106,9 @@ public class EntryLeftBanner extends Composite {
                     countryCode.toLowerCase() + ".gif"; //$NON-NLS-1$
             image = UIUtils.getImage(imageName);
         }
-//        if (image == null) {
-//            image = UIUtils.getImage("countries/blank.gif"); //$NON-NLS-1$
-//        }
+        // if (image == null) {
+        //            image = UIUtils.getImage("countries/blank.gif"); //$NON-NLS-1$
+        // }
         return image;
     }
 

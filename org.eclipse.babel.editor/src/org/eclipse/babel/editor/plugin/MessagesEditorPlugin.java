@@ -48,105 +48,110 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
-public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChangeListenerRegistry {
+public class MessagesEditorPlugin extends AbstractUIPlugin implements
+        IFileChangeListenerRegistry {
 
-	//TODO move somewhere more appropriate
-    public static final String MARKER_TYPE =
-        "org.eclipse.babel.editor.nlsproblem"; //$NON-NLS-1$
-	
-	// The plug-in ID
-	public static final String PLUGIN_ID = "org.eclipse.babel.editor";
+    // TODO move somewhere more appropriate
+    public static final String MARKER_TYPE = "org.eclipse.babel.editor.nlsproblem"; //$NON-NLS-1$
 
-	// The shared instance
-	private static MessagesEditorPlugin plugin;
-	
-	//Resource bundle.
-	//TODO Use Eclipse MessagesBundle instead.
-	private ResourceBundle resourceBundle;
-	
-	//The resource change litener for the entire plugin.
-	//objects interested in changes in the workspace resources must
-	//subscribe to this listener by calling subscribe/unsubscribe on the plugin.
-	private IResourceChangeListener resourceChangeListener;
-	
-	//The map of resource change subscribers.
-	//The key is the full path of the resource listened. The value as set of SimpleResourceChangeListners
-	//private Map<String,Set<SimpleResourceChangeListners>> resourceChangeSubscribers;
-	private Map<String,Set<AbstractIFileChangeListener>> resourceChangeSubscribers;
-	
-	private ResourceBundleModel model;
+    // The plug-in ID
+    public static final String PLUGIN_ID = "org.eclipse.babel.editor";
 
-	/**
-	 * The constructor
-	 */
-	public MessagesEditorPlugin() {
-		resourceChangeSubscribers = new HashMap<String,Set<AbstractIFileChangeListener>>();
-	}
-	
-    private static class UndoKeyListener implements Listener {
-    
-    	public void handleEvent(Event event) {
-    		Control focusControl = event.display.getFocusControl();
-    		if (event.stateMask == SWT.CONTROL && focusControl instanceof Text) {
-    			
-    			Text txt = (Text) focusControl;
-    			String actText = txt.getText();
-    			Stack<String> undoStack = (Stack<String>) txt.getData("UNDO");
-				Stack<String> redoStack = (Stack<String>) txt.getData("REDO");
-				
-    			if (event.keyCode == 'z' && undoStack != null && redoStack != null) { // Undo
-    				event.doit = false;
-    				
-    				if (undoStack.size() > 0) {
-    					String peek = undoStack.peek();
-    					if (actText != null && !txt.getText().equals(peek)) {
-    						String pop = undoStack.pop();
-	    					txt.setText(pop);
-	    					txt.setSelection(pop.length());
-	    					redoStack.push(actText);
-    					}
-    				}
-    			} else if (event.keyCode == 'y' && undoStack != null && redoStack != null) { // Redo
-    				
-    				event.doit = false;
-    				
-    				if (redoStack.size() > 0) {
-    					String peek = redoStack.peek();
-    					
-    					if (actText != null && !txt.getText().equals(peek)) {
-    						String pop = redoStack.pop();
-	    					txt.setText(pop);
-	    					txt.setSelection(pop.length());
-	    					undoStack.push(actText);
-    					}
-    				}
-    			}
-    		}
-    	}
-    	
+    // The shared instance
+    private static MessagesEditorPlugin plugin;
+
+    // Resource bundle.
+    // TODO Use Eclipse MessagesBundle instead.
+    private ResourceBundle resourceBundle;
+
+    // The resource change litener for the entire plugin.
+    // objects interested in changes in the workspace resources must
+    // subscribe to this listener by calling subscribe/unsubscribe on the
+    // plugin.
+    private IResourceChangeListener resourceChangeListener;
+
+    // The map of resource change subscribers.
+    // The key is the full path of the resource listened. The value as set of
+    // SimpleResourceChangeListners
+    // private Map<String,Set<SimpleResourceChangeListners>>
+    // resourceChangeSubscribers;
+    private Map<String, Set<AbstractIFileChangeListener>> resourceChangeSubscribers;
+
+    private ResourceBundleModel model;
+
+    /**
+     * The constructor
+     */
+    public MessagesEditorPlugin() {
+        resourceChangeSubscribers = new HashMap<String, Set<AbstractIFileChangeListener>>();
     }
 
-	/**
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(
-	 *         org.osgi.framework.BundleContext)
-	 */
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-		plugin = this;
-		
-		//make sure the rbe nature and builder are set on java projects
-		//if that is what the users prefers.
-		if (MsgEditorPreferences.getInstance().isBuilderSetupAutomatically()) {
-			ToggleNatureAction.addOrRemoveNatureOnAllJavaProjects(true);
-		}
+    private static class UndoKeyListener implements Listener {
 
-		//TODO replace deprecated
+        public void handleEvent(Event event) {
+            Control focusControl = event.display.getFocusControl();
+            if (event.stateMask == SWT.CONTROL && focusControl instanceof Text) {
+
+                Text txt = (Text) focusControl;
+                String actText = txt.getText();
+                Stack<String> undoStack = (Stack<String>) txt.getData("UNDO");
+                Stack<String> redoStack = (Stack<String>) txt.getData("REDO");
+
+                if (event.keyCode == 'z' && undoStack != null
+                        && redoStack != null) { // Undo
+                    event.doit = false;
+
+                    if (undoStack.size() > 0) {
+                        String peek = undoStack.peek();
+                        if (actText != null && !txt.getText().equals(peek)) {
+                            String pop = undoStack.pop();
+                            txt.setText(pop);
+                            txt.setSelection(pop.length());
+                            redoStack.push(actText);
+                        }
+                    }
+                } else if (event.keyCode == 'y' && undoStack != null
+                        && redoStack != null) { // Redo
+
+                    event.doit = false;
+
+                    if (redoStack.size() > 0) {
+                        String peek = redoStack.peek();
+
+                        if (actText != null && !txt.getText().equals(peek)) {
+                            String pop = redoStack.pop();
+                            txt.setText(pop);
+                            txt.setSelection(pop.length());
+                            undoStack.push(actText);
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    /**
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+     */
+    public void start(BundleContext context) throws Exception {
+        super.start(context);
+        plugin = this;
+
+        // make sure the rbe nature and builder are set on java projects
+        // if that is what the users prefers.
+        if (MsgEditorPreferences.getInstance().isBuilderSetupAutomatically()) {
+            ToggleNatureAction.addOrRemoveNatureOnAllJavaProjects(true);
+        }
+
+        // TODO replace deprecated
         try {
-            URL messagesUrl = FileLocator.find(getBundle(),
-                    new Path("$nl$/messages.properties"), null);//$NON-NLS-1$
-            if(messagesUrl != null) {
+            URL messagesUrl = FileLocator.find(getBundle(), new Path(
+                    "$nl$/messages.properties"), null);//$NON-NLS-1$
+            if (messagesUrl != null) {
                 resourceBundle = new PropertyResourceBundle(
                         messagesUrl.openStream());
             }
@@ -154,210 +159,240 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements IFileChang
             resourceBundle = null;
         }
 
-        //the unique file change listener
+        // the unique file change listener
         resourceChangeListener = new IResourceChangeListener() {
-        	public void resourceChanged(IResourceChangeEvent event) {
-        		IResource resource = event.getResource();
-        		if (resource != null) {
-        			String fullpath = resource.getFullPath().toString();
-        			Set<AbstractIFileChangeListener> listeners = resourceChangeSubscribers.get(fullpath);
-        			if (listeners != null) {
-        				AbstractIFileChangeListener[] larray = listeners.toArray(new AbstractIFileChangeListener[0]);//avoid concurrency issues. kindof.
-        				for (int i = 0; i < larray.length; i++) {
-        					larray[i].listenedFileChanged(event);
-        				}
-        			}
-        		}
-        	}
+            public void resourceChanged(IResourceChangeEvent event) {
+                IResource resource = event.getResource();
+                if (resource != null) {
+                    String fullpath = resource.getFullPath().toString();
+                    Set<AbstractIFileChangeListener> listeners = resourceChangeSubscribers
+                            .get(fullpath);
+                    if (listeners != null) {
+                        AbstractIFileChangeListener[] larray = listeners
+                                .toArray(new AbstractIFileChangeListener[0]);// avoid
+                                                                             // concurrency
+                                                                             // issues.
+                                                                             // kindof.
+                        for (int i = 0; i < larray.length; i++) {
+                            larray[i].listenedFileChanged(event);
+                        }
+                    }
+                }
+            }
         };
-        ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener);
+        ResourcesPlugin.getWorkspace().addResourceChangeListener(
+                resourceChangeListener);
         try {
-	        Display.getDefault().asyncExec(new Runnable() {
-				
-				public void run() {
-					Display.getDefault().addFilter(SWT.KeyUp, new UndoKeyListener());
-					
-				}
-			});
+            Display.getDefault().asyncExec(new Runnable() {
+
+                public void run() {
+                    Display.getDefault().addFilter(SWT.KeyUp,
+                            new UndoKeyListener());
+
+                }
+            });
         } catch (NullPointerException e) {
-        	// TODO [RAP] Non UI-Thread, no default display available, in RAP multiple clients and displays
+            // TODO [RAP] Non UI-Thread, no default display available, in RAP
+            // multiple clients and displays
         }
-	}
-
-	/**
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(
-	 *         org.osgi.framework.BundleContext)
-	 */
-	public void stop(BundleContext context) throws Exception {
-		plugin = null;
-		ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceChangeListener);
-		super.stop(context);
-	}
-	
-	/**
-	 * @param rcl Adds a subscriber to a resource change event.
-	 */
-	public void subscribe(AbstractIFileChangeListener fileChangeListener) {
-		synchronized (resourceChangeListener) {
-			String channel = fileChangeListener.getListenedFileFullPath();
-			Set<AbstractIFileChangeListener> channelListeners = resourceChangeSubscribers.get(channel);
-			if (channelListeners == null) {
-				channelListeners = new HashSet<AbstractIFileChangeListener>();
-				resourceChangeSubscribers.put(channel, channelListeners);
-			}
-			channelListeners.add(fileChangeListener);
-		}
-	}
-	
-	/**
-	 * @param rcl Removes a subscriber to a resource change event.
-	 */
-	public void unsubscribe(AbstractIFileChangeListener fileChangeListener) {
-		synchronized (resourceChangeListener) {
-			String channel = fileChangeListener.getListenedFileFullPath();
-			Set<AbstractIFileChangeListener> channelListeners = resourceChangeSubscribers.get(channel);
-			if (channelListeners != null
-					&& channelListeners.remove(fileChangeListener)
-					&& channelListeners.isEmpty()) {
-				//nobody left listening to this file.
-				resourceChangeSubscribers.remove(channel);
-			}
-		}
-	}
-	
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	public static MessagesEditorPlugin getDefault() {
-		return plugin;
-	}
-
-	//--------------------------------------------------------------------------
-	//TODO Better way/location for these methods?
-	
-	/**
-	 * Returns the string from the plugin's resource bundle,
-	 * or 'key' if not found.
-     * @param key the key for which to fetch a localized text
-     * @return localized string corresponding to key
-	 */
-	public static String getString(String key) {
-		ResourceBundle bundle = 
-                MessagesEditorPlugin.getDefault().getResourceBundle();
-		try {
-			return (bundle != null) ? bundle.getString(key) : key;
-		} catch (MissingResourceException e) {
-			return key;
-		}
-	}
+    }
 
     /**
-     * Returns the string from the plugin's resource bundle,
-     * or 'key' if not found.
-     * @param key the key for which to fetch a localized text
-     * @param arg1 runtime argument to replace in key value 
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+     */
+    public void stop(BundleContext context) throws Exception {
+        plugin = null;
+        ResourcesPlugin.getWorkspace().removeResourceChangeListener(
+                resourceChangeListener);
+        super.stop(context);
+    }
+
+    /**
+     * @param rcl
+     *            Adds a subscriber to a resource change event.
+     */
+    public void subscribe(AbstractIFileChangeListener fileChangeListener) {
+        synchronized (resourceChangeListener) {
+            String channel = fileChangeListener.getListenedFileFullPath();
+            Set<AbstractIFileChangeListener> channelListeners = resourceChangeSubscribers
+                    .get(channel);
+            if (channelListeners == null) {
+                channelListeners = new HashSet<AbstractIFileChangeListener>();
+                resourceChangeSubscribers.put(channel, channelListeners);
+            }
+            channelListeners.add(fileChangeListener);
+        }
+    }
+
+    /**
+     * @param rcl
+     *            Removes a subscriber to a resource change event.
+     */
+    public void unsubscribe(AbstractIFileChangeListener fileChangeListener) {
+        synchronized (resourceChangeListener) {
+            String channel = fileChangeListener.getListenedFileFullPath();
+            Set<AbstractIFileChangeListener> channelListeners = resourceChangeSubscribers
+                    .get(channel);
+            if (channelListeners != null
+                    && channelListeners.remove(fileChangeListener)
+                    && channelListeners.isEmpty()) {
+                // nobody left listening to this file.
+                resourceChangeSubscribers.remove(channel);
+            }
+        }
+    }
+
+    /**
+     * Returns the shared instance
+     * 
+     * @return the shared instance
+     */
+    public static MessagesEditorPlugin getDefault() {
+        return plugin;
+    }
+
+    // --------------------------------------------------------------------------
+    // TODO Better way/location for these methods?
+
+    /**
+     * Returns the string from the plugin's resource bundle, or 'key' if not
+     * found.
+     * 
+     * @param key
+     *            the key for which to fetch a localized text
+     * @return localized string corresponding to key
+     */
+    public static String getString(String key) {
+        ResourceBundle bundle = MessagesEditorPlugin.getDefault()
+                .getResourceBundle();
+        try {
+            return (bundle != null) ? bundle.getString(key) : key;
+        } catch (MissingResourceException e) {
+            return key;
+        }
+    }
+
+    /**
+     * Returns the string from the plugin's resource bundle, or 'key' if not
+     * found.
+     * 
+     * @param key
+     *            the key for which to fetch a localized text
+     * @param arg1
+     *            runtime argument to replace in key value
      * @return localized string corresponding to key
      */
     public static String getString(String key, String arg1) {
-        return MessageFormat.format(getString(key), new Object[]{arg1});
+        return MessageFormat.format(getString(key), new Object[] { arg1 });
     }
-    
+
     /**
-     * Returns the string from the plugin's resource bundle,
-     * or 'key' if not found.
-     * @param key the key for which to fetch a localized text
-     * @param arg1 runtime first argument to replace in key value
-     * @param arg2 runtime second argument to replace in key value
+     * Returns the string from the plugin's resource bundle, or 'key' if not
+     * found.
+     * 
+     * @param key
+     *            the key for which to fetch a localized text
+     * @param arg1
+     *            runtime first argument to replace in key value
+     * @param arg2
+     *            runtime second argument to replace in key value
      * @return localized string corresponding to key
      */
     public static String getString(String key, String arg1, String arg2) {
-        return MessageFormat.format(
-                getString(key), new Object[]{arg1, arg2});
+        return MessageFormat
+                .format(getString(key), new Object[] { arg1, arg2 });
     }
-    
+
     /**
-     * Returns the string from the plugin's resource bundle,
-     * or 'key' if not found.
-     * @param key the key for which to fetch a localized text
-     * @param arg1 runtime argument to replace in key value 
-     * @param arg2 runtime second argument to replace in key value
-     * @param arg3 runtime third argument to replace in key value
+     * Returns the string from the plugin's resource bundle, or 'key' if not
+     * found.
+     * 
+     * @param key
+     *            the key for which to fetch a localized text
+     * @param arg1
+     *            runtime argument to replace in key value
+     * @param arg2
+     *            runtime second argument to replace in key value
+     * @param arg3
+     *            runtime third argument to replace in key value
      * @return localized string corresponding to key
      */
-    public static String getString(
-            String key, String arg1, String arg2, String arg3) {
-        return MessageFormat.format(
-                getString(key), new Object[]{arg1, arg2, arg3});
+    public static String getString(String key, String arg1, String arg2,
+            String arg3) {
+        return MessageFormat.format(getString(key), new Object[] { arg1, arg2,
+                arg3 });
     }
-    
-	/**
-	 * Returns the plugin's resource bundle.
+
+    /**
+     * Returns the plugin's resource bundle.
+     * 
      * @return resource bundle
-	 */
-	protected ResourceBundle getResourceBundle() {
-		return resourceBundle;
-	}
-	
-	// Stefan's activator methods:
-	
-	/**
-	 * Returns an image descriptor for the given icon filename.
-	 * 
-	 * @param filename the icon filename relative to the icons path
-	 * @return the image descriptor
-	 */
-	public static ImageDescriptor getImageDescriptor(String filename) {
-		String iconPath = "icons/"; //$NON-NLS-1$
-		return imageDescriptorFromPlugin(PLUGIN_ID, iconPath + filename);
-	}
+     */
+    protected ResourceBundle getResourceBundle() {
+        return resourceBundle;
+    }
 
-	public static ResourceBundleModel getModel(IProgressMonitor monitor) {
-		if (plugin.model == null) {
-			plugin.model = new ResourceBundleModel(monitor);
-		}
-		return plugin.model;
-	}
+    // Stefan's activator methods:
 
-	public static void disposeModel() {
-		if (plugin != null) {
-			plugin.model = null;
-		}
-	}
+    /**
+     * Returns an image descriptor for the given icon filename.
+     * 
+     * @param filename
+     *            the icon filename relative to the icons path
+     * @return the image descriptor
+     */
+    public static ImageDescriptor getImageDescriptor(String filename) {
+        String iconPath = "icons/"; //$NON-NLS-1$
+        return imageDescriptorFromPlugin(PLUGIN_ID, iconPath + filename);
+    }
 
-	// Logging
+    public static ResourceBundleModel getModel(IProgressMonitor monitor) {
+        if (plugin.model == null) {
+            plugin.model = new ResourceBundleModel(monitor);
+        }
+        return plugin.model;
+    }
 
-	/**
-	 * Adds the given exception to the log.
-	 * 
-	 * @param e the exception to log
-	 * @return the logged status
-	 */
-	public static IStatus log(Throwable e) {
-		return log(new Status(IStatus.ERROR, PLUGIN_ID, 0, "Internal error.", e));
-	}
+    public static void disposeModel() {
+        if (plugin != null) {
+            plugin.model = null;
+        }
+    }
 
-	/**
-	 * Adds the given exception to the log.
-	 * 
-	 * @param exception the exception to log
-	 * @return the logged status
-	 */
-	public static IStatus log(String message, Throwable exception) {
-		return log(new Status(IStatus.ERROR, PLUGIN_ID, -1, message, exception));
-	}
+    // Logging
 
-	/**
-	 * Adds the given <code>IStatus</code> to the log.
-	 * 
-	 * @param status the status to log
-	 * @return the logged status
-	 */
-	public static IStatus log(IStatus status) {
-		getDefault().getLog().log(status);
-		return status;
-	}
+    /**
+     * Adds the given exception to the log.
+     * 
+     * @param e
+     *            the exception to log
+     * @return the logged status
+     */
+    public static IStatus log(Throwable e) {
+        return log(new Status(IStatus.ERROR, PLUGIN_ID, 0, "Internal error.", e));
+    }
 
-	
+    /**
+     * Adds the given exception to the log.
+     * 
+     * @param exception
+     *            the exception to log
+     * @return the logged status
+     */
+    public static IStatus log(String message, Throwable exception) {
+        return log(new Status(IStatus.ERROR, PLUGIN_ID, -1, message, exception));
+    }
+
+    /**
+     * Adds the given <code>IStatus</code> to the log.
+     * 
+     * @param status
+     *            the status to log
+     * @return the logged status
+     */
+    public static IStatus log(IStatus status) {
+        getDefault().getLog().log(status);
+        return status;
+    }
+
 }

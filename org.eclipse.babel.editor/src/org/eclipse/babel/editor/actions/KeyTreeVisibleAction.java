@@ -18,23 +18,24 @@ import org.eclipse.jface.action.IAction;
 
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public class KeyTreeVisibleAction extends Action {
 
     private AbstractMessagesEditor editor;
-    
+
     /**
      * 
      */
     public KeyTreeVisibleAction() {
         super("Show/Hide Key Tree", IAction.AS_CHECK_BOX);
-//        setText();
+        // setText();
         setToolTipText("Show/hide the key tree");
         setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_VIEW_LEFT));
     }
 
-    //TODO RBEditor hold such an action registry.  Then move this method to constructor
+    // TODO RBEditor hold such an action registry. Then move this method to
+    // constructor
     public void setEditor(AbstractMessagesEditor editor) {
         this.editor = editor;
         editor.addChangeListener(new MessagesEditorChangeAdapter() {
@@ -45,13 +46,14 @@ public class KeyTreeVisibleAction extends Action {
         setChecked(editor.getI18NPage().isKeyTreeVisible());
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.eclipse.jface.action.Action#run()
      */
     public void run() {
         editor.getI18NPage().setKeyTreeVisible(
                 !editor.getI18NPage().isKeyTreeVisible());
     }
-    
-    
+
 }

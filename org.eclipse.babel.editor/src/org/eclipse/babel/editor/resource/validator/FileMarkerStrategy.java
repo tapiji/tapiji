@@ -22,79 +22,79 @@ import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public class FileMarkerStrategy implements IValidationMarkerStrategy {
 
-    
     /**
-     * @see org.eclipse.babel.editor.resource.validator.IValidationMarkerStrategy#markFailed(org.eclipse.core.resources.IResource, org.eclipse.babel.core.bundle.checks.IBundleEntryCheck)
+     * @see org.eclipse.babel.editor.resource.validator.IValidationMarkerStrategy#markFailed(org.eclipse.core.resources.IResource,
+     *      org.eclipse.babel.core.bundle.checks.IBundleEntryCheck)
      */
     public void markFailed(ValidationFailureEvent event) {
         if (event.getCheck() instanceof MissingValueCheck) {
-            MessagesBundle bundle = (MessagesBundle) event.getBundleGroup().getMessagesBundle(event.getLocale());
+            MessagesBundle bundle = (MessagesBundle) event.getBundleGroup()
+                    .getMessagesBundle(event.getLocale());
             addMarker((IResource) bundle.getResource().getSource(),
-//            addMarker(event.getResource(),
-                    event.getKey(),
-                    "Key \"" + event.getKey() //$NON-NLS-1$
-                    + "\" is missing a value.", //$NON-NLS-1$
-                 getSeverity(MsgEditorPreferences.getInstance()
-                		 .getReportMissingValuesLevel()));
-            
+            // addMarker(event.getResource(),
+                    event.getKey(), "Key \"" + event.getKey() //$NON-NLS-1$
+                            + "\" is missing a value.", //$NON-NLS-1$
+                    getSeverity(MsgEditorPreferences.getInstance()
+                            .getReportMissingValuesLevel()));
+
         } else if (event.getCheck() instanceof DuplicateValueCheck) {
-            String duplicates = BabelUtils.join(
-                    ((DuplicateValueCheck) event.getCheck())
+            String duplicates = BabelUtils
+                    .join(((DuplicateValueCheck) event.getCheck())
                             .getDuplicateKeys(), ", ");
-            MessagesBundle bundle = (MessagesBundle) event.getBundleGroup().getMessagesBundle(event.getLocale());
+            MessagesBundle bundle = (MessagesBundle) event.getBundleGroup()
+                    .getMessagesBundle(event.getLocale());
             addMarker((IResource) bundle.getResource().getSource(),
-//            addMarker(event.getResource(),
-                    event.getKey(),
-                    "Key \"" + event.getKey() //$NON-NLS-1$
-                          + "\" duplicates " + duplicates, //$NON-NLS-1$
-                  getSeverity(MsgEditorPreferences.getInstance()
-                         		 .getReportDuplicateValuesLevel()));
+            // addMarker(event.getResource(),
+                    event.getKey(), "Key \"" + event.getKey() //$NON-NLS-1$
+                            + "\" duplicates " + duplicates, //$NON-NLS-1$
+                    getSeverity(MsgEditorPreferences.getInstance()
+                            .getReportDuplicateValuesLevel()));
         }
     }
 
-    private void addMarker(
-            IResource resource, 
-            String key,
-            String message, //int lineNumber,
+    private void addMarker(IResource resource, String key, String message, // int
+                                                                           // lineNumber,
             int severity) {
         try {
-            //TODO move MARKER_TYPE elsewhere.
-            IMarker marker = resource.createMarker(MessagesEditorPlugin.MARKER_TYPE);
+            // TODO move MARKER_TYPE elsewhere.
+            IMarker marker = resource
+                    .createMarker(MessagesEditorPlugin.MARKER_TYPE);
             marker.setAttribute(IMarker.MESSAGE, message);
             marker.setAttribute(IMarker.SEVERITY, severity);
             marker.setAttribute(IMarker.LOCATION, key);
-//            if (lineNumber == -1) {
-//                lineNumber = 1;
-//            }
-//            marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
+            // if (lineNumber == -1) {
+            // lineNumber = 1;
+            // }
+            // marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
         } catch (CoreException e) {
             throw new RuntimeException("Cannot add marker.", e); //$NON-NLS-1$
         }
     }
 
     /**
-     * Translates the validation level as defined in 
-     * MsgEditorPreferences.VALIDATION_MESSAGE_* to the corresponding value
-     * for the marker attribute IMarke.SEVERITY.
+     * Translates the validation level as defined in
+     * MsgEditorPreferences.VALIDATION_MESSAGE_* to the corresponding value for
+     * the marker attribute IMarke.SEVERITY.
+     * 
      * @param msgValidationLevel
      * @return The value for the marker attribute IMarker.SEVERITY.
      */
     private static int getSeverity(int msgValidationLevel) {
-    	switch (msgValidationLevel) {
-    	case MsgEditorPreferences.VALIDATION_MESSAGE_ERROR:
-    		return IMarker.SEVERITY_ERROR;
-    	case MsgEditorPreferences.VALIDATION_MESSAGE_WARNING:
-    		return IMarker.SEVERITY_WARNING;
-    	case MsgEditorPreferences.VALIDATION_MESSAGE_INFO:
-    		return IMarker.SEVERITY_INFO;
-    	case MsgEditorPreferences.VALIDATION_MESSAGE_IGNORE:
-    	default:
-    		return IMarker.SEVERITY_INFO;//why are we here?
-    	}
+        switch (msgValidationLevel) {
+        case MsgEditorPreferences.VALIDATION_MESSAGE_ERROR:
+            return IMarker.SEVERITY_ERROR;
+        case MsgEditorPreferences.VALIDATION_MESSAGE_WARNING:
+            return IMarker.SEVERITY_WARNING;
+        case MsgEditorPreferences.VALIDATION_MESSAGE_INFO:
+            return IMarker.SEVERITY_INFO;
+        case MsgEditorPreferences.VALIDATION_MESSAGE_IGNORE:
+        default:
+            return IMarker.SEVERITY_INFO;// why are we here?
+        }
     }
-    
+
 }

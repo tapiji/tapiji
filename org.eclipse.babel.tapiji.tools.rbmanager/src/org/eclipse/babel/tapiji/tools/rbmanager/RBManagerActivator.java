@@ -37,8 +37,8 @@ public class RBManagerActivator extends AbstractUIPlugin {
      * )
      */
     public void start(BundleContext context) throws Exception {
-	super.start(context);
-	plugin = this;
+        super.start(context);
+        plugin = this;
     }
 
     /*
@@ -49,8 +49,8 @@ public class RBManagerActivator extends AbstractUIPlugin {
      * )
      */
     public void stop(BundleContext context) throws Exception {
-	plugin = null;
-	super.stop(context);
+        plugin = null;
+        super.stop(context);
     }
 
     /**
@@ -59,13 +59,13 @@ public class RBManagerActivator extends AbstractUIPlugin {
      * @return the shared instance
      */
     public static RBManagerActivator getDefault() {
-	return plugin;
+        return plugin;
     }
 
     public static ImageDescriptor getImageDescriptor(String name) {
-	String path = "icons/" + name;
+        String path = "icons/" + name;
 
-	return imageDescriptorFromPlugin(PLUGIN_ID, path);
+        return imageDescriptorFromPlugin(PLUGIN_ID, path);
     }
 
 }

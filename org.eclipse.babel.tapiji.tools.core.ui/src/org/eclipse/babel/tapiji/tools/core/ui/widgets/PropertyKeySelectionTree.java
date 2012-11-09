@@ -90,7 +90,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 public class PropertyKeySelectionTree extends Composite implements
-	IResourceBundleChangedListener {
+        IResourceBundleChangedListener {
 
     private final int KEY_COLUMN_WEIGHT = 1;
     private final int LOCALE_COLUMN_WEIGHT = 1;
@@ -130,703 +130,705 @@ public class PropertyKeySelectionTree extends Composite implements
     private String projectName;
 
     public PropertyKeySelectionTree(IViewSite viewSite,
-	    IWorkbenchPartSite site, Composite parent, int style,
-	    String projectName, String resources, List<Locale> locales) {
-	super(parent, style);
-	this.site = site;
-	this.resourceBundle = resources;
-	this.projectName = projectName;
+            IWorkbenchPartSite site, Composite parent, int style,
+            String projectName, String resources, List<Locale> locales) {
+        super(parent, style);
+        this.site = site;
+        this.resourceBundle = resources;
+        this.projectName = projectName;
 
-	if (resourceBundle != null && resourceBundle.trim().length() > 0) {
-	    if (locales == null)
-		initVisibleLocales();
-	    else
-		this.visibleLocales = locales;
-	}
+        if (resourceBundle != null && resourceBundle.trim().length() > 0) {
+            if (locales == null)
+                initVisibleLocales();
+            else
+                this.visibleLocales = locales;
+        }
 
-	constructWidget();
+        constructWidget();
 
-	if (resourceBundle != null && resourceBundle.trim().length() > 0) {
-	    initTreeViewer();
-	    initMatchers();
-	    initSorters();
-	    treeViewer.expandAll();
-	}
+        if (resourceBundle != null && resourceBundle.trim().length() > 0) {
+            initTreeViewer();
+            initMatchers();
+            initSorters();
+            treeViewer.expandAll();
+        }
 
-	hookDragAndDrop();
-	registerListeners();
+        hookDragAndDrop();
+        registerListeners();
     }
 
     @Override
     public void dispose() {
-	super.dispose();
-	unregisterListeners();
+        super.dispose();
+        unregisterListeners();
     }
 
     protected void initSorters() {
-	sorter = new ValuedKeyTreeItemSorter(treeViewer, sortInfo);
-	treeViewer.setSorter(sorter);
+        sorter = new ValuedKeyTreeItemSorter(treeViewer, sortInfo);
+        treeViewer.setSorter(sorter);
     }
 
     public void enableFuzzyMatching(boolean enable) {
-	String pattern = "";
-	if (matcher != null) {
-	    pattern = matcher.getPattern();
+        String pattern = "";
+        if (matcher != null) {
+            pattern = matcher.getPattern();
 
-	    if (!fuzzyMatchingEnabled && enable) {
-		if (matcher.getPattern().trim().length() > 1
-			&& matcher.getPattern().startsWith("*")
-			&& matcher.getPattern().endsWith("*"))
-		    pattern = pattern.substring(1).substring(0,
-			    pattern.length() - 2);
-		matcher.setPattern(null);
-	    }
-	}
-	fuzzyMatchingEnabled = enable;
-	initMatchers();
+            if (!fuzzyMatchingEnabled && enable) {
+                if (matcher.getPattern().trim().length() > 1
+                        && matcher.getPattern().startsWith("*")
+                        && matcher.getPattern().endsWith("*"))
+                    pattern = pattern.substring(1).substring(0,
+                            pattern.length() - 2);
+                matcher.setPattern(null);
+            }
+        }
+        fuzzyMatchingEnabled = enable;
+        initMatchers();
 
-	matcher.setPattern(pattern);
-	treeViewer.refresh();
+        matcher.setPattern(pattern);
+        treeViewer.refresh();
     }
 
     public boolean isFuzzyMatchingEnabled() {
-	return fuzzyMatchingEnabled;
+        return fuzzyMatchingEnabled;
     }
 
     protected void initMatchers() {
-	treeViewer.resetFilters();
+        treeViewer.resetFilters();
 
-	if (fuzzyMatchingEnabled) {
-	    matcher = new FuzzyMatcher(treeViewer);
-	    ((FuzzyMatcher) matcher).setMinimumSimilarity(matchingPrecision);
-	} else
-	    matcher = new ExactMatcher(treeViewer);
+        if (fuzzyMatchingEnabled) {
+            matcher = new FuzzyMatcher(treeViewer);
+            ((FuzzyMatcher) matcher).setMinimumSimilarity(matchingPrecision);
+        } else
+            matcher = new ExactMatcher(treeViewer);
 
     }
 
     protected void initTreeViewer() {
-	this.setRedraw(false);
-	// init content provider
-	contentProvider = new ResKeyTreeContentProvider(visibleLocales,
-		projectName, resourceBundle, treeType);
-	treeViewer.setContentProvider(contentProvider);
+        this.setRedraw(false);
+        // init content provider
+        contentProvider = new ResKeyTreeContentProvider(visibleLocales,
+                projectName, resourceBundle, treeType);
+        treeViewer.setContentProvider(contentProvider);
 
-	// init label provider
-	labelProvider = new ResKeyTreeLabelProvider(visibleLocales);
-	treeViewer.setLabelProvider(labelProvider);
+        // init label provider
+        labelProvider = new ResKeyTreeLabelProvider(visibleLocales);
+        treeViewer.setLabelProvider(labelProvider);
 
-	// we need this to keep the tree expanded
-	treeViewer.setComparer(new IElementComparer() {
+        // we need this to keep the tree expanded
+        treeViewer.setComparer(new IElementComparer() {
 
-	    @Override
-	    public int hashCode(Object element) {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-			+ ((toString() == null) ? 0 : toString().hashCode());
-		return result;
-	    }
+            @Override
+            public int hashCode(Object element) {
+                final int prime = 31;
+                int result = 1;
+                result = prime * result
+                        + ((toString() == null) ? 0 : toString().hashCode());
+                return result;
+            }
 
-	    @Override
-	    public boolean equals(Object a, Object b) {
-		if (a == b) {
-		    return true;
-		}
-		if (a instanceof IKeyTreeNode && b instanceof IKeyTreeNode) {
-		    IKeyTreeNode nodeA = (IKeyTreeNode) a;
-		    IKeyTreeNode nodeB = (IKeyTreeNode) b;
-		    return nodeA.equals(nodeB);
-		}
-		return false;
-	    }
-	});
+            @Override
+            public boolean equals(Object a, Object b) {
+                if (a == b) {
+                    return true;
+                }
+                if (a instanceof IKeyTreeNode && b instanceof IKeyTreeNode) {
+                    IKeyTreeNode nodeA = (IKeyTreeNode) a;
+                    IKeyTreeNode nodeB = (IKeyTreeNode) b;
+                    return nodeA.equals(nodeB);
+                }
+                return false;
+            }
+        });
 
-	setTreeStructure();
-	this.setRedraw(true);
+        setTreeStructure();
+        this.setRedraw(true);
     }
 
     public void setTreeStructure() {
-	IAbstractKeyTreeModel model = KeyTreeFactory
-		.createModel(ResourceBundleManager.getManager(projectName)
-			.getResourceBundle(resourceBundle));
-	if (treeViewer.getInput() == null) {
-	    treeViewer.setUseHashlookup(true);
-	}
-	org.eclipse.jface.viewers.TreePath[] expandedTreePaths = treeViewer
-		.getExpandedTreePaths();
-	treeViewer.setInput(model);
-	treeViewer.refresh();
-	treeViewer.setExpandedTreePaths(expandedTreePaths);
+        IAbstractKeyTreeModel model = KeyTreeFactory
+                .createModel(ResourceBundleManager.getManager(projectName)
+                        .getResourceBundle(resourceBundle));
+        if (treeViewer.getInput() == null) {
+            treeViewer.setUseHashlookup(true);
+        }
+        org.eclipse.jface.viewers.TreePath[] expandedTreePaths = treeViewer
+                .getExpandedTreePaths();
+        treeViewer.setInput(model);
+        treeViewer.refresh();
+        treeViewer.setExpandedTreePaths(expandedTreePaths);
     }
 
     protected void refreshContent(ResourceBundleChangedEvent event) {
-	if (visibleLocales == null) {
-	    initVisibleLocales();
-	}
-	ResourceBundleManager manager = ResourceBundleManager
-		.getManager(projectName);
+        if (visibleLocales == null) {
+            initVisibleLocales();
+        }
+        ResourceBundleManager manager = ResourceBundleManager
+                .getManager(projectName);
 
-	// update content provider
-	contentProvider.setLocales(visibleLocales);
-	contentProvider.setProjectName(manager.getProject().getName());
-	contentProvider.setBundleId(resourceBundle);
+        // update content provider
+        contentProvider.setLocales(visibleLocales);
+        contentProvider.setProjectName(manager.getProject().getName());
+        contentProvider.setBundleId(resourceBundle);
 
-	// init label provider
-	IMessagesBundleGroup group = manager.getResourceBundle(resourceBundle);
-	labelProvider.setLocales(visibleLocales);
-	if (treeViewer.getLabelProvider() != labelProvider)
-	    treeViewer.setLabelProvider(labelProvider);
+        // init label provider
+        IMessagesBundleGroup group = manager.getResourceBundle(resourceBundle);
+        labelProvider.setLocales(visibleLocales);
+        if (treeViewer.getLabelProvider() != labelProvider)
+            treeViewer.setLabelProvider(labelProvider);
 
-	// define input of treeviewer
-	setTreeStructure();
+        // define input of treeviewer
+        setTreeStructure();
     }
 
     protected void initVisibleLocales() {
-	SortedMap<String, Locale> locSorted = new TreeMap<String, Locale>();
-	ResourceBundleManager manager = ResourceBundleManager
-		.getManager(projectName);
-	sortInfo = new SortInfo();
-	visibleLocales.clear();
-	if (resourceBundle != null) {
-	    for (Locale l : manager.getProvidedLocales(resourceBundle)) {
-		if (l == null) {
-		    locSorted.put("Default", null);
-		} else {
-		    locSorted.put(l.getDisplayName(uiLocale), l);
-		}
-	    }
-	}
+        SortedMap<String, Locale> locSorted = new TreeMap<String, Locale>();
+        ResourceBundleManager manager = ResourceBundleManager
+                .getManager(projectName);
+        sortInfo = new SortInfo();
+        visibleLocales.clear();
+        if (resourceBundle != null) {
+            for (Locale l : manager.getProvidedLocales(resourceBundle)) {
+                if (l == null) {
+                    locSorted.put("Default", null);
+                } else {
+                    locSorted.put(l.getDisplayName(uiLocale), l);
+                }
+            }
+        }
 
-	for (String lString : locSorted.keySet()) {
-	    visibleLocales.add(locSorted.get(lString));
-	}
-	sortInfo.setVisibleLocales(visibleLocales);
+        for (String lString : locSorted.keySet()) {
+            visibleLocales.add(locSorted.get(lString));
+        }
+        sortInfo.setVisibleLocales(visibleLocales);
     }
 
     protected void constructWidget() {
-	basicLayout = new TreeColumnLayout();
-	this.setLayout(basicLayout);
+        basicLayout = new TreeColumnLayout();
+        this.setLayout(basicLayout);
 
-	treeViewer = new TreeViewer(this, SWT.FULL_SELECTION | SWT.SINGLE
-		| SWT.BORDER);
-	Tree tree = treeViewer.getTree();
+        treeViewer = new TreeViewer(this, SWT.FULL_SELECTION | SWT.SINGLE
+                | SWT.BORDER);
+        Tree tree = treeViewer.getTree();
 
-	if (resourceBundle != null) {
-	    tree.setHeaderVisible(true);
-	    tree.setLinesVisible(true);
+        if (resourceBundle != null) {
+            tree.setHeaderVisible(true);
+            tree.setLinesVisible(true);
 
-	    // create tree-columns
-	    constructTreeColumns(tree);
-	} else {
-	    tree.setHeaderVisible(false);
-	    tree.setLinesVisible(false);
-	}
+            // create tree-columns
+            constructTreeColumns(tree);
+        } else {
+            tree.setHeaderVisible(false);
+            tree.setLinesVisible(false);
+        }
 
-	makeActions();
-	hookDoubleClickAction();
+        makeActions();
+        hookDoubleClickAction();
 
-	// register messages table as selection provider
-	site.setSelectionProvider(treeViewer);
+        // register messages table as selection provider
+        site.setSelectionProvider(treeViewer);
     }
 
     protected void constructTreeColumns(Tree tree) {
-	tree.removeAll();
-	// tree.getColumns().length;
+        tree.removeAll();
+        // tree.getColumns().length;
 
-	// construct key-column
-	keyColumn = new TreeColumn(tree, SWT.NONE);
-	keyColumn.setText("Key");
-	keyColumn.addSelectionListener(new SelectionListener() {
+        // construct key-column
+        keyColumn = new TreeColumn(tree, SWT.NONE);
+        keyColumn.setText("Key");
+        keyColumn.addSelectionListener(new SelectionListener() {
 
-	    @Override
-	    public void widgetSelected(SelectionEvent e) {
-		updateSorter(0);
-	    }
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                updateSorter(0);
+            }
 
-	    @Override
-	    public void widgetDefaultSelected(SelectionEvent e) {
-		updateSorter(0);
-	    }
-	});
-	basicLayout.setColumnData(keyColumn, new ColumnWeightData(
-		KEY_COLUMN_WEIGHT));
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e) {
+                updateSorter(0);
+            }
+        });
+        basicLayout.setColumnData(keyColumn, new ColumnWeightData(
+                KEY_COLUMN_WEIGHT));
 
-	if (visibleLocales != null) {
-	    final ResourceBundleManager manager = ResourceBundleManager
-		    .getManager(projectName);
-	    for (final Locale l : visibleLocales) {
-		TreeColumn col = new TreeColumn(tree, SWT.NONE);
+        if (visibleLocales != null) {
+            final ResourceBundleManager manager = ResourceBundleManager
+                    .getManager(projectName);
+            for (final Locale l : visibleLocales) {
+                TreeColumn col = new TreeColumn(tree, SWT.NONE);
 
-		// Add editing support to this table column
-		TreeViewerColumn tCol = new TreeViewerColumn(treeViewer, col);
-		tCol.setEditingSupport(new EditingSupport(treeViewer) {
+                // Add editing support to this table column
+                TreeViewerColumn tCol = new TreeViewerColumn(treeViewer, col);
+                tCol.setEditingSupport(new EditingSupport(treeViewer) {
 
-		    TextCellEditor editor = null;
+                    TextCellEditor editor = null;
 
-		    @Override
-		    protected void setValue(Object element, Object value) {
+                    @Override
+                    protected void setValue(Object element, Object value) {
 
-			if (element instanceof IValuedKeyTreeNode) {
-			    IValuedKeyTreeNode vkti = (IValuedKeyTreeNode) element;
-			    String activeKey = vkti.getMessageKey();
+                        if (element instanceof IValuedKeyTreeNode) {
+                            IValuedKeyTreeNode vkti = (IValuedKeyTreeNode) element;
+                            String activeKey = vkti.getMessageKey();
 
-			    if (activeKey != null) {
-				IMessagesBundleGroup bundleGroup = manager
-					.getResourceBundle(resourceBundle);
-				IMessage entry = bundleGroup.getMessage(
-					activeKey, l);
+                            if (activeKey != null) {
+                                IMessagesBundleGroup bundleGroup = manager
+                                        .getResourceBundle(resourceBundle);
+                                IMessage entry = bundleGroup.getMessage(
+                                        activeKey, l);
 
-				if (entry == null
-					|| !value.equals(entry.getValue())) {
-				    String comment = null;
-				    if (entry != null) {
-					comment = entry.getComment();
-				    }
+                                if (entry == null
+                                        || !value.equals(entry.getValue())) {
+                                    String comment = null;
+                                    if (entry != null) {
+                                        comment = entry.getComment();
+                                    }
 
-				    IMessagesBundle messagesBundle = bundleGroup
-					    .getMessagesBundle(l);
+                                    IMessagesBundle messagesBundle = bundleGroup
+                                            .getMessagesBundle(l);
 
-				    DirtyHack.setFireEnabled(false);
+                                    DirtyHack.setFireEnabled(false);
 
-				    IMessage message = messagesBundle
-					    .getMessage(activeKey);
-				    if (message == null) {
-					IMessage newMessage = MessageFactory
-						.createMessage(activeKey, l);
-					newMessage.setText(String
-						.valueOf(value));
-					newMessage.setComment(comment);
-					messagesBundle.addMessage(newMessage);
-				    } else {
-					message.setText(String.valueOf(value));
-					message.setComment(comment);
-				    }
+                                    IMessage message = messagesBundle
+                                            .getMessage(activeKey);
+                                    if (message == null) {
+                                        IMessage newMessage = MessageFactory
+                                                .createMessage(activeKey, l);
+                                        newMessage.setText(String
+                                                .valueOf(value));
+                                        newMessage.setComment(comment);
+                                        messagesBundle.addMessage(newMessage);
+                                    } else {
+                                        message.setText(String.valueOf(value));
+                                        message.setComment(comment);
+                                    }
 
-				    FileUtils.writeToFile(messagesBundle);
-				    RBManager
-					    .getInstance(manager.getProject())
-					    .fireResourceChanged(messagesBundle);
+                                    FileUtils.writeToFile(messagesBundle);
+                                    RBManager
+                                            .getInstance(manager.getProject())
+                                            .fireResourceChanged(messagesBundle);
 
-				    // update TreeViewer
-				    vkti.setValue(l, String.valueOf(value));
-				    treeViewer.refresh();
+                                    // update TreeViewer
+                                    vkti.setValue(l, String.valueOf(value));
+                                    treeViewer.refresh();
 
-				    DirtyHack.setFireEnabled(true);
-				}
-			    }
-			}
-		    }
+                                    DirtyHack.setFireEnabled(true);
+                                }
+                            }
+                        }
+                    }
 
-		    @Override
-		    protected Object getValue(Object element) {
-			return labelProvider.getColumnText(element,
-				visibleLocales.indexOf(l) + 1);
-		    }
+                    @Override
+                    protected Object getValue(Object element) {
+                        return labelProvider.getColumnText(element,
+                                visibleLocales.indexOf(l) + 1);
+                    }
 
-		    @Override
-		    protected CellEditor getCellEditor(Object element) {
-			if (editor == null) {
-			    Composite tree = (Composite) treeViewer
-				    .getControl();
-			    editor = new TextCellEditor(tree);
-			    editor.getControl().addTraverseListener(
-				    new TraverseListener() {
+                    @Override
+                    protected CellEditor getCellEditor(Object element) {
+                        if (editor == null) {
+                            Composite tree = (Composite) treeViewer
+                                    .getControl();
+                            editor = new TextCellEditor(tree);
+                            editor.getControl().addTraverseListener(
+                                    new TraverseListener() {
 
-					@Override
-					public void keyTraversed(TraverseEvent e) {
-					    Logger.logInfo("CELL_EDITOR: "
-						    + e.toString());
-					    if (e.detail == SWT.TRAVERSE_TAB_NEXT
-						    || e.detail == SWT.TRAVERSE_TAB_PREVIOUS) {
+                                        @Override
+                                        public void keyTraversed(TraverseEvent e) {
+                                            Logger.logInfo("CELL_EDITOR: "
+                                                    + e.toString());
+                                            if (e.detail == SWT.TRAVERSE_TAB_NEXT
+                                                    || e.detail == SWT.TRAVERSE_TAB_PREVIOUS) {
 
-						e.doit = false;
-						int colIndex = visibleLocales
-							.indexOf(l) + 1;
-						Object sel = ((IStructuredSelection) treeViewer
-							.getSelection())
-							.getFirstElement();
-						int noOfCols = treeViewer
-							.getTree()
-							.getColumnCount();
+                                                e.doit = false;
+                                                int colIndex = visibleLocales
+                                                        .indexOf(l) + 1;
+                                                Object sel = ((IStructuredSelection) treeViewer
+                                                        .getSelection())
+                                                        .getFirstElement();
+                                                int noOfCols = treeViewer
+                                                        .getTree()
+                                                        .getColumnCount();
 
-						// go to next cell
-						if (e.detail == SWT.TRAVERSE_TAB_NEXT) {
-						    int nextColIndex = colIndex + 1;
-						    if (nextColIndex < noOfCols)
-							treeViewer.editElement(
-								sel,
-								nextColIndex);
-						    // go to previous cell
-						} else if (e.detail == SWT.TRAVERSE_TAB_PREVIOUS) {
-						    int prevColIndex = colIndex - 1;
-						    if (prevColIndex > 0)
-							treeViewer.editElement(
-								sel,
-								colIndex - 1);
-						}
-					    }
-					}
-				    });
-			}
-			return editor;
-		    }
+                                                // go to next cell
+                                                if (e.detail == SWT.TRAVERSE_TAB_NEXT) {
+                                                    int nextColIndex = colIndex + 1;
+                                                    if (nextColIndex < noOfCols)
+                                                        treeViewer.editElement(
+                                                                sel,
+                                                                nextColIndex);
+                                                    // go to previous cell
+                                                } else if (e.detail == SWT.TRAVERSE_TAB_PREVIOUS) {
+                                                    int prevColIndex = colIndex - 1;
+                                                    if (prevColIndex > 0)
+                                                        treeViewer.editElement(
+                                                                sel,
+                                                                colIndex - 1);
+                                                }
+                                            }
+                                        }
+                                    });
+                        }
+                        return editor;
+                    }
 
-		    @Override
-		    protected boolean canEdit(Object element) {
-			return editable;
-		    }
-		});
+                    @Override
+                    protected boolean canEdit(Object element) {
+                        return editable;
+                    }
+                });
 
-		String displayName = l == null ? ResourceBundleManager.defaultLocaleTag
-			: l.getDisplayName(uiLocale);
+                String displayName = l == null ? ResourceBundleManager.defaultLocaleTag
+                        : l.getDisplayName(uiLocale);
 
-		col.setText(displayName);
-		col.addSelectionListener(new SelectionListener() {
+                col.setText(displayName);
+                col.addSelectionListener(new SelectionListener() {
 
-		    @Override
-		    public void widgetSelected(SelectionEvent e) {
-			updateSorter(visibleLocales.indexOf(l) + 1);
-		    }
+                    @Override
+                    public void widgetSelected(SelectionEvent e) {
+                        updateSorter(visibleLocales.indexOf(l) + 1);
+                    }
 
-		    @Override
-		    public void widgetDefaultSelected(SelectionEvent e) {
-			updateSorter(visibleLocales.indexOf(l) + 1);
-		    }
-		});
-		basicLayout.setColumnData(col, new ColumnWeightData(
-			LOCALE_COLUMN_WEIGHT));
-	    }
-	}
+                    @Override
+                    public void widgetDefaultSelected(SelectionEvent e) {
+                        updateSorter(visibleLocales.indexOf(l) + 1);
+                    }
+                });
+                basicLayout.setColumnData(col, new ColumnWeightData(
+                        LOCALE_COLUMN_WEIGHT));
+            }
+        }
     }
 
     protected void updateSorter(int idx) {
-	SortInfo sortInfo = sorter.getSortInfo();
-	if (idx == sortInfo.getColIdx())
-	    sortInfo.setDESC(!sortInfo.isDESC());
-	else {
-	    sortInfo.setColIdx(idx);
-	    sortInfo.setDESC(false);
-	}
-	sortInfo.setVisibleLocales(visibleLocales);
-	sorter.setSortInfo(sortInfo);
-	treeType = idx == 0 ? TreeType.Tree : TreeType.Flat;
-	setTreeStructure();
-	treeViewer.refresh();
+        SortInfo sortInfo = sorter.getSortInfo();
+        if (idx == sortInfo.getColIdx())
+            sortInfo.setDESC(!sortInfo.isDESC());
+        else {
+            sortInfo.setColIdx(idx);
+            sortInfo.setDESC(false);
+        }
+        sortInfo.setVisibleLocales(visibleLocales);
+        sorter.setSortInfo(sortInfo);
+        treeType = idx == 0 ? TreeType.Tree : TreeType.Flat;
+        setTreeStructure();
+        treeViewer.refresh();
     }
 
     @Override
     public boolean setFocus() {
-	return treeViewer.getControl().setFocus();
+        return treeViewer.getControl().setFocus();
     }
 
     /*** DRAG AND DROP ***/
     protected void hookDragAndDrop() {
-	// KeyTreeItemDragSource ktiSource = new KeyTreeItemDragSource
-	// (treeViewer);
-	KeyTreeItemDropTarget ktiTarget = new KeyTreeItemDropTarget(treeViewer);
-	MessagesDragSource source = new MessagesDragSource(treeViewer,
-		this.resourceBundle);
-	MessagesDropTarget target = new MessagesDropTarget(treeViewer,
-		projectName, resourceBundle);
+        // KeyTreeItemDragSource ktiSource = new KeyTreeItemDragSource
+        // (treeViewer);
+        KeyTreeItemDropTarget ktiTarget = new KeyTreeItemDropTarget(treeViewer);
+        MessagesDragSource source = new MessagesDragSource(treeViewer,
+                this.resourceBundle);
+        MessagesDropTarget target = new MessagesDropTarget(treeViewer,
+                projectName, resourceBundle);
 
-	// Initialize drag source for copy event
-	DragSource dragSource = new DragSource(treeViewer.getControl(),
-		DND.DROP_COPY | DND.DROP_MOVE);
-	dragSource.setTransfer(new Transfer[] { TextTransfer.getInstance() });
-	// dragSource.addDragListener(ktiSource);
-	dragSource.addDragListener(source);
+        // Initialize drag source for copy event
+        DragSource dragSource = new DragSource(treeViewer.getControl(),
+                DND.DROP_COPY | DND.DROP_MOVE);
+        dragSource.setTransfer(new Transfer[] { TextTransfer.getInstance() });
+        // dragSource.addDragListener(ktiSource);
+        dragSource.addDragListener(source);
 
-	// Initialize drop target for copy event
-	DropTarget dropTarget = new DropTarget(treeViewer.getControl(),
-		DND.DROP_MOVE | DND.DROP_COPY);
-	dropTarget.setTransfer(new Transfer[] { TextTransfer.getInstance(),
-		JavaUI.getJavaElementClipboardTransfer() });
-	dropTarget.addDropListener(ktiTarget);
-	dropTarget.addDropListener(target);
+        // Initialize drop target for copy event
+        DropTarget dropTarget = new DropTarget(treeViewer.getControl(),
+                DND.DROP_MOVE | DND.DROP_COPY);
+        dropTarget.setTransfer(new Transfer[] { TextTransfer.getInstance(),
+                JavaUI.getJavaElementClipboardTransfer() });
+        dropTarget.addDropListener(ktiTarget);
+        dropTarget.addDropListener(target);
     }
 
     /*** ACTIONS ***/
 
     private void makeActions() {
-	doubleClickAction = new Action() {
+        doubleClickAction = new Action() {
 
-	    @Override
-	    public void run() {
-		editSelectedItem();
-	    }
+            @Override
+            public void run() {
+                editSelectedItem();
+            }
 
-	};
+        };
     }
 
     private void hookDoubleClickAction() {
-	treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+        treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
-	    public void doubleClick(DoubleClickEvent event) {
-		doubleClickAction.run();
-	    }
-	});
+            public void doubleClick(DoubleClickEvent event) {
+                doubleClickAction.run();
+            }
+        });
     }
 
     /*** SELECTION LISTENER ***/
 
     protected void registerListeners() {
 
-	this.editorListener = new MessagesEditorListener();
-	ResourceBundleManager manager = ResourceBundleManager
-		.getManager(projectName);
-	if (manager != null) {
-	    RBManager.getInstance(manager.getProject())
-		    .addMessagesEditorListener(editorListener);
-	}
+        this.editorListener = new MessagesEditorListener();
+        ResourceBundleManager manager = ResourceBundleManager
+                .getManager(projectName);
+        if (manager != null) {
+            RBManager.getInstance(manager.getProject())
+                    .addMessagesEditorListener(editorListener);
+        }
 
-	treeViewer.getControl().addKeyListener(new KeyAdapter() {
+        treeViewer.getControl().addKeyListener(new KeyAdapter() {
 
-	    public void keyPressed(KeyEvent event) {
-		if (event.character == SWT.DEL && event.stateMask == 0) {
-		    deleteSelectedItems();
-		}
-	    }
-	});
+            public void keyPressed(KeyEvent event) {
+                if (event.character == SWT.DEL && event.stateMask == 0) {
+                    deleteSelectedItems();
+                }
+            }
+        });
     }
 
     protected void unregisterListeners() {
-	ResourceBundleManager manager = ResourceBundleManager
-		.getManager(projectName);
-	if (manager != null) {
-	    RBManager.getInstance(manager.getProject())
-		    .removeMessagesEditorListener(editorListener);
-	}
-	treeViewer.removeSelectionChangedListener(selectionChangedListener);
+        ResourceBundleManager manager = ResourceBundleManager
+                .getManager(projectName);
+        if (manager != null) {
+            RBManager.getInstance(manager.getProject())
+                    .removeMessagesEditorListener(editorListener);
+        }
+        treeViewer.removeSelectionChangedListener(selectionChangedListener);
     }
 
     public void addSelectionChangedListener(ISelectionChangedListener listener) {
-	treeViewer.addSelectionChangedListener(listener);
-	selectionChangedListener = listener;
+        treeViewer.addSelectionChangedListener(listener);
+        selectionChangedListener = listener;
     }
 
     @Override
     public void resourceBundleChanged(final ResourceBundleChangedEvent event) {
-	if (event.getType() != ResourceBundleChangedEvent.MODIFIED
-		|| !event.getBundle().equals(this.getResourceBundle()))
-	    return;
+        if (event.getType() != ResourceBundleChangedEvent.MODIFIED
+                || !event.getBundle().equals(this.getResourceBundle()))
+            return;
 
-	if (Display.getCurrent() != null) {
-	    refreshViewer(event, true);
-	    return;
-	}
+        if (Display.getCurrent() != null) {
+            refreshViewer(event, true);
+            return;
+        }
 
-	Display.getDefault().asyncExec(new Runnable() {
+        Display.getDefault().asyncExec(new Runnable() {
 
-	    public void run() {
-		refreshViewer(event, true);
-	    }
-	});
+            public void run() {
+                refreshViewer(event, true);
+            }
+        });
     }
 
     private void refreshViewer(ResourceBundleChangedEvent event,
-	    boolean computeVisibleLocales) {
-	// manager.loadResourceBundle(resourceBundle);
-	if (computeVisibleLocales) {
-	    refreshContent(event);
-	}
+            boolean computeVisibleLocales) {
+        // manager.loadResourceBundle(resourceBundle);
+        if (computeVisibleLocales) {
+            refreshContent(event);
+        }
 
-	// Display.getDefault().asyncExec(new Runnable() {
-	// public void run() {
-	treeViewer.refresh();
-	// }
-	// });
+        // Display.getDefault().asyncExec(new Runnable() {
+        // public void run() {
+        treeViewer.refresh();
+        // }
+        // });
     }
 
     public StructuredViewer getViewer() {
-	return this.treeViewer;
+        return this.treeViewer;
     }
 
     public void setSearchString(String pattern) {
-	matcher.setPattern(pattern);
-	treeType = matcher.getPattern().trim().length() > 0 ? TreeType.Flat
-		: TreeType.Tree;
-	labelProvider.setSearchEnabled(treeType.equals(TreeType.Flat));
-	// WTF?
-	treeType = treeType.equals(TreeType.Tree)
-		&& sorter.getSortInfo().getColIdx() == 0 ? TreeType.Tree
-		: TreeType.Flat;
-	treeViewer.refresh();
+        matcher.setPattern(pattern);
+        treeType = matcher.getPattern().trim().length() > 0 ? TreeType.Flat
+                : TreeType.Tree;
+        labelProvider.setSearchEnabled(treeType.equals(TreeType.Flat));
+        // WTF?
+        treeType = treeType.equals(TreeType.Tree)
+                && sorter.getSortInfo().getColIdx() == 0 ? TreeType.Tree
+                : TreeType.Flat;
+        treeViewer.refresh();
 
-	this.refreshContent(null);
+        this.refreshContent(null);
 
-	// highlight the search results
-	labelProvider.updateTreeViewer(treeViewer);
+        // highlight the search results
+        labelProvider.updateTreeViewer(treeViewer);
     }
 
     public SortInfo getSortInfo() {
-	if (this.sorter != null)
-	    return this.sorter.getSortInfo();
-	else
-	    return null;
+        if (this.sorter != null)
+            return this.sorter.getSortInfo();
+        else
+            return null;
     }
 
     public void setSortInfo(SortInfo sortInfo) {
-	sortInfo.setVisibleLocales(visibleLocales);
-	if (sorter != null) {
-	    sorter.setSortInfo(sortInfo);
-	    treeType = sortInfo.getColIdx() == 0 ? TreeType.Tree
-		    : TreeType.Flat;
-	    treeViewer.refresh();
-	}
+        sortInfo.setVisibleLocales(visibleLocales);
+        if (sorter != null) {
+            sorter.setSortInfo(sortInfo);
+            treeType = sortInfo.getColIdx() == 0 ? TreeType.Tree
+                    : TreeType.Flat;
+            treeViewer.refresh();
+        }
     }
 
     public String getSearchString() {
-	return matcher.getPattern();
+        return matcher.getPattern();
     }
 
     public boolean isEditable() {
-	return editable;
+        return editable;
     }
 
     public void setEditable(boolean editable) {
-	this.editable = editable;
+        this.editable = editable;
     }
 
     public List<Locale> getVisibleLocales() {
-	return visibleLocales;
+        return visibleLocales;
     }
 
     public String getResourceBundle() {
-	return resourceBundle;
+        return resourceBundle;
     }
 
     public void editSelectedItem() {
-	String key = "";
-	ISelection selection = treeViewer.getSelection();
-	if (selection instanceof IStructuredSelection) {
-	    IStructuredSelection structSel = (IStructuredSelection) selection;
-	    if (structSel.getFirstElement() instanceof IKeyTreeNode) {
-		IKeyTreeNode keyTreeNode = (IKeyTreeNode) structSel
-			.getFirstElement();
-		key = keyTreeNode.getMessageKey();
-	    }
-	}
+        String key = "";
+        ISelection selection = treeViewer.getSelection();
+        if (selection instanceof IStructuredSelection) {
+            IStructuredSelection structSel = (IStructuredSelection) selection;
+            if (structSel.getFirstElement() instanceof IKeyTreeNode) {
+                IKeyTreeNode keyTreeNode = (IKeyTreeNode) structSel
+                        .getFirstElement();
+                key = keyTreeNode.getMessageKey();
+            }
+        }
 
-	ResourceBundleManager manager = ResourceBundleManager
-		.getManager(projectName);
-	EditorUtils.openEditor(site.getPage(),
-		manager.getRandomFile(resourceBundle),
-		EditorUtils.RESOURCE_BUNDLE_EDITOR, key);
+        ResourceBundleManager manager = ResourceBundleManager
+                .getManager(projectName);
+        EditorUtils.openEditor(site.getPage(),
+                manager.getRandomFile(resourceBundle),
+                EditorUtils.RESOURCE_BUNDLE_EDITOR, key);
     }
 
     public void refactorSelectedItem() {
-		String key = "";
-		String bundleId = "";
-		ISelection selection = treeViewer.getSelection();
-		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection structSel = (IStructuredSelection) selection;
-			if (structSel.getFirstElement() instanceof IKeyTreeNode) {
-				IKeyTreeNode keyTreeNode = (IKeyTreeNode) structSel
-				        .getFirstElement();
-				key = keyTreeNode.getMessageKey();
-				bundleId = keyTreeNode.getMessagesBundleGroup().getResourceBundleId();
-				
-				RBManager.getRefactorService().openRefactorDialog(projectName, bundleId, key, null);
-			}
-		}
-	}
-    
+        String key = "";
+        String bundleId = "";
+        ISelection selection = treeViewer.getSelection();
+        if (selection instanceof IStructuredSelection) {
+            IStructuredSelection structSel = (IStructuredSelection) selection;
+            if (structSel.getFirstElement() instanceof IKeyTreeNode) {
+                IKeyTreeNode keyTreeNode = (IKeyTreeNode) structSel
+                        .getFirstElement();
+                key = keyTreeNode.getMessageKey();
+                bundleId = keyTreeNode.getMessagesBundleGroup()
+                        .getResourceBundleId();
+
+                RBManager.getRefactorService().openRefactorDialog(projectName,
+                        bundleId, key, null);
+            }
+        }
+    }
+
     public void deleteSelectedItems() {
-	List<String> keys = new ArrayList<String>();
+        List<String> keys = new ArrayList<String>();
 
-	IWorkbenchWindow window = PlatformUI.getWorkbench()
-		.getActiveWorkbenchWindow();
-	ISelection selection = window.getActivePage().getSelection();
-	if (selection instanceof IStructuredSelection) {
-	    for (Iterator<?> iter = ((IStructuredSelection) selection)
-		    .iterator(); iter.hasNext();) {
-		Object elem = iter.next();
-		if (elem instanceof IKeyTreeNode) {
-		    addKeysToRemove((IKeyTreeNode) elem, keys);
-		}
-	    }
-	}
+        IWorkbenchWindow window = PlatformUI.getWorkbench()
+                .getActiveWorkbenchWindow();
+        ISelection selection = window.getActivePage().getSelection();
+        if (selection instanceof IStructuredSelection) {
+            for (Iterator<?> iter = ((IStructuredSelection) selection)
+                    .iterator(); iter.hasNext();) {
+                Object elem = iter.next();
+                if (elem instanceof IKeyTreeNode) {
+                    addKeysToRemove((IKeyTreeNode) elem, keys);
+                }
+            }
+        }
 
-	try {
-	    ResourceBundleManager manager = ResourceBundleManager
-		    .getManager(projectName);
-	    manager.removeResourceBundleEntry(getResourceBundle(), keys);
-	} catch (Exception ex) {
-	    Logger.logError(ex);
-	}
+        try {
+            ResourceBundleManager manager = ResourceBundleManager
+                    .getManager(projectName);
+            manager.removeResourceBundleEntry(getResourceBundle(), keys);
+        } catch (Exception ex) {
+            Logger.logError(ex);
+        }
     }
 
     private void addKeysToRemove(IKeyTreeNode node, List<String> keys) {
-	keys.add(node.getMessageKey());
-	for (IKeyTreeNode ktn : node.getChildren()) {
-	    addKeysToRemove(ktn, keys);
-	}
+        keys.add(node.getMessageKey());
+        for (IKeyTreeNode ktn : node.getChildren()) {
+            addKeysToRemove(ktn, keys);
+        }
     }
 
     public void addNewItem(ISelection selection) {
-	// event.feedback = DND.FEEDBACK_INSERT_BEFORE;
-	String newKeyPrefix = "";
+        // event.feedback = DND.FEEDBACK_INSERT_BEFORE;
+        String newKeyPrefix = "";
 
-	if (selection instanceof IStructuredSelection) {
-	    for (Iterator<?> iter = ((IStructuredSelection) selection)
-		    .iterator(); iter.hasNext();) {
-		Object elem = iter.next();
-		if (elem instanceof IKeyTreeNode) {
-		    newKeyPrefix = ((IKeyTreeNode) elem).getMessageKey();
-		    break;
-		}
-	    }
-	}
+        if (selection instanceof IStructuredSelection) {
+            for (Iterator<?> iter = ((IStructuredSelection) selection)
+                    .iterator(); iter.hasNext();) {
+                Object elem = iter.next();
+                if (elem instanceof IKeyTreeNode) {
+                    newKeyPrefix = ((IKeyTreeNode) elem).getMessageKey();
+                    break;
+                }
+            }
+        }
 
-	CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
-		Display.getDefault().getActiveShell());
+        CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
+                Display.getDefault().getActiveShell());
 
-	DialogConfiguration config = dialog.new DialogConfiguration();
-	config.setPreselectedKey(newKeyPrefix.trim().length() > 0 ? newKeyPrefix
-		+ "." + "[Platzhalter]"
-		: "");
-	config.setPreselectedMessage("");
-	config.setPreselectedBundle(getResourceBundle());
-	config.setPreselectedLocale("");
-	config.setProjectName(projectName);
+        DialogConfiguration config = dialog.new DialogConfiguration();
+        config.setPreselectedKey(newKeyPrefix.trim().length() > 0 ? newKeyPrefix
+                + "." + "[Platzhalter]"
+                : "");
+        config.setPreselectedMessage("");
+        config.setPreselectedBundle(getResourceBundle());
+        config.setPreselectedLocale("");
+        config.setProjectName(projectName);
 
-	dialog.setDialogConfiguration(config);
+        dialog.setDialogConfiguration(config);
 
-	if (dialog.open() != InputDialog.OK)
-	    return;
+        if (dialog.open() != InputDialog.OK)
+            return;
     }
 
     public void setMatchingPrecision(float value) {
-	matchingPrecision = value;
-	if (matcher instanceof FuzzyMatcher) {
-	    ((FuzzyMatcher) matcher).setMinimumSimilarity(value);
-	    treeViewer.refresh();
-	}
+        matchingPrecision = value;
+        if (matcher instanceof FuzzyMatcher) {
+            ((FuzzyMatcher) matcher).setMinimumSimilarity(value);
+            treeViewer.refresh();
+        }
     }
 
     public float getMatchingPrecision() {
-	return matchingPrecision;
+        return matchingPrecision;
     }
 
     private class MessagesEditorListener implements IMessagesEditorListener {
-	@Override
-	public void onSave() {
-	    if (resourceBundle != null) {
-		setTreeStructure();
-	    }
-	}
+        @Override
+        public void onSave() {
+            if (resourceBundle != null) {
+                setTreeStructure();
+            }
+        }
 
-	@Override
-	public void onModify() {
-	    if (resourceBundle != null) {
-		setTreeStructure();
-	    }
-	}
+        @Override
+        public void onModify() {
+            if (resourceBundle != null) {
+                setTreeStructure();
+            }
+        }
 
-	@Override
-	public void onResourceChanged(IMessagesBundle bundle) {
-	    // TODO Auto-generated method stub
+        @Override
+        public void onResourceChanged(IMessagesBundle bundle) {
+            // TODO Auto-generated method stub
 
-	}
+        }
     }
 }

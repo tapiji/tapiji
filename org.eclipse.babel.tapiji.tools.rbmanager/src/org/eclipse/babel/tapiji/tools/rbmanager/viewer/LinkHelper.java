@@ -29,21 +29,21 @@ public class LinkHelper implements ILinkHelper {
 
     @Override
     public IStructuredSelection findSelection(IEditorInput anInput) {
-	IFile file = ResourceUtil.getFile(anInput);
-	if (file != null) {
-	    return new StructuredSelection(file);
-	}
-	return StructuredSelection.EMPTY;
+        IFile file = ResourceUtil.getFile(anInput);
+        if (file != null) {
+            return new StructuredSelection(file);
+        }
+        return StructuredSelection.EMPTY;
     }
 
     @Override
     public void activateEditor(IWorkbenchPage aPage,
-	    IStructuredSelection aSelection) {
-	if (aSelection.getFirstElement() instanceof IFile)
-	    try {
-		IDE.openEditor(aPage, (IFile) aSelection.getFirstElement());
-	    } catch (PartInitException e) {/**/
-	    }
+            IStructuredSelection aSelection) {
+        if (aSelection.getFirstElement() instanceof IFile)
+            try {
+                IDE.openEditor(aPage, (IFile) aSelection.getFirstElement());
+            } catch (PartInitException e) {/**/
+            }
     }
 
 }

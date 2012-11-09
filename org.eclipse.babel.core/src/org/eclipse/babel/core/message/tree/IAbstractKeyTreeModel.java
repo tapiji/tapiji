@@ -10,19 +10,18 @@
  ******************************************************************************/
 package org.eclipse.babel.core.message.tree;
 
-
 public interface IAbstractKeyTreeModel {
 
-	IKeyTreeNode[] getChildren(IKeyTreeNode node);
+    IKeyTreeNode[] getChildren(IKeyTreeNode node);
 
-	IKeyTreeNode getChild(String key);
+    IKeyTreeNode getChild(String key);
 
-	IKeyTreeNode[] getRootNodes();
+    IKeyTreeNode[] getRootNodes();
 
-	IKeyTreeNode getRootNode();
+    IKeyTreeNode getRootNode();
 
-	IKeyTreeNode getParent(IKeyTreeNode node);
+    IKeyTreeNode getParent(IKeyTreeNode node);
 
-	void accept(IKeyTreeVisitor visitor, IKeyTreeNode node);
+    void accept(IKeyTreeVisitor visitor, IKeyTreeNode node);
 
 }

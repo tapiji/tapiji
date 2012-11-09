@@ -34,21 +34,21 @@ public class LanguageUtils {
     private static final String INITIALISATION_STRING = PropertiesSerializer.GENERATED_BY;
 
     private static IFile createFile(IContainer container, String fileName,
-	    IProgressMonitor monitor) throws CoreException, IOException {
-	if (!container.exists()) {
-	    if (container instanceof IFolder) {
-		((IFolder) container).create(false, false, monitor);
-	    }
-	}
+            IProgressMonitor monitor) throws CoreException, IOException {
+        if (!container.exists()) {
+            if (container instanceof IFolder) {
+                ((IFolder) container).create(false, false, monitor);
+            }
+        }
 
-	IFile file = container.getFile(new Path(fileName));
-	if (!file.exists()) {
-	    InputStream s = new StringBufferInputStream(INITIALISATION_STRING);
-	    file.create(s, true, monitor);
-	    s.close();
-	}
+        IFile file = container.getFile(new Path(fileName));
+        if (!file.exists()) {
+            InputStream s = new StringBufferInputStream(INITIALISATION_STRING);
+            file.create(s, true, monitor);
+            s.close();
+        }
 
-	return file;
+        return file;
     }
 
     /**
@@ -61,58 +61,58 @@ public class LanguageUtils {
      * @param locale
      */
     public static void addLanguageToResourceBundle(IProject project,
-	    final String rbId, final Locale locale) {
-	ResourceBundleManager rbManager = ResourceBundleManager
-		.getManager(project);
+            final String rbId, final Locale locale) {
+        ResourceBundleManager rbManager = ResourceBundleManager
+                .getManager(project);
 
-	if (rbManager.getProvidedLocales(rbId).contains(locale)) {
-	    return;
-	}
+        if (rbManager.getProvidedLocales(rbId).contains(locale)) {
+            return;
+        }
 
-	final IResource file = rbManager.getRandomFile(rbId);
-	final IContainer c = ResourceUtils.getCorrespondingFolders(
-		file.getParent(), project);
+        final IResource file = rbManager.getRandomFile(rbId);
+        final IContainer c = ResourceUtils.getCorrespondingFolders(
+                file.getParent(), project);
 
-	new Job("create new propertfile") {
-	    @Override
-	    protected IStatus run(IProgressMonitor monitor) {
-		try {
-		    String newFilename = ResourceBundleManager
-			    .getResourceBundleName(file);
-		    if (locale.getLanguage() != null
-			    && !locale.getLanguage().equalsIgnoreCase(
-				    ResourceBundleManager.defaultLocaleTag)
-			    && !locale.getLanguage().equals("")) {
-			newFilename += "_" + locale.getLanguage();
-		    }
-		    if (locale.getCountry() != null
-			    && !locale.getCountry().equals("")) {
-			newFilename += "_" + locale.getCountry();
-		    }
-		    if (locale.getVariant() != null
-			    && !locale.getCountry().equals("")) {
-			newFilename += "_" + locale.getVariant();
-		    }
-		    newFilename += ".properties";
+        new Job("create new propertfile") {
+            @Override
+            protected IStatus run(IProgressMonitor monitor) {
+                try {
+                    String newFilename = ResourceBundleManager
+                            .getResourceBundleName(file);
+                    if (locale.getLanguage() != null
+                            && !locale.getLanguage().equalsIgnoreCase(
+                                    ResourceBundleManager.defaultLocaleTag)
+                            && !locale.getLanguage().equals("")) {
+                        newFilename += "_" + locale.getLanguage();
+                    }
+                    if (locale.getCountry() != null
+                            && !locale.getCountry().equals("")) {
+                        newFilename += "_" + locale.getCountry();
+                    }
+                    if (locale.getVariant() != null
+                            && !locale.getCountry().equals("")) {
+                        newFilename += "_" + locale.getVariant();
+                    }
+                    newFilename += ".properties";
 
-		    createFile(c, newFilename, monitor);
-		} catch (CoreException e) {
-		    Logger.logError(
-			    "File for locale "
-				    + locale
-				    + " could not be created in ResourceBundle "
-				    + rbId, e);
-		} catch (IOException e) {
-		    Logger.logError(
-			    "File for locale "
-				    + locale
-				    + " could not be created in ResourceBundle "
-				    + rbId, e);
-		}
-		monitor.done();
-		return Status.OK_STATUS;
-	    }
-	}.schedule();
+                    createFile(c, newFilename, monitor);
+                } catch (CoreException e) {
+                    Logger.logError(
+                            "File for locale "
+                                    + locale
+                                    + " could not be created in ResourceBundle "
+                                    + rbId, e);
+                } catch (IOException e) {
+                    Logger.logError(
+                            "File for locale "
+                                    + locale
+                                    + " could not be created in ResourceBundle "
+                                    + rbId, e);
+                }
+                monitor.done();
+                return Status.OK_STATUS;
+            }
+        }.schedule();
     }
 
     /**
@@ -124,14 +124,14 @@ public class LanguageUtils {
      * @param locale
      */
     public static void addLanguageToProject(IProject project, Locale locale) {
-	ResourceBundleManager rbManager = ResourceBundleManager
-		.getManager(project);
+        ResourceBundleManager rbManager = ResourceBundleManager
+                .getManager(project);
 
-	// Audit if all resourecbundles provide this locale. if not - add new
-	// file
-	for (String rbId : rbManager.getResourceBundleIdentifiers()) {
-	    addLanguageToResourceBundle(project, rbId, locale);
-	}
+        // Audit if all resourecbundles provide this locale. if not - add new
+        // file
+        for (String rbId : rbManager.getResourceBundleIdentifiers()) {
+            addLanguageToResourceBundle(project, rbId, locale);
+        }
     }
 
 }

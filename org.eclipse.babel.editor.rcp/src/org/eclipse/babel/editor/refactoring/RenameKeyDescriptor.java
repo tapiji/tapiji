@@ -32,109 +32,119 @@ import org.eclipse.ltk.core.refactoring.participants.RenameRefactoring;
  */
 public final class RenameKeyDescriptor extends RefactoringDescriptor {
 
-	public static final String ID = "org.eclipse.babel.editor.refactoring.renameKey"; //$NON-NLS-1$
+    public static final String ID = "org.eclipse.babel.editor.refactoring.renameKey"; //$NON-NLS-1$
 
-	/** The name attribute */
-	private String fNewName;
+    /** The name attribute */
+    private String fNewName;
 
-	private KeyTreeNode fKeyNode;
-	
-	private MessagesBundleGroup fMessagesBundleGroup;
-	
-	/** Configures if references will be updated */
-	private boolean fRenameChildKeys;
+    private KeyTreeNode fKeyNode;
 
-	/**
-	 * Creates a new refactoring descriptor.
-	 * <p>
-	 * Clients should not instantiated this class but use {@link RefactoringCore#getRefactoringContribution(String)}
-	 * with {@link #ID} to get the contribution that can create the descriptor.
-	 * </p>
-	 */
-	public RenameKeyDescriptor() {
-		super(ID, null, "N/A", null, RefactoringDescriptor.STRUCTURAL_CHANGE | RefactoringDescriptor.MULTI_CHANGE);
-		fNewName = null;
-	}
+    private MessagesBundleGroup fMessagesBundleGroup;
 
-	/**
-	 * Sets the new name to rename the resource to.
-	 *
-	 * @param name
-	 *            the non-empty new name to set
-	 */
-	public void setNewName(final String name) {
-		Assert.isNotNull(name);
-		Assert.isLegal(!"".equals(name), "Name must not be empty"); //$NON-NLS-1$//$NON-NLS-2$
-		fNewName = name;
-	}
+    /** Configures if references will be updated */
+    private boolean fRenameChildKeys;
 
-	/**
-	 * Returns the new name to rename the resource to.
-	 *
-	 * @return
-	 *            the new name to rename the resource to
-	 */
-	public String getNewName() {
-		return fNewName;
-	}
+    /**
+     * Creates a new refactoring descriptor.
+     * <p>
+     * Clients should not instantiated this class but use
+     * {@link RefactoringCore#getRefactoringContribution(String)} with
+     * {@link #ID} to get the contribution that can create the descriptor.
+     * </p>
+     */
+    public RenameKeyDescriptor() {
+        super(ID, null, "N/A", null, RefactoringDescriptor.STRUCTURAL_CHANGE
+                | RefactoringDescriptor.MULTI_CHANGE);
+        fNewName = null;
+    }
 
-	/**
-	 * Sets the project name of this refactoring.
-	 * <p>
-	 * Note: If the resource to be renamed is of type {@link IResource#PROJECT},
-	 * clients are required to to set the project name to <code>null</code>.
-	 * </p>
-	 * <p>
-	 * The default is to associate the refactoring with the workspace.
-	 * </p>
-	 *
-	 * @param project
-	 *            the non-empty project name to set, or <code>null</code> for
-	 *            the workspace
-	 *
-	 * @see #getProject()
-	 */
-//	public void setProject(final String project) {
-//		super.setProject(project);
-//	}
+    /**
+     * Sets the new name to rename the resource to.
+     * 
+     * @param name
+     *            the non-empty new name to set
+     */
+    public void setNewName(final String name) {
+        Assert.isNotNull(name);
+        Assert.isLegal(!"".equals(name), "Name must not be empty"); //$NON-NLS-1$//$NON-NLS-2$
+        fNewName = name;
+    }
 
-	/**
-	 * 	If set to <code>true</code>, this rename will also rename child keys. The default is to rename child keys.
-	 *
-	 * @param renameChildKeys  <code>true</code> if this rename will rename child keys
-	 */
-	public void setRenameChildKeys(boolean renameChildKeys) {
-		fRenameChildKeys = renameChildKeys;
-	}
+    /**
+     * Returns the new name to rename the resource to.
+     * 
+     * @return the new name to rename the resource to
+     */
+    public String getNewName() {
+        return fNewName;
+    }
 
-	public void setRenameChildKeys(KeyTreeNode keyNode, MessagesBundleGroup messagesBundleGroup) {
-		this.fKeyNode = keyNode;
-		this.fMessagesBundleGroup = messagesBundleGroup;
-	}
+    /**
+     * Sets the project name of this refactoring.
+     * <p>
+     * Note: If the resource to be renamed is of type {@link IResource#PROJECT},
+     * clients are required to to set the project name to <code>null</code>.
+     * </p>
+     * <p>
+     * The default is to associate the refactoring with the workspace.
+     * </p>
+     * 
+     * @param project
+     *            the non-empty project name to set, or <code>null</code> for
+     *            the workspace
+     * 
+     * @see #getProject()
+     */
+    // public void setProject(final String project) {
+    // super.setProject(project);
+    // }
 
-	/**
-	 * Returns if this rename will also rename child keys
-	 *
-	 * @return returns <code>true</code> if this rename will rename child keys
-	 */
-	public boolean isRenameChildKeys() {
-		return fRenameChildKeys;
-	}
+    /**
+     * If set to <code>true</code>, this rename will also rename child keys. The
+     * default is to rename child keys.
+     * 
+     * @param renameChildKeys
+     *            <code>true</code> if this rename will rename child keys
+     */
+    public void setRenameChildKeys(boolean renameChildKeys) {
+        fRenameChildKeys = renameChildKeys;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ltk.core.refactoring.RefactoringDescriptor#createRefactoring(org.eclipse.ltk.core.refactoring.RefactoringStatus)
-	 */
-	public Refactoring createRefactoring(RefactoringStatus status) throws CoreException {
+    public void setRenameChildKeys(KeyTreeNode keyNode,
+            MessagesBundleGroup messagesBundleGroup) {
+        this.fKeyNode = keyNode;
+        this.fMessagesBundleGroup = messagesBundleGroup;
+    }
 
-		String newName= getNewName();
-		if (newName == null || newName.length() == 0) {
-			status.addFatalError("The rename resource bundle key refactoring can not be performed as the new name is invalid");
-			return null;
-		}
-		RenameKeyProcessor processor = new RenameKeyProcessor(fKeyNode, fMessagesBundleGroup);
-		processor.setNewResourceName(newName);
-		processor.setRenameChildKeys(fRenameChildKeys);
+    /**
+     * Returns if this rename will also rename child keys
+     * 
+     * @return returns <code>true</code> if this rename will rename child keys
+     */
+    public boolean isRenameChildKeys() {
+        return fRenameChildKeys;
+    }
 
-		return new RenameRefactoring(processor);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.eclipse.ltk.core.refactoring.RefactoringDescriptor#createRefactoring
+     * (org.eclipse.ltk.core.refactoring.RefactoringStatus)
+     */
+    public Refactoring createRefactoring(RefactoringStatus status)
+            throws CoreException {
+
+        String newName = getNewName();
+        if (newName == null || newName.length() == 0) {
+            status.addFatalError("The rename resource bundle key refactoring can not be performed as the new name is invalid");
+            return null;
+        }
+        RenameKeyProcessor processor = new RenameKeyProcessor(fKeyNode,
+                fMessagesBundleGroup);
+        processor.setNewResourceName(newName);
+        processor.setRenameChildKeys(fRenameChildKeys);
+
+        return new RenameRefactoring(processor);
+    }
 }

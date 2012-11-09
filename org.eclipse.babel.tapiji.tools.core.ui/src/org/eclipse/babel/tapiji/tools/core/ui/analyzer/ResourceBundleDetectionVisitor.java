@@ -21,43 +21,43 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 
 public class ResourceBundleDetectionVisitor implements IResourceVisitor,
-	IResourceDeltaVisitor {
+        IResourceDeltaVisitor {
 
     private IProject project = null;
 
     public ResourceBundleDetectionVisitor(IProject project) {
-	this.project = project;
+        this.project = project;
     }
 
     @Override
     public boolean visit(IResource resource) throws CoreException {
-	try {
-	    if (RBFileUtils.isResourceBundleFile(resource)) {
-		Logger.logInfo("Loading Resource-Bundle file '"
-			+ resource.getName() + "'");
-		if (!ResourceBundleManager.isResourceExcluded(resource)) {
-		    ResourceBundleManager.getManager(project)
-			    .addBundleResource(resource);
-		}
-		return false;
-	    } else {
-		return true;
-	    }
-	} catch (Exception e) {
-	    return false;
-	}
+        try {
+            if (RBFileUtils.isResourceBundleFile(resource)) {
+                Logger.logInfo("Loading Resource-Bundle file '"
+                        + resource.getName() + "'");
+                if (!ResourceBundleManager.isResourceExcluded(resource)) {
+                    ResourceBundleManager.getManager(project)
+                            .addBundleResource(resource);
+                }
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     public boolean visit(IResourceDelta delta) throws CoreException {
-	IResource resource = delta.getResource();
+        IResource resource = delta.getResource();
 
-	if (RBFileUtils.isResourceBundleFile(resource)) {
-	    // ResourceBundleManager.getManager(resource.getProject()).bundleResourceModified(delta);
-	    return false;
-	}
+        if (RBFileUtils.isResourceBundleFile(resource)) {
+            // ResourceBundleManager.getManager(resource.getProject()).bundleResourceModified(delta);
+            return false;
+        }
 
-	return true;
+        return true;
     }
 
 }

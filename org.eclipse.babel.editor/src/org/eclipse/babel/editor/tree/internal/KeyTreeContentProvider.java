@@ -22,19 +22,19 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 
-
 /**
  * Content provider for key tree viewer.
+ * 
  * @author Pascal Essiembre
  */
 public class KeyTreeContentProvider implements ITreeContentProvider {
 
     private AbstractKeyTreeModel keyTreeModel;
-    private Viewer viewer; 
+    private Viewer viewer;
     private TreeType treeType;
-    
+
     /**
-     * @param treeType 
+     * @param treeType
      * 
      */
     public KeyTreeContentProvider(TreeType treeType) {
@@ -42,103 +42,102 @@ public class KeyTreeContentProvider implements ITreeContentProvider {
     }
 
     /**
-     * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(
-     *              java.lang.Object)
+     * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
      */
     public Object[] getChildren(Object parentElement) {
         KeyTreeNode parentNode = (KeyTreeNode) parentElement;
         switch (treeType) {
         case Tree:
-    		return keyTreeModel.getChildren(parentNode);
+            return keyTreeModel.getChildren(parentNode);
         case Flat:
-    		return new KeyTreeNode[0];
-    	default:
-    		// Should not happen
-    		return new KeyTreeNode[0];
+            return new KeyTreeNode[0];
+        default:
+            // Should not happen
+            return new KeyTreeNode[0];
         }
     }
 
     /**
      * @see org.eclipse.jface.viewers.ITreeContentProvider#
-     *              getParent(java.lang.Object)
+     *      getParent(java.lang.Object)
      */
     public Object getParent(Object element) {
         KeyTreeNode node = (KeyTreeNode) element;
         switch (treeType) {
         case Tree:
-    		return keyTreeModel.getParent(node);
+            return keyTreeModel.getParent(node);
         case Flat:
-    		return keyTreeModel;
-    	default:
-    		// Should not happen
-    		return null;
+            return keyTreeModel;
+        default:
+            // Should not happen
+            return null;
         }
     }
 
     /**
      * @see org.eclipse.jface.viewers.ITreeContentProvider#
-     *              hasChildren(java.lang.Object)
+     *      hasChildren(java.lang.Object)
      */
     public boolean hasChildren(Object element) {
         switch (treeType) {
         case Tree:
             return keyTreeModel.getChildren((KeyTreeNode) element).length > 0;
         case Flat:
-    		return false;
-    	default:
-    		// Should not happen
-    		return false;
+            return false;
+        default:
+            // Should not happen
+            return false;
         }
     }
 
     /**
      * @see org.eclipse.jface.viewers.IStructuredContentProvider#
-     *              getElements(java.lang.Object)
+     *      getElements(java.lang.Object)
      */
     public Object[] getElements(Object inputElement) {
-		switch (treeType) {
+        switch (treeType) {
         case Tree:
             return keyTreeModel.getRootNodes();
         case Flat:
-        	final Collection<IKeyTreeNode> actualKeys = new ArrayList<IKeyTreeNode>();
-        	IKeyTreeVisitor visitor = new IKeyTreeVisitor() {
-        		public void visitKeyTreeNode(IKeyTreeNode node) {
-        			if (node.isUsedAsKey()) {
-        				actualKeys.add(node);
-        			}
-        		}
-        	};
-        	keyTreeModel.accept(visitor, keyTreeModel.getRootNode());
-        	return actualKeys.toArray(); 
+            final Collection<IKeyTreeNode> actualKeys = new ArrayList<IKeyTreeNode>();
+            IKeyTreeVisitor visitor = new IKeyTreeVisitor() {
+                public void visitKeyTreeNode(IKeyTreeNode node) {
+                    if (node.isUsedAsKey()) {
+                        actualKeys.add(node);
+                    }
+                }
+            };
+            keyTreeModel.accept(visitor, keyTreeModel.getRootNode());
+            return actualKeys.toArray();
         default:
-    		// Should not happen
-    		return new KeyTreeNode[0];
+            // Should not happen
+            return new KeyTreeNode[0];
         }
     }
 
     /**
      * @see org.eclipse.jface.viewers.IContentProvider#dispose()
      */
-    public void dispose() {}
+    public void dispose() {
+    }
 
     /**
-     * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(
-     *              org.eclipse.jface.viewers.Viewer,
-     *              java.lang.Object, java.lang.Object)
+     * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer,
+     *      java.lang.Object, java.lang.Object)
      */
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
         this.viewer = (TreeViewer) viewer;
         this.keyTreeModel = (AbstractKeyTreeModel) newInput;
     }
 
-	public TreeType getTreeType() {
-		return treeType;
-	}
+    public TreeType getTreeType() {
+        return treeType;
+    }
 
-	public void setTreeType(TreeType treeType) {
-		if (this.treeType != treeType) {
-			this.treeType = treeType;
-			viewer.refresh();
-		}
-	}
+    public void setTreeType(TreeType treeType) {
+        if (this.treeType != treeType) {
+            this.treeType = treeType;
+            viewer.refresh();
+        }
+    }
 }

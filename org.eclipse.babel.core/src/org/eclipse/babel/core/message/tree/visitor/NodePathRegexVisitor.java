@@ -18,6 +18,7 @@ import org.eclipse.babel.core.message.tree.IKeyTreeVisitor;
 
 /**
  * Visitor for finding keys matching the given regular expression.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public class NodePathRegexVisitor implements IKeyTreeVisitor {
@@ -25,7 +26,7 @@ public class NodePathRegexVisitor implements IKeyTreeVisitor {
     /** Holder for matching keys. */
     private List<IKeyTreeNode> nodes = new ArrayList<IKeyTreeNode>();
     private final String regex;
-    
+
     /**
      * Constructor.
      */
@@ -46,6 +47,7 @@ public class NodePathRegexVisitor implements IKeyTreeVisitor {
 
     /**
      * Gets matching key tree nodes.
+     * 
      * @return matching key tree nodes
      */
     public List<IKeyTreeNode> getKeyTreeNodes() {
@@ -54,6 +56,7 @@ public class NodePathRegexVisitor implements IKeyTreeVisitor {
 
     /**
      * Gets matching key tree node paths.
+     * 
      * @return matching key tree node paths
      */
     public List<String> getKeyTreeNodePaths() {
@@ -64,9 +67,9 @@ public class NodePathRegexVisitor implements IKeyTreeVisitor {
         return paths;
     }
 
-    
     /**
      * Gets the first item matched.
+     * 
      * @return first item matched, or <code>null</code> if none was found
      */
     public IKeyTreeNode getKeyTreeNode() {

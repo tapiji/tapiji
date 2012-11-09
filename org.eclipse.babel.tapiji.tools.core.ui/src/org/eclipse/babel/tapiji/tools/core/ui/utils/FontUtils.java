@@ -27,8 +27,8 @@ public class FontUtils {
      * @return system color
      */
     public static Color getSystemColor(int colorId) {
-	return Activator.getDefault().getWorkbench().getDisplay()
-		.getSystemColor(colorId);
+        return Activator.getDefault().getWorkbench().getDisplay()
+                .getSystemColor(colorId);
     }
 
     /**
@@ -42,8 +42,8 @@ public class FontUtils {
      * @return newly created font
      */
     public static Font createFont(Control control, int style) {
-	// TODO consider dropping in favor of control-less version?
-	return createFont(control, style, 0);
+        // TODO consider dropping in favor of control-less version?
+        return createFont(control, style, 0);
     }
 
     /**
@@ -59,13 +59,13 @@ public class FontUtils {
      * @return newly created font
      */
     public static Font createFont(Control control, int style, int relSize) {
-	// TODO consider dropping in favor of control-less version?
-	FontData[] fontData = control.getFont().getFontData();
-	for (int i = 0; i < fontData.length; i++) {
-	    fontData[i].setHeight(fontData[i].getHeight() + relSize);
-	    fontData[i].setStyle(style);
-	}
-	return new Font(control.getDisplay(), fontData);
+        // TODO consider dropping in favor of control-less version?
+        FontData[] fontData = control.getFont().getFontData();
+        for (int i = 0; i < fontData.length; i++) {
+            fontData[i].setHeight(fontData[i].getHeight() + relSize);
+            fontData[i].setStyle(style);
+        }
+        return new Font(control.getDisplay(), fontData);
     }
 
     /**
@@ -77,7 +77,7 @@ public class FontUtils {
      * @return newly created font
      */
     public static Font createFont(int style) {
-	return createFont(style, 0);
+        return createFont(style, 0);
     }
 
     /**
@@ -91,12 +91,12 @@ public class FontUtils {
      * @return newly created font
      */
     public static Font createFont(int style, int relSize) {
-	Display display = Activator.getDefault().getWorkbench().getDisplay();
-	FontData[] fontData = display.getSystemFont().getFontData();
-	for (int i = 0; i < fontData.length; i++) {
-	    fontData[i].setHeight(fontData[i].getHeight() + relSize);
-	    fontData[i].setStyle(style);
-	}
-	return new Font(display, fontData);
+        Display display = Activator.getDefault().getWorkbench().getDisplay();
+        FontData[] fontData = display.getSystemFont().getFontData();
+        for (int i = 0; i < fontData.length; i++) {
+            fontData[i].setHeight(fontData[i].getHeight() + relSize);
+            fontData[i].setStyle(style);
+        }
+        return new Font(display, fontData);
     }
 }

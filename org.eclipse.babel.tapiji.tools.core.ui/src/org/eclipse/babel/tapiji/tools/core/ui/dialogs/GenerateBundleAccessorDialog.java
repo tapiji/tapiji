@@ -29,73 +29,73 @@ public class GenerateBundleAccessorDialog extends TitleAreaDialog {
     private Text packageName;
 
     public GenerateBundleAccessorDialog(Shell parentShell) {
-	super(parentShell);
+        super(parentShell);
     }
 
     @Override
     protected Control createDialogArea(Composite parent) {
-	Composite dialogArea = (Composite) super.createDialogArea(parent);
-	initLayout(dialogArea);
-	constructBASection(dialogArea);
-	// constructDefaultSection (dialogArea);
-	initContent();
-	return dialogArea;
+        Composite dialogArea = (Composite) super.createDialogArea(parent);
+        initLayout(dialogArea);
+        constructBASection(dialogArea);
+        // constructDefaultSection (dialogArea);
+        initContent();
+        return dialogArea;
     }
 
     protected void initLayout(Composite parent) {
-	final GridLayout layout = new GridLayout(1, true);
-	parent.setLayout(layout);
+        final GridLayout layout = new GridLayout(1, true);
+        parent.setLayout(layout);
     }
 
     protected void constructBASection(Composite parent) {
-	final Group group = new Group(parent, SWT.SHADOW_ETCHED_IN);
-	group.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true,
-		false, 1, 1));
-	group.setText("Resource Bundle");
+        final Group group = new Group(parent, SWT.SHADOW_ETCHED_IN);
+        group.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true,
+                false, 1, 1));
+        group.setText("Resource Bundle");
 
-	// define grid data for this group
-	GridData gridData = new GridData();
-	gridData.horizontalAlignment = SWT.FILL;
-	gridData.grabExcessHorizontalSpace = true;
-	group.setLayoutData(gridData);
-	group.setLayout(new GridLayout(2, false));
+        // define grid data for this group
+        GridData gridData = new GridData();
+        gridData.horizontalAlignment = SWT.FILL;
+        gridData.grabExcessHorizontalSpace = true;
+        group.setLayoutData(gridData);
+        group.setLayout(new GridLayout(2, false));
 
-	final Label spacer = new Label(group, SWT.NONE | SWT.LEFT);
-	spacer.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER,
-		false, false, 1, 1));
+        final Label spacer = new Label(group, SWT.NONE | SWT.LEFT);
+        spacer.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER,
+                false, false, 1, 1));
 
-	final Label infoLabel = new Label(group, SWT.NONE | SWT.LEFT);
-	infoLabel.setLayoutData(new GridData(GridData.BEGINNING,
-		GridData.CENTER, false, false, 1, 1));
-	infoLabel
-		.setText("Diese Zeile stellt einen Platzhalter f�r einen kurzen Infotext dar.\nDiese Zeile stellt einen Platzhalter f�r einen kurzen Infotext dar.");
+        final Label infoLabel = new Label(group, SWT.NONE | SWT.LEFT);
+        infoLabel.setLayoutData(new GridData(GridData.BEGINNING,
+                GridData.CENTER, false, false, 1, 1));
+        infoLabel
+                .setText("Diese Zeile stellt einen Platzhalter f�r einen kurzen Infotext dar.\nDiese Zeile stellt einen Platzhalter f�r einen kurzen Infotext dar.");
 
-	// Schl�ssel
-	final Label lblBA = new Label(group, SWT.NONE | SWT.RIGHT);
-	GridData lblBAGrid = new GridData(GridData.END, GridData.CENTER, false,
-		false, 1, 1);
-	lblBAGrid.widthHint = WIDTH_LEFT_COLUMN;
-	lblBA.setLayoutData(lblBAGrid);
-	lblBA.setText("Class-Name:");
+        // Schl�ssel
+        final Label lblBA = new Label(group, SWT.NONE | SWT.RIGHT);
+        GridData lblBAGrid = new GridData(GridData.END, GridData.CENTER, false,
+                false, 1, 1);
+        lblBAGrid.widthHint = WIDTH_LEFT_COLUMN;
+        lblBA.setLayoutData(lblBAGrid);
+        lblBA.setText("Class-Name:");
 
-	bundleAccessor = new Text(group, SWT.BORDER);
-	bundleAccessor.setLayoutData(new GridData(GridData.FILL,
-		GridData.CENTER, true, false, 1, 1));
+        bundleAccessor = new Text(group, SWT.BORDER);
+        bundleAccessor.setLayoutData(new GridData(GridData.FILL,
+                GridData.CENTER, true, false, 1, 1));
 
-	// Resource-Bundle
-	final Label lblPkg = new Label(group, SWT.NONE);
-	lblPkg.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
-		false, 1, 1));
-	lblPkg.setText("Package:");
+        // Resource-Bundle
+        final Label lblPkg = new Label(group, SWT.NONE);
+        lblPkg.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
+                false, 1, 1));
+        lblPkg.setText("Package:");
 
-	packageName = new Text(group, SWT.BORDER);
-	packageName.setLayoutData(new GridData(GridData.FILL, GridData.CENTER,
-		true, false, 1, 1));
+        packageName = new Text(group, SWT.BORDER);
+        packageName.setLayoutData(new GridData(GridData.FILL, GridData.CENTER,
+                true, false, 1, 1));
     }
 
     protected void initContent() {
-	bundleAccessor.setText("BundleAccessor");
-	packageName.setText("a.b");
+        bundleAccessor.setText("BundleAccessor");
+        packageName.setText("a.b");
     }
 
     /*
@@ -139,8 +139,8 @@ public class GenerateBundleAccessorDialog extends TitleAreaDialog {
 
     @Override
     protected void configureShell(Shell newShell) {
-	super.configureShell(newShell);
-	newShell.setText("Create Resource-Bundle Accessor");
+        super.configureShell(newShell);
+        newShell.setText("Create Resource-Bundle Accessor");
     }
 
 }

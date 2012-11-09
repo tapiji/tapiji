@@ -24,30 +24,30 @@ public class MissingLanguageResolution implements IMarkerResolution2 {
     private Locale language;
 
     public MissingLanguageResolution(Locale language) {
-	this.language = language;
+        this.language = language;
     }
 
     @Override
     public String getLabel() {
-	return "Add missing language '" + language + "'";
+        return "Add missing language '" + language + "'";
     }
 
     @Override
     public void run(IMarker marker) {
-	IResource res = marker.getResource();
-	String rbId = ResourceBundleManager.getResourceBundleId(res);
-	LanguageUtils.addLanguageToResourceBundle(res.getProject(), rbId,
-		language);
+        IResource res = marker.getResource();
+        String rbId = ResourceBundleManager.getResourceBundleId(res);
+        LanguageUtils.addLanguageToResourceBundle(res.getProject(), rbId,
+                language);
     }
 
     @Override
     public String getDescription() {
-	return "Creates a new localized properties-file with the same basename as the resourcebundle";
+        return "Creates a new localized properties-file with the same basename as the resourcebundle";
     }
 
     @Override
     public Image getImage() {
-	return null;
+        return null;
     }
 
 }

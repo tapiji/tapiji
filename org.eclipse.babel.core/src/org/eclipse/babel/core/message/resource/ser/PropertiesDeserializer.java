@@ -23,22 +23,23 @@ import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.util.BabelUtils;
 
 /**
- * Class responsible for deserializing {@link Properties}-like text into
- * a {@link MessagesBundle}.
+ * Class responsible for deserializing {@link Properties}-like text into a
+ * {@link MessagesBundle}.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public class PropertiesDeserializer {
 
     /** System line separator. */
-    private static final String SYSTEM_LINE_SEPARATOR = 
-            System.getProperty("line.separator"); //$NON-NLS-1$
-    
+    private static final String SYSTEM_LINE_SEPARATOR = System
+            .getProperty("line.separator"); //$NON-NLS-1$
+
     /** Characters accepted as key value separators. */
     private static final String KEY_VALUE_SEPARATORS = "=:"; //$NON-NLS-1$
 
     /** MessagesBundle deserializer configuration. */
     private IPropertiesDeserializerConfig config;
-    
+
     /**
      * Constructor.
      */
@@ -48,21 +49,23 @@ public class PropertiesDeserializer {
     }
 
     /**
-     * Parses a string and populates a <code>MessagesBundle</code>.
-     * The string is expected to match the documented structure of a properties
-     * file.
-     * @param messagesBundle the target {@link MessagesBundle}
-     * @param properties the string containing the properties to parse
+     * Parses a string and populates a <code>MessagesBundle</code>. The string
+     * is expected to match the documented structure of a properties file.
+     * 
+     * @param messagesBundle
+     *            the target {@link MessagesBundle}
+     * @param properties
+     *            the string containing the properties to parse
      */
     public void deserialize(IMessagesBundle messagesBundle, String properties) {
         Locale locale = messagesBundle.getLocale();
-        
-        Collection<String> oldKeys =
-        		new ArrayList<String>(Arrays.asList(messagesBundle.getKeys()));
+
+        Collection<String> oldKeys = new ArrayList<String>(
+                Arrays.asList(messagesBundle.getKeys()));
         Collection<String> newKeys = new ArrayList<String>();
-        
+
         String[] lines = properties.split("\r\n|\r|\n"); //$NON-NLS-1$
-        
+
         boolean doneWithFileComment = false;
         StringBuffer fileComment = new StringBuffer();
         StringBuffer lineComment = new StringBuffer();
@@ -71,12 +74,12 @@ public class PropertiesDeserializer {
             String line = lines[i];
             lineBuf.setLength(0);
             lineBuf.append(line);
-        
+
             int equalPosition = findKeyValueSeparator(line);
             boolean isRegularLine = line.matches("^[^#].*"); //$NON-NLS-1$
-            boolean isCommentedLine = doneWithFileComment 
+            boolean isCommentedLine = doneWithFileComment
                     && line.matches("^##[^#].*"); //$NON-NLS-1$
-            
+
             // parse regular and commented lines
             if (equalPosition >= 1 && (isRegularLine || isCommentedLine)) {
                 doneWithFileComment = true;
@@ -91,17 +94,14 @@ public class PropertiesDeserializer {
                     equalPosition -= 2;
                 }
                 String backslash = "\\"; //$NON-NLS-1$
-                while (lineBuf.lastIndexOf(backslash) == lineBuf.length() -1) {
+                while (lineBuf.lastIndexOf(backslash) == lineBuf.length() - 1) {
                     int lineBreakPosition = lineBuf.lastIndexOf(backslash);
-                    lineBuf.replace(
-                            lineBreakPosition,
-                            lineBreakPosition + 1, ""); //$NON-NLS-1$
+                    lineBuf.replace(lineBreakPosition, lineBreakPosition + 1,
+                            ""); //$NON-NLS-1$
                     if (++i < lines.length) {
-                        String wrappedLine = lines[i].replaceFirst(
-                                "^\\s*", ""); //$NON-NLS-1$ //$NON-NLS-2$
+                        String wrappedLine = lines[i].replaceFirst("^\\s*", ""); //$NON-NLS-1$ //$NON-NLS-2$
                         if (isCommentedLine) {
-                            lineBuf.append(wrappedLine.replaceFirst(
-                                    "^##", "")); //$NON-NLS-1$ //$NON-NLS-2$
+                            lineBuf.append(wrappedLine.replaceFirst("^##", "")); //$NON-NLS-1$ //$NON-NLS-2$
                         } else {
                             lineBuf.append(wrappedLine);
                         }
@@ -109,22 +109,20 @@ public class PropertiesDeserializer {
                 }
                 String key = lineBuf.substring(0, equalPosition).trim();
                 key = unescapeKey(key);
-                
+
                 String value = lineBuf.substring(equalPosition + 1)
-                        .replaceFirst("^\\s*", "");  //$NON-NLS-1$//$NON-NLS-2$
+                        .replaceFirst("^\\s*", ""); //$NON-NLS-1$//$NON-NLS-2$
                 // Unescape leading spaces
                 if (value.startsWith("\\ ")) { //$NON-NLS-1$
                     value = value.substring(1);
                 }
-                
+
                 if (this.config != null && config.isUnicodeUnescapeEnabled()) {
                     key = convertEncodedToUnicode(key);
                     value = convertEncodedToUnicode(value);
                 } else {
-                    value = value.replaceAll(
-                            "\\\\r", "\r"); //$NON-NLS-1$ //$NON-NLS-2$
-                    value = value.replaceAll(
-                            "\\\\n", "\n");  //$NON-NLS-1$//$NON-NLS-2$
+                    value = value.replaceAll("\\\\r", "\r"); //$NON-NLS-1$ //$NON-NLS-2$
+                    value = value.replaceAll("\\\\n", "\n"); //$NON-NLS-1$//$NON-NLS-2$
                 }
                 IMessage entry = messagesBundle.getMessage(key);
                 if (entry == null) {
@@ -135,7 +133,7 @@ public class PropertiesDeserializer {
                 entry.setComment(comment);
                 entry.setText(value);
                 newKeys.add(key);
-            // parse comment line
+                // parse comment line
             } else if (lineBuf.indexOf("#") == 0) { //$NON-NLS-1$
                 if (!doneWithFileComment) {
                     fileComment.append(lineBuf);
@@ -144,22 +142,23 @@ public class PropertiesDeserializer {
                     lineComment.append(lineBuf);
                     lineComment.append(SYSTEM_LINE_SEPARATOR);
                 }
-            // handle blank or unsupported line
+                // handle blank or unsupported line
             } else {
                 doneWithFileComment = true;
             }
         }
         oldKeys.removeAll(newKeys);
-        messagesBundle.removeMessages(
-        		oldKeys.toArray(BabelUtils.EMPTY_STRINGS)); 
+        messagesBundle
+                .removeMessages(oldKeys.toArray(BabelUtils.EMPTY_STRINGS));
         messagesBundle.setComment(fileComment.toString());
     }
-    
-    
+
     /**
-     * Converts encoded &#92;uxxxx to unicode chars
-     * and changes special saved chars to their original forms
-     * @param str the string to convert
+     * Converts encoded &#92;uxxxx to unicode chars and changes special saved
+     * chars to their original forms
+     * 
+     * @param str
+     *            the string to convert
      * @return converted string
      * @see java.util.Properties
      */
@@ -178,25 +177,40 @@ public class PropertiesDeserializer {
                     for (int i = 0; i < 4; i++) {
                         aChar = str.charAt(x++);
                         switch (aChar) {
-                        case '0': case '1': case '2': case '3': case '4':
-                        case '5': case '6': case '7': case '8': case '9':
+                        case '0':
+                        case '1':
+                        case '2':
+                        case '3':
+                        case '4':
+                        case '5':
+                        case '6':
+                        case '7':
+                        case '8':
+                        case '9':
                             value = (value << 4) + aChar - '0';
                             break;
-                        case 'a': case 'b': case 'c':
-                        case 'd': case 'e': case 'f':
+                        case 'a':
+                        case 'b':
+                        case 'c':
+                        case 'd':
+                        case 'e':
+                        case 'f':
                             value = (value << 4) + 10 + aChar - 'a';
                             break;
-                        case 'A': case 'B': case 'C':
-                        case 'D': case 'E': case 'F':
+                        case 'A':
+                        case 'B':
+                        case 'C':
+                        case 'D':
+                        case 'E':
+                        case 'F':
                             value = (value << 4) + 10 + aChar - 'A';
                             break;
                         default:
                             value = aChar;
-                            System.err.println(
-                                    "PropertiesDeserializer: " //$NON-NLS-1$
-                                  + "bad character " //$NON-NLS-1$
-                                  + "encoding for string:" //$NON-NLS-1$
-                                  + str);
+                            System.err.println("PropertiesDeserializer: " //$NON-NLS-1$
+                                    + "bad character " //$NON-NLS-1$
+                                    + "encoding for string:" //$NON-NLS-1$
+                                    + str);
                         }
                     }
                     outBuffer.append((char) value);
@@ -220,10 +234,12 @@ public class PropertiesDeserializer {
         }
         return outBuffer.toString();
     }
-    
+
     /**
      * Finds the separator symbol that separates keys and values.
-     * @param str the string on which to find seperator
+     * 
+     * @param str
+     *            the string on which to find seperator
      * @return the separator index or -1 if no separator was found
      */
     private int findKeyValueSeparator(String str) {
@@ -240,7 +256,7 @@ public class PropertiesDeserializer {
         }
         return index;
     }
-    
+
     private String unescapeKey(String key) {
         int length = key.length();
         StringBuffer buf = new StringBuffer();
@@ -252,5 +268,5 @@ public class PropertiesDeserializer {
         }
         return buf.toString();
     }
-    
+
 }

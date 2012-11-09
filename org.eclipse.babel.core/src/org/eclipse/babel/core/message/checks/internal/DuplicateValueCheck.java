@@ -21,36 +21,37 @@ import org.eclipse.babel.core.util.BabelUtils;
 
 /**
  * Checks if key as a duplicate value.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public class DuplicateValueCheck implements IMessageCheck {
 
     private String[] duplicateKeys;
-    
+
     /**
      * Constructor.
      */
     public DuplicateValueCheck() {
         super();
     }
-    
+
     /**
      * Resets the collected keys to null.
      */
     public void reset() {
-    	duplicateKeys = null;
+        duplicateKeys = null;
     }
 
-    public boolean checkKey(
-            IMessagesBundleGroup messagesBundleGroup, IMessage message) {
+    public boolean checkKey(IMessagesBundleGroup messagesBundleGroup,
+            IMessage message) {
         Collection<String> keys = new ArrayList<String>();
         if (message != null) {
-            IMessagesBundle messagesBundle =
-            		messagesBundleGroup.getMessagesBundle(message.getLocale());
+            IMessagesBundle messagesBundle = messagesBundleGroup
+                    .getMessagesBundle(message.getLocale());
             for (IMessage duplicateEntry : messagesBundle.getMessages()) {
                 if (!message.getKey().equals(duplicateEntry.getKey())
-                            && BabelUtils.equals(message.getValue(),
-                                    duplicateEntry.getValue())) {
+                        && BabelUtils.equals(message.getValue(),
+                                duplicateEntry.getValue())) {
                     keys.add(duplicateEntry.getKey());
                 }
             }
@@ -59,12 +60,12 @@ public class DuplicateValueCheck implements IMessageCheck {
             }
         }
 
-        duplicateKeys = keys.toArray(new String[]{});
+        duplicateKeys = keys.toArray(new String[] {});
         return !keys.isEmpty();
     }
-    
+
     public String[] getDuplicateKeys() {
         return duplicateKeys;
     }
-    
+
 }

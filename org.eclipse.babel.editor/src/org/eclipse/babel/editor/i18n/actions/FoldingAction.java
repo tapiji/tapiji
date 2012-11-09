@@ -16,13 +16,13 @@ import org.eclipse.jface.action.Action;
 
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public class FoldingAction extends Action {
 
     private final AbstractI18NEntry i18NEntry;
     private boolean expanded;
-    
+
     /**
      * 
      */
@@ -31,12 +31,13 @@ public class FoldingAction extends Action {
         this.i18NEntry = i18NEntry;
         this.expanded = i18NEntry.getExpanded();
         setText("Collapse");
-        setImageDescriptor(
-                UIUtils.getImageDescriptor("minus.gif"));
-        setToolTipText("TODO put something here"); //TODO put tooltip
+        setImageDescriptor(UIUtils.getImageDescriptor("minus.gif"));
+        setToolTipText("TODO put something here"); // TODO put tooltip
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {

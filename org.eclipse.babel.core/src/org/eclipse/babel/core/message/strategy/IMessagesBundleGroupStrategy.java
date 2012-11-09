@@ -17,49 +17,54 @@ import org.eclipse.babel.core.message.internal.MessageException;
 import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
 
-
-
 /**
- * This class holds the algorithms required to abstract the internal nature
- * of a <code>MessagesBundleGroup</code>. 
+ * This class holds the algorithms required to abstract the internal nature of a
+ * <code>MessagesBundleGroup</code>.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  * @see IMessagesResource
  */
 public interface IMessagesBundleGroupStrategy {
-    //TODO think of a better name for this interface?
-    
+    // TODO think of a better name for this interface?
+
     /**
      * Creates a name that attempts to uniquely identifies a messages bundle
-     * group.  It is not a strict requirement that the name be unique,
-     * but doing facilitates users interaction with a message bundle group
-     * in a given user-facing implementation.<P>
+     * group. It is not a strict requirement that the name be unique, but doing
+     * facilitates users interaction with a message bundle group in a given
+     * user-facing implementation.
+     * <P>
      * This method is called at construction time of a
-     * <code>MessagesBundleGroup</code>. 
+     * <code>MessagesBundleGroup</code>.
+     * 
      * @return messages bundle group name
      */
     String createMessagesBundleGroupName();
-    
+
     String createMessagesBundleId();
-    
+
     /**
      * Load all bundles making up a messages bundle group from the underlying
-     * source.
-     * This method is called at construction time of a
-     * <code>MessagesBundleGroup</code>. 
+     * source. This method is called at construction time of a
+     * <code>MessagesBundleGroup</code>.
+     * 
      * @return all bundles making a bundle group
-     * @throws MessageException problem loading bundles
+     * @throws MessageException
+     *             problem loading bundles
      */
     MessagesBundle[] loadMessagesBundles() throws MessageException;
-    
+
     /**
-     * Creates a new bundle for the given <code>Locale</code>.  If the 
+     * Creates a new bundle for the given <code>Locale</code>. If the
      * <code>Locale</code> is <code>null</code>, the default system
      * <code>Locale</code> is assumed.
-     * @param locale locale for which to create the messages bundle
+     * 
+     * @param locale
+     *            locale for which to create the messages bundle
      * @return a new messages bundle
-     * @throws MessageException problem creating a new messages bundle
+     * @throws MessageException
+     *             problem creating a new messages bundle
      */
     MessagesBundle createMessagesBundle(Locale locale) throws MessageException;
-    
+
     String getProjectName();
 }

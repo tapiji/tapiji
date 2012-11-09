@@ -10,53 +10,56 @@
  ******************************************************************************/
 package org.eclipse.babel.core.message.checks.proximity;
 
-
 /**
  * Compares two strings (case insensitive) and returns a proximity level based
  * on the number of character transformation required to have identical strings.
  * Non-string objects are converted to strings using the <code>toString()</code>
- * method. The exact algorithm was taken from Micheal Gilleland
- * (<a href="http://merriampark.com/ld.htm">http://merriampark.com/ld.htm</a>).
+ * method. The exact algorithm was taken from Micheal Gilleland (<a
+ * href="http://merriampark.com/ld.htm">http://merriampark.com/ld.htm</a>).
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public class LevenshteinDistanceAnalyzer implements IProximityAnalyzer {
 
-    private static final IProximityAnalyzer INSTANCE =
-            new LevenshteinDistanceAnalyzer();
-    
+    private static final IProximityAnalyzer INSTANCE = new LevenshteinDistanceAnalyzer();
+
     /**
      * Constructor.
      */
     private LevenshteinDistanceAnalyzer() {
-        //TODO add case sensitivity?
+        // TODO add case sensitivity?
         super();
     }
 
     /**
      * Gets the unique instance.
+     * 
      * @return a proximity analyzer
      */
     public static IProximityAnalyzer getInstance() {
         return INSTANCE;
     }
-    
+
     /**
      * @see com.essiembre.eclipse.rbe.model.utils.IProximityAnalyzer
      *      #analyse(java.lang.Object, java.lang.Object)
      */
-   public double analyse(String str1, String str2) {
+    public double analyse(String str1, String str2) {
         int maxLength = Math.max(str1.length(), str2.length());
         double distance = distance(str1, str2);
 
         return 1d - (distance / maxLength);
     }
-   
-   
+
     /**
      * Retuns the minimum of three values.
-     * @param a first value
-     * @param b second value
-     * @param c third value
+     * 
+     * @param a
+     *            first value
+     * @param b
+     *            second value
+     * @param c
+     *            third value
      * @return lowest value
      */
     private int minimum(int a, int b, int c) {
@@ -75,8 +78,11 @@ public class LevenshteinDistanceAnalyzer implements IProximityAnalyzer {
 
     /***
      * Compute the distance
-     * @param s source string
-     * @param t target string
+     * 
+     * @param s
+     *            source string
+     * @param t
+     *            target string
      * @return distance
      */
     public int distance(String s, String t) {

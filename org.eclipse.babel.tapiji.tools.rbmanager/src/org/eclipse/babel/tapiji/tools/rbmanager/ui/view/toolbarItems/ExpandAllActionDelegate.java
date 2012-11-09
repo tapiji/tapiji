@@ -29,29 +29,29 @@ public class ExpandAllActionDelegate implements IViewActionDelegate {
 
     @Override
     public void run(IAction action) {
-	Object data = viewer.getControl().getData();
+        Object data = viewer.getControl().getData();
 
-	for (final IProject p : ((IWorkspaceRoot) data).getProjects()) {
-	    UIJob job = new UIJob("expand Projects") {
-		@Override
-		public IStatus runInUIThread(IProgressMonitor monitor) {
-		    viewer.expandToLevel(p, AbstractTreeViewer.ALL_LEVELS);
-		    return Status.OK_STATUS;
-		}
-	    };
+        for (final IProject p : ((IWorkspaceRoot) data).getProjects()) {
+            UIJob job = new UIJob("expand Projects") {
+                @Override
+                public IStatus runInUIThread(IProgressMonitor monitor) {
+                    viewer.expandToLevel(p, AbstractTreeViewer.ALL_LEVELS);
+                    return Status.OK_STATUS;
+                }
+            };
 
-	    job.schedule();
-	}
+            job.schedule();
+        }
     }
 
     @Override
     public void selectionChanged(IAction action, ISelection selection) {
-	// TODO Auto-generated method stub
+        // TODO Auto-generated method stub
     }
 
     @Override
     public void init(IViewPart view) {
-	viewer = ((CommonNavigator) view).getCommonViewer();
+        viewer = ((CommonNavigator) view).getCommonViewer();
     }
 
 }

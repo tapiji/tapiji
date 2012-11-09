@@ -29,69 +29,69 @@ public class ConstantStringHover implements IJavaEditorTextHover {
 
     @Override
     public void setEditor(IEditorPart editor) {
-	this.editor = editor;
-	initConstantStringAuditor();
+        this.editor = editor;
+        initConstantStringAuditor();
     }
 
     protected void initConstantStringAuditor() {
-	// parse editor content and extract resource-bundle access strings
+        // parse editor content and extract resource-bundle access strings
 
-	// get the type of the currently loaded resource
-	ITypeRoot typeRoot = JavaUI.getEditorInputTypeRoot(editor
-		.getEditorInput());
+        // get the type of the currently loaded resource
+        ITypeRoot typeRoot = JavaUI.getEditorInputTypeRoot(editor
+                .getEditorInput());
 
-	if (typeRoot == null) {
-	    return;
-	}
+        if (typeRoot == null) {
+            return;
+        }
 
-	CompilationUnit cu = ASTutilsUI.getCompilationUnit(typeRoot);
+        CompilationUnit cu = ASTutilsUI.getCompilationUnit(typeRoot);
 
-	if (cu == null) {
-	    return;
-	}
+        if (cu == null) {
+            return;
+        }
 
-	manager = ResourceBundleManager.getManager(cu.getJavaElement()
-		.getResource().getProject());
+        manager = ResourceBundleManager.getManager(cu.getJavaElement()
+                .getResource().getProject());
 
-	// determine the element at the position of the cursur
-	csf = new ResourceAuditVisitor(null, manager.getProject().getName());
-	cu.accept(csf);
+        // determine the element at the position of the cursur
+        csf = new ResourceAuditVisitor(null, manager.getProject().getName());
+        cu.accept(csf);
     }
 
     @Override
     public String getHoverInfo(ITextViewer textViewer, IRegion hoverRegion) {
-	initConstantStringAuditor();
-	if (hoverRegion == null) {
-	    return null;
-	}
+        initConstantStringAuditor();
+        if (hoverRegion == null) {
+            return null;
+        }
 
-	// get region for string literals
-	hoverRegion = getHoverRegion(textViewer, hoverRegion.getOffset());
+        // get region for string literals
+        hoverRegion = getHoverRegion(textViewer, hoverRegion.getOffset());
 
-	if (hoverRegion == null) {
-	    return null;
-	}
+        if (hoverRegion == null) {
+            return null;
+        }
 
-	String bundleName = csf.getBundleReference(hoverRegion);
-	String key = csf.getKeyAt(hoverRegion);
+        String bundleName = csf.getBundleReference(hoverRegion);
+        String key = csf.getKeyAt(hoverRegion);
 
-	String hoverText = manager.getKeyHoverString(bundleName, key);
-	if (hoverText == null || hoverText.equals("")) {
-	    return null;
-	} else {
-	    return hoverText;
-	}
+        String hoverText = manager.getKeyHoverString(bundleName, key);
+        if (hoverText == null || hoverText.equals("")) {
+            return null;
+        } else {
+            return hoverText;
+        }
     }
 
     @Override
     public IRegion getHoverRegion(ITextViewer textViewer, int offset) {
-	if (editor == null) {
-	    return null;
-	}
+        if (editor == null) {
+            return null;
+        }
 
-	// Retrieve the property key at this position. Otherwise, null is
-	// returned.
-	return csf.getKeyAt(Long.valueOf(offset));
+        // Retrieve the property key at this position. Otherwise, null is
+        // returned.
+        return csf.getKeyAt(Long.valueOf(offset));
     }
 
 }

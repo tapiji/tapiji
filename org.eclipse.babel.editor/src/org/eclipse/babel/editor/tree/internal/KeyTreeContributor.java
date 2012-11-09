@@ -52,14 +52,14 @@ import org.eclipse.swt.widgets.Tree;
 
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public class KeyTreeContributor implements IKeyTreeContributor {
 
-	private AbstractMessagesEditor editor;
+    private AbstractMessagesEditor editor;
     private AbstractKeyTreeModel treeModel;
     private TreeType treeType;
-    
+
     /**
      * 
      */
@@ -74,160 +74,162 @@ public class KeyTreeContributor implements IKeyTreeContributor {
      * 
      */
     public void contribute(final TreeViewer treeViewer) {
-        
-        KeyTreeContentProvider contentProvider = new KeyTreeContentProvider(treeType);
-		treeViewer.setContentProvider(contentProvider);
-		ColumnViewerToolTipSupport.enableFor (treeViewer);
-        treeViewer.setLabelProvider(new KeyTreeLabelProvider(editor, treeModel, contentProvider));
+
+        KeyTreeContentProvider contentProvider = new KeyTreeContentProvider(
+                treeType);
+        treeViewer.setContentProvider(contentProvider);
+        ColumnViewerToolTipSupport.enableFor(treeViewer);
+        treeViewer.setLabelProvider(new KeyTreeLabelProvider(editor, treeModel,
+                contentProvider));
         if (treeViewer.getInput() == null)
             treeViewer.setUseHashlookup(true);
-        
+
         ViewerFilter onlyUnusedAndMissingKeysFilter = new OnlyUnsuedAndMissingKey();
-        ViewerFilter[] filters = {onlyUnusedAndMissingKeysFilter};
+        ViewerFilter[] filters = { onlyUnusedAndMissingKeysFilter };
         treeViewer.setFilters(filters);
 
-//        IKeyBindingService service = editor.getSite().getKeyBindingService();
-//        service.setScopes(new String[]{"org.eclilpse.babel.editor.editor.tree"});
-        
+        // IKeyBindingService service = editor.getSite().getKeyBindingService();
+        // service.setScopes(new
+        // String[]{"org.eclilpse.babel.editor.editor.tree"});
+
         contributeActions(treeViewer);
-        
+
         contributeKeySync(treeViewer);
-        
-        
+
         contributeModelChanges(treeViewer);
 
         contributeDoubleClick(treeViewer);
 
         contributeMarkers(treeViewer);
-        
+
         // Set input model
         treeViewer.setInput(treeModel);
         treeViewer.expandAll();
-        
-        treeViewer.setColumnProperties(new String[]{"column1"});
-        treeViewer.setCellEditors(new CellEditor[] {new TextCellEditor(treeViewer.getTree())} );
+
+        treeViewer.setColumnProperties(new String[] { "column1" });
+        treeViewer.setCellEditors(new CellEditor[] { new TextCellEditor(
+                treeViewer.getTree()) });
     }
 
     private class OnlyUnsuedAndMissingKey extends ViewerFilter implements
-    AbstractKeyTreeModel.IKeyTreeNodeLeafFilter {
+            AbstractKeyTreeModel.IKeyTreeNodeLeafFilter {
 
         /*
          * (non-Javadoc)
          * 
-         * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer,
-         *      java.lang.Object, java.lang.Object)
+         * @see
+         * org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers
+         * .Viewer, java.lang.Object, java.lang.Object)
          */
         public boolean select(Viewer viewer, Object parentElement,
                 Object element) {
-        	if (editor.isShowOnlyUnusedAndMissingKeys() == IMessagesEditorChangeListener.SHOW_ALL
-        			|| !(element instanceof KeyTreeNode)) {
-        		//no filtering. the element is displayed by default.
-        		return true;
-        	}
-        	if (editor.getI18NPage() != null && editor.getI18NPage().isKeyTreeVisible()) {
-        		return editor.getKeyTreeModel().isBranchFiltered(this, (KeyTreeNode)element);
-        	} else {
-        		return isFilteredLeaf((KeyTreeNode)element);
-        	}
+            if (editor.isShowOnlyUnusedAndMissingKeys() == IMessagesEditorChangeListener.SHOW_ALL
+                    || !(element instanceof KeyTreeNode)) {
+                // no filtering. the element is displayed by default.
+                return true;
+            }
+            if (editor.getI18NPage() != null
+                    && editor.getI18NPage().isKeyTreeVisible()) {
+                return editor.getKeyTreeModel().isBranchFiltered(this,
+                        (KeyTreeNode) element);
+            } else {
+                return isFilteredLeaf((KeyTreeNode) element);
+            }
         }
-        
-        /**
-    	 * @param node
-    	 * @return true if this node should be in the filter. Does not navigate the tree
-    	 * of KeyTreeNode. false unless the node is a missing or unused key.
-    	 */
-    	public boolean isFilteredLeaf(IKeyTreeNode node) {
-    		MessagesEditorMarkers markers = KeyTreeContributor.this.editor.getMarkers();
-    		String key = node.getMessageKey();
-    		boolean missingOrUnused = markers.isMissingOrUnusedKey(key);
-    		if (!missingOrUnused) {
-    			return false;
-    		}
-    		switch (editor.isShowOnlyUnusedAndMissingKeys()) {
-    		case IMessagesEditorChangeListener.SHOW_ONLY_MISSING_AND_UNUSED:
-    			return missingOrUnused;
-    		case IMessagesEditorChangeListener.SHOW_ONLY_MISSING:
-    			return !markers.isUnusedKey(key, missingOrUnused);
-    		case IMessagesEditorChangeListener.SHOW_ONLY_UNUSED:
-    			return markers.isUnusedKey(key, missingOrUnused);
-    		default:
-    			return false;
-    		}
-    	}
-        
-    }
 
+        /**
+         * @param node
+         * @return true if this node should be in the filter. Does not navigate
+         *         the tree of KeyTreeNode. false unless the node is a missing
+         *         or unused key.
+         */
+        public boolean isFilteredLeaf(IKeyTreeNode node) {
+            MessagesEditorMarkers markers = KeyTreeContributor.this.editor
+                    .getMarkers();
+            String key = node.getMessageKey();
+            boolean missingOrUnused = markers.isMissingOrUnusedKey(key);
+            if (!missingOrUnused) {
+                return false;
+            }
+            switch (editor.isShowOnlyUnusedAndMissingKeys()) {
+            case IMessagesEditorChangeListener.SHOW_ONLY_MISSING_AND_UNUSED:
+                return missingOrUnused;
+            case IMessagesEditorChangeListener.SHOW_ONLY_MISSING:
+                return !markers.isUnusedKey(key, missingOrUnused);
+            case IMessagesEditorChangeListener.SHOW_ONLY_UNUSED:
+                return markers.isUnusedKey(key, missingOrUnused);
+            default:
+                return false;
+            }
+        }
+
+    }
 
     /**
      * Contributes markers.
-     * @param treeViewer tree viewer
+     * 
+     * @param treeViewer
+     *            tree viewer
      */
     private void contributeMarkers(final TreeViewer treeViewer) {
         editor.getMarkers().addObserver(new Observer() {
             public void update(Observable o, Object arg) {
-            	Display display = treeViewer.getTree().getDisplay();
-            	// [RAP] only refresh tree viewer in this UIThread
-            	if (display.equals(Display.getCurrent())) {
-	            	display.asyncExec(new Runnable(){
-						public void run() {
-			                treeViewer.refresh();
-						}
-					});
-            	}
+                Display display = treeViewer.getTree().getDisplay();
+                // [RAP] only refresh tree viewer in this UIThread
+                if (display.equals(Display.getCurrent())) {
+                    display.asyncExec(new Runnable() {
+                        public void run() {
+                            treeViewer.refresh();
+                        }
+                    });
+                }
             }
         });
-//      editor.addChangeListener(new MessagesEditorChangeAdapter() {
-//      public void editorDisposed() {
-//          editor.getMarkers().clear();
-//      }
-//  });
+        // editor.addChangeListener(new MessagesEditorChangeAdapter() {
+        // public void editorDisposed() {
+        // editor.getMarkers().clear();
+        // }
+        // });
 
-        
-        
-        
-        
-        
-        
-        
-//        final IMarkerListener markerListener = new IMarkerListener() {
-//            public void markerAdded(IMarker marker) {
-//                PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable () {
-//                    public void run() {
-//                        if (!PlatformUI.getWorkbench().getDisplay().isDisposed()) {
-//                            treeViewer.refresh(true);
-//                        }
-//                    }
-//                });
-//            }
-//            public void markerRemoved(IMarker marker) {
-//                PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable () {
-//                    public void run() {
-//                        if (!PlatformUI.getWorkbench().getDisplay().isDisposed()) {
-//                            treeViewer.refresh(true);
-//                        }
-//                    }
-//                });
-//            }
-//        };
-//        editor.getMarkerManager().addMarkerListener(markerListener);
-//        editor.addChangeListener(new MessagesEditorChangeAdapter() {
-//            public void editorDisposed() {
-//                editor.getMarkerManager().removeMarkerListener(markerListener);
-//            }
-//        });
+        // final IMarkerListener markerListener = new IMarkerListener() {
+        // public void markerAdded(IMarker marker) {
+        // PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable () {
+        // public void run() {
+        // if (!PlatformUI.getWorkbench().getDisplay().isDisposed()) {
+        // treeViewer.refresh(true);
+        // }
+        // }
+        // });
+        // }
+        // public void markerRemoved(IMarker marker) {
+        // PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable () {
+        // public void run() {
+        // if (!PlatformUI.getWorkbench().getDisplay().isDisposed()) {
+        // treeViewer.refresh(true);
+        // }
+        // }
+        // });
+        // }
+        // };
+        // editor.getMarkerManager().addMarkerListener(markerListener);
+        // editor.addChangeListener(new MessagesEditorChangeAdapter() {
+        // public void editorDisposed() {
+        // editor.getMarkerManager().removeMarkerListener(markerListener);
+        // }
+        // });
     }
-
-
 
     /**
      * Contributes double-click support, expanding/collapsing nodes.
-     * @param treeViewer tree viewer
+     * 
+     * @param treeViewer
+     *            tree viewer
      */
     private void contributeDoubleClick(final TreeViewer treeViewer) {
         treeViewer.getTree().addMouseListener(new MouseAdapter() {
             public void mouseDoubleClick(MouseEvent event) {
-                IStructuredSelection selection = 
-                    (IStructuredSelection) treeViewer.getSelection();
+                IStructuredSelection selection = (IStructuredSelection) treeViewer
+                        .getSelection();
                 Object element = selection.getFirstElement();
                 if (treeViewer.isExpandable(element)) {
                     if (treeViewer.getExpandedState(element)) {
@@ -242,57 +244,65 @@ public class KeyTreeContributor implements IKeyTreeContributor {
 
     /**
      * Contributes key synchronization between editor and tree selected keys.
-     * @param treeViewer tree viewer
+     * 
+     * @param treeViewer
+     *            tree viewer
      */
     private void contributeModelChanges(final TreeViewer treeViewer) {
         final IKeyTreeModelListener keyTreeListener = new IKeyTreeModelListener() {
-            //TODO be smarter about refreshes.
+            // TODO be smarter about refreshes.
             public void nodeAdded(KeyTreeNode node) {
-            	Display.getDefault().asyncExec(new Runnable(){
-					public void run() {
-		                treeViewer.refresh(true);
-					}
-				});
+                Display.getDefault().asyncExec(new Runnable() {
+                    public void run() {
+                        treeViewer.refresh(true);
+                    }
+                });
             };
-//            public void nodeChanged(KeyTreeNode node) {
-//                treeViewer.refresh(true);
-//            };
+
+            // public void nodeChanged(KeyTreeNode node) {
+            // treeViewer.refresh(true);
+            // };
             public void nodeRemoved(KeyTreeNode node) {
-            	Display.getDefault().asyncExec(new Runnable(){
-					public void run() {
-		                treeViewer.refresh(true);
-					}
-				});
+                Display.getDefault().asyncExec(new Runnable() {
+                    public void run() {
+                        treeViewer.refresh(true);
+                    }
+                });
             };
         };
         treeModel.addKeyTreeModelListener(keyTreeListener);
         editor.addChangeListener(new MessagesEditorChangeAdapter() {
-            public void keyTreeModelChanged(AbstractKeyTreeModel oldModel, AbstractKeyTreeModel newModel) {
+            public void keyTreeModelChanged(AbstractKeyTreeModel oldModel,
+                    AbstractKeyTreeModel newModel) {
                 oldModel.removeKeyTreeModelListener(keyTreeListener);
                 newModel.addKeyTreeModelListener(keyTreeListener);
                 treeViewer.setInput(newModel);
                 treeViewer.refresh();
             }
-        	public void showOnlyUnusedAndMissingChanged(int hideEverythingElse) {
-        		treeViewer.refresh();
+
+            public void showOnlyUnusedAndMissingChanged(int hideEverythingElse) {
+                treeViewer.refresh();
             }
         });
     }
 
     /**
      * Contributes key synchronization between editor and tree selected keys.
-     * @param treeViewer tree viewer
+     * 
+     * @param treeViewer
+     *            tree viewer
      */
     private void contributeKeySync(final TreeViewer treeViewer) {
         // changes in tree selected key update the editor
         treeViewer.getTree().addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent e) {
-                IStructuredSelection selection = 
-                    (IStructuredSelection) treeViewer.getSelection();
+                IStructuredSelection selection = (IStructuredSelection) treeViewer
+                        .getSelection();
                 if (selection != null && selection.getFirstElement() != null) {
-                    KeyTreeNode node =
-                            (KeyTreeNode) selection.getFirstElement();
-                    System.out.println("viewer key/hash:" + node.getMessageKey() + "/" + node.hashCode());
+                    KeyTreeNode node = (KeyTreeNode) selection
+                            .getFirstElement();
+                    System.out.println("viewer key/hash:"
+                            + node.getMessageKey() + "/" + node.hashCode());
                     editor.setSelectedKey(node.getMessageKey());
                 } else {
                     editor.setSelectedKey(null);
@@ -302,35 +312,35 @@ public class KeyTreeContributor implements IKeyTreeContributor {
         // changes in editor selected key updates the tree
         editor.addChangeListener(new MessagesEditorChangeAdapter() {
             public void selectedKeyChanged(String oldKey, String newKey) {
-                ITreeContentProvider provider =
-                        (ITreeContentProvider) treeViewer.getContentProvider();
+                ITreeContentProvider provider = (ITreeContentProvider) treeViewer
+                        .getContentProvider();
                 if (provider != null) { // alst workaround
-                    KeyTreeNode node = findKeyTreeNode(
-                            provider, provider.getElements(null), newKey);
-                    
-    //                String[] test = newKey.split("\\.");
-    //                treeViewer.setSelection(new StructuredSelection(test), true);
-                    
-                    
-					if (node != null) {
-						treeViewer.setSelection(new StructuredSelection(node),
-								true);
-						treeViewer.getTree().showSelection();
-					}
+                    KeyTreeNode node = findKeyTreeNode(provider,
+                            provider.getElements(null), newKey);
+
+                    // String[] test = newKey.split("\\.");
+                    // treeViewer.setSelection(new StructuredSelection(test),
+                    // true);
+
+                    if (node != null) {
+                        treeViewer.setSelection(new StructuredSelection(node),
+                                true);
+                        treeViewer.getTree().showSelection();
+                    }
                 }
             }
         });
     }
 
-
-
     /**
      * Contributes actions to the tree.
-     * @param treeViewer tree viewer
+     * 
+     * @param treeViewer
+     *            tree viewer
      */
     private void contributeActions(final TreeViewer treeViewer) {
         Tree tree = treeViewer.getTree();
-        
+
         // Add menu
         MenuManager menuManager = new MenuManager();
         Menu menu = menuManager.createContextMenu(tree);
@@ -342,27 +352,28 @@ public class KeyTreeContributor implements IKeyTreeContributor {
         final IAction deleteAction = new DeleteKeyAction(editor, treeViewer);
         menuManager.add(deleteAction);
         // Rename
-        //final IAction renameAction = new RenameKeyAction(editor, treeViewer);
+        // final IAction renameAction = new RenameKeyAction(editor, treeViewer);
         AbstractRenameKeyAction renameKeyAction = null;
         try {
-        	Class<?> clazz = Class
-        			.forName(AbstractRenameKeyAction.INSTANCE_CLASS);
-			Constructor<?> cons = clazz.getConstructor(AbstractMessagesEditor.class, TreeViewer.class);
-			renameKeyAction = (AbstractRenameKeyAction) cons
-					.newInstance(editor, treeViewer);
+            Class<?> clazz = Class
+                    .forName(AbstractRenameKeyAction.INSTANCE_CLASS);
+            Constructor<?> cons = clazz.getConstructor(
+                    AbstractMessagesEditor.class, TreeViewer.class);
+            renameKeyAction = (AbstractRenameKeyAction) cons.newInstance(
+                    editor, treeViewer);
         } catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
         }
         final IAction renameAction = renameKeyAction;
         menuManager.add(renameAction);
-        
+
         // Refactor
         final IAction refactorAction = new RefactorKeyAction(editor, treeViewer);
         menuManager.add(refactorAction);
-        
+
         menuManager.update(true);
         tree.setMenu(menu);
-        
+
         // Bind actions to tree
         tree.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent event) {
@@ -374,9 +385,9 @@ public class KeyTreeContributor implements IKeyTreeContributor {
             }
         });
     }
-    
-    private KeyTreeNode findKeyTreeNode(
-            ITreeContentProvider provider, Object[] nodes, String key) {
+
+    private KeyTreeNode findKeyTreeNode(ITreeContentProvider provider,
+            Object[] nodes, String key) {
         for (int i = 0; i < nodes.length; i++) {
             KeyTreeNode node = (KeyTreeNode) nodes[i];
             if (node.getMessageKey().equals(key)) {
@@ -393,10 +404,10 @@ public class KeyTreeContributor implements IKeyTreeContributor {
     public IKeyTreeNode getKeyTreeNode(String key) {
         return getKeyTreeNode(key, null);
     }
-    
+
     // TODO, think about a hashmap
     private IKeyTreeNode getKeyTreeNode(String key, IKeyTreeNode node) {
-        if (node == null) { 
+        if (node == null) {
             for (IKeyTreeNode ktn : treeModel.getRootNodes()) {
                 String id = ktn.getMessageKey();
                 if (key.equals(id)) {
@@ -421,5 +432,5 @@ public class KeyTreeContributor implements IKeyTreeContributor {
     public IKeyTreeNode[] getRootKeyItems() {
         return treeModel.getRootNodes();
     }
-    
+
 }

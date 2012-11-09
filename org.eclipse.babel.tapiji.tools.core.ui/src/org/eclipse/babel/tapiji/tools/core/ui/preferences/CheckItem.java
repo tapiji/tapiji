@@ -16,19 +16,19 @@ public class CheckItem {
     String name;
 
     public CheckItem(String item, boolean checked) {
-	this.name = item;
-	this.checked = checked;
+        this.name = item;
+        this.checked = checked;
     }
 
     public String getName() {
-	return name;
+        return name;
     }
 
     public boolean getChecked() {
-	return checked;
+        return checked;
     }
 
     public boolean equals(CheckItem item) {
-	return name.equals(item.getName());
+        return name.equals(item.getName());
     }
 }

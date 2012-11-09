@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.builder;
 
-
 /**
  * @author hmalphettes
  */

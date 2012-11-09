@@ -29,96 +29,96 @@ public class FragmentProjectSelectionDialog extends ListDialog {
     private List<IProject> allProjects;
 
     public FragmentProjectSelectionDialog(Shell parent, IProject hostproject,
-	    List<IProject> fragmentprojects) {
-	super(parent);
-	this.hostproject = hostproject;
-	this.allProjects = new ArrayList<IProject>(fragmentprojects);
-	allProjects.add(0, hostproject);
+            List<IProject> fragmentprojects) {
+        super(parent);
+        this.hostproject = hostproject;
+        this.allProjects = new ArrayList<IProject>(fragmentprojects);
+        allProjects.add(0, hostproject);
 
-	init();
+        init();
     }
 
     private void init() {
-	this.setAddCancelButton(true);
-	this.setMessage("Select one of the following plug-ins:");
-	this.setTitle("Project Selector");
-	this.setContentProvider(new IProjectContentProvider());
-	this.setLabelProvider(new IProjectLabelProvider());
+        this.setAddCancelButton(true);
+        this.setMessage("Select one of the following plug-ins:");
+        this.setTitle("Project Selector");
+        this.setContentProvider(new IProjectContentProvider());
+        this.setLabelProvider(new IProjectLabelProvider());
 
-	this.setInput(allProjects);
+        this.setInput(allProjects);
     }
 
     public IProject getSelectedProject() {
-	Object[] selection = this.getResult();
-	if (selection != null && selection.length > 0)
-	    return (IProject) selection[0];
-	return null;
+        Object[] selection = this.getResult();
+        if (selection != null && selection.length > 0)
+            return (IProject) selection[0];
+        return null;
     }
 
     // private classes--------------------------------------------------------
     class IProjectContentProvider implements IStructuredContentProvider {
 
-	@Override
-	public Object[] getElements(Object inputElement) {
-	    List<IProject> resources = (List<IProject>) inputElement;
-	    return resources.toArray();
-	}
+        @Override
+        public Object[] getElements(Object inputElement) {
+            List<IProject> resources = (List<IProject>) inputElement;
+            return resources.toArray();
+        }
 
-	@Override
-	public void dispose() {
-	    // TODO Auto-generated method stub
+        @Override
+        public void dispose() {
+            // TODO Auto-generated method stub
 
-	}
+        }
 
-	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-	    // TODO Auto-generated method stub
-	}
+        @Override
+        public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+            // TODO Auto-generated method stub
+        }
 
     }
 
     class IProjectLabelProvider implements ILabelProvider {
 
-	@Override
-	public Image getImage(Object element) {
-	    return PlatformUI.getWorkbench().getSharedImages()
-		    .getImage(ISharedImages.IMG_OBJ_PROJECT);
-	}
+        @Override
+        public Image getImage(Object element) {
+            return PlatformUI.getWorkbench().getSharedImages()
+                    .getImage(ISharedImages.IMG_OBJ_PROJECT);
+        }
 
-	@Override
-	public String getText(Object element) {
-	    IProject p = ((IProject) element);
-	    String text = p.getName();
-	    if (p.equals(hostproject))
-		text += " [host project]";
-	    else
-		text += " [fragment project]";
-	    return text;
-	}
+        @Override
+        public String getText(Object element) {
+            IProject p = ((IProject) element);
+            String text = p.getName();
+            if (p.equals(hostproject))
+                text += " [host project]";
+            else
+                text += " [fragment project]";
+            return text;
+        }
 
-	@Override
-	public void addListener(ILabelProviderListener listener) {
-	    // TODO Auto-generated method stub
+        @Override
+        public void addListener(ILabelProviderListener listener) {
+            // TODO Auto-generated method stub
 
-	}
+        }
 
-	@Override
-	public void dispose() {
-	    // TODO Auto-generated method stub
+        @Override
+        public void dispose() {
+            // TODO Auto-generated method stub
 
-	}
+        }
 
-	@Override
-	public boolean isLabelProperty(Object element, String property) {
-	    // TODO Auto-generated method stub
-	    return false;
-	}
+        @Override
+        public boolean isLabelProperty(Object element, String property) {
+            // TODO Auto-generated method stub
+            return false;
+        }
 
-	@Override
-	public void removeListener(ILabelProviderListener listener) {
-	    // TODO Auto-generated method stub
+        @Override
+        public void removeListener(ILabelProviderListener listener) {
+            // TODO Auto-generated method stub
 
-	}
+        }
 
     }
 }

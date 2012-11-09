@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.eclipse.babel.core.message.tree;
 
-
 /**
  * Objects implementing this interface can act as a visitor to a
  * <code>IKeyTreeModel</code>.
@@ -18,11 +17,11 @@ package org.eclipse.babel.core.message.tree;
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public interface IKeyTreeVisitor {
-	/**
-	 * Visits a key tree node.
-	 * 
-	 * @param item
-	 *            key tree node to visit
-	 */
-	void visitKeyTreeNode(IKeyTreeNode node);
+    /**
+     * Visits a key tree node.
+     * 
+     * @param item
+     *            key tree node to visit
+     */
+    void visitKeyTreeNode(IKeyTreeNode node);
 }

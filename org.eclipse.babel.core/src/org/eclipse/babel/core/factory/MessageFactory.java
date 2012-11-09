@@ -25,18 +25,21 @@ import org.eclipse.babel.core.message.internal.Message;
  */
 public class MessageFactory {
 
-    static Logger logger = Logger.getLogger(MessageFactory.class.getSimpleName());
-    
+    static Logger logger = Logger.getLogger(MessageFactory.class
+            .getSimpleName());
+
     /**
-     * @param key The key of the message
-     * @param locale The {@link Locale}
+     * @param key
+     *            The key of the message
+     * @param locale
+     *            The {@link Locale}
      * @return An instance of {@link IMessage}
      */
     public static IMessage createMessage(String key, Locale locale) {
         String l = locale == null ? "[default]" : locale.toString();
         logger.log(Level.INFO, "createMessage, key: " + key + " locale: " + l);
-        
+
         return new Message(key, locale);
     }
-    
+
 }

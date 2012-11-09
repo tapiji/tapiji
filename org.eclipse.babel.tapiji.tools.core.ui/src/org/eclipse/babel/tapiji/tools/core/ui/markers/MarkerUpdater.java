@@ -21,27 +21,27 @@ public class MarkerUpdater implements IMarkerUpdater {
 
     @Override
     public String getMarkerType() {
-	return "org.eclipse.core.resources.problemmarker";
+        return "org.eclipse.core.resources.problemmarker";
     }
 
     @Override
     public String[] getAttribute() {
-	// TODO Auto-generated method stub
-	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public boolean updateMarker(IMarker marker, IDocument document,
-	    Position position) {
-	try {
-	    int start = position.getOffset();
-	    int end = position.getOffset() + position.getLength();
-	    marker.setAttribute(IMarker.CHAR_START, start);
-	    marker.setAttribute(IMarker.CHAR_END, end);
-	    return true;
-	} catch (CoreException e) {
-	    Logger.logError(e);
-	    return false;
-	}
+            Position position) {
+        try {
+            int start = position.getOffset();
+            int end = position.getOffset() + position.getLength();
+            marker.setAttribute(IMarker.CHAR_START, start);
+            marker.setAttribute(IMarker.CHAR_END, end);
+            return true;
+        } catch (CoreException e) {
+            Logger.logError(e);
+            return false;
+        }
     }
 }

@@ -27,23 +27,28 @@ import org.eclipse.swt.widgets.ToolBar;
 
 /**
  * Tree for displaying and navigating through resource bundle keys.
+ * 
  * @author Pascal Essiembre
  */
 public class SideNavComposite extends Composite {
 
     /** Key Tree Viewer. */
     private TreeViewer treeViewer;
-        
+
     private AbstractMessagesEditor editor;
-    
+
     private SideNavTextBoxComposite textBoxComp;
+
     /**
      * Constructor.
-     * @param parent parent composite
-     * @param keyTree key tree
+     * 
+     * @param parent
+     *            parent composite
+     * @param keyTree
+     *            key tree
      */
-    public SideNavComposite(
-            Composite parent, final AbstractMessagesEditor editor) {
+    public SideNavComposite(Composite parent,
+            final AbstractMessagesEditor editor) {
         super(parent, SWT.BORDER);
         this.editor = editor;
 
@@ -51,11 +56,9 @@ public class SideNavComposite extends Composite {
         ToolBarManager toolBarMgr = new ToolBarManager(SWT.FLAT);
         ToolBar toolBar = toolBarMgr.createControl(this);
 
-        
-        this.treeViewer = new TreeViewer(this,
-                SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+        this.treeViewer = new TreeViewer(this, SWT.SINGLE | SWT.BORDER
+                | SWT.V_SCROLL | SWT.H_SCROLL);
 
-        
         setLayout(new GridLayout(1, false));
 
         GridData gid;
@@ -70,45 +73,47 @@ public class SideNavComposite extends Composite {
         toolBarMgr.add(new ExpandAllAction(editor, treeViewer));
         toolBarMgr.add(new CollapseAllAction(editor, treeViewer));
         toolBarMgr.update(true);
-        
-        //TODO have two toolbars, one left-align, and one right, with drop
-        //down menu
-//        initListener();
-        
-//        createTopSection();
+
+        // TODO have two toolbars, one left-align, and one right, with drop
+        // down menu
+        // initListener();
+
+        // createTopSection();
         createKeyTree();
         textBoxComp = new SideNavTextBoxComposite(this, editor);
     }
 
-//    private void initListener() {
-//        IResourceChangeListener listener = new IResourceChangeListener() {
-//            
-//            public void resourceChanged(IResourceChangeEvent event) {
-//                if (!Boolean.valueOf(System.getProperty("dirty"))) {
-//                    createKeyTree();
-//                }
-//            }
-//        };
-//        
-//        ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
-//        
-//    }
+    // private void initListener() {
+    // IResourceChangeListener listener = new IResourceChangeListener() {
+    //
+    // public void resourceChanged(IResourceChangeEvent event) {
+    // if (!Boolean.valueOf(System.getProperty("dirty"))) {
+    // createKeyTree();
+    // }
+    // }
+    // };
+    //
+    // ResourcesPlugin.getWorkspace().addResourceChangeListener(listener,
+    // IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
+    //
+    // }
 
     /**
      * Gets the tree viewer.
+     * 
      * @return tree viewer
      */
     public TreeViewer getTreeViewer() {
         return treeViewer;
     }
-    
+
     /**
      * @see org.eclipse.swt.widgets.Widget#dispose()
      */
     public void dispose() {
         super.dispose();
     }
-    
+
     /**
      * Creates the middle (tree) section of this composite.
      */
@@ -120,14 +125,13 @@ public class SideNavComposite extends Composite {
         gridData.horizontalAlignment = GridData.FILL;
         gridData.grabExcessHorizontalSpace = true;
 
-        
         KeyTreeContributor treeContributor = new KeyTreeContributor(editor);
         treeContributor.contribute(treeViewer);
-        treeViewer.getTree().setLayoutData(gridData);      
+        treeViewer.getTree().setLayoutData(gridData);
 
     }
-    
+
     public SideNavTextBoxComposite getSidNavTextBoxComposite() {
-    	return textBoxComp;
+        return textBoxComp;
     }
 }

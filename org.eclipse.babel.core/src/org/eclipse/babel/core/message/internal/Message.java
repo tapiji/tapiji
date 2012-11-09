@@ -44,9 +44,12 @@ public final class Message extends AbstractMessageModel implements IMessage {
     private String text;
 
     /**
-     * Constructor.  Key and locale arguments are <code>null</code> safe.
-     * @param key unique identifier within a messages bundle
-     * @param locale the message locale
+     * Constructor. Key and locale arguments are <code>null</code> safe.
+     * 
+     * @param key
+     *            unique identifier within a messages bundle
+     * @param locale
+     *            the message locale
      */
     public Message(final String key, final Locale locale) {
         super();
@@ -54,33 +57,35 @@ public final class Message extends AbstractMessageModel implements IMessage {
         this.locale = locale;
     }
 
-    
-    
     /**
      * Sets the message comment.
-     * @param comment The comment to set.
+     * 
+     * @param comment
+     *            The comment to set.
      */
     public void setComment(String comment) {
         Object oldValue = this.comment;
         this.comment = comment;
         firePropertyChange(PROPERTY_COMMENT, oldValue, comment);
     }
-    
+
     public void setComment(String comment, boolean silent) {
         Object oldValue = this.comment;
         this.comment = comment;
         if (!silent) {
-        	firePropertyChange(PROPERTY_COMMENT, oldValue, comment);
+            firePropertyChange(PROPERTY_COMMENT, oldValue, comment);
         }
     }
 
     /**
-     * Sets whether the message is active or not.  An inactive message is
-     * one that we continue to keep track of, but will not be picked
-     * up by internationalisation mechanism (e.g. <code>ResourceBundle</code>).
-     * Typically, those are commented (i.e. //) key/text pairs in a
-     * *.properties file.
-     * @param active The active to set.
+     * Sets whether the message is active or not. An inactive message is one
+     * that we continue to keep track of, but will not be picked up by
+     * internationalisation mechanism (e.g. <code>ResourceBundle</code>).
+     * Typically, those are commented (i.e. //) key/text pairs in a *.properties
+     * file.
+     * 
+     * @param active
+     *            The active to set.
      */
     public void setActive(boolean active) {
         boolean oldValue = this.active;
@@ -90,40 +95,46 @@ public final class Message extends AbstractMessageModel implements IMessage {
 
     /**
      * Sets the actual message text.
-     * @param text The text to set.
+     * 
+     * @param text
+     *            The text to set.
      */
     public void setText(String text) {
         Object oldValue = this.text;
         this.text = text;
         firePropertyChange(PROPERTY_TEXT, oldValue, text);
     }
-    
+
     public void setText(String text, boolean silent) {
         Object oldValue = this.text;
         this.text = text;
         if (!silent) {
-        	firePropertyChange(PROPERTY_TEXT, oldValue, text);
+            firePropertyChange(PROPERTY_TEXT, oldValue, text);
         }
     }
 
     /**
-     * Gets the comment associated with this message (<code>null</code> if
-     * no comments).
+     * Gets the comment associated with this message (<code>null</code> if no
+     * comments).
+     * 
      * @return Returns the comment.
      */
     public String getComment() {
         return comment;
     }
+
     /**
      * Gets the message key attribute.
+     * 
      * @return Returns the key.
      */
     public String getKey() {
         return key;
     }
-        
+
     /**
      * Gets the message text.
+     * 
      * @return Returns the text.
      */
     public String getValue() {
@@ -132,24 +143,26 @@ public final class Message extends AbstractMessageModel implements IMessage {
 
     /**
      * Gets the message locale.
+     * 
      * @return Returns the locale
      */
     public Locale getLocale() {
         return locale;
     }
-    
+
     /**
      * Gets whether this message is active or not.
+     * 
      * @return <code>true</code> if this message is active.
      */
     public boolean isActive() {
         return active;
     }
-    
+
     /**
-     * Copies properties of the given message to this message.
-     * The properties copied over are all properties but the 
-     * message key and locale.
+     * Copies properties of the given message to this message. The properties
+     * copied over are all properties but the message key and locale.
+     * 
      * @param message
      */
     protected void copyFrom(IMessage message) {
@@ -166,32 +179,32 @@ public final class Message extends AbstractMessageModel implements IMessage {
             return false;
         }
         Message entry = (Message) obj;
-        return equals(key, entry.key)
-            && equals(locale, entry.locale)
-            && active == entry.active
-            && equals(text, entry.text)
-            && equals(comment, entry.comment);
+        return equals(key, entry.key) && equals(locale, entry.locale)
+                && active == entry.active && equals(text, entry.text)
+                && equals(comment, entry.comment);
     }
 
     /**
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return "Message=[[key=" + key  //$NON-NLS-1$
+        return "Message=[[key=" + key //$NON-NLS-1$
                 + "][text=" + text //$NON-NLS-1$
                 + "][comment=" + comment //$NON-NLS-1$
                 + "][active=" + active //$NON-NLS-1$
-                + "]]";  //$NON-NLS-1$
+                + "]]"; //$NON-NLS-1$
     }
-    
+
     public final synchronized void addMessageListener(
             final PropertyChangeListener listener) {
         addPropertyChangeListener(listener);
     }
+
     public final synchronized void removeMessageListener(
             final PropertyChangeListener listener) {
         removePropertyChangeListener(listener);
     }
+
     public final synchronized PropertyChangeListener[] getMessageListeners() {
         return getPropertyChangeListeners();
     }

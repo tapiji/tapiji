@@ -17,38 +17,39 @@ import org.eclipse.babel.core.message.IMessagesBundle;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 
-
 /**
- * Based implementation of a text-based messages resource following
- * the conventions defined by the Java {@link Properties} class for
- * serialization and deserialization.
+ * Based implementation of a text-based messages resource following the
+ * conventions defined by the Java {@link Properties} class for serialization
+ * and deserialization.
+ * 
  * @author Pascal Essiembre
  */
-public abstract class AbstractPropertiesResource
-		extends AbstractMessagesResource {
+public abstract class AbstractPropertiesResource extends
+        AbstractMessagesResource {
 
     private PropertiesDeserializer deserializer;
     private PropertiesSerializer serializer;
-    
+
     /**
      * Constructor.
-     * @param locale properties locale
-     * @param serializer properties serializer
-     * @param deserializer properties deserializer
+     * 
+     * @param locale
+     *            properties locale
+     * @param serializer
+     *            properties serializer
+     * @param deserializer
+     *            properties deserializer
      */
-    public AbstractPropertiesResource(
-            Locale locale,
-            PropertiesSerializer serializer,
-            PropertiesDeserializer deserializer) {
+    public AbstractPropertiesResource(Locale locale,
+            PropertiesSerializer serializer, PropertiesDeserializer deserializer) {
         super(locale);
         this.deserializer = deserializer;
         this.serializer = serializer;
-        //TODO initialises with configurations only... 
+        // TODO initialises with configurations only...
     }
 
     /**
-     * @see org.eclipse.babel.core.message.internal.resource.IMessagesResource#serialize(
-     *              org.eclipse.babel.core.message.internal.MessagesBundle)
+     * @see org.eclipse.babel.core.message.internal.resource.IMessagesResource#serialize(org.eclipse.babel.core.message.internal.MessagesBundle)
      */
     public void serialize(IMessagesBundle messagesBundle) {
         setText(serializer.serialize(messagesBundle));
@@ -56,7 +57,7 @@ public abstract class AbstractPropertiesResource
 
     /**
      * @see org.eclipse.babel.core.message.internal.resource.IMessagesResource
-     * 		#deserialize(org.eclipse.babel.core.message.internal.MessagesBundle)
+     *      #deserialize(org.eclipse.babel.core.message.internal.MessagesBundle)
      */
     public void deserialize(IMessagesBundle messagesBundle) {
         deserializer.deserialize(messagesBundle, getText());
@@ -64,13 +65,17 @@ public abstract class AbstractPropertiesResource
 
     /**
      * Gets the {@link Properties}-like formated text.
+     * 
      * @return formated text
      */
     protected abstract String getText();
+
     /**
      * Sets the {@link Properties}-like formated text.
-     * @param text formated text
+     * 
+     * @param text
+     *            formated text
      */
     protected abstract void setText(String text);
-    
+
 }

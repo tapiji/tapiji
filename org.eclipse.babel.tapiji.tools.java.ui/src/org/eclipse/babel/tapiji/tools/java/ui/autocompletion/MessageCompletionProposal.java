@@ -26,52 +26,52 @@ public class MessageCompletionProposal implements IJavaCompletionProposal {
     private boolean messageAccessor = false;
 
     public MessageCompletionProposal(int offset, int length, String content,
-	    boolean messageAccessor) {
-	this.offset = offset;
-	this.length = length;
-	this.content = content;
-	this.messageAccessor = messageAccessor;
+            boolean messageAccessor) {
+        this.offset = offset;
+        this.length = length;
+        this.content = content;
+        this.messageAccessor = messageAccessor;
     }
 
     @Override
     public void apply(IDocument document) {
-	try {
-	    document.replace(offset, length, content);
-	} catch (Exception e) {
-	    Logger.logError(e);
-	}
+        try {
+            document.replace(offset, length, content);
+        } catch (Exception e) {
+            Logger.logError(e);
+        }
     }
 
     @Override
     public String getAdditionalProposalInfo() {
-	return "Inserts the resource key '" + this.content + "'";
+        return "Inserts the resource key '" + this.content + "'";
     }
 
     @Override
     public IContextInformation getContextInformation() {
-	return null;
+        return null;
     }
 
     @Override
     public String getDisplayString() {
-	return content;
+        return content;
     }
 
     @Override
     public Image getImage() {
-	if (messageAccessor)
-	    return ImageUtils.getImage(ImageUtils.IMAGE_RESOURCE_BUNDLE);
-	return ImageUtils.getImage(ImageUtils.IMAGE_PROPERTIES_FILE);
+        if (messageAccessor)
+            return ImageUtils.getImage(ImageUtils.IMAGE_RESOURCE_BUNDLE);
+        return ImageUtils.getImage(ImageUtils.IMAGE_PROPERTIES_FILE);
     }
 
     @Override
     public Point getSelection(IDocument document) {
-	return new Point(offset + content.length() + 1, 0);
+        return new Point(offset + content.length() + 1, 0);
     }
 
     @Override
     public int getRelevance() {
-	return 99;
+        return 99;
     }
 
 }

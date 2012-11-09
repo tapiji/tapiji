@@ -11,18 +11,20 @@
 package org.eclipse.babel.core.message.tree;
 
 /**
- * Enum for two tree types. If a tree has the type {@link #Tree}, then it
- * is displayed as tree. E.g. following key is given: parent.child.grandchild
- * result: 
+ * Enum for two tree types. If a tree has the type {@link #Tree}, then it is
+ * displayed as tree. E.g. following key is given: parent.child.grandchild
+ * result:
+ * 
  * <pre>
  * parent
  * 	child
  * 		grandchild
  * </pre>
+ * 
  * If it is {@link #Flat}, it will be displayed as parent.child.grandchild.
  * 
  * @author Alexej Strelzow
  */
 public enum TreeType {
-	Tree, Flat
+    Tree, Flat
 }

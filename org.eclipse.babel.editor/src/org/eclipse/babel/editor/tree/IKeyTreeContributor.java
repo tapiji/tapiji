@@ -15,9 +15,9 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 public interface IKeyTreeContributor {
 
-	void contribute(final TreeViewer treeViewer);
+    void contribute(final TreeViewer treeViewer);
 
-	IKeyTreeNode getKeyTreeNode(String key);
+    IKeyTreeNode getKeyTreeNode(String key);
 
-	IKeyTreeNode[] getRootKeyItems();
+    IKeyTreeNode[] getRootKeyItems();
 }

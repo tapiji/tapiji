@@ -25,147 +25,153 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJarEntryResource;
 
 /**
- * A <code>ResourceBundle</code> represents a single <code>.properties</code> file.
+ * A <code>ResourceBundle</code> represents a single <code>.properties</code>
+ * file.
  * <p>
  * <code>ResourceBundle</code> implements lazy loading. A bundle will be loaded
- * automatically when its entries are accessed. It can through the parent model by
- * calling {@link ResourceBundleModel#unloadBundles(Locale)} with the proper locale.
+ * automatically when its entries are accessed. It can through the parent model
+ * by calling {@link ResourceBundleModel#unloadBundles(Locale)} with the proper
+ * locale.
  * </p>
  */
 public class ResourceBundle extends ResourceBundleElement {
 
-	private static boolean debug = false;
-	
-	/**
-	 * The bundle's locale.
-	 */
-	private Locale locale;
-	/**
-	 * The underlying resource. Either an {@link IFile} or an {@link IJarEntryResource}.
-	 */
-	private Object resource;
+    private static boolean debug = false;
 
-	private HashMap<String, String> entries;
+    /**
+     * The bundle's locale.
+     */
+    private Locale locale;
+    /**
+     * The underlying resource. Either an {@link IFile} or an
+     * {@link IJarEntryResource}.
+     */
+    private Object resource;
 
-	public ResourceBundle(ResourceBundleFamily parent, Object resource, Locale locale) {
-		super(parent);
-		this.resource = resource;
-		this.locale = locale;
-		if (locale == null)
-			throw new IllegalArgumentException("Locale may not be null.");
-	}
+    private HashMap<String, String> entries;
 
-	/**
-	 * Returns the family to which this bundle belongs.
-	 * 
-	 * @return the family to which this bundle belongs
-	 */
-	public ResourceBundleFamily getFamily() {
-		return (ResourceBundleFamily) super.getParent();
-	}
+    public ResourceBundle(ResourceBundleFamily parent, Object resource,
+            Locale locale) {
+        super(parent);
+        this.resource = resource;
+        this.locale = locale;
+        if (locale == null)
+            throw new IllegalArgumentException("Locale may not be null.");
+    }
 
-	/**
-	 * Returns the locale.
-	 * 
-	 * @return the locale
-	 */
-	public Locale getLocale() {
-		return locale;
-	}
+    /**
+     * Returns the family to which this bundle belongs.
+     * 
+     * @return the family to which this bundle belongs
+     */
+    public ResourceBundleFamily getFamily() {
+        return (ResourceBundleFamily) super.getParent();
+    }
 
-	public String getString(String key) throws CoreException {
-		load();
-		return entries.get(key);
-	}
+    /**
+     * Returns the locale.
+     * 
+     * @return the locale
+     */
+    public Locale getLocale() {
+        return locale;
+    }
 
-	/**
-	 * Returns the underlying resource. This may be an {@link IFile}
-	 * or an {@link IJarEntryResource}.
-	 * 
-	 * @return the underlying resource (an {@link IFile} or an {@link IJarEntryResource})
-	 */
-	public Object getUnderlyingResource() {
-		return resource;
-	}
+    public String getString(String key) throws CoreException {
+        load();
+        return entries.get(key);
+    }
 
-	protected boolean isLoaded() {
-		return entries != null;
-	}
+    /**
+     * Returns the underlying resource. This may be an {@link IFile} or an
+     * {@link IJarEntryResource}.
+     * 
+     * @return the underlying resource (an {@link IFile} or an
+     *         {@link IJarEntryResource})
+     */
+    public Object getUnderlyingResource() {
+        return resource;
+    }
 
-	public void load() throws CoreException {
-		if (isLoaded())
-			return;
-		entries = new HashMap<String, String>();
+    protected boolean isLoaded() {
+        return entries != null;
+    }
 
-		if (resource instanceof IFile) {
-			if (debug) {
-				System.out.println("Loading " + resource + "...");
-			}
-			IFile file = (IFile) resource;
-			InputStream inputStream = file.getContents();
-			Properties properties = new Properties();
-			try {
-				properties.load(inputStream);
-				putAll(properties);
-			} catch (IOException e) {
-				MessagesEditorPlugin.log("Error reading property file.", e);
-			}
-		} else if (resource instanceof IJarEntryResource) {
-			IJarEntryResource jarEntryResource = (IJarEntryResource) resource;
-			InputStream inputStream = jarEntryResource.getContents();
-			Properties properties = new Properties();
-			try {
-				properties.load(inputStream);
-				putAll(properties);
-			} catch (IOException e) {
-				MessagesEditorPlugin.log("Error reading property file.", e);
-			}
-		} else {
-			MessagesEditorPlugin.log("Unknown resource type.", new RuntimeException());
-		}
-	}
+    public void load() throws CoreException {
+        if (isLoaded())
+            return;
+        entries = new HashMap<String, String>();
 
-	protected void unload() {
-		entries = null;
-	}
+        if (resource instanceof IFile) {
+            if (debug) {
+                System.out.println("Loading " + resource + "...");
+            }
+            IFile file = (IFile) resource;
+            InputStream inputStream = file.getContents();
+            Properties properties = new Properties();
+            try {
+                properties.load(inputStream);
+                putAll(properties);
+            } catch (IOException e) {
+                MessagesEditorPlugin.log("Error reading property file.", e);
+            }
+        } else if (resource instanceof IJarEntryResource) {
+            IJarEntryResource jarEntryResource = (IJarEntryResource) resource;
+            InputStream inputStream = jarEntryResource.getContents();
+            Properties properties = new Properties();
+            try {
+                properties.load(inputStream);
+                putAll(properties);
+            } catch (IOException e) {
+                MessagesEditorPlugin.log("Error reading property file.", e);
+            }
+        } else {
+            MessagesEditorPlugin.log("Unknown resource type.",
+                    new RuntimeException());
+        }
+    }
 
-	public boolean isReadOnly() {
-		if (resource instanceof IJarEntryResource)
-			return true;
-		if (resource instanceof IFile) {
-			IFile file = (IFile) resource;
-			return file.isReadOnly() || file.isLinked();
-		}
-		return false;
-	}
+    protected void unload() {
+        entries = null;
+    }
 
-	protected void putAll(Properties properties) throws CoreException {
-		Set<Entry<Object, Object>> entrySet = properties.entrySet();
-		Iterator<Entry<Object, Object>> iter = entrySet.iterator();
-		ResourceBundleFamily family = getFamily();
-		while (iter.hasNext()) {
-			Entry<Object, Object> next = iter.next();
-			Object key = next.getKey();
-			Object value = next.getValue();
-			if (key instanceof String && value instanceof String) {
-				String stringKey = (String) key;
-				entries.put(stringKey, (String) value);
-				family.addKey(stringKey);
-			}
-		}
-	}
+    public boolean isReadOnly() {
+        if (resource instanceof IJarEntryResource)
+            return true;
+        if (resource instanceof IFile) {
+            IFile file = (IFile) resource;
+            return file.isReadOnly() || file.isLinked();
+        }
+        return false;
+    }
 
-	public void put(String key, String value) throws CoreException {
-		load();
-		ResourceBundleFamily family = getFamily();
-		entries.put(key, value);
-		family.addKey(key);
-	}
+    protected void putAll(Properties properties) throws CoreException {
+        Set<Entry<Object, Object>> entrySet = properties.entrySet();
+        Iterator<Entry<Object, Object>> iter = entrySet.iterator();
+        ResourceBundleFamily family = getFamily();
+        while (iter.hasNext()) {
+            Entry<Object, Object> next = iter.next();
+            Object key = next.getKey();
+            Object value = next.getValue();
+            if (key instanceof String && value instanceof String) {
+                String stringKey = (String) key;
+                entries.put(stringKey, (String) value);
+                family.addKey(stringKey);
+            }
+        }
+    }
 
-	public String[] getKeys() throws CoreException {
-		load();
-		Set<String> keySet = entries.keySet();
-		return keySet.toArray(new String[keySet.size()]);
-	}
+    public void put(String key, String value) throws CoreException {
+        load();
+        ResourceBundleFamily family = getFamily();
+        entries.put(key, value);
+        family.addKey(key);
+    }
+
+    public String[] getKeys() throws CoreException {
+        load();
+        Set<String> keySet = entries.keySet();
+        return keySet.toArray(new String[keySet.size()]);
+    }
 
 }

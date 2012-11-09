@@ -14,17 +14,17 @@ import org.eclipse.babel.core.message.checks.proximity.IProximityAnalyzer;
 import org.eclipse.babel.core.message.checks.proximity.LevenshteinDistanceAnalyzer;
 
 /**
- * Provides the {@link IProximityAnalyzer}
- * <br><br>
+ * Provides the {@link IProximityAnalyzer} <br>
+ * <br>
  * 
  * @author Alexej Strelzow
  */
 public class AnalyzerFactory {
 
-	/**
-	 * @return An instance of the {@link LevenshteinDistanceAnalyzer}
-	 */
-	public static IProximityAnalyzer getLevenshteinDistanceAnalyzer () {
-		return (IProximityAnalyzer) LevenshteinDistanceAnalyzer.getInstance();
-	}
+    /**
+     * @return An instance of the {@link LevenshteinDistanceAnalyzer}
+     */
+    public static IProximityAnalyzer getLevenshteinDistanceAnalyzer() {
+        return (IProximityAnalyzer) LevenshteinDistanceAnalyzer.getInstance();
+    }
 }

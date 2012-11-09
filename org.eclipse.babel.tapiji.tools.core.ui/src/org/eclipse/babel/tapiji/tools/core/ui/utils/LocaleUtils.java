@@ -18,33 +18,33 @@ import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 public class LocaleUtils {
 
     public static Locale getLocaleByDisplayName(Set<Locale> locales,
-	    String displayName) {
-	for (Locale l : locales) {
-	    String name = l == null ? ResourceBundleManager.defaultLocaleTag
-		    : l.getDisplayName();
-	    if (name.equals(displayName)
-		    || (name.trim().length() == 0 && displayName
-			    .equals(ResourceBundleManager.defaultLocaleTag))) {
-		return l;
-	    }
-	}
+            String displayName) {
+        for (Locale l : locales) {
+            String name = l == null ? ResourceBundleManager.defaultLocaleTag
+                    : l.getDisplayName();
+            if (name.equals(displayName)
+                    || (name.trim().length() == 0 && displayName
+                            .equals(ResourceBundleManager.defaultLocaleTag))) {
+                return l;
+            }
+        }
 
-	return null;
+        return null;
     }
 
     public static boolean containsLocaleByDisplayName(Set<Locale> locales,
-	    String displayName) {
-	for (Locale l : locales) {
-	    String name = l == null ? ResourceBundleManager.defaultLocaleTag
-		    : l.getDisplayName();
-	    if (name.equals(displayName)
-		    || (name.trim().length() == 0 && displayName
-			    .equals(ResourceBundleManager.defaultLocaleTag))) {
-		return true;
-	    }
-	}
+            String displayName) {
+        for (Locale l : locales) {
+            String name = l == null ? ResourceBundleManager.defaultLocaleTag
+                    : l.getDisplayName();
+            if (name.equals(displayName)
+                    || (name.trim().length() == 0 && displayName
+                            .equals(ResourceBundleManager.defaultLocaleTag))) {
+                return true;
+            }
+        }
 
-	return false;
+        return false;
     }
 
 }

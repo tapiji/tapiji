@@ -15,56 +15,60 @@ import java.util.Locale;
 import org.eclipse.babel.core.message.checks.IMessageCheck;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 
-
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public class ValidationFailureEvent {
 
     private final MessagesBundleGroup messagesBundleGroup;
     private final Locale locale;
     private final String key;
-//    private final IResource resource;
+    // private final IResource resource;
     private final IMessageCheck check;
+
     /**
      * @param messagesBundleGroup
      * @param locale
      * @param key
      * @param resource
-     * @param check not null
+     * @param check
+     *            not null
      */
-    /*default*/ ValidationFailureEvent(
-            final MessagesBundleGroup messagesBundleGroup,
-            final Locale locale,
+    /* default */ValidationFailureEvent(
+            final MessagesBundleGroup messagesBundleGroup, final Locale locale,
             final String key,
-//            final IResource resource,
+            // final IResource resource,
             final IMessageCheck check) {
         super();
         this.messagesBundleGroup = messagesBundleGroup;
         this.locale = locale;
         this.key = key;
-//        this.resource = resource;
+        // this.resource = resource;
         this.check = check;
     }
+
     /**
      * @return the messagesBundleGroup
      */
     public MessagesBundleGroup getBundleGroup() {
         return messagesBundleGroup;
     }
+
     /**
      * @return the check, never null
      */
     public IMessageCheck getCheck() {
         return check;
     }
+
     /**
      * @return the key
      */
     public String getKey() {
         return key;
     }
+
     /**
      * @return the locale
      */
@@ -72,6 +76,4 @@ public class ValidationFailureEvent {
         return locale;
     }
 
-    
-    
 }

@@ -32,72 +32,81 @@ import org.eclipse.swt.widgets.Display;
  */
 public class RefactoringService implements IRefactoringService {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void refactorKey(String projectName, String resourceBundleId, 
-			String selectedLocale, String oldKey, String newKey, String enumName) {
-		ASTutilsUI.refactorKey(projectName, resourceBundleId, selectedLocale, oldKey, newKey, enumName);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void refactorKey(String projectName, String resourceBundleId,
+            String selectedLocale, String oldKey, String newKey, String enumName) {
+        ASTutilsUI.refactorKey(projectName, resourceBundleId, selectedLocale,
+                oldKey, newKey, enumName);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void openRefactorDialog(String projectName, String resourceBundleId,
-			String oldKey, String enumName) {
-		
-		KeyRefactoringDialog dialog = new KeyRefactoringDialog(
-		        Display.getDefault().getActiveShell());
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void openRefactorDialog(String projectName, String resourceBundleId,
+            String oldKey, String enumName) {
 
-		DialogConfiguration config = dialog.new DialogConfiguration();
-		config.setPreselectedKey(oldKey);
-		config.setPreselectedBundle(resourceBundleId);
-		config.setProjectName(projectName);
+        KeyRefactoringDialog dialog = new KeyRefactoringDialog(Display
+                .getDefault().getActiveShell());
 
-		dialog.setDialogConfiguration(config);
+        DialogConfiguration config = dialog.new DialogConfiguration();
+        config.setPreselectedKey(oldKey);
+        config.setPreselectedBundle(resourceBundleId);
+        config.setProjectName(projectName);
 
-		if (dialog.open() != InputDialog.OK) {
-			return;
-		}
-		
-		refactorKey(projectName, resourceBundleId, config.getSelectedLocale(), oldKey, config.getNewKey(), enumName);
-	}
+        dialog.setDialogConfiguration(config);
 
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void openRefactorDialog(IFile file, int selectionOffset) {
-		
-		String projectName = file.getProject().getName();
-		CompilationUnit cu = ASTutilsUI.getCompilationUnit(file);
-		
-		StringLiteral literal = ASTutils.getStringLiteralAtPos(cu, selectionOffset);
-		
-		if (literal == null) { // check for Cal10n
-			String[] metaData = ASTutils.getCal10nEnumLiteralDataAtPos(projectName, cu, selectionOffset);
-			if (metaData != null) {
-				openRefactorDialog(projectName, metaData[0], metaData[1], metaData[2]);
-			}
-		} else { // it's a String (not Cal10n)
-			ResourceBundleManager manager = ResourceBundleManager.getManager(projectName);
-			ResourceAuditVisitor visitor = new ResourceAuditVisitor(file, projectName);
-			cu.accept(visitor);
-			
-			String oldKey = literal.getLiteralValue();
-			IRegion region = visitor.getKeyAt(new Long(selectionOffset));
-			String bundleName = visitor.getBundleReference(region);
-			if (bundleName != null) {
-				IMessagesBundleGroup resourceBundle = manager.getResourceBundle(bundleName);
-				if (resourceBundle.containsKey(oldKey)) {
-					String resourceBundleId = resourceBundle.getResourceBundleId();
-					
-					openRefactorDialog(projectName, resourceBundleId, oldKey, null);
-				}
-			}
-		}
-	}
+        if (dialog.open() != InputDialog.OK) {
+            return;
+        }
+
+        refactorKey(projectName, resourceBundleId, config.getSelectedLocale(),
+                oldKey, config.getNewKey(), enumName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void openRefactorDialog(IFile file, int selectionOffset) {
+
+        String projectName = file.getProject().getName();
+        CompilationUnit cu = ASTutilsUI.getCompilationUnit(file);
+
+        StringLiteral literal = ASTutils.getStringLiteralAtPos(cu,
+                selectionOffset);
+
+        if (literal == null) { // check for Cal10n
+            String[] metaData = ASTutils.getCal10nEnumLiteralDataAtPos(
+                    projectName, cu, selectionOffset);
+            if (metaData != null) {
+                openRefactorDialog(projectName, metaData[0], metaData[1],
+                        metaData[2]);
+            }
+        } else { // it's a String (not Cal10n)
+            ResourceBundleManager manager = ResourceBundleManager
+                    .getManager(projectName);
+            ResourceAuditVisitor visitor = new ResourceAuditVisitor(file,
+                    projectName);
+            cu.accept(visitor);
+
+            String oldKey = literal.getLiteralValue();
+            IRegion region = visitor.getKeyAt(new Long(selectionOffset));
+            String bundleName = visitor.getBundleReference(region);
+            if (bundleName != null) {
+                IMessagesBundleGroup resourceBundle = manager
+                        .getResourceBundle(bundleName);
+                if (resourceBundle.containsKey(oldKey)) {
+                    String resourceBundleId = resourceBundle
+                            .getResourceBundleId();
+
+                    openRefactorDialog(projectName, resourceBundleId, oldKey,
+                            null);
+                }
+            }
+        }
+    }
 }

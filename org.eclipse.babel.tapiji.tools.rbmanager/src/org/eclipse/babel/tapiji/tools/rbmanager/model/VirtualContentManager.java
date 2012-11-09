@@ -25,43 +25,43 @@ public class VirtualContentManager {
     }
 
     public static VirtualContentManager getVirtualContentManager() {
-	if (singelton == null) {
-	    singelton = new VirtualContentManager();
-	}
-	return singelton;
+        if (singelton == null) {
+            singelton = new VirtualContentManager();
+        }
+        return singelton;
     }
 
     public VirtualContainer getContainer(IContainer container) {
-	return containers.get(container);
+        return containers.get(container);
     }
 
     public void addVContainer(IContainer container, VirtualContainer vContainer) {
-	containers.put(container, vContainer);
+        containers.put(container, vContainer);
     }
 
     public void removeVContainer(IContainer container) {
-	vResourceBundles.remove(container);
+        vResourceBundles.remove(container);
     }
 
     public VirtualResourceBundle getVResourceBundles(String vRbId) {
-	return vResourceBundles.get(vRbId);
+        return vResourceBundles.get(vRbId);
     }
 
     public void addVResourceBundle(String vRbId,
-	    VirtualResourceBundle vResourceBundle) {
-	vResourceBundles.put(vRbId, vResourceBundle);
+            VirtualResourceBundle vResourceBundle) {
+        vResourceBundles.put(vRbId, vResourceBundle);
     }
 
     public void removeVResourceBundle(String vRbId) {
-	vResourceBundles.remove(vRbId);
+        vResourceBundles.remove(vRbId);
     }
 
     public boolean containsVResourceBundles(String vRbId) {
-	return vResourceBundles.containsKey(vRbId);
+        return vResourceBundles.containsKey(vRbId);
     }
 
     public void reset() {
-	vResourceBundles.clear();
-	containers.clear();
+        vResourceBundles.clear();
+        containers.clear();
     }
 }

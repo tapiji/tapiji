@@ -20,11 +20,11 @@ import org.eclipse.babel.core.message.resource.IMessagesResource;
  */
 public interface IMessagesResourceChangeListener {
 
-	/**
-	 * Method called when the messages resource has changed.
-	 * 
-	 * @param resource
-	 *            the resource that changed
-	 */
-	void resourceChanged(IMessagesResource resource);
+    /**
+     * Method called when the messages resource has changed.
+     * 
+     * @param resource
+     *            the resource that changed
+     */
+    void resourceChanged(IMessagesResource resource);
 }

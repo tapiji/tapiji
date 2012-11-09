@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 
 /**
  * A button that when clicked, will execute the given action.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public class ActionButton extends Composite {

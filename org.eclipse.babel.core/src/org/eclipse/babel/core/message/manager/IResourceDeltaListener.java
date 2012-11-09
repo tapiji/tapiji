@@ -13,26 +13,30 @@ package org.eclipse.babel.core.message.manager;
 import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.core.resources.IResource;
 
-
 /**
- * Used to update TapiJI (ResourceBundleManager) when bundles have been removed.
- * <br><br>
+ * Used to update TapiJI (ResourceBundleManager) when bundles have been removed. <br>
+ * <br>
  * 
  * @author Alexej Strelzow
  */
 public interface IResourceDeltaListener {
 
-	/**
-	 * Called when a resource (= bundle) has been removed
-	 * @param resourceBundleId The {@link IMessagesBundleGroup} which contains the bundle
-	 * @param resource The resource itself
-	 */
-	public void onDelete(String resourceBundleId, IResource resource);
-	
-	/**
-	 * Called when a {@link IMessagesBundleGroup} has been removed
-	 * @param bundleGroup The removed bundle group
-	 */
-	public void onDelete(IMessagesBundleGroup bundleGroup);
-	
+    /**
+     * Called when a resource (= bundle) has been removed
+     * 
+     * @param resourceBundleId
+     *            The {@link IMessagesBundleGroup} which contains the bundle
+     * @param resource
+     *            The resource itself
+     */
+    public void onDelete(String resourceBundleId, IResource resource);
+
+    /**
+     * Called when a {@link IMessagesBundleGroup} has been removed
+     * 
+     * @param bundleGroup
+     *            The removed bundle group
+     */
+    public void onDelete(IMessagesBundleGroup bundleGroup);
+
 }

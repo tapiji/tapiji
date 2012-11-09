@@ -43,9 +43,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
 /**
- * The "New" wizard page allows setting the container for
- * the new bundle group as well as the bundle group common base name. The page
- * will only accept file name without the extension.
+ * The "New" wizard page allows setting the container for the new bundle group
+ * as well as the bundle group common base name. The page will only accept file
+ * name without the extension.
+ * 
  * @author Pascal Essiembre (essiembre@users.sourceforge.net)
  * @version $Author: droy $ $Revision: 1.2 $ $Date: 2012/07/18 20:13:09 $
  */
@@ -54,9 +55,10 @@ public class ResourceBundleNewWizardPage extends WizardPage {
     static final String DEFAULT_LOCALE = "[" //$NON-NLS-1$
             + MessagesEditorPlugin.getString("editor.default") //$NON-NLS-1$
             + "]"; //$NON-NLS-1$
-    
+
     /**
-     * contains the path of the folder in which the resource file will be created
+     * contains the path of the folder in which the resource file will be
+     * created
      */
     private Text containerText;
     /**
@@ -64,33 +66,36 @@ public class ResourceBundleNewWizardPage extends WizardPage {
      */
     private Text fileText;
     private ISelection selection;
-    
+
     private Button addButton;
     private Button removeButton;
     /**
      * Contains all added locales
      */
     private List bundleLocalesList;
-    
+
     private LocaleSelector localeSelector;
 
     private String defaultPath = "";
     private String defaultRBName = "ApplicationResources";
-    
+
     /**
      * Constructor for SampleNewWizardPage.
-     * @param selection workbench selection
+     * 
+     * @param selection
+     *            workbench selection
      */
-    public ResourceBundleNewWizardPage(ISelection selection, String defaultPath, String defaultRBName) {
+    public ResourceBundleNewWizardPage(ISelection selection,
+            String defaultPath, String defaultRBName) {
         super("wizardPage"); //$NON-NLS-1$
         setTitle(MessagesEditorPlugin.getString("editor.wiz.title")); //$NON-NLS-1$
         setDescription(MessagesEditorPlugin.getString("editor.wiz.desc")); //$NON-NLS-1$
         this.selection = selection;
-        
-        if (! defaultPath.isEmpty())
-        	this.defaultPath = defaultPath;
-        if (! defaultRBName.isEmpty())
-        	this.defaultRBName = defaultRBName;
+
+        if (!defaultPath.isEmpty())
+            this.defaultPath = defaultPath;
+        if (!defaultRBName.isEmpty())
+            this.defaultRBName = defaultRBName;
     }
 
     /**
@@ -104,23 +109,23 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         layout.verticalSpacing = 20;
         GridData gd = new GridData(GridData.FILL_HORIZONTAL);
         container.setLayoutData(gd);
-        
-        // Bundle name + location        
+
+        // Bundle name + location
         createTopComposite(container);
 
-        // Locales        
+        // Locales
         createBottomComposite(container);
-        
-                
+
         initialize();
         dialogChanged();
         setControl(container);
     }
 
-
     /**
      * Creates the bottom part of this wizard, which is the locales to add.
-     * @param parent parent container
+     * 
+     * @param parent
+     *            parent container
      */
     private void createBottomComposite(Composite parent) {
         Composite container = new Composite(parent, SWT.NULL);
@@ -130,21 +135,22 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         layout.verticalSpacing = 9;
         GridData gd = new GridData(GridData.FILL_HORIZONTAL);
         container.setLayoutData(gd);
-        
+
         // Available locales
         createBottomAvailableLocalesComposite(container);
 
         // Buttons
         createBottomButtonsComposite(container);
-    
+
         // Selected locales
         createBottomSelectedLocalesComposite(container);
     }
 
     /**
-     * Creates the bottom part of this wizard where selected locales 
-     * are stored.
-     * @param parent parent container
+     * Creates the bottom part of this wizard where selected locales are stored.
+     * 
+     * @param parent
+     *            parent container
      */
     private void createBottomSelectedLocalesComposite(Composite parent) {
 
@@ -156,27 +162,29 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         selectedGroup.setLayout(layout);
         GridData gd = new GridData(GridData.FILL_BOTH);
         selectedGroup.setLayoutData(gd);
-        selectedGroup.setText(MessagesEditorPlugin.getString(
-                "editor.wiz.selected")); //$NON-NLS-1$
-        bundleLocalesList = 
-                new List(selectedGroup, SWT.READ_ONLY | SWT.MULTI | SWT.BORDER);
+        selectedGroup.setText(MessagesEditorPlugin
+                .getString("editor.wiz.selected")); //$NON-NLS-1$
+        bundleLocalesList = new List(selectedGroup, SWT.READ_ONLY | SWT.MULTI
+                | SWT.BORDER);
         gd = new GridData(GridData.FILL_BOTH);
         bundleLocalesList.setLayoutData(gd);
         bundleLocalesList.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
-                removeButton.setEnabled(
-                        bundleLocalesList.getSelectionIndices().length != 0);
+                removeButton.setEnabled(bundleLocalesList.getSelectionIndices().length != 0);
                 setAddButtonState();
             }
         });
-        // add a single Locale so that the bundleLocalesList isn't empty on startup
+        // add a single Locale so that the bundleLocalesList isn't empty on
+        // startup
         bundleLocalesList.add(DEFAULT_LOCALE);
     }
-    
+
     /**
      * Creates the bottom part of this wizard where buttons to add/remove
      * locales are located.
-     * @param parent parent container
+     * 
+     * @param parent
+     *            parent container
      */
     private void createBottomButtonsComposite(Composite parent) {
         Composite container = new Composite(parent, SWT.NULL);
@@ -189,8 +197,7 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         addButton = new Button(container, SWT.NULL);
         gd = new GridData(GridData.FILL_HORIZONTAL);
         addButton.setLayoutData(gd);
-        addButton.setText(MessagesEditorPlugin.getString(
-                "editor.wiz.add")); //$NON-NLS-1$
+        addButton.setText(MessagesEditorPlugin.getString("editor.wiz.add")); //$NON-NLS-1$
         addButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
                 bundleLocalesList.add(getSelectedLocaleAsString());
@@ -202,40 +209,43 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         removeButton = new Button(container, SWT.NULL);
         gd = new GridData(GridData.FILL_HORIZONTAL);
         removeButton.setLayoutData(gd);
-        removeButton.setText(MessagesEditorPlugin.getString(
-                "editor.wiz.remove")); //$NON-NLS-1$
+        removeButton.setText(MessagesEditorPlugin
+                .getString("editor.wiz.remove")); //$NON-NLS-1$
         removeButton.setEnabled(false);
         removeButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
-                bundleLocalesList.remove(
-                        bundleLocalesList.getSelectionIndices());
+                bundleLocalesList.remove(bundleLocalesList
+                        .getSelectionIndices());
                 removeButton.setEnabled(false);
                 setAddButtonState();
                 dialogChanged(); // for the locale-check
             }
         });
     }
-        
+
     /**
-     * Creates the bottom part of this wizard where locales can be chosen
-     * or created
-     * @param parent parent container
+     * Creates the bottom part of this wizard where locales can be chosen or
+     * created
+     * 
+     * @param parent
+     *            parent container
      */
     private void createBottomAvailableLocalesComposite(Composite parent) {
 
-        localeSelector = 
-                new LocaleSelector(parent);
-        localeSelector.addModifyListener(new ModifyListener(){
+        localeSelector = new LocaleSelector(parent);
+        localeSelector.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
                 setAddButtonState();
             }
         });
     }
-    
+
     /**
-     * Creates the top part of this wizard, which is the bundle name
-     * and location.
-     * @param parent parent container
+     * Creates the top part of this wizard, which is the bundle name and
+     * location.
+     * 
+     * @param parent
+     *            parent container
      */
     private void createTopComposite(Composite parent) {
         Composite container = new Composite(parent, SWT.NULL);
@@ -245,11 +255,10 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         layout.verticalSpacing = 9;
         GridData gd = new GridData(GridData.FILL_HORIZONTAL);
         container.setLayoutData(gd);
-        
+
         // Folder
         Label label = new Label(container, SWT.NULL);
-        label.setText(MessagesEditorPlugin.getString(
-                "editor.wiz.folder")); //$NON-NLS-1$
+        label.setText(MessagesEditorPlugin.getString("editor.wiz.folder")); //$NON-NLS-1$
 
         containerText = new Text(container, SWT.BORDER | SWT.SINGLE);
         gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -260,18 +269,16 @@ public class ResourceBundleNewWizardPage extends WizardPage {
             }
         });
         Button button = new Button(container, SWT.PUSH);
-        button.setText(MessagesEditorPlugin.getString(
-                "editor.wiz.browse")); //$NON-NLS-1$
+        button.setText(MessagesEditorPlugin.getString("editor.wiz.browse")); //$NON-NLS-1$
         button.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent e) {
                 handleBrowse();
             }
         });
-        
+
         // Bundle name
         label = new Label(container, SWT.NULL);
-        label.setText(MessagesEditorPlugin.getString(
-                "editor.wiz.bundleName")); //$NON-NLS-1$
+        label.setText(MessagesEditorPlugin.getString("editor.wiz.bundleName")); //$NON-NLS-1$
 
         fileText = new Text(container, SWT.BORDER | SWT.SINGLE);
         gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -284,121 +291,117 @@ public class ResourceBundleNewWizardPage extends WizardPage {
         label = new Label(container, SWT.NULL);
         label.setText("[locale].properties"); //$NON-NLS-1$
     }
-    
+
     /**
-     * Tests if the current workbench selection is a suitable
-     * container to use.
+     * Tests if the current workbench selection is a suitable container to use.
      */
     private void initialize() {
-        if (! defaultPath.isEmpty()) {
-        	containerText.setText(defaultPath);
-        	
-        } else if (selection!=null && selection.isEmpty()==false && 
-        		selection instanceof IStructuredSelection) {
-            IStructuredSelection ssel = (IStructuredSelection)selection;
-            if (ssel.size()>1) {
-            	return;
+        if (!defaultPath.isEmpty()) {
+            containerText.setText(defaultPath);
+
+        } else if (selection != null && selection.isEmpty() == false
+                && selection instanceof IStructuredSelection) {
+            IStructuredSelection ssel = (IStructuredSelection) selection;
+            if (ssel.size() > 1) {
+                return;
             }
             Object obj = ssel.getFirstElement();
             if (obj instanceof IAdaptable) {
-	    		IResource resource = (IResource) ((IAdaptable) obj).
-	    				getAdapter(IResource.class);
-	    		// check if selection is a file
-	    		if (resource.getType() == IResource.FILE) {
-	    			resource = resource.getParent();
-	    		}
-	    		// fill filepath container
-	    		containerText.setText(resource.getFullPath().
-	    				toPortableString());
-	    	} else if (obj instanceof IResource) { 
-	    		// this will most likely never happen (legacy code)
+                IResource resource = (IResource) ((IAdaptable) obj)
+                        .getAdapter(IResource.class);
+                // check if selection is a file
+                if (resource.getType() == IResource.FILE) {
+                    resource = resource.getParent();
+                }
+                // fill filepath container
+                containerText
+                        .setText(resource.getFullPath().toPortableString());
+            } else if (obj instanceof IResource) {
+                // this will most likely never happen (legacy code)
                 IContainer container;
                 if (obj instanceof IContainer) {
-                    container = (IContainer)obj;
+                    container = (IContainer) obj;
                 } else {
-                	container = ((IResource)obj).getParent();
+                    container = ((IResource) obj).getParent();
                 }
-                containerText.setText(container.getFullPath().
-                		toPortableString());
-            } 
+                containerText.setText(container.getFullPath()
+                        .toPortableString());
+            }
         }
-        
+
         fileText.setText(defaultRBName);
     }
-    
+
     /**
-     * Uses the standard container selection dialog to
-     * choose the new value for the container field.
+     * Uses the standard container selection dialog to choose the new value for
+     * the container field.
      */
 
-    /*default*/ void handleBrowse() {
-        ContainerSelectionDialog dialog =
-            new ContainerSelectionDialog(
-                getShell(),
-                ResourcesPlugin.getWorkspace().getRoot(),
-                false,
-                MessagesEditorPlugin.getString(
-                        "editor.wiz.selectFolder")); //$NON-NLS-1$
+    /* default */void handleBrowse() {
+        ContainerSelectionDialog dialog = new ContainerSelectionDialog(
+                getShell(), ResourcesPlugin.getWorkspace().getRoot(), false,
+                MessagesEditorPlugin.getString("editor.wiz.selectFolder")); //$NON-NLS-1$
         if (dialog.open() == Window.OK) {
             Object[] result = dialog.getResult();
             if (result.length == 1) {
-                containerText.setText(((Path)result[0]).toOSString());
+                containerText.setText(((Path) result[0]).toOSString());
             }
         }
     }
-    
+
     /**
      * Ensures that both text fields and the Locale field are set.
      */
-    /*default*/ void dialogChanged() {
+    /* default */void dialogChanged() {
         String container = getContainerName();
         String fileName = getFileName();
 
         if (container.length() == 0) {
-            updateStatus(MessagesEditorPlugin.getString(
-                    "editor.wiz.error.container")); //$NON-NLS-1$
+            updateStatus(MessagesEditorPlugin
+                    .getString("editor.wiz.error.container")); //$NON-NLS-1$
             return;
         }
         if (fileName.length() == 0) {
-            updateStatus(MessagesEditorPlugin.getString(
-                    "editor.wiz.error.bundleName")); //$NON-NLS-1$
+            updateStatus(MessagesEditorPlugin
+                    .getString("editor.wiz.error.bundleName")); //$NON-NLS-1$
             return;
         }
         int dotLoc = fileName.lastIndexOf('.');
         if (dotLoc != -1) {
-            updateStatus(MessagesEditorPlugin.getString(
-                    "editor.wiz.error.extension")); //$NON-NLS-1$
+            updateStatus(MessagesEditorPlugin
+                    .getString("editor.wiz.error.extension")); //$NON-NLS-1$
             return;
         }
         // check if at least one Locale has been added to th list
         if (bundleLocalesList.getItemCount() <= 0) {
-        	updateStatus(MessagesEditorPlugin.getString(
-                    "editor.wiz.error.locale")); //$NON-NLS-1$
+            updateStatus(MessagesEditorPlugin
+                    .getString("editor.wiz.error.locale")); //$NON-NLS-1$
             return;
         }
         // check if the container field contains a valid path
         // meaning: Project exists, at least one segment, valid path
         Path pathContainer = new Path(container);
         if (!pathContainer.isValidPath(container)) {
-        	updateStatus(MessagesEditorPlugin.getString(
-                    "editor.wiz.error.invalidpath")); //$NON-NLS-1$
+            updateStatus(MessagesEditorPlugin
+                    .getString("editor.wiz.error.invalidpath")); //$NON-NLS-1$
             return;
         }
-        
+
         if (pathContainer.segmentCount() < 1) {
-        	updateStatus(MessagesEditorPlugin.getString(
-                    "editor.wiz.error.invalidpath")); //$NON-NLS-1$
-        	return;
+            updateStatus(MessagesEditorPlugin
+                    .getString("editor.wiz.error.invalidpath")); //$NON-NLS-1$
+            return;
         }
-        
+
         if (!projectExists(pathContainer.segment(0))) {
-        	String errormessage = MessagesEditorPlugin.getString(
-                    "editor.wiz.error.projectnotexist");
-        	errormessage = String.format(errormessage, pathContainer.segment(0));
-        	updateStatus(errormessage); //$NON-NLS-1$
-        	return;
+            String errormessage = MessagesEditorPlugin
+                    .getString("editor.wiz.error.projectnotexist");
+            errormessage = String
+                    .format(errormessage, pathContainer.segment(0));
+            updateStatus(errormessage); //$NON-NLS-1$
+            return;
         }
-        
+
         updateStatus(null);
     }
 
@@ -409,67 +412,73 @@ public class ResourceBundleNewWizardPage extends WizardPage {
 
     /**
      * Gets the container name.
+     * 
      * @return container name
      */
     public String getContainerName() {
         return containerText.getText();
     }
-    /** 
+
+    /**
      * Gets the file name.
+     * 
      * @return file name
      */
     public String getFileName() {
         return fileText.getText();
     }
-    
+
     /**
-     * Sets the "add" button state. 
+     * Sets the "add" button state.
      */
-    /*default*/ void setAddButtonState() {
-        addButton.setEnabled(bundleLocalesList.indexOf(
-                getSelectedLocaleAsString()) == -1);
+    /* default */void setAddButtonState() {
+        addButton.setEnabled(bundleLocalesList
+                .indexOf(getSelectedLocaleAsString()) == -1);
     }
-    
+
     /**
      * Gets the user selected locales.
+     * 
      * @return locales
      */
-    /*default*/ String[] getLocaleStrings() {
+    /* default */String[] getLocaleStrings() {
         return bundleLocalesList.getItems();
     }
-    
+
     /**
      * Gets a string representation of selected locale.
+     * 
      * @return string representation of selected locale
      */
-    /*default*/ String getSelectedLocaleAsString() {
+    /* default */String getSelectedLocaleAsString() {
         Locale selectedLocale = localeSelector.getSelectedLocale();
         if (selectedLocale != null) {
             return selectedLocale.toString();
         }
         return DEFAULT_LOCALE;
     }
-    
+
     /**
      * Checks if there is a Project with the given name in the Package Explorer
+     * 
      * @param projectName
      * @return
      */
-    /*default*/ boolean projectExists(String projectName) {
-    	IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-        Path containerNamePath = new Path("/"+projectName);
+    /* default */boolean projectExists(String projectName) {
+        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+        Path containerNamePath = new Path("/" + projectName);
         IResource resource = root.findMember(containerNamePath);
         if (resource == null) {
-        	return false;
+            return false;
         }
         return resource.exists();
     }
-    
+
     public void setDefaultRBName(String name) {
-    	defaultRBName = name;
+        defaultRBName = name;
     }
-    
+
     public void setDefaultPath(String path) {
-    	defaultPath = path;
+        defaultPath = path;
     }
 }

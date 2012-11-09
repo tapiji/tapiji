@@ -24,63 +24,63 @@ import org.eclipse.jdt.core.JavaCore;
  */
 public class NameUtils {
 
-	
-	public static String getResourceBundleId(IResource resource) {
-		String packageFragment = "";
+    public static String getResourceBundleId(IResource resource) {
+        String packageFragment = "";
 
-		IJavaElement propertyFile = JavaCore.create(resource.getParent());
-		if (propertyFile != null && propertyFile instanceof IPackageFragment)
-			packageFragment = ((IPackageFragment) propertyFile)
-					.getElementName();
+        IJavaElement propertyFile = JavaCore.create(resource.getParent());
+        if (propertyFile != null && propertyFile instanceof IPackageFragment)
+            packageFragment = ((IPackageFragment) propertyFile)
+                    .getElementName();
 
-		return (packageFragment.length() > 0 ? packageFragment + "." : "")
-				+ getResourceBundleName(resource);
-	}
+        return (packageFragment.length() > 0 ? packageFragment + "." : "")
+                + getResourceBundleName(resource);
+    }
 
-	public static String getResourceBundleName(IResource res) {
-		String name = res.getName();
-		String regex = "^(.*?)" //$NON-NLS-1$
-				+ "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" //$NON-NLS-1$
-				+ "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." //$NON-NLS-1$
-				+ res.getFileExtension() + ")$"; //$NON-NLS-1$
-		return name.replaceFirst(regex, "$1"); //$NON-NLS-1$
-	}
-	
-	public static Locale getLocaleByName(String bundleName, String localeID) {
-		String theBundleName = bundleName;
-		if (theBundleName.contains(".")) {
-			// we entered this method with the rbID and not the name!
-			theBundleName = theBundleName.substring(theBundleName.indexOf(".") + 1);
-		}
-		
-		// Check locale
-		Locale locale = null;
-		localeID = localeID.substring(0,
-				localeID.length() - "properties".length() - 1);
-		if (localeID.length() == theBundleName.length()) {
-			// default locale
-			return null;
-		} else {
-			localeID = localeID.substring(theBundleName.length() + 1);
-			String[] localeTokens = localeID.split("_");
+    public static String getResourceBundleName(IResource res) {
+        String name = res.getName();
+        String regex = "^(.*?)" //$NON-NLS-1$
+                + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" //$NON-NLS-1$
+                + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." //$NON-NLS-1$
+                + res.getFileExtension() + ")$"; //$NON-NLS-1$
+        return name.replaceFirst(regex, "$1"); //$NON-NLS-1$
+    }
 
-			switch (localeTokens.length) {
-			case 1:
-				locale = new Locale(localeTokens[0]);
-				break;
-			case 2:
-				locale = new Locale(localeTokens[0], localeTokens[1]);
-				break;
-			case 3:
-				locale = new Locale(localeTokens[0], localeTokens[1],
-						localeTokens[2]);
-				break;
-			default:
-				locale = null;
-				break;
-			}
-		}
+    public static Locale getLocaleByName(String bundleName, String localeID) {
+        String theBundleName = bundleName;
+        if (theBundleName.contains(".")) {
+            // we entered this method with the rbID and not the name!
+            theBundleName = theBundleName
+                    .substring(theBundleName.indexOf(".") + 1);
+        }
 
-		return locale;
-	}
+        // Check locale
+        Locale locale = null;
+        localeID = localeID.substring(0,
+                localeID.length() - "properties".length() - 1);
+        if (localeID.length() == theBundleName.length()) {
+            // default locale
+            return null;
+        } else {
+            localeID = localeID.substring(theBundleName.length() + 1);
+            String[] localeTokens = localeID.split("_");
+
+            switch (localeTokens.length) {
+            case 1:
+                locale = new Locale(localeTokens[0]);
+                break;
+            case 2:
+                locale = new Locale(localeTokens[0], localeTokens[1]);
+                break;
+            case 3:
+                locale = new Locale(localeTokens[0], localeTokens[1],
+                        localeTokens[2]);
+                break;
+            default:
+                locale = null;
+                break;
+            }
+        }
+
+        return locale;
+    }
 }

@@ -29,46 +29,46 @@ public class VirtualProject extends VirtualContainer {
 
     // Slow
     public VirtualProject(IProject project, boolean countResourceBundles) {
-	super(project, countResourceBundles);
-	isFragment = FragmentProjectUtils.isFragment(project);
-	if (isFragment) {
-	    hostProject = FragmentProjectUtils.getFragmentHost(project);
-	} else
-	    fragmentProjects = FragmentProjectUtils.getFragments(project);
+        super(project, countResourceBundles);
+        isFragment = FragmentProjectUtils.isFragment(project);
+        if (isFragment) {
+            hostProject = FragmentProjectUtils.getFragmentHost(project);
+        } else
+            fragmentProjects = FragmentProjectUtils.getFragments(project);
     }
 
     /*
      * No fragment search
      */
     public VirtualProject(final IProject project, boolean isFragment,
-	    boolean countResourceBundles) {
-	super(project, countResourceBundles);
-	this.isFragment = isFragment;
-	// Display.getDefault().asyncExec(new Runnable() {
-	// @Override
-	// public void run() {
-	// hostProject = FragmentProjectUtils.getFragmentHost(project);
-	// }
-	// });
+            boolean countResourceBundles) {
+        super(project, countResourceBundles);
+        this.isFragment = isFragment;
+        // Display.getDefault().asyncExec(new Runnable() {
+        // @Override
+        // public void run() {
+        // hostProject = FragmentProjectUtils.getFragmentHost(project);
+        // }
+        // });
     }
 
     public Set<Locale> getProvidedLocales() {
-	return rbmanager.getProjectProvidedLocales();
+        return rbmanager.getProjectProvidedLocales();
     }
 
     public boolean isFragment() {
-	return isFragment;
+        return isFragment;
     }
 
     public IProject getHostProject() {
-	return hostProject;
+        return hostProject;
     }
 
     public boolean hasFragments() {
-	return !fragmentProjects.isEmpty();
+        return !fragmentProjects.isEmpty();
     }
 
     public List<IProject> getFragmets() {
-	return fragmentProjects;
+        return fragmentProjects;
     }
 }

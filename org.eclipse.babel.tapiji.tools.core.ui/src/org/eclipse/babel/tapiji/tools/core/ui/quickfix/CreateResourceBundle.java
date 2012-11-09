@@ -46,156 +46,156 @@ public class CreateResourceBundle implements IMarkerResolution2 {
     private final String newBunldeWizard = "org.eclipse.babel.editor.wizards.ResourceBundleWizard";
 
     public CreateResourceBundle(String key, IResource resource, int start,
-	    int end) {
-	this.key = ResourceUtils.deriveNonExistingRBName(key,
-		ResourceBundleManager.getManager(resource.getProject()));
-	this.resource = resource;
-	this.start = start;
-	this.end = end;
-	this.jsfContext = jsfContext;
+            int end) {
+        this.key = ResourceUtils.deriveNonExistingRBName(key,
+                ResourceBundleManager.getManager(resource.getProject()));
+        this.resource = resource;
+        this.start = start;
+        this.end = end;
+        this.jsfContext = jsfContext;
     }
 
     @Override
     public String getDescription() {
-	return "Creates a new Resource-Bundle with the id '" + key + "'";
+        return "Creates a new Resource-Bundle with the id '" + key + "'";
     }
 
     @Override
     public Image getImage() {
-	// TODO Auto-generated method stub
-	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public String getLabel() {
-	return "Create Resource-Bundle '" + key + "'";
+        return "Create Resource-Bundle '" + key + "'";
     }
 
     @Override
     public void run(IMarker marker) {
-	runAction();
+        runAction();
     }
 
     protected void runAction() {
-	// First see if this is a "new wizard".
-	IWizardDescriptor descriptor = PlatformUI.getWorkbench()
-		.getNewWizardRegistry().findWizard(newBunldeWizard);
-	// If not check if it is an "import wizard".
-	if (descriptor == null) {
-	    descriptor = PlatformUI.getWorkbench().getImportWizardRegistry()
-		    .findWizard(newBunldeWizard);
-	}
-	// Or maybe an export wizard
-	if (descriptor == null) {
-	    descriptor = PlatformUI.getWorkbench().getExportWizardRegistry()
-		    .findWizard(newBunldeWizard);
-	}
-	try {
-	    // Then if we have a wizard, open it.
-	    if (descriptor != null) {
-		IWizard wizard = descriptor.createWizard();
-		if (!(wizard instanceof IResourceBundleWizard)) {
-		    return;
-		}
+        // First see if this is a "new wizard".
+        IWizardDescriptor descriptor = PlatformUI.getWorkbench()
+                .getNewWizardRegistry().findWizard(newBunldeWizard);
+        // If not check if it is an "import wizard".
+        if (descriptor == null) {
+            descriptor = PlatformUI.getWorkbench().getImportWizardRegistry()
+                    .findWizard(newBunldeWizard);
+        }
+        // Or maybe an export wizard
+        if (descriptor == null) {
+            descriptor = PlatformUI.getWorkbench().getExportWizardRegistry()
+                    .findWizard(newBunldeWizard);
+        }
+        try {
+            // Then if we have a wizard, open it.
+            if (descriptor != null) {
+                IWizard wizard = descriptor.createWizard();
+                if (!(wizard instanceof IResourceBundleWizard)) {
+                    return;
+                }
 
-		IResourceBundleWizard rbw = (IResourceBundleWizard) wizard;
-		String[] keySilbings = key.split("\\.");
-		String rbName = keySilbings[keySilbings.length - 1];
-		String packageName = "";
+                IResourceBundleWizard rbw = (IResourceBundleWizard) wizard;
+                String[] keySilbings = key.split("\\.");
+                String rbName = keySilbings[keySilbings.length - 1];
+                String packageName = "";
 
-		rbw.setBundleId(rbName);
+                rbw.setBundleId(rbName);
 
-		// Set the default path according to the specified package name
-		String pathName = "";
-		if (keySilbings.length > 1) {
-		    try {
-			IJavaProject jp = JavaCore
-				.create(resource.getProject());
-			packageName = key.substring(0, key.lastIndexOf("."));
+                // Set the default path according to the specified package name
+                String pathName = "";
+                if (keySilbings.length > 1) {
+                    try {
+                        IJavaProject jp = JavaCore
+                                .create(resource.getProject());
+                        packageName = key.substring(0, key.lastIndexOf("."));
 
-			for (IPackageFragmentRoot fr : jp
-				.getAllPackageFragmentRoots()) {
-			    IPackageFragment pf = fr
-				    .getPackageFragment(packageName);
-			    if (pf.exists()) {
-				pathName = pf.getResource().getFullPath()
-					.removeFirstSegments(0).toOSString();
-				break;
-			    }
-			}
-		    } catch (Exception e) {
-			pathName = "";
-		    }
-		}
+                        for (IPackageFragmentRoot fr : jp
+                                .getAllPackageFragmentRoots()) {
+                            IPackageFragment pf = fr
+                                    .getPackageFragment(packageName);
+                            if (pf.exists()) {
+                                pathName = pf.getResource().getFullPath()
+                                        .removeFirstSegments(0).toOSString();
+                                break;
+                            }
+                        }
+                    } catch (Exception e) {
+                        pathName = "";
+                    }
+                }
 
-		try {
-		    IJavaProject jp = JavaCore.create(resource.getProject());
-		    if (pathName.trim().equals("")) {
-			for (IPackageFragmentRoot fr : jp
-				.getAllPackageFragmentRoots()) {
-			    if (!fr.isReadOnly()) {
-				pathName = fr.getResource().getFullPath()
-					.removeFirstSegments(0).toOSString();
-				break;
-			    }
-			}
-		    }
-		} catch (Exception e) {
-		    pathName = "";
-		}
+                try {
+                    IJavaProject jp = JavaCore.create(resource.getProject());
+                    if (pathName.trim().equals("")) {
+                        for (IPackageFragmentRoot fr : jp
+                                .getAllPackageFragmentRoots()) {
+                            if (!fr.isReadOnly()) {
+                                pathName = fr.getResource().getFullPath()
+                                        .removeFirstSegments(0).toOSString();
+                                break;
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    pathName = "";
+                }
 
-		rbw.setDefaultPath(pathName);
+                rbw.setDefaultPath(pathName);
 
-		WizardDialog wd = new WizardDialog(Display.getDefault()
-			.getActiveShell(), wizard);
-		wd.setTitle(wizard.getWindowTitle());
-		if (wd.open() == WizardDialog.OK) {
-		    try {
-			resource.getProject().build(
-				IncrementalProjectBuilder.FULL_BUILD,
-				I18nBuilder.BUILDER_ID, null, null);
-		    } catch (CoreException e) {
-			Logger.logError(e);
-		    }
+                WizardDialog wd = new WizardDialog(Display.getDefault()
+                        .getActiveShell(), wizard);
+                wd.setTitle(wizard.getWindowTitle());
+                if (wd.open() == WizardDialog.OK) {
+                    try {
+                        resource.getProject().build(
+                                IncrementalProjectBuilder.FULL_BUILD,
+                                I18nBuilder.BUILDER_ID, null, null);
+                    } catch (CoreException e) {
+                        Logger.logError(e);
+                    }
 
-		    ITextFileBufferManager bufferManager = FileBuffers
-			    .getTextFileBufferManager();
-		    IPath path = resource.getRawLocation();
-		    try {
-			bufferManager.connect(path, null);
-			ITextFileBuffer textFileBuffer = bufferManager
-				.getTextFileBuffer(path);
-			IDocument document = textFileBuffer.getDocument();
+                    ITextFileBufferManager bufferManager = FileBuffers
+                            .getTextFileBufferManager();
+                    IPath path = resource.getRawLocation();
+                    try {
+                        bufferManager.connect(path, null);
+                        ITextFileBuffer textFileBuffer = bufferManager
+                                .getTextFileBuffer(path);
+                        IDocument document = textFileBuffer.getDocument();
 
-			if (document.get().charAt(start - 1) == '"'
-				&& document.get().charAt(start) != '"') {
-			    start--;
-			    end++;
-			}
-			if (document.get().charAt(end + 1) == '"'
-				&& document.get().charAt(end) != '"') {
-			    end++;
-			}
+                        if (document.get().charAt(start - 1) == '"'
+                                && document.get().charAt(start) != '"') {
+                            start--;
+                            end++;
+                        }
+                        if (document.get().charAt(end + 1) == '"'
+                                && document.get().charAt(end) != '"') {
+                            end++;
+                        }
 
-			document.replace(start, end - start, "\""
-				+ (packageName.equals("") ? "" : packageName
-					+ ".") + rbName + "\"");
+                        document.replace(start, end - start, "\""
+                                + (packageName.equals("") ? "" : packageName
+                                        + ".") + rbName + "\"");
 
-			textFileBuffer.commit(null, false);
-		    } catch (Exception e) {
-			Logger.logError(e);
-		    } finally {
-			try {
-			    bufferManager.disconnect(path, null);
-			} catch (CoreException e) {
-			    Logger.logError(e);
-			}
-		    }
-		}
-	    }
-	} catch (CoreException e) {
-	    Logger.logError(e);
-	}
+                        textFileBuffer.commit(null, false);
+                    } catch (Exception e) {
+                        Logger.logError(e);
+                    } finally {
+                        try {
+                            bufferManager.disconnect(path, null);
+                        } catch (CoreException e) {
+                            Logger.logError(e);
+                        }
+                    }
+                }
+            }
+        } catch (CoreException e) {
+            Logger.logError(e);
+        }
     }
 
 }

@@ -20,115 +20,128 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 
 /**
- * Proposal for the key refactoring. The gets triggerd if you press
- * Ctrl + Shift + Space on an externalized (!) {@link String} or
- * on an externalized (!) enum! The key must be registered in the system!
+ * Proposal for the key refactoring. The gets triggerd if you press Ctrl + Shift
+ * + Space on an externalized (!) {@link String} or on an externalized (!) enum!
+ * The key must be registered in the system!
  * 
  * @author Alexej Strelzow
  */
 public class KeyRefactoringProposal implements IJavaCompletionProposal {
 
-	private int startPos;
-	private String value;
-	private String projectName;
-	private String bundleName;
-	private String reference;
-	private String enumPath;
+    private int startPos;
+    private String value;
+    private String projectName;
+    private String bundleName;
+    private String reference;
+    private String enumPath;
 
-	/**
-	 * Constructor for non Cal10n refactoring.
-	 * @param startPos The starting position of the Ctrl + Shift + Space command.
-	 * @param value The value of the key to refactor.
-	 * @param projectName The project the resource bundle is in.
-	 * @param bundleName The resource bundle, which contains the key to be refactored.
-	 */
-	public KeyRefactoringProposal(int startPos,
-	        String value, String projectName, String bundleName) {
+    /**
+     * Constructor for non Cal10n refactoring.
+     * 
+     * @param startPos
+     *            The starting position of the Ctrl + Shift + Space command.
+     * @param value
+     *            The value of the key to refactor.
+     * @param projectName
+     *            The project the resource bundle is in.
+     * @param bundleName
+     *            The resource bundle, which contains the key to be refactored.
+     */
+    public KeyRefactoringProposal(int startPos, String value,
+            String projectName, String bundleName) {
 
-		this.startPos = startPos;
-		this.value = value;
-		this.projectName = projectName;
-		this.bundleName = bundleName;
-	}
-	
-	/**
-	 * Constructor for Cal10n refactoring.
-	 * @param startPos The starting position of the Ctrl + Shift + Space command.
-	 * @param value The value of the key to refactor.
-	 * @param projectName The project the resource bundle is in.
-	 * @param bundleName The resource bundle, which contains the key to be refactored.
-	 * @param enumPath The {@link IPath#toPortableString()} of the enum to change
-	 */
-	public KeyRefactoringProposal(int startPos,
-	        String value, String projectName, String bundleName, String enumPath) {
-		this(startPos, value, projectName, bundleName);
-		this.enumPath = enumPath; // relative path (to the project)
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void apply(IDocument document) {
-		RBManager.getRefactorService().openRefactorDialog(projectName, bundleName, value, enumPath);
-	}
+        this.startPos = startPos;
+        this.value = value;
+        this.projectName = projectName;
+        this.bundleName = bundleName;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Point getSelection(IDocument document) {
-		int refLength = reference == null ? 0 : reference.length() - 1;
-		return new Point(startPos + refLength, 0);
-	}
+    /**
+     * Constructor for Cal10n refactoring.
+     * 
+     * @param startPos
+     *            The starting position of the Ctrl + Shift + Space command.
+     * @param value
+     *            The value of the key to refactor.
+     * @param projectName
+     *            The project the resource bundle is in.
+     * @param bundleName
+     *            The resource bundle, which contains the key to be refactored.
+     * @param enumPath
+     *            The {@link IPath#toPortableString()} of the enum to change
+     */
+    public KeyRefactoringProposal(int startPos, String value,
+            String projectName, String bundleName, String enumPath) {
+        this(startPos, value, projectName, bundleName);
+        this.enumPath = enumPath; // relative path (to the project)
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getAdditionalProposalInfo() {
-		
-		if (enumPath != null) {
-			return "Replace this enum key with a new one! \r\n" + 
-			"This operation will automatically replace all references to the selected key " + 
-			"with the new one. Also the enum value will be changed!";
-		} else {
-			return "Replace this key with a new one! \r\n" + 
-			"This operation will automatically replace all references to the selected key " + 
-			"with the new one.";
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void apply(IDocument document) {
+        RBManager.getRefactorService().openRefactorDialog(projectName,
+                bundleName, value, enumPath);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getDisplayString() {
-		return "Refactor this key...";
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Point getSelection(IDocument document) {
+        int refLength = reference == null ? 0 : reference.length() - 1;
+        return new Point(startPos + refLength, 0);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Image getImage() {
-		return UIUtils.getImageDescriptor(UIUtils.IMAGE_REFACTORING).createImage();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getAdditionalProposalInfo() {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public IContextInformation getContextInformation() {
-		return null;
-	}
+        if (enumPath != null) {
+            return "Replace this enum key with a new one! \r\n"
+                    + "This operation will automatically replace all references to the selected key "
+                    + "with the new one. Also the enum value will be changed!";
+        } else {
+            return "Replace this key with a new one! \r\n"
+                    + "This operation will automatically replace all references to the selected key "
+                    + "with the new one.";
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int getRelevance() {
-		return 100;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDisplayString() {
+        return "Refactor this key...";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Image getImage() {
+        return UIUtils.getImageDescriptor(UIUtils.IMAGE_REFACTORING)
+                .createImage();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IContextInformation getContextInformation() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getRelevance() {
+        return 100;
+    }
 
 }

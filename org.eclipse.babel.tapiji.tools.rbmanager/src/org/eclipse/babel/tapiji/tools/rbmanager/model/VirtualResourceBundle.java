@@ -23,38 +23,38 @@ public class VirtualResourceBundle {
     private ResourceBundleManager rbmanager;
 
     public VirtualResourceBundle(String rbname, String rbId,
-	    ResourceBundleManager rbmanager) {
-	this.rbmanager = rbmanager;
-	resourcebundlename = rbname;
-	resourcebundleId = rbId;
+            ResourceBundleManager rbmanager) {
+        this.rbmanager = rbmanager;
+        resourcebundlename = rbname;
+        resourcebundleId = rbId;
     }
 
     public ResourceBundleManager getResourceBundleManager() {
-	return rbmanager;
+        return rbmanager;
     }
 
     public String getResourceBundleId() {
-	return resourcebundleId;
+        return resourcebundleId;
     }
 
     @Override
     public String toString() {
-	return resourcebundleId;
+        return resourcebundleId;
     }
 
     public IPath getFullPath() {
-	return rbmanager.getRandomFile(resourcebundleId).getFullPath();
+        return rbmanager.getRandomFile(resourcebundleId).getFullPath();
     }
 
     public String getName() {
-	return resourcebundlename;
+        return resourcebundlename;
     }
 
     public Collection<IResource> getFiles() {
-	return rbmanager.getResourceBundles(resourcebundleId);
+        return rbmanager.getResourceBundles(resourcebundleId);
     }
 
     public IFile getRandomFile() {
-	return rbmanager.getRandomFile(resourcebundleId);
+        return rbmanager.getRandomFile(resourcebundleId);
     }
 }

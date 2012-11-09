@@ -22,120 +22,124 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 
 /**
- * Singelton, which provides information regarding the configuration of:
- * <li>TapiJI Preference Page: interface is {@link IConfiguration}</li>
- * <li>Serializing {@link MessagesBundleGroup} to property file</li>
- * <li>Deserializing {@link MessagesBundleGroup} from property file</li>
- * <br><br>
+ * Singelton, which provides information regarding the configuration of: <li>
+ * TapiJI Preference Page: interface is {@link IConfiguration}</li> <li>
+ * Serializing {@link MessagesBundleGroup} to property file</li> <li>
+ * Deserializing {@link MessagesBundleGroup} from property file</li> <br>
+ * <br>
  * 
  * @author Alexej Strelzow
  */
 public class ConfigurationManager {
 
-	private static ConfigurationManager INSTANCE;
-	
-	private IConfiguration config;
-	
-	private IPropertiesSerializerConfig serializerConfig;
-	
-	private IPropertiesDeserializerConfig deserializerConfig;
-	
-	private final static IConfiguration DEFAULT_CONFIG = new IConfiguration() {		
-		@Override
-		public String getNonRbPattern() {
-			return "^(.)*/build\\.properties:true;^(.)*/config\\.properties:true;^(.)*/targetplatform/(.)*:true";
-		}
-		
-		@Override
-		public boolean getAuditSameValue() {
-			return false;
-		}
-		
-		@Override
-		public boolean getAuditResource() {
-			return false;
-		}
-		
-		@Override
-		public boolean getAuditRb() {
-			return false;
-		}
-		
-		@Override
-		public boolean getAuditMissingValue() {
-			return false;
-		}
-		
-		@Override
-		public boolean getAuditMissingLanguage() {
-			return false;
-		}
-	};
-	
-	private ConfigurationManager() {
-		config = getConfig();
-	}
-	
-	private IConfiguration getConfig() {
-		
-		IExtensionPoint extp = Platform.getExtensionRegistry().getExtensionPoint(
-                "org.eclipse.babel.core" + ".babelConfiguration");
+    private static ConfigurationManager INSTANCE;
+
+    private IConfiguration config;
+
+    private IPropertiesSerializerConfig serializerConfig;
+
+    private IPropertiesDeserializerConfig deserializerConfig;
+
+    private final static IConfiguration DEFAULT_CONFIG = new IConfiguration() {
+        @Override
+        public String getNonRbPattern() {
+            return "^(.)*/build\\.properties:true;^(.)*/config\\.properties:true;^(.)*/targetplatform/(.)*:true";
+        }
+
+        @Override
+        public boolean getAuditSameValue() {
+            return false;
+        }
+
+        @Override
+        public boolean getAuditResource() {
+            return false;
+        }
+
+        @Override
+        public boolean getAuditRb() {
+            return false;
+        }
+
+        @Override
+        public boolean getAuditMissingValue() {
+            return false;
+        }
+
+        @Override
+        public boolean getAuditMissingLanguage() {
+            return false;
+        }
+    };
+
+    private ConfigurationManager() {
+        config = getConfig();
+    }
+
+    private IConfiguration getConfig() {
+
+        IExtensionPoint extp = Platform.getExtensionRegistry()
+                .getExtensionPoint(
+                        "org.eclipse.babel.core" + ".babelConfiguration");
         IConfigurationElement[] elements = extp.getConfigurationElements();
-        
+
         if (elements.length != 0) {
-        	try {
-				return (IConfiguration) elements[0].createExecutableExtension("class");
-        	} catch (CoreException e) {
-				e.printStackTrace();
-			}
-        } 
-    	return DEFAULT_CONFIG;
-	}
+            try {
+                return (IConfiguration) elements[0]
+                        .createExecutableExtension("class");
+            } catch (CoreException e) {
+                e.printStackTrace();
+            }
+        }
+        return DEFAULT_CONFIG;
+    }
 
-	/**
-	 * @return The singleton instance
-	 */
-	public static ConfigurationManager getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new ConfigurationManager();
-		}
-		return INSTANCE;
-	}
-	
-	/**
-	 * @return TapiJI configuration
-	 */
-	public IConfiguration getConfiguration() {
-		return this.config;
-	}
+    /**
+     * @return The singleton instance
+     */
+    public static ConfigurationManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ConfigurationManager();
+        }
+        return INSTANCE;
+    }
 
-	/**
-	 * @return Config needed for {@link PropertiesSerializer}
-	 */
-	public IPropertiesSerializerConfig getSerializerConfig() {
-		return serializerConfig;
-	}
+    /**
+     * @return TapiJI configuration
+     */
+    public IConfiguration getConfiguration() {
+        return this.config;
+    }
 
-	/**
-	 * @param serializerConfig The config for serialization
-	 */
-	public void setSerializerConfig(IPropertiesSerializerConfig serializerConfig) {
-		this.serializerConfig = serializerConfig;
-	}
+    /**
+     * @return Config needed for {@link PropertiesSerializer}
+     */
+    public IPropertiesSerializerConfig getSerializerConfig() {
+        return serializerConfig;
+    }
 
-	/**
-	 * @return Config needed for {@link PropertiesDeserializer}
-	 */
-	public IPropertiesDeserializerConfig getDeserializerConfig() {
-		return deserializerConfig;
-	}
+    /**
+     * @param serializerConfig
+     *            The config for serialization
+     */
+    public void setSerializerConfig(IPropertiesSerializerConfig serializerConfig) {
+        this.serializerConfig = serializerConfig;
+    }
 
-	/**
-	 * @param serializerConfig The config for deserialization
-	 */
-	public void setDeserializerConfig(
-			IPropertiesDeserializerConfig deserializerConfig) {
-		this.deserializerConfig = deserializerConfig;
-	}
-	
+    /**
+     * @return Config needed for {@link PropertiesDeserializer}
+     */
+    public IPropertiesDeserializerConfig getDeserializerConfig() {
+        return deserializerConfig;
+    }
+
+    /**
+     * @param serializerConfig
+     *            The config for deserialization
+     */
+    public void setDeserializerConfig(
+            IPropertiesDeserializerConfig deserializerConfig) {
+        this.deserializerConfig = deserializerConfig;
+    }
+
 }

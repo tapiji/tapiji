@@ -11,7 +11,8 @@
 package org.eclipse.babel.core.message.internal;
 
 /**
- * Exception thrown when a message-related operation raised a problem. 
+ * Exception thrown when a message-related operation raised a problem.
+ * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public class MessageException extends RuntimeException {
@@ -28,7 +29,9 @@ public class MessageException extends RuntimeException {
 
     /**
      * Creates a new <code>MessageException</code>.
-     * @param message exception message
+     * 
+     * @param message
+     *            exception message
      */
     public MessageException(String message) {
         super(message);
@@ -36,8 +39,11 @@ public class MessageException extends RuntimeException {
 
     /**
      * Creates a new <code>MessageException</code>.
-     * @param message exception message
-     * @param cause root cause
+     * 
+     * @param message
+     *            exception message
+     * @param cause
+     *            root cause
      */
     public MessageException(String message, Throwable cause) {
         super(message, cause);
@@ -45,7 +51,9 @@ public class MessageException extends RuntimeException {
 
     /**
      * Creates a new <code>MessageException</code>.
-     * @param cause root cause
+     * 
+     * @param cause
+     *            root cause
      */
     public MessageException(Throwable cause) {
         super(cause);
