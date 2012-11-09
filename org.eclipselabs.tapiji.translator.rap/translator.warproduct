@@ -71,7 +71,6 @@
       <plugin id="org.eclipselabs.tapiji.translator.rap.model"/>
       <plugin id="org.eclipselabs.tapiji.translator.rap.supplemental"/>
       <plugin id="org.hibernate"/>
-      <plugin id="org.jasypt"/>
       <plugin id="org.junit"/>
    </plugins>
 
@@ -140,7 +139,6 @@
       <plugin id="org.eclipselabs.tapiji.translator.rap.model" autoStart="true" startLevel="0" />
       <plugin id="org.eclipselabs.tapiji.translator.rap.supplemental" autoStart="true" startLevel="0" />
       <plugin id="org.hibernate" autoStart="true" startLevel="0" />
-      <plugin id="org.jasypt" autoStart="true" startLevel="0" />
       <plugin id="org.junit" autoStart="true" startLevel="0" />
    </configurations>
 
