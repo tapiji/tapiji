@@ -3,9 +3,9 @@
 <plugin>
    <extension
          point="org.eclipse.babel.tapiji.tools.core.builderExtension">
-      <i18nResourceAuditor
+      <i18nAuditor
             class="org.eclipse.babel.tapiji.tools.java.ui.JavaResourceAuditor">
-      </i18nResourceAuditor>
+      </i18nAuditor>
    </extension>
    <extension
          point="org.eclipse.jdt.ui.javaEditorTextHovers">
