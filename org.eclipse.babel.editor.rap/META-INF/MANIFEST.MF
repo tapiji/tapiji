@@ -5,5 +5,3 @@ Bundle-SymbolicName: org.eclipse.babel.editor.rap
 Bundle-Version: 0.8.0.qualifier
 Fragment-Host: org.eclipse.babel.editor;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.eclipselabs.tapiji.translator.rap.helpers.managers,
- org.eclipselabs.tapiji.translator.rap.helpers.utils

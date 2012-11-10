@@ -436,17 +436,20 @@ public class StorageView extends ViewPart {
 		
 		ResourceBundle rb = null;
 		List<PropertiesFile> deleteFiles = new ArrayList<PropertiesFile>();
-		boolean openEditor = false;
+		// remove while resource bundle
+		boolean removeRB = false;
 		
 		
 		if (selectedItem instanceof ResourceBundle) {
 			rb = (ResourceBundle) selectedItem;
 			deleteFiles.addAll(rb.getPropertiesFiles());
+			removeRB = true;
 			
 		} else if (selectedItem instanceof PropertiesFile) {
 			PropertiesFile file = (PropertiesFile) selectedItem;
 			rb = file.getResourceBundle();
 			deleteFiles.add(file);
+			removeRB = false;
 		}
 		
 		try {
@@ -456,7 +459,7 @@ public class StorageView extends ViewPart {
 			// shared Resource Bundle, user not owner of RB
 			if (! rb.isTemporary() && ! currentUser.equals(ownerUser)) {
 				// delete RB
-				if (deleteFiles.size() > 1) {
+				if (removeRB) {
 					// remove user relation to rb
 					currentUser.getStoredRBs().remove(rb);
 					currentUser.eResource().save(null);
@@ -489,27 +492,24 @@ public class StorageView extends ViewPart {
 				
 				// refresh msg editor if opened
 				IMessagesEditor msgEditor = EditorUtils.getMessagesEditor(rb);
-				if (msgEditor != null) {
-					// rb is deleted -> close editor
-					if (rb.getPropertiesFiles().isEmpty())
-						EditorUtils.closeEditorOfRB(rb, false);
+				if (msgEditor != null) {					
 					// properties file is deleted -> remove message bundle
-					else {
+					if (! removeRB) {
 						PropertiesFile propsFile = deleteFiles.get(0);
 						Locale deletedLocale = new Locale(propsFile.getLocale());
 						msgEditor.getBundleGroup().removeMessagesBundle(deletedLocale);
-					}
-						
+					}						
 				}
-			}
-			
+			}		
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
 		
-		
+		// close editor
+		if (removeRB)
+			EditorUtils.closeEditorOfRB(rb, false);
 		
 		// refresh tree
 		refreshSelectedRB(rb);
