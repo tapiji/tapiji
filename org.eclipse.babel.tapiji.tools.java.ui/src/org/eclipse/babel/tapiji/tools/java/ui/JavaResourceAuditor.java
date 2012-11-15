@@ -37,10 +37,14 @@ import org.eclipse.ui.IMarkerResolution;
 
 public class JavaResourceAuditor extends I18nResourceAuditor {
 
-    protected List<SLLocation> constantLiterals = new ArrayList<SLLocation>();
-    protected List<SLLocation> brokenResourceReferences = new ArrayList<SLLocation>();
-    protected List<SLLocation> brokenBundleReferences = new ArrayList<SLLocation>();
+    protected List<SLLocation> constantLiterals;
+    protected List<SLLocation> brokenResourceReferences;
+    protected List<SLLocation> brokenBundleReferences;
 
+    public JavaResourceAuditor() {
+        this.reset();
+    }
+    
     @Override
     public String[] getFileEndings() {
         return new String[] { "java" };
@@ -63,13 +67,13 @@ public class JavaResourceAuditor extends I18nResourceAuditor {
         cu.accept(csav);
 
         // Report all constant string literals
-        constantLiterals = csav.getConstantStringLiterals();
+        constantLiterals.addAll(csav.getConstantStringLiterals());
 
         // Report all broken Resource-Bundle references
-        brokenResourceReferences = csav.getBrokenResourceReferences();
+        brokenResourceReferences.addAll(csav.getBrokenResourceReferences());
 
         // Report all broken definitions to Resource-Bundle references
-        brokenBundleReferences = csav.getBrokenRBReferences();
+        brokenBundleReferences.addAll(csav.getBrokenRBReferences());
     }
 
     @Override
@@ -162,4 +166,10 @@ public class JavaResourceAuditor extends I18nResourceAuditor {
         return resolutions;
     }
 
+    @Override
+    public void reset() {
+        constantLiterals = new ArrayList<SLLocation>();
+        brokenResourceReferences = new ArrayList<SLLocation>();
+        brokenBundleReferences = new ArrayList<SLLocation>();
+    }
 }

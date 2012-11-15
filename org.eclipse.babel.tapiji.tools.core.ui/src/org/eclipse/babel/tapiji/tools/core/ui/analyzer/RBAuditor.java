@@ -60,5 +60,10 @@ public class RBAuditor extends I18nResourceAuditor {
     public List<IMarkerResolution> getMarkerResolutions(IMarker marker) {
         return null;
     }
+    
+    @Override
+    public void reset() {
+        // there is nothing todo
+    }
 
 }
