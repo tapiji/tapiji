@@ -435,8 +435,7 @@ public class StorageView extends ViewPart {
 		Object selectedItem = getSelectedItem();
 		
 		ResourceBundle rb = null;
-		List<PropertiesFile> deleteFiles = new ArrayList<PropertiesFile>();
-		// remove while resource bundle
+		List<PropertiesFile> deleteFiles = new ArrayList<PropertiesFile>();		
 		boolean removeRB = false;
 		
 		
@@ -460,8 +459,9 @@ public class StorageView extends ViewPart {
 			if (! rb.isTemporary() && ! currentUser.equals(ownerUser)) {
 				// delete RB
 				if (removeRB) {
-					// remove user relation to rb
+					// remove user share relation to rb
 					currentUser.getStoredRBs().remove(rb);
+					rb.getSharedUsers().remove(currentUser);
 					currentUser.eResource().save(null);
 				// delete properties file	
 				} else {
@@ -511,8 +511,11 @@ public class StorageView extends ViewPart {
 		if (removeRB)
 			EditorUtils.closeEditorOfRB(rb, false);
 		
-		// refresh tree
-		refreshSelectedRB(rb);
+		// refresh
+		if (removeRB)
+			refresh();
+		else
+			refreshSelectedRB(rb);
 	}
 
 	public void renameSelectedItem() {

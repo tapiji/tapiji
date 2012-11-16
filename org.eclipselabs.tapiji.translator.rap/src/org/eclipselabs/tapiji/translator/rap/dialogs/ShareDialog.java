@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipselabs.tapiji.translator.rap.helpers.utils.DBUtils;
 import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
 import org.eclipselabs.tapiji.translator.rap.model.user.User;
@@ -109,7 +110,7 @@ public class ShareDialog extends Dialog {
 	
     private void fillCombo(Combo combo) {
     	List<User> sharedUsers = resourceBundle.getSharedUsers();
-    	for (User user : UserUtils.getAllRegisteredUsers()) {
+    	for (User user : DBUtils.getAllRegisteredUsers()) {
     		// don't add already shared users and owner of rb
     		if (! sharedUsers.contains(user) && ! user.equals(resourceBundle.getOwner()))
     			combo.add(user.getUsername());
