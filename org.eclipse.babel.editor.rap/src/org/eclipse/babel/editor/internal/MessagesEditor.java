@@ -10,6 +10,7 @@ import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.core.message.internal.IMessagesBundleGroupListener;
 import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroupAdapter;
+import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.babel.editor.IMessagesEditor;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
@@ -40,7 +41,75 @@ public class MessagesEditor extends AbstractMessagesEditor {
 	private Display display;
 	private Map<PropertiesFile, IPropertiesFileLockListener> pfLockListeners = 
 			new HashMap<PropertiesFile, IPropertiesFileLockListener>();
+	
+	private IPropertiesFileLockListener pfLockListener = new IPropertiesFileLockListener() {		
+		// return locale from properties file ID
+		private Locale idToLocale(long pfID) {						
+			PropertiesFile propertiesFile = DBUtils.getPropertiesFile(pfID);
+			return propertiesFile.getLocale() != null ? 
+					new Locale(propertiesFile.getLocale()) : null;						
+		}
 		
+		@Override
+		public void lockAcquired(final PFLock lock) {
+			display.asyncExec(new Runnable() {									
+				@Override
+				public void run() {
+					User currentUser = UserUtils.getUser();
+					if (currentUser != null && ! currentUser.equals(lock.getOwner())) {										
+						Locale locale = idToLocale(lock.getPropertiesFileID());									
+						
+						// disable i18n-Page + text-editor								
+						setEnabled(false, locale);
+						// disable add button
+						i18nPage.getSidNavTextBoxComposite().setEnabled(false);
+						// disable context menu
+						i18nPage.getTreeViewer().getTree().getMenu().setEnabled(false);
+					}
+				}
+			});		
+		}	
+		
+		@Override
+		public void lockReleased(final PFLock lock) {
+			display.asyncExec(new Runnable() {									
+				@Override
+				public void run() {
+					User currentUser = UserUtils.getUser();
+					if (currentUser != null && ! currentUser.equals(lock.getOwner())) {
+						Locale locale = idToLocale(lock.getPropertiesFileID());
+						
+						// enable i18n-entry + text-editor
+						setEnabled(true, locale);
+						
+						if (RBLockManager.INSTANCE.isOwnerOfRBLock(currentUser, resourceBundle)) {
+							// enable add button if rb isn't locked
+							i18nPage.getSidNavTextBoxComposite().setEnabled(true);
+							// enable context menu
+							i18nPage.getTreeViewer().getTree().getMenu().setEnabled(true);
+						}
+						
+						// refresh the text-editor of the locale
+						for (int i=0; i < localesIndex.size(); i++) {
+							Locale l = localesIndex.get(i);
+							if (BabelUtils.equals(l, locale)) {
+								textEditorsIndex.get(i).doRevertToSaved();
+								break;
+							}				
+						}								
+						
+						// get messages bundle from locale						
+						IMessagesBundle msgBundle = messagesBundleGroup.getMessagesBundle(locale);						
+						// update message bundle with underlying resource
+						msgBundle.getResource().deserialize(msgBundle);
+						// refresh selected key's entry	
+						RBManager.getInstance(messagesBundleGroup.getProjectName()).fireResourceChanged(msgBundle);									
+					}
+				}
+			});
+		}
+	};
+	
 	@Override
 	public void disposeRAP() {		
 		if (resourceBundle != null && ! pfLockListeners.isEmpty()) {
@@ -64,91 +133,7 @@ public class MessagesEditor extends AbstractMessagesEditor {
 		// add locking mechanism only for stored resource bundles
 		if (resourceBundle != null) {				
 			SharedMsgEditorsManager.INSTANCE.addMessagesEditor(resourceBundle.getId(), this);
-			for (PropertiesFile propertiesFile : resourceBundle.getPropertiesFiles()) {
-				IPropertiesFileLockListener pfLockListener = new IPropertiesFileLockListener() {		
-//					IStatusLineManager statusLineManager;
-					
-//					private void initStatusLine() {
-//						if (statusLineManager == null && getEditorSite() != null)
-//							statusLineManager = getEditorSite().getActionBars().getStatusLineManager();
-//					}
-					
-					// return locale from properties file ID
-					private Locale idToLocale(long pfID) {						
-						PropertiesFile propertiesFile = DBUtils.getPropertiesFile(pfID);
-						return propertiesFile.getLocale() != null ? 
-								new Locale(propertiesFile.getLocale()) : null;						
-					}
-					
-					@Override
-					public void lockAcquired(final PFLock lock) {
-						display.asyncExec(new Runnable() {									
-							@Override
-							public void run() {
-								User currentUser = UserUtils.getUser();
-								if (currentUser != null && ! currentUser.equals(lock.getOwner())) {										
-									Locale locale = idToLocale(lock.getPropertiesFileID());									
-									
-									// disable i18n-Page + text-editor								
-									setEnabled(false, locale);
-									// disable add button
-									i18nPage.getSidNavTextBoxComposite().setEnabled(false);
-									// disable context menu
-									i18nPage.getTreeViewer().getTree().getMenu().setEnabled(false);
-								}
-							}
-						});		
-					}	
-					
-					@Override
-					public void lockReleased(final PFLock lock) {
-						display.asyncExec(new Runnable() {									
-							@Override
-							public void run() {
-								User currentUser = UserUtils.getUser();
-								if (currentUser != null && ! currentUser.equals(lock.getOwner())) {
-									Locale locale = idToLocale(lock.getPropertiesFileID());
-									
-									// enable i18n-entry + text-editor
-									setEnabled(true, locale);
-									
-									if (RBLockManager.INSTANCE.isOwnerOfRBLock(currentUser, resourceBundle)) {
-										// enable add button if rb isn't locked
-										i18nPage.getSidNavTextBoxComposite().setEnabled(true);
-										// enable context menu
-										i18nPage.getTreeViewer().getTree().getMenu().setEnabled(true);
-									}
-									
-									
-									
-									// refresh the text-editor of the locale
-									for (int i=0; i < localesIndex.size(); i++) {
-										Locale l = localesIndex.get(i);
-										if (BabelUtils.equals(l, locale)) {
-											textEditorsIndex.get(i).doRevertToSaved();
-											break;
-										}				
-									}									
-									// update message bundle of the locale with underlying resource
-									for (IMessagesBundle bundle : messagesBundleGroup.getMessagesBundles()) {
-										if (BabelUtils.equals(locale, bundle.getLocale())) {
-											bundle.getResource().deserialize(bundle);
-											break;
-										}
-									}
-									
-//									// refresh tree model
-//									refreshKeyTreeModel();
-									// refresh selected key's entries
-									for (IMessagesEditorChangeListener listener : changeListeners) {
-										listener.selectedKeyChanged(getSelectedKey(), getSelectedKey());
-									}										
-								}
-							}
-						});
-					}
-				};				
-				
+			for (PropertiesFile propertiesFile : resourceBundle.getPropertiesFiles()) {	
 				RBLockManager.INSTANCE.addPFLockListener(propertiesFile.getId(), pfLockListener);
 				// disable editor if resource bundle is already opened by another user
 				if (RBLockManager.INSTANCE.isPFLocked(propertiesFile.getId()))
@@ -167,12 +152,16 @@ public class MessagesEditor extends AbstractMessagesEditor {
 				final Locale newLocal = messagesBundle.getLocale();
 				
 				display.asyncExec(new Runnable() {
-					public void run() {
-						addMessagesBundle(messagesBundle, newLocal);
-						// add entry to i18n page
-						i18nPage.addI18NEntry(MessagesEditor.this, newLocal);
+					public void run() {						
+						// add a new messages bundle to editor
+						addMessagesBundle(messagesBundle);						
+						// get properties file
+						PropertiesFile pf = ((TextEditor) messagesBundle.getResource().getSource()).
+								getPropertiesFile();
 						// update resource bundle
-						resourceBundle = getRBFromFile(file);
+						resourceBundle.getPropertiesFiles().add(pf);
+						// register properties file lock listener						
+						RBLockManager.INSTANCE.addPFLockListener(pf.getId(), pfLockListener);
 					}
 				});
 				
@@ -195,10 +184,16 @@ public class MessagesEditor extends AbstractMessagesEditor {
 				
 				display.asyncExec(new Runnable() {
 					@Override
-					public void run() {											
-						removeMessagesBundle(messagesBundle, locale);						
+					public void run() {
+						// get properties file
+						PropertiesFile pf = ((TextEditor) messagesBundle.getResource().getSource()).
+								getPropertiesFile();
+						// remove properties file lock listener
+						RBLockManager.INSTANCE.removePFLockListener(pf.getId(), pfLockListener);
+						// remove msg bundle from i18n page + remove text editor
+						removeMessagesBundle(messagesBundle);						
 						// update resource bundle
-						resourceBundle = getRBFromFile(file);
+						resourceBundle.getPropertiesFiles().remove(pf);						
 					}
 				});					
 				
