@@ -435,18 +435,20 @@ public class StorageView extends ViewPart {
 		Object selectedItem = getSelectedItem();
 		
 		ResourceBundle rb = null;
-		List<PropertiesFile> deleteFiles = new ArrayList<PropertiesFile>();
-		boolean openEditor = false;
+		List<PropertiesFile> deleteFiles = new ArrayList<PropertiesFile>();		
+		boolean removeRB = false;
 		
 		
 		if (selectedItem instanceof ResourceBundle) {
 			rb = (ResourceBundle) selectedItem;
 			deleteFiles.addAll(rb.getPropertiesFiles());
+			removeRB = true;
 			
 		} else if (selectedItem instanceof PropertiesFile) {
 			PropertiesFile file = (PropertiesFile) selectedItem;
 			rb = file.getResourceBundle();
 			deleteFiles.add(file);
+			removeRB = false;
 		}
 		
 		try {
@@ -456,9 +458,10 @@ public class StorageView extends ViewPart {
 			// shared Resource Bundle, user not owner of RB
 			if (! rb.isTemporary() && ! currentUser.equals(ownerUser)) {
 				// delete RB
-				if (deleteFiles.size() > 1) {
-					// remove user relation to rb
+				if (removeRB) {
+					// remove user share relation to rb
 					currentUser.getStoredRBs().remove(rb);
+					rb.getSharedUsers().remove(currentUser);
 					currentUser.eResource().save(null);
 				// delete properties file	
 				} else {
@@ -489,30 +492,30 @@ public class StorageView extends ViewPart {
 				
 				// refresh msg editor if opened
 				IMessagesEditor msgEditor = EditorUtils.getMessagesEditor(rb);
-				if (msgEditor != null) {
-					// rb is deleted -> close editor
-					if (rb.getPropertiesFiles().isEmpty())
-						EditorUtils.closeEditorOfRB(rb, false);
+				if (msgEditor != null) {					
 					// properties file is deleted -> remove message bundle
-					else {
+					if (! removeRB) {
 						PropertiesFile propsFile = deleteFiles.get(0);
 						Locale deletedLocale = new Locale(propsFile.getLocale());
 						msgEditor.getBundleGroup().removeMessagesBundle(deletedLocale);
-					}
-						
+					}						
 				}
-			}
-			
+			}		
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
 		
+		// close editor
+		if (removeRB)
+			EditorUtils.closeEditorOfRB(rb, false);
 		
-		
-		// refresh tree
-		refreshSelectedRB(rb);
+		// refresh
+		if (removeRB)
+			refresh();
+		else
+			refreshSelectedRB(rb);
 	}
 
 	public void renameSelectedItem() {

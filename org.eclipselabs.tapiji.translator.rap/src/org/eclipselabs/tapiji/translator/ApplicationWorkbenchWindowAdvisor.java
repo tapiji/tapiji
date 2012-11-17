@@ -1,5 +1,8 @@
 package org.eclipselabs.tapiji.translator;
 
+import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.IMessagesBundleGroup;
+import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.IMessagesEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -72,15 +75,15 @@ public class ApplicationWorkbenchWindowAdvisor extends
 			}
 			
 			@Override
-			public void partClosed(IWorkbenchPartReference partRef) {
-				if (UserUtils.isUserLoggedIn()){
-					IWorkbenchPart workbenchPart = partRef.getPart(false);
-					IEditorPart editor = null;
-					
-					if (workbenchPart instanceof IEditorPart)
-						editor = (IEditorPart) workbenchPart;
-					
-					if (editor != null && editor instanceof IMessagesEditor) {
+			public void partClosed(IWorkbenchPartReference partRef) {				
+				IWorkbenchPart workbenchPart = partRef.getPart(false);
+				IEditorPart editor = null;
+				
+				if (workbenchPart instanceof IEditorPart)
+					editor = (IEditorPart) workbenchPart;
+				
+				if (editor != null && editor instanceof IMessagesEditor) {
+					if (UserUtils.isUserLoggedIn()) {
 						// release resource bundle locks
 						IFileEditorInput editorInput = (IFileEditorInput) editor.getEditorInput();
 						String ifilePath = editorInput.getFile().getLocation().toOSString();
@@ -92,7 +95,19 @@ public class ApplicationWorkbenchWindowAdvisor extends
 							RBLockManager.INSTANCE.releaseLocksHeldByUser(UserUtils.getUser(), rb);
 						}
 					}
-				}
+					
+					// dispose msg bundle group
+					IMessagesBundleGroup msgBundleGroup = ((IMessagesEditor) editor).getBundleGroup();
+					// dispose mbg with underlying eclipse properties editor resources
+					msgBundleGroup.dispose();
+					// dispose mbg with underlying properties file resources if it exists
+					IMessagesBundleGroup mbgPfr = RBManager.getInstance(msgBundleGroup.getProjectName()).
+							getMessagesBundleGroup("");
+					if (mbgPfr != null)
+						mbgPfr.dispose();
+					
+					
+				}				
 			}
 			
 			@Override

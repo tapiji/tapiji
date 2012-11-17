@@ -194,7 +194,7 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
         locales = UIUtils.filterLocales(locales);
         for (int i = 0; i < locales.length; i++) {
             Locale locale = locales[i];
-            addI18NEntry(editor, locale);
+            addI18NEntry(locale);
         }
 
         editor.addChangeListener(new MessagesEditorChangeAdapter() {
@@ -208,7 +208,7 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
         return scrolledComposite;
     }
 
-    public void addI18NEntry(AbstractMessagesEditor editor, Locale locale) {
+    public void addI18NEntry(Locale locale) {
         AbstractI18NEntry i18NEntry = null;
         try {
             Class<?> clazz = Class.forName(AbstractI18NEntry.INSTANCE_CLASS);

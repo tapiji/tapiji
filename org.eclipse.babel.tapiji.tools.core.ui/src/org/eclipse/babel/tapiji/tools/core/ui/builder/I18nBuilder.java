@@ -153,6 +153,12 @@ public class I18nBuilder extends IncrementalProjectBuilder {
 
         monitor.beginTask(
                 "Audit resource file for Internationalization problems", work);
+        
+        for (I18nAuditor ra : ExtensionManager.getRegisteredI18nAuditors()) {
+            if (ra instanceof I18nResourceAuditor) {
+                ((I18nResourceAuditor)ra).reset();
+            }
+        }
 
         for (IResource resource : resources) {
             monitor.subTask("'" + resource.getFullPath().toOSString() + "'");

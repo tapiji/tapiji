@@ -176,17 +176,14 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
             Locale locale = locales[i];
             MessagesBundle messagesBundle = (MessagesBundle) messagesBundleGroup
                     .getMessagesBundle(locale);
-            addMessagesBundle(messagesBundle, locale);
+            createMessagesBundlePage(messagesBundle);
         }
     }
 
     /**
-     * Creates a new text editor for the messages bundle and locale, which gets
-     * added to a new page
+     * Creates a new text editor for the messages bundle, which gets added to a new page
      */
-
-    protected void addMessagesBundle(MessagesBundle messagesBundle,
-            Locale locale) {
+    protected void createMessagesBundlePage(MessagesBundle messagesBundle) {
         try {
             IMessagesResource resource = messagesBundle.getResource();
             final TextEditor textEditor = (TextEditor) resource.getSource();
@@ -194,8 +191,8 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
             setPageText(index,
                     UIUtils.getDisplayName(messagesBundle.getLocale()));
             setPageImage(index, UIUtils.getImage(UIUtils.IMAGE_PROPERTIES_FILE));
-            localesIndex.add(locale);
-            textEditorsIndex.add(textEditor);
+            localesIndex.add(messagesBundle.getLocale());
+            textEditorsIndex.add(textEditor);            
         } catch (PartInitException e) {
             ErrorDialog.openError(getSite().getShell(),
                     "Error creating text editor page.", //$NON-NLS-1$
@@ -203,8 +200,19 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
         }
     }
 
-    protected void removeMessagesBundle(MessagesBundle messagesBundle,
-            Locale locale) {
+    /**
+     * Adds a new messages bundle to an opened messages editor. Creates a new text edtor page
+     * and a new entry in the i18n page for the given locale and messages bundle.
+     */
+    protected void addMessagesBundle(MessagesBundle messagesBundle) {
+    	createMessagesBundlePage(messagesBundle);
+    	i18nPage.addI18NEntry(messagesBundle.getLocale());
+    }
+    
+    /**
+     * Removes the text editor page + the entry from the i18n page of the given locale and messages bundle.
+     */
+    protected void removeMessagesBundle(MessagesBundle messagesBundle) {
         IMessagesResource resource = messagesBundle.getResource();
         final TextEditor textEditor = (TextEditor) resource.getSource();
         // index + 1 because of i18n page
@@ -212,12 +220,12 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
         removePage(pageIndex);
 
         textEditorsIndex.remove(textEditor);
-        localesIndex.remove(locale);
+        localesIndex.remove(messagesBundle.getLocale());
 
         textEditor.dispose();
 
         // remove entry from i18n page
-        i18nPage.removeI18NEntry(messagesBundle.getLocale());
+        i18nPage.removeI18NEntry(messagesBundle.getLocale());        
     }
 
     /**

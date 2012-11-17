@@ -30,3 +30,6 @@ Require-Bundle: org.eclipse.core.databinding,
  org.eclipse.jdt.core;bundle-version="3.6.2";resolution:=optional,
  org.eclipselabs.tapiji.translator.rap.supplemental;bundle-version="0.0.2";resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Eclipse-ExtensibleAPI: true
+Bundle-ClassPath: org.eclipse.babel.core.pdeutils.jar,
+ .

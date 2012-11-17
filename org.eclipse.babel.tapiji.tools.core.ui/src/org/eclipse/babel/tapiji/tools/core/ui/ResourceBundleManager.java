@@ -1,13 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2012 Martin Reiterer, Alexej Strelzow.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * Copyright (c) 2012 Martin Reiterer, Alexej Strelzow. All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Martin Reiterer - initial API and implementation
- *     Alexej Strelzow - moved object management to RBManager, Babel integration
+ * Contributors: Martin Reiterer - initial API and implementation Alexej
+ * Strelzow - moved object management to RBManager, Babel integration
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui;
 
@@ -129,10 +127,14 @@ public class ResourceBundleManager {
     public static ResourceBundleManager getManager(IProject project) {
         // check if persistant state has been loaded
         if (!state_loaded) {
-            stateLoader = getStateLoader();
-            stateLoader.loadState();
-            state_loaded = true;
-            excludedResources = stateLoader.getExcludedResources();
+            IStateLoader stateLoader = getStateLoader();
+            if (stateLoader != null) {
+                stateLoader.loadState();
+                state_loaded = true;
+                excludedResources = stateLoader.getExcludedResources();
+            } else {
+                Logger.logError("State-Loader uninitialized! Unable to restore project state.");
+            }
         }
 
         // set host-project
@@ -362,7 +364,7 @@ public class ResourceBundleManager {
                 }
             } catch (CoreException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                Logger.logError(e);
             }
         }
         return projs;
@@ -583,7 +585,12 @@ public class ResourceBundleManager {
         IResource resource = res;
 
         if (!state_loaded) {
-            stateLoader.loadState();
+            IStateLoader stateLoader = getStateLoader();
+            if (stateLoader != null) {
+                stateLoader.loadState();
+            } else {
+                Logger.logError("State-Loader uninitialized! Unable to restore state.");
+            }
         }
 
         boolean isExcluded = false;
@@ -621,7 +628,7 @@ public class ResourceBundleManager {
             IMessagesBundle bundle = messagesBundles.iterator().next();
             return FileUtils.getFile(bundle);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.logError(e);
         }
         return null;
     }
@@ -793,26 +800,34 @@ public class ResourceBundleManager {
         return locales;
     }
 
-    private static IStateLoader getStateLoader() {
+    public static IStateLoader getStateLoader() {
+        if (stateLoader == null) {
 
-        IExtensionPoint extp = Platform.getExtensionRegistry()
-                .getExtensionPoint(
-                        "org.eclipse.babel.tapiji.tools.core" + ".stateLoader");
-        IConfigurationElement[] elements = extp.getConfigurationElements();
+            IExtensionPoint extp = Platform.getExtensionRegistry()
+                    .getExtensionPoint(
+                            "org.eclipse.babel.tapiji.tools.core"
+                                    + ".stateLoader");
+            IConfigurationElement[] elements = extp.getConfigurationElements();
 
-        if (elements.length != 0) {
-            try {
-                return (IStateLoader) elements[0]
-                        .createExecutableExtension("class");
-            } catch (CoreException e) {
-                e.printStackTrace();
+            if (elements.length != 0) {
+                try {
+                    stateLoader = (IStateLoader) elements[0]
+                            .createExecutableExtension("class");
+                } catch (CoreException e) {
+                    Logger.logError(e);
+                }
             }
         }
-        return null;
+
+        return stateLoader;
+
     }
 
     public static void saveManagerState() {
-        stateLoader.saveState();
+        IStateLoader stateLoader = getStateLoader();
+        if (stateLoader != null) {
+            stateLoader.saveState();
+        }
     }
 
 }

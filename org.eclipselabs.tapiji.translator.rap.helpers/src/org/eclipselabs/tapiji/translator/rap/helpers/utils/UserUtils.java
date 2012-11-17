@@ -1,9 +1,7 @@
 package org.eclipselabs.tapiji.translator.rap.helpers.utils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
@@ -117,7 +115,7 @@ public class UserUtils {
 	}
 
 	/**
-	 * Checks if the given username matches an existing user, stored in database.
+	 * Checks if the given username matches an existing user stored in database.
 	 * @param username name of a user
 	 * @return true if the user exists or false if not.
 	 */
@@ -128,7 +126,8 @@ public class UserUtils {
 		for (EObject obj : registeredObjects) {
 			if (obj instanceof User) {
 				User user = (User) obj;
-				if (user.getUsername().equals(username)) {
+				// not case sensitive
+				if (user.getUsername().toLowerCase().equals(username.toLowerCase())) {
 					return true;
 				}
 			}
@@ -197,18 +196,5 @@ public class UserUtils {
 		}
 		// username not found
 		return null;
-	}
-	
-	public static List<User> getAllRegisteredUsers() {
-		Resource resource = DBUtils.getPersistentData();
-		EList<EObject> registeredObjects = resource.getContents();
-		
-		List<User> users = new ArrayList<User>();
-				
-		for (EObject obj : registeredObjects)
-			if (obj instanceof User)
-				users.add((User) obj);			
-		
-		return users;
 	}
 }

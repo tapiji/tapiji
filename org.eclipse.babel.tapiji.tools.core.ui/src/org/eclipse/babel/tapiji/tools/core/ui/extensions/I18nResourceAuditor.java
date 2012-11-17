@@ -67,6 +67,11 @@ public abstract class I18nResourceAuditor extends I18nAuditor {
      *         resources
      */
     public abstract List<ILocation> getBrokenBundleReferences();
+    
+    /**
+     * Resets the auditor and clears collected Internationalization errors
+     */
+    public abstract void reset();
 
     /**
      * Returns a characterizing identifier of the implemented auditing
