@@ -133,17 +133,19 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
 
             public void onResourceChanged(IMessagesBundle bundle) {
                 // [RAP] only update tree, which belongs to this UIThread
-                Display display = keysComposite.getTreeViewer().getTree()
-                        .getDisplay();
-                if (display.equals(Display.getCurrent())) {
-                    AbstractI18NEntry i18nEntry = entryComposites.get(bundle
-                            .getLocale());
-                    if (i18nEntry != null && !getSelection().isEmpty()) {
-                        i18nEntry.updateKey(String
-                                .valueOf(((IStructuredSelection) getSelection())
-                                        .getFirstElement()));
-                    }
-                }
+            	if (!keysComposite.isDisposed()) {
+	                Display display = keysComposite.getTreeViewer().getTree()
+	                        .getDisplay();
+	                if (display.equals(Display.getCurrent())) {
+	                    AbstractI18NEntry i18nEntry = entryComposites.get(bundle
+	                            .getLocale());
+	                    if (i18nEntry != null && !getSelection().isEmpty()) {
+	                        i18nEntry.updateKey(String
+	                                .valueOf(((IStructuredSelection) getSelection())
+	                                        .getFirstElement()));
+	                    }
+	                }
+            	}
             }
 
         });

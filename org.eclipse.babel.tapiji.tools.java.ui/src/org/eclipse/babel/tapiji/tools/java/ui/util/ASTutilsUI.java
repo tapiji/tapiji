@@ -16,9 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.babel.core.configuration.DirtyHack;
 import org.eclipse.babel.core.message.IMessagesBundle;
 import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.core.message.manager.RBManager;
+import org.eclipse.babel.core.util.FileUtils;
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.dialogs.KeyRefactoringDialog;
@@ -263,8 +265,11 @@ public class ASTutilsUI {
         IMessagesBundleGroup messagesBundleGroup = rbManager
                 .getMessagesBundleGroup(resourceBundleId);
 
+        DirtyHack.setFireEnabled(false); // now the editor won't get dirty
+        // but with this change, we have to write it manually down -> rbManager.writeToFile
         if (KeyRefactoringDialog.ALL_LOCALES.equals(selectedLocale)) {
             messagesBundleGroup.renameMessageKeys(oldKey, newKey);
+            
         } else {
             IMessagesBundle messagesBundle = messagesBundleGroup
                     .getMessagesBundle(LocaleUtils.getLocaleByDisplayName(
@@ -273,7 +278,10 @@ public class ASTutilsUI {
             messagesBundle.renameMessageKey(oldKey, newKey);
             // rbManager.fireResourceChanged(messagesBundle); ??
         }
+        DirtyHack.setFireEnabled(true);
+        
         rbManager.fireEditorChanged(); // notify Resource Bundle View
+        rbManager.writeToFile(rbManager.getMessagesBundleGroup(resourceBundleId));
 
         // show the summary dialog
         KeyRefactoringSummaryDialog summaryDialog = new KeyRefactoringSummaryDialog(

@@ -254,7 +254,9 @@ public class KeyTreeContributor implements IKeyTreeContributor {
             public void nodeAdded(KeyTreeNode node) {
                 Display.getDefault().asyncExec(new Runnable() {
                     public void run() {
-                        treeViewer.refresh(true);
+                    	if (!editor.getI18NPage().isDisposed()) {
+                    		treeViewer.refresh(true);
+                    	}
                     }
                 });
             };
@@ -265,7 +267,9 @@ public class KeyTreeContributor implements IKeyTreeContributor {
             public void nodeRemoved(KeyTreeNode node) {
                 Display.getDefault().asyncExec(new Runnable() {
                     public void run() {
-                        treeViewer.refresh(true);
+                    	if (!editor.getI18NPage().isDisposed()) {
+                    		treeViewer.refresh(true);
+                    	}
                     }
                 });
             };
