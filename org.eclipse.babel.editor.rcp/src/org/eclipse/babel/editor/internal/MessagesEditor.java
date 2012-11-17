@@ -13,10 +13,7 @@ public class MessagesEditor extends AbstractMessagesEditor {
         return new MessagesBundleGroupAdapter() {
             @Override
             public void messagesBundleAdded(MessagesBundle messagesBundle) {
-                addMessagesBundle(messagesBundle, messagesBundle.getLocale());
-                // refresh i18n page
-                i18nPage.addI18NEntry(MessagesEditor.this,
-                        messagesBundle.getLocale());
+                addMessagesBundle(messagesBundle);
             }
         };
     }
