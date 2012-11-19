@@ -1,31 +1,35 @@
 plugin@org.eclipse.babel.core=GIT,\
-       repo=git.eclipse.org/gitroot/babel/plugins.git,\
+       repo=git://git.eclipse.org/gitroot/babel/plugins.git,\
        path=org.eclipse.babel.core
 
 plugin@org.eclipse.babel.editor=GIT,\
-       repo=git.eclipse.org/gitroot/babel/plugins.git,\
+       repo=git://git.eclipse.org/gitroot/babel/plugins.git,\
        path=org.eclipse.babel.editor
 
-plugin@org.eclipse.babel.editor.nls=GIT,\
-       repo=git.eclipse.org/gitroot/babel/plugins.git,\
+fragment@org.eclipse.babel.editor.nls=GIT,\
+       repo=git://git.eclipse.org/gitroot/babel/plugins.git,\
        path=org.eclipse.babel.editor.nls
 
 plugin@org.eclipse.babel.tapiji.tools.core=GIT,\
-       repo=git.eclipse.org/gitroot/babel/plugins.git,\
+       repo=git://git.eclipse.org/gitroot/babel/plugins.git,\
        path=org.eclipse.babel.tapiji.tools.core
 
 plugin@org.eclipse.babel.tapiji.tools.core.ui=GIT,\
-       repo=git.eclipse.org/gitroot/babel/plugins.git,\
+       repo=git://git.eclipse.org/gitroot/babel/plugins.git,\
        path=org.eclipse.babel.tapiji.tools.core.ui
 
 plugin@org.eclipse.babel.tapiji.tools.java=GIT,\
-       repo=git.eclipse.org/gitroot/babel/plugins.git,\
+       repo=git://git.eclipse.org/gitroot/babel/plugins.git,\
        path=org.eclipse.babel.tapiji.tools.java
 
 plugin@org.eclipse.babel.tapiji.tools.java.ui=GIT,\
-       repo=git.eclipse.org/gitroot/babel/plugins.git,\
+       repo=git://git.eclipse.org/gitroot/babel/plugins.git,\
        path=org.eclipse.babel.tapiji.tools.java.ui
 
+plugin@org.eclipse.babel.tapiji.tools.rbmanager=GIT,\
+       repo=git://git.eclipse.org/gitroot/babel/plugins.git,\
+       path=org.eclipse.babel.tapiji.tools.rbmanager
+
 feature@org.eclipse.babel.tapiji.tools.java.feature=GIT,\
-       repo=git.eclipse.org/gitroot/babel/plugins.git,\
-       path=/plugins
+       repo=git://git.eclipse.org/gitroot/babel/plugins.git,\
+       path=org.eclipse.babel.tapiji.tools.java.feature
