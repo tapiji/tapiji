@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
-import java.util.Properties;
 
 import org.eclipse.babel.core.message.IMessage;
 import org.eclipse.babel.core.message.IMessagesBundle;
@@ -270,3 +269,4 @@ public class PropertiesDeserializer {
     }
 
 }
+
