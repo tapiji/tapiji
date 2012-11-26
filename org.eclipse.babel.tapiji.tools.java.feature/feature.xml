@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.babel.tapiji.tools.java.feature"
+      label="Feature"
+      version="0.0.2.qualifier">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <plugin
+         id="org.eclipse.babel.core"
+         download-size="0"
+         install-size="0"
+         version="0.8.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.babel.editor"
+         download-size="0"
+         install-size="0"
+         version="0.8.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.babel.editor.nls"
+         download-size="0"
+         install-size="0"
+         version="0.8.0.qualifier"
+         fragment="true"/>
+
+   <plugin
+         id="org.eclipse.babel.tapiji.tools.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.2.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.babel.tapiji.tools.core.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.2.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.babel.tapiji.tools.java"
+         download-size="0"
+         install-size="0"
+         version="0.0.2.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.babel.tapiji.tools.java.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.2.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.babel.tapiji.tools.rbmanager"
+         download-size="0"
+         install-size="0"
+         version="0.0.2.qualifier"
+         unpack="false"/>
+
+</feature>

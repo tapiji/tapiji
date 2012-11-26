@@ -22,6 +22,7 @@ Export-Package: org.eclipse.babel.core.configuration;uses:="org.eclipse.babel.co
  org.eclipse.babel.core.message.tree,
  org.eclipse.babel.core.message.tree.internal,
  org.eclipse.babel.core.message.tree.visitor;uses:="org.eclipse.babel.core.message,org.eclipselabs.tapiji.translator.rbe.babel.bundle",
+ org.eclipse.babel.core.refactoring,
  org.eclipse.babel.core.util;uses:="org.eclipse.core.resources"
 Require-Bundle: org.eclipse.core.databinding,
  org.eclipse.core.resources,

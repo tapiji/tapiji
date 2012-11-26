@@ -3,3 +3,8 @@
 /*/tmp/**
 /*/local.properties
 /*/.settings/
+/*/target/
+
+# binaries for PDE editor extension
+org.eclipse.babel.core.pdeutils/org.eclipse.babel.core.pdeutils.jar
+

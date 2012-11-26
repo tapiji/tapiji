@@ -8,7 +8,7 @@
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
  *    Alexej Strelzow - TapJI integration, bug fixes & enhancements
- *    				  - issue 35, 36, 48, 73
+ *                    - issue 35, 36, 48, 73
  ******************************************************************************/
 package org.eclipse.babel.editor.internal;
 
@@ -205,8 +205,8 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
      * and a new entry in the i18n page for the given locale and messages bundle.
      */
     protected void addMessagesBundle(MessagesBundle messagesBundle) {
-    	createMessagesBundlePage(messagesBundle);
-    	i18nPage.addI18NEntry(messagesBundle.getLocale());
+        createMessagesBundlePage(messagesBundle);
+        i18nPage.addI18NEntry(messagesBundle.getLocale());
     }
     
     /**
