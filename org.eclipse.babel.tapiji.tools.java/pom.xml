@@ -4,7 +4,7 @@
   <packaging>eclipse-plugin</packaging>
 
   <parent>
-  	<groupId>org.eclipse.babel.tapiji.tools</groupId>
+  	<groupId>org.eclipse.babel.plugins</groupId>
   	<artifactId>org.eclipse.babel.tapiji.tools.parent</artifactId>
   	<version>0.0.2-SNAPSHOT</version>
   	<relativePath>../org.eclipse.babel.tapiji.tools.parent</relativePath>

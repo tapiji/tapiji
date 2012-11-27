@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
   xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.eclipse.babel.tapiji.tools</groupId>
+  <groupId>org.eclipse.babel.plugins</groupId>
   <artifactId>org.eclipse.babel.tapiji.tools.parent</artifactId>
   <version>0.0.2-SNAPSHOT</version>
   <packaging>pom</packaging>
@@ -57,7 +57,7 @@
         <configuration>
           <target>
             <artifact>
-              <groupId>org.eclipse.babel.tapiji.tools</groupId>
+              <groupId>org.eclipse.babel.plugins</groupId>
               <artifactId>org.eclipse.babel.tapiji.tools.target</artifactId>
               <version>0.0.2-SNAPSHOT</version>
             </artifact>
