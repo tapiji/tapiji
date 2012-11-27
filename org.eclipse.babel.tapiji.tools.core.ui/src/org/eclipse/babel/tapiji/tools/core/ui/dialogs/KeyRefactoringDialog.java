@@ -237,6 +237,8 @@ public class KeyRefactoringDialog extends TitleAreaDialog {
         newKeyLabel.setText("New key name:");
 
         newKeyText = new Text(master, SWT.BORDER);
+        newKeyText.setText(config.getPreselectedKey());
+        newKeyText.setSelection(0, newKeyText.getText().length());
         newKeyText.setLayoutData(new GridData(GridData.FILL, GridData.FILL,
                 true, true, 1, 1));
 
