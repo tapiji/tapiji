@@ -10,11 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.dialogs;
 
-import java.util.Locale;
-import java.util.Set;
-
 import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
-import org.eclipse.babel.tapiji.tools.core.ui.utils.LocaleUtils;
 import org.eclipse.babel.tapiji.tools.core.ui.utils.ResourceUtils;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
@@ -25,7 +21,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -43,7 +38,6 @@ public class KeyRefactoringDialog extends TitleAreaDialog {
     /*** Dialog Model ***/
     private DialogConfiguration config;
     private String selectedKey = "";
-    private String selectedLocale = "";
 
     public static final String ALL_LOCALES = "All available";
 
@@ -61,7 +55,7 @@ public class KeyRefactoringDialog extends TitleAreaDialog {
     private Text newKeyText;
     private Text projectText;
     private Text resourceBundleText;
-    private Combo languageCombo;
+    private Text languageText;
 
     /**
      * Meta data for the dialog.
@@ -136,50 +130,8 @@ public class KeyRefactoringDialog extends TitleAreaDialog {
 
         Composite dialogArea = (Composite) super.createDialogArea(parent);
         initLayout(dialogArea);
-        initContent();
 
         return super.createDialogArea(parent);
-    }
-
-    private void initContent() {
-        ResourceBundleManager manager = ResourceBundleManager.getManager(config
-                .getProjectName());
-        // Retrieve available locales for the selected resource-bundle
-        Set<Locale> locales = manager.getProvidedLocales(config
-                .getPreselectedBundle());
-
-        String displayName = ResourceBundleManager.defaultLocaleTag;
-
-        // if only 1 locale available, then set this locale
-        if (locales.size() == 1) {
-            Locale l = locales.iterator().next();
-            languageCombo.add(l == null ? displayName : l.getDisplayName());
-        } else {
-            languageCombo.add(ALL_LOCALES);
-            for (Locale l : locales) {
-                displayName = l == null ? ResourceBundleManager.defaultLocaleTag
-                        : l.getDisplayName();
-                languageCombo.add(displayName);
-
-            }
-        }
-
-        languageCombo.select(0);
-        selectedLocale = languageCombo.getItem(0);
-        newKeyText.setFocus();
-
-        languageCombo.addModifyListener(new ModifyListener() {
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void modifyText(ModifyEvent e) {
-                selectedLocale = languageCombo.getText();
-                validate();
-            }
-        });
-
     }
 
     /**
@@ -220,9 +172,11 @@ public class KeyRefactoringDialog extends TitleAreaDialog {
         languageLabel = new Label(master, SWT.NONE);
         languageLabel.setText("Language (Country):");
 
-        languageCombo = new Combo(master, SWT.BORDER);
-        languageCombo.setLayoutData(new GridData(GridData.FILL, GridData.FILL,
+        languageText = new Text(master, SWT.BORDER);
+        languageText.setLayoutData(new GridData(GridData.FILL, GridData.FILL,
                 true, true, 1, 1));
+        languageText.setText(ALL_LOCALES);
+        languageText.setEnabled(false);
 
         oldKeyLabel = new Label(master, SWT.NONE);
         oldKeyLabel.setText("Old key name:");
@@ -241,6 +195,8 @@ public class KeyRefactoringDialog extends TitleAreaDialog {
         newKeyText.setSelection(0, newKeyText.getText().length());
         newKeyText.setLayoutData(new GridData(GridData.FILL, GridData.FILL,
                 true, true, 1, 1));
+        
+        newKeyText.setFocus();
 
         newKeyText.addModifyListener(new ModifyListener() {
 
@@ -294,18 +250,12 @@ public class KeyRefactoringDialog extends TitleAreaDialog {
     protected void validate() {
         // Check Resource-Bundle ids
         boolean keyValid = false;
-        boolean localeValid = true;
         boolean keyValidChar = ResourceUtils.isValidResourceKey(selectedKey);
 
         String resourceBundle = config.getPreselectedBundle();
 
         ResourceBundleManager manager = ResourceBundleManager.getManager(config
                 .getProjectName());
-
-        if (!ALL_LOCALES.equals(selectedLocale)) {
-            localeValid = LocaleUtils.containsLocaleByDisplayName(
-                    manager.getProvidedLocales(resourceBundle), selectedLocale);
-        }
 
         if (!manager.isResourceExisting(resourceBundle, selectedKey)) {
             keyValid = true;
@@ -316,11 +266,9 @@ public class KeyRefactoringDialog extends TitleAreaDialog {
             errorMessage = "No resource key specified.";
         } else if (!keyValidChar) {
             errorMessage = "The specified resource key contains invalid characters.";
-        } else if (!keyValid)
+        } else if (!keyValid) {
             errorMessage = "The specified resource key is already existing.";
-        else if (!localeValid) {
-            errorMessage = "The specified Locale does not exist for the selected Resource-Bundle.";
-        } else {
+    	} else {
             if (okButton != null)
                 okButton.setEnabled(true);
         }
@@ -330,7 +278,7 @@ public class KeyRefactoringDialog extends TitleAreaDialog {
             okButton.setEnabled(false);
         } else {
             this.config.setNewKey(selectedKey);
-            this.config.setSelectedLocale(selectedLocale);
+            this.config.setSelectedLocale(ALL_LOCALES);
         }
     }
 
