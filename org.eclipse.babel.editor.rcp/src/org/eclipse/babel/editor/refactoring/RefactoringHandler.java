@@ -13,6 +13,7 @@ package org.eclipse.babel.editor.refactoring;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
+import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -71,7 +72,11 @@ public class RefactoringHandler extends AbstractHandler {
             TreeItem[] treeItems = tree.getSelection();
             if (treeItems.length == 1) {
                 TreeItem item = treeItems[0];
+                Object data = item.getData();
                 String oldKey = item.getText();
+                if (data != null && data instanceof KeyTreeNode) {
+                	oldKey = ((KeyTreeNode)data).getMessageKey();
+                }
                 if (tree.getData() instanceof AbstractKeyTreeModel) {
                     AbstractKeyTreeModel model = (AbstractKeyTreeModel) tree
                             .getData();
