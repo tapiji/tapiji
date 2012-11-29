@@ -80,17 +80,16 @@
     </plugins>
   </build>
   <modules>
-    <module>../org.eclipse.babel.core</module>
-    <module>../org.eclipse.babel.editor</module>
-    <module>../org.eclipse.babel.tapiji.tools.core</module>
-    <module>../org.eclipse.babel.tapiji.tools.core.ui</module>
-    <module>../org.eclipse.babel.tapiji.tools.java</module>
-    <module>../org.eclipse.babel.tapiji.tools.java.feature</module>
-    <module>../org.eclipse.babel.tapiji.tools.java.ui</module>
-    <module>../org.eclipse.babel.tapiji.tools.rbmanager</module>
-    <module>../org.eclipse.babel.editor.nls</module>
-    <module>../org.eclipse.babel.tapiji.tools.target</module>
-    <module>../org.eclipse.babel.core.pdeutils</module>
-    <module>../org.eclipse.babel.editor.rcp.compat</module>
+    <module>org.eclipse.babel.core</module>
+    <module>org.eclipse.babel.editor</module>
+    <module>org.eclipse.babel.tapiji.tools.core</module>
+    <module>org.eclipse.babel.tapiji.tools.core.ui</module>
+    <module>org.eclipse.babel.tapiji.tools.java</module>
+    <module>org.eclipse.babel.tapiji.tools.java.feature</module>
+    <module>org.eclipse.babel.tapiji.tools.java.ui</module>
+    <module>org.eclipse.babel.tapiji.tools.rbmanager</module>
+    <module>org.eclipse.babel.editor.nls</module>
+    <module>org.eclipse.babel.tapiji.tools.target</module>
+    <module>org.eclipse.babel.core.pdeutils</module>
   </modules>
 </project>
