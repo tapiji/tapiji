@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description url="Eclipse Babel Tools">
+      TODO ... add a nice description here
+   </description>
+   <feature url="features/org.eclipse.babel.tapiji.tools.java.feature_0.0.0.qualifier.jar" id="org.eclipse.babel.tapiji.tools.java.feature" version="0.0.0" patch="true">
+      <category name="Babel Tools Project"/>
+   </feature>
+   <category-def name="Babel Tools Project" label="Babel Tools Project">
+      <description>
+         Babel Tools Project
+      </description>
+   </category-def>
+</site>
