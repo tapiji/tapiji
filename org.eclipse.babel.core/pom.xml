@@ -19,6 +19,13 @@ Contributors: Martin Reiterer - setup of tycho build for babel tools
   <version>0.8.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
 
+  <parent>
+  	<groupId>org.eclipse.babel.plugins</groupId>
+  	<artifactId>org.eclipse.babel.tapiji.tools.parent</artifactId>
+  	<version>0.0.2-SNAPSHOT</version>
+  	<relativePath>..</relativePath>
+  </parent>
+  
   <properties>
     <tycho-version>0.16.0</tycho-version>
   </properties>
@@ -43,10 +50,4 @@ Contributors: Martin Reiterer - setup of tycho build for babel tools
       <url>http://download.eclipse.org/releases/indigo/</url>
     </repository>
   </repositories>
-  <parent>
-  	<groupId>org.eclipse.babel.plugins</groupId>
-  	<artifactId>org.eclipse.babel.tapiji.tools.parent</artifactId>
-  	<version>0.0.2-SNAPSHOT</version>
-  	<relativePath>../org.eclipse.babel.tapiji.tools.parent</relativePath>
-  </parent>
 </project>

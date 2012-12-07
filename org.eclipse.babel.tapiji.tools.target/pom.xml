@@ -17,10 +17,11 @@ Contributors: Martin Reiterer - setup of tycho build for babel tools
   <modelVersion>4.0.0</modelVersion>
   <artifactId>org.eclipse.babel.tapiji.tools.target</artifactId>
   <packaging>eclipse-target-definition </packaging>
+  
   <parent>
   	<groupId>org.eclipse.babel.plugins</groupId>
   	<artifactId>org.eclipse.babel.tapiji.tools.parent</artifactId>
   	<version>0.0.2-SNAPSHOT</version>
-  	<relativePath>../org.eclipse.babel.tapiji.tools.parent</relativePath>
+  	<relativePath>..</relativePath>
   </parent>
 </project>
