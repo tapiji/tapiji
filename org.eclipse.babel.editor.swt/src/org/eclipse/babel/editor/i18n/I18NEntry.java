@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2007 Pascal Essiembre, Alexej Strelow, Matthias Lettmayer.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - updateKey
+ *    Matthias Lettmayer - extracted I18NEntry into own class for SWT specific implementation
+ ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
 import java.util.Locale;
