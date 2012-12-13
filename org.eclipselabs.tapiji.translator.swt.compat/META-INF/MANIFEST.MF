@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: RCP Compatibiltiy for TapiJI Translator
+Bundle-SymbolicName: org.eclipselabs.tapiji.translator.swt.compat
+Bundle-Version: 0.0.2.qualifier
+Bundle-Activator: org.eclipselabs.tapiji.translator.compat.Activator
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.osgi.framework;version="1.6.0"
+Require-Bundle: org.eclipse.ui
+Export-Package: org.eclipselabs.tapiji.translator.compat

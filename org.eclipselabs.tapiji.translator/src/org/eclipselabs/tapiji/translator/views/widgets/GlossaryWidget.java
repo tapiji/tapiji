@@ -54,7 +54,7 @@ import org.eclipselabs.tapiji.translator.core.GlossaryManager;
 import org.eclipselabs.tapiji.translator.model.Glossary;
 import org.eclipselabs.tapiji.translator.model.Term;
 import org.eclipselabs.tapiji.translator.model.Translation;
-import org.eclipselabs.tapiji.translator.compat.MySWT;
+import org.eclipselabs.tapiji.translator.compat.SwtRapCompatibilitySWT;
 import org.eclipselabs.tapiji.translator.views.widgets.dnd.GlossaryDragSource;
 import org.eclipselabs.tapiji.translator.views.widgets.dnd.GlossaryDropTarget;
 import org.eclipselabs.tapiji.translator.views.widgets.dnd.TermTransfer;
@@ -265,7 +265,7 @@ public class GlossaryWidget extends Composite implements
 			ComponentOrientation orientation = ComponentOrientation
 			        .getOrientation(locale);
 			if (orientation == ComponentOrientation.RIGHT_TO_LEFT) {
-				return MySWT.RIGHT_TO_LEFT;
+				return SwtRapCompatibilitySWT.RIGHT_TO_LEFT;
 			}
 		}
 		return SWT.LEFT_TO_RIGHT;
@@ -285,7 +285,7 @@ public class GlossaryWidget extends Composite implements
 		        refDef[0], refDef[1], refDef[2]);
 
 		this.displayedTranslations.add(referenceLocale);
-		termColumn = new TreeColumn(tree, MySWT.RIGHT_TO_LEFT/* getOrientation(l) */);
+		termColumn = new TreeColumn(tree, SwtRapCompatibilitySWT.RIGHT_TO_LEFT/* getOrientation(l) */);
 
 		termColumn.setText(l.getDisplayName());
 		TreeViewerColumn termCol = new TreeViewerColumn(treeViewer, termColumn);

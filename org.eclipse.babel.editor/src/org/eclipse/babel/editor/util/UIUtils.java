@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.eclipse.babel.editor.compat.MySWT;
+import org.eclipse.babel.editor.compat.SwtRapCompatibilitySWT;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.core.resources.IFile;
@@ -568,7 +568,7 @@ public final class UIUtils {
             ComponentOrientation orientation = ComponentOrientation
                     .getOrientation(locale);
             if (orientation == ComponentOrientation.RIGHT_TO_LEFT) {
-                return MySWT.RIGHT_TO_LEFT;
+                return SwtRapCompatibilitySWT.RIGHT_TO_LEFT;
             }
         }
         return SWT.LEFT_TO_RIGHT;
