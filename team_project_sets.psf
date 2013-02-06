@@ -5,8 +5,8 @@
 <project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipse.babel.core.pdeutils"/>
 <project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipse.babel.editor"/>
 <project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipse.babel.editor.nls"/>
-<project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipse.babel.editor.rcp"/>
-<project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipse.babel.editor.rcp.compat"/>
+<project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipse.babel.editor.swt"/>
+<project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipse.babel.editor.swt.compat"/>
 <project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipse.babel.tapiji.tools.core"/>
 <project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipse.babel.tapiji.tools.core.ui"/>
 <project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipse.babel.tapiji.tools.java"/>
@@ -25,9 +25,9 @@
 <item elementID="=org.eclipse.babel.tapiji.tools.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.babel.tapiji.tools.rbmanager" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.babel.tapiji.tools.java" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item elementID="=org.eclipse.babel.editor.rcp" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.babel.editor.swt" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.babel.editor" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipse.babel.editor.nls" type="4"/>
-<item elementID="=org.eclipse.babel.editor.rcp.compat" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.babel.editor.swt.compat" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSets>
 </psf>
