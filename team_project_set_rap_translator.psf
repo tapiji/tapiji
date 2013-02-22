@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<psf version="2.0">
+
+<provider id="org.eclipse.egit.core.GitProvider">
+<project reference="1.0,http://git.eclipse.org/gitroot/babel/plugins.git,master,org.eclipse.babel.core"/>
+<project reference="1.0,http://git.eclipse.org/gitroot/babel/plugins.git,master,org.eclipse.babel.editor"/>
+<project reference="1.0,http://git.eclipse.org/gitroot/babel/plugins.git,master,org.eclipse.babel.editor.nls"/>
+<project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipse.babel.editor.rap"/>
+<project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipse.babel.editor.rap.compat"/>
+<project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipselabs.tapiji.translator"/>
+<project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipselabs.tapiji.translator.rap"/>
+<project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipselabs.tapiji.translator.rap.compat"/>
+<project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipselabs.tapiji.translator.rap.helpers"/>
+<project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipselabs.tapiji.translator.rap.supplemental"/>
+<project reference="1.0,https://code.google.com/a/eclipselabs.org/p/tapiji/,master,org.eclipselabs.tapiji.translator.rap.model"/>
+</provider>
+
+<workingSets editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1354519122612_2" label="TapiJI RAP Translator" name="tapiji_rap_translator">
+<item elementID="=org.eclipse.babel.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.babel.editor" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.babel.editor.rap" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.babel.editor.rap.compat" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipse.babel.editor.nls" type="4"/>
+<item elementID="=org.eclipselabs.tapiji.translator" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipselabs.tapiji.translator.rap" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipselabs.tapiji.translator.rap.compat" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipselabs.tapiji.translator.rap.model" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipselabs.tapiji.translator.rap.helpers" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipselabs.tapiji.translator.rap.supplemental" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSets>
+
+</psf>
