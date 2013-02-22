@@ -12,9 +12,9 @@
       <hover
             activate="true"
             class="org.eclipse.babel.tapiji.tools.java.ui.ConstantStringHover"
-            description="hovers constant strings"
+            description="%hover.description"
             id="org.eclipse.babel.tapiji.tools.java.ui.ConstantStringHover"
-            label="Constant Strings">
+            label="%hover.label">
       </hover>
    </extension>
    <extension

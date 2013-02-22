@@ -8,7 +8,7 @@
             class="org.eclipse.ui.navigator.CommonNavigator"
             icon="icons/resourcebundle.gif"
             id="org.eclipse.babel.tapiji.tools.rbmanager.ResourceBundleExplorer"
-            name="Resource Bundle Explorer"
+            name="%view.rbe.name"
             restorable="true">
       </view>
    </extension>
@@ -21,11 +21,11 @@
                class="org.eclipse.babel.tapiji.tools.rbmanager.ui.view.toolbarItems.ToggleFilterActionDelegate"
                icon="icons/warning.gif"
                id="org.eclipse.babel.tapiji.tools.rbmanager.activateFilter"
-               label="Filter Problematic ResourceBundles"
+               label="%action.filter.label"
                state="false"
                style="toggle"
                toolbarPath="additions"
-               tooltip="Filters ResourceBundles With Warnings">
+               tooltip="%action.filter.tooltip">
          </action>
       </viewContribution>
       <viewContribution
@@ -35,7 +35,7 @@
                class="org.eclipse.babel.tapiji.tools.rbmanager.ui.view.toolbarItems.ExpandAllActionDelegate"
                icon="icons/expandall.gif"
                id="org.eclipse.babel.tapiji.tools.rbmanager.expandAll"
-               label="Expand All"
+               label="%action.expand.label"
                style="push"
                toolbarPath="additions">
          </action>
@@ -114,7 +114,7 @@
             icon="icons/resourcebundle.gif"
             id="org.eclipse.babel.tapiji.tools.rbmanager.resourcebundleContent"
             labelProvider="org.eclipse.babel.tapiji.tools.rbmanager.viewer.ResourceBundleLabelProvider"
-            name="Resource Bundle Content"
+            name="%navigatorContent.name"
             priority="high">
          <triggerPoints>
             <or>
@@ -171,7 +171,7 @@
             activeByDefault="false"
             class="org.eclipse.babel.tapiji.tools.rbmanager.viewer.filters.ProblematicResourceBundleFilter"
             id="org.eclipse.babel.tapiji.tools.rbmanager.filter.ProblematicResourceBundleFiles"
-            name="Problematic Resource Bundle Files">
+            name="%commonFilter.name">
       </commonFilter>
    </extension>
    <extension

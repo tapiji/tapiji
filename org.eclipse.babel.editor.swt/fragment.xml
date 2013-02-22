@@ -12,7 +12,7 @@
        point="org.eclipse.ui.commands">
     <command
           id="org.eclipse.babel.editor.command.refactoring"
-          name="Refactor...">
+          name="%command.name">
     </command>
  </extension>
  <extension
