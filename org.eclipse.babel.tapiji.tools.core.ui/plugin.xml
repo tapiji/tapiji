@@ -11,7 +11,7 @@
    
    <extension
          id="org.eclipse.babel.tapiji.tools.core.ui.nature"
-         name="Internationalization Nature"
+         name="%extension.nature.name"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run class="org.eclipse.babel.tapiji.tools.core.ui.builder.InternationalizationNature" />
@@ -24,14 +24,14 @@
          point="org.eclipse.ui.views">
       <category
             id="org.eclipse.babel.tapiji"
-            name="Internationalization">
+            name="%category.i18n.name">
       </category>
       <view
             category="org.eclipse.babel.tapiji"
             class="org.eclipse.babel.tapiji.tools.core.ui.views.messagesview.MessagesView"
             icon="icons/resourcebundle.gif"
             id="org.eclipse.babel.tapiji.tools.core.views.MessagesView"
-            name="Resource-Bundle">
+            name="%view.rb.name">
       </view>
    </extension>
    <extension
@@ -52,8 +52,8 @@
             locationURI="popup:org.eclipse.ui.popup.any?before=additions">
          <menu
                id="org.eclipse.babel.tapiji.tools.core.ui.menus.Internationalization"
-               label="Internationalization"
-               tooltip="Java Internationalization assistance">
+               label="%menu.i18n.label"
+               tooltip="%menu.i18n.tooltip">
          </menu>
       </menuContribution>
       <menuContribution
@@ -79,10 +79,10 @@
          point="org.eclipse.jdt.ui.javaElementFilters">
       <filter
             class="org.eclipse.babel.tapiji.tools.core.ui.filters.PropertiesFileFilter"
-            description="Filters only resource bundles"
+            description="%filter.description"
             enabled="false"
             id="ResourceBundleFilter"
-            name="ResourceBundleFilter">
+            name="%filter.name">
       </filter>
    </extension>
    <extension
@@ -91,7 +91,7 @@
             adaptable="true"
             class="org.eclipse.babel.tapiji.tools.core.ui.decorators.ExcludedResource"
             id="org.eclipse.babel.tapiji.tools.core.decorators.ExcludedResource"
-            label="Resource is excluded from Internationalization"
+            label="%decorator.label"
             lightweight="false"
             state="true">
          <enablement>
@@ -116,19 +116,19 @@
       <page
             class="org.eclipse.babel.tapiji.tools.core.ui.preferences.TapiHomePreferencePage"
             id="org.eclipse.babel.tapiji.tools.core.TapiJIGeneralPrefPage"
-            name="TapiJI">
+            name="%page.general.pref.name">
       </page>
       <page
             category="org.eclipse.babel.tapiji.tools.core.TapiJIGeneralPrefPage"
             class="org.eclipse.babel.tapiji.tools.core.ui.preferences.FilePreferencePage"
             id="org.eclipse.babel.tapiji.tools.core.FilePrefPage"
-            name="File Settings">
+            name="%page.file.pref.name">
       </page>
       <page
             category="org.eclipse.babel.tapiji.tools.core.TapiJIGeneralPrefPage"
             class="org.eclipse.babel.tapiji.tools.core.ui.preferences.BuilderPreferencePage"
             id="org.eclipse.babel.tapiji.tools.core.BuilderPrefPage"
-            name="Builder Settings">
+            name="%page.builder.prefname">
       </page>
    </extension>
   
@@ -148,7 +148,7 @@
    </extension>
    <extension
          id="StringLiteralAuditMarker"
-         name="String Literal Audit Marker"
+         name="%extension.string.marker.name"
          point="org.eclipse.core.resources.markers">
       <super
             type="org.eclipse.core.resources.problemmarker">
@@ -189,7 +189,7 @@
    </extension>
    <extension
          id="ResourceBundleAuditMarker"
-         name="Resource-Bundle Audit Marker"
+         name="%extension.bundle.marker.name"
          point="org.eclipse.core.resources.markers">
       <super
             type="org.eclipse.core.resources.problemmarker">

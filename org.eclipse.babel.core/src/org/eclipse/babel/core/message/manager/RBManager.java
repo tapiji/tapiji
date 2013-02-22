@@ -384,7 +384,7 @@ public class RBManager {
      *            The project, which is managed by the {@link RBManager}
      * @return The corresponding {@link RBManager} to the project
      */
-    public static RBManager getInstance(IProject project) {
+    public static synchronized RBManager getInstance(IProject project) {
         // set host-project
         if (PDEUtils.isFragment(project)) {
             project = PDEUtils.getFragmentHost(project);
