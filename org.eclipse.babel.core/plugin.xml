@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.4"?>
-<plugin>
-   <extension-point id="babelConfiguration" name="babelConfiguration.exsd" schema="schema/babelConfiguration.exsd"/>
-   <extension-point id="refactoringService" name="refactoringService.exsd" schema="schema/refactoringService.exsd"/>
-</plugin>

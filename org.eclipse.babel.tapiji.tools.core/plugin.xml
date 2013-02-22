@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.4"?>
-<plugin>
-   <extension-point id="org.eclipse.babel.tapiji.tools.core.builderExtension" name="BuilderExtension" schema="schema/org.eclipse.babel.tapiji.tools.core.builderExtension.exsd"/>
-   <extension-point id="org.eclipse.babel.tapiji.tools.core.stateLoader" name="StateLoader" schema="schema/org.eclipse.babel.tapiji.tools.core.stateLoader.exsd"/>
-</plugin>
