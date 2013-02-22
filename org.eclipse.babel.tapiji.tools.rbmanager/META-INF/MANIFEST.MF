@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Manager
-Bundle-SymbolicName: org.eclipse.babel.tapiji.tools.rbmanager;singleton:=true
+Bundle-SymbolicName: org.eclipse.babel.tapiji.tools.rbmanager.ui;singleton:=true
 Bundle-Version: 0.0.2.qualifier
 Bundle-Activator: org.eclipse.babel.tapiji.tools.rbmanager.RBManagerActivator
 Bundle-Vendor: GKNSINTERMETALS
