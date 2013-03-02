@@ -3,7 +3,6 @@ package org.eclipselabs.tapiji.translator.actions;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.rwt.service.IServiceHandler;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -16,7 +15,6 @@ public class DownloadPropertiesFileAction extends Action implements IWorkbenchWi
 	
 	private static final long serialVersionUID = 1854301925848519466L;
 	private IWorkbenchWindow window;
-	private IServiceHandler handler;
 	
 	
 	@Override

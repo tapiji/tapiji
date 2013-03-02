@@ -10,77 +10,37 @@
  *******************************************************************************/
 package org.eclipse.ui.ide;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceStatus;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.resources.mapping.IModelProviderDescriptor;
-import org.eclipse.core.resources.mapping.IResourceChangeDescriptionFactory;
-import org.eclipse.core.resources.mapping.ModelProvider;
-import org.eclipse.core.resources.mapping.ModelStatus;
-import org.eclipse.core.resources.mapping.ResourceChangeValidator;
-import org.eclipse.core.resources.mapping.ResourceMapping;
-import org.eclipse.core.resources.mapping.ResourceMappingContext;
-import org.eclipse.core.resources.mapping.ResourceTraversal;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.IAdapterFactory;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
-import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.content.IContentType;
-import org.eclipse.core.runtime.content.IContentTypeMatcher;
-import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.util.SafeRunnable;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.osgi.util.NLS;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorRegistry;
-//import org.eclipse.ui.IMarkerHelpRegistry;
-import org.eclipse.ui.ISaveableFilter;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchPartReference;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.MultiPartInitException;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.Saveable;
 import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
+import org.eclipse.ui.internal.misc.UIStats;
+import org.eclipse.ui.part.FileEditorInput;
+//import org.eclipse.ui.IMarkerHelpRegistry;
 /*import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.internal.ide.model.StandardPropertiesAdapterFactory;
 import org.eclipse.ui.internal.ide.model.WorkbenchAdapterFactory;
 import org.eclipse.ui.internal.ide.registry.MarkerHelpRegistry;
 import org.eclipse.ui.internal.ide.registry.MarkerHelpRegistryReader; */
-import org.eclipse.ui.internal.misc.UIStats;
-import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * Collection of IDE-specific APIs factored out of existing workbench. This

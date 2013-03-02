@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.eclipse.rwt.RWT;
+import org.eclipse.rap.rwt.RWT;
 import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
@@ -115,7 +115,7 @@ public class RBLockManager {
 	}
 	
 	private void addSessionLock(PFLock lock) {
-		String sessionId = RWT.getSessionStore().getId();
+		String sessionId = RWT.getUISession().getId();
 		List<PFLock> locks = sessionLockMap.get(sessionId);
 		if (locks == null) {
 			locks = new ArrayList<PFLock>();
@@ -125,7 +125,7 @@ public class RBLockManager {
 	}
 	
 	private void removeSessionLock(PFLock lock) {
-		String sessionId = RWT.getSessionStore().getId();
+		String sessionId = RWT.getUISession().getId();
 		List<PFLock> locks = sessionLockMap.get(sessionId);
 		if (locks != null) {
 			locks.remove(lock);

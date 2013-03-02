@@ -10,9 +10,8 @@ import java.util.zip.ZipOutputStream;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.rwt.RWT;
-import org.eclipse.rwt.service.IServiceHandler;
-import org.eclipse.rwt.service.IServiceManager;
+import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rap.rwt.service.ServiceManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.MouseAdapter;
@@ -149,14 +148,12 @@ public class DownloadDialog extends Dialog {
 	}
 	
 	private String createDownloadUrl( String filepath ) {
-		  StringBuilder url = new StringBuilder();
-		  url.append( RWT.getRequest().getRequestURL() );
-		  url.append( "?" );
-		  url.append( IServiceHandler.REQUEST_PARAM );
-		  url.append( "=" + DownloadServiceHandler.DOWNLOAD_HANDLER_ID );
-		  url.append( "&"+ DownloadServiceHandler.FILEPATH_ID + "=" );
-		  url.append( filepath );
-		  return RWT.getResponse().encodeURL( url.toString() );
+		ServiceManager manager = RWT.getServiceManager();
+		String url = manager.getServiceHandlerUrl(
+				DownloadServiceHandler.DOWNLOAD_HANDLER_ID);
+		// add file path parameter to service url
+		url += "&"+ DownloadServiceHandler.FILEPATH_ID + "=" + filepath;
+		return RWT.getResponse().encodeURL(url);
 	}
 	
 	private File createZipFile() {		
@@ -204,7 +201,7 @@ public class DownloadDialog extends Dialog {
 	private void registerDownloadServiceHandler() {
 		// register service handler
 		if (downloadHandler == null) {
-			IServiceManager manager = RWT.getServiceManager();
+			ServiceManager manager = RWT.getServiceManager();
 			downloadHandler = new DownloadServiceHandler();
 			manager.registerServiceHandler( DownloadServiceHandler.DOWNLOAD_HANDLER_ID, downloadHandler );
 		}

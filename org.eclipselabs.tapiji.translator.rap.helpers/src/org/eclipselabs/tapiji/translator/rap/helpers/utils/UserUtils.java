@@ -7,7 +7,7 @@ import java.util.Map;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.rwt.RWT;
+import org.eclipse.rap.rwt.RWT;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextActivation;
 import org.eclipse.ui.contexts.IContextService;
@@ -96,7 +96,7 @@ public class UserUtils {
 	public static User loginUser(String username, String password) {
 		User user = verifyUser(username, password);
 		if (user != null) {
-			RWT.getSessionStore().getHttpSession().setAttribute(UserUtils.SESSION_USER_ATT, user);
+			RWT.getUISession().getHttpSession().setAttribute(UserUtils.SESSION_USER_ATT, user);
 			setUserLoggedInContext(true);
 		}
 		
@@ -110,7 +110,7 @@ public class UserUtils {
 	public static User logoutUser() {
 		User user = getUser();
 		setUserLoggedInContext(false);
-		RWT.getSessionStore().getHttpSession().setAttribute(UserUtils.SESSION_USER_ATT, null);		
+		RWT.getUISession().getHttpSession().setAttribute(UserUtils.SESSION_USER_ATT, null);		
 		return user;
 	}
 
@@ -179,7 +179,7 @@ public class UserUtils {
 	 * @return the stored user from session or null if no user is stored.
 	 */
 	public static User getUser() {
-		return (User) RWT.getSessionStore().getHttpSession().getAttribute(UserUtils.SESSION_USER_ATT);
+		return (User) RWT.getUISession().getHttpSession().getAttribute(UserUtils.SESSION_USER_ATT);
 	}
 	
 	public static User getUser(String username) {

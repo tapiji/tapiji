@@ -2,11 +2,8 @@ package org.eclipselabs.tapiji.translator.views.widgets.provider;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipselabs.tapiji.translator.rap.helpers.managers.PFLock;
@@ -14,7 +11,6 @@ import org.eclipselabs.tapiji.translator.rap.helpers.managers.RBLockManager;
 import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
 import org.eclipselabs.tapiji.translator.rap.model.user.PropertiesFile;
 import org.eclipselabs.tapiji.translator.rap.model.user.ResourceBundle;
-import org.eclipselabs.tapiji.translator.rap.model.user.User;
 import org.eclipselabs.tapiji.translator.rap.utils.UIUtils;
 
 public class StorageTreeLabelProvider extends ColumnLabelProvider {

@@ -1,6 +1,5 @@
 package org.eclipselabs.tapiji.translator;
 
-import org.eclipse.babel.core.message.IMessagesBundle;
 import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.IMessagesEditor;

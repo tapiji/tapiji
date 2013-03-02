@@ -2,7 +2,6 @@ package org.eclipselabs.tapiji.translator.rap.dialogs;
 
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.editor.widgets.LocaleSelector;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Composite;

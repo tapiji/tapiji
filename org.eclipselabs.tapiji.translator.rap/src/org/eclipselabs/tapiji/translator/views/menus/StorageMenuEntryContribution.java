@@ -11,8 +11,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipselabs.tapiji.translator.rap.dialogs.DownloadDialog;
-import org.eclipselabs.tapiji.translator.rap.dialogs.ShareDialog;
 import org.eclipselabs.tapiji.translator.rap.helpers.managers.PFLock;
 import org.eclipselabs.tapiji.translator.rap.helpers.managers.RBLockManager;
 import org.eclipselabs.tapiji.translator.rap.helpers.utils.UserUtils;
