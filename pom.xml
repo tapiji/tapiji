@@ -1,129 +1,194 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- 
-
-Copyright (c) 2012 Martin Reiterer, Stefan Strobl
-
-All rights reserved. This program and the accompanying materials 
-are made available under the terms of the Eclipse Public License 
-v1.0 which accompanies this distribution, and is available at 
-http://www.eclipse.org/legal/epl-v10.html 
-
-Contributors:
-	Martin Reiterer - setup of tycho build for babel tools
-	Stefan Strobl - add eclipse signing plugin, babel p2 repository
-
--->
+<!-- Copyright (c) 2012 Martin Reiterer, Stefan Strobl All rights reserved. 
+	This program and the accompanying materials are made available under the 
+	terms of the Eclipse Public License v1.0 which accompanies this distribution, 
+	and is available at http://www.eclipse.org/legal/epl-v10.html Contributors: 
+	Martin Reiterer - setup of tycho build for babel tools Stefan Strobl - add 
+	eclipse signing plugin, babel p2 repository -->
 
 <project
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.eclipse.babel.plugins</groupId>
-  <artifactId>org.eclipse.babel.tapiji.tools.parent</artifactId>
-  <version>0.0.2-SNAPSHOT</version>
-  <packaging>pom</packaging>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.eclipselabs.tapiji</groupId>
+	<artifactId>org.eclipselabs.tapiji.translator.parent</artifactId>
+	<version>0.9.0.B1</version>
+	<packaging>pom</packaging>
 
-<!-- tycho requires maven >= 3.0 -->
-  <prerequisites>
-    <maven>3.0</maven>
-  </prerequisites>
+	<modules>
+		<module>org.eclipselabs.tapiji.translator.swt.compat</module>
+		<module>org.eclipselabs.tapiji.translator</module>
+		<module>org.eclipselabs.tapiji.translator.swt.product</module>
+	</modules>
 
-  <properties>
-    <tycho-version>0.16.0</tycho-version>
-  </properties>
-  <repositories>
-    <!-- configure p2 repository to resolve against -->
-    <repository>
-      <id>indigo</id>
-      <layout>p2</layout>
-      <url>http://download.eclipse.org/releases/indigo</url>
-    </repository>
-  </repositories>
+	<properties>
+		<tycho-version>0.16.0</tycho-version>
+		<eclipse-repository-url>http://download.eclipse.org/eclipse/updates/3.6</eclipse-repository-url>
+		<babel-plugins-url>http://build.eclipse.org/technology/babel/tools-updates-nightly</babel-plugins-url>
+	</properties>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>maven.eclipse.org</id>
-      <url>http://maven.eclipse.org/nexus/content/repositories/milestone-indigo/</url>
-    </pluginRepository>
-  </pluginRepositories>
+	<profiles>
+		<profile>
+			<id>indigo rcp</id>
+			<properties>
+				<eclipse-repository-url>http://download.eclipse.org/releases/indigo</eclipse-repository-url>
+				<babel-plugins-url>http://build.eclipse.org/technology/babel/tools-updates-nightly</babel-plugins-url>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>maven.profile</name>
+					<value>swt-editor</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>target-platform-configuration</artifactId>
+						<version>${tycho-version}</version>
+						<configuration>
+							<!-- disable resolving of optional dependencies, but define the extra 
+								dependencies -->
+							<dependency-resolution>
+								<optionalDependencies>ignore</optionalDependencies>
+								<extraRequirements>
+									<requirement>
+										<type>eclipse-plugin</type>
+										<id>org.eclipselabs.tapiji.translator.swt.compat</id>
+										<versionRange>0.0.0</versionRange>
+									</requirement>
+									<requirement>
+										<type>eclipse-plugin</type>
+										<id>org.eclipse.babel.editor.swt.compat</id>
+										<versionRange>0.9.0</versionRange>
+									</requirement>
+									<requirement>
+										<type>eclipse-plugin</type>
+										<id>org.eclipse.ui</id>
+										<versionRange>0.0.0</versionRange>
+									</requirement>
+									<requirement>
+										<type>eclipse-plugin</type>
+										<id>org.eclipse.jface.text</id>
+										<versionRange>0.0.0</versionRange>
+									</requirement>
+									<requirement>
+										<type>eclipse-plugin</type>
+										<id>org.eclipse.ui.editors</id>
+										<versionRange>0.0.0</versionRange>
+									</requirement>
+									<requirement>
+										<type>eclipse-plugin</type>
+										<id>org.eclipse.ui.ide</id>
+										<versionRange>0.0.0</versionRange>
+									</requirement>
+									<requirement>
+										<type>eclipse-plugin</type>
+										<id>org.eclipse.ui.workbench.texteditor</id>
+										<versionRange>0.0.0</versionRange>
+									</requirement>
+									<requirement>
+										<type>eclipse-plugin</type>
+										<id>org.eclipse.ui.forms</id>
+										<versionRange>0.0.0</versionRange>
+									</requirement>
+									<requirement>
+										<type>eclipse-plugin</type>
+										<id>org.eclipse.ltk.core.refactoring</id>
+										<versionRange>0.0.0</versionRange>
+									</requirement>
+									<requirement>
+										<type>eclipse-plugin</type>
+										<id>org.eclipse.ltk.ui.refactoring</id>
+										<versionRange>0.0.0</versionRange>
+									</requirement>
+									<requirement>
+										<type>eclipse-plugin</type>
+										<id>org.junit</id>
+										<versionRange>0.0.0</versionRange>
+									</requirement>
+									<requirement>
+										<type>eclipse-plugin</type>
+										<id>org.eclipse.ui.forms</id>
+										<versionRange>3.5.101</versionRange>
+									</requirement>
+								</extraRequirements>
+							</dependency-resolution>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
-  <build>
-    <plugins>
-      <plugin>
-        <!-- enable tycho build extension -->
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-maven-plugin</artifactId>
-        <version>${tycho-version}</version>
-        <extensions>true</extensions>
-      </plugin>
+	<repositories>
+		<repository>
+			<id>eclipse-repository</id>
+			<url>${eclipse-repository-url}</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>babel-extension-plugins</id>
+			<url>${babel-plugins-url}</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
 
-      <!-- enable source bundle generation -->
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-source-plugin</artifactId>
-        <version>${tycho-version}</version>
-        <executions>
-          <execution>
-            <id>plugin-source</id>
-            <goals>
-              <goal>plugin-source</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<environments>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>carbon</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>target-platform-configuration</artifactId>
-        <version>${tycho-version}</version>
-        <configuration>
-          <target>
-            <artifact>
-              <groupId>org.eclipse.babel.plugins</groupId>
-              <artifactId>org.eclipse.babel.tapiji.tools.target</artifactId>
-              <version>0.0.2-SNAPSHOT</version>
-            </artifact>
-          </target>
-          <!-- configure the p2 target environments for multi-platform build -->
-          <environments>
-            <environment>
-              <os>linux</os>
-              <ws>gtk</ws>
-              <arch>x86_64</arch>
-            </environment>
-            <environment>
-              <os>win32</os>
-              <ws>win32</ws>
-              <arch>x86_64</arch>
-            </environment>
-          </environments>
-        </configuration>
-      </plugin>
-    </plugins>
-    <pluginManagement>
-      <plugins>
-        <!-- provide maven singing plugin for babel.repository pom -->
-        <plugin>
-          <groupId>org.eclipse.dash.maven</groupId>
-          <artifactId>eclipse-signing-maven-plugin</artifactId>
-          <version>1.0.5</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
-  <modules>
-    <module>org.eclipse.babel.core</module>
-    <module>org.eclipse.babel.editor</module>
-    <module>org.eclipse.babel.tapiji.tools.core</module>
-    <module>org.eclipse.babel.tapiji.tools.core.ui</module>
-    <module>org.eclipse.babel.tapiji.tools.java</module>
-    <module>org.eclipse.babel.tapiji.tools.java.feature</module>
-    <module>org.eclipse.babel.tapiji.tools.java.ui</module>
-    <module>org.eclipse.babel.tapiji.tools.rbmanager</module>
-    <module>org.eclipse.babel.editor.nls</module>
-    <module>org.eclipse.babel.tapiji.tools.target</module>
-    <module>org.eclipse.babel.core.pdeutils</module>
-    <module>org.eclipse.babel.repository</module>
-  </modules>
 </project>

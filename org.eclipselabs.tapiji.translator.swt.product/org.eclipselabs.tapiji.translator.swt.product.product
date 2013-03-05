@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="TapiJI Translator" uid="org.eclipselabs.tapiji.translator.product" id="org.eclipselabs.tapiji.translator.app" application="org.eclipselabs.tapiji.translator.application" version="0.0.1" useFeatures="false" includeLaunchers="true">
+<product name="TapiJI Translator" uid="org.eclipselabs.tapiji.translator.rcp.product" id="org.eclipselabs.tapiji.translator.app" application="org.eclipselabs.tapiji.translator.application" version="0.9.0.B1" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.eclipselabs.tapiji.translator/icons/TapiJI_128.png"/>
@@ -239,9 +239,7 @@ litigation.
       <plugin id="org.eclipse.babel.core"/>
       <plugin id="org.eclipse.babel.editor"/>
       <plugin id="org.eclipse.babel.editor.nls" fragment="true"/>
-      <plugin id="org.eclipse.babel.editor.rcp" fragment="true"/>
-      <plugin id="org.eclipse.babel.editor.rcp.compat"/>
-      <plugin id="org.eclipse.babel.tapiji.translator.rbe"/>
+      <plugin id="org.eclipse.babel.editor.swt" fragment="true"/>
       <plugin id="org.eclipse.compare"/>
       <plugin id="org.eclipse.compare.core"/>
       <plugin id="org.eclipse.core.commands"/>
@@ -252,7 +250,6 @@ litigation.
       <plugin id="org.eclipse.core.expressions"/>
       <plugin id="org.eclipse.core.filebuffers"/>
       <plugin id="org.eclipse.core.filesystem"/>
-      <plugin id="org.eclipse.core.filesystem.linux.x86_64" fragment="true"/>
       <plugin id="org.eclipse.core.jobs"/>
       <plugin id="org.eclipse.core.resources"/>
       <plugin id="org.eclipse.core.runtime"/>
@@ -288,11 +285,6 @@ litigation.
       <plugin id="org.eclipse.equinox.simpleconfigurator"/>
       <plugin id="org.eclipse.equinox.simpleconfigurator.manipulator"/>
       <plugin id="org.eclipse.help"/>
-      <plugin id="org.eclipse.jdt.compiler.apt" fragment="true"/>
-      <plugin id="org.eclipse.jdt.compiler.tool" fragment="true"/>
-      <plugin id="org.eclipse.jdt.core"/>
-      <plugin id="org.eclipse.jdt.debug"/>
-      <plugin id="org.eclipse.jdt.launching"/>
       <plugin id="org.eclipse.jface"/>
       <plugin id="org.eclipse.jface.databinding"/>
       <plugin id="org.eclipse.jface.text"/>
@@ -300,10 +292,7 @@ litigation.
       <plugin id="org.eclipse.ltk.ui.refactoring"/>
       <plugin id="org.eclipse.osgi"/>
       <plugin id="org.eclipse.osgi.services"/>
-      <plugin id="org.eclipse.pde.build"/>
-      <plugin id="org.eclipse.pde.core"/>
       <plugin id="org.eclipse.swt"/>
-      <plugin id="org.eclipse.swt.gtk.linux.x86_64" fragment="true"/>
       <plugin id="org.eclipse.team.core"/>
       <plugin id="org.eclipse.team.ui"/>
       <plugin id="org.eclipse.text"/>
@@ -317,8 +306,7 @@ litigation.
       <plugin id="org.eclipse.ui.workbench.texteditor"/>
       <plugin id="org.eclipse.update.configurator"/>
       <plugin id="org.eclipselabs.tapiji.translator"/>
-      <plugin id="org.eclipselabs.tapiji.translator.rcp" fragment="true"/>
-      <plugin id="org.eclipselabs.tapiji.translator.rcp.compat"/>
+      <plugin id="org.eclipselabs.tapiji.translator.swt.compat"/>
       <plugin id="org.hamcrest.core"/>
       <plugin id="org.junit"/>
       <plugin id="org.sat4j.core"/>
