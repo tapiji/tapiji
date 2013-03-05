@@ -239,7 +239,6 @@ litigation.
       <plugin id="com.ibm.icu"/>
       <plugin id="org.eclipse.ant.core"/>
       <plugin id="org.eclipse.babel.core"/>
-      <plugin id="org.eclipse.babel.core.pdeutils" fragment="true"/>
       <plugin id="org.eclipse.babel.editor"/>
       <plugin id="org.eclipse.babel.editor.nls" fragment="true"/>
       <plugin id="org.eclipse.babel.editor.swt" fragment="true"/>
