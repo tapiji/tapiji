@@ -19,7 +19,7 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-<!-- <build>
+ <build>
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -40,5 +40,5 @@
 			</plugin>
 		</plugins>
 	</build>
- -->
+
 </project>
