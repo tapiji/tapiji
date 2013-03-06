@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="org.eclipselabs.tapiji.translator.rcp.target.target" sequenceNumber="11">
+<target name="org.eclipselabs.tapiji.translator.rcp.target.target" sequenceNumber="13">
 <locations>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.jdt.feature.group" version="3.7.2.v20120120-1414-7z8gFcuFMP7BW5XTz0jLTnz0l9B1"/>
 <repository location="http://download.eclipse.org/releases/indigo"/>
 </location>
-<location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.swt.tools.feature.feature.group" version="1.0.1.201103231601"/>
-<repository location="http://www.eclipse.org/swt/updates/3.6"/>
-</location>
-<location path="${project_loc}/plugins" type="Directory"/>
 </locations>
 </target>
