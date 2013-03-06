@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="TapiJI Translator" uid="org.eclipselabs.tapiji.translator.swt.product" id="org.eclipselabs.tapiji.translator.app" application="org.eclipselabs.tapiji.translator.application" version="0.9.0.B1" useFeatures="false" includeLaunchers="true">
+<product name="TapiJI Translator" uid="org.eclipselabs.tapiji.translator.product" id="org.eclipselabs.tapiji.translator.app" application="org.eclipselabs.tapiji.translator.application" version="0.9.0.B1" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.eclipselabs.tapiji.translator/icons/TapiJI_128.png"/>
@@ -295,7 +295,7 @@ litigation.
       <plugin id="org.eclipse.pde.build"/>
       <plugin id="org.eclipse.pde.core"/>
       <plugin id="org.eclipse.swt"/>
-      <plugin id="org.eclipse.swt.gtk.linux.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.swt.gtk.linux.x86_64" fragment="true" os="linux" ws="gtk" arch="x86_64"/>
       <plugin id="org.eclipse.team.core"/>
       <plugin id="org.eclipse.team.ui"/>
       <plugin id="org.eclipse.text"/>
