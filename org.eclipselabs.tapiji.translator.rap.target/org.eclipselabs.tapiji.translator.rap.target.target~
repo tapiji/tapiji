@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?>
+
+<target name="org.eclipselabs.tapiji.translator.rap.target.target" sequenceNumber="16">
+<locations>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.dom4j" version="1.6.1.201210222237"/>
+<unit id="org.hibernate" version="4.1.1.201210222237"/>
+<unit id="com.mysql.jdbc" version="5.1.11.201210222237"/>
+<repository location="file:org.eclipselabs.tapiji.translator.rap.target/"/>
+<repository location="http://download.eclipse.org/modeling/emf/teneo/updates/2.0.0/interim/"/>
+<repository location="http://download.eclipse.org/rt/rap/incubator/2.0/fileupload"/>
+<repository location="http://download.eclipse.org/rt/rap/2.0"/>
+<repository location="http://download.eclipse.org/releases/juno"/>
+</location>
+</locations>
+</target>
