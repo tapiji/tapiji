@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Copyright (c) 2012 Martin Reiterer, Stefan Strobl All rights reserved. 
-	This program and the accompanying materials are made available under the 
-	terms of the Eclipse Public License v1.0 which accompanies this distribution, 
-	and is available at http://www.eclipse.org/legal/epl-v10.html Contributors: 
-	Martin Reiterer - setup of tycho build for babel tools Stefan Strobl - add 
-	eclipse signing plugin, babel p2 repository -->
+<!-- Copyright (c) 2013 Martin Reiterer, Matthias Lettmayer, Stefan Strobl All rights reserved. 
+    This program and the accompanying materials are made available under the 
+    terms of the Eclipse Public License v1.0 which accompanies this distribution, 
+    and is available at http://www.eclipse.org/legal/epl-v10.html 
+    Contributors: 
+    Martin Reiterer - setup of tycho build for RCP translator
+    Matthias Lettmayer - setup of tycho build for RAP translator
+    Stefan Strobl - cleanup
+    -->
 
 <project
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
@@ -17,7 +20,7 @@
   <packaging>pom</packaging>
 
   <modules>
-  	<module>org.eclipselabs.tapiji.translator</module>
+    <module>org.eclipselabs.tapiji.translator</module>
   </modules>
 
   <properties>
@@ -26,16 +29,16 @@
     <babel-plugins-url>http://build.eclipse.org/technology/babel/tools-updates-nightly</babel-plugins-url>
   </properties>
 
-  <!-- Maven Profile for RCP Translator, run with "mvn clean/install -P indigo_rcp" -->
+<!-- Maven Profile for RCP Translator, run with "mvn clean/install -P indigo_rcp" -->
   <profiles>
     <profile>
       <id>indigo_rcp</id>
-      
+
       <properties>
         <eclipse-repository-url>http://download.eclipse.org/releases/indigo</eclipse-repository-url>
         <babel-plugins-url>http://build.eclipse.org/technology/babel/tools-updates-nightly</babel-plugins-url>
       </properties>
-      
+
       <activation>
         <activeByDefault>false</activeByDefault>
         <property>
@@ -43,14 +46,14 @@
           <value>indigo_rcp</value>
         </property>
       </activation>
-      
-       <modules>
-      	<module>org.eclipselabs.tapiji.translator.swt</module>
-    	<module>org.eclipselabs.tapiji.translator.swt.compat</module>
-    	<module>org.eclipselabs.tapiji.translator.rcp.target</module>
-		<module>org.eclipselabs.tapiji.translator.rcp</module>
+
+      <modules>
+        <module>org.eclipselabs.tapiji.translator.swt</module>
+        <module>org.eclipselabs.tapiji.translator.swt.compat</module>
+        <module>org.eclipselabs.tapiji.translator.rcp.target</module>
+        <module>org.eclipselabs.tapiji.translator.rcp</module>
       </modules>
-      
+
       <build>
         <plugins>
           <plugin>
@@ -135,16 +138,16 @@
         </plugins>
       </build>
     </profile>
- 
- 	<!-- Maven Profile for RCP Translator, run with "mvn clean/install -P juno_rap_2.0" -->
+
+<!-- Maven Profile for RAP Translator, run with "mvn clean/install -P juno_rap_2.0" -->
     <profile>
       <id>juno_rap_2.0</id>
-      
+
       <properties>
         <eclipse-repository-url>http://download.eclipse.org/releases/juno</eclipse-repository-url>
         <babel-plugins-url>http://build.eclipse.org/technology/babel/tools-updates-nightly</babel-plugins-url>
       </properties>
-      
+
       <activation>
         <activeByDefault>false</activeByDefault>
         <property>
@@ -152,36 +155,36 @@
           <value>juno_rap_2.0</value>
         </property>
       </activation>
-      
+
       <modules>
-      	<module>org.eclipselabs.tapiji.translator.rap.target</module>
-      	<module>org.eclipselabs.tapiji.translator.rap</module>
-    	<module>org.eclipselabs.tapiji.translator.rap.compat</module>
-   	 	<module>org.eclipselabs.tapiji.translator.rap.helpers</module>
-    	<module>org.eclipselabs.tapiji.translator.rap.model</module>
-    	<module>org.eclipselabs.tapiji.translator.rap.supplemental</module>
-    	<module>org.eclipse.babel.editor.rap</module>
-    	<module>org.eclipse.babel.editor.rap.compat</module>
+        <module>org.eclipselabs.tapiji.translator.rap.target</module>
+        <module>org.eclipselabs.tapiji.translator.rap</module>
+        <module>org.eclipselabs.tapiji.translator.rap.compat</module>
+        <module>org.eclipselabs.tapiji.translator.rap.helpers</module>
+        <module>org.eclipselabs.tapiji.translator.rap.model</module>
+        <module>org.eclipselabs.tapiji.translator.rap.supplemental</module>
+        <module>org.eclipse.babel.editor.rap</module>
+        <module>org.eclipse.babel.editor.rap.compat</module>
       </modules>
-      
+
       <repositories>
-		<repository>
-		  <id>rap-repository</id>
-		  <url>http://download.eclipse.org/rt/rap/2.0</url>
-		  <layout>p2</layout>
-		</repository>
-		<repository>
-		  <id>rap-filedialog-plugin</id>
-		  <url>http://download.eclipse.org/rt/rap/incubator/2.0/fileupload</url>
-		  <layout>p2</layout>
-		</repository>
-		<repository>
-		  <id>teneo-repository</id>
-		  <url>http://download.eclipse.org/modeling/emf/teneo/updates/2.0.0/interim/</url>
-		  <layout>p2</layout>
-		</repository>
+        <repository>
+          <id>rap-repository</id>
+          <url>http://download.eclipse.org/rt/rap/2.0</url>
+          <layout>p2</layout>
+        </repository>
+        <repository>
+          <id>rap-filedialog-plugin</id>
+          <url>http://download.eclipse.org/rt/rap/incubator/2.0/fileupload</url>
+          <layout>p2</layout>
+        </repository>
+        <repository>
+          <id>teneo-repository</id>
+          <url>http://download.eclipse.org/modeling/emf/teneo/updates/2.0.0/interim/</url>
+          <layout>p2</layout>
+        </repository>
       </repositories>
-      
+
       <build>
         <plugins>
           <plugin>
@@ -278,7 +281,7 @@
       </build>
     </profile>
   </profiles>
-  
+
   <repositories>
     <repository>
       <id>eclipse-repository</id>
