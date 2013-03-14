@@ -40,7 +40,7 @@
       </properties>
 
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
         <property>
           <name>maven.profile</name>
           <value>indigo_rcp</value>
