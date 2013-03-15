@@ -6,6 +6,6 @@ Bundle-Version: 0.9.0.B1
 Bundle-Activator: org.eclipselabs.tapiji.translator.compat.Activator
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.osgi.framework;version="1.6.0"
+Import-Package: org.osgi.framework;version="1.5.0"
 Require-Bundle: org.eclipse.ui
 Export-Package: org.eclipselabs.tapiji.translator.compat
