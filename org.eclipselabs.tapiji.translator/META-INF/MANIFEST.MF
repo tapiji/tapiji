@@ -30,4 +30,6 @@ Import-Package: javax.servlet;resolution:=optional,
  javax.servlet.http;resolution:=optional,
  org.eclipse.babel.editor,
  org.eclipse.babel.editor.api,
- org.eclipse.babel.editor.widgets
+ org.eclipse.babel.editor.widgets,
+ org.eclipse.babel.editor.widgets.suggestion,
+ org.eclipse.babel.editor.widgets.suggestion.provider

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="org.eclipselabs.tapiji.translator.suggestion" name="Suggestion Provider" schema="schema/org.eclipselabs.tapiji.translator.suggestion.exsd"/>
 <extension
         id="app"
         point="org.eclipse.core.runtime.products">
@@ -114,5 +115,11 @@
               value="TapiJI Translator">
         </property>
      </product>
+  </extension>
+  <extension
+        point="org.eclipse.ui.startup">
+     <startup
+           class="org.eclipselabs.tapiji.translator.Startup">
+     </startup>
   </extension>
 </plugin>
