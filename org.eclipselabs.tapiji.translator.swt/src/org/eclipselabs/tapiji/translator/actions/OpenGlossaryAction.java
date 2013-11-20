@@ -12,6 +12,12 @@ package org.eclipselabs.tapiji.translator.actions;
 
 import java.io.File;
 
+import org.eclipse.babel.editor.widgets.suggestion.provider.ISuggestionProvider;
+import org.eclipse.babel.editor.widgets.suggestion.provider.SuggestionProviderUtils;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -20,6 +26,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipselabs.tapiji.translator.core.GlossaryManager;
+import org.eclipselabs.tapiji.translator.suggestionprovider.glossary.GlossarySuggestionProvider;
 import org.eclipselabs.tapiji.translator.utils.FileUtils;
 
 public class OpenGlossaryAction implements IWorkbenchWindowActionDelegate {
@@ -43,6 +50,13 @@ public class OpenGlossaryAction implements IWorkbenchWindowActionDelegate {
 			IWorkbenchPage page = window.getActivePage();
 			if (fileName != null) {
 				GlossaryManager.loadGlossary(new File(fileName));
+			}
+		}
+		
+		for(ISuggestionProvider provider : SuggestionProviderUtils.getSuggetionProviders()){
+			if(provider instanceof GlossarySuggestionProvider){
+				((GlossarySuggestionProvider)provider).setGlossaryFile(fileName);
+				SuggestionProviderUtils.fireSuggestionProviderUpdated(provider);
 			}
 		}
 	}
