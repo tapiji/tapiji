@@ -7,6 +7,8 @@
  * 
  * Contributors:
  *     Martin Reiterer - initial API and implementation
+ *     Samir Soyer     - passing glossary file path to 
+ *     GlossarySuggestionProvider
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.actions;
 
