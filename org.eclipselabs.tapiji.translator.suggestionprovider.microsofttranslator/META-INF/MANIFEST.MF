@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Microsoft Translator Provider
+Bundle-SymbolicName: org.eclipselabs.tapiji.translator.suggestionprovider.microsofttranslator;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.babel.editor,
+ org.eclipselabs.tapiji.translator
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: microsoft-translator-java-api-0.6.2-jar-with-dependencies.jar,
+ .
+Import-Package: org.junit

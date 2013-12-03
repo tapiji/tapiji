@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Glossary Suggestion Provider
+Bundle-SymbolicName: org.eclipselabs.tapiji.translator.suggestionprovider.glossary;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipselabs.tapiji.translator,
+ org.eclipse.babel.editor;bundle-version="0.9.1"
+Bundle-ClassPath: .
+Import-Package: org.junit;version="4.8.2"
+Export-Package: org.eclipselabs.tapiji.translator.suggestionprovider.glossary
