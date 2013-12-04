@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.suggestionprovider.microsofttranslator;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.eclipse.babel.editor.widgets.suggestion.exception.SuggestionErrors;
 import org.eclipse.babel.editor.widgets.suggestion.model.Suggestion;
 import org.eclipse.babel.editor.widgets.suggestion.provider.ISuggestionProvider;
@@ -31,6 +34,10 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 	private Image icon;
 	private static final String ICON_PATH = "/icons/mt16.png";
 	private static final String QUOTA_EXCEEDED = "Quota Exceeded";
+	private static final Language SOURCE_LANG = Language.ENGLISH;
+	
+	private final Level LOG_LEVEL = Level.INFO;
+	private static final Logger LOGGER = Logger.getLogger(MicrosoftTranslatorProvider.class.getName());
 
 	/**
 	 * Sets the {@code clientId} and {@code clientSecret} to the obtained values from
@@ -101,6 +108,9 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 	@Override
 	public Suggestion getSuggestion(String original, String targetLanguage) throws IllegalArgumentException{
 		
+		LOGGER.log(LOG_LEVEL,"original text: "+original+
+				", targetLanguage: "+targetLanguage);
+		
 		if(original == null || targetLanguage == null ||
 				original.equals("") || targetLanguage.equals("")){
 			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR);
@@ -119,13 +129,14 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 				return new Suggestion(icon,SuggestionErrors.LANG_NOT_SUPPORT_ERR);
 			}
 		} catch (Exception e1) {
+			LOGGER.log(LOG_LEVEL,"Language exception: "+e1.getMessage());
 			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
 		}
 
 		try {
-			translatedText = Translate.execute(original, Language.AUTO_DETECT, Language.fromString(targetLanguage));
+			translatedText = Translate.execute(original, SOURCE_LANG, Language.fromString(targetLanguage));
 		} catch (Exception e) {
-			//TODO logging 
+			LOGGER.log(LOG_LEVEL,"Translation exception: "+e.getMessage());
 			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
 		}
 		
@@ -134,6 +145,9 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 		}
 		if(translatedText.toLowerCase().contains(QUOTA_EXCEEDED)){
 			return new Suggestion(icon,SuggestionErrors.QUOTA_EXCEEDED);
+		}
+		if(translatedText.toLowerCase().equals("")){
+			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR);
 		}
 
 		return new Suggestion(icon,translatedText);

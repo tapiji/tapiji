@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.babel.editor.widgets.suggestion.exception.SuggestionErrors;
 import org.eclipse.babel.editor.widgets.suggestion.model.Suggestion;
@@ -41,6 +43,9 @@ public class GlossarySuggestionProvider extends DefaultHandler implements ISugge
 //	private static final String GLOSSARY = "/glossary.xml";
 	private static final String ICON_PATH = "/icons/sample.gif";
 	private String glossaryPath;
+	
+	private final Level LOG_LEVEL = Level.INFO;
+	private static final Logger LOGGER = Logger.getLogger(GlossarySuggestionProvider.class.getName());
 
 	/**
 	 * Creates the image of this provider from globally defined icon
@@ -55,6 +60,7 @@ public class GlossarySuggestionProvider extends DefaultHandler implements ISugge
 	 * @param glossaryPath is the path of xml file to be parsed.
 	 */
 	public void setGlossaryFile(String glossaryPath){
+		LOGGER.log(LOG_LEVEL,"glossaryPath: "+glossaryPath);
 		this.glossaryPath=glossaryPath;
 	}
 
@@ -63,6 +69,9 @@ public class GlossarySuggestionProvider extends DefaultHandler implements ISugge
 	 */
 	@Override
 	public Suggestion getSuggestion(String original, String targetLanguage) {
+		
+		LOGGER.log(LOG_LEVEL,"original text: "+original+
+				", targetLanguage: "+targetLanguage);
 
 		if(original == null || targetLanguage == null ||
 				original.equals("") || targetLanguage.equals("")){
@@ -78,7 +87,7 @@ public class GlossarySuggestionProvider extends DefaultHandler implements ISugge
 		try {
 			xr = XMLReaderFactory.createXMLReader();
 		} catch (SAXException e) {
-			//			e.printStackTrace();
+			LOGGER.log(LOG_LEVEL,"SAX exception: "+e.getMessage());
 			return new Suggestion(icon,SuggestionErrors.INVALID_GLOSSARY);
 		}
 
@@ -90,7 +99,7 @@ public class GlossarySuggestionProvider extends DefaultHandler implements ISugge
 		try {
 			is = new InputSource(new FileInputStream(new File(glossaryPath)));
 		} catch (FileNotFoundException e1) {
-//			e1.printStackTrace();
+			LOGGER.log(LOG_LEVEL,"File exception: "+e1.getMessage());
 			return new Suggestion(icon,SuggestionErrors.INVALID_GLOSSARY);
 		}
 
@@ -98,10 +107,10 @@ public class GlossarySuggestionProvider extends DefaultHandler implements ISugge
 		try {
 			xr.parse(is);
 		} catch (IOException e) {
-//			e.printStackTrace();
+			LOGGER.log(LOG_LEVEL,"IO exception: "+e.getMessage());
 			return new Suggestion(icon,SuggestionErrors.INVALID_GLOSSARY);
 		} catch (SAXException e) {
-//			e.printStackTrace();
+			LOGGER.log(LOG_LEVEL,"SAX exception: "+e.getMessage());
 			return new Suggestion(icon,SuggestionErrors.INVALID_GLOSSARY);
 		}
 

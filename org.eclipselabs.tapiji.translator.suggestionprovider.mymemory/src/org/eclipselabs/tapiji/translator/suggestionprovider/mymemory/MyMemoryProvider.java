@@ -16,6 +16,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.babel.editor.widgets.suggestion.exception.SuggestionErrors;
 import org.eclipse.babel.editor.widgets.suggestion.model.Suggestion;
@@ -39,7 +41,10 @@ public class MyMemoryProvider implements ISuggestionProvider {
 	private static final String QUOTA_EXCEEDED = "YOU USED ALL AVAILABLE FREE TRANSLATION FOR TODAY";
 	private static final String INVALID_LANGUAGE = "IS AN INVALID TARGET LANGUAGE";
 	private Image icon;
+	private static final String SOURCE_LANG = "langpair=en|";
 
+	private final Level LOG_LEVEL = Level.INFO;
+	private static final Logger LOGGER = Logger.getLogger(MyMemoryProvider.class.getName());
 
 	/**
 	 * Creates the image from globally defined icon path
@@ -59,6 +64,9 @@ public class MyMemoryProvider implements ISuggestionProvider {
 	 */
 	@Override
 	public Suggestion getSuggestion(String original, String targetLanguage) {
+		
+		LOGGER.log(LOG_LEVEL,"original text: "+original+
+				", targetLanguage: "+targetLanguage);
 
 		if(original == null || targetLanguage == null ||
 				original.equals("") || targetLanguage.equals("")){
@@ -67,7 +75,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 
 
 		//REST GET
-		String langpair = "langpair=en|" + targetLanguage.toLowerCase()
+		String langpair = SOURCE_LANG + targetLanguage.toLowerCase()
 				.subSequence(0, 2);
 		String restUrl = URL + original + "&"+ langpair;
 		restUrl = restUrl.replaceAll("\\s", "%20");
@@ -78,7 +86,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 		try {
 			url = new URL(restUrl);
 		} catch (MalformedURLException e) {
-			//TODO logging
+			LOGGER.log(LOG_LEVEL,"url exception: "+e.getMessage());
 			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
 		}
 		
@@ -89,10 +97,8 @@ public class MyMemoryProvider implements ISuggestionProvider {
 
 
 			if (conn.getResponseCode() != 200) {
+				LOGGER.log(LOG_LEVEL,"Http response: "+conn.getResponseCode());
 				return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
-				//TODO logging
-				//			throw new RuntimeException("Failed : HTTP error code : "
-				//					+ conn.getResponseCode());
 			}
 
 			BufferedReader br;
@@ -108,7 +114,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 
 			br.close();
 		} catch (IOException e) {
-			//TODO logging
+			LOGGER.log(LOG_LEVEL,"IO exception: "+e.getMessage());
 			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
 		}
 
@@ -120,7 +126,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 			jobject = jelement.getAsJsonObject();
 			jobject = jobject.getAsJsonObject("responseData");
 		} catch (Exception e) {
-			// TODO logging
+			LOGGER.log(LOG_LEVEL,"JSON parsing exception: "+e.getMessage());
 			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
 		}
 				
@@ -131,6 +137,9 @@ public class MyMemoryProvider implements ISuggestionProvider {
 		}
 		if(translatedText.contains(QUOTA_EXCEEDED)){
 			return new Suggestion(icon,SuggestionErrors.QUOTA_EXCEEDED);
+		}
+		if(translatedText.equals("")){
+			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR);
 		}
 
 		return new Suggestion(icon,translatedText);
