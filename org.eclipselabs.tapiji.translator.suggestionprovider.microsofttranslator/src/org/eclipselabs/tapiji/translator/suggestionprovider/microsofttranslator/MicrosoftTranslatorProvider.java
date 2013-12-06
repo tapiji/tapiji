@@ -10,12 +10,15 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.suggestionprovider.microsofttranslator;
 
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.babel.editor.widgets.suggestion.exception.InvalidConfigurationSetting;
 import org.eclipse.babel.editor.widgets.suggestion.exception.SuggestionErrors;
 import org.eclipse.babel.editor.widgets.suggestion.model.Suggestion;
 import org.eclipse.babel.editor.widgets.suggestion.provider.ISuggestionProvider;
+import org.eclipse.babel.editor.widgets.suggestion.provider.ISuggestionProviderConfigurationSetting;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
@@ -35,7 +38,7 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 	private static final String ICON_PATH = "/icons/mt16.png";
 	private static final String QUOTA_EXCEEDED = "Quota Exceeded";
 	private static final Language SOURCE_LANG = Language.ENGLISH;
-	
+
 	private final Level LOG_LEVEL = Level.INFO;
 	private static final Logger LOGGER = Logger.getLogger(MicrosoftTranslatorProvider.class.getName());
 
@@ -47,6 +50,13 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 		Translate.setClientId(CLIENT_ID);
 		Translate.setClientSecret(CLIENT_SECRET);
 		icon = new Image(Display.getCurrent(),MicrosoftTranslatorProvider.class.getResourceAsStream(ICON_PATH));
+	}
+
+	/**
+	 * @return Path to the icon of this provider
+	 */
+	public String getIconPath() {
+		return ICON_PATH;
 	}
 
 
@@ -107,23 +117,23 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 	 * */
 	@Override
 	public Suggestion getSuggestion(String original, String targetLanguage) throws IllegalArgumentException{
-		
+
 		LOGGER.log(LOG_LEVEL,"original text: "+original+
 				", targetLanguage: "+targetLanguage);
-		
+
 		if(original == null || targetLanguage == null ||
 				original.equals("") || targetLanguage.equals("")){
 			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR);
 		}
-		
+
 		targetLanguage=targetLanguage.toLowerCase();
-		
+
 		String translatedText = "";
-		
+
 		if(targetLanguage.contains("zh")){
 			targetLanguage = "zh-CHS";
 		}
-		
+
 		try {
 			if(!Language.getLanguageCodesForTranslation().contains(targetLanguage)){
 				return new Suggestion(icon,SuggestionErrors.LANG_NOT_SUPPORT_ERR);
@@ -139,7 +149,7 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 			LOGGER.log(LOG_LEVEL,"Translation exception: "+e.getMessage());
 			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
 		}
-		
+
 		if(translatedText.toLowerCase().contains("exception")){
 			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR);
 		}
@@ -151,6 +161,37 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 		}
 
 		return new Suggestion(icon,translatedText);
+	}
+
+
+	@Override
+	public Map<String, ISuggestionProviderConfigurationSetting> getAllConfigurationSettings() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void updateConfigurationSetting(String configurationId,
+			ISuggestionProviderConfigurationSetting setting)
+					throws InvalidConfigurationSetting {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean equals(Object obj){
+
+		if (this == obj) {
+			return true;
+		} else if (obj instanceof MicrosoftTranslatorProvider) {
+			MicrosoftTranslatorProvider mtp = 
+					(MicrosoftTranslatorProvider) obj;
+			if(this.getIconPath().equals(mtp.getIconPath())){
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

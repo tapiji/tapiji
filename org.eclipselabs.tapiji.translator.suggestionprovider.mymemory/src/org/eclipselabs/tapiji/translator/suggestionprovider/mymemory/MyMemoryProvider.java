@@ -16,12 +16,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.babel.editor.widgets.suggestion.exception.InvalidConfigurationSetting;
 import org.eclipse.babel.editor.widgets.suggestion.exception.SuggestionErrors;
 import org.eclipse.babel.editor.widgets.suggestion.model.Suggestion;
 import org.eclipse.babel.editor.widgets.suggestion.provider.ISuggestionProvider;
+import org.eclipse.babel.editor.widgets.suggestion.provider.ISuggestionProviderConfigurationSetting;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
@@ -51,9 +54,15 @@ public class MyMemoryProvider implements ISuggestionProvider {
 	 */
 	public MyMemoryProvider() {
 		this.icon = new Image(Display.getCurrent(),MyMemoryProvider.class.getResourceAsStream(ICON_PATH));
-//		this.icon = UIUtils.getImageDescriptor("mymemo16.png").createImage();
+		//		this.icon = UIUtils.getImageDescriptor("mymemo16.png").createImage();
 	}
 
+	/**
+	 * @return Path to the icon of this provider
+	 */
+	public String getIconPath() {
+		return ICON_PATH;
+	}
 
 	/**
 	 * Connects to MyMemory Translation Memory, translates given String from
@@ -64,7 +73,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 	 */
 	@Override
 	public Suggestion getSuggestion(String original, String targetLanguage) {
-		
+
 		LOGGER.log(LOG_LEVEL,"original text: "+original+
 				", targetLanguage: "+targetLanguage);
 
@@ -89,7 +98,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 			LOGGER.log(LOG_LEVEL,"url exception: "+e.getMessage());
 			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
 		}
-		
+
 		HttpURLConnection conn;
 
 		try {
@@ -129,7 +138,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 			LOGGER.log(LOG_LEVEL,"JSON parsing exception: "+e.getMessage());
 			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
 		}
-				
+
 		String translatedText = jobject.get("translatedText").toString().replaceAll("\"", "");
 
 		if(translatedText.contains(INVALID_LANGUAGE)){
@@ -143,6 +152,37 @@ public class MyMemoryProvider implements ISuggestionProvider {
 		}
 
 		return new Suggestion(icon,translatedText);
+	}
+
+
+	@Override
+	public Map<String, ISuggestionProviderConfigurationSetting> getAllConfigurationSettings() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void updateConfigurationSetting(String configurationId,
+			ISuggestionProviderConfigurationSetting setting)
+					throws InvalidConfigurationSetting {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean equals(Object obj){
+
+		if (this == obj) {
+			return true;
+		} else if (obj instanceof MyMemoryProvider) {
+			MyMemoryProvider mmp = 
+					(MyMemoryProvider) obj;
+			if(this.getIconPath().equals(mmp.getIconPath())){
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
