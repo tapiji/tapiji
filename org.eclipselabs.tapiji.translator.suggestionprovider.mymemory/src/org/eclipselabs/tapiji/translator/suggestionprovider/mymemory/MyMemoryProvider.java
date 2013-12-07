@@ -102,13 +102,14 @@ public class MyMemoryProvider implements ISuggestionProvider {
 			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR, this);
 		}
 
-		HttpURLConnection conn;
+		HttpURLConnection conn = null;
 
 		try {
 			conn = (HttpURLConnection) url.openConnection();
 
 
-			if (conn.getResponseCode() != 200) {
+			if (conn.getResponseCode() != 200) {	
+				conn.disconnect();
 				LOGGER.log(LOG_LEVEL,"Http response: "+conn.getResponseCode());
 				return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR, this);
 			}
@@ -129,9 +130,10 @@ public class MyMemoryProvider implements ISuggestionProvider {
 		} catch (IOException e) {
 			LOGGER.log(LOG_LEVEL,"IO exception: "+e.getMessage());
 			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR, this);
+		}finally{
+			if(conn != null)
+				conn.disconnect();
 		}
-
-		conn.disconnect();
 
 		JsonObject jobject;
 		try {
