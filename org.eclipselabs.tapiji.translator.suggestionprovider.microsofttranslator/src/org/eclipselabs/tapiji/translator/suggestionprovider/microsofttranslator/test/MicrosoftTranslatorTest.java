@@ -53,7 +53,8 @@ public class MicrosoftTranslatorTest {
 		}
 				
 		
-		Suggestion expected = new Suggestion(new Image(Display.getCurrent(),"icons/mt16.png"),translatedText);
+		Suggestion expected = new Suggestion(new Image(Display.getCurrent(),
+				"icons/mt16.png"),translatedText, mtp);
 		
 		assertNotNull(actual);
 		assertEquals(expected.getText(), actual.getText());		
@@ -69,7 +70,8 @@ public class MicrosoftTranslatorTest {
 			fail();
 		}
 		
-		Suggestion expected = new Suggestion(new Image(Display.getCurrent(),"icons/mt16.png"),translatedText);
+		Suggestion expected = new Suggestion(new Image(Display.getCurrent(),
+				"icons/mt16.png"),translatedText, mtp);
 		
 		assertNotNull(actual);
 		assertEquals(expected.getText(), actual.getText());		

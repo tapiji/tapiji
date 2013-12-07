@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,6 +46,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 	private static final String INVALID_LANGUAGE = "IS AN INVALID TARGET LANGUAGE";
 	private Image icon;
 	private static final String SOURCE_LANG = "langpair=en|";
+	private Map<String, ISuggestionProviderConfigurationSetting> configSettings;
 
 	private final Level LOG_LEVEL = Level.INFO;
 	private static final Logger LOGGER = Logger.getLogger(MyMemoryProvider.class.getName());
@@ -55,6 +57,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 	public MyMemoryProvider() {
 		this.icon = new Image(Display.getCurrent(),MyMemoryProvider.class.getResourceAsStream(ICON_PATH));
 		//		this.icon = UIUtils.getImageDescriptor("mymemo16.png").createImage();
+		configSettings = new HashMap<String, ISuggestionProviderConfigurationSetting>();
 	}
 
 	/**
@@ -79,7 +82,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 
 		if(original == null || targetLanguage == null ||
 				original.equals("") || targetLanguage.equals("")){
-			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR);
+			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR, this);
 		}
 
 
@@ -96,7 +99,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 			url = new URL(restUrl);
 		} catch (MalformedURLException e) {
 			LOGGER.log(LOG_LEVEL,"url exception: "+e.getMessage());
-			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
+			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR, this);
 		}
 
 		HttpURLConnection conn;
@@ -107,7 +110,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 
 			if (conn.getResponseCode() != 200) {
 				LOGGER.log(LOG_LEVEL,"Http response: "+conn.getResponseCode());
-				return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
+				return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR, this);
 			}
 
 			BufferedReader br;
@@ -120,11 +123,12 @@ public class MyMemoryProvider implements ISuggestionProvider {
 			while ((line = br.readLine()) != null) {
 				sb.append(line);
 			}
-
+			LOGGER.log(LOG_LEVEL,"rest response: "+sb.toString());
+			
 			br.close();
 		} catch (IOException e) {
 			LOGGER.log(LOG_LEVEL,"IO exception: "+e.getMessage());
-			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
+			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR, this);
 		}
 
 		conn.disconnect();
@@ -136,29 +140,30 @@ public class MyMemoryProvider implements ISuggestionProvider {
 			jobject = jobject.getAsJsonObject("responseData");
 		} catch (Exception e) {
 			LOGGER.log(LOG_LEVEL,"JSON parsing exception: "+e.getMessage());
-			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
+			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR, this);
 		}
 
 		String translatedText = jobject.get("translatedText").toString().replaceAll("\"", "");
+		
+		LOGGER.log(LOG_LEVEL,"translatedText: "+translatedText);
 
 		if(translatedText.contains(INVALID_LANGUAGE)){
-			return new Suggestion(icon,SuggestionErrors.LANG_NOT_SUPPORT_ERR);
+			return new Suggestion(icon,SuggestionErrors.LANG_NOT_SUPPORT_ERR, this);
 		}
 		if(translatedText.contains(QUOTA_EXCEEDED)){
-			return new Suggestion(icon,SuggestionErrors.QUOTA_EXCEEDED);
+			return new Suggestion(icon,SuggestionErrors.QUOTA_EXCEEDED, this);
 		}
 		if(translatedText.equals("")){
-			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR);
+			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR, this);
 		}
 
-		return new Suggestion(icon,translatedText);
+		return new Suggestion(icon,translatedText, this);
 	}
 
 
 	@Override
 	public Map<String, ISuggestionProviderConfigurationSetting> getAllConfigurationSettings() {
-		// TODO Auto-generated method stub
-		return null;
+		return configSettings;
 	}
 
 

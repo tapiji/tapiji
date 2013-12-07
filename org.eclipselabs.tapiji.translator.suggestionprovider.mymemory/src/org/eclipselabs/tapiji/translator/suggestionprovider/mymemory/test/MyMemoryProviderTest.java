@@ -46,7 +46,7 @@ public class MyMemoryProviderTest {
 		}
 
 		Suggestion expected = new Suggestion(new Image(Display.getCurrent(),
-				"icons/mymemo16.png"),translatedText);
+				"icons/mymemo16.png"),translatedText, mp);
 
 		assertNotNull(actual);
 		assertEquals(expected.getText(), actual.getText());	
@@ -63,7 +63,7 @@ public class MyMemoryProviderTest {
 		}
 
 		Suggestion expected = new Suggestion(new Image(Display.getCurrent(),
-				"icons/mymemo16.png"),translatedText);
+				"icons/mymemo16.png"),translatedText, mp);
 
 		assertNotNull(actual);
 		assertEquals(expected.getText(), actual.getText());		
@@ -74,7 +74,7 @@ public class MyMemoryProviderTest {
 		
 		Suggestion actual = null;
 		try {
-			actual = mp.getSuggestion(originalText, "foo");
+			actual = mp.getSuggestion(originalText, "--");
 		} catch (Exception e) {
 			fail();
 		}

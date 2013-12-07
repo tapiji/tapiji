@@ -44,7 +44,7 @@ public class GlossarySuggestionProviderTest {
 		}
 
 		Suggestion expected = new Suggestion(new Image(Display.getCurrent(),
-				"icons/sample.gif"), translatedText);
+				"icons/sample.gif"), translatedText, gsp);
 
 		assertNotNull(actual);
 		assertEquals(expected.getText(), actual.getText());
@@ -62,7 +62,7 @@ public class GlossarySuggestionProviderTest {
 		}
 
 		Suggestion expected = new Suggestion(new Image(Display.getCurrent(),
-				"icons/sample.gif"),translatedText);
+				"icons/sample.gif"),translatedText, gsp);
 
 		assertNotNull(actual);
 		assertEquals(expected.getText(), actual.getText());
@@ -93,7 +93,7 @@ public class GlossarySuggestionProviderTest {
 		}
 
 		Suggestion expected = new Suggestion(new Image(Display.getCurrent(),
-				"icons/sample.gif"),translatedText);
+				"icons/sample.gif"),translatedText, gsp);
 
 		assertNotNull(actual);
 		assertEquals(expected.getText(), actual.getText());

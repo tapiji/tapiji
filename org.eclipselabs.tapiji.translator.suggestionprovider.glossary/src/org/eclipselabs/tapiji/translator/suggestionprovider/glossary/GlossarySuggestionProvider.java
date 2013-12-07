@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +25,7 @@ import org.eclipse.babel.editor.widgets.suggestion.exception.SuggestionErrors;
 import org.eclipse.babel.editor.widgets.suggestion.model.Suggestion;
 import org.eclipse.babel.editor.widgets.suggestion.provider.ISuggestionProvider;
 import org.eclipse.babel.editor.widgets.suggestion.provider.ISuggestionProviderConfigurationSetting;
+import org.eclipse.babel.editor.widgets.suggestion.provider.StringConfigurationSetting;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.xml.sax.Attributes;
@@ -46,6 +48,7 @@ public class GlossarySuggestionProvider extends DefaultHandler implements ISugge
 	//	private static final String GLOSSARY = "/glossary.xml";
 	private static final String ICON_PATH = "/icons/sample.gif";
 	private String glossaryPath;
+	private Map<String, ISuggestionProviderConfigurationSetting> configSettings;
 
 	private final Level LOG_LEVEL = Level.INFO;
 	private static final Logger LOGGER = Logger.getLogger(GlossarySuggestionProvider.class.getName());
@@ -56,6 +59,8 @@ public class GlossarySuggestionProvider extends DefaultHandler implements ISugge
 	 */
 	public GlossarySuggestionProvider() {
 		this.icon = new Image(Display.getCurrent(),GlossarySuggestionProvider.class.getResourceAsStream(ICON_PATH));
+		configSettings = new HashMap<String, ISuggestionProviderConfigurationSetting>();
+		configSettings.put("glossaryFile", new StringConfigurationSetting(""));
 	}
 
 	/**
@@ -86,11 +91,11 @@ public class GlossarySuggestionProvider extends DefaultHandler implements ISugge
 
 		if(original == null || targetLanguage == null ||
 				original.equals("") || targetLanguage.equals("")){
-			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR);
+			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR, this);
 		}
 
 		if(glossaryPath == null){
-			return new Suggestion(icon,SuggestionErrors.NO_GLOSSARY_FILE);
+			return new Suggestion(icon,SuggestionErrors.NO_GLOSSARY_FILE, this);
 		}
 
 		XMLReader xr = null;
@@ -99,7 +104,7 @@ public class GlossarySuggestionProvider extends DefaultHandler implements ISugge
 			xr = XMLReaderFactory.createXMLReader();
 		} catch (SAXException e) {
 			LOGGER.log(LOG_LEVEL,"SAX exception: "+e.getMessage());
-			return new Suggestion(icon,SuggestionErrors.INVALID_GLOSSARY);
+			return new Suggestion(icon,SuggestionErrors.INVALID_GLOSSARY, this);
 		}
 
 		XMLContentHandler handler = new XMLContentHandler(original,targetLanguage);
@@ -111,7 +116,7 @@ public class GlossarySuggestionProvider extends DefaultHandler implements ISugge
 			is = new InputSource(new FileInputStream(new File(glossaryPath)));
 		} catch (FileNotFoundException e1) {
 			LOGGER.log(LOG_LEVEL,"File exception: "+e1.getMessage());
-			return new Suggestion(icon,SuggestionErrors.INVALID_GLOSSARY);
+			return new Suggestion(icon,SuggestionErrors.INVALID_GLOSSARY, this);
 		}
 
 
@@ -119,32 +124,54 @@ public class GlossarySuggestionProvider extends DefaultHandler implements ISugge
 			xr.parse(is);
 		} catch (IOException e) {
 			LOGGER.log(LOG_LEVEL,"IO exception: "+e.getMessage());
-			return new Suggestion(icon,SuggestionErrors.INVALID_GLOSSARY);
+			return new Suggestion(icon,SuggestionErrors.INVALID_GLOSSARY, this);
 		} catch (SAXException e) {
 			LOGGER.log(LOG_LEVEL,"SAX exception: "+e.getMessage());
-			return new Suggestion(icon,SuggestionErrors.INVALID_GLOSSARY);
+			return new Suggestion(icon,SuggestionErrors.INVALID_GLOSSARY, this);
 		}
 
 		String bestSuggestion = handler.getBestSuggestion();
 
 		if(bestSuggestion.equals("")){
-			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR);
+			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR, this);
 		}
 
-		return new Suggestion(icon,bestSuggestion);
+		return new Suggestion(icon,bestSuggestion, this);
 	}
 
 	@Override
 	public Map<String, ISuggestionProviderConfigurationSetting> getAllConfigurationSettings() {
-		// TODO Auto-generated method stub
-		return null;
+		return configSettings;
 	}
 
 	@Override
 	public void updateConfigurationSetting(String configurationId,
 			ISuggestionProviderConfigurationSetting setting)
 					throws InvalidConfigurationSetting {
-		// TODO Auto-generated method stub
+
+		if(getAllConfigurationSettings().containsKey(configurationId)){
+
+			String config = (String) configSettings
+					.get(configurationId).getConfigurationSetting();
+
+			if(!config
+					.equals((String)setting.getConfigurationSetting())){
+				
+				configSettings.put(configurationId,
+						new StringConfigurationSetting(config));
+				
+				if(configurationId.equals("glossaryFile")){
+					glossaryPath = (String)setting
+							.getConfigurationSetting();
+				}
+				
+
+			}
+
+		}else{
+			throw new InvalidConfigurationSetting(configurationId
+					+"is not a valid configuration id");
+		}
 
 	}
 

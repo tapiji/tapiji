@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.suggestionprovider.microsofttranslator;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +39,7 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 	private static final String ICON_PATH = "/icons/mt16.png";
 	private static final String QUOTA_EXCEEDED = "Quota Exceeded";
 	private static final Language SOURCE_LANG = Language.ENGLISH;
+	private Map<String, ISuggestionProviderConfigurationSetting> configSettings;
 
 	private final Level LOG_LEVEL = Level.INFO;
 	private static final Logger LOGGER = Logger.getLogger(MicrosoftTranslatorProvider.class.getName());
@@ -50,6 +52,7 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 		Translate.setClientId(CLIENT_ID);
 		Translate.setClientSecret(CLIENT_SECRET);
 		icon = new Image(Display.getCurrent(),MicrosoftTranslatorProvider.class.getResourceAsStream(ICON_PATH));
+		configSettings = new HashMap<String, ISuggestionProviderConfigurationSetting>();
 	}
 
 	/**
@@ -123,7 +126,7 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 
 		if(original == null || targetLanguage == null ||
 				original.equals("") || targetLanguage.equals("")){
-			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR);
+			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR, this);
 		}
 
 		targetLanguage=targetLanguage.toLowerCase();
@@ -136,38 +139,37 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 
 		try {
 			if(!Language.getLanguageCodesForTranslation().contains(targetLanguage)){
-				return new Suggestion(icon,SuggestionErrors.LANG_NOT_SUPPORT_ERR);
+				return new Suggestion(icon,SuggestionErrors.LANG_NOT_SUPPORT_ERR, this);
 			}
 		} catch (Exception e1) {
 			LOGGER.log(LOG_LEVEL,"Language exception: "+e1.getMessage());
-			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
+			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR, this);
 		}
 
 		try {
 			translatedText = Translate.execute(original, SOURCE_LANG, Language.fromString(targetLanguage));
 		} catch (Exception e) {
 			LOGGER.log(LOG_LEVEL,"Translation exception: "+e.getMessage());
-			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR);
+			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR, this);
 		}
 
 		if(translatedText.toLowerCase().contains("exception")){
-			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR);
+			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR, this);
 		}
 		if(translatedText.toLowerCase().contains(QUOTA_EXCEEDED)){
-			return new Suggestion(icon,SuggestionErrors.QUOTA_EXCEEDED);
+			return new Suggestion(icon,SuggestionErrors.QUOTA_EXCEEDED, this);
 		}
 		if(translatedText.toLowerCase().equals("")){
-			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR);
+			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR, this);
 		}
 
-		return new Suggestion(icon,translatedText);
+		return new Suggestion(icon,translatedText, this);
 	}
 
 
 	@Override
 	public Map<String, ISuggestionProviderConfigurationSetting> getAllConfigurationSettings() {
-		// TODO Auto-generated method stub
-		return null;
+		return configSettings;
 	}
 
 
