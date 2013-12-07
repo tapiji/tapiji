@@ -2,7 +2,6 @@ package org.eclipselabs.tapiji.translator.suggestionprovider.glossary.test;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
 
 import org.eclipse.babel.editor.widgets.suggestion.exception.SuggestionErrors;
 import org.eclipse.babel.editor.widgets.suggestion.model.Suggestion;
@@ -17,15 +16,16 @@ public class GlossarySuggestionProviderTest {
 
 	private GlossarySuggestionProvider gsp;
 	private String originalText = "Instances of this class are selectable";
-	private String translatedText = "Instanzen dieser Klasse (60% match)";
+	private String translatedText = "Instanzen der Klasse (47% match)";
 	private String targetLanguage = "de";
 
 	/**Test glossary */
-	private File glossaryFile = new File("glossary.xml");
+	private String glossaryFile = "glossary.xml";
 
 	@Before
 	public void setUp() throws Exception {
 		gsp = new GlossarySuggestionProvider();
+		gsp.setGlossaryFile(glossaryFile);
 	}
 
 	@After

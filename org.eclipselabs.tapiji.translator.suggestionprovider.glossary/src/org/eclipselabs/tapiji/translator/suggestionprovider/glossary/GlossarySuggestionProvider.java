@@ -254,8 +254,8 @@ class XMLContentHandler extends DefaultHandler{
 			throws SAXException {
 
 		if(localName.equals("translations")){
-
-			if(original.toLowerCase().contains(defaultGlossaryEntry.toLowerCase())){
+//			original.toLowerCase().contains(defaultGlossaryEntry.toLowerCase())
+			if(contains(original.toLowerCase(),defaultGlossaryEntry.toLowerCase())){
 				if(defaultGlossaryEntry.length() > longestMatching.length()){
 
 					longestMatching = defaultGlossaryEntry;
@@ -280,6 +280,22 @@ class XMLContentHandler extends DefaultHandler{
 		if(localName.equals("value")){
 			inValue=false;
 		}
+	}
+	
+	private boolean contains(String source, String substring){
+		String[] originalWords = source.split(" ");
+		StringBuilder sb = new StringBuilder();
+		
+		for(String word : originalWords){
+			if(substring.contains(word)){
+				sb.append(word+" ");
+			}
+		}		
+		
+		if(substring.equals(sb.toString().trim())){
+			return true;
+		}
+		return false;
 	}
 
 	/**
