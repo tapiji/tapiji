@@ -78,9 +78,10 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 				SOURCE_LANG = Language.fromString(lang);
 			}
 		} catch (Exception e1) {
-			LOGGER.log(LOG_LEVEL,"Source language is not supported," +
-					" English will be used instead"
-					+"\nLanguage exception: "+e1.getMessage());
+			LOGGER.log(LOG_LEVEL,"Error while checking supported" +
+					"languages, check your internet connection" +
+					"English will be used as default (source)" +
+					"language");
 			SOURCE_LANG = Language.ENGLISH;
 		}		
 	}
