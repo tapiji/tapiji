@@ -23,6 +23,10 @@ public class MyMemoryProviderTest {
 			" w\u00e4hlbar Objekte der Benutzeroberfl\u00e4che";
 
 	private String targetLanguage = "de";
+	
+	private static final String ICON_PATH = "/icons/mymemo16.png";
+	private Image icon = new Image(Display.getCurrent(),
+			MyMemoryProvider.class.getResourceAsStream(ICON_PATH));
 
 	@Before
 	public void setUp() throws Exception {
@@ -45,8 +49,7 @@ public class MyMemoryProviderTest {
 			fail();
 		}
 
-		Suggestion expected = new Suggestion(new Image(Display.getCurrent(),
-				"icons/mymemo16.png"),translatedText, mp);
+		Suggestion expected = new Suggestion(icon,translatedText, mp);
 
 		assertNotNull(actual);
 		assertEquals(expected.getText(), actual.getText());	
@@ -62,8 +65,7 @@ public class MyMemoryProviderTest {
 			fail();
 		}
 
-		Suggestion expected = new Suggestion(new Image(Display.getCurrent(),
-				"icons/mymemo16.png"),translatedText, mp);
+		Suggestion expected = new Suggestion(icon,translatedText, mp);
 
 		assertNotNull(actual);
 		assertEquals(expected.getText(), actual.getText());		
