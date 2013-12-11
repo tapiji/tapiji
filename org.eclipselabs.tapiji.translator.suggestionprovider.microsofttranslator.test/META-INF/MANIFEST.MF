@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Microsoft Translator Test
+Bundle-SymbolicName: org.eclipselabs.tapiji.translator.suggestionprovider.microsofttranslator.test;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: org.eclipselabs.tapiji.translator.suggestionprovider.microsofttranslator;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
