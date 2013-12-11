@@ -18,9 +18,12 @@ public class GlossarySuggestionProviderTest {
 	private String originalText = "Instances of this class are selectable";
 	private String translatedText = "Instanzen der Klasse (47% match)";
 	private String targetLanguage = "de";
+	private static final String ICON_PATH = "/icons/sample.gif";
 
 	/**Test glossary */
 	private String glossaryFile = "glossary.xml";
+	private Image icon = new Image(Display.getCurrent(),
+			GlossarySuggestionProvider.class.getResourceAsStream(ICON_PATH));
 
 	@Before
 	public void setUp() throws Exception {
@@ -43,8 +46,7 @@ public class GlossarySuggestionProviderTest {
 			fail();
 		}
 
-		Suggestion expected = new Suggestion(new Image(Display.getCurrent(),
-				"icons/sample.gif"), translatedText, gsp);
+		Suggestion expected = new Suggestion(icon, translatedText, gsp);
 
 		assertNotNull(actual);
 		assertEquals(expected.getText(), actual.getText());
@@ -61,8 +63,7 @@ public class GlossarySuggestionProviderTest {
 			fail();
 		}
 
-		Suggestion expected = new Suggestion(new Image(Display.getCurrent(),
-				"icons/sample.gif"),translatedText, gsp);
+		Suggestion expected = new Suggestion(icon,translatedText, gsp);
 
 		assertNotNull(actual);
 		assertEquals(expected.getText(), actual.getText());
@@ -92,8 +93,7 @@ public class GlossarySuggestionProviderTest {
 			fail();
 		}
 
-		Suggestion expected = new Suggestion(new Image(Display.getCurrent(),
-				"icons/sample.gif"),translatedText, gsp);
+		Suggestion expected = new Suggestion(icon,translatedText, gsp);
 
 		assertNotNull(actual);
 		assertEquals(expected.getText(), actual.getText());
