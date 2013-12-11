@@ -13,6 +13,8 @@
 package org.eclipselabs.tapiji.translator.actions;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.babel.editor.widgets.suggestion.exception.InvalidConfigurationSetting;
 import org.eclipse.babel.editor.widgets.suggestion.provider.StringConfigurationSetting;
@@ -31,6 +33,10 @@ public class OpenGlossaryAction implements IWorkbenchWindowActionDelegate {
 
 	/** The workbench window */
 	private IWorkbenchWindow window;
+	
+	private final Level LOG_LEVEL = Level.INFO;
+	private static final Logger LOGGER = Logger
+			.getLogger(OpenGlossaryAction.class.getName());
 
 	@Override
 	public void run(IAction action) {
@@ -55,11 +61,8 @@ public class OpenGlossaryAction implements IWorkbenchWindowActionDelegate {
 			SuggestionProviderUtils.updateConfigurationSetting("glossaryFile",
 					new StringConfigurationSetting(fileName));
 		} catch (InvalidConfigurationSetting e) {
-			// log					
+			LOGGER.log(LOG_LEVEL,e.getMessage());			
 		}
-
-
-
 	}
 
 	@Override
