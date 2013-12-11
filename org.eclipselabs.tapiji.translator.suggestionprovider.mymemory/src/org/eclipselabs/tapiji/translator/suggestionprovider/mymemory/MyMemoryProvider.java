@@ -45,7 +45,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 	private static final String QUOTA_EXCEEDED = "YOU USED ALL AVAILABLE FREE TRANSLATION FOR TODAY";
 	private static final String INVALID_LANGUAGE = "IS AN INVALID TARGET LANGUAGE";
 	private Image icon;
-	private static final String SOURCE_LANG = "langpair=en|";
+	private static String SOURCE_LANG;
 	private Map<String, ISuggestionProviderConfigurationSetting> configSettings;
 
 	private final Level LOG_LEVEL = Level.INFO;
@@ -58,6 +58,8 @@ public class MyMemoryProvider implements ISuggestionProvider {
 		this.icon = new Image(Display.getCurrent(),MyMemoryProvider.class.getResourceAsStream(ICON_PATH));
 		//		this.icon = UIUtils.getImageDescriptor("mymemo16.png").createImage();
 		configSettings = new HashMap<String, ISuggestionProviderConfigurationSetting>();
+		
+		setSourceLanguage(System.getProperty("tapiji.translator.default.language"));
 	}
 
 	/**
@@ -65,6 +67,23 @@ public class MyMemoryProvider implements ISuggestionProvider {
 	 */
 	public String getIconPath() {
 		return ICON_PATH;
+	}
+	
+private void setSourceLanguage(String lang){
+		
+		if(lang!=null){
+			lang = lang.substring(0, 2);
+			if(lang.contains("zh")){
+				lang = "zh-CHS";
+			}
+			
+			SOURCE_LANG = "langpair="+lang+"|";
+		}else{
+			LOGGER.log(LOG_LEVEL,"No source language"
+					+" has benn set, " +
+					"English will be used instead");
+			SOURCE_LANG = "langpair=en|";
+		}
 	}
 
 	/**
@@ -124,7 +143,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 			while ((line = br.readLine()) != null) {
 				sb.append(line);
 			}
-			LOGGER.log(LOG_LEVEL,"rest response: "+sb.toString());
+			LOGGER.log(Level.SEVERE,"rest response: "+sb.toString());
 			
 			br.close();
 		} catch (IOException e) {

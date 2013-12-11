@@ -35,11 +35,11 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 
 	private static final String CLIENT_ID = "tapiji_translator";
 	private static final String CLIENT_SECRET = "+aQX87s1KwVOziGL3DgAdXIQu63K0nYDS7bNkh3XuyE=";
-	private Image icon;
 	private static final String ICON_PATH = "/icons/mt16.png";
 	private static final String QUOTA_EXCEEDED = "Quota Exceeded";
-	private static final Language SOURCE_LANG = Language.ENGLISH;
+	private static Language SOURCE_LANG;
 	private Map<String, ISuggestionProviderConfigurationSetting> configSettings;
+	private Image icon;
 
 	private final Level LOG_LEVEL = Level.INFO;
 	private static final Logger LOGGER = Logger.getLogger(MicrosoftTranslatorProvider.class.getName());
@@ -51,8 +51,38 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 	public MicrosoftTranslatorProvider(){
 		Translate.setClientId(CLIENT_ID);
 		Translate.setClientSecret(CLIENT_SECRET);
-		icon = new Image(Display.getCurrent(),MicrosoftTranslatorProvider.class.getResourceAsStream(ICON_PATH));
+		icon = new Image(Display.getCurrent(),
+				MicrosoftTranslatorProvider.class.getResourceAsStream(ICON_PATH));
 		configSettings = new HashMap<String, ISuggestionProviderConfigurationSetting>();
+		
+		setSourceLanguage(System.getProperty("tapiji.translator.default.language"));
+		
+	}
+	
+	private void setSourceLanguage(String lang){
+		
+		if(lang!=null){
+			lang = lang.substring(0, 2);
+			if(lang.contains("zh")){
+				lang = "zh-CHS";
+			}
+		}
+		
+		try {
+			if(!Language.getLanguageCodesForTranslation().contains(lang)){
+				LOGGER.log(LOG_LEVEL,"Source language "+lang
+						+" is not supported, " +
+						"English will be used instead");
+				SOURCE_LANG = Language.ENGLISH;
+			}else{
+				SOURCE_LANG = Language.fromString(lang);
+			}
+		} catch (Exception e1) {
+			LOGGER.log(LOG_LEVEL,"Source language is not supported," +
+					" English will be used instead"
+					+"\nLanguage exception: "+e1.getMessage());
+			SOURCE_LANG = Language.ENGLISH;
+		}		
 	}
 
 	/**
