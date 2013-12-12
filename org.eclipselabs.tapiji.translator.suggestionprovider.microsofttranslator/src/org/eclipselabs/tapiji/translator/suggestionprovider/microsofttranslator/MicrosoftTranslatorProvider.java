@@ -79,8 +79,8 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 			}
 		} catch (Exception e1) {
 			LOGGER.log(LOG_LEVEL,"Error while checking supported" +
-					"languages, check your internet connection" +
-					"English will be used as default (source)" +
+					"languages, check your internet connection," +
+					" therefore English will be used as default (source)" +
 					"language");
 			SOURCE_LANG = Language.ENGLISH;
 		}		

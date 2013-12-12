@@ -58,7 +58,7 @@ public class MyMemoryProvider implements ISuggestionProvider {
 		this.icon = new Image(Display.getCurrent(),MyMemoryProvider.class.getResourceAsStream(ICON_PATH));
 		//		this.icon = UIUtils.getImageDescriptor("mymemo16.png").createImage();
 		configSettings = new HashMap<String, ISuggestionProviderConfigurationSetting>();
-		
+
 		setSourceLanguage(System.getProperty("tapiji.translator.default.language"));
 	}
 
@@ -68,15 +68,15 @@ public class MyMemoryProvider implements ISuggestionProvider {
 	public String getIconPath() {
 		return ICON_PATH;
 	}
-	
-private void setSourceLanguage(String lang){
-		
+
+	private void setSourceLanguage(String lang){
+
 		if(lang!=null){
 			lang = lang.substring(0, 2);
 			if(lang.contains("zh")){
 				lang = "zh-CHS";
 			}
-			
+
 			SOURCE_LANG = "langpair="+lang+"|";
 		}else{
 			LOGGER.log(LOG_LEVEL,"No source language"
@@ -144,7 +144,7 @@ private void setSourceLanguage(String lang){
 				sb.append(line);
 			}
 			LOGGER.log(Level.SEVERE,"rest response: "+sb.toString());
-			
+
 			br.close();
 		} catch (IOException e) {
 			LOGGER.log(LOG_LEVEL,"IO exception: "+e.getMessage());
@@ -165,7 +165,7 @@ private void setSourceLanguage(String lang){
 		}
 
 		String translatedText = jobject.get("translatedText").toString().replaceAll("\"", "");
-		
+
 		LOGGER.log(LOG_LEVEL,"translatedText: "+translatedText);
 
 		if(translatedText.contains(INVALID_LANGUAGE)){
