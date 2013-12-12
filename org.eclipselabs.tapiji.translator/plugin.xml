@@ -45,12 +45,6 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+O">
       </key>
-      <key
-            commandId="org.eclipse.ui.help.aboutAction"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+A">
-      </key>
    </extension>
    
    <extension

@@ -83,6 +83,7 @@ public abstract class AbstractApplicationActionBarAdvisor extends ActionBarAdvis
 		        IWorkbenchActionConstants.M_HELP);
 
 		// TODO [RAP] helpMenu.add(getAction(ActionFactory.ABOUT.getId()));
+		helpMenu.add(getAction(ActionFactory.ABOUT.getId()));
 
 		return helpMenu;
 	}
@@ -110,6 +111,7 @@ public abstract class AbstractApplicationActionBarAdvisor extends ActionBarAdvis
 		registerAsGlobal(ActionFactory.CLOSE_ALL.create(window));
 		registerAsGlobal(ActionFactory.CLOSE_ALL_SAVED.create(window));
 		//TODO [RAP] registerAsGlobal(ActionFactory.ABOUT.create(window));
+		registerAsGlobal(ActionFactory.ABOUT.create(window));
 		registerAsGlobal(ActionFactory.QUIT.create(window));
 		
 		showViewItem = ContributionItemFactory.VIEWS_SHORTLIST.create(window);
