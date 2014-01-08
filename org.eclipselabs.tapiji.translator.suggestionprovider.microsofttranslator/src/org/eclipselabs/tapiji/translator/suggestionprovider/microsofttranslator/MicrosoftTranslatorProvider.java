@@ -28,13 +28,15 @@ import com.memetix.mst.translate.Translate;
 
 /**
  * Provides suggestions via Microsoft Translator
+ * 
  * @author Samir Soyer
- *
+ * 
  */
 public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 
 	private static final String CLIENT_ID = "tapiji_translator";
-	private static final String CLIENT_SECRET = "+aQX87s1KwVOziGL3DgAdXIQu63K0nYDS7bNkh3XuyE=";
+	private static final String CLIENT_SECRET =
+			"+aQX87s1KwVOziGL3DgAdXIQu63K0nYDS7bNkh3XuyE=";
 	private static final String ICON_PATH = "/icons/mt16.png";
 	private static final String QUOTA_EXCEEDED = "Quota Exceeded";
 	private static Language SOURCE_LANG;
@@ -42,48 +44,52 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 	private Image icon;
 
 	private final Level LOG_LEVEL = Level.INFO;
-	private static final Logger LOGGER = Logger.getLogger(MicrosoftTranslatorProvider.class.getName());
+	private static final Logger LOGGER = Logger
+			.getLogger(MicrosoftTranslatorProvider.class.getName());
 
 	/**
-	 * Sets the {@code clientId} and {@code clientSecret} to the obtained values from
-	 * Windows Azure Marketplace and creates the image from globally defined icon path
+	 * Sets the {@code clientId} and {@code clientSecret} to the obtained values
+	 * from Windows Azure Marketplace and creates the image from globally
+	 * defined icon path
 	 */
-	public MicrosoftTranslatorProvider(){
+	public MicrosoftTranslatorProvider() {
 		Translate.setClientId(CLIENT_ID);
 		Translate.setClientSecret(CLIENT_SECRET);
 		icon = new Image(Display.getCurrent(),
-				MicrosoftTranslatorProvider.class.getResourceAsStream(ICON_PATH));
-		configSettings = new HashMap<String, ISuggestionProviderConfigurationSetting>();
-		
-		setSourceLanguage(System.getProperty("tapiji.translator.default.language"));
-		
+				MicrosoftTranslatorProvider.class
+				.getResourceAsStream(ICON_PATH));
+		configSettings = new HashMap<String, 
+				ISuggestionProviderConfigurationSetting>();
+
+		setSourceLanguage(System
+				.getProperty("tapiji.translator.default.language"));
+
 	}
-	
-	private void setSourceLanguage(String lang){
-		
-		if(lang!=null){
+
+	private void setSourceLanguage(String lang) {
+		if (lang != null) {
 			lang = lang.substring(0, 2);
-			if(lang.contains("zh")){
+			if (lang.contains("zh")) {
 				lang = "zh-CHS";
 			}
 		}
-		
+
 		try {
-			if(!Language.getLanguageCodesForTranslation().contains(lang)){
-				LOGGER.log(LOG_LEVEL,"Source language "+lang
-						+" is not supported, " +
-						"English will be used instead");
+			if (!Language.getLanguageCodesForTranslation().contains(lang)) {
+				LOGGER.log(LOG_LEVEL, "Source language " + lang
+						+ " is not supported, "
+						+ "English will be used instead");
 				SOURCE_LANG = Language.ENGLISH;
-			}else{
+			} else {
 				SOURCE_LANG = Language.fromString(lang);
 			}
 		} catch (Exception e1) {
-			LOGGER.log(LOG_LEVEL,"Error while checking supported" +
-					"languages, check your internet connection," +
-					" therefore English will be used as default (source)" +
-					"language");
+			LOGGER.log(LOG_LEVEL, "Error while checking supported"
+					+ "languages, check your internet connection,"
+					+ " therefore English will be used as default (source)"
+					+ "language");
 			SOURCE_LANG = Language.ENGLISH;
-		}		
+		}
 	}
 
 	/**
@@ -93,13 +99,15 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 		return ICON_PATH;
 	}
 
-
 	/**
-	 * Connects to Microsoft Translator, translates given String form
-	 * English to {@code targetLanguage}, then returns translation as Suggestion object
+	 * Connects to Microsoft Translator, translates given String form English to
+	 * {@code targetLanguage}, then returns translation as Suggestion object
 	 * 
 	 * Supported languages and their abbreviations are:
-	 * <p><blockquote><pre>
+	 * <p>
+	 * <blockquote>
+	 * 
+	 * <pre>
 	 * ARABIC("ar"),
 	 * BULGARIAN("bg"),
 	 * CATALAN("ca"),
@@ -141,90 +149,93 @@ public class MicrosoftTranslatorProvider implements ISuggestionProvider {
 	 * UKRAINIAN("uk"),
 	 * URDU("ur"),
 	 * VIETNAMESE("vi");
-	 *  </pre></blockquote><p>
+	 * </pre>
 	 * 
-	 * @param original is the original text that  is going be translated.
-	 * @param targetLanguage should be in ISO 639-1 Code, e.g "de" for GERMAN.
-	 * If not specified "zh-CHS" will be used for any variants of Chinese
+	 * </blockquote>
+	 * <p>
+	 * 
+	 * @param original
+	 *            is the original text that is going be translated.
+	 * @param targetLanguage
+	 *            should be in ISO 639-1 Code, e.g "de" for GERMAN. If not
+	 *            specified "zh-CHS" will be used for any variants of Chinese
 	 * @return suggestion object
 	 * 
 	 * */
 	@Override
-	public Suggestion getSuggestion(String original, String targetLanguage) throws IllegalArgumentException{
+	public Suggestion getSuggestion(String original, String targetLanguage)
+			throws IllegalArgumentException {
+		LOGGER.log(LOG_LEVEL, "original text: " + original
+				+ ", targetLanguage: " + targetLanguage);
 
-		LOGGER.log(LOG_LEVEL,"original text: "+original+
-				", targetLanguage: "+targetLanguage);
-
-		if(original == null || targetLanguage == null ||
-				original.equals("") || targetLanguage.equals("")){
-			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR, this);
+		if (original == null || targetLanguage == null || original.equals("")
+				|| targetLanguage.equals("")) {
+			return new Suggestion(icon, SuggestionErrors.NO_SUGESTION_ERR, this);
 		}
 
-		targetLanguage=targetLanguage.toLowerCase();
+		targetLanguage = targetLanguage.toLowerCase();
 
 		String translatedText = "";
 
-		if(targetLanguage.contains("zh")){
+		if (targetLanguage.contains("zh")) {
 			targetLanguage = "zh-CHS";
 		}
 
 		try {
-			if(!Language.getLanguageCodesForTranslation().contains(targetLanguage)){
-				return new Suggestion(icon,SuggestionErrors.LANG_NOT_SUPPORT_ERR, this);
+			if (!Language.getLanguageCodesForTranslation().contains(
+					targetLanguage)) {
+				return new Suggestion(icon,
+						SuggestionErrors.LANG_NOT_SUPPORT_ERR, this);
 			}
 		} catch (Exception e1) {
-			LOGGER.log(LOG_LEVEL,"Language exception: "+e1.getMessage());
-			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR, this);
+			LOGGER.log(LOG_LEVEL, "Language exception: " + e1.getMessage());
+			return new Suggestion(icon, SuggestionErrors.CONNECTION_ERR, this);
 		}
 
 		try {
-			translatedText = Translate.execute(original, SOURCE_LANG, Language.fromString(targetLanguage));
+			translatedText = Translate.execute(original, SOURCE_LANG,
+					Language.fromString(targetLanguage));
 		} catch (Exception e) {
-			LOGGER.log(LOG_LEVEL,"Translation exception: "+e.getMessage());
-			return new Suggestion(icon,SuggestionErrors.CONNECTION_ERR, this);
+			LOGGER.log(LOG_LEVEL, "Translation exception: " + e.getMessage());
+			return new Suggestion(icon, SuggestionErrors.CONNECTION_ERR, this);
 		}
 
-		if(translatedText.toLowerCase().contains("exception")){
-			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR, this);
+		if (translatedText.toLowerCase().contains("exception")) {
+			return new Suggestion(icon, SuggestionErrors.NO_SUGESTION_ERR, this);
 		}
-		if(translatedText.toLowerCase().contains(QUOTA_EXCEEDED)){
-			return new Suggestion(icon,SuggestionErrors.QUOTA_EXCEEDED, this);
+		if (translatedText.toLowerCase().contains(QUOTA_EXCEEDED)) {
+			return new Suggestion(icon, SuggestionErrors.QUOTA_EXCEEDED, this);
 		}
-		if(translatedText.toLowerCase().equals("")){
-			return new Suggestion(icon,SuggestionErrors.NO_SUGESTION_ERR, this);
+		if (translatedText.toLowerCase().equals("")) {
+			return new Suggestion(icon, SuggestionErrors.NO_SUGESTION_ERR, this);
 		}
 
-		return new Suggestion(icon,translatedText, this);
+		return new Suggestion(icon, translatedText, this);
 	}
-
 
 	@Override
-	public Map<String, ISuggestionProviderConfigurationSetting> getAllConfigurationSettings() {
+	public Map<String, ISuggestionProviderConfigurationSetting> 
+	getAllConfigurationSettings() {
 		return configSettings;
 	}
-
 
 	@Override
 	public void updateConfigurationSetting(String configurationId,
 			ISuggestionProviderConfigurationSetting setting)
 					throws InvalidConfigurationSetting {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
-	public boolean equals(Object obj){
-
+	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		} else if (obj instanceof MicrosoftTranslatorProvider) {
-			MicrosoftTranslatorProvider mtp = 
-					(MicrosoftTranslatorProvider) obj;
-			if(this.getIconPath().equals(mtp.getIconPath())){
+			MicrosoftTranslatorProvider mtp = (MicrosoftTranslatorProvider) obj;
+			if (this.getIconPath().equals(mtp.getIconPath())) {
 				return true;
 			}
 		}
 		return false;
 	}
-
 }

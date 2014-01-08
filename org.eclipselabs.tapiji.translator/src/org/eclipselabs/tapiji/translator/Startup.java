@@ -14,12 +14,12 @@ import org.eclipse.ui.IStartup;
 import org.eclipselabs.tapiji.translator.suggestionlookup.SuggestionProviderLoader;
 
 /**
- * Class that contains the method to call 
- * after startup
+ * Class that contains the method to call after startup
+ * 
  * @author Samir Soyer
- *
+ * 
  */
-public class Startup implements IStartup{
+public class Startup implements IStartup {
 
 	/**
 	 * @see org.eclipse.ui.IStartup#earlyStartup()
@@ -27,7 +27,7 @@ public class Startup implements IStartup{
 	@Override
 	public void earlyStartup() {
 		SuggestionProviderLoader.registerProviders();
-		
+
 	}
 
 }

@@ -1,7 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2013 Samir Soyer.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Samir Soyer - initial API and implementation
+ ******************************************************************************/
 package org.eclipselabs.tapiji.translator.suggestionprovider.glossary.test;
 
 import static org.junit.Assert.*;
-
 
 import org.eclipse.babel.editor.widgets.suggestion.exception.SuggestionErrors;
 import org.eclipse.babel.editor.widgets.suggestion.model.Suggestion;
@@ -20,7 +29,7 @@ public class GlossarySuggestionProviderTest {
 	private String targetLanguage = "de";
 	private static final String ICON_PATH = "/icons/sample.gif";
 
-	/**Test glossary */
+	/** Test glossary */
 	private String glossaryFile = "glossary.xml";
 	private Image icon = new Image(Display.getCurrent(),
 			GlossarySuggestionProvider.class.getResourceAsStream(ICON_PATH));
@@ -54,7 +63,6 @@ public class GlossarySuggestionProviderTest {
 
 	@Test
 	public void testGetSuggestionWithTargetLanguageInUpperCase() {
-
 		Suggestion actual = null;
 
 		try {
@@ -63,7 +71,7 @@ public class GlossarySuggestionProviderTest {
 			fail();
 		}
 
-		Suggestion expected = new Suggestion(icon,translatedText, gsp);
+		Suggestion expected = new Suggestion(icon, translatedText, gsp);
 
 		assertNotNull(actual);
 		assertEquals(expected.getText(), actual.getText());
@@ -88,12 +96,13 @@ public class GlossarySuggestionProviderTest {
 		Suggestion actual = null;
 
 		try {
-			actual = gsp.getSuggestion(originalText.toLowerCase(), targetLanguage);
+			actual = gsp.getSuggestion(originalText.toLowerCase(),
+					targetLanguage);
 		} catch (Exception e) {
 			fail();
 		}
 
-		Suggestion expected = new Suggestion(icon,translatedText, gsp);
+		Suggestion expected = new Suggestion(icon, translatedText, gsp);
 
 		assertNotNull(actual);
 		assertEquals(expected.getText(), actual.getText());
@@ -106,7 +115,7 @@ public class GlossarySuggestionProviderTest {
 
 		try {
 			actual = gsp.getSuggestion(null, null);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			fail();
 		}
 
@@ -120,15 +129,12 @@ public class GlossarySuggestionProviderTest {
 
 		try {
 			actual = gsp.getSuggestion("", "");
-		}catch (Exception e) {
+		} catch (Exception e) {
 			fail();
 		}
 
 		assertNotNull(actual);
 		assertEquals(SuggestionErrors.NO_SUGESTION_ERR, actual.getText());
-
 	}
-	
-	//TODO test invalid glossary file
-
+	// TODO test invalid glossary file
 }

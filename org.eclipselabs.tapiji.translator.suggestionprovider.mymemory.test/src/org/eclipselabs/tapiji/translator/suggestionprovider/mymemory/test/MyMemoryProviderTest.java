@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013 Samir Soyer.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Samir Soyer - initial API and implementation
+ ******************************************************************************/
 package org.eclipselabs.tapiji.translator.suggestionprovider.mymemory.test;
 
 import static org.junit.Assert.assertEquals;
@@ -16,14 +26,14 @@ import org.junit.Test;
 public class MyMemoryProviderTest {
 
 	private MyMemoryProvider mp;
-	private String originalText = "Instances of this class are" +
-			" selectable user interface objects";
+	private String originalText = "Instances of this class are"
+			+ " selectable user interface objects";
 
-	private String translatedText = "Instanzen dieser Klasse sind" +
-			" w\u00e4hlbar Objekte der Benutzeroberfl\u00e4che";
+	private String translatedText = "Instanzen dieser Klasse sind"
+			+ " w\u00e4hlbar Objekte der Benutzeroberfl\u00e4che";
 
 	private String targetLanguage = "de";
-	
+
 	private static final String ICON_PATH = "/icons/mymemo16.png";
 	private Image icon = new Image(Display.getCurrent(),
 			MyMemoryProvider.class.getResourceAsStream(ICON_PATH));
@@ -49,10 +59,10 @@ public class MyMemoryProviderTest {
 			fail();
 		}
 
-		Suggestion expected = new Suggestion(icon,translatedText, mp);
+		Suggestion expected = new Suggestion(icon, translatedText, mp);
 
 		assertNotNull(actual);
-		assertEquals(expected.getText(), actual.getText());	
+		assertEquals(expected.getText(), actual.getText());
 	}
 
 	@Test
@@ -60,27 +70,26 @@ public class MyMemoryProviderTest {
 		Suggestion actual = null;
 
 		try {
-			actual =  mp.getSuggestion(originalText, "DE");
+			actual = mp.getSuggestion(originalText, "DE");
 		} catch (Exception e) {
 			fail();
 		}
 
-		Suggestion expected = new Suggestion(icon,translatedText, mp);
+		Suggestion expected = new Suggestion(icon, translatedText, mp);
 
 		assertNotNull(actual);
-		assertEquals(expected.getText(), actual.getText());		
+		assertEquals(expected.getText(), actual.getText());
 	}
 
 	@Test
-	public void testGetSuggestionWithWrongLanguage() {	
-		
+	public void testGetSuggestionWithWrongLanguage() {
 		Suggestion actual = null;
 		try {
 			actual = mp.getSuggestion(originalText, "--");
 		} catch (Exception e) {
 			fail();
 		}
-		
+
 		assertNotNull(actual);
 		assertEquals(SuggestionErrors.LANG_NOT_SUPPORT_ERR, actual.getText());
 	}
@@ -91,10 +100,10 @@ public class MyMemoryProviderTest {
 
 		try {
 			actual = mp.getSuggestion(null, null);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			fail();
 		}
-		
+
 		assertNotNull(actual);
 		assertEquals(SuggestionErrors.NO_SUGESTION_ERR, actual.getText());
 	}
@@ -105,13 +114,11 @@ public class MyMemoryProviderTest {
 
 		try {
 			actual = mp.getSuggestion("", "");
-		}catch (Exception e) {
+		} catch (Exception e) {
 			fail();
 		}
-		
+
 		assertNotNull(actual);
 		assertEquals(SuggestionErrors.NO_SUGESTION_ERR, actual.getText());
-
 	}
-
 }

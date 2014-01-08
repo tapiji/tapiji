@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013 Samir Soyer.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Samir Soyer - initial API and implementation
+ ******************************************************************************/
 package org.eclipselabs.tapiji.translator.suggestionprovider.microsofttranslator.test;
 
 import static org.junit.Assert.*;
@@ -12,22 +22,22 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class MicrosoftTranslatorTest {
-	
+
 	private MicrosoftTranslatorProvider mtp;
-	
-	private String originalText = "Instances of this class are selectable user " +
-			"interface objects that allow the user to enter and modify text." +
-			" Text controls can be either single or multi-line."; 
-			
+
+	private String originalText = "Instances of this class are selectable user "
+			+ "interface objects that allow the user to enter and modify text."
+			+ " Text controls can be either single or multi-line.";
+
 	private String targetLanguage = "de";
-	
-	private String translatedText = "Instanzen dieser Klasse sind wählbar " +
-			"Benutzer-Interface-Objekte, mit denen den Benutzer eingeben " +
-			"und Ändern von Text. Text-Steuerelemente können entweder " +
-			"ein- oder mehrzeiligen sein.";
-	
+
+	private String translatedText = "Instanzen dieser Klasse sind wählbar "
+			+ "Benutzer-Interface-Objekte, mit denen den Benutzer eingeben "
+			+ "und Ändern von Text. Text-Steuerelemente können entweder "
+			+ "ein- oder mehrzeiligen sein.";
+
 	private static final String ICON_PATH = "/icons/mt16.png";
-	
+
 	private Image icon = new Image(Display.getCurrent(),
 			MicrosoftTranslatorProvider.class.getResourceAsStream(ICON_PATH));
 
@@ -41,86 +51,82 @@ public class MicrosoftTranslatorTest {
 		mtp = null;
 	}
 
-	/**According to Microsoft Translator API, empty source language string should cause to detect source
-	 * language automatically. If the resulting suggestion doesn't match with already translated suggestion 
-	 * (by Microsoft Translator) test fails.
+	/**
+	 * According to Microsoft Translator API, empty source language string
+	 * should cause to detect source language automatically. If the resulting
+	 * suggestion doesn't match with already translated suggestion (by Microsoft
+	 * Translator) test fails.
 	 * */
 	@Test
 	public void testGetSuggestion() {
-		
 		Suggestion actual = null;
-		
+
 		try {
 			actual = mtp.getSuggestion(originalText, targetLanguage);
 		} catch (Exception e) {
 			fail();
 		}
-				
-		
-		Suggestion expected = new Suggestion(icon,translatedText, mtp);
-		
+
+		Suggestion expected = new Suggestion(icon, translatedText, mtp);
+
 		assertNotNull(actual);
-		assertEquals(expected.getText(), actual.getText());		
+		assertEquals(expected.getText(), actual.getText());
 	}
-	
+
 	@Test
 	public void testGetSuggestionWithTargetLanguageInUpperCase() {
 		Suggestion actual = null;
-		
+
 		try {
-			actual =  mtp.getSuggestion(originalText, "DE");
+			actual = mtp.getSuggestion(originalText, "DE");
 		} catch (Exception e) {
 			fail();
 		}
-		
-		Suggestion expected = new Suggestion(icon,translatedText, mtp);
-		
+
+		Suggestion expected = new Suggestion(icon, translatedText, mtp);
+
 		assertNotNull(actual);
-		assertEquals(expected.getText(), actual.getText());		
+		assertEquals(expected.getText(), actual.getText());
 	}
-	
+
 	@Test
 	public void testGetSuggestionWithWrongLanguage() {
-		
 		Suggestion actual = null;
 		try {
 			actual = mtp.getSuggestion(originalText, "foo");
 		} catch (Exception e) {
 			fail();
 		}
-		
+
 		assertNotNull(actual);
 		assertEquals(SuggestionErrors.LANG_NOT_SUPPORT_ERR, actual.getText());
-		
 	}
-	
+
 	@Test
 	public void testGetSuggestionWithNullParameter() {
 		Suggestion actual = null;
 
 		try {
 			actual = mtp.getSuggestion(null, null);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			fail();
 		}
-		
+
 		assertNotNull(actual);
 		assertEquals(SuggestionErrors.NO_SUGESTION_ERR, actual.getText());
 	}
-	
+
 	@Test
 	public void testGetSuggestionInvalidParameter() {
 		Suggestion actual = null;
 
 		try {
 			actual = mtp.getSuggestion("", "");
-		}catch (Exception e) {
+		} catch (Exception e) {
 			fail();
 		}
-		
+
 		assertNotNull(actual);
 		assertEquals(SuggestionErrors.NO_SUGESTION_ERR, actual.getText());
-		
 	}
-
 }
