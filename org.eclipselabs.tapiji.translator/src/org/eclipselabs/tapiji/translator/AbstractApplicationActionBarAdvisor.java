@@ -7,6 +7,7 @@
  * 
  * Contributors:
  *     Martin Reiterer - initial API and implementation
+ *     Samir Soyer     - about dialog added in help menu
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator;
 
