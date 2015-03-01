@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmi:id="_Tb38kMAvEeSRGIkNvtWVbw" elementId="org.eclipselabs.e4.tapiji.translator.application">
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_ZcsPgMAvEeSRGIkNvtWVbw" elementId="org.eclipselabs.e4.tapiji.translator.trimmedwindow.tapijiTranslator" label="TapiJI Translator" tooltip="Tooling for agile and process integrated Java Internationalization"/>
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_ZcsPgMAvEeSRGIkNvtWVbw" elementId="org.eclipselabs.e4.tapiji.translator.trimmedwindow.tapijiTranslator" label="TapiJI Translator" tooltip="Tooling for agile and process integrated Java Internationalization" x="100" y="100" width="600" height="400"/>
   <addons xmi:id="_Tb38kcAvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_Tb38ksAvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_Tb38k8AvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

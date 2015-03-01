@@ -9,14 +9,17 @@
             application="org.eclipse.e4.ui.workbench.swt.E4Application"
             name="translator">
          <property
-               name="appName"
-               value="translator">
+               name="windowImages"
+               value="platform:/plugin/org.eclipselabs.e4.tapiji.resources/icons/16x16/tapiji.png,platform:/plugin/org.eclipselabs.e4.tapiji.resources/icons/32x32/tapiji.png,platform:/plugin/org.eclipselabs.e4.tapiji.resources/icons/48x48/tapiji.png,platform:/plugin/org.eclipselabs.e4.tapiji.resources/icons/64x64/tapiji.png,platform:/plugin/org.eclipselabs.e4.tapiji.resources/icons/128x128/tapiji.png">
          </property>
          <property
                name="aboutText"
                value="TapiJI - Translator &#x0A;Version 1.0.0&#x0A;by Stefan Strobl &amp;amp;&#x0A;Martin Reiterer &amp;amp;&#x0A;Christian Behon">
          </property>
+         <property
+               name="appName"
+               value="translator">
+         </property>
       </product>
    </extension>
-
 </plugin>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="translator" id="org.eclipselabs.e4.tapiji.translator.product" application="org.eclipse.e4.ui.workbench.swt.E4Application" useFeatures="true" includeLaunchers="true">
+<product name="translator" uid="org.eclipselabs.e4.tapiji.translator.rcp.product" id="org.eclipselabs.e4.tapiji.translator.product" application="org.eclipse.e4.ui.workbench.swt.E4Application" version="1.0.0" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <text>
@@ -18,16 +18,16 @@ Christian Behon
 
    <launcherArgs>
       <programArgs>-clearPersistedState
--XstartOnFirstThread
       </programArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
    </launcherArgs>
 
-   <windowImages/>
+   <windowImages i16="/org.eclipselabs.e4.tapiji.resources/icons/16x16/tapiji.png" i32="/org.eclipselabs.e4.tapiji.resources/icons/32x32/tapiji.png" i48="/org.eclipselabs.e4.tapiji.resources/icons/48x48/tapiji.png" i64="/org.eclipselabs.e4.tapiji.resources/icons/64x64/tapiji.png" i128="/org.eclipselabs.e4.tapiji.resources/icons/128x128/tapiji.png"/>
 
-
-   <launcher>
+   <splash
+      location="org.eclipselabs.e4.tapiji.resources" />
+   <launcher name="Tapiji Translator">
       <solaris/>
       <win useIco="false">
          <bmp/>
