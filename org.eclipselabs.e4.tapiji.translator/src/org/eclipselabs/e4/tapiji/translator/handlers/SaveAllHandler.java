@@ -18,5 +18,4 @@ public class SaveAllHandler {
   public boolean canExecute() {
     return false;
   }
-
 }
