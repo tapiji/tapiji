@@ -16,7 +16,11 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.menu.MToolBar;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -50,7 +54,7 @@ import org.eclipselabs.e4.tapiji.translator.views.widgets.model.GlossaryViewStat
 import org.eclipselabs.e4.tapiji.translator.views.widgets.provider.AbstractGlossaryLabelProvider;
 
 
-public class GlossaryView implements ILoadGlossaryListener {
+public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.swt.widgets.Listener {
 
   /**
    * The ID of the view as specified by the extension.
@@ -61,7 +65,7 @@ public class GlossaryView implements ILoadGlossaryListener {
   private GlossaryWidget treeViewer;
   private Scale fuzzyScaler;
   private Label lblScale;
-  private Text filter;
+  private Text inputFilter;
 
   /*** ACTIONS ***/
   private GlossaryEntryMenuContribution glossaryEditContribution;
@@ -84,10 +88,14 @@ public class GlossaryView implements ILoadGlossaryListener {
   /*** View state ***/
   // private IMemento memento;
   private GlossaryViewState viewState;
+
   private GlossaryManager glossary;
 
   @Inject
   MPart part;
+
+  @Inject
+  ESelectionService selectionService;
 
   /**
    * The constructor.
@@ -103,73 +111,73 @@ public class GlossaryView implements ILoadGlossaryListener {
    * This is a callback that will allow us to create the viewer and initialize it.
    */
   @PostConstruct
-  public void createPartControl(Composite parent) {
-
-    String test = "asda";
-    System.out.println("TEST");
+  public void createPartControl(final Composite parent) {
+    parent.setLayout(new GridLayout(1, false));
+    initSearchBar(parent);
     /*
-     * this.parent = parent; initLayout(parent); initSearchBar(parent); initMessagesTree(parent); makeActions();
-     * hookContextMenu(); contributeToActionBars(); initListener(parent);
+     * initMessagesTree(parent); makeActions(); hookContextMenu(); contributeToActionBars(); initListener(parent);
      */
   }
 
 
-  protected void initListener(Composite parent) {
-    filter.addModifyListener(new ModifyListener() {
+  protected void initListener(final Composite parent) {
+    inputFilter.addModifyListener(new ModifyListener() {
 
       @Override
-      public void modifyText(ModifyEvent e) {
-        if (glossary != null && glossary.getGlossary() != null)
-          treeViewer.setSearchString(filter.getText());
+      public void modifyText(final ModifyEvent e) {
+        if ((glossary != null) && (glossary.getGlossary() != null)) {
+          treeViewer.setSearchString(inputFilter.getText());
+        }
       }
     });
   }
 
-  protected void initLayout(Composite parent) {
-    GridLayout mainLayout = new GridLayout();
-    mainLayout.numColumns = 1;
-    parent.setLayout(mainLayout);
-
+  private Label createLabel(final Composite parent, final String text) {
+    final Label label = new Label(parent, SWT.None);
+    label.setText(text);
+    return label;
   }
 
-  protected void initSearchBar(Composite parent) {
+  private GridData createGrid(final int horizontalAlignment, final int verticalAlignment,
+          final boolean hasHorizontalSpace, final int horizontalSpan) {
+    final GridData gridData = new GridData();
+    gridData.horizontalAlignment = horizontalAlignment;
+    gridData.verticalAlignment = verticalAlignment;
+    gridData.grabExcessHorizontalSpace = hasHorizontalSpace;
+    gridData.horizontalSpan = horizontalSpan;
+    return gridData;
+  }
+
+  protected void initSearchBar(final Composite parent) {
     // Construct a new parent container
-    Composite parentComp = new Composite(parent, SWT.BORDER);
+    final Composite parentComp = new Composite(parent, SWT.BORDER);
     parentComp.setLayout(new GridLayout(4, false));
     parentComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-    Label lblSearchText = new Label(parentComp, SWT.NONE);
-    lblSearchText.setText("Search expression:");
 
-    // define the grid data for the layout
-    GridData gridData = new GridData();
-    gridData.horizontalAlignment = SWT.FILL;
-    gridData.grabExcessHorizontalSpace = false;
-    gridData.horizontalSpan = 1;
-    lblSearchText.setLayoutData(gridData);
+    createLabel(parentComp, "Search expression:").setLayoutData(createGrid(SWT.FILL, SWT.CENTER, false, 1));
 
-    filter = new Text(parentComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
-    if (viewState != null && viewState.getSearchString() != null) {
-      if (viewState.getSearchString().length() > 1 && viewState.getSearchString().startsWith("*")
-              && viewState.getSearchString().endsWith("*"))
-        filter.setText(viewState.getSearchString().substring(1).substring(0, viewState.getSearchString().length() - 2));
-      else
-        filter.setText(viewState.getSearchString());
+
+    inputFilter = new Text(parentComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
+    if ((viewState != null) && (viewState.getSearchString() != null)) {
+      if ((viewState.getSearchString().length() > 1) && viewState.getSearchString().startsWith("*")
+              && viewState.getSearchString().endsWith("*")) {
+        inputFilter.setText(viewState.getSearchString().substring(1)
+                .substring(0, viewState.getSearchString().length() - 2));
+      } else {
+        inputFilter.setText(viewState.getSearchString());
+      }
 
     }
-    GridData gridDatas = new GridData();
-    gridDatas.horizontalAlignment = SWT.FILL;
-    gridDatas.grabExcessHorizontalSpace = true;
-    gridDatas.horizontalSpan = 3;
-    filter.setLayoutData(gridDatas);
+    inputFilter.setLayoutData(createGrid(SWT.FILL, SWT.CENTER, true, 3));
 
-    lblScale = new Label(parentComp, SWT.None);
-    lblScale.setText("\nPrecision:");
-    GridData gdScaler = new GridData();
+    final GridData gdScaler = new GridData();
     gdScaler.verticalAlignment = SWT.CENTER;
     gdScaler.grabExcessVerticalSpace = true;
     gdScaler.horizontalSpan = 1;
-    lblScale.setLayoutData(gdScaler);
+
+    lblScale = createLabel(parentComp, "\nPrecision:");
+    lblScale.setLayoutData(createGrid(SWT.BEGINNING, SWT.CENTER, true, 1));
 
     // Add a scale for specification of fuzzy Matching precision
     fuzzyScaler = new Scale(parentComp, SWT.None);
@@ -181,15 +189,16 @@ public class GlossaryView implements ILoadGlossaryListener {
             .getMatchingPrecision()) * 100.f));
     fuzzyScaler.addListener(SWT.Selection, new Listener() {
 
-      public void handleEvent(Event event) {
-        float val = 1f - (Float.parseFloat((fuzzyScaler.getMaximum() - fuzzyScaler.getSelection() + fuzzyScaler
+      @Override
+      public void handleEvent(final Event event) {
+        final float val = 1f - (Float.parseFloat(((fuzzyScaler.getMaximum() - fuzzyScaler.getSelection()) + fuzzyScaler
                 .getMinimum()) + "") / 100.f);
         treeViewer.setMatchingPrecision(val);
       }
     });
     fuzzyScaler.setSize(100, 10);
 
-    GridData gdScalers = new GridData();
+    final GridData gdScalers = new GridData();
     gdScalers.verticalAlignment = SWT.BEGINNING;
     gdScalers.horizontalAlignment = SWT.FILL;
     gdScalers.horizontalSpan = 3;
@@ -213,46 +222,39 @@ public class GlossaryView implements ILoadGlossaryListener {
     lblScale.getParent().getParent().layout();
   }
 
-  protected void initMessagesTree(Composite parent) {
+  protected void initMessagesTree(final Composite parent) {
     // Unregister the label provider as selection listener
-    if (treeViewer != null && treeViewer.getViewer() != null && treeViewer.getViewer().getLabelProvider() != null
-            && treeViewer.getViewer().getLabelProvider() instanceof AbstractGlossaryLabelProvider)
-      // getSite()
-      // .getWorkbenchWindow()
-      // .getSelectionService()
-      // .removeSelectionListener(
-      // ((AbstractGlossaryLabelProvider) treeViewer.getViewer()
-      // .getLabelProvider()));
+    if ((treeViewer != null) && (treeViewer.getViewer() != null) && (treeViewer.getViewer().getLabelProvider() != null)
+            && (treeViewer.getViewer().getLabelProvider() instanceof AbstractGlossaryLabelProvider)) {
+      selectionService.removeSelectionListener((ISelectionListener) treeViewer.getViewer().getLabelProvider());
+    }
+    treeViewer = new GlossaryWidget(parent, SWT.NONE, glossary != null ? glossary : null,
+            viewState != null ? viewState.getReferenceLanguage() : null,
+            viewState != null ? viewState.getDisplayLanguages() : null);
 
-      // treeViewer = new GlossaryWidget(getSite(), parent, SWT.NONE,
-      // glossary != null ? glossary : null,
-      // viewState != null ? viewState.getReferenceLanguage() : null,
-      // viewState != null ? viewState.getDisplayLanguages() : null);
+    // Register the label provider as selection listener
+    if ((treeViewer.getViewer() != null) && (treeViewer.getViewer().getLabelProvider() != null)
+            && (treeViewer.getViewer().getLabelProvider() instanceof AbstractGlossaryLabelProvider)) {
+      selectionService.addSelectionListener((ISelectionListener) treeViewer.getViewer().getLabelProvider());
+    }
 
-      // Register the label provider as selection listener
-      if (treeViewer.getViewer() != null && treeViewer.getViewer().getLabelProvider() != null
-              && treeViewer.getViewer().getLabelProvider() instanceof AbstractGlossaryLabelProvider)
-        // getSite()
-        // .getWorkbenchWindow()
-        // .getSelectionService()
-        // .addSelectionListener(
-        // ((AbstractGlossaryLabelProvider) treeViewer.getViewer()
-        // .getLabelProvider()));
-        if (treeViewer != null && this.glossary != null && this.glossary.getGlossary() != null) {
-          if (viewState != null && viewState.getSortings() != null)
-            treeViewer.setSortInfo(viewState.getSortings());
+    if ((treeViewer != null) && (this.glossary != null) && (this.glossary.getGlossary() != null)) {
+      if ((viewState != null) && (viewState.getSortings() != null)) {
+        treeViewer.setSortInfo(viewState.getSortings());
+      }
 
-          treeViewer.enableFuzzyMatching(viewState.isFuzzyMatchingEnabled());
-          treeViewer.bindContentToSelection(viewState.isSelectiveViewEnabled());
-          treeViewer.setMatchingPrecision(viewState.getMatchingPrecision());
-          treeViewer.setEditable(viewState.isEditable());
+      treeViewer.enableFuzzyMatching(viewState.isFuzzyMatchingEnabled());
+      treeViewer.bindContentToSelection(viewState.isSelectiveViewEnabled());
+      treeViewer.setMatchingPrecision(viewState.getMatchingPrecision());
+      treeViewer.setEditable(viewState.isEditable());
 
-          if (viewState.getSearchString() != null)
-            treeViewer.setSearchString(viewState.getSearchString());
-        }
+      if (viewState.getSearchString() != null) {
+        treeViewer.setSearchString(viewState.getSearchString());
+      }
+    }
 
     // define the grid data for the layout
-    GridData gridData = new GridData();
+    final GridData gridData = new GridData();
     gridData.horizontalAlignment = SWT.FILL;
     gridData.verticalAlignment = SWT.FILL;
     gridData.grabExcessHorizontalSpace = true;
@@ -265,7 +267,9 @@ public class GlossaryView implements ILoadGlossaryListener {
    */
   @Focus
   public void setFocus() {
-    treeViewer.setFocus();
+    if (treeViewer != null) {
+      treeViewer.setFocus();
+    }
   }
 
   protected void redrawTreeViewer() {
@@ -276,7 +280,7 @@ public class GlossaryView implements ILoadGlossaryListener {
       makeActions();
       contributeToActionBars();
       hookContextMenu();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       e.printStackTrace();
     }
     parent.setRedraw(true);
@@ -300,6 +304,7 @@ public class GlossaryView implements ILoadGlossaryListener {
 
     enableFuzzyMatching = new Action() {
 
+      @Override
       public void run() {
         super.run();
         treeViewer.enableFuzzyMatching(!treeViewer.isFuzzyMatchingEnabled());
@@ -314,6 +319,7 @@ public class GlossaryView implements ILoadGlossaryListener {
 
     editable = new Action() {
 
+      @Override
       public void run() {
         super.run();
         treeViewer.setEditable(!treeViewer.isEditable());
@@ -327,25 +333,28 @@ public class GlossaryView implements ILoadGlossaryListener {
     /** New Translation */
     newTranslation = new Action("New Translation ...") {
 
+      @Override
       public void run() {
         /*
          * Construct a list of all Locales except Locales that are already part of the translation glossary
          */
-        if (glossary == null || glossary.getGlossary() == null)
+        if ((glossary == null) || (glossary.getGlossary() == null)) {
           return;
+        }
 
-        List<Locale> allLocales = new ArrayList<Locale>();
-        List<Locale> locales = new ArrayList<Locale>();
-        for (String l : glossary.getGlossary().info.getTranslations()) {
-          String[] locDef = l.split("_");
-          Locale locale = locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0],
+        final List<Locale> allLocales = new ArrayList<Locale>();
+        final List<Locale> locales = new ArrayList<Locale>();
+        for (final String l : glossary.getGlossary().info.getTranslations()) {
+          final String[] locDef = l.split("_");
+          final Locale locale = locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0],
                   locDef[1])) : new Locale(locDef[0], locDef[1], locDef[2]);
           locales.add(locale);
         }
 
-        for (Locale l : Locale.getAvailableLocales()) {
-          if (!locales.contains(l))
+        for (final Locale l : Locale.getAvailableLocales()) {
+          if (!locales.contains(l)) {
             allLocales.add(l);
+          }
         }
 
         /*
@@ -354,7 +363,7 @@ public class GlossaryView implements ILoadGlossaryListener {
         Collections.sort(allLocales, new Comparator<Locale>() {
 
           @Override
-          public int compare(Locale o1, Locale o2) {
+          public int compare(final Locale o1, final Locale o2) {
             return o1.getDisplayName().compareTo(o2.getDisplayName());
           }
         });
@@ -375,24 +384,28 @@ public class GlossaryView implements ILoadGlossaryListener {
     /** Delete Translation */
     deleteTranslation = new Action("Delete Translation ...") {
 
+      @Override
       public void run() {
         /*
          * Construct a list of type locale from all existing translations
          */
-        if (glossary == null || glossary.getGlossary() == null)
+        if ((glossary == null) || (glossary.getGlossary() == null)) {
           return;
+        }
 
         String referenceLang = glossary.getGlossary().info.getTranslations()[0];
-        if (viewState != null && viewState.getReferenceLanguage() != null)
+        if ((viewState != null) && (viewState.getReferenceLanguage() != null)) {
           referenceLang = viewState.getReferenceLanguage();
+        }
 
-        List<Locale> locales = new ArrayList<Locale>();
-        List<String> strLoc = new ArrayList<String>();
-        for (String l : glossary.getGlossary().info.getTranslations()) {
-          if (l.equalsIgnoreCase(referenceLang))
+        final List<Locale> locales = new ArrayList<Locale>();
+        final List<String> strLoc = new ArrayList<String>();
+        for (final String l : glossary.getGlossary().info.getTranslations()) {
+          if (l.equalsIgnoreCase(referenceLang)) {
             continue;
-          String[] locDef = l.split("_");
-          Locale locale = locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0],
+          }
+          final String[] locDef = l.split("_");
+          final Locale locale = locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0],
                   locDef[1])) : new Locale(locDef[0], locDef[1], locDef[2]);
           locales.add(locale);
           strLoc.add(l);
@@ -430,15 +443,16 @@ public class GlossaryView implements ILoadGlossaryListener {
   }
 
   private void contributeToActionBars() {
-    // IActionBars bars = getViewSite().getActionBars();
+    MToolBar bars = part.getToolbar();
+
     // fillLocalPullDown(bars.getMenuManager());
     // fillLocalToolBar(bars.getToolBarManager());
   }
 
-  private void fillLocalPullDown(IMenuManager manager) {
+  private void fillLocalPullDown(final IMenuManager manager) {
     manager.removeAll();
 
-    if (this.glossary != null && this.glossary.getGlossary() != null) {
+    if ((this.glossary != null) && (this.glossary.getGlossary() != null)) {
       glossaryEditContribution = new GlossaryEntryMenuContribution(treeViewer, !treeViewer.getViewer().getSelection()
               .isEmpty());
       manager.add(this.glossaryEditContribution);
@@ -448,7 +462,7 @@ public class GlossaryView implements ILoadGlossaryListener {
     manager.add(enableFuzzyMatching);
     manager.add(editable);
 
-    if (this.glossary != null && this.glossary.getGlossary() != null) {
+    if ((this.glossary != null) && (this.glossary.getGlossary() != null)) {
       manager.add(new Separator());
       manager.add(newTranslation);
       manager.add(deleteTranslation);
@@ -458,23 +472,24 @@ public class GlossaryView implements ILoadGlossaryListener {
 
   /*** CONTEXT MENU ***/
   private void hookContextMenu() {
-    MenuManager menuMgr = new MenuManager("#PopupMenu");
+    final MenuManager menuMgr = new MenuManager("#PopupMenu");
     menuMgr.setRemoveAllWhenShown(true);
     menuMgr.addMenuListener(new IMenuListener() {
 
-      public void menuAboutToShow(IMenuManager manager) {
+      @Override
+      public void menuAboutToShow(final IMenuManager manager) {
         fillContextMenu(manager);
       }
     });
-    Menu menu = menuMgr.createContextMenu(treeViewer.getViewer().getControl());
+    final Menu menu = menuMgr.createContextMenu(treeViewer.getViewer().getControl());
     treeViewer.getViewer().getControl().setMenu(menu);
     // getViewSite().registerContextMenu(menuMgr, treeViewer.getViewer());
   }
 
-  private void fillContextMenu(IMenuManager manager) {
+  private void fillContextMenu(final IMenuManager manager) {
     manager.removeAll();
 
-    if (this.glossary != null && this.glossary.getGlossary() != null) {
+    if ((this.glossary != null) && (this.glossary.getGlossary() != null)) {
       glossaryEditContribution = new GlossaryEntryMenuContribution(treeViewer, !treeViewer.getViewer().getSelection()
               .isEmpty());
       manager.add(this.glossaryEditContribution);
@@ -487,7 +502,7 @@ public class GlossaryView implements ILoadGlossaryListener {
     manager.add(enableFuzzyMatching);
 
     /** Locale management section */
-    if (this.glossary != null && this.glossary.getGlossary() != null) {
+    if ((this.glossary != null) && (this.glossary.getGlossary() != null)) {
       manager.add(new Separator());
       manager.add(newTranslation);
       manager.add(deleteTranslation);
@@ -496,11 +511,11 @@ public class GlossaryView implements ILoadGlossaryListener {
     createMenuAdditions(manager);
   }
 
-  private void createShowContentMenu(IMenuManager manager) {
+  private void createShowContentMenu(final IMenuManager manager) {
     showMenu = new MenuManager("&Show", "show");
 
-    if (showAll == null || showSelectiveContent == null) {
-      showAll = new Action("All terms", Action.AS_RADIO_BUTTON) {
+    if ((showAll == null) || (showSelectiveContent == null)) {
+      showAll = new Action("All terms", IAction.AS_RADIO_BUTTON) {
 
         @Override
         public void run() {
@@ -512,7 +527,7 @@ public class GlossaryView implements ILoadGlossaryListener {
       showAll.setToolTipText(showAll.getDescription());
       showAll.setChecked(!viewState.isSelectiveViewEnabled());
 
-      showSelectiveContent = new Action("Relevant terms", Action.AS_RADIO_BUTTON) {
+      showSelectiveContent = new Action("Relevant terms", IAction.AS_RADIO_BUTTON) {
 
         @Override
         public void run() {
@@ -532,32 +547,34 @@ public class GlossaryView implements ILoadGlossaryListener {
     manager.add(showMenu);
   }
 
-  private void createMenuAdditions(IMenuManager manager) {
+  private void createMenuAdditions(final IMenuManager manager) {
     // Make reference language actions
-    if (glossary != null && glossary.getGlossary() != null) {
-      Glossary g = glossary.getGlossary();
+    if ((glossary != null) && (glossary.getGlossary() != null)) {
+      final Glossary g = glossary.getGlossary();
       final String[] translations = g.info.getTranslations();
 
-      if (translations == null || translations.length == 0)
+      if ((translations == null) || (translations.length == 0)) {
         return;
+      }
 
       referenceMenu = new MenuManager("&Reference Translation", "reflang");
       if (referenceActions == null) {
         referenceActions = new ArrayList<Action>();
 
         for (final String lang : translations) {
-          String[] locDef = lang.split("_");
-          Locale l = locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0], locDef[1]))
-                  : new Locale(locDef[0], locDef[1], locDef[2]);
-          Action refLangAction = new Action(lang, Action.AS_RADIO_BUTTON) {
+          final String[] locDef = lang.split("_");
+          final Locale l = locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0],
+                  locDef[1])) : new Locale(locDef[0], locDef[1], locDef[2]);
+          final Action refLangAction = new Action(lang, IAction.AS_RADIO_BUTTON) {
 
             @Override
             public void run() {
               super.run();
               // init reference language specification
               String referenceLanguage = translations[0];
-              if (viewState.getReferenceLanguage() != null)
+              if (viewState.getReferenceLanguage() != null) {
                 referenceLanguage = viewState.getReferenceLanguage();
+              }
 
               if (!lang.equalsIgnoreCase(referenceLanguage)) {
                 viewState.setReferenceLanguage(lang);
@@ -571,10 +588,11 @@ public class GlossaryView implements ILoadGlossaryListener {
           };
           // init reference language specification
           String referenceLanguage = translations[0];
-          if (viewState.getReferenceLanguage() != null)
+          if (viewState.getReferenceLanguage() != null) {
             referenceLanguage = viewState.getReferenceLanguage();
-          else
+          } else {
             viewState.setReferenceLanguage(referenceLanguage);
+          }
 
           refLangAction.setChecked(lang.equalsIgnoreCase(referenceLanguage));
           refLangAction.setText(l.getDisplayName());
@@ -582,7 +600,7 @@ public class GlossaryView implements ILoadGlossaryListener {
         }
       }
 
-      for (Action a : referenceActions) {
+      for (final Action a : referenceActions) {
         referenceMenu.add(a);
       }
 
@@ -600,27 +618,31 @@ public class GlossaryView implements ILoadGlossaryListener {
         displayActions = new ArrayList<Action>();
         for (final String lang : translations) {
           String referenceLanguage = translations[0];
-          if (viewState.getReferenceLanguage() != null)
+          if (viewState.getReferenceLanguage() != null) {
             referenceLanguage = viewState.getReferenceLanguage();
+          }
 
-          if (lang.equalsIgnoreCase(referenceLanguage))
+          if (lang.equalsIgnoreCase(referenceLanguage)) {
             continue;
+          }
 
-          String[] locDef = lang.split("_");
-          Locale l = locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0], locDef[1]))
-                  : new Locale(locDef[0], locDef[1], locDef[2]);
-          Action refLangAction = new Action(lang, Action.AS_CHECK_BOX) {
+          final String[] locDef = lang.split("_");
+          final Locale l = locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0],
+                  locDef[1])) : new Locale(locDef[0], locDef[1], locDef[2]);
+          final Action refLangAction = new Action(lang, IAction.AS_CHECK_BOX) {
 
             @Override
             public void run() {
               super.run();
-              List<String> dls = viewState.getDisplayLanguages();
+              final List<String> dls = viewState.getDisplayLanguages();
               if (this.isChecked()) {
-                if (!dls.contains(lang))
+                if (!dls.contains(lang)) {
                   dls.add(lang);
+                }
               } else {
-                if (dls.contains(lang))
+                if (dls.contains(lang)) {
                   dls.remove(lang);
+                }
               }
               viewState.setDisplayLanguages(dls);
               redrawTreeViewer();
@@ -633,7 +655,7 @@ public class GlossaryView implements ILoadGlossaryListener {
         }
       }
 
-      for (Action a : displayActions) {
+      for (final Action a : displayActions) {
         displayMenu.add(a);
       }
 
@@ -643,7 +665,7 @@ public class GlossaryView implements ILoadGlossaryListener {
     }
   }
 
-  private void fillLocalToolBar(IToolBarManager manager) {
+  private void fillLocalToolBar(final IToolBarManager manager) {
   }
 
   // @Override
@@ -682,8 +704,8 @@ public class GlossaryView implements ILoadGlossaryListener {
   // }
 
   @Override
-  public void glossaryLoaded(LoadGlossaryEvent event) {
-    File glossaryFile = event.getGlossaryFile();
+  public void glossaryLoaded(final LoadGlossaryEvent event) {
+    final File glossaryFile = event.getGlossaryFile();
     try {
       this.glossary = new GlossaryManager(glossaryFile, event.isNewGlossary());
       viewState.setGlossaryFile(glossaryFile.getAbsolutePath());
@@ -692,10 +714,16 @@ public class GlossaryView implements ILoadGlossaryListener {
       displayActions = null;
       viewState.setDisplayLangArr(glossary.getGlossary().info.getTranslations());
       this.redrawTreeViewer();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       // MessageDialog.openError(getViewSite().getShell(),
       // "Cannot open Glossary",
       // "The choosen file does not represent a valid Glossary!");
     }
+  }
+
+  @Override
+  public void handleEvent(Event event) {
+    // TODO Auto-generated method stub
+
   }
 }

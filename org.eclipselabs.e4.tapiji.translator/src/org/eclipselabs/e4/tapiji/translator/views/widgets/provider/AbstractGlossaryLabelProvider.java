@@ -1,155 +1,135 @@
 /*******************************************************************************
- * Copyright (c) 2012 TapiJI.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     Martin Reiterer - initial API and implementation
+ * Copyright (c) 2012 TapiJI. All rights reserved. This program and the accompanying materials are made available under
+ * the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html Contributors: Martin Reiterer - initial API and implementation
  ******************************************************************************/
 package org.eclipselabs.e4.tapiji.translator.views.widgets.provider;
+
 
 import java.util.List;
 import org.eclipse.babel.core.message.IMessage;
 import org.eclipse.babel.core.message.tree.IKeyTreeNode;
-import org.eclipse.babel.editor.api.EditorUtil;
-import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-/*import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;*/
+/*
+ * import org.eclipse.ui.ISelectionListener; import org.eclipse.ui.IWorkbenchPage; import org.eclipse.ui.IWorkbenchPart;
+ */
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
 import org.eclipselabs.e4.tapiji.translator.utils.FontUtils;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.FilterInfo;
 
-public abstract class AbstractGlossaryLabelProvider extends StyledCellLabelProvider implements
-        //ISelectionListener, 
+
+// import org.eclipse.babel.editor.api.EditorUtil;
+
+public abstract class AbstractGlossaryLabelProvider extends StyledCellLabelProvider implements ISelectionListener,
         ISelectionChangedListener {
 
-	private static final long serialVersionUID = -1833407818565507359L;
-	public static final String INSTANCE_CLASS = "org.eclipselabs.tapiji.translator.views.widgets.provider.GlossaryLabelProvider";
-	
-	protected boolean searchEnabled = false;
-	protected int referenceColumn = 0;
-	protected List<String> translations;
-	protected IKeyTreeNode selectedItem;
+  private static final long serialVersionUID = -1833407818565507359L;
+  public static final String INSTANCE_CLASS = "org.eclipselabs.tapiji.translator.views.widgets.provider.GlossaryLabelProvider";
 
-	/*** COLORS ***/
-	protected Color gray = FontUtils.getSystemColor(SWT.COLOR_GRAY);
-	protected Color black = FontUtils.getSystemColor(SWT.COLOR_BLACK);
-	protected Color info_color = FontUtils.getSystemColor(SWT.COLOR_YELLOW);
-	protected Color info_crossref = FontUtils
-	        .getSystemColor(SWT.COLOR_INFO_BACKGROUND);
-	protected Color info_crossref_foreground = FontUtils
-	        .getSystemColor(SWT.COLOR_INFO_FOREGROUND);
-	protected Color transparent = FontUtils.getSystemColor(SWT.COLOR_WHITE);
+  protected boolean searchEnabled = false;
+  protected int referenceColumn = 0;
+  protected List<String> translations;
+  protected IKeyTreeNode selectedItem;
 
-	/*** FONTS ***/
-	protected Font bold = FontUtils.createFont(SWT.BOLD);
-	protected Font bold_italic = FontUtils.createFont(SWT.ITALIC);
+  /*** COLORS ***/
+  protected Color gray = FontUtils.getSystemColor(SWT.COLOR_GRAY);
+  protected Color black = FontUtils.getSystemColor(SWT.COLOR_BLACK);
+  protected Color info_color = FontUtils.getSystemColor(SWT.COLOR_YELLOW);
+  protected Color info_crossref = FontUtils.getSystemColor(SWT.COLOR_INFO_BACKGROUND);
+  protected Color info_crossref_foreground = FontUtils.getSystemColor(SWT.COLOR_INFO_FOREGROUND);
+  protected Color transparent = FontUtils.getSystemColor(SWT.COLOR_WHITE);
 
-	public void setSearchEnabled(boolean b) {
-		this.searchEnabled = b;
-	}
+  /*** FONTS ***/
+  protected Font bold = FontUtils.createFont(SWT.BOLD);
+  protected Font bold_italic = FontUtils.createFont(SWT.ITALIC);
 
-	public AbstractGlossaryLabelProvider(int referenceColumn,
-	        List<String> translations
-	        //, IWorkbenchPage page
-	        ) {
-		this.referenceColumn = referenceColumn;
-		this.translations = translations;
-		/*if (page.getActiveEditor() != null) {
-			selectedItem = EditorUtil.getSelectedKeyTreeNode(page);
-		}*/
-	}
+  public void setSearchEnabled(boolean b) {
+    this.searchEnabled = b;
+  }
 
-	public String getColumnText(Object element, int columnIndex) {
-		try {
-			Term term = (Term) element;
-			if (term != null) {
-				Translation transl = term.getTranslation(this.translations
-				        .get(columnIndex));
-				return transl != null ? transl.value : "";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "";
-	}
+  public AbstractGlossaryLabelProvider(int referenceColumn, List<String> translations
+  // , IWorkbenchPage page
+  ) {
+    this.referenceColumn = referenceColumn;
+    this.translations = translations;
+    /*
+     * if (page.getActiveEditor() != null) { selectedItem = EditorUtil.getSelectedKeyTreeNode(page); }
+     */
+  }
 
-	public boolean isSearchEnabled() {
-		return this.searchEnabled;
-	}
+  public String getColumnText(Object element, int columnIndex) {
+    try {
+      Term term = (Term) element;
+      if (term != null) {
+        Translation transl = term.getTranslation(this.translations.get(columnIndex));
+        return transl != null ? transl.value : "";
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return "";
+  }
 
-	protected boolean isMatchingToPattern(Object element, int columnIndex) {
-		boolean matching = false;
+  public boolean isSearchEnabled() {
+    return this.searchEnabled;
+  }
 
-		if (element instanceof Term) {
-			Term term = (Term) element;
+  protected boolean isMatchingToPattern(Object element, int columnIndex) {
+    boolean matching = false;
 
-			if (term.getInfo() == null)
-				return false;
+    if (element instanceof Term) {
+      Term term = (Term) element;
 
-			FilterInfo filterInfo = (FilterInfo) term.getInfo();
+      if (term.getInfo() == null)
+        return false;
 
-			matching = filterInfo.hasFoundInTranslation(translations
-			        .get(columnIndex));
-		}
+      FilterInfo filterInfo = (FilterInfo) term.getInfo();
 
-		return matching;
-	}
+      matching = filterInfo.hasFoundInTranslation(translations.get(columnIndex));
+    }
 
-	protected boolean isCrossRefRegion(String cellText) {
-		if (selectedItem != null) {
-			for (IMessage entry : selectedItem.getMessagesBundleGroup()
-			        .getMessages(selectedItem.getMessageKey())) {
-				String value = entry.getValue();
-				String[] subValues = value.split("[\\s\\p{Punct}]+");
-				for (String v : subValues) {
-					if (v.trim().equalsIgnoreCase(cellText.trim()))
-						return true;
-				}
-			}
-		}
+    return matching;
+  }
 
-		return false;
-	}
+  protected boolean isCrossRefRegion(String cellText) {
+    if (selectedItem != null) {
+      for (IMessage entry : selectedItem.getMessagesBundleGroup().getMessages(selectedItem.getMessageKey())) {
+        String value = entry.getValue();
+        String[] subValues = value.split("[\\s\\p{Punct}]+");
+        for (String v : subValues) {
+          if (v.trim().equalsIgnoreCase(cellText.trim()))
+            return true;
+        }
+      }
+    }
 
-	protected Font getColumnFont(Object element, int columnIndex) {
-		if (columnIndex == 0) {
-			return bold_italic;
-		}
-		return null;
-	}
+    return false;
+  }
 
-/*	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		try {
-			if (selection.isEmpty())
-				return;
+  protected Font getColumnFont(Object element, int columnIndex) {
+    if (columnIndex == 0) {
+      return bold_italic;
+    }
+    return null;
+  }
 
-			if (!(selection instanceof IStructuredSelection))
-				return;
+  /*
+   * @Override public void selectionChanged(IWorkbenchPart part, ISelection selection) { try { if (selection.isEmpty())
+   * return; if (!(selection instanceof IStructuredSelection)) return; IStructuredSelection sel = (IStructuredSelection)
+   * selection; selectedItem = (IKeyTreeNode) sel.iterator().next(); this.getViewer().refresh(); } catch (Exception e) {
+   * // silent catch } }
+   */
 
-			IStructuredSelection sel = (IStructuredSelection) selection;
-			selectedItem = (IKeyTreeNode) sel.iterator().next();
-			this.getViewer().refresh();
-		} catch (Exception e) {
-			// silent catch
-		}
-	}*/
-
-	@Override
-	public void selectionChanged(SelectionChangedEvent event) {
-		event.getSelection();
-	}
+  @Override
+  public void selectionChanged(SelectionChangedEvent event) {
+    event.getSelection();
+  }
 
 }
