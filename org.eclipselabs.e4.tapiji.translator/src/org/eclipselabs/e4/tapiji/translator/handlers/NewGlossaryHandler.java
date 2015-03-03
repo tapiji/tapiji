@@ -26,6 +26,10 @@ public class NewGlossaryHandler {
 
     final String[] fileNames = FileUtils.queryFileName(shell, "New Glossary", SWT.SAVE, XML_FILE_ENDING);
 
+    if (fileNames == null) {
+      return;
+    }
+
     String fileName = fileNames[0];
     if (!fileName.endsWith(".xml")) {
       if (fileName.endsWith(".")) {

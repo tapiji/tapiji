@@ -26,6 +26,11 @@ public class OpenGlossaryHandler {
   public void execute(@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
     System.out.println("Execute: " + TAG);
     final String[] fileNames = FileUtils.queryFileName(shell, "Open Glossary", SWT.OPEN, XML_FILE_ENDING);
+
+    if (fileNames == null) {
+      return;
+    }
+
     final String fileName = fileNames[0];
 
     if (!FileUtils.isGlossary(fileName)) {

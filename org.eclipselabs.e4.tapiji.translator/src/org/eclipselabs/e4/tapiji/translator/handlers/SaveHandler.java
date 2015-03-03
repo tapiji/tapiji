@@ -1,7 +1,11 @@
 package org.eclipselabs.e4.tapiji.translator.handlers;
 
 
+import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
 
 public class SaveHandler {
@@ -9,8 +13,17 @@ public class SaveHandler {
   private static final String TAG = SaveHandler.class.getSimpleName();
 
   @Execute
-  public void execute() {
+  public void execute(EPartService partService, MPart part) {
     System.out.println("Execute: " + TAG);
+    partService.savePart(part, false);
+  }
+
+  @CanExecute
+  public boolean canExecute(@Optional EPartService partService) {
+    if (partService != null) {
+      return partService.getActivePart().isDirty();
+    }
+    return false;
   }
 
 }
