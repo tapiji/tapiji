@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Text;
+import org.eclipselabs.e.tapiji.logger.Log;
 // import org.eclipse.ui.IActionBars;
 // import org.eclipse.ui.IMemento;
 // import org.eclipse.ui.IViewSite;
@@ -105,6 +106,8 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
      * Register the view for being informed each time a new glossary is loaded into the translator
      */
     GlossaryManager.registerLoadGlossaryListener(this);
+
+    Log.d("GlossaryView", "GlossaryView Constructor");
   }
 
   /**
