@@ -1,4 +1,4 @@
-package org.eclipselabs.e.tapiji.logger.levels;
+package org.eclipselabs.e4.tapiji.logger.levels;
 
 
 import java.util.logging.Level;

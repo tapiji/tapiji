@@ -1,9 +1,9 @@
-package org.eclipselabs.e.tapiji.logger.handler;
+package org.eclipselabs.e4.tapiji.logger.handler;
 
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.LogRecord;
-import org.eclipselabs.e.tapiji.logger.Log;
+import org.eclipselabs.e4.tapiji.logger.Log;
 
 
 public class SimpleConsoleHandler extends ConsoleHandler {

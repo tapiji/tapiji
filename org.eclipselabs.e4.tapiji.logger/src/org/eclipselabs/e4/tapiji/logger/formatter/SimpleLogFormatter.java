@@ -1,4 +1,4 @@
-package org.eclipselabs.e.tapiji.logger.formatter;
+package org.eclipselabs.e4.tapiji.logger.formatter;
 
 
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-import org.eclipselabs.e.tapiji.logger.levels.LogLevels;
+import org.eclipselabs.e4.tapiji.logger.levels.LogLevels;
 
 
 public final class SimpleLogFormatter extends Formatter {

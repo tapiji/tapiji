@@ -6,4 +6,4 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: javax.inject,
  org.eclipse.e4.core.di.annotations
-Export-Package: org.eclipselabs.e.tapiji.logger
+Export-Package: org.eclipselabs.e4.tapiji.logger

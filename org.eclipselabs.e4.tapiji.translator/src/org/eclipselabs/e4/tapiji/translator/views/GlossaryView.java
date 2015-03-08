@@ -38,7 +38,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Text;
-import org.eclipselabs.e.tapiji.logger.Log;
+import org.eclipselabs.e4.tapiji.logger.Log;
 // import org.eclipse.ui.IActionBars;
 // import org.eclipse.ui.IMemento;
 // import org.eclipse.ui.IViewSite;

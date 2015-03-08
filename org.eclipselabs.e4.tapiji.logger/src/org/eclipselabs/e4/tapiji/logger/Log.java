@@ -1,4 +1,4 @@
-package org.eclipselabs.e.tapiji.logger;
+package org.eclipselabs.e4.tapiji.logger;
 
 
 import java.io.IOException;
@@ -7,11 +7,11 @@ import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.eclipselabs.e.tapiji.logger.formatter.SimpleLogFormatter;
-import org.eclipselabs.e.tapiji.logger.handler.SimpleConsoleHandler;
-import org.eclipselabs.e.tapiji.logger.levels.LevelDebug;
-import org.eclipselabs.e.tapiji.logger.levels.LevelException;
-import org.eclipselabs.e.tapiji.logger.levels.LevelWhatATerribleFailure;
+import org.eclipselabs.e4.tapiji.logger.formatter.SimpleLogFormatter;
+import org.eclipselabs.e4.tapiji.logger.handler.SimpleConsoleHandler;
+import org.eclipselabs.e4.tapiji.logger.levels.LevelDebug;
+import org.eclipselabs.e4.tapiji.logger.levels.LevelException;
+import org.eclipselabs.e4.tapiji.logger.levels.LevelWhatATerribleFailure;
 
 
 public final class Log {
