@@ -23,12 +23,11 @@ public class OpenResourceBundleHandler {
     System.out.println("Execute: " + TAG);
 
     final String[] fileNames = FileUtils.queryFileName(shell, "Open Resource-Bundle", SWT.OPEN, PROPERTY_FILE_ENDINGS);
-    if (fileNames == null) {
+    if (fileNames == null || fileNames[0] == null) {
       return;
     }
 
     final String fileName = fileNames[0];
-
     if (!FileUtils.isResourceBundle(fileName)) {
       MessageDialog.openError(shell, "Cannot open Resource-Bundle",
               "The choosen file does not represent a Resource-Bundle!");

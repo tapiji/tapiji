@@ -155,10 +155,14 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
     parentComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 
-    createLabel(parentComp, "Search expression:").setLayoutData(createGrid(SWT.FILL, SWT.CENTER, false, 1));
+    final Label label = new Label(parentComp, SWT.None);
+    label.setText("Search expression:");
+    label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 
 
     inputFilter = new Text(parentComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
+    // inputFilter.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, false, 1, 1));
+
     if ((viewState != null) && (viewState.getSearchString() != null)) {
       if ((viewState.getSearchString().length() > 1) && viewState.getSearchString().startsWith("*")
               && viewState.getSearchString().endsWith("*")) {
@@ -169,7 +173,7 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
       }
 
     }
-    inputFilter.setLayoutData(createGrid(SWT.FILL, SWT.CENTER, true, 3));
+    inputFilter.setLayoutData(createGrid(SWT.FILL, SWT.LEFT, true, 3));
 
     final GridData gdScaler = new GridData();
     gdScaler.verticalAlignment = SWT.CENTER;
@@ -177,10 +181,10 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
     gdScaler.horizontalSpan = 1;
 
     lblScale = createLabel(parentComp, "\nPrecision:");
-    lblScale.setLayoutData(createGrid(SWT.BEGINNING, SWT.CENTER, true, 1));
+    // lblScale.setLayoutData(createGrid(SWT.BEGINNING, SWT.CENTER, true, 1));
 
     // Add a scale for specification of fuzzy Matching precision
-    fuzzyScaler = new Scale(parentComp, SWT.None);
+    fuzzyScaler = new Scale(parentComp, SWT.FILL);
     fuzzyScaler.setMaximum(100);
     fuzzyScaler.setMinimum(0);
     fuzzyScaler.setIncrement(1);
@@ -194,6 +198,7 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
         final float val = 1f - (Float.parseFloat(((fuzzyScaler.getMaximum() - fuzzyScaler.getSelection()) + fuzzyScaler
                 .getMinimum()) + "") / 100.f);
         treeViewer.setMatchingPrecision(val);
+        System.out.println("FUZZYSCALER");
       }
     });
     fuzzyScaler.setSize(100, 10);
@@ -715,9 +720,8 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
       viewState.setDisplayLangArr(glossary.getGlossary().info.getTranslations());
       this.redrawTreeViewer();
     } catch (final Exception e) {
-      // MessageDialog.openError(getViewSite().getShell(),
-      // "Cannot open Glossary",
-      // "The choosen file does not represent a valid Glossary!");
+      // MessageDialog.openError(getViewSite().getShell(), "Cannot open Glossary",
+      //       "The choosen file does not represent a valid Glossary!");
     }
   }
 

@@ -27,22 +27,17 @@ public class OpenGlossaryHandler {
     System.out.println("Execute: " + TAG);
     final String[] fileNames = FileUtils.queryFileName(shell, "Open Glossary", SWT.OPEN, XML_FILE_ENDING);
 
-    if (fileNames == null) {
+    if (fileNames == null || fileNames[0] == null) {
       return;
     }
 
     final String fileName = fileNames[0];
-
     if (!FileUtils.isGlossary(fileName)) {
       MessageDialog.openError(shell, "Cannot open Glossary", "The choosen file does not represent a Glossary!");
       return;
     }
 
-    if (fileName != null) {
-      if (fileName != null) {
-        GlossaryManager.loadGlossary(new File(fileName));
-      }
-    }
+    GlossaryManager.loadGlossary(new File(fileName));
 
     try {
       SuggestionProviderUtils.updateConfigurationSetting("glossaryFile", new StringConfigurationSetting(fileName));

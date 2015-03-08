@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.eclipselabs.tapiji.translator.actions;
 
+
 import java.io.File;
 import java.text.MessageFormat;
-
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -23,54 +23,53 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipselabs.tapiji.translator.core.GlossaryManager;
 import org.eclipselabs.tapiji.translator.utils.FileUtils;
 
+
+@Deprecated
 public class NewGlossaryAction implements IWorkbenchWindowActionDelegate {
 
-	/** The workbench window */
-	private IWorkbenchWindow window;
+  /** The workbench window */
+  private IWorkbenchWindow window;
 
-	@Override
-	public void run(IAction action) {
-		String[] fileNames = FileUtils.queryFileName(window.getShell(),
-		        "New Glossary", SWT.SAVE, new String[] { "*.xml" });
-		
-		String fileName = fileNames[0];
-		
-		if (!fileName.endsWith(".xml")) {
-			if (fileName.endsWith("."))
-				fileName += "xml";
-			else
-				fileName += ".xml";
-		}
+  @Override
+  public void run(IAction action) {
+    String[] fileNames = FileUtils.queryFileName(window.getShell(), "New Glossary", SWT.SAVE, new String[] {"*.xml"});
 
-		if (new File(fileName).exists()) {
-			String recallPattern = "The file \"{0}\" already exists. Do you want to replace this file with an empty translation glossary?";
-			MessageFormat mf = new MessageFormat(recallPattern);
+    String fileName = fileNames[0];
 
-			if (!MessageDialog.openQuestion(window.getShell(),
-			        "File already exists!",
-			        mf.format(new String[] { fileName })))
-				return;
-		}
+    if (!fileName.endsWith(".xml")) {
+      if (fileName.endsWith("."))
+        fileName += "xml";
+      else
+        fileName += ".xml";
+    }
 
-		if (fileName != null) {
-			IWorkbenchPage page = window.getActivePage();
-			GlossaryManager.newGlossary(new File(fileName));
-		}
-	}
+    if (new File(fileName).exists()) {
+      String recallPattern = "The file \"{0}\" already exists. Do you want to replace this file with an empty translation glossary?";
+      MessageFormat mf = new MessageFormat(recallPattern);
 
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
+      if (!MessageDialog.openQuestion(window.getShell(), "File already exists!", mf.format(new String[] {fileName})))
+        return;
+    }
 
-	}
+    if (fileName != null) {
+      IWorkbenchPage page = window.getActivePage();
+      GlossaryManager.newGlossary(new File(fileName));
+    }
+  }
 
-	@Override
-	public void dispose() {
-		this.window = null;
-	}
+  @Override
+  public void selectionChanged(IAction action, ISelection selection) {
 
-	@Override
-	public void init(IWorkbenchWindow window) {
-		this.window = window;
-	}
+  }
+
+  @Override
+  public void dispose() {
+    this.window = null;
+  }
+
+  @Override
+  public void init(IWorkbenchWindow window) {
+    this.window = window;
+  }
 
 }

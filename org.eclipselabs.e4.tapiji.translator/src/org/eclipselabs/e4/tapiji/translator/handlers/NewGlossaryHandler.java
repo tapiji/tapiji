@@ -26,7 +26,7 @@ public class NewGlossaryHandler {
 
     final String[] fileNames = FileUtils.queryFileName(shell, "New Glossary", SWT.SAVE, XML_FILE_ENDING);
 
-    if (fileNames == null) {
+    if (fileNames == null || fileNames[0] == null) {
       return;
     }
 

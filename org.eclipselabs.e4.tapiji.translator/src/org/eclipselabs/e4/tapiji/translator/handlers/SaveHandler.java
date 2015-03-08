@@ -13,17 +13,16 @@ public class SaveHandler {
   private static final String TAG = SaveHandler.class.getSimpleName();
 
   @Execute
-  public void execute(EPartService partService, MPart part) {
+  public void execute(final EPartService partService, final MPart part) {
     System.out.println("Execute: " + TAG);
     partService.savePart(part, false);
   }
 
   @CanExecute
-  public boolean canExecute(@Optional EPartService partService) {
+  public boolean canExecute(@Optional final EPartService partService) {
     if (partService != null) {
       return partService.getActivePart().isDirty();
     }
     return false;
   }
-
 }
