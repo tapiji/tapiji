@@ -47,8 +47,9 @@ import org.eclipselabs.e4.tapiji.logger.Log;
 // import org.eclipse.ui.part.ViewPart;
 import org.eclipselabs.e4.tapiji.translator.core.GlossaryManager;
 import org.eclipselabs.e4.tapiji.translator.core.ILoadGlossaryListener;
-import org.eclipselabs.e4.tapiji.translator.core.LoadGlossaryEvent;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
+import org.eclipselabs.e4.tapiji.translator.model.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.model.LoadGlossaryEvent;
 import org.eclipselabs.e4.tapiji.translator.views.menus.GlossaryEntryMenuContribution;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.GlossaryWidget;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.model.GlossaryViewState;
@@ -61,6 +62,8 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
    * The ID of the view as specified by the extension.
    */
   public static final String ID = "org.eclipselabs.tapiji.translator.views.GlossaryView";
+
+  private static final String TAG = GlossaryView.class.getSimpleName();
 
   /*** Primary view controls ***/
   private GlossaryWidget treeViewer;
@@ -114,9 +117,14 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
    * This is a callback that will allow us to create the viewer and initialize it.
    */
   @PostConstruct
-  public void createPartControl(final Composite parent) {
+  public void createPartControl(final Composite parent, IGlossaryService glossaryService) {
+
+    Log.i(TAG, "" + glossaryService.getGlossary());
+
     parent.setLayout(new GridLayout(1, false));
     initSearchBar(parent);
+
+
     /*
      * initMessagesTree(parent); makeActions(); hookContextMenu(); contributeToActionBars(); initListener(parent);
      */
@@ -711,8 +719,15 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
   // }
   // }
 
+
   @Override
-  public void glossaryLoaded(final LoadGlossaryEvent event) {
+  public void handleEvent(Event event) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void glossaryLoaded(LoadGlossaryEvent event) {
     final File glossaryFile = event.getGlossaryFile();
     try {
       this.glossary = new GlossaryManager(glossaryFile, event.isNewGlossary());
@@ -726,11 +741,5 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
       // MessageDialog.openError(getViewSite().getShell(), "Cannot open Glossary",
       //       "The choosen file does not represent a valid Glossary!");
     }
-  }
-
-  @Override
-  public void handleEvent(Event event) {
-    // TODO Auto-generated method stub
-
   }
 }

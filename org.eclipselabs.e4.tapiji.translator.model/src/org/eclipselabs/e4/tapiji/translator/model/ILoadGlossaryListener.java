@@ -9,10 +9,8 @@
  *     Martin Reiterer - initial API and implementation
  *     Christian Behon
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.core;
+package org.eclipselabs.e4.tapiji.translator.model;
 
-
-import org.eclipselabs.e4.tapiji.translator.model.LoadGlossaryEvent;
 
 
 public interface ILoadGlossaryListener {

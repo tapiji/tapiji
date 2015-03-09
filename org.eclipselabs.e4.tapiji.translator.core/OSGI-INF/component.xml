@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipselabs.e4.tapiji.translator.core">
+   <implementation class="org.eclipselabs.e4.tapiji.translator.core.internal.GlossaryManager"/>
+   <service>
+      <provide interface="org.eclipselabs.e4.tapiji.translator.model.IGlossaryService"/>
+   </service>
+</scr:component>

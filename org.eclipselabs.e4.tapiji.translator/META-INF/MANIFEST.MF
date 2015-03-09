@@ -21,7 +21,8 @@ Require-Bundle: org.eclipse.jface,
  org.eclipse.ui.workbench,
  org.eclipse.babel.editor,
  org.eclipselabs.e4.tapiji.logger,
- org.eclipselabs.e4.tapiji.utils
+ org.eclipselabs.e4.tapiji.utils,
+ org.eclipselabs.e4.tapiji.translator.model
 Bundle-ManifestVersion: 2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Vienna University of Technology
