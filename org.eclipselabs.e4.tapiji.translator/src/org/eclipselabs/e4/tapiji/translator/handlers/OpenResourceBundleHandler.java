@@ -8,7 +8,7 @@ import org.eclipse.e4.ui.workbench.IWorkbench;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipselabs.e4.tapiji.translator.utils.FileUtils;
+import org.eclipselabs.e4.tapiji.utils.FileUtils;
 
 
 public class OpenResourceBundleHandler {

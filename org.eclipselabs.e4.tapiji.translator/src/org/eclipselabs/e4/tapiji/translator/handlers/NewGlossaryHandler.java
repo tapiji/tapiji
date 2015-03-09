@@ -9,46 +9,32 @@ import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.core.GlossaryManager;
-import org.eclipselabs.e4.tapiji.translator.utils.FileUtils;
+import org.eclipselabs.e4.tapiji.utils.FileUtils;
 
 
 public class NewGlossaryHandler {
 
   private static final String TAG = NewGlossaryHandler.class.getSimpleName();
 
-  // TODO MOVE TO FILEUTIL
-  private static final String[] XML_FILE_ENDING = new String[] {"*.xml"};
-
   @Execute
   public void execute(@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
-    System.out.println("Execute: " + TAG);
+    final String[] fileNames = FileUtils.queryFileName(shell, "New Glossary", SWT.SAVE, FileUtils.XML_FILE_ENDING);
+    if (fileNames != null) {
 
-    final String[] fileNames = FileUtils.queryFileName(shell, "New Glossary", SWT.SAVE, XML_FILE_ENDING);
+      String fileName = fileNames[0];
+      fileName = FileUtils.checkXmlFileEnding(fileName);
 
-    if (fileNames == null || fileNames[0] == null) {
-      return;
-    }
-
-    String fileName = fileNames[0];
-    if (!fileName.endsWith(".xml")) {
-      if (fileName.endsWith(".")) {
-        fileName += "xml";
-      } else {
-        fileName += ".xml";
+      if (new File(fileName).exists()) {
+        final String recallPattern = "The file \"{0}\" already exists. Do you want to replace this file with an empty translation glossary?";
+        final boolean result = MessageDialog.openQuestion(shell, "File already exists!", new MessageFormat(
+                recallPattern).format(new String[] {fileName}));
+        if (!result) {
+          Log.i(TAG, String.format("Filename %s already exists", fileName));
+          return;
+        }
       }
-    }
-
-    if (new File(fileName).exists()) {
-      final String recallPattern = "The file \"{0}\" already exists. Do you want to replace this file with an empty translation glossary?";
-      if (!MessageDialog.openQuestion(shell, "File already exists!",
-              new MessageFormat(recallPattern).format(new String[] {fileName}))) {
-        return;
-      }
-    }
-
-    if (fileName != null) {
-      // IWorkbenchPage page = window.getActivePage();
       GlossaryManager.newGlossary(new File(fileName));
     }
   }

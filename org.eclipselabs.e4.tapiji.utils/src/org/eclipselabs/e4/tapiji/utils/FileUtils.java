@@ -26,7 +26,9 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
 
-public class FileUtils {
+public final class FileUtils {
+
+  public static final String[] XML_FILE_ENDING = new String[] {"*.xml"};
 
   /** Token to replace in a regular expression with a bundle name. */
   private static final String TOKEN_BUNDLE_NAME = "BUNDLENAME";
@@ -36,12 +38,17 @@ public class FileUtils {
   public static final String PROPERTIES_FILE_REGEX = "^(" + TOKEN_BUNDLE_NAME + ")"
           + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." + TOKEN_FILE_EXTENSION
           + ")$";
-
   /** Project name for external resource bundles */
   public static final String EXTERNAL_RB_PROJECT_NAME = "ExternalResourceBundles";
 
   /** The singleton instance of Workspace */
   private static IWorkspace workspace;
+
+
+  private FileUtils() {
+    // Hide constructor
+  }
+
 
   public static boolean isResourceBundle(final String fileName) {
     return fileName.toLowerCase().endsWith(".properties");
@@ -55,25 +62,18 @@ public class FileUtils {
     if (workspace == null) {
       workspace = ResourcesPlugin.getWorkspace();
     }
-
     return workspace;
   }
 
   public static IProject getProject(final String projectName) throws CoreException {
     final IProject project = getWorkspace().getRoot().getProject(projectName);
-
     if (!project.exists()) {
       project.create(null);
     }
     if (!project.isOpen()) {
       project.open(null);
     }
-
     return project;
-  }
-
-  public static void prePareEditorInputs() {
-    final IWorkspace workspace = getWorkspace();
   }
 
   public static IFile getResourceBundleRef(final String location, final String projectName) throws CoreException {
@@ -165,5 +165,16 @@ public class FileUtils {
       }
       return null;
     }
+  }
+
+  public static String checkXmlFileEnding(String fileName) {
+    if (!fileName.endsWith(".xml")) {
+      if (fileName.endsWith(".")) {
+        fileName += "xml";
+      } else {
+        fileName += ".xml";
+      }
+    }
+    return fileName;
   }
 }

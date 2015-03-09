@@ -21,8 +21,8 @@ import org.eclipse.swt.graphics.Font;
  */
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
-import org.eclipselabs.e4.tapiji.translator.utils.FontUtils;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.FilterInfo;
+import org.eclipselabs.e4.tapiji.utils.FontUtils;
 
 
 // import org.eclipse.babel.editor.api.EditorUtil;

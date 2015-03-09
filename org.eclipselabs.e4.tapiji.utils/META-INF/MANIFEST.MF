@@ -7,3 +7,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.swt,
  org.eclipse.equinox.registry,
  org.eclipse.core.resources
+Export-Package: org.eclipselabs.e4.tapiji.utils

@@ -11,38 +11,32 @@ import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.core.GlossaryManager;
-import org.eclipselabs.e4.tapiji.translator.utils.FileUtils;
+import org.eclipselabs.e4.tapiji.utils.FileUtils;
 
 
 public class OpenGlossaryHandler {
 
   private static final String TAG = OpenGlossaryHandler.class.getSimpleName();
 
-  // TODO MOVE TO FILEUTIL
-  private static final String[] XML_FILE_ENDING = new String[] {"*.xml"};
-
   @Execute
   public void execute(@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
-    System.out.println("Execute: " + TAG);
-    final String[] fileNames = FileUtils.queryFileName(shell, "Open Glossary", SWT.OPEN, XML_FILE_ENDING);
+    final String[] fileNames = FileUtils.queryFileName(shell, "Open Glossary", SWT.OPEN, FileUtils.XML_FILE_ENDING);
+    if (fileNames != null) {
+      final String fileName = fileNames[0];
+      if (!FileUtils.isGlossary(fileName)) {
+        MessageDialog.openError(shell, "Cannot open Glossary", "The choosen file does not represent a Glossary!");
+        Log.i(TAG, String.format("Cannot open Glossary %s", fileName));
+        return;
+      }
 
-    if (fileNames == null || fileNames[0] == null) {
-      return;
-    }
-
-    final String fileName = fileNames[0];
-    if (!FileUtils.isGlossary(fileName)) {
-      MessageDialog.openError(shell, "Cannot open Glossary", "The choosen file does not represent a Glossary!");
-      return;
-    }
-
-    GlossaryManager.loadGlossary(new File(fileName));
-
-    try {
-      SuggestionProviderUtils.updateConfigurationSetting("glossaryFile", new StringConfigurationSetting(fileName));
-    } catch (final InvalidConfigurationSetting e) {
-      System.out.println("WAA");
+      GlossaryManager.loadGlossary(new File(fileName));
+      try {
+        SuggestionProviderUtils.updateConfigurationSetting("glossaryFile", new StringConfigurationSetting(fileName));
+      } catch (final InvalidConfigurationSetting exception) {
+        Log.e(TAG, exception);
+      }
     }
   }
 }
