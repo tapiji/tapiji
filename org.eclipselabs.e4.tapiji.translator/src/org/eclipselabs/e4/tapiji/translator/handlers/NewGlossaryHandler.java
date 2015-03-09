@@ -20,16 +20,13 @@ public class NewGlossaryHandler {
 
   @Execute
   public void execute(@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
-    final String[] fileNames = FileUtils.queryFileName(shell, "New Glossary", SWT.SAVE, FileUtils.XML_FILE_ENDING);
+    final String[] fileNames = FileUtils.queryFileName(shell, "New Glossary", SWT.SAVE, FileUtils.XML_FILE_ENDINGS);
     if (fileNames != null) {
-
       String fileName = fileNames[0];
       fileName = FileUtils.checkXmlFileEnding(fileName);
 
       if (new File(fileName).exists()) {
-        final String recallPattern = "The file \"{0}\" already exists. Do you want to replace this file with an empty translation glossary?";
-        final boolean result = MessageDialog.openQuestion(shell, "File already exists!", new MessageFormat(
-                recallPattern).format(new String[] {fileName}));
+        final boolean result = showQuestionDialog(shell, fileName);
         if (!result) {
           Log.i(TAG, String.format("Filename %s already exists", fileName));
           return;
@@ -37,5 +34,12 @@ public class NewGlossaryHandler {
       }
       GlossaryManager.newGlossary(new File(fileName));
     }
+  }
+
+  public boolean showQuestionDialog(final Shell shell, String fileName) {
+    final String recallPattern = "The file \"{0}\" already exists. Do you want to replace this file with an empty translation glossary?";
+    final boolean result = MessageDialog.openQuestion(shell, "File already exists!",
+            new MessageFormat(recallPattern).format(new String[] {fileName}));
+    return result;
   }
 }

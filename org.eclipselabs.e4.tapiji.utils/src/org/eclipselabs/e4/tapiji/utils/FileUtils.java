@@ -28,7 +28,9 @@ import org.eclipse.swt.widgets.Shell;
 
 public final class FileUtils {
 
-  public static final String[] XML_FILE_ENDING = new String[] {"*.xml"};
+  public static final String[] XML_FILE_ENDINGS = new String[] {"*.xml"};
+
+  public static final String[] PROPERTY_FILE_ENDINGS = new String[] {"*.properties"};
 
   /** Token to replace in a regular expression with a bundle name. */
   private static final String TOKEN_BUNDLE_NAME = "BUNDLENAME";
