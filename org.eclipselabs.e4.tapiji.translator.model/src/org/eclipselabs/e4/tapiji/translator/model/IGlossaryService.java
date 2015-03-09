@@ -19,4 +19,8 @@ public interface IGlossaryService {
 
   Glossary getGlossary();
 
+  void loadGlossaryEvent(File file);
+
+  void newGlossaryEvent(File file);
+
 }

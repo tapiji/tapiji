@@ -45,10 +45,10 @@ import org.eclipselabs.e4.tapiji.logger.Log;
 // import org.eclipse.ui.PartInitException;
 // import org.eclipse.ui.dialogs.ListSelectionDialog;
 // import org.eclipse.ui.part.ViewPart;
-import org.eclipselabs.e4.tapiji.translator.core.GlossaryManager;
-import org.eclipselabs.e4.tapiji.translator.core.ILoadGlossaryListener;
+
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.model.ILoadGlossaryListener;
 import org.eclipselabs.e4.tapiji.translator.model.LoadGlossaryEvent;
 import org.eclipselabs.e4.tapiji.translator.views.menus.GlossaryEntryMenuContribution;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.GlossaryWidget;
@@ -93,7 +93,7 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
   // private IMemento memento;
   private GlossaryViewState viewState;
 
-  private GlossaryManager glossary;
+  private IGlossaryService glossaryService;
 
   @Inject
   MPart part;
@@ -108,7 +108,7 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
     /**
      * Register the view for being informed each time a new glossary is loaded into the translator
      */
-    GlossaryManager.registerLoadGlossaryListener(this);
+    //GlossaryManager.registerLoadGlossaryListener(this);
 
     Log.d("GlossaryView", "GlossaryView Constructor");
   }
@@ -118,7 +118,7 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
    */
   @PostConstruct
   public void createPartControl(final Composite parent, IGlossaryService glossaryService) {
-
+    this.glossaryService = glossaryService;
     Log.i(TAG, "" + glossaryService.getGlossary());
 
     parent.setLayout(new GridLayout(1, false));
@@ -136,7 +136,7 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
 
       @Override
       public void modifyText(final ModifyEvent e) {
-        if ((glossary != null) && (glossary.getGlossary() != null)) {
+        if ((glossaryService != null) && (glossaryService.getGlossary() != null)) {
           treeViewer.setSearchString(inputFilter.getText());
         }
       }
@@ -244,7 +244,7 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
             && (treeViewer.getViewer().getLabelProvider() instanceof AbstractGlossaryLabelProvider)) {
       selectionService.removeSelectionListener((ISelectionListener) treeViewer.getViewer().getLabelProvider());
     }
-    treeViewer = new GlossaryWidget(parent, SWT.NONE, glossary != null ? glossary : null,
+    treeViewer = new GlossaryWidget(parent, SWT.NONE, glossaryService != null ? glossaryService : null,
             viewState != null ? viewState.getReferenceLanguage() : null,
             viewState != null ? viewState.getDisplayLanguages() : null);
 
@@ -254,7 +254,7 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
       selectionService.addSelectionListener((ISelectionListener) treeViewer.getViewer().getLabelProvider());
     }
 
-    if ((treeViewer != null) && (this.glossary != null) && (this.glossary.getGlossary() != null)) {
+    if ((treeViewer != null) && (this.glossaryService != null) && (this.glossaryService.getGlossary() != null)) {
       if ((viewState != null) && (viewState.getSortings() != null)) {
         treeViewer.setSortInfo(viewState.getSortings());
       }
@@ -354,13 +354,13 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
         /*
          * Construct a list of all Locales except Locales that are already part of the translation glossary
          */
-        if ((glossary == null) || (glossary.getGlossary() == null)) {
+        if ((glossaryService == null) || (glossaryService.getGlossary() == null)) {
           return;
         }
 
         final List<Locale> allLocales = new ArrayList<Locale>();
         final List<Locale> locales = new ArrayList<Locale>();
-        for (final String l : glossary.getGlossary().info.getTranslations()) {
+        for (final String l : glossaryService.getGlossary().info.getTranslations()) {
           final String[] locDef = l.split("_");
           final Locale locale = locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0],
                   locDef[1])) : new Locale(locDef[0], locDef[1], locDef[2]);
@@ -405,18 +405,18 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
         /*
          * Construct a list of type locale from all existing translations
          */
-        if ((glossary == null) || (glossary.getGlossary() == null)) {
+        if ((glossaryService == null) || (glossaryService.getGlossary() == null)) {
           return;
         }
 
-        String referenceLang = glossary.getGlossary().info.getTranslations()[0];
+        String referenceLang = glossaryService.getGlossary().info.getTranslations()[0];
         if ((viewState != null) && (viewState.getReferenceLanguage() != null)) {
           referenceLang = viewState.getReferenceLanguage();
         }
 
         final List<Locale> locales = new ArrayList<Locale>();
         final List<String> strLoc = new ArrayList<String>();
-        for (final String l : glossary.getGlossary().info.getTranslations()) {
+        for (final String l : glossaryService.getGlossary().info.getTranslations()) {
           if (l.equalsIgnoreCase(referenceLang)) {
             continue;
           }
@@ -468,7 +468,7 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
   private void fillLocalPullDown(final IMenuManager manager) {
     manager.removeAll();
 
-    if ((this.glossary != null) && (this.glossary.getGlossary() != null)) {
+    if ((this.glossaryService != null) && (this.glossaryService.getGlossary() != null)) {
       glossaryEditContribution = new GlossaryEntryMenuContribution(treeViewer, !treeViewer.getViewer().getSelection()
               .isEmpty());
       manager.add(this.glossaryEditContribution);
@@ -478,7 +478,7 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
     manager.add(enableFuzzyMatching);
     manager.add(editable);
 
-    if ((this.glossary != null) && (this.glossary.getGlossary() != null)) {
+    if ((this.glossaryService != null) && (this.glossaryService.getGlossary() != null)) {
       manager.add(new Separator());
       manager.add(newTranslation);
       manager.add(deleteTranslation);
@@ -505,7 +505,7 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
   private void fillContextMenu(final IMenuManager manager) {
     manager.removeAll();
 
-    if ((this.glossary != null) && (this.glossary.getGlossary() != null)) {
+    if ((this.glossaryService != null) && (this.glossaryService.getGlossary() != null)) {
       glossaryEditContribution = new GlossaryEntryMenuContribution(treeViewer, !treeViewer.getViewer().getSelection()
               .isEmpty());
       manager.add(this.glossaryEditContribution);
@@ -518,7 +518,7 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
     manager.add(enableFuzzyMatching);
 
     /** Locale management section */
-    if ((this.glossary != null) && (this.glossary.getGlossary() != null)) {
+    if ((this.glossaryService != null) && (this.glossaryService.getGlossary() != null)) {
       manager.add(new Separator());
       manager.add(newTranslation);
       manager.add(deleteTranslation);
@@ -565,8 +565,8 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
 
   private void createMenuAdditions(final IMenuManager manager) {
     // Make reference language actions
-    if ((glossary != null) && (glossary.getGlossary() != null)) {
-      final Glossary g = glossary.getGlossary();
+    if ((glossaryService != null) && (glossaryService.getGlossary() != null)) {
+      final Glossary g = glossaryService.getGlossary();
       final String[] translations = g.info.getTranslations();
 
       if ((translations == null) || (translations.length == 0)) {
@@ -730,12 +730,13 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
   public void glossaryLoaded(LoadGlossaryEvent event) {
     final File glossaryFile = event.getGlossaryFile();
     try {
-      this.glossary = new GlossaryManager(glossaryFile, event.isNewGlossary());
+      
+   //   this.glossaryService = new GlossaryManager(glossaryFile, event.isNewGlossary());
       viewState.setGlossaryFile(glossaryFile.getAbsolutePath());
 
       referenceActions = null;
       displayActions = null;
-      viewState.setDisplayLangArr(glossary.getGlossary().info.getTranslations());
+      viewState.setDisplayLangArr(glossaryService.getGlossary().info.getTranslations());
       this.redrawTreeViewer();
     } catch (final Exception e) {
       // MessageDialog.openError(getViewSite().getShell(), "Cannot open Glossary",

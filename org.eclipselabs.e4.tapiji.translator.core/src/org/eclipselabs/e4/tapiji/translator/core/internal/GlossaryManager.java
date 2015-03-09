@@ -57,10 +57,12 @@ public class GlossaryManager implements IGlossaryService {
     return glossary;
   }
 
+  @Override
   public void loadGlossaryEvent(final File file) {
     notifyListeners(new LoadGlossaryEvent(file));
   }
 
+  @Override
   public void newGlossaryEvent(final File file) {
     notifyListeners(new LoadGlossaryEvent(file, true));
   }

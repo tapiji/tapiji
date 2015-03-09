@@ -32,10 +32,6 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DragSource;
-import org.eclipse.swt.dnd.DropTarget;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionEvent;
@@ -45,21 +41,18 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IWorkbenchPage;
-//import org.eclipse.ui.IWorkbenchPage;
-//import org.eclipse.ui.IWorkbenchPartSite;
-import org.eclipselabs.e4.tapiji.translator.core.GlossaryManager;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
+import org.eclipselabs.e4.tapiji.translator.model.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.dnd.GlossaryDragSource;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.dnd.GlossaryDropTarget;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.dnd.TermTransfer;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.ExactMatcher;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.FuzzyMatcher;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.provider.AbstractGlossaryLabelProvider;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.provider.GlossaryContentProvider;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.sorter.GlossaryEntrySorter;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.sorter.SortInfo;
+//import org.eclipse.ui.IWorkbenchPage;
+//import org.eclipse.ui.IWorkbenchPartSite;
 
 
 //import org.eclipselabs.tapiji.translator.compat.SwtRapCompatibilitySWT;
@@ -85,7 +78,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 
   private SortInfo sortInfo;
   private Glossary glossary;
-  private GlossaryManager manager;
+  private IGlossaryService manager;
 
   private GlossaryContentProvider contentProvider;
   private AbstractGlossaryLabelProvider labelProvider;
@@ -101,7 +94,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 
   public GlossaryWidget(
   //IWorkbenchPartSite site,
-          Composite parent, int style, GlossaryManager manager, String refLang, List<String> dls) {
+          Composite parent, int style, IGlossaryService manager, String refLang, List<String> dls) {
     super(parent, style);
     //this.site = site;
 
@@ -293,7 +286,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
             Glossary gl = ((GlossaryContentProvider) treeViewer.getContentProvider()).getGlossary();
             manager.setGlossary(gl);
             try {
-              manager.saveGlossary();
+              //manager.saveGlossary();
             } catch (Exception e) {
               e.printStackTrace();
             }
@@ -370,7 +363,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
               Glossary gl = ((GlossaryContentProvider) treeViewer.getContentProvider()).getGlossary();
               manager.setGlossary(gl);
               try {
-                manager.saveGlossary();
+                // manager.saveGlossary();
               } catch (Exception e) {
                 e.printStackTrace();
               }
@@ -438,18 +431,18 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 
   /*** DRAG AND DROP ***/
   protected void hookDragAndDrop() {
-    GlossaryDragSource source = new GlossaryDragSource(treeViewer, manager);
-    GlossaryDropTarget target = new GlossaryDropTarget(treeViewer, manager);
+    /* GlossaryDragSource source = new GlossaryDragSource(treeViewer, manager);
+     GlossaryDropTarget target = new GlossaryDropTarget(treeViewer, manager);
 
-    // Initialize drag source for copy event
-    DragSource dragSource = new DragSource(treeViewer.getControl(), DND.DROP_MOVE);
-    dragSource.setTransfer(new Transfer[] {TermTransfer.getInstance()});
-    dragSource.addDragListener(source);
+     // Initialize drag source for copy event
+     DragSource dragSource = new DragSource(treeViewer.getControl(), DND.DROP_MOVE);
+     dragSource.setTransfer(new Transfer[] {TermTransfer.getInstance()});
+     dragSource.addDragListener(source);
 
-    // Initialize drop target for copy event
-    DropTarget dropTarget = new DropTarget(treeViewer.getControl(), DND.DROP_MOVE);
-    dropTarget.setTransfer(new Transfer[] {TermTransfer.getInstance()});
-    dropTarget.addDropListener(target);
+     // Initialize drop target for copy event
+     DropTarget dropTarget = new DropTarget(treeViewer.getControl(), DND.DROP_MOVE);
+     dropTarget.setTransfer(new Transfer[] {TermTransfer.getInstance()});
+     dropTarget.addDropListener(target);*/
   }
 
   /*** ACTIONS ***/
@@ -563,7 +556,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 
         this.manager.setGlossary(this.glossary);
         try {
-          this.manager.saveGlossary();
+          //  this.manager.saveGlossary();
         } catch (Exception e) {
           e.printStackTrace();
         }

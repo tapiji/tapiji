@@ -10,7 +10,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipselabs.e4.tapiji.logger.Log;
-import org.eclipselabs.e4.tapiji.translator.core.GlossaryManager;
+import org.eclipselabs.e4.tapiji.translator.model.IGlossaryService;
 import org.eclipselabs.e4.tapiji.utils.FileUtils;
 
 
@@ -19,7 +19,7 @@ public class NewGlossaryHandler {
   private static final String TAG = NewGlossaryHandler.class.getSimpleName();
 
   @Execute
-  public void execute(@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
+  public void execute(@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService) {
     final String[] fileNames = FileUtils.queryFileName(shell, "New Glossary", SWT.SAVE, FileUtils.XML_FILE_ENDINGS);
     if (fileNames != null) {
       String fileName = fileNames[0];
@@ -32,7 +32,7 @@ public class NewGlossaryHandler {
           return;
         }
       }
-      GlossaryManager.newGlossary(new File(fileName));
+      glossaryService.newGlossaryEvent(new File(fileName));
     }
   }
 
