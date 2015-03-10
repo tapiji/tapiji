@@ -6,7 +6,6 @@
 package org.eclipselabs.e4.tapiji.translator.views;
 
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,25 +31,17 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Text;
 import org.eclipselabs.e4.tapiji.logger.Log;
-// import org.eclipse.ui.IActionBars;
-// import org.eclipse.ui.IMemento;
-// import org.eclipse.ui.IViewSite;
-// import org.eclipse.ui.PartInitException;
-// import org.eclipse.ui.dialogs.ListSelectionDialog;
-// import org.eclipse.ui.part.ViewPart;
-
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
-
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.views.menus.GlossaryEntryMenuContribution;
@@ -59,211 +50,187 @@ import org.eclipselabs.e4.tapiji.translator.views.widgets.model.GlossaryViewStat
 import org.eclipselabs.e4.tapiji.translator.views.widgets.provider.AbstractGlossaryLabelProvider;
 
 
-public final class GlossaryView implements org.eclipse.swt.widgets.Listener {
+public final class GlossaryView {
 
-  /**
-   * The ID of the view as specified by the extension.
-   */
-  public static final String ID = "org.eclipselabs.tapiji.translator.views.GlossaryView";
-
-  private static final String TAG = GlossaryView.class.getSimpleName();
-
-  /*** Primary view controls ***/
-  private GlossaryWidget treeViewer;
-  private Scale fuzzyScaler;
-  private Label lblScale;
-  private Text inputFilter;
-
-  /*** ACTIONS ***/
-  private GlossaryEntryMenuContribution glossaryEditContribution;
-  private MenuManager referenceMenu;
-  private MenuManager displayMenu;
-  private MenuManager showMenu;
-  private Action newEntry;
-  private Action enableFuzzyMatching;
-  private Action editable;
-  private Action newTranslation;
-  private Action deleteTranslation;
-  private Action showAll;
-  private Action showSelectiveContent;
-  private List<Action> referenceActions;
-  private List<Action> displayActions;
-
-  /*** Parent component ***/
-  private Composite parent;
-
-  /*** View state ***/
-  // private IMemento memento;
-  private GlossaryViewState viewState;
-
-  private IGlossaryService glossaryService;
-
-  @Inject
-  private MPart part;
-
-  @Inject
-  private ESelectionService selectionService;
-  
-  @Inject
-  private IEventBroker eventBroker;
-
-  /**
-   * The constructor.
-   */
-  public GlossaryView() {
     /**
-     * Register the view for being informed each time a new glossary is loaded into the translator
+     * The ID of the view as specified by the extension.
      */
-    //GlossaryManager.registerLoadGlossaryListener(this);
+    public static final String ID = "org.eclipselabs.tapiji.translator.views.GlossaryView";
 
-    Log.d("GlossaryView", "GlossaryView Constructor");
-  }
+    private static final String TAG = GlossaryView.class.getSimpleName();
 
-  /**
-   * This is a callback that will allow us to create the viewer and initialize it.
-   */
-  @PostConstruct
-  public void createPartControl(final Composite parent, IGlossaryService glossaryService) {
-    this.glossaryService = glossaryService;
-    Log.i(TAG, "" + glossaryService.getGlossary());
+    /*** Primary view controls ***/
+    private GlossaryWidget treeViewer;
+    private Scale fuzzyScaler;
+    private Label labelScale;
+    private Text inputFilter;
 
-    parent.setLayout(new GridLayout(1, false));
-    initSearchBar(parent);
+    /*** ACTIONS ***/
+    private GlossaryEntryMenuContribution glossaryEditContribution;
+    private MenuManager referenceMenu;
+    private MenuManager displayMenu;
+    private MenuManager showMenu;
+    private Action newEntry;
+    private Action enableFuzzyMatching;
+    private Action editable;
+    private Action newTranslation;
+    private Action deleteTranslation;
+    private Action showAll;
+    private Action showSelectiveContent;
+    private List<Action> referenceActions;
+    private List<Action> displayActions;
 
+    /*** Parent component ***/
+    private Composite parent;
 
-    /*
-     * initMessagesTree(parent); makeActions(); hookContextMenu(); contributeToActionBars(); initListener(parent);
-     */
-  }
+    /*** View state ***/
+    // private IMemento memento;
+    private GlossaryViewState viewState;
 
-  
-  @Inject
-  @Optional
-  private void getNotified(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_NEW) String s) {
-    Log.d(TAG, "GOT NOTIFICATION %s "+s);
-    
-  /*  final File glossaryFile = event.getGlossaryFile();
-    try {
-      
-   //   this.glossaryService = new GlossaryManager(glossaryFile, event.isNewGlossary());
-      viewState.setGlossaryFile(glossaryFile.getAbsolutePath());
+    private IGlossaryService glossaryService;
 
-      referenceActions = null;
-      displayActions = null;
-      viewState.setDisplayLangArr(glossaryService.getGlossary().info.getTranslations());
-      this.redrawTreeViewer();
-    } catch (final Exception e) {
-      // MessageDialog.openError(getViewSite().getShell(), "Cannot open Glossary",
-      //       "The choosen file does not represent a valid Glossary!");
-    }*/
-  }
-  
+    @Inject
+    private MPart part;
 
-  protected void initListener(final Composite parent) {
-    inputFilter.addModifyListener(new ModifyListener() {
+    @Inject
+    private ESelectionService selectionService;
 
-      @Override
-      public void modifyText(final ModifyEvent e) {
-        if ((glossaryService != null) && (glossaryService.getGlossary() != null)) {
-          treeViewer.setSearchString(inputFilter.getText());
-        }
-      }
-    });
-  }
-
-  private Label createLabel(final Composite parent, final String text) {
-    final Label label = new Label(parent, SWT.None);
-    label.setText(text);
-    return label;
-  }
-
-  private GridData createGrid(final int horizontalAlignment, final int verticalAlignment,
-          final boolean hasHorizontalSpace, final int horizontalSpan) {
-    final GridData gridData = new GridData();
-    gridData.horizontalAlignment = horizontalAlignment;
-    gridData.verticalAlignment = verticalAlignment;
-    gridData.grabExcessHorizontalSpace = hasHorizontalSpace;
-    gridData.horizontalSpan = horizontalSpan;
-    return gridData;
-  }
-
-  protected void initSearchBar(final Composite parent) {
-    // Construct a new parent container
-    final Composite parentComp = new Composite(parent, SWT.BORDER);
-    parentComp.setLayout(new GridLayout(4, false));
-    parentComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+    @Inject
+    private IEventBroker eventBroker;
 
 
-    final Label label = new Label(parentComp, SWT.None);
-    label.setText("Search expression:");
-    label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+    @PostConstruct
+    public void createPartControl(final Composite parent, IGlossaryService glossaryService) {
+        this.glossaryService = glossaryService;
+        Log.i(TAG, "" + glossaryService.getGlossary());
+        parent.setLayout(new GridLayout(1, false));
+        initSearchBar(parent);
+        initMessagesTree(parent);
 
-
-    inputFilter = new Text(parentComp, SWT.SINGLE | SWT.LEFT | SWT.BORDER);
-    // inputFilter.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, false, 1, 1));
-
-    if ((viewState != null) && (viewState.getSearchString() != null)) {
-      if ((viewState.getSearchString().length() > 1) && viewState.getSearchString().startsWith("*")
-              && viewState.getSearchString().endsWith("*")) {
-        inputFilter.setText(viewState.getSearchString().substring(1)
-                .substring(0, viewState.getSearchString().length() - 2));
-      } else {
-        inputFilter.setText(viewState.getSearchString());
-      }
-
+        /*
+         *  makeActions(); hookContextMenu(); contributeToActionBars(); initListener(parent);
+         */
     }
-    inputFilter.setLayoutData(createGrid(SWT.FILL, SWT.LEFT, true, 3));
 
-    final GridData gdScaler = new GridData();
-    gdScaler.verticalAlignment = SWT.CENTER;
-    gdScaler.grabExcessVerticalSpace = true;
-    gdScaler.horizontalSpan = 1;
 
-    lblScale = createLabel(parentComp, "\nPrecision:");
-    // lblScale.setLayoutData(createGrid(SWT.BEGINNING, SWT.CENTER, true, 1));
+    @Inject
+    @Optional
+    private void getNotified(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_NEW) String s) {
+        Log.d(TAG, "GOT NOTIFICATION %s " + s);
 
-    // Add a scale for specification of fuzzy Matching precision
-    fuzzyScaler = new Scale(parentComp, SWT.FILL);
-    fuzzyScaler.setMaximum(100);
-    fuzzyScaler.setMinimum(0);
-    fuzzyScaler.setIncrement(1);
-    fuzzyScaler.setPageIncrement(5);
-    fuzzyScaler.setSelection(Math.round((treeViewer != null ? treeViewer.getMatchingPrecision() : viewState
-            .getMatchingPrecision()) * 100.f));
-    fuzzyScaler.addListener(SWT.Selection, new Listener() {
+        /*  final File glossaryFile = event.getGlossaryFile();
+          try {
+            
+         //   this.glossaryService = new GlossaryManager(glossaryFile, event.isNewGlossary());
+            viewState.setGlossaryFile(glossaryFile.getAbsolutePath());
 
-      @Override
-      public void handleEvent(final Event event) {
+            referenceActions = null;
+            displayActions = null;
+            viewState.setDisplayLangArr(glossaryService.getGlossary().info.getTranslations());
+            this.redrawTreeViewer();
+          } catch (final Exception e) {
+            // MessageDialog.openError(getViewSite().getShell(), "Cannot open Glossary",
+            //       "The choosen file does not represent a valid Glossary!");
+          }*/
+    }
+
+
+    protected void initListener(final Composite parent) {
+        inputFilter.addModifyListener(new ModifyListener() {
+
+            @Override
+            public void modifyText(final ModifyEvent e) {
+                if ((glossaryService != null) && (glossaryService.getGlossary() != null)) {
+                    treeViewer.setSearchString(inputFilter.getText());
+                }
+            }
+        });
+    }
+
+    protected void initSearchBar(final Composite parent) {
+
+        final Composite parentComp = new Composite(parent, SWT.BORDER);
+        parentComp.setLayout(new GridLayout(2, false));
+        parentComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+        final Label labelSearch = new Label(parentComp, SWT.NONE);
+        labelSearch.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+        labelSearch.setText("Search expression:");
+
+        inputFilter = new Text(parentComp, SWT.BORDER | SWT.SEARCH | SWT.CANCEL | SWT.ICON_SEARCH); // TODO SAVE STATE LOGIC
+        inputFilter.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
+        labelScale = new Label(parentComp, SWT.NONE);
+        labelScale.setText("Precision:");
+
+        fuzzyScaler = new Scale(parentComp, SWT.NONE);
+        fuzzyScaler.setMaximum(100);
+        fuzzyScaler.setMinimum(0);
+        fuzzyScaler.setIncrement(1);
+        fuzzyScaler.setPageIncrement(5);
+        fuzzyScaler.setSelection(0);
+        /* fuzzyScaler.setSelection(Math.round((treeViewer != null ? treeViewer.getMatchingPrecision() : viewState
+                         .getMatchingPrecision()) * 100.f));*/
+        fuzzyScaler.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                super.widgetSelected(e);
+                computeMatchingPrecision();
+
+            }
+        });
+        fuzzyScaler.setData("fuzzyScaler");
+        fuzzyScaler.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
+        //  refreshSearchbarState();
+    }
+  
+  
+    private void computeMatchingPrecision() {
+        if (treeViewer != null && fuzzyScaler != null) {
         final float val = 1f - (Float.parseFloat(((fuzzyScaler.getMaximum() - fuzzyScaler.getSelection()) + fuzzyScaler
-                .getMinimum()) + "") / 100.f);
-        treeViewer.setMatchingPrecision(val);
-        System.out.println("FUZZYSCALER");
-      }
-    });
-    fuzzyScaler.setSize(100, 10);
-
-    final GridData gdScalers = new GridData();
-    gdScalers.verticalAlignment = SWT.BEGINNING;
-    gdScalers.horizontalAlignment = SWT.FILL;
-    gdScalers.horizontalSpan = 3;
-    fuzzyScaler.setLayoutData(gdScalers);
-    refreshSearchbarState();
-  }
-
+                        .getMinimum()) + "") / 100.f);
+            treeViewer.setMatchingPrecision(val);
+        }
+    }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   protected void refreshSearchbarState() {
-    lblScale.setVisible(treeViewer != null ? treeViewer.isFuzzyMatchingEnabled() : viewState.isFuzzyMatchingEnabled());
+        labelScale.setVisible(treeViewer != null ? treeViewer.isFuzzyMatchingEnabled() : viewState
+                        .isFuzzyMatchingEnabled());
     fuzzyScaler.setVisible(treeViewer != null ? treeViewer.isFuzzyMatchingEnabled() : viewState
             .isFuzzyMatchingEnabled());
     if (treeViewer != null ? treeViewer.isFuzzyMatchingEnabled() : viewState.isFuzzyMatchingEnabled()) {
-      ((GridData) lblScale.getLayoutData()).heightHint = 40;
+            ((GridData) labelScale.getLayoutData()).heightHint = 40;
       ((GridData) fuzzyScaler.getLayoutData()).heightHint = 40;
     } else {
-      ((GridData) lblScale.getLayoutData()).heightHint = 0;
+            ((GridData) labelScale.getLayoutData()).heightHint = 0;
       ((GridData) fuzzyScaler.getLayoutData()).heightHint = 0;
     }
 
-    lblScale.getParent().layout();
-    lblScale.getParent().getParent().layout();
+        labelScale.getParent().layout();
+        labelScale.getParent().getParent().layout();
   }
 
   protected void initMessagesTree(final Composite parent) {
@@ -277,25 +244,25 @@ public final class GlossaryView implements org.eclipse.swt.widgets.Listener {
             viewState != null ? viewState.getDisplayLanguages() : null);
 
     // Register the label provider as selection listener
-    if ((treeViewer.getViewer() != null) && (treeViewer.getViewer().getLabelProvider() != null)
-            && (treeViewer.getViewer().getLabelProvider() instanceof AbstractGlossaryLabelProvider)) {
-      selectionService.addSelectionListener((ISelectionListener) treeViewer.getViewer().getLabelProvider());
-    }
+    /*  if ((treeViewer.getViewer() != null) && (treeViewer.getViewer().getLabelProvider() != null)
+                 && (treeViewer.getViewer().getLabelProvider() instanceof AbstractGlossaryLabelProvider)) {
+           selectionService.addSelectionListener((ISelectionListener) treeViewer.getViewer().getLabelProvider());
+         }
 
-    if ((treeViewer != null) && (this.glossaryService != null) && (this.glossaryService.getGlossary() != null)) {
-      if ((viewState != null) && (viewState.getSortings() != null)) {
-        treeViewer.setSortInfo(viewState.getSortings());
-      }
+         if ((treeViewer != null) && (this.glossaryService != null) && (this.glossaryService.getGlossary() != null)) {
+           if ((viewState != null) && (viewState.getSortings() != null)) {
+             treeViewer.setSortInfo(viewState.getSortings());
+           }
 
-      treeViewer.enableFuzzyMatching(viewState.isFuzzyMatchingEnabled());
-      treeViewer.bindContentToSelection(viewState.isSelectiveViewEnabled());
-      treeViewer.setMatchingPrecision(viewState.getMatchingPrecision());
-      treeViewer.setEditable(viewState.isEditable());
+           treeViewer.enableFuzzyMatching(viewState.isFuzzyMatchingEnabled());
+           treeViewer.bindContentToSelection(viewState.isSelectiveViewEnabled());
+           treeViewer.setMatchingPrecision(viewState.getMatchingPrecision());
+           treeViewer.setEditable(viewState.isEditable());
 
-      if (viewState.getSearchString() != null) {
-        treeViewer.setSearchString(viewState.getSearchString());
-      }
-    }
+           if (viewState.getSearchString() != null) {
+             treeViewer.setSearchString(viewState.getSearchString());
+           }
+         }*/
 
     // define the grid data for the layout
     final GridData gridData = new GridData();
@@ -748,11 +715,7 @@ public final class GlossaryView implements org.eclipse.swt.widgets.Listener {
   // }
 
 
-  @Override
-  public void handleEvent(Event event) {
-    // TODO Auto-generated method stub
 
-  }
 
 
 }
