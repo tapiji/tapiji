@@ -17,67 +17,67 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
-import org.eclipselabs.e4.tapiji.translator.model.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
+import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.provider.GlossaryContentProvider;
 
 
 public class GlossaryDropTarget extends DropTargetAdapter {
 
-  private final TreeViewer target;
-  private final IGlossaryService manager;
+    private final TreeViewer target;
+    private final IGlossaryService manager;
 
-  public GlossaryDropTarget(TreeViewer viewer, IGlossaryService manager) {
-    super();
-    this.target = viewer;
-    this.manager = manager;
-  }
-
-  public void dragEnter(DropTargetEvent event) {
-    if (event.detail == DND.DROP_MOVE || event.detail == DND.DROP_DEFAULT) {
-      if ((event.operations & DND.DROP_MOVE) != 0)
-        event.detail = DND.DROP_MOVE;
-      else
-        event.detail = DND.DROP_NONE;
+    public GlossaryDropTarget(TreeViewer viewer, IGlossaryService manager) {
+        super();
+        this.target = viewer;
+        this.manager = manager;
     }
-  }
 
-  public void drop(DropTargetEvent event) {
-    if (TermTransfer.getInstance().isSupportedType(event.currentDataType)) {
-      Term parentTerm = null;
+    public void dragEnter(DropTargetEvent event) {
+        if (event.detail == DND.DROP_MOVE || event.detail == DND.DROP_DEFAULT) {
+            if ((event.operations & DND.DROP_MOVE) != 0)
+                event.detail = DND.DROP_MOVE;
+            else
+                event.detail = DND.DROP_NONE;
+        }
+    }
 
-      event.detail = DND.DROP_MOVE;
-      event.feedback = DND.FEEDBACK_INSERT_AFTER;
+    public void drop(DropTargetEvent event) {
+        if (TermTransfer.getInstance().isSupportedType(event.currentDataType)) {
+            Term parentTerm = null;
 
-      if (event.item instanceof TreeItem && ((TreeItem) event.item).getData() instanceof Term) {
-        parentTerm = ((Term) ((TreeItem) event.item).getData());
-      }
+            event.detail = DND.DROP_MOVE;
+            event.feedback = DND.FEEDBACK_INSERT_AFTER;
 
-      Term[] moveTerm = (Term[]) event.data;
-      Glossary glossary = ((GlossaryContentProvider) target.getContentProvider()).getGlossary();
+            if (event.item instanceof TreeItem && ((TreeItem) event.item).getData() instanceof Term) {
+                parentTerm = ((Term) ((TreeItem) event.item).getData());
+            }
 
-      /*
-       * Remove the move term from its initial position for (Term
-       * selectionObject : moveTerm) glossary.removeTerm(selectionObject);
-       */
+            Term[] moveTerm = (Term[]) event.data;
+            Glossary glossary = ((GlossaryContentProvider) target.getContentProvider()).getGlossary();
 
-      /* Insert the move term on its target position */
-      if (parentTerm == null) {
-        for (Term t : moveTerm)
-          glossary.terms.add(t);
-      } else {
-        for (Term t : moveTerm)
-          parentTerm.subTerms.add(t);
-      }
+            /*
+             * Remove the move term from its initial position for (Term
+             * selectionObject : moveTerm) glossary.removeTerm(selectionObject);
+             */
 
-      manager.setGlossary(glossary);
-      try {
-        // manager.saveGlossary();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-      target.refresh();
-    } else
-      event.detail = DND.DROP_NONE;
-  }
+            /* Insert the move term on its target position */
+            if (parentTerm == null) {
+                for (Term t : moveTerm)
+                    glossary.terms.add(t);
+            } else {
+                for (Term t : moveTerm)
+                    parentTerm.subTerms.add(t);
+            }
+
+            //  manager.setGlossary(glossary);
+            try {
+                // manager.saveGlossary();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            target.refresh();
+        } else
+            event.detail = DND.DROP_NONE;
+    }
 }

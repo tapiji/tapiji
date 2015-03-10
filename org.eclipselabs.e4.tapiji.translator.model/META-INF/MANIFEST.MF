@@ -4,4 +4,6 @@ Bundle-Name: Model
 Bundle-SymbolicName: org.eclipselabs.e4.tapiji.translator.model
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: org.eclipselabs.e4.tapiji.translator.model
+Export-Package: org.eclipselabs.e4.tapiji.translator.model,
+ org.eclipselabs.e4.tapiji.translator.model.constants,
+ org.eclipselabs.e4.tapiji.translator.model.interfaces

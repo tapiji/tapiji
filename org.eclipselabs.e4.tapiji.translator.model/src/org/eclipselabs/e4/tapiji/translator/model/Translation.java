@@ -10,6 +10,7 @@ package org.eclipselabs.e4.tapiji.translator.model;
  *
  * Contributors:
  *     Martin Reiterer - initial API and implementation
+ *     Christian Behon
  ******************************************************************************/
 
 
@@ -23,19 +24,19 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "Translation")
 public class Translation implements Serializable {
 
-  private static final long serialVersionUID = 2033276999496196690L;
+    private static final long serialVersionUID = 2033276999496196690L;
 
-  public String id;
+    public String id;
 
-  public String value;
+    public String value;
 
-  public Translation() {
-    this.id = "";
-    this.value = "";
-  }
+    public Translation() {
+        this.id = "";
+        this.value = "";
+    }
 
-  @Override
-  public String toString() {
-    return "Translation [id=" + id + ", value=" + value + "]";
-  }
+    @Override
+    public String toString() {
+        return "Translation [id=" + id + ", value=" + value + "]";
+    }
 }

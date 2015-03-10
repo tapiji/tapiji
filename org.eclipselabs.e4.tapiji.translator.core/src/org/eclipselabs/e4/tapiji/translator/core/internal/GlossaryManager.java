@@ -15,97 +15,69 @@ package org.eclipselabs.e4.tapiji.translator.core.internal;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.List;
+import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
-import org.eclipselabs.e4.tapiji.translator.model.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.model.ILoadGlossaryListener;
-import org.eclipselabs.e4.tapiji.translator.model.LoadGlossaryEvent;
+import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
+import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
+import org.eclipselabs.e4.tapiji.utils.FileUtils;
 
 
-public class GlossaryManager implements IGlossaryService {
+public final class GlossaryManager implements IGlossaryService {
 
-  private static final String TAG = GlossaryManager.class.getSimpleName();
-  private final Object LOCK_OBJECT = new Object();
-  private Glossary glossary;
-  private final List<ILoadGlossaryListener> glossaryListeners = new ArrayList<ILoadGlossaryListener>();
+    private static final String TAG = GlossaryManager.class.getSimpleName();
 
-  /* public GlossaryManager(final File file, final boolean overwrite) throws Exception {
-    glossary = new Glossary();
-    if (file.exists() && !overwrite) {
-      loadGlossary(file);
-    } else {
-      saveGlossary(file);
+    private Glossary glossary;
+
+    @Inject
+    private IEventBroker eventBroker;
+
+    @Override
+    public Glossary getGlossary() {
+        return glossary;
     }
-  }*/
 
-  @Override
-  public void setGlossary(final Glossary glossary) {
-    this.glossary = glossary;
-  }
-
-  @Override
-  public Glossary getGlossary() {
-    Log.d(TAG, "getGlossary");
-    return glossary;
-  }
-
-  @Override
-  public void loadGlossaryEvent(final File file) {
-    notifyListeners(new LoadGlossaryEvent(file));
-  }
-
-  @Override
-  public void newGlossaryEvent(final File file) {
-    notifyListeners(new LoadGlossaryEvent(file, true));
-  }
-
-  private void notifyListeners(final LoadGlossaryEvent event) {
-    synchronized (LOCK_OBJECT) {
-      for (final ILoadGlossaryListener listener : glossaryListeners) {
-        listener.glossaryLoaded(event);
-      }
+    @Override
+    public void loadGlossary(final File file) {
+        JAXBContext context;
+        try {
+            final Glossary glossary = new Glossary();
+            context = JAXBContext.newInstance(glossary.getClass());
+            this.glossary = (Glossary) context.createUnmarshaller().unmarshal(file);
+            Log.d(TAG, String.format("Loaded glossary: %s ", glossary.toString()));
+        } catch (final JAXBException exception) {
+            Log.wtf(TAG, String.format("Can not load file %s", file), exception);
+        }
     }
-  }
 
-  @Override
-  public void loadGlossary(final File file) throws JAXBException {
-    final JAXBContext context = JAXBContext.newInstance(glossary.getClass());
-    final Unmarshaller unmarshaller = context.createUnmarshaller();
-    glossary = (Glossary) unmarshaller.unmarshal(file);
-  }
+    @Override
+    public void saveGlossary(final File file) {
+        this.glossary = new Glossary();
+        JAXBContext context;
+        try {
+            context = JAXBContext.newInstance(glossary.getClass());
+            final Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, FileUtils.ENCODING_TYPE_UTF_16);
+            try (OutputStream fout = new FileOutputStream(file.getAbsolutePath());
+                 OutputStream bout = new BufferedOutputStream(fout);
+                 OutputStreamWriter osw = new OutputStreamWriter(bout, FileUtils.ENCODING_TYPE_UTF_16)) {
 
-  @Override
-  public void saveGlossary(final File file) throws Exception {
-    final JAXBContext context = JAXBContext.newInstance(glossary.getClass());
-    final Marshaller marshaller = context.createMarshaller();
-    marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-16");
+                marshaller.marshal(glossary, osw);
+                eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_NEW, "DATA");
+                Log.d(TAG, String.format("Glossary saved: %s ", glossary.toString()));
 
-    try (OutputStream fout = new FileOutputStream(file.getAbsolutePath());
-         OutputStream bout = new BufferedOutputStream(fout);
-         OutputStreamWriter osw = new OutputStreamWriter(bout, "UTF-16")) {
-      marshaller.marshal(glossary, osw);
+            } catch (final IOException exceptions) {
+                Log.wtf(TAG, "Interrupted I/O operations", exceptions);
+            }
+        } catch (final JAXBException exception) {
+            Log.wtf(TAG, "Marshall problem", exception);
+        }
     }
-  }
-
-  @Override
-  public void unregisterGlossaryListener(final ILoadGlossaryListener listener) {
-    synchronized (LOCK_OBJECT) {
-      glossaryListeners.remove(listener);
-    }
-  }
-
-  @Override
-  public void registerGlossaryListener(final ILoadGlossaryListener listener) {
-    synchronized (LOCK_OBJECT) {
-      glossaryListeners.add(listener);
-    }
-  }
 }

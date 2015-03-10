@@ -12,7 +12,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipselabs.e4.tapiji.logger.Log;
-import org.eclipselabs.e4.tapiji.translator.model.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.utils.FileUtils;
 
 
@@ -31,7 +31,7 @@ public class OpenGlossaryHandler {
         return;
       }
 
-      glossaryService.loadGlossaryEvent(new File(fileName));
+      glossaryService.loadGlossary(new File(fileName));
       try {
         SuggestionProviderUtils.updateConfigurationSetting("glossaryFile", new StringConfigurationSetting(fileName));
       } catch (final InvalidConfigurationSetting exception) {

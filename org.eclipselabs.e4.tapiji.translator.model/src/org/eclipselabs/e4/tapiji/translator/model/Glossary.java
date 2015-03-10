@@ -28,69 +28,69 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Glossary implements Serializable {
 
-  private static final long serialVersionUID = 2070750758712154134L;
+    private static final long serialVersionUID = 2070750758712154134L;
 
-  public Info info;
+    public Info info;
 
-  @XmlElementWrapper(name = "terms")
-  @XmlElement(name = "term")
-  public List<Term> terms;
+    @XmlElementWrapper(name = "terms")
+    @XmlElement(name = "term")
+    public List<Term> terms;
 
-  public Glossary() {
-    this.terms = new ArrayList<Term>();
-    this.info = new Info();
-  }
-
-  public Term[] getAllTerms() {
-    return terms.toArray(new Term[terms.size()]);
-  }
-
-  public int getIndexOfLocale(final String referenceLocale) {
-    int i = 0;
-
-    for (final String locale : info.translations) {
-      if (locale.equalsIgnoreCase(referenceLocale)) {
-        return i;
-      }
-      i++;
+    public Glossary() {
+        this.terms = new ArrayList<Term>();
+        this.info = new Info();
     }
 
-    return 0;
-  }
-
-  public void removeTerm(final Term elem) {
-    for (final Term term : terms) {
-      if (term == elem) {
-        terms.remove(term);
-        break;
-      }
-
-      if (term.removeTerm(elem)) {
-        break;
-      }
-    }
-  }
-
-  public void addTerm(final Term parentTerm, final Term newTerm) {
-    if (parentTerm == null) {
-      this.terms.add(newTerm);
-      return;
+    public Term[] getAllTerms() {
+        return terms.toArray(new Term[terms.size()]);
     }
 
-    for (final Term term : terms) {
-      if (term == parentTerm) {
-        term.subTerms.add(newTerm);
-        break;
-      }
+    public int getIndexOfLocale(final String referenceLocale) {
+        int i = 0;
 
-      if (term.addTerm(parentTerm, newTerm)) {
-        break;
-      }
+        for (final String locale : info.translations) {
+            if (locale.equalsIgnoreCase(referenceLocale)) {
+                return i;
+            }
+            i++;
+        }
+
+        return 0;
     }
-  }
 
-  @Override
-  public String toString() {
-    return "Glossary [info=" + info + ", terms=" + terms + "]";
-  }
+    public void removeTerm(final Term elem) {
+        for (final Term term : terms) {
+            if (term == elem) {
+                terms.remove(term);
+                break;
+            }
+
+            if (term.removeTerm(elem)) {
+                break;
+            }
+        }
+    }
+
+    public void addTerm(final Term parentTerm, final Term newTerm) {
+        if (parentTerm == null) {
+            this.terms.add(newTerm);
+            return;
+        }
+
+        for (final Term term : terms) {
+            if (term == parentTerm) {
+                term.subTerms.add(newTerm);
+                break;
+            }
+
+            if (term.addTerm(parentTerm, newTerm)) {
+                break;
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Glossary [info=" + info + ", terms=" + terms + "]";
+    }
 }

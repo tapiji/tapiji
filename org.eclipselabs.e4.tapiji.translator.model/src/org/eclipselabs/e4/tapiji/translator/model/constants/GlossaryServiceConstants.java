@@ -1,3 +1,6 @@
+package org.eclipselabs.e4.tapiji.translator.model.constants;
+
+
 /*******************************************************************************
  * Copyright (c) 2012 Martin Reiterer.
  * All rights reserved. This program and the accompanying materials
@@ -6,15 +9,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Martin Reiterer - initial API and implementation
  *     Christian Behon
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.model;
 
+public final class GlossaryServiceConstants {
 
+    private GlossaryServiceConstants() {
+    }
 
-public interface ILoadGlossaryListener {
-
-  void glossaryLoaded(LoadGlossaryEvent event);
-
+    public static final String TOPIC_GLOSSARY_NEW = "TOPIC_GLOSSARY/NEW";
 }

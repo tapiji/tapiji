@@ -14,7 +14,10 @@ import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.MToolBar;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
@@ -47,16 +50,16 @@ import org.eclipselabs.e4.tapiji.logger.Log;
 // import org.eclipse.ui.part.ViewPart;
 
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
-import org.eclipselabs.e4.tapiji.translator.model.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.model.ILoadGlossaryListener;
-import org.eclipselabs.e4.tapiji.translator.model.LoadGlossaryEvent;
+
+import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
+import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.views.menus.GlossaryEntryMenuContribution;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.GlossaryWidget;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.model.GlossaryViewState;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.provider.AbstractGlossaryLabelProvider;
 
 
-public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.swt.widgets.Listener {
+public final class GlossaryView implements org.eclipse.swt.widgets.Listener {
 
   /**
    * The ID of the view as specified by the extension.
@@ -96,10 +99,13 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
   private IGlossaryService glossaryService;
 
   @Inject
-  MPart part;
+  private MPart part;
 
   @Inject
-  ESelectionService selectionService;
+  private ESelectionService selectionService;
+  
+  @Inject
+  private IEventBroker eventBroker;
 
   /**
    * The constructor.
@@ -130,6 +136,28 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
      */
   }
 
+  
+  @Inject
+  @Optional
+  private void getNotified(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_NEW) String s) {
+    Log.d(TAG, "GOT NOTIFICATION %s "+s);
+    
+  /*  final File glossaryFile = event.getGlossaryFile();
+    try {
+      
+   //   this.glossaryService = new GlossaryManager(glossaryFile, event.isNewGlossary());
+      viewState.setGlossaryFile(glossaryFile.getAbsolutePath());
+
+      referenceActions = null;
+      displayActions = null;
+      viewState.setDisplayLangArr(glossaryService.getGlossary().info.getTranslations());
+      this.redrawTreeViewer();
+    } catch (final Exception e) {
+      // MessageDialog.openError(getViewSite().getShell(), "Cannot open Glossary",
+      //       "The choosen file does not represent a valid Glossary!");
+    }*/
+  }
+  
 
   protected void initListener(final Composite parent) {
     inputFilter.addModifyListener(new ModifyListener() {
@@ -726,21 +754,5 @@ public final class GlossaryView implements ILoadGlossaryListener, org.eclipse.sw
 
   }
 
-  @Override
-  public void glossaryLoaded(LoadGlossaryEvent event) {
-    final File glossaryFile = event.getGlossaryFile();
-    try {
-      
-   //   this.glossaryService = new GlossaryManager(glossaryFile, event.isNewGlossary());
-      viewState.setGlossaryFile(glossaryFile.getAbsolutePath());
 
-      referenceActions = null;
-      displayActions = null;
-      viewState.setDisplayLangArr(glossaryService.getGlossary().info.getTranslations());
-      this.redrawTreeViewer();
-    } catch (final Exception e) {
-      // MessageDialog.openError(getViewSite().getShell(), "Cannot open Glossary",
-      //       "The choosen file does not represent a valid Glossary!");
-    }
-  }
 }
