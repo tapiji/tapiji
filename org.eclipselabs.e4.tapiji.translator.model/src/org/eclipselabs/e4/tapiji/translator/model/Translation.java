@@ -35,6 +35,11 @@ public class Translation implements Serializable {
         this.value = "";
     }
 
+    public Translation(final String id, final String value) {
+        this.id = id;
+        this.value = value;
+    }
+
     @Override
     public String toString() {
         return "Translation [id=" + id + ", value=" + value + "]";

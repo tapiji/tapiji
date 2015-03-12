@@ -49,6 +49,13 @@ public class Term implements Serializable {
         this.info = null;
     }
 
+    public Term(final List<Translation> translations, final List<Term> subTerms, final Term parentTerm, final Info info) {
+        this.translations = translations;
+        this.subTerms = subTerms;
+        this.parentTerm = parentTerm;
+        this.info = info;
+    }
+
     public void setInfo(final Object info) {
         this.info = info;
     }

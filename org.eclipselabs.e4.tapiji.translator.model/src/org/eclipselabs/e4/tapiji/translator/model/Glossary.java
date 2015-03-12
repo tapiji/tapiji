@@ -41,7 +41,7 @@ public class Glossary implements Serializable {
         this.info = new Info();
     }
 
-    public Term[] getAllTerms() {
+    public synchronized Term[] getAllTerms() {
         return terms.toArray(new Term[terms.size()]);
     }
 
@@ -59,32 +59,36 @@ public class Glossary implements Serializable {
     }
 
     public void removeTerm(final Term elem) {
-        for (final Term term : terms) {
-            if (term == elem) {
-                terms.remove(term);
-                break;
-            }
+        synchronized (terms) {
+            for (final Term term : terms) {
+                if (term == elem) {
+                    terms.remove(term);
+                    break;
+                }
 
-            if (term.removeTerm(elem)) {
-                break;
+                if (term.removeTerm(elem)) {
+                    break;
+                }
             }
         }
     }
 
     public void addTerm(final Term parentTerm, final Term newTerm) {
-        if (parentTerm == null) {
-            this.terms.add(newTerm);
-            return;
-        }
-
-        for (final Term term : terms) {
-            if (term == parentTerm) {
-                term.subTerms.add(newTerm);
-                break;
+        synchronized (terms) {
+            if (parentTerm == null) {
+                this.terms.add(newTerm);
+                return;
             }
 
-            if (term.addTerm(parentTerm, newTerm)) {
-                break;
+            for (final Term term : terms) {
+                if (term == parentTerm) {
+                    term.subTerms.add(newTerm);
+                    break;
+                }
+
+                if (term.addTerm(parentTerm, newTerm)) {
+                    break;
+                }
             }
         }
     }

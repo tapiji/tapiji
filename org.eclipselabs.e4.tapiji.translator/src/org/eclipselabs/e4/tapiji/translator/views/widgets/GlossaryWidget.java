@@ -128,6 +128,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
     protected void registerListeners() {
         treeViewer.getControl().addKeyListener(new KeyAdapter() {
 
+            @Override
             public void keyPressed(KeyEvent event) {
                 if (event.character == SWT.DEL && event.stateMask == 0) {
                     deleteSelectedItems();
@@ -145,7 +146,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
         treeViewer.setSorter(sorter);
     }
 
-    public void enableFuzzyMatching(boolean enable) {
+    /*public void enableFuzzyMatching(boolean enable) {
         String pattern = "";
         if (matcher != null) {
             pattern = matcher.getPattern();
@@ -162,11 +163,11 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 
         matcher.setPattern(pattern);
         treeViewer.refresh();
-    }
-
-    public boolean isFuzzyMatchingEnabled() {
-        return fuzzyMatchingEnabled;
-    }
+    }*/
+    /*
+        public boolean isFuzzyMatchingEnabled() {
+            return fuzzyMatchingEnabled;
+        }*/
 
     protected void initMatchers() {
         treeViewer.resetFilters();
@@ -279,7 +280,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
             protected void setValue(Object element, Object value) {
                 if (element instanceof Term) {
                     Term term = (Term) element;
-                    Translation translation = (Translation) term.getTranslation(referenceLocale);
+                    Translation translation = term.getTranslation(referenceLocale);
 
                     if (translation != null) {
                         translation.value = (String) value;
@@ -356,7 +357,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
                 protected void setValue(Object element, Object value) {
                     if (element instanceof Term) {
                         Term term = (Term) element;
-                        Translation translation = (Translation) term.getTranslation(sfLocale);
+                        Translation translation = term.getTranslation(sfLocale);
 
                         if (translation != null) {
                             translation.value = (String) value;
@@ -461,6 +462,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
     private void hookDoubleClickAction() {
         treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
+            @Override
             public void doubleClick(DoubleClickEvent event) {
                 doubleClickAction.run();
             }

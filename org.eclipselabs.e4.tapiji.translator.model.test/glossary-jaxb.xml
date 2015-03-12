@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<glossary>
+    <info>
+        <locales>
+            <locale>default</locale>
+            <locale>de</locale>
+            <locale>en</locale>
+        </locales>
+    </info>
+    <terms>
+        <term>
+            <translations>
+                <translation>
+                    <id>default</id>
+                    <value>Hallo Welt!</value>
+                </translation>
+                <translation>
+                    <id>de</id>
+                    <value>Hallo Welt!</value>
+                </translation>
+                <translation>
+                    <id>en</id>
+                    <value>Hello World!</value>
+                </translation>
+            </translations>
+            <terms>
+                <term>
+                    <translations>
+                        <translation>
+                            <id>default</id>
+                            <value>Hallo Welt!</value>
+                        </translation>
+                        <translation>
+                            <id>de</id>
+                            <value>Hallo Welt!</value>
+                        </translation>
+                        <translation>
+                            <id>en</id>
+                            <value>Hello World!</value>
+                        </translation>
+                    </translations>
+                    <terms/>
+                </term>
+            </terms>
+        </term>
+        <term>
+            <translations>
+                <translation>
+                    <id>default</id>
+                    <value>Hallo Welt!</value>
+                </translation>
+                <translation>
+                    <id>de</id>
+                    <value>Hallo Welt!</value>
+                </translation>
+                <translation>
+                    <id>en</id>
+                    <value>Hello World!</value>
+                </translation>
+            </translations>
+            <terms/>
+        </term>
+    </terms>
+</glossary>

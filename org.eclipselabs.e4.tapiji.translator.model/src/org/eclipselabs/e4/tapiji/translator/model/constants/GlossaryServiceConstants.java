@@ -18,4 +18,6 @@ public final class GlossaryServiceConstants {
     }
 
     public static final String TOPIC_GLOSSARY_NEW = "TOPIC_GLOSSARY/NEW";
+
+    public static final String TOPIC_GLOSSARY_OPEN = "TOPIC_GLOSSARY/OPEN";
 }

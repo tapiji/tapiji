@@ -46,12 +46,14 @@ public final class GlossaryManager implements IGlossaryService {
 
     @Override
     public void loadGlossary(final File file) {
+        Log.i(TAG, String.format("Open Glossary %s", file));
         JAXBContext context;
         try {
-            final Glossary glossary = new Glossary();
+            glossary = new Glossary();
             context = JAXBContext.newInstance(glossary.getClass());
             this.glossary = (Glossary) context.createUnmarshaller().unmarshal(file);
             Log.d(TAG, String.format("Loaded glossary: %s ", glossary.toString()));
+            eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_OPEN, "DATA");
         } catch (final JAXBException exception) {
             Log.wtf(TAG, String.format("Can not load file %s", file), exception);
         }

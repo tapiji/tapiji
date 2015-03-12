@@ -6,12 +6,17 @@
         <children xsi:type="basic:PartSashContainer" xmi:id="_TH6usMBDEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.partsashcontainer.main">
           <children xsi:type="basic:PartStack" xmi:id="_LFLK0MBEEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.partstack.1"/>
           <children xsi:type="basic:Part" xmi:id="_sCzawMBKEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.part.glossaryview" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.views.GlossaryView" bindingContexts="_lv-iAMEfEeS16pfZp0OXPg">
-            <menus xsi:type="menu:PopupMenu" xmi:id="_h5_RgMBnEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.popupmenu.kijhuhzg" label="kijhuhzg">
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_iUuswMBnEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.vttrc" label="vttrc"/>
-            </menus>
-            <menus xmi:id="_pQchsMBnEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.menu.1">
-              <tags>ViewMenu</tags>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_pt1BQMBnEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.hgzvg" label="hgzvg"/>
+            <menus xsi:type="menu:PopupMenu" xmi:id="_gtyn0MjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.popupmenu.treeview">
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_jGchQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.add" label="Add"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_lnbQQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.remove" label="Remove"/>
+              <children xsi:type="menu:MenuSeparator" xmi:id="_nDgzwMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.2"/>
+              <children xsi:type="menu:Menu" xmi:id="_n3w7MMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menu.1"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_pYXLQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.editable" label="Editable"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_psY6gMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.fuzzy-matching" label="Fuzzy-Matching"/>
+              <children xsi:type="menu:MenuSeparator" xmi:id="_t7bGwMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.3"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_uNz3QMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.newTranslation" label="New Translation"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_uio3wMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.deleteTranslation" label="Delete TRanslation"/>
+              <children xsi:type="menu:MenuSeparator" xmi:id="_vrzfQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.4"/>
             </menus>
           </children>
         </children>
