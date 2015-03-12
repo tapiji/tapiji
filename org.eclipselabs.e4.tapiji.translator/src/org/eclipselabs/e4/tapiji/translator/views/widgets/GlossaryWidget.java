@@ -12,7 +12,6 @@ package org.eclipselabs.e4.tapiji.translator.views.widgets;
 
 
 import java.awt.ComponentOrientation;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -40,14 +39,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.views.ViewLabelProvider;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.ExactMatcher;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.FuzzyMatcher;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.provider.AbstractGlossaryLabelProvider;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.provider.GlossaryContentProvider;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.sorter.GlossaryEntrySorter;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.sorter.SortInfo;
@@ -81,7 +79,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
     private IGlossaryService manager;
 
     private GlossaryContentProvider contentProvider;
-    private AbstractGlossaryLabelProvider labelProvider;
+    private ViewLabelProvider labelProvider;
 
     /*** MATCHER ***/
     ExactMatcher matcher;
@@ -192,16 +190,17 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
         treeViewer.setContentProvider(contentProvider);
 
         // init label provider
-        try {
+       /* try {
             Class<?> clazz = Class.forName(AbstractGlossaryLabelProvider.INSTANCE_CLASS);
             Constructor<?> constr = clazz.getConstructor(int.class, List.class, IWorkbenchPage.class);
-            // labelProvider = (AbstractGlossaryLabelProvider) constr.newInstance(
-            //         this.displayedTranslations.indexOf(referenceLocale), this.displayedTranslations, site.getPage());
+            labelProvider = (AbstractGlossaryLabelProvider) constr.newInstance(
+                            this.displayedTranslations.indexOf(referenceLocale), this.displayedTranslations,
+                            site.getPage());
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
+        labelProvider = new ViewLabelProvider(treeViewer);
         treeViewer.setLabelProvider(labelProvider);
-
         setTreeStructure(grouped);
     }
 
@@ -298,7 +297,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 
             @Override
             protected Object getValue(Object element) {
-                return labelProvider.getColumnText(element, 0);
+                return "dd";//labelProvider.getColumnText(element, 0);
             }
 
             @Override
@@ -375,7 +374,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
 
                 @Override
                 protected Object getValue(Object element) {
-                    return labelProvider.getColumnText(element, ifCall);
+                    return "sdsad"; //labelProvider.getColumnText(element, ifCall);
                 }
 
                 @Override
@@ -485,7 +484,7 @@ public class GlossaryWidget extends Composite implements IResourceChangeListener
             grouped = false;
         else
             grouped = true;
-        labelProvider.setSearchEnabled(!grouped);
+        //labelProvider.setSearchEnabled(!grouped);
         this.setTreeStructure(grouped && sorter != null && sorter.getSortInfo().getColIdx() == 0);
         treeViewer.refresh();
     }

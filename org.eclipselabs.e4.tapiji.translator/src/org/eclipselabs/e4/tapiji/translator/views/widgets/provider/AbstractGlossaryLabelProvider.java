@@ -132,4 +132,7 @@ public abstract class AbstractGlossaryLabelProvider extends StyledCellLabelProvi
     event.getSelection();
   }
 
+
+
+
 }
