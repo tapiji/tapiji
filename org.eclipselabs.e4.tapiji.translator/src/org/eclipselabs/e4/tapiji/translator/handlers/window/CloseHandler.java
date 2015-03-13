@@ -1,4 +1,4 @@
-package org.eclipselabs.e4.tapiji.translator.handlers;
+package org.eclipselabs.e4.tapiji.translator.handlers.window;
 
 
 import org.eclipse.e4.core.di.annotations.Execute;

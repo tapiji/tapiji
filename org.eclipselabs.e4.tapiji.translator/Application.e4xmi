@@ -5,10 +5,10 @@
       <children xsi:type="advanced:Perspective" xmi:id="_HCcxsMBDEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.perspective" label="TapiJI Translator">
         <children xsi:type="basic:PartSashContainer" xmi:id="_TH6usMBDEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.partsashcontainer.main">
           <children xsi:type="basic:PartStack" xmi:id="_LFLK0MBEEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.partstack.1"/>
-          <children xsi:type="basic:Part" xmi:id="_sCzawMBKEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.part.glossaryview" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.views.GlossaryView" bindingContexts="_lv-iAMEfEeS16pfZp0OXPg">
-            <menus xsi:type="menu:PopupMenu" xmi:id="_gtyn0MjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.popupmenu.treeview">
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_jGchQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.add" label="Add"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_lnbQQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.remove" label="Remove"/>
+          <children xsi:type="basic:Part" xmi:id="_sCzawMBKEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.part.glossaryview" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.views.GlossaryPart" bindingContexts="_lv-iAMEfEeS16pfZp0OXPg">
+            <menus xsi:type="menu:PopupMenu" xmi:id="_gtyn0MjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.popupmenu.treeview" label="Tree Menu">
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_jGchQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.add" label="Add" command="_bfB6gMnOEeSNbNVYTrKUgg"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_lnbQQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.remove" label="Remove" command="_Dme0MMnSEeSNbNVYTrKUgg"/>
               <children xsi:type="menu:MenuSeparator" xmi:id="_nDgzwMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.2"/>
               <children xsi:type="menu:Menu" xmi:id="_n3w7MMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menu.1"/>
               <children xsi:type="menu:HandledMenuItem" xmi:id="_pYXLQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.editable" label="Editable"/>
@@ -53,15 +53,17 @@
       </children>
     </trimBars>
   </children>
-  <handlers xmi:id="_iY_1kMETEeS87-LHw5gOnA" elementId="org.eclipselabs.e4.tapiji.translator.handler.openResourceBundle" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.OpenResourceBundleHandler" command="_QQ2kcMETEeS87-LHw5gOnA"/>
-  <handlers xmi:id="_ACaiwMEaEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.exit" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.ExitHandler" command="_qRUnQMEUEeS87-LHw5gOnA"/>
-  <handlers xmi:id="_N-jtgMEaEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.openGlossary" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.OpenGlossaryHandler" command="_8xeWcMEZEeS16pfZp0OXPg"/>
-  <handlers xmi:id="_VkaroMEaEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.newGlossary" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.NewGlossaryHandler" command="_7KpikMEZEeS16pfZp0OXPg"/>
-  <handlers xmi:id="_U3jwMMEbEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.about" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.AboutHandler" command="_FXUuwMEWEeS87-LHw5gOnA"/>
-  <handlers xmi:id="_iUG04MEbEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.save" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.SaveHandler" command="_3-kvgMEWEeS87-LHw5gOnA"/>
-  <handlers xmi:id="_mffQMMEbEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.saveall" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.SaveAllHandler" command="_zZzj0MEWEeS87-LHw5gOnA"/>
-  <handlers xmi:id="_tPBDQMEbEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.close" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.CloseHandler" command="_a5nEIMEZEeS16pfZp0OXPg"/>
-  <handlers xmi:id="_xM0VkMEbEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.closeall" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.CloseAllHandler" command="_1cj-YMEZEeS16pfZp0OXPg"/>
+  <handlers xmi:id="_iY_1kMETEeS87-LHw5gOnA" elementId="org.eclipselabs.e4.tapiji.translator.handler.openResourceBundle" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.window.OpenResourceBundleHandler" command="_QQ2kcMETEeS87-LHw5gOnA"/>
+  <handlers xmi:id="_ACaiwMEaEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.exit" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.window.ExitHandler" command="_qRUnQMEUEeS87-LHw5gOnA"/>
+  <handlers xmi:id="_N-jtgMEaEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.openGlossary" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.window.OpenGlossaryHandler" command="_8xeWcMEZEeS16pfZp0OXPg"/>
+  <handlers xmi:id="_VkaroMEaEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.newGlossary" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.window.NewGlossaryHandler" command="_7KpikMEZEeS16pfZp0OXPg"/>
+  <handlers xmi:id="_U3jwMMEbEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.about" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.window.AboutHandler" command="_FXUuwMEWEeS87-LHw5gOnA"/>
+  <handlers xmi:id="_iUG04MEbEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.save" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.window.SaveHandler" command="_3-kvgMEWEeS87-LHw5gOnA"/>
+  <handlers xmi:id="_mffQMMEbEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.saveall" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.window.SaveAllHandler" command="_zZzj0MEWEeS87-LHw5gOnA"/>
+  <handlers xmi:id="_tPBDQMEbEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.close" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.window.CloseHandler" command="_a5nEIMEZEeS16pfZp0OXPg"/>
+  <handlers xmi:id="_xM0VkMEbEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.closeall" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.window.window.CloseAllHandler" command="_1cj-YMEZEeS16pfZp0OXPg"/>
+  <handlers xmi:id="_fHMUAMnOEeSNbNVYTrKUgg" elementId="org.eclipselabs.e4.tapiji.translator.handler.addTerm" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.AddTermHandler" command="_bfB6gMnOEeSNbNVYTrKUgg"/>
+  <handlers xmi:id="_FvUwAMnSEeSNbNVYTrKUgg" elementId="org.eclipselabs.e4.tapiji.translator.handler.0" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.RemoveTermHandler" command="_Dme0MMnSEeSNbNVYTrKUgg"/>
   <bindingTables xmi:id="_zBkJUMEeEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.bindingtable.tapiji" bindingContext="_lv-iAMEfEeS16pfZp0OXPg">
     <bindings xmi:id="_WlR5cMEfEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.keybinding.openResourceBundle" keySequence="M1+O" command="_QQ2kcMETEeS87-LHw5gOnA"/>
   </bindingTables>
@@ -79,6 +81,8 @@
   <commands xmi:id="_1cj-YMEZEeS16pfZp0OXPg" elementId="org.eclipse.ui.file.closeAll" commandName="Close All"/>
   <commands xmi:id="_7KpikMEZEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.command.newGlossary" commandName="New Glossary"/>
   <commands xmi:id="_8xeWcMEZEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.command.openGlossary" commandName="Open Glossary"/>
+  <commands xmi:id="_bfB6gMnOEeSNbNVYTrKUgg" elementId="org.eclipselabs.e4.tapiji.translator.command.addTerm" commandName="Add Term"/>
+  <commands xmi:id="_Dme0MMnSEeSNbNVYTrKUgg" elementId="org.eclipselabs.e4.tapiji.translator.command.removeTerm" commandName="Remove Term"/>
   <addons xmi:id="_Tb38kcAvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_Tb38ksAvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_Tb38k8AvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

@@ -20,12 +20,12 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 //import org.eclipse.ui.ISharedImages;
 //import org.eclipse.ui.PlatformUI;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.GlossaryWidget;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.TreeViewerWidget;
 
 public class GlossaryEntryMenuContribution extends ContributionItem implements
 	ISelectionChangedListener {
 
-    private GlossaryWidget parentView;
+    private TreeViewerWidget parentView;
     private boolean legalSelection = false;
 
     // Menu-Items
@@ -35,7 +35,7 @@ public class GlossaryEntryMenuContribution extends ContributionItem implements
     public GlossaryEntryMenuContribution() {
     }
 
-    public GlossaryEntryMenuContribution(GlossaryWidget view,
+    public GlossaryEntryMenuContribution(TreeViewerWidget view,
 	    boolean legalSelection) {
 	this.legalSelection = legalSelection;
 	this.parentView = view;
