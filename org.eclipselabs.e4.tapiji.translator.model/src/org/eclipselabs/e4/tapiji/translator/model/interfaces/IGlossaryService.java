@@ -2,7 +2,7 @@ package org.eclipselabs.e4.tapiji.translator.model.interfaces;
 
 
 /*******************************************************************************
- * Copyright (c) 2012 Martin Reiterer.
+ * Copyright (c) 2012 Christian Behon.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,6 +14,7 @@ package org.eclipselabs.e4.tapiji.translator.model.interfaces;
 
 import java.io.File;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
+import org.eclipselabs.e4.tapiji.translator.model.Term;
 
 
 public interface IGlossaryService {
@@ -23,4 +24,10 @@ public interface IGlossaryService {
     void loadGlossary(File file);
 
     Glossary getGlossary();
+
+    void addTerm(Term term);
+
+    void removeTerm(Term term);
+
+    void evictGlossary();
 }

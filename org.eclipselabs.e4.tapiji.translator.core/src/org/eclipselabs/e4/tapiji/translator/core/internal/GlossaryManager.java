@@ -25,6 +25,7 @@ import javax.xml.bind.Marshaller;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
+import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.utils.FileUtils;
@@ -81,5 +82,23 @@ public final class GlossaryManager implements IGlossaryService {
         } catch (final JAXBException exception) {
             Log.wtf(TAG, "Marshall problem", exception);
         }
+    }
+
+    @Override
+    public void addTerm(Term term) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void removeTerm(Term term) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void evictGlossary() {
+        // TODO Auto-generated method stub
+
     }
 }
