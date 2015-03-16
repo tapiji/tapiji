@@ -25,19 +25,6 @@ public class AddTermHandler {
         final InputDialog dialog = new InputDialog(shell, "New Term", "Please, define the new term:", "", null);
         if (dialog.open() == Window.OK) {
             if (dialog.getValue() != null && dialog.getValue().trim().length() > 0) {
-                
-                /*     for (Iterator<?> iter = ((IStructuredSelection) selection)
-                                     .iterator(); iter.hasNext();) {
-                                 Object elem = iter.next();
-                                 if (elem instanceof Term) {
-                                     parentTerm = ((Term) elem);
-                                     break;
-                                 }*/
-                
-                
-                /*
-                final Glossary glossary = glossaryService.getGlossary();
-                Term term = Term.newInstance();*/
 
 
                 Log.d(TAG, String.format("Added new Term %s ", dialog.getValue()));

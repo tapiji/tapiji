@@ -13,6 +13,7 @@ Service-Component: OSGI-INF/service.xml
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation,
  javax.inject,
+ org.eclipselabs.e4.tapiji.translator.messages,
  org.eclipselabs.e4.tapiji.translator.model,
  org.eclipselabs.e4.tapiji.translator.model.constants,
  org.eclipselabs.e4.tapiji.translator.model.interfaces,

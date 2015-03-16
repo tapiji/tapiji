@@ -21,9 +21,6 @@ public final class GlossaryManagerTest {
 
     private Info info;
 
-    private Glossary glossary;
-
-
     private Term term;
     private Term term2;
 
@@ -39,7 +36,7 @@ public final class GlossaryManagerTest {
 
 
     private void initializeTestData() {
-        info = new Info();
+        info = Info.newInstance();
         info.translations = new ArrayList<String>();
         info.translations.add("default");
 
@@ -56,7 +53,7 @@ public final class GlossaryManagerTest {
         term2.translations.add(Translation.newInstance("en", "World!"));
         term2.parentTerm = null;
 
-        glossary = new Glossary();
+        final Glossary glossary = new Glossary();
         glossary.info = info;
         glossary.terms.add(term);
         glossary.terms.add(term2);
@@ -90,11 +87,16 @@ public final class GlossaryManagerTest {
         assertEquals(0, glossaryService.getGlossary().terms.size());
     }
 
-
     @Test
-    public void clearGlossaryTest() {
-        //    manager.evictGlossary();
+    public void evictGlossary() {
+        initializeTestData();
+
+        glossaryService.evictGlossary();
+
+        assertEquals(0, glossaryService.getGlossary().terms.size());
+        assertEquals("Default", glossaryService.getGlossary().info.getTranslations()[0]);
     }
+
 
     @Test
     public void saveGlossaryTest() {

@@ -8,13 +8,16 @@ package org.eclipselabs.e4.tapiji.translator.views;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.EMenuService;
+import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -29,6 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Scale;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
@@ -114,25 +118,19 @@ public final class GlossaryPart {
 
     /* fuzzyScaler.setSelection(Math.round((treeViewer != null ? treeViewer.getMatchingPrecision() : viewState
                              .getMatchingPrecision()) * 100.f));*/
-    @Inject
-    @Optional
-    private void getNotified(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_NEW) final String s) {
-        Log.d(TAG, "GOT NOTIFICATION %s " + s);
-        this.redrawTreeViewer();
-    }
+
 
     @Inject
     @Optional
-    private void fileOpened(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_OPEN) final String s) {
-        Log.d(TAG, "GOT NOTIFICATION OPEN %s " + s);
-        this.redrawTreeViewer();
+    private void onError(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_ERROR) final String[] error,
+                    @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
+        MessageDialog.openError(shell, "Deletion not possible", "No term selected");
     }
 
 
     @Inject
     @Optional
-    private void reloadGlossary(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD) final String s) {
-
+    private void onReloadGlossary(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD) final String s) {
         this.redrawTreeViewer();
     }
 
@@ -159,19 +157,16 @@ public final class GlossaryPart {
     }
 
     protected void initMessagesTree(final Composite parent) {
-
         treeViewerWidget = new TreeViewerWidget(parent, SWT.FILL, glossaryService != null ? glossaryService : null,
                         null, null);
         treeViewerWidget.addSelectionChangedListener(new ISelectionChangedListener() {
 
             @Override
-            public void selectionChanged(SelectionChangedEvent event) {
-                IStructuredSelection selection = (IStructuredSelection) treeViewerWidget.getTreeView().getSelection();
+            public void selectionChanged(final SelectionChangedEvent event) {
+                final IStructuredSelection selection = (IStructuredSelection) treeViewerWidget.getTreeView()
+                                .getSelection();
                 selectionService.setSelection(selection.getFirstElement());
-                
                 Log.d(TAG, "Selection:" + selection.getFirstElement());
-                Log.d(TAG, "Event:" + ((IStructuredSelection) event.getSelection()).getFirstElement());
-
             }
         });
 

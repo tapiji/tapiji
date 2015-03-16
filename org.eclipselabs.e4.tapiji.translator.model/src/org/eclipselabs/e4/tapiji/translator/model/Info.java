@@ -32,7 +32,7 @@ public class Info implements Serializable {
     @XmlElement(name = "locale")
     public List<String> translations;
 
-    public Info() {
+    private Info() {
         this.translations = new ArrayList<String>();
         this.translations.add("Default");
     }
@@ -44,5 +44,9 @@ public class Info implements Serializable {
     @Override
     public String toString() {
         return "Info [translations=" + translations + "]";
+    }
+
+    public static Info newInstance() {
+        return new Info();
     }
 }

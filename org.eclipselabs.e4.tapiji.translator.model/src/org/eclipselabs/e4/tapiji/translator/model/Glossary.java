@@ -38,7 +38,7 @@ public class Glossary implements Serializable {
 
     public Glossary() {
         this.terms = new ArrayList<Term>();
-        this.info = new Info();
+        this.info = Info.newInstance();
     }
 
     public synchronized Term[] getAllTerms() {

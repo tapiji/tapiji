@@ -23,4 +23,6 @@ public final class GlossaryServiceConstants {
     public static final String TOPIC_GLOSSARY_OPEN = "TOPIC_GLOSSARY/OPEN";
 
     public static final String TOPIC_GLOSSARY_RELOAD = "TOPIC_GLOSSARY/RELOAD";
+    
+    public static final String TOPIC_GLOSSARY_ERROR = "TOPIC_GLOSSARY/ERROR";
 }

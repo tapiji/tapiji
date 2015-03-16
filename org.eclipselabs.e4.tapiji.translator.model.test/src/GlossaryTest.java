@@ -27,7 +27,7 @@ public class GlossaryTest {
 
     @BeforeClass
     public static void setup() {
-        info = new Info();
+        info = Info.newInstance();
         info.translations = new ArrayList<String>();
         info.translations.add("default");
         info.translations.add("de");

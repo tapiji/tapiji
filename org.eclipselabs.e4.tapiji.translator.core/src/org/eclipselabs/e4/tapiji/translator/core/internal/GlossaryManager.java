@@ -24,7 +24,9 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipselabs.e4.tapiji.logger.Log;
+import org.eclipselabs.e4.tapiji.translator.messages.ErrorMessage;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
+import org.eclipselabs.e4.tapiji.translator.model.Info;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
@@ -46,7 +48,7 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
     @Override
-    public void setGlossary(Glossary glossary) {
+    public void setGlossary(final Glossary glossary) {
         this.glossary = glossary;
     }
 
@@ -59,14 +61,17 @@ public final class GlossaryManager implements IGlossaryService {
             context = JAXBContext.newInstance(glossary.getClass());
             this.glossary = (Glossary) context.createUnmarshaller().unmarshal(file);
             Log.d(TAG, String.format("Loaded glossary: %s ", glossary.toString()));
-            eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_OPEN, "DATA");
+            eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, "ignored");
         } catch (final JAXBException exception) {
+            final ErrorMessage message =new ErrorMessage("Glossary error", String.format("Can not load file %s", file));
+            eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_ERROR, message);
             Log.wtf(TAG, String.format("Can not load file %s", file), exception);
         }
     }
 
     @Override
     public void saveGlossary(final File file) {
+        boolean error = false;
         this.glossary = new Glossary();
         JAXBContext context;
         try {
@@ -78,14 +83,20 @@ public final class GlossaryManager implements IGlossaryService {
                  OutputStreamWriter osw = new OutputStreamWriter(bout, FileUtils.ENCODING_TYPE_UTF_16)) {
 
                 marshaller.marshal(glossary, osw);
-                eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_NEW, "DATA");
+                eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, "ignored");
                 Log.d(TAG, String.format("Glossary saved: %s ", glossary.toString()));
 
             } catch (final IOException exceptions) {
+                error = true;
                 Log.wtf(TAG, "Interrupted I/O operations", exceptions);
             }
         } catch (final JAXBException exception) {
+            error = true;
             Log.wtf(TAG, "Marshall problem", exception);
+        }
+        if (error) {
+            final ErrorMessage message = new ErrorMessage("Glossary error", String.format("Can not save file %s", file));
+            eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_ERROR, message);
         }
     }
 
@@ -95,13 +106,20 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
     @Override
-    public void removeTerm(Term term) {
+    public void removeTerm(final Term term) {
         glossary.removeTerm(term);
     }
 
     @Override
     public void evictGlossary() {
-        // TODO Auto-generated method stub
-
+        for (Term term : glossary.terms) {
+            term.translations.clear();
+            term.subTerms.clear();
+            term.parentTerm = null;
+            term.subTerms = null;
+            term.translations = null;
+        }
+        glossary.terms.clear();
+        glossary.info = Info.newInstance();
     }
 }
