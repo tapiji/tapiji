@@ -42,7 +42,7 @@ public class Term implements Serializable {
     @XmlTransient
     private Object info;
 
-    public Term() {
+    private Term() {
         this.translations = new ArrayList<Translation>();
         this.subTerms = new ArrayList<Term>();
         this.parentTerm = null;
@@ -87,7 +87,7 @@ public class Term implements Serializable {
             }
         }
 
-        final Translation newTranslation = new Translation();
+        final Translation newTranslation = Translation.newInstance();
         newTranslation.id = language;
         translations.add(newTranslation);
 
@@ -132,5 +132,9 @@ public class Term implements Serializable {
     public String toString() {
         return "Term [translations=" + translations + ", subTerms=" + subTerms + ", parentTerm=" + parentTerm
                         + ", info=" + info + "]";
+    }
+
+    public static Term newInstance() {
+        return new Term();
     }
 }

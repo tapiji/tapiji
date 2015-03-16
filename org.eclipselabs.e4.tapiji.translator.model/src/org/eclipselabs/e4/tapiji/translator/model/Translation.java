@@ -30,12 +30,12 @@ public class Translation implements Serializable {
 
     public String value;
 
-    public Translation() {
+    private Translation() {
         this.id = "";
         this.value = "";
     }
 
-    public Translation(final String id, final String value) {
+    private Translation(final String id, final String value) {
         this.id = id;
         this.value = value;
     }
@@ -43,5 +43,13 @@ public class Translation implements Serializable {
     @Override
     public String toString() {
         return "Translation [id=" + id + ", value=" + value + "]";
+    }
+
+    public static Translation newInstance() {
+        return new Translation();
+    }
+
+    public static Translation newInstance(final String id, final String value) {
+        return new Translation(id, value);
     }
 }

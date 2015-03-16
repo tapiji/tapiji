@@ -81,9 +81,9 @@ public class GlossaryEntrySorter extends ViewerSorter {
 			.get(col));
 
 		if (transComp1 == null)
-		    transComp1 = new Translation();
+                    transComp1 = Translation.newInstance();
 		if (transComp2 == null)
-		    transComp2 = new Translation();
+                    transComp2 = Translation.newInstance();
 		result = transComp1.value.compareTo(transComp2.value);
 	    }
 

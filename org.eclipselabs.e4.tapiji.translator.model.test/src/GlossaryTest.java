@@ -34,24 +34,24 @@ public class GlossaryTest {
         info.translations.add("en");
 
         // Hello world
-        final Term term = new Term();
-        term.translations.add(new Translation("default", "Hallo Welt!"));
-        term.translations.add(new Translation("de", "Hallo Welt!"));
-        term.translations.add(new Translation("en", "Hello World!"));
+        final Term term = Term.newInstance();
+        term.translations.add(Translation.newInstance("default", "Hallo Welt!"));
+        term.translations.add(Translation.newInstance("de", "Hallo Welt!"));
+        term.translations.add(Translation.newInstance("en", "Hello World!"));
         term.parentTerm = null;
 
         // Hello world 2
-        final Term subTerms = new Term();
-        subTerms.translations.add(new Translation("default", "Hallo Welt!"));
-        subTerms.translations.add(new Translation("de", "Hallo Welt!"));
-        subTerms.translations.add(new Translation("en", "Hello World!"));
+        final Term subTerms = Term.newInstance();
+        subTerms.translations.add(Translation.newInstance("default", "Hallo Welt!"));
+        subTerms.translations.add(Translation.newInstance("de", "Hallo Welt!"));
+        subTerms.translations.add(Translation.newInstance("en", "Hello World!"));
         term.subTerms.add(subTerms);
 
         // Hello World 3
-        term2 = new Term();
-        term2.translations.add(new Translation("default", "Hallo Welt!"));
-        term2.translations.add(new Translation("de", "Hallo Welt!"));
-        term2.translations.add(new Translation("en", "Hello World!"));
+        term2 = Term.newInstance();
+        term2.translations.add(Translation.newInstance("default", "Hallo Welt!"));
+        term2.translations.add(Translation.newInstance("de", "Hallo Welt!"));
+        term2.translations.add(Translation.newInstance("en", "Hello World!"));
         term2.parentTerm = null;
 
         glossary = new Glossary();

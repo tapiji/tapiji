@@ -1,4 +1,3 @@
-import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import org.eclipselabs.e4.tapiji.translator.core.internal.GlossaryManager;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
@@ -28,31 +27,24 @@ public class GlossaryManagerTest {
         info.translations.add("default");
 
         // Hello world
-        final Term term = new Term();
-        term.translations.add(new Translation("default", "Hallo Welt!"));
-        term.translations.add(new Translation("de", "Hallo Welt!"));
-        term.translations.add(new Translation("en", "Hello World!"));
+        final Term term = Term.newInstance();
+        term.translations.add(Translation.newInstance("default", "Hallo Welt!"));
+        term.translations.add(Translation.newInstance("de", "Hallo Welt!"));
+        term.translations.add(Translation.newInstance("en", "Hello World!"));
         term.parentTerm = null;
 
         manager = new GlossaryManager();
     }
 
-
-    @Test
-    public void test() {
-        fail("Not yet implemented");
-    }
-
-
     @Test
     public void addTermTest() {
-        Term term = new Term();
+        Term term = Term.newInstance();
         manager.addTerm(term);
     }
 
     @Test
     public void removeTermTest() {
-        Term term = new Term();
+        Term term = Term.newInstance();
         manager.removeTerm(term);
     }
 

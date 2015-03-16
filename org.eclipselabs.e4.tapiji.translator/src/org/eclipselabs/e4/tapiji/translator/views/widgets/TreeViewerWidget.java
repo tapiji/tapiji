@@ -613,8 +613,8 @@ public class TreeViewerWidget extends Composite implements IResourceChangeListen
                 this.glossary = ((GlossaryContentProvider) treeViewer.getContentProvider()).getGlossary();
 
                 // Construct a new term
-                final Term newTerm = new Term();
-                final Translation defaultTranslation = new Translation();
+                final Term newTerm = Term.newInstance();
+                final Translation defaultTranslation = Translation.newInstance();
                 defaultTranslation.id = referenceLocale;
                 defaultTranslation.value = dialog.getValue();
                 newTerm.translations.add(defaultTranslation);
