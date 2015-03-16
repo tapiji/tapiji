@@ -5,4 +5,6 @@ Bundle-SymbolicName: org.eclipselabs.e4.tapiji.translator.core.test
 Bundle-Version: 1.0.0.qualifier
 Fragment-Host: org.eclipselabs.e4.tapiji.translator.core;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Require-Bundle: org.junit
+Require-Bundle: org.junit,
+ org.eclipse.e4.ui.services,
+ org.eclipse.osgi.services

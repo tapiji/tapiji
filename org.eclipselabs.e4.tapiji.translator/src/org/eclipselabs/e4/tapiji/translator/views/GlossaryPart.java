@@ -159,8 +159,18 @@ public final class GlossaryPart {
             @Override
             public void selectionChanged(SelectionChangedEvent event) {
                 IStructuredSelection selection = (IStructuredSelection) treeViewerWidget.getTreeView().getSelection();
-                selectionService.setSelection(selection.getFirstElement());
+                //selectionService.setSelection(selection.getFirstElement());
 
+                
+                /*  for (Iterator<?> iter = selection.iterator(); iter.hasNext();) {
+                      Object elem = iter.next();
+                      if (elem instanceof Term) {
+                          Log.d(TAG, "----------------");
+                      Log.d(TAG + "sdsd", elem.toString());
+                          Log.d(TAG, "----------------\n");
+                      }
+                  }*/
+                
                 Log.d(TAG, "Selection:" + selection.getFirstElement());
                 Log.d(TAG, "Event:" + ((IStructuredSelection) event.getSelection()).getFirstElement());
 

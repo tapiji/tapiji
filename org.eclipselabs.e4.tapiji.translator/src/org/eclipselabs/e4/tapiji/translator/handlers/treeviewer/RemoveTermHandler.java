@@ -36,7 +36,7 @@ public class RemoveTermHandler {
 
             @Override
             protected IStatus run(final IProgressMonitor monitor) {
-                //glossaryService.
+                glossaryService.removeTerm(term);
 
                 Log.d(TAG, String.format("Removed Term: %s ", term.toString()));
                 return Status.OK_STATUS;

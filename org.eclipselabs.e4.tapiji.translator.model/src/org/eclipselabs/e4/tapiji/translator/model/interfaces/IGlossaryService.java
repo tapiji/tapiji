@@ -25,9 +25,11 @@ public interface IGlossaryService {
 
     Glossary getGlossary();
 
-    void addTerm(Term term);
-
     void removeTerm(Term term);
 
     void evictGlossary();
+
+    void setGlossary(Glossary glossary);
+
+    void addTerm(Term parentTerm, Term term);
 }

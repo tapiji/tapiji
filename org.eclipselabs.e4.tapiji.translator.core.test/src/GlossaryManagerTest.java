@@ -1,4 +1,10 @@
+import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.core.internal.GlossaryManager;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Info;
@@ -9,53 +15,89 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 
+public final class GlossaryManagerTest {
 
-public class GlossaryManagerTest {
+    private static final String TAG = GlossaryManagerTest.class.getSimpleName();
 
-    private static Info info;
+    private Info info;
 
-    private static Glossary glossary;
+    private Glossary glossary;
 
-    private static Term term2;
 
-    private static IGlossaryService manager;
+    private Term term;
+    private Term term2;
+
+    private static IGlossaryService glossaryService;
 
     @BeforeClass
     public static void setup() {
+        final IEclipseContext context = EclipseContextFactory.create();
+        context.set(IEventBroker.class, new EventBrokerMock());
+
+        glossaryService = ContextInjectionFactory.make(GlossaryManager.class, context);
+    }
+
+
+    private void initializeTestData() {
         info = new Info();
         info.translations = new ArrayList<String>();
         info.translations.add("default");
 
         // Hello world
-        final Term term = Term.newInstance();
+        term = Term.newInstance();
         term.translations.add(Translation.newInstance("default", "Hallo Welt!"));
         term.translations.add(Translation.newInstance("de", "Hallo Welt!"));
         term.translations.add(Translation.newInstance("en", "Hello World!"));
         term.parentTerm = null;
 
-        manager = new GlossaryManager();
+        term2 = Term.newInstance();
+        term2.translations.add(Translation.newInstance("default", "Welt!"));
+        term2.translations.add(Translation.newInstance("de", "Welt!"));
+        term2.translations.add(Translation.newInstance("en", "World!"));
+        term2.parentTerm = null;
+
+        glossary = new Glossary();
+        glossary.info = info;
+        glossary.terms.add(term);
+        glossary.terms.add(term2);
+
+        glossaryService.setGlossary(glossary);
     }
+
 
     @Test
     public void addTermTest() {
-        Term term = Term.newInstance();
-        manager.addTerm(term);
+
+        initializeTestData();
+        Log.d(TAG, glossaryService.getGlossary().toString());
+
+        assertEquals(2, glossaryService.getGlossary().terms.size());
+
     }
 
     @Test
     public void removeTermTest() {
-        Term term = Term.newInstance();
-        manager.removeTerm(term);
+        initializeTestData();
+        glossaryService.removeTerm(term);
+        assertEquals(1, glossaryService.getGlossary().terms.size());
+
+        glossaryService.removeTerm(term);
+        assertEquals(1, glossaryService.getGlossary().terms.size());
+
+        glossaryService.removeTerm(term2);
+        assertEquals(0, glossaryService.getGlossary().terms.size());
+
+        assertEquals(0, glossaryService.getGlossary().terms.size());
     }
+
 
     @Test
     public void clearGlossaryTest() {
-        manager.evictGlossary();
+        //    manager.evictGlossary();
     }
 
     @Test
     public void saveGlossaryTest() {
-
 
 
     }

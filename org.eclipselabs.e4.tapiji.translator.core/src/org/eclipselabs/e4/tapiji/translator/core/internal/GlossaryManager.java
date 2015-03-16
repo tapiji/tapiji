@@ -46,6 +46,11 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
     @Override
+    public void setGlossary(Glossary glossary) {
+        this.glossary = glossary;
+    }
+
+    @Override
     public void loadGlossary(final File file) {
         Log.i(TAG, String.format("Open Glossary %s", file));
         JAXBContext context;
@@ -85,15 +90,13 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
     @Override
-    public void addTerm(Term term) {
-        // TODO Auto-generated method stub
+    public void addTerm(final Term parentTerm, final Term term) {
 
     }
 
     @Override
     public void removeTerm(Term term) {
-        // TODO Auto-generated method stub
-
+        glossary.removeTerm(term);
     }
 
     @Override
