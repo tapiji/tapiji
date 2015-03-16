@@ -20,6 +20,8 @@ public class AddTermHandler {
     @Execute
     public void execute(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) final Term term,@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService) {
 
+        Log.d(TAG, "TERM: " + term);
+        
         final InputDialog dialog = new InputDialog(shell, "New Term", "Please, define the new term:", "", null);
         if (dialog.open() == Window.OK) {
             if (dialog.getValue() != null && dialog.getValue().trim().length() > 0) {

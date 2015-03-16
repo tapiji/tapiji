@@ -15,9 +15,12 @@ package org.eclipselabs.e4.tapiji.translator.model.constants;
 public final class GlossaryServiceConstants {
 
     private GlossaryServiceConstants() {
+        // Hide constructor. Only static access
     }
 
     public static final String TOPIC_GLOSSARY_NEW = "TOPIC_GLOSSARY/NEW";
 
     public static final String TOPIC_GLOSSARY_OPEN = "TOPIC_GLOSSARY/OPEN";
+
+    public static final String TOPIC_GLOSSARY_RELOAD = "TOPIC_GLOSSARY/RELOAD";
 }

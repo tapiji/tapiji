@@ -128,6 +128,14 @@ public final class GlossaryPart {
         this.redrawTreeViewer();
     }
 
+
+    @Inject
+    @Optional
+    private void reloadGlossary(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD) final String s) {
+
+        this.redrawTreeViewer();
+    }
+
     protected void initListener(final Composite parent) {
         inputFilter.addModifyListener(new ModifyListener() {
 
@@ -159,17 +167,7 @@ public final class GlossaryPart {
             @Override
             public void selectionChanged(SelectionChangedEvent event) {
                 IStructuredSelection selection = (IStructuredSelection) treeViewerWidget.getTreeView().getSelection();
-                //selectionService.setSelection(selection.getFirstElement());
-
-                
-                /*  for (Iterator<?> iter = selection.iterator(); iter.hasNext();) {
-                      Object elem = iter.next();
-                      if (elem instanceof Term) {
-                          Log.d(TAG, "----------------");
-                      Log.d(TAG + "sdsd", elem.toString());
-                          Log.d(TAG, "----------------\n");
-                      }
-                  }*/
+                selectionService.setSelection(selection.getFirstElement());
                 
                 Log.d(TAG, "Selection:" + selection.getFirstElement());
                 Log.d(TAG, "Event:" + ((IStructuredSelection) event.getSelection()).getFirstElement());
