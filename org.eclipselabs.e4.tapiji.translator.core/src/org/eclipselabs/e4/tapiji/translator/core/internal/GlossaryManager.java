@@ -61,7 +61,7 @@ public final class GlossaryManager implements IGlossaryService {
             context = JAXBContext.newInstance(glossary.getClass());
             this.glossary = (Glossary) context.createUnmarshaller().unmarshal(file);
             Log.d(TAG, String.format("Loaded glossary: %s ", glossary.toString()));
-            eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, "ignored");
+            eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, glossary);
         } catch (final JAXBException exception) {
             final ErrorMessage message =new ErrorMessage("Glossary error", String.format("Can not load file %s", file));
             eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_ERROR, message);
@@ -83,7 +83,7 @@ public final class GlossaryManager implements IGlossaryService {
                  OutputStreamWriter osw = new OutputStreamWriter(bout, FileUtils.ENCODING_TYPE_UTF_16)) {
 
                 marshaller.marshal(glossary, osw);
-                eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, "ignored");
+                // eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, glossary);
                 Log.d(TAG, String.format("Glossary saved: %s ", glossary.toString()));
 
             } catch (final IOException exceptions) {

@@ -17,10 +17,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
-import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.provider.GlossaryContentProvider;
 
 
 public class GlossaryDragSource implements DragSourceListener {
@@ -37,17 +35,17 @@ public class GlossaryDragSource implements DragSourceListener {
 
     @Override
     public void dragFinished(DragSourceEvent event) {
-        GlossaryContentProvider contentProvider = ((GlossaryContentProvider) source.getContentProvider());
-        Glossary glossary = contentProvider.getGlossary();
-        for (Term selectionObject : selectionList)
-            glossary.removeTerm(selectionObject);
-        // manager.setGlossary(glossary);
-        this.source.refresh();
-        try {
-            // manager.saveGlossary();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        /*  GlossaryContentProvider contentProvider = ((GlossaryContentProvider) source.getContentProvider());
+          Glossary glossary = contentProvider.getGlossary();
+          for (Term selectionObject : selectionList)
+              glossary.removeTerm(selectionObject);
+          // manager.setGlossary(glossary);
+          this.source.refresh();
+          try {
+              // manager.saveGlossary();
+          } catch (Exception e) {
+              e.printStackTrace();
+          }*/
     }
 
     @Override

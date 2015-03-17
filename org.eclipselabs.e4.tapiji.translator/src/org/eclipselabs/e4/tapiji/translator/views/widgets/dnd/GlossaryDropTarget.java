@@ -16,10 +16,8 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.provider.GlossaryContentProvider;
 
 
 public class GlossaryDropTarget extends DropTargetAdapter {
@@ -33,6 +31,7 @@ public class GlossaryDropTarget extends DropTargetAdapter {
         this.manager = manager;
     }
 
+    @Override
     public void dragEnter(DropTargetEvent event) {
         if (event.detail == DND.DROP_MOVE || event.detail == DND.DROP_DEFAULT) {
             if ((event.operations & DND.DROP_MOVE) != 0)
@@ -42,6 +41,7 @@ public class GlossaryDropTarget extends DropTargetAdapter {
         }
     }
 
+    @Override
     public void drop(DropTargetEvent event) {
         if (TermTransfer.getInstance().isSupportedType(event.currentDataType)) {
             Term parentTerm = null;
@@ -54,7 +54,7 @@ public class GlossaryDropTarget extends DropTargetAdapter {
             }
 
             Term[] moveTerm = (Term[]) event.data;
-            Glossary glossary = ((GlossaryContentProvider) target.getContentProvider()).getGlossary();
+            // Glossary glossary = ((GlossaryContentProvider) target.getContentProvider()).getGlossary();
 
             /*
              * Remove the move term from its initial position for (Term
@@ -62,13 +62,13 @@ public class GlossaryDropTarget extends DropTargetAdapter {
              */
 
             /* Insert the move term on its target position */
-            if (parentTerm == null) {
-                for (Term t : moveTerm)
-                    glossary.terms.add(t);
-            } else {
-                for (Term t : moveTerm)
-                    parentTerm.subTerms.add(t);
-            }
+            /*  if (parentTerm == null) {
+                  for (Term t : moveTerm)
+                      glossary.terms.add(t);
+              } else {
+                  for (Term t : moveTerm)
+                      parentTerm.subTerms.add(t);
+              }*/
 
             //  manager.setGlossary(glossary);
             try {

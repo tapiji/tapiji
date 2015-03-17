@@ -22,8 +22,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -35,6 +33,7 @@ import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipselabs.e4.tapiji.logger.Log;
+import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.TreeViewerWidget;
@@ -68,8 +67,7 @@ public final class GlossaryPart {
 
 
     @PostConstruct
-    public void createPartControl(final Composite parent, final IGlossaryService glossaryService,
-                    final EMenuService menuService) {
+    public void createPartControl(final Composite parent, final IGlossaryService glossaryService, final EMenuService menuService) {
         this.glossaryService = glossaryService;
         this.parent = parent;
 
@@ -122,57 +120,68 @@ public final class GlossaryPart {
 
     @Inject
     @Optional
-    private void onError(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_ERROR) final String[] error,
-                    @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
+    private void onError(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_ERROR) final String[] error, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
         MessageDialog.openError(shell, "Deletion not possible", "No term selected");
     }
 
 
+    protected void initListener(final Composite parent) {
+        /*        inputFilter.addModifyListener(new ModifyListener() {
+
+                    @Override
+                    public void modifyText(final ModifyEvent e) {
+                        if ((glossaryService != null) && (glossaryService.getGlossary() != null)) {
+                            treeViewerWidget.setSearchString(inputFilter.getText());
+                        }
+                    }
+                });*/
+    }
+
     @Inject
     @Optional
-    private void onReloadGlossary(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD) final String s) {
-        this.redrawTreeViewer();
-    }
-
-    protected void initListener(final Composite parent) {
-        inputFilter.addModifyListener(new ModifyListener() {
-
-            @Override
-            public void modifyText(final ModifyEvent e) {
-                if ((glossaryService != null) && (glossaryService.getGlossary() != null)) {
-                    treeViewerWidget.setSearchString(inputFilter.getText());
-                }
-            }
-        });
-    }
-
-
-    private void computeMatchingPrecision() {
-        if ((treeViewerWidget != null) && (fuzzyScaler != null)) {
-            final float val = 1f - (Float
-                            .parseFloat(((fuzzyScaler.getMaximum() - fuzzyScaler.getSelection()) + fuzzyScaler
-                                            .getMinimum()) + "") / 100.f);
-            treeViewerWidget.setMatchingPrecision(val);
+    private void onReloadGlossary(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD) final Glossary glossary) {
+        if (glossary != null) {
+            treeViewerWidget.updateView(glossary);
         }
     }
 
+    private void computeMatchingPrecision() {
+        /* if ((treeViewerWidget != null) && (fuzzyScaler != null)) {
+             final float val = 1f - (Float
+                             .parseFloat(((fuzzyScaler.getMaximum() - fuzzyScaler.getSelection()) + fuzzyScaler
+                                             .getMinimum()) + "") / 100.f);
+             treeViewerWidget.setMatchingPrecision(val);
+         }*/
+    }
+
     protected void initMessagesTree(final Composite parent) {
-        treeViewerWidget = new TreeViewerWidget(parent, SWT.FILL, glossaryService != null ? glossaryService : null,
-                        null, null);
-        treeViewerWidget.addSelectionChangedListener(new ISelectionChangedListener() {
+
+        /* Composite composite = new Composite(this, SWT.NONE);
+         composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+         composite.setLayout(new GridLayout(1, false));
+
+         TreeViewer treeViewer = new TreeViewer(composite, SWT.NONE);
+         Tree tree = treeViewer.getTree();
+         tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+         TreeColumn trclmnTest = new TreeColumn(tree, SWT.NONE);
+         trclmnTest.setWidth(100);
+         trclmnTest.setText("Test");*/
+
+
+        treeViewerWidget = TreeViewerWidget.create(parent, SWT.NONE);
+        treeViewerWidget.getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 
             @Override
             public void selectionChanged(final SelectionChangedEvent event) {
-                final IStructuredSelection selection = (IStructuredSelection) treeViewerWidget.getTreeView()
-                                .getSelection();
+                final IStructuredSelection selection = (IStructuredSelection) treeViewerWidget.getTreeViewer().getSelection();
                 selectionService.setSelection(selection.getFirstElement());
                 Log.d(TAG, "Selection:" + selection.getFirstElement());
             }
         });
 
         treeViewerWidget.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        menuService.registerContextMenu(treeViewerWidget.getControl(),
-                        "org.eclipselabs.e4.tapiji.translator.popupmenu.treeview");
+        menuService.registerContextMenu(treeViewerWidget.getTreeViewer().getControl(), "org.eclipselabs.e4.tapiji.translator.popupmenu.treeview");
     }
 
     @Focus
@@ -183,18 +192,18 @@ public final class GlossaryPart {
     }
 
     protected void redrawTreeViewer() {
-        parentComp.setRedraw(false);
+        /* parentComp.setRedraw(false);
 
-        treeViewerWidget.dispose();
+         treeViewerWidget.dispose();
 
-        if (treeViewerWidget != null) {
-            treeViewerWidget.dispose();
-        }
+         if (treeViewerWidget != null) {
+             treeViewerWidget.dispose();
+         }
 
-        initMessagesTree(parent);
+         initMessagesTree(parent);
 
-        parentComp.setRedraw(true);
-        parentComp.layout(true);
-        treeViewerWidget.layout(true);
+         parentComp.setRedraw(true);
+         parentComp.layout(true);
+         treeViewerWidget.layout(true);*/
     }
 }

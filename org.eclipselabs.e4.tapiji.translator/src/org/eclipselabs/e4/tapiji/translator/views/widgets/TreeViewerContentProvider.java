@@ -1,15 +1,4 @@
-/*******************************************************************************
- * Copyright (c) 2012 Martin Reiterer.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     Martin Reiterer - initial API and implementation
- *     Christian Behon
- ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.views.widgets.provider;
+package org.eclipselabs.e4.tapiji.translator.views.widgets;
 
 
 import java.util.ArrayList;
@@ -20,27 +9,16 @@ import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 
 
-public final class GlossaryContentProvider implements ITreeContentProvider {
+class TreeViewerContentProvider implements ITreeContentProvider {
+
+    private final boolean grouped = false;
 
     private Glossary glossary;
 
-    private boolean grouped = false;
 
-    public GlossaryContentProvider(final Glossary glossary) {
-        this.glossary = glossary;
-    }
-
-    public Glossary getGlossary() {
-        return glossary;
-    }
-
-    public void setGrouped(final boolean grouped) {
-        this.grouped = grouped;
-    }
-
-    @Override
-    public void dispose() {
-        this.glossary = null;
+    public TreeViewerContentProvider() {
+        super();
+        this.glossary = new Glossary();
     }
 
     @Override
@@ -66,7 +44,7 @@ public final class GlossaryContentProvider implements ITreeContentProvider {
     @Override
     public Object[] getChildren(final Object parentElement) {
         if (grouped) {
-            if (parentElement instanceof Term) {
+            if ((parentElement instanceof Term)) {
                 final Term t = (Term) parentElement;
                 return t.getAllSubTerms();
             }
@@ -100,8 +78,15 @@ public final class GlossaryContentProvider implements ITreeContentProvider {
                 allTerms.addAll(getAllElements(term.subTerms));
             }
         }
-
         return allTerms;
     }
 
+    @Override
+    public void dispose() {
+        this.glossary = null;
+    }
+
+    public static TreeViewerContentProvider newInstance() {
+        return new TreeViewerContentProvider();
+    }
 }

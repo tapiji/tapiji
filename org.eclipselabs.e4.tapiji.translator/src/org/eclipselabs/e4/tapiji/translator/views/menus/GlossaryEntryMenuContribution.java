@@ -39,7 +39,7 @@ public class GlossaryEntryMenuContribution extends ContributionItem implements
 	    boolean legalSelection) {
 	this.legalSelection = legalSelection;
 	this.parentView = view;
-	parentView.addSelectionChangedListener(this);
+        //parentView.addSelectionChangedListener(this);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class GlossaryEntryMenuContribution extends ContributionItem implements
 
 	    @Override
 	    public void widgetSelected(SelectionEvent e) {
-		parentView.addNewItem();
+                //	parentView.addNewItem();
 	    }
 
 	    @Override
@@ -74,7 +74,7 @@ public class GlossaryEntryMenuContribution extends ContributionItem implements
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-		    parentView.deleteSelectedItems();
+                    //   parentView.deleteSelectedItems();
 		}
 
 		@Override
