@@ -15,8 +15,8 @@
                 <children xsi:type="menu:HandledMenuItem" xmi:id="_j56XsMzlEeSHOM1sG85QHg" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.relevantTerms" label="Relevant terms"/>
               </children>
               <children xsi:type="menu:MenuSeparator" xmi:id="_vrzfQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.4"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_pYXLQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.editable" label="Editable"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_psY6gMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.fuzzy-matching" label="Fuzzy-Matching"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_nw0r0M56EeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.editMode" accessibilityPhrase="EDIT" label="Edit Mode" type="Check" command="_OaOesM50EeSwQYgLIg6mtg"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_psY6gMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.fuzzy-matching" label="Fuzzy-Matching" type="Check" command="_yisZUM6CEeSwQYgLIg6mtg"/>
               <children xsi:type="menu:MenuSeparator" xmi:id="_t7bGwMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.3"/>
               <children xsi:type="menu:HandledMenuItem" xmi:id="_uNz3QMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.newTranslation" label="New Translation"/>
               <children xsi:type="menu:HandledMenuItem" xmi:id="_uio3wMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.deleteTranslation" label="Delete TRanslation"/>
@@ -66,6 +66,8 @@
   <handlers xmi:id="_mffQMMEbEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.handler.saveall" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.window.SaveAllHandler" command="_zZzj0MEWEeS87-LHw5gOnA"/>
   <handlers xmi:id="_fHMUAMnOEeSNbNVYTrKUgg" elementId="org.eclipselabs.e4.tapiji.translator.handler.addTerm" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.AddTermHandler" command="_bfB6gMnOEeSNbNVYTrKUgg"/>
   <handlers xmi:id="_FvUwAMnSEeSNbNVYTrKUgg" elementId="org.eclipselabs.e4.tapiji.translator.handler.0" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.RemoveTermHandler" command="_Dme0MMnSEeSNbNVYTrKUgg"/>
+  <handlers xmi:id="_NYKkwM50EeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.handler.editMode" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.EditModeHandler" command="_OaOesM50EeSwQYgLIg6mtg"/>
+  <handlers xmi:id="_0t8v8M6CEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.handler.fuzzyMatching" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.FuzzyMatchingModeHandler" command="_yisZUM6CEeSwQYgLIg6mtg"/>
   <bindingTables xmi:id="_zBkJUMEeEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.bindingtable.tapiji" bindingContext="_lv-iAMEfEeS16pfZp0OXPg">
     <bindings xmi:id="_WlR5cMEfEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.keybinding.openResourceBundle" keySequence="M1+O" command="_QQ2kcMETEeS87-LHw5gOnA"/>
   </bindingTables>
@@ -83,6 +85,8 @@
   <commands xmi:id="_8xeWcMEZEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.command.openGlossary" commandName="Open Glossary"/>
   <commands xmi:id="_bfB6gMnOEeSNbNVYTrKUgg" elementId="org.eclipselabs.e4.tapiji.translator.command.addTerm" commandName="Add Term"/>
   <commands xmi:id="_Dme0MMnSEeSNbNVYTrKUgg" elementId="org.eclipselabs.e4.tapiji.translator.command.removeTerm" commandName="Remove Term"/>
+  <commands xmi:id="_OaOesM50EeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.command.editMode" commandName="Edit Mode"/>
+  <commands xmi:id="_yisZUM6CEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.command.fuzzyMatching" commandName="Fuzzy Matching"/>
   <addons xmi:id="_Tb38kcAvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_Tb38ksAvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_Tb38k8AvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

@@ -36,6 +36,7 @@ import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.preferences.Preference;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.TreeViewerWidget;
 
 
@@ -64,6 +65,9 @@ public final class GlossaryPart {
     @Inject
     EMenuService menuService;
     private Composite parentComp;
+
+    @Inject
+    private Preference prefs;
 
 
     @PostConstruct
