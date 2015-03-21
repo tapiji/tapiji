@@ -1,4 +1,4 @@
-package org.eclipselabs.e4.tapiji.translator.views.widgets;
+package org.eclipselabs.e4.tapiji.translator.views.providers;
 
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 
 
-class TreeViewerContentProvider implements ITreeContentProvider {
+public class TreeViewerContentProvider implements ITreeContentProvider {
 
     private final boolean grouped = false;
 

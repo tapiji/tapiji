@@ -17,6 +17,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
 import org.eclipselabs.e4.tapiji.utils.FileUtils;
 
 
@@ -24,14 +25,15 @@ public class OpenGlossaryHandler {
 
     private static final String TAG = OpenGlossaryHandler.class.getSimpleName();
 
+
     @Execute
-    public void execute(@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService) {
-        final String[] fileNames = FileUtils
-                        .queryFileName(shell, "Open Glossary", SWT.OPEN, FileUtils.XML_FILE_ENDINGS);
+    public void execute(@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService, final StoreInstanceState instanceState) {
+        final String[] fileNames = FileUtils.queryFileName(shell, "Open Glossary", SWT.OPEN, FileUtils.XML_FILE_ENDINGS);
         if (fileNames != null) {
             final String fileName = fileNames[0];
             if (FileUtils.isGlossary(fileName)) {
                 loadGlossaryAsync(glossaryService, new File(fileName));
+                instanceState.setGlossaryFile(fileName);
             } else {
                 showErrorDialog(shell, fileName);
                 Log.i(TAG, String.format("Cannot open Glossary %s", fileName));
@@ -39,8 +41,7 @@ public class OpenGlossaryHandler {
             }
 
             try {
-                SuggestionProviderUtils.updateConfigurationSetting("glossaryFile", new StringConfigurationSetting(
-                                fileName));
+                SuggestionProviderUtils.updateConfigurationSetting("glossaryFile", new StringConfigurationSetting(fileName));
             } catch (final InvalidConfigurationSetting exception) {
                 Log.e(TAG, exception);
             }
@@ -61,7 +62,6 @@ public class OpenGlossaryHandler {
 
 
     private void showErrorDialog(final Shell shell, final String fileName) {
-        MessageDialog.openError(shell, String.format("Cannot open Glossary %s", fileName),
-                        "The choosen file does not represent a Glossary!");
+        MessageDialog.openError(shell, String.format("Cannot open Glossary %s", fileName), "The choosen file does not represent a Glossary!");
     }
 }

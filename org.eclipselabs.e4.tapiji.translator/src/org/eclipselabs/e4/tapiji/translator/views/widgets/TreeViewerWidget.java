@@ -23,6 +23,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
+import org.eclipselabs.e4.tapiji.translator.views.providers.TreeViewerContentProvider;
+import org.eclipselabs.e4.tapiji.translator.views.providers.TreeViewerLabelProvider;
 
 
 public final class TreeViewerWidget extends Composite implements IResourceChangeListener {

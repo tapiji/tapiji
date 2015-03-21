@@ -12,11 +12,11 @@ import javax.inject.Named;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.di.PersistState;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -38,8 +38,8 @@ import org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.preferences.Preference;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.TreeViewerWidget;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
 
 
 public final class GlossaryPart {
@@ -69,11 +69,11 @@ public final class GlossaryPart {
     private Composite parentComp;
 
     @Inject
-    private Preference prefs;
-
+    StoreInstanceState storeInstanceState;
 
     @PostConstruct
     public void createPartControl(final Composite parent, final IGlossaryService glossaryService, final EMenuService menuService) {
+
         this.glossaryService = glossaryService;
         this.parent = parent;
 
@@ -100,8 +100,8 @@ public final class GlossaryPart {
         labelScale.setText("Precision:");
 
         fuzzyScaler = new Scale(parentComp, SWT.NONE);
-        //    fuzzyScaler.setMaximum(100);
-        //    fuzzyScaler.setMinimum(0);
+        fuzzyScaler.setMaximum(100);
+        fuzzyScaler.setMinimum(0);
         fuzzyScaler.setIncrement(1);
         fuzzyScaler.setPageIncrement(5);
         fuzzyScaler.setSelection(0);
@@ -118,11 +118,26 @@ public final class GlossaryPart {
         fuzzyScaler.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
         initMessagesTree(parent);
+
+        onRestoreInstance(storeInstanceState);
     }
 
     /* fuzzyScaler.setSelection(Math.round((treeViewer != null ? treeViewer.getMatchingPrecision() : viewState
                              .getMatchingPrecision()) * 100.f));*/
 
+
+
+    private void showHideFuzzyMatching(boolean isVisible) {
+        if (isVisible) {
+            ((GridData) labelScale.getLayoutData()).heightHint = SWT.DEFAULT;
+            ((GridData) fuzzyScaler.getLayoutData()).heightHint = SWT.DEFAULT;
+        } else {
+            ((GridData) labelScale.getLayoutData()).heightHint = 0;
+            ((GridData) fuzzyScaler.getLayoutData()).heightHint = 0;
+        }
+        labelScale.getParent().layout();
+        labelScale.getParent().getParent().layout();
+    }
 
     @Inject
     @Optional
@@ -132,18 +147,17 @@ public final class GlossaryPart {
 
     @Inject
     @Optional
-    private void onError(@UIEventTopic(TranslatorConstants.TOPIC_GUI) boolean isVisible, EModelService modelService) {
-        if (isVisible) {
-            ((GridData) labelScale.getLayoutData()).heightHint = SWT.DEFAULT;
-            ((GridData) fuzzyScaler.getLayoutData()).heightHint = SWT.DEFAULT;
-          } else {
-            ((GridData) labelScale.getLayoutData()).heightHint = 0;
-            ((GridData) fuzzyScaler.getLayoutData()).heightHint = 0;
-        }
-        labelScale.getParent().layout();
-        labelScale.getParent().getParent().layout();
+    private void onError(@UIEventTopic(TranslatorConstants.TOPIC_GUI) boolean isVisible) {
+        showHideFuzzyMatching(isVisible);
     }
 
+    @Inject
+    @Optional
+    private void onReloadGlossary(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD) final Glossary glossary) {
+        if (glossary != null) {
+            treeViewerWidget.updateView(glossary);
+        }
+    }
 
     protected void initListener(final Composite parent) {
         /*        inputFilter.addModifyListener(new ModifyListener() {
@@ -157,13 +171,7 @@ public final class GlossaryPart {
                 });*/
     }
 
-    @Inject
-    @Optional
-    private void onReloadGlossary(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD) final Glossary glossary) {
-        if (glossary != null) {
-            treeViewerWidget.updateView(glossary);
-        }
-    }
+
 
     private void computeMatchingPrecision() {
         /* if ((treeViewerWidget != null) && (fuzzyScaler != null)) {
@@ -224,6 +232,24 @@ public final class GlossaryPart {
 
          parentComp.setRedraw(true);
          parentComp.layout(true);
-         treeViewerWidget.layout(true);*/
+         treeViewerWidget. layout(true);*/
     }
+    
+
+
+
+    @PersistState
+    public void saveInstanceState() {
+        storeInstanceState.setSearchValue(inputFilter.getText());
+        storeInstanceState.setMatchingPrecision(fuzzyScaler.getSelection());
+        
+        Log.d(TAG, String.format("Array: %s", storeInstanceState.toString()));
+    }
+
+    private void onRestoreInstance(StoreInstanceState storeInstanceState) {
+        // showHideFuzzyMatching(storeInstanceState.isFuzzyMode());
+        inputFilter.setText(storeInstanceState.getSearchValue());
+        fuzzyScaler.setSelection((int) storeInstanceState.getMatchingPrecision());
+    }
+
 }

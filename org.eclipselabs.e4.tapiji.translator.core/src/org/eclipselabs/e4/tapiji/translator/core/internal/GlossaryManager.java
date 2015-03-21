@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Locale;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -63,7 +64,7 @@ public final class GlossaryManager implements IGlossaryService {
             Log.d(TAG, String.format("Loaded glossary: %s ", glossary.toString()));
             eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, glossary);
         } catch (final JAXBException exception) {
-            final ErrorMessage message =new ErrorMessage("Glossary error", String.format("Can not load file %s", file));
+            final ErrorMessage message = new ErrorMessage("Glossary error", String.format("Can not load file %s", file));
             eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_ERROR, message);
             Log.wtf(TAG, String.format("Can not load file %s", file), exception);
         }
@@ -79,8 +80,8 @@ public final class GlossaryManager implements IGlossaryService {
             final Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_ENCODING, FileUtils.ENCODING_TYPE_UTF_16);
             try (OutputStream fout = new FileOutputStream(file.getAbsolutePath());
-                 OutputStream bout = new BufferedOutputStream(fout);
-                 OutputStreamWriter osw = new OutputStreamWriter(bout, FileUtils.ENCODING_TYPE_UTF_16)) {
+                            OutputStream bout = new BufferedOutputStream(fout);
+                            OutputStreamWriter osw = new OutputStreamWriter(bout, FileUtils.ENCODING_TYPE_UTF_16)) {
 
                 marshaller.marshal(glossary, osw);
                 // eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, glossary);
@@ -106,13 +107,28 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
     @Override
+    public void removeLocales(final Object[] locales) {
+        for (final Object localeToRemove : locales) {
+
+        }
+    }
+
+    @Override
+    public void addLocales(final Object[] locales) {
+        for (final Object localeToAdd : locales) {
+            glossary.info.translations.add(((Locale) localeToAdd).toString());
+            Log.d(TAG, String.format("Locale %s added", ((Locale) localeToAdd).toString()));
+        }
+    }
+
+    @Override
     public void removeTerm(final Term term) {
         glossary.removeTerm(term);
     }
 
     @Override
     public void evictGlossary() {
-        for (Term term : glossary.terms) {
+        for (final Term term : glossary.terms) {
             term.translations.clear();
             term.subTerms.clear();
             term.parentTerm = null;

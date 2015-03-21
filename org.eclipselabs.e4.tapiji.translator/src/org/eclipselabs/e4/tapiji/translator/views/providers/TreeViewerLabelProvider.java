@@ -1,4 +1,4 @@
-package org.eclipselabs.e4.tapiji.translator.views.widgets;
+package org.eclipselabs.e4.tapiji.translator.views.providers;
 
 
 import javax.annotation.PreDestroy;
@@ -9,11 +9,11 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
-import org.eclipselabs.e4.tapiji.translator.views.Constants;
 
 
-class TreeViewerLabelProvider extends StyledCellLabelProvider implements ITableLabelProvider {
+public class TreeViewerLabelProvider extends StyledCellLabelProvider implements ITableLabelProvider {
 
     private final TreeViewer treeViewer;
 
@@ -34,7 +34,7 @@ class TreeViewerLabelProvider extends StyledCellLabelProvider implements ITableL
         //    cell.setForeground(info_crossref_foreground);
         //} else {
         cell.setFont(getColumnFont(element, columnIndex));
-        cell.setBackground(Constants.COLOR_WHITE);
+        cell.setBackground(TranslatorConstants.COLOR_WHITE);
         //}
 
         /* if (isSearchEnabled()) {
@@ -60,7 +60,7 @@ class TreeViewerLabelProvider extends StyledCellLabelProvider implements ITableL
 
     protected Font getColumnFont(final Object element, final int columnIndex) {
         if (columnIndex == 0) {
-            return Constants.FONT_ITALIC;
+            return TranslatorConstants.FONT_ITALIC;
         }
         return null;
     }

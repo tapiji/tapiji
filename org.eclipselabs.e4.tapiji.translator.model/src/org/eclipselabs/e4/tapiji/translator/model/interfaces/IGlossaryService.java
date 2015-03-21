@@ -32,4 +32,8 @@ public interface IGlossaryService {
     void setGlossary(Glossary glossary);
 
     void addTerm(Term parentTerm, Term term);
+
+    void addLocales(Object[] locales);
+
+    void removeLocales(Object[] locales);
 }
