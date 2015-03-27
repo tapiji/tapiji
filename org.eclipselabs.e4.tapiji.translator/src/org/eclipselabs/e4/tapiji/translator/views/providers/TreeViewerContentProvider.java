@@ -11,7 +11,7 @@ import org.eclipselabs.e4.tapiji.translator.model.Term;
 
 public class TreeViewerContentProvider implements ITreeContentProvider {
 
-    private final boolean grouped = false;
+    private boolean isGrouped;
 
     private Glossary glossary;
 
@@ -19,6 +19,7 @@ public class TreeViewerContentProvider implements ITreeContentProvider {
     public TreeViewerContentProvider() {
         super();
         this.glossary = new Glossary();
+        this.isGrouped = true;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class TreeViewerContentProvider implements ITreeContentProvider {
 
     @Override
     public Object[] getElements(final Object inputElement) {
-        if (!grouped) {
+        if (!isGrouped) {
             return getAllElements(glossary.terms).toArray(new Term[glossary.terms.size()]);
         }
 
@@ -44,7 +45,7 @@ public class TreeViewerContentProvider implements ITreeContentProvider {
     @Override
     public Object[] getChildren(final Object parentElement) {
         Term[] elements = new Term[] {};
-        if (grouped) {
+        if (isGrouped) {
             if (parentElement instanceof Term) {
                 final Term t = (Term) parentElement;
                 elements = ((Term) parentElement).getAllSubTerms();
@@ -63,7 +64,7 @@ public class TreeViewerContentProvider implements ITreeContentProvider {
 
     @Override
     public boolean hasChildren(final Object element) {
-        if (grouped) {
+        if (isGrouped) {
             if (element instanceof Term) {
                 return ((Term) element).hasChildTerms();
             }
@@ -89,5 +90,9 @@ public class TreeViewerContentProvider implements ITreeContentProvider {
 
     public static TreeViewerContentProvider newInstance() {
         return new TreeViewerContentProvider();
+    }
+
+    public void setGrouped(boolean isGrouped) {
+        this.isGrouped = isGrouped;
     }
 }

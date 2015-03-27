@@ -28,6 +28,10 @@ import org.eclipse.swt.widgets.Shell;
 
 public final class FileUtils {
 
+    private FileUtils() {
+        // Only static access
+    }
+
     public static final String[] XML_FILE_ENDINGS = new String[] {"*.xml"};
 
     public static final String[] PROPERTY_FILE_ENDINGS = new String[] {"*.properties"};
@@ -47,12 +51,6 @@ public final class FileUtils {
 
     /** The singleton instance of Workspace */
     private static IWorkspace workspace;
-
-
-    private FileUtils() {
-        // Hide constructor
-    }
-
 
     public static boolean isResourceBundle(final String fileName) {
         return fileName.toLowerCase().endsWith(".properties");

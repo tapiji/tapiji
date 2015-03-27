@@ -351,6 +351,19 @@ public class GlossaryWidget extends Composite implements
 		/** Translations */
 		String[] allLocales = this.translationsToDisplay;
 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		int iCol = 1;
 		for (String locale : allLocales) {
 			final int ifCall = iCol;

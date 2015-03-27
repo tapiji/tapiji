@@ -32,8 +32,9 @@ public class OpenGlossaryHandler {
         if (fileNames != null) {
             final String fileName = fileNames[0];
             if (FileUtils.isGlossary(fileName)) {
-                loadGlossaryAsync(glossaryService, new File(fileName));
-                instanceState.setGlossaryFile(fileName);
+                final File file = new File(fileName);
+                loadGlossaryAsync(glossaryService, file);
+                instanceState.setGlossaryFile(file.toString());
             } else {
                 showErrorDialog(shell, fileName);
                 Log.i(TAG, String.format("Cannot open Glossary %s", fileName));

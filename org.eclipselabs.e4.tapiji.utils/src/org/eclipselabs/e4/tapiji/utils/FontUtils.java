@@ -16,11 +16,14 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 
 
-//import org.eclipselabs.tapiji.translator.Activator;
+public final class FontUtils {
 
-public class FontUtils {
+    private FontUtils() {
+        // Only static access
+    }
 
   /**
    * Gets a system color.
@@ -29,8 +32,8 @@ public class FontUtils {
    * @return system color
    */
   public static Color getSystemColor(final int colorId) {
-    return null;//Activator.getDefault().getWorkbench().getDisplay()
-    //.getSystemColor(colorId);
+        final Display display = Display.getCurrent();
+        return display.getSystemColor(colorId);
   }
 
   /**
@@ -42,7 +45,6 @@ public class FontUtils {
    * @return newly created font
    */
   public static Font createFont(final Control control, final int style) {
-    // TODO consider dropping in favor of control-less version?
     return createFont(control, style, 0);
   }
 
@@ -83,12 +85,12 @@ public class FontUtils {
    * @return newly created font
    */
   public static Font createFont(final int style, final int relSize) {
-    /*
-     * Display display = Activator.getDefault().getWorkbench().getDisplay(); FontData[] fontData =
-     * display.getSystemFont().getFontData(); for (int i = 0; i < fontData.length; i++) {
-     * fontData[i].setHeight(fontData[i].getHeight() + relSize); fontData[i].setStyle(style); } return new Font(display,
-     * fontData);
-     */
-    return null;
+      final Display display = Display.getCurrent();
+        FontData[] fontData = display.getSystemFont().getFontData();
+        for (int i = 0; i < fontData.length; i++) {
+            fontData[i].setHeight(fontData[i].getHeight() + relSize);
+            fontData[i].setStyle(style);
+        }
+        return new Font(display, fontData);
   }
 }

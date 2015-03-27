@@ -1,24 +1,32 @@
 package org.eclipselabs.e4.tapiji.translator.views.providers;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PreDestroy;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
+import org.eclipselabs.e4.tapiji.translator.model.Translation;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.FilterInfo;
 
 
 public class TreeViewerLabelProvider extends StyledCellLabelProvider implements ITableLabelProvider {
 
     private final TreeViewer treeViewer;
+    private final String[] translations;
+    private boolean isSearchEnabled;
 
-    public TreeViewerLabelProvider(final TreeViewer treeViewer) {
+    public TreeViewerLabelProvider(final TreeViewer treeViewer, final String[] translations) {
         this.treeViewer = treeViewer;
+        this.translations = translations;
     }
 
 
@@ -28,34 +36,48 @@ public class TreeViewerLabelProvider extends StyledCellLabelProvider implements 
         final int columnIndex = cell.getColumnIndex();
         cell.setText(this.getColumnText(element, columnIndex));
 
-        //if (isCrossRefRegion(cell.getText())) {
-        //    cell.setFont(bold);
-        //    cell.setBackground(info_crossref);
-        //    cell.setForeground(info_crossref_foreground);
-        //} else {
-        cell.setFont(getColumnFont(element, columnIndex));
-        cell.setBackground(TranslatorConstants.COLOR_WHITE);
-        //}
+        if (isCrossRefRegion(cell.getText())) {
+            cell.setFont(TranslatorConstants.FONT_BOLD);
+            cell.setBackground(TranslatorConstants.COLOR_CROSSREFERENCE_BACKGROUND);
+            cell.setForeground(TranslatorConstants.COLOR_CROSSREFERENCE_FOREGROUND);
+        } else {
+            cell.setFont(getColumnFont(element, columnIndex));
+            cell.setBackground(TranslatorConstants.COLOR_WHITE);
+        }
 
-        /* if (isSearchEnabled()) {
-             if (isMatchingToPattern(element, columnIndex)) {
-                 List<StyleRange> styleRanges = new ArrayList<StyleRange>();
-                 FilterInfo filterInfo = (FilterInfo) ((Term) element).getInfo();
+        if (isSearchEnabled) {
+            if (isMatchingToPattern(element, columnIndex)) {
+                final List<StyleRange> styleRanges = new ArrayList<StyleRange>();
+                final FilterInfo filterInfo = (FilterInfo) ((Term) element).getInfo();
 
-                 for (Region reg : filterInfo
-                         .getFoundInTranslationRanges(translations
-                                 .get(columnIndex < referenceColumn ? columnIndex + 1
-                                         : columnIndex))) {
-                     styleRanges.add(new StyleRange(reg.getOffset(), reg
-                             .getLength(), black, info_color, SWT.BOLD));
-                 }
+                /*for (Region reg : filterInfo
+                        .getFoundInTranslationRanges(translations
+                                .get(columnIndex < referenceColumn ? columnIndex + 1
+                                        : columnIndex))) {
+                    styleRanges.add(new StyleRange(reg.getOffset(), reg
+                .getLength(), TranslatorConstants.COLOR_BLACK, TranslatorConstants.COLOR_INFO, SWT.BOLD));
+                }*/
 
-                 cell.setStyleRanges(styleRanges
-                         .toArray(new StyleRange[styleRanges.size()]));
-             } else {
-                 cell.setForeground(gray);
-             }
-         }*/
+                cell.setStyleRanges(styleRanges.toArray(new StyleRange[styleRanges.size()]));
+            } else {
+                cell.setForeground(TranslatorConstants.COLOR_GRAY);
+            }
+        }
+    }
+
+    public void setSearchEnabled(final boolean isSearchEnabled) {
+        this.isSearchEnabled = isSearchEnabled;
+    }
+
+    protected boolean isMatchingToPattern(final Object element, final int columnIndex) {
+        boolean matching = false;
+        if (element instanceof Term) {
+            final Term term = (Term) element;
+            if (term.getInfo() != null) {
+                matching = ((FilterInfo) term.getInfo()).hasFoundInTranslation(translations[columnIndex]);
+            }
+        }
+        return matching;
     }
 
     protected Font getColumnFont(final Object element, final int columnIndex) {
@@ -63,6 +85,10 @@ public class TreeViewerLabelProvider extends StyledCellLabelProvider implements 
             return TranslatorConstants.FONT_ITALIC;
         }
         return null;
+    }
+
+    protected boolean isCrossRefRegion(final String cellText) {
+        return false;
     }
 
     @Override
@@ -75,8 +101,8 @@ public class TreeViewerLabelProvider extends StyledCellLabelProvider implements 
         try {
             final Term term = (Term) element;
             if (term != null) {
-                // Translation transl = term.getTranslation(this.translations.get(columnIndex));
-                return "BLA BLA"; //transl != null ? transl.value : "";
+                final Translation transl = term.getTranslation(translations[columnIndex]);
+                return transl != null ? transl.value : "";
             }
         } catch (final Exception e) {
             e.printStackTrace();
@@ -97,7 +123,7 @@ public class TreeViewerLabelProvider extends StyledCellLabelProvider implements 
 
     }
 
-    public static TreeViewerLabelProvider newInstance(final TreeViewer treeViewer) {
-        return new TreeViewerLabelProvider(treeViewer);
+    public static TreeViewerLabelProvider newInstance(final TreeViewer treeViewer, final String[] translations) {
+        return new TreeViewerLabelProvider(treeViewer, translations);
     }
 }
