@@ -2,6 +2,7 @@ package org.eclipselabs.e4.tapiji.translator.handlers.treeviewer;
 
 
 import javax.inject.Named;
+import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -32,4 +33,11 @@ public class AddTermHandler {
         }
     }
 
+    @CanExecute
+    public boolean canExecute(IGlossaryService glossaryService) {
+        if (glossaryService.getGlossary() == null) {
+            return false;
+        }
+        return true;
+    }
 }

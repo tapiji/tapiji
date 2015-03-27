@@ -43,13 +43,14 @@ public class TreeViewerContentProvider implements ITreeContentProvider {
 
     @Override
     public Object[] getChildren(final Object parentElement) {
+        Term[] elements = new Term[] {};
         if (grouped) {
-            if ((parentElement instanceof Term)) {
+            if (parentElement instanceof Term) {
                 final Term t = (Term) parentElement;
-                return t.getAllSubTerms();
+                elements = ((Term) parentElement).getAllSubTerms();
             }
         }
-        return null;
+        return elements;
     }
 
     @Override

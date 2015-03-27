@@ -36,4 +36,8 @@ public interface IGlossaryService {
     void addLocales(Object[] locales);
 
     void removeLocales(Object[] locales);
+
+    String[] getTranslations();
+
+    void saveGlossary();
 }

@@ -43,6 +43,8 @@ public final class GlossaryManager implements IGlossaryService {
     @Inject
     private IEventBroker eventBroker;
 
+    private File file;
+
     @Override
     public Glossary getGlossary() {
         return glossary;
@@ -72,6 +74,7 @@ public final class GlossaryManager implements IGlossaryService {
 
     @Override
     public void saveGlossary(final File file) {
+        this.file = file;
         boolean error = false;
         this.glossary = new Glossary();
         JAXBContext context;
@@ -107,6 +110,11 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
     @Override
+    public String[] getTranslations() {
+        return glossary.info.getTranslations();
+    }
+
+    @Override
     public void removeLocales(final Object[] locales) {
         for (final Object localeToRemove : locales) {
 
@@ -137,5 +145,12 @@ public final class GlossaryManager implements IGlossaryService {
         }
         glossary.terms.clear();
         glossary.info = Info.newInstance();
+    }
+
+    @Override
+    public void saveGlossary() {
+        if (glossary != null) {
+            saveGlossary(file);
+        }
     }
 }

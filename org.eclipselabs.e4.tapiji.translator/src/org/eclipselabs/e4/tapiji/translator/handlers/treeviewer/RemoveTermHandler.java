@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -49,5 +50,13 @@ public final class RemoveTermHandler {
             }
         };
         job.schedule();
+    }
+
+    @CanExecute
+    public boolean canExecute(IGlossaryService glossaryService) {
+        if (glossaryService.getGlossary() == null) {
+            return false;
+        }
+        return true;
     }
 }

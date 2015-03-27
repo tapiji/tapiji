@@ -105,6 +105,7 @@ public class StoreInstanceState {
         }
     }
 
+
     @Override
     public String toString() {
         return "StoreInstanceState [persistedState=" + persistedState + "]";

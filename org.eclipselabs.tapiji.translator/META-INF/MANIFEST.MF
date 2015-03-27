@@ -22,13 +22,12 @@ Require-Bundle: org.eclipse.ui;resolution:=optional,
  org.hibernate;bundle-version="4.1.1";resolution:=optional,
  com.mysql.jdbc;bundle-version="5.1.11";resolution:=optional,
  org.apache.commons.io;bundle-version="2.0.1";resolution:=optional,
- org.eclipselabs.tapiji.translator.rap.helpers;bundle-version="1.0.0";resolution:=optional
+ org.eclipselabs.tapiji.translator.rap.helpers;bundle-version="1.0.0";resolution:=optional,
+ org.eclipse.jface.text.source
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Vienna University of Technology
-Import-Package: javax.servlet;resolution:=optional,
- javax.servlet.http;resolution:=optional,
- org.eclipse.babel.editor,
+Import-Package: org.eclipse.babel.editor,
  org.eclipse.babel.editor.api,
  org.eclipse.babel.editor.widgets,
  org.eclipse.babel.editor.widgets.suggestion,

@@ -7,8 +7,8 @@
           <children xsi:type="basic:PartStack" xmi:id="_LFLK0MBEEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.partstack.1"/>
           <children xsi:type="basic:Part" xmi:id="_sCzawMBKEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.part.glossaryview" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.views.GlossaryPart" bindingContexts="_lv-iAMEfEeS16pfZp0OXPg">
             <menus xsi:type="menu:PopupMenu" xmi:id="_gtyn0MjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.popupmenu.treeview" label="Tree Menu">
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_jGchQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.add" label="Add" command="_bfB6gMnOEeSNbNVYTrKUgg"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_lnbQQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.remove" label="Remove" command="_Dme0MMnSEeSNbNVYTrKUgg"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_jGchQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.add" label="Add" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resources/icons/16x16/add.png" command="_bfB6gMnOEeSNbNVYTrKUgg"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_lnbQQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.remove" label="Remove" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resources/icons/16x16/delete.png" command="_Dme0MMnSEeSNbNVYTrKUgg"/>
               <children xsi:type="menu:MenuSeparator" xmi:id="_nDgzwMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.2"/>
               <children xsi:type="menu:Menu" xmi:id="_n3w7MMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menu.show" label="Show">
                 <children xsi:type="menu:HandledMenuItem" xmi:id="_ifBHAMzlEeSHOM1sG85QHg" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.show" label="Show"/>

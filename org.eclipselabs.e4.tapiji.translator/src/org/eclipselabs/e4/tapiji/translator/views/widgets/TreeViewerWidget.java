@@ -107,4 +107,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
             treeViewer.addSelectionChangedListener(selectionChangedListener);
         }
     }
+
+
+
 }
