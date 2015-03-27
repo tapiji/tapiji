@@ -10,7 +10,7 @@
            name="TapiJI Translator">
         <property
               name="windowImages"
-              value="icons/TapiJI_16.png,icons/TapiJI_32.png,icons/TapiJI_48.png,icons/TapiJI_64.png,icons/TapiJI_128.png">
+              value="/org.eclipselabs.tapiji.translator.rcp.product/icons/TapiJI_16.png,/org.eclipselabs.tapiji.translator.rcp.product/icons/TapiJI_32.png,/org.eclipselabs.tapiji.translator.rcp.product/icons/TapiJI_48.png,/org.eclipselabs.tapiji.translator.rcp.product/icons/TapiJI_64.png,/org.eclipselabs.tapiji.translator.rcp.product/icons/TapiJI_128.png">
         </property>
         <property
               name="aboutText"

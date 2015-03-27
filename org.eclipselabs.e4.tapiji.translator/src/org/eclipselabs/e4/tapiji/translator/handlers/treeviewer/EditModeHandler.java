@@ -12,21 +12,21 @@ public final class EditModeHandler {
 
     @Execute
     public void execute(final MMenuItem menuItem, final StoreInstanceState storeInstanceState) {
-        storeInstanceState.setEditMode(menuItem.isSelected());
+        storeInstanceState.setEditMode(!menuItem.isSelected());
     }
 
     @CanExecute
     public boolean canExecute(final MMenuItem menuItem, final StoreInstanceState storeInstanceState) {
-        if (storeInstanceState.isEditMode()) {
-            menuItem.setSelected(storeInstanceState.isEditMode());
+        if ((menuItem == null) && (storeInstanceState == null)) {
+            return false;
         } else {
-            storeInstanceState.setEditMode(false);
+            menuItem.setSelected(storeInstanceState.isEditMode());
+            return true;
         }
-        return true;
     }
 
     @CanExecute
-    public boolean canExecute(IGlossaryService glossaryService) {
+    public boolean canExecute(final IGlossaryService glossaryService) {
         if (glossaryService.getGlossary() == null) {
             return false;
         }

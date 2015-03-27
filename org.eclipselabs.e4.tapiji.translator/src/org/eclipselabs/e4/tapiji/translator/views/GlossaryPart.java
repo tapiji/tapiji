@@ -78,14 +78,11 @@ public final class GlossaryPart {
         this.parent = parent;
 
         final Display display = Display.getCurrent();
-
         parent.setLayout(new GridLayout(1, false));
-        parent.setBackground(display.getSystemColor(SWT.COLOR_DARK_YELLOW));
 
 
         final Composite parentComp = new Composite(parent, SWT.BORDER);
         parentComp.setLayout(new GridLayout(2, false));
-        parentComp.setBackground(display.getSystemColor(SWT.COLOR_DARK_CYAN));
         parentComp.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
         this.parentComp = parentComp;
 
@@ -98,6 +95,7 @@ public final class GlossaryPart {
 
         labelScale = new Label(parentComp, SWT.NONE);
         labelScale.setText("Precision:");
+        labelScale.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, false, false, 1, 1));
 
         fuzzyScaler = new Scale(parentComp, SWT.NONE);
         fuzzyScaler.setMaximum(100);
@@ -247,9 +245,9 @@ public final class GlossaryPart {
     }
 
     private void onRestoreInstance(StoreInstanceState storeInstanceState) {
-        // showHideFuzzyMatching(storeInstanceState.isFuzzyMode());
         inputFilter.setText(storeInstanceState.getSearchValue());
         fuzzyScaler.setSelection((int) storeInstanceState.getMatchingPrecision());
+        showHideFuzzyMatching(storeInstanceState.isFuzzyMode());
     }
 
 }

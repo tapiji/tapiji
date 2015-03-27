@@ -7,17 +7,15 @@ import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
 
 
-public final class TranslationVisibilityHandler {
+public final class ReferenceLanguageChangedHandler {
 
-    private static final String TAG = TranslationVisibilityHandler.class.getSimpleName();
+    private static final String TAG = ReferenceLanguageChangedHandler.class.getSimpleName();
 
     @Execute
     public void execute(final MMenuItem menuItem, final StoreInstanceState storeInstanceState) {
-        if (menuItem.isSelected()) {
-            storeInstanceState.showLocale(menuItem.getContainerData());
-        } else {
-            storeInstanceState.hideLocale(menuItem.getContainerData());
+        if (menuItem.getContainerData() != null) {
+            storeInstanceState.setReferenceLanguage(menuItem.getContainerData());
         }
-        Log.d(TAG, String.format("Store reference language: %s", menuItem.isSelected()));
+        Log.d(TAG, String.format("Store reference language: %s", menuItem.getContainerData()));
     }
 }

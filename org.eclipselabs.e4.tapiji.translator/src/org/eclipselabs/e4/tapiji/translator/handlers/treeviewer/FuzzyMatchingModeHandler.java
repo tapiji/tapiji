@@ -14,16 +14,16 @@ public final class FuzzyMatchingModeHandler {
     @Execute
     public void execute(final MMenuItem menuItem, final IEventBroker eventBroker, final StoreInstanceState storeInstanceState) {
         storeInstanceState.setFuzzyMode(!menuItem.isSelected());
-        eventBroker.post(TranslatorConstants.TOPIC_GUI, menuItem.isSelected());
+        eventBroker.post(TranslatorConstants.TOPIC_GUI, !menuItem.isSelected());
     }
 
     @CanExecute
     public boolean canExecute(final MMenuItem menuItem, final StoreInstanceState storeInstanceState) {
-        if (storeInstanceState.isFuzzyMode()) {
-            menuItem.setSelected(storeInstanceState.isFuzzyMode());
+        if ((menuItem == null) && (storeInstanceState == null)) {
+            return false;
         } else {
-            storeInstanceState.setFuzzyMode(false);
+            menuItem.setSelected(storeInstanceState.isFuzzyMode());
+            return true;
         }
-        return true;
     }
 }

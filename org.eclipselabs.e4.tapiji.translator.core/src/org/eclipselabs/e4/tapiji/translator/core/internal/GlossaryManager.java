@@ -111,7 +111,11 @@ public final class GlossaryManager implements IGlossaryService {
 
     @Override
     public String[] getTranslations() {
-        return glossary.info.getTranslations();
+        if (glossary != null) {
+            return glossary.info.getTranslations();
+        } else {
+            return new String[0];
+        }
     }
 
     @Override
@@ -131,7 +135,9 @@ public final class GlossaryManager implements IGlossaryService {
 
     @Override
     public void removeTerm(final Term term) {
-        glossary.removeTerm(term);
+        if (glossary != null) {
+            glossary.removeTerm(term);
+        }
     }
 
     @Override

@@ -22,13 +22,13 @@
                 <persistedState key="isFuzzyMatchingMode" value="false"/>
               </children>
               <children xsi:type="menu:MenuSeparator" xmi:id="_t7bGwMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.3"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_uNz3QMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.newTranslation" label="New Translation" command="_uvffEM_jEeS7geCp-xH0Qw"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_uio3wMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.deleteTranslation" label="Delete Translation" command="_00WyQM_oEeS7geCp-xH0Qw"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_uNz3QMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.newTranslation" label="New Translation ..." command="_uvffEM_jEeS7geCp-xH0Qw"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_uio3wMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.deleteTranslation" label="Delete Translation ..." command="_00WyQM_oEeS7geCp-xH0Qw"/>
               <children xsi:type="menu:MenuSeparator" xmi:id="_qa8bwMzlEeSHOM1sG85QHg" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.5"/>
-              <children xsi:type="menu:Menu" xmi:id="_5ji20M6LEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.menu.1">
-                <children xsi:type="menu:DynamicMenuContribution" xmi:id="_NFvEEM6MEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.dynamicmenucontribution.0" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.DisplayedTranslationHandler"/>
+              <children xsi:type="menu:Menu" xmi:id="_5ji20M6LEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.menu.referenceTranslation" label="Reference Translation">
+                <children xsi:type="menu:DynamicMenuContribution" xmi:id="_NFvEEM6MEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.dynamicmenucontribution.0" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.ReferenceTranslationHandler"/>
               </children>
-              <children xsi:type="menu:Menu" xmi:id="_7eLXgM6LEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.menu.2">
+              <children xsi:type="menu:Menu" xmi:id="_7eLXgM6LEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.menu.displayedTranslation" label="Displayed Translation">
                 <children xsi:type="menu:DynamicMenuContribution" xmi:id="_NrSoMM6MEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.dynamicmenucontribution.1" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.DisplayedTranslationHandler"/>
               </children>
             </menus>

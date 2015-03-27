@@ -19,7 +19,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
@@ -38,10 +37,10 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
 
     private TreeViewerWidget(final Composite parent, final int style) {
         super(parent, SWT.FILL);
-        setLayout(new GridLayout(1, false));
-
-
-        setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
+        final GridLayout gridLayout = new GridLayout(1, false);
+        gridLayout.marginHeight = 0;
+        gridLayout.marginWidth = 0;
+        setLayout(gridLayout);
         createControls(parent);
     }
 

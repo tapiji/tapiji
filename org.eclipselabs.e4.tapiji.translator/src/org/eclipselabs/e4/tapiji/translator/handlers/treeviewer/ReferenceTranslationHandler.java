@@ -14,39 +14,38 @@ import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
 
 
-public final class DisplayedTranslationHandler {
+public final class ReferenceTranslationHandler {
 
-    private static final String CONTRIBUTION_URI = "bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.TranslationVisibilityHandler";
-    private static final String TAG = DisplayedTranslationHandler.class.getSimpleName();
+    private static final String CONTRIBUTION_URI = "bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.ReferenceLanguageChangedHandler";
+    private static final String TAG = ReferenceTranslationHandler.class.getSimpleName();
 
     @AboutToShow
     public void aboutToShow(final List<MMenuElement> items, final EModelService modelService, final IGlossaryService glossaryService, final StoreInstanceState storeInstanceState) {
         final String[] translations = glossaryService.getTranslations();
-        final List<String> locales = storeInstanceState.getHiddenLocales();
         final String referenceLanguage = storeInstanceState.getReferenceLanguage();
+
+        Log.d(TAG, String.format("Get reference language: %s", referenceLanguage));
+
         MDirectMenuItem dynamicItem;
         for (final String lang : translations) {
-            if (referenceLanguage.equals(lang)) {
-                continue;
-            }
             dynamicItem = modelService.createModelElement(MDirectMenuItem.class);
             dynamicItem.setLabel(getLocale(lang).getDisplayName());
-            dynamicItem.setContributionURI(CONTRIBUTION_URI);
-            if (locales.contains(lang)) {
-                dynamicItem.setSelected(false);
-            } else {
-                dynamicItem.setSelected(true);
-            }
             dynamicItem.setContainerData(lang);
-            dynamicItem.setType(ItemType.CHECK);
+            dynamicItem.setContributionURI(CONTRIBUTION_URI);
+            if (referenceLanguage.equals(lang)) {
+                dynamicItem.setSelected(true);
+            } else {
+                dynamicItem.setSelected(false);
+            }
+            dynamicItem.setType(ItemType.RADIO);
             items.add(dynamicItem);
         }
-        Log.d(TAG, "TERM: " + storeInstanceState.getHiddenLocales().toString());
     }
 
     public Locale getLocale(final String lang) {
         final String[] locDef = lang.split("_");
-        return locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0], locDef[1])) : new Locale(locDef[0], locDef[1], locDef[2]);
+        final Locale l = locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0], locDef[1])) : new Locale(locDef[0], locDef[1], locDef[2]);
+        return l;
     }
 
     @CanExecute
