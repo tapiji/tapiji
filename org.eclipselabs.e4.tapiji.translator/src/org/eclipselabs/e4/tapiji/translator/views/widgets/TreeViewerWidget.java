@@ -74,10 +74,14 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         super(parent, SWT.FILL);
         this.glossaryService = glossaryService;
         translations = glossaryService.getTranslations();
-        if (storeInstanceState.getReferenceLanguage().isEmpty()) {
+        if (!storeInstanceState.getReferenceLanguage().isEmpty()) {
+
             this.referenceLanguage = storeInstanceState.getReferenceLanguage();
+            Log.d(TAG, "REFERENCE LANGUAGE IS EMPTY" + referenceLanguage);
         } else {
+            Log.d(TAG, "REFERENCE USE DEFAULT");
             this.referenceLanguage = translations[0];
+            storeInstanceState.setReferenceLanguage(referenceLanguage);
         }
         /* 
         if(storeInstanceState.getHiddenLocales().isEmpty()) {

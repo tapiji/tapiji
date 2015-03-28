@@ -150,6 +150,15 @@ public final class GlossaryPart {
 
     @Inject
     @Optional
+    private void onEditModeChanged(@UIEventTopic(TranslatorConstants.TOPIC_EDIT_MODE) boolean isEditable) {
+        Log.d(TAG, "IsEditMode:" + isEditable);
+        if (treeViewerWidget != null) {
+            treeViewerWidget.setColumnEditable(isEditable);
+        }
+    }
+
+    @Inject
+    @Optional
     private void onSearchSelected(@UIEventTopic(TranslatorConstants.TOPIC_GUI) boolean isVisible) {
         showHideFuzzyMatching(isVisible);
     }

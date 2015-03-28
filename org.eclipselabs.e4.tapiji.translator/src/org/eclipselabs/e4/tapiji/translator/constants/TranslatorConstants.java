@@ -15,6 +15,7 @@ public final class TranslatorConstants {
     }
 
     public static final String TOPIC_GUI = "TOPIC_GUI/SHOW_HIDE_FUZZY_MATCHING";
+    public static final String TOPIC_EDIT_MODE = "TOPIC_GUI/EDIT_MODE";
 
     public static final Color COLOR_GRAY = FontUtils.getSystemColor(SWT.COLOR_GRAY);
     public static final Color COLOR_BLACK = FontUtils.getSystemColor(SWT.COLOR_BLACK);

@@ -19,27 +19,27 @@ import org.eclipselabs.e4.tapiji.translator.model.Term;
 
 public interface IGlossaryService {
 
-    void loadGlossary(File file);
+    void loadGlossary(final File file);
 
     Glossary getGlossary();
 
-    void removeTerm(Term term);
+    void removeTerm(final Term term);
 
     void evictGlossary();
 
     void updateGlossary(Glossary glossary);
 
-    void addTerm(Term parentTerm, Term term);
+    void addTerm(final Term parentTerm, final Term term);
 
-    void addLocales(Object[] locales);
+    void addLocales(final Object[] locales);
 
-    void removeLocales(Object[] locales);
+    void removeLocales(final Object[] locales);
 
     String[] getTranslations();
 
     void saveGlossary();
 
-    void createGlossary(File file);
+    void createGlossary(final File file);
 
     void reloadGlossary();
 }

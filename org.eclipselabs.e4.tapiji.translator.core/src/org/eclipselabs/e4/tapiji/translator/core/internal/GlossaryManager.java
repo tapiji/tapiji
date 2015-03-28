@@ -51,20 +51,20 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
     @Override
-    public void reloadGlossary() {
+    public final void reloadGlossary() {
         if(file != null) {
             loadGlossary(file);
         }
     }
 
     @Override
-    public void updateGlossary(final Glossary glossary) {
+    public final void updateGlossary(final Glossary glossary) {
         this.glossary = glossary;
         saveGlossary();
     }
 
     @Override
-    public void loadGlossary(final File file) {
+    public final void loadGlossary(final File file) {
         Log.i(TAG, String.format("Open Glossary %s", file));
         this.file = file;
         JAXBContext context;
@@ -82,7 +82,7 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
     @Override
-    public void createGlossary(final File file) {
+    public final void createGlossary(final File file) {
         Log.i(TAG, String.format("Create Glossary %s", file));
         this.file = file;
         glossary = new Glossary();
@@ -90,7 +90,7 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
     @Override
-    public void saveGlossary() {
+    public final void saveGlossary() {
         Log.i(TAG, String.format("Save Glossary %s", glossary.toString()));
         boolean error = false;
         JAXBContext context;
@@ -119,13 +119,10 @@ public final class GlossaryManager implements IGlossaryService {
         }
     }
 
-    @Override
-    public void addTerm(final Term parentTerm, final Term term) {
 
-    }
 
     @Override
-    public String[] getTranslations() {
+    public final String[] getTranslations() {
         if (glossary != null) {
             return glossary.info.getTranslations();
         } else {
@@ -134,29 +131,41 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
     @Override
-    public void removeLocales(final Object[] locales) {
+    public final void removeLocales(final Object[] locales) {
         for (final Object localeToRemove : locales) {
 
         }
     }
 
     @Override
-    public void addLocales(final Object[] locales) {
+    public final void addLocales(final Object[] locales) {
         for (final Object localeToAdd : locales) {
             glossary.info.translations.add(((Locale) localeToAdd).toString());
             Log.d(TAG, String.format("Locale %s added", ((Locale) localeToAdd).toString()));
         }
     }
 
+
     @Override
-    public void removeTerm(final Term term) {
+    public final void addTerm(final Term parentTerm, final Term term) {
+        glossary.addTerm(parentTerm, term);
+        saveGlossary();
+        eventBroker.send(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, glossary);
+        Log.d(TAG, String.format("Added Term: %s ", term.toString()));
+    }
+
+    @Override
+    public final void removeTerm(final Term term) {
         if (glossary != null) {
             glossary.removeTerm(term);
+            saveGlossary();
+            eventBroker.send(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, glossary);
+            Log.d(TAG, String.format("Removed Term: %s ", term.toString()));
         }
     }
 
     @Override
-    public void evictGlossary() {
+    public final void evictGlossary() {
         for (final Term term : glossary.terms) {
             term.translations.clear();
             term.subTerms.clear();
