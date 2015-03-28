@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Named;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -16,35 +20,60 @@ import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.views.providers.LocaleContentProvider;
 import org.eclipselabs.e4.tapiji.translator.views.providers.LocaleLabelProvider;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
+import org.eclipselabs.e4.tapiji.utils.LocaleUtils;
 
 
 public final class RemoveTranslationHandler {
 
+    private final ArrayList<Locale> languageLocales;
+    private final ArrayList<String> languageCodes;
+
+    public RemoveTranslationHandler() {
+        languageLocales = new ArrayList<Locale>();
+        languageCodes = new ArrayList<String>();
+    }
+
     @Execute
-    public void execute(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) final Term term, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService) {
+    public void execute(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) final Term term, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService, StoreInstanceState storeInstanceState) {
         final CheckedTreeSelectionDialog localeDialog = new CheckedTreeSelectionDialog(shell, new LocaleLabelProvider(), new LocaleContentProvider());
-        localeDialog.setInput(generateLocales(glossaryService.getTranslations()));
+        
+        localeDialog.setInput(generateLocales(glossaryService.getTranslations(), storeInstanceState.getReferenceLanguage()));
         localeDialog.setTitle("Translation Selection");
 
         if (localeDialog.open() == Window.OK) {
-            glossaryService.addLocales(localeDialog.getResult());
+            removeTranslationAsync(glossaryService, localeDialog.getResult());
         }
     }
 
-    private List<Locale> generateLocales(final String[] translations) {
+    private void removeTranslationAsync(IGlossaryService glossaryService, Object[] translations) {
+        final Job job = new Job("Remove Locales") {
 
-        final String referenceLang = translations[0];
+            @Override
+            protected IStatus run(final IProgressMonitor monitor) {
+                final List<String> toRemove = new ArrayList<String>();
+                for (Object delLoc : translations) {
+                    toRemove.add(languageCodes.get(languageLocales.indexOf(delLoc)));
+                }
+                glossaryService.removeLocales(toRemove);
+                return Status.OK_STATUS;
+            }
+        };
+        job.schedule();
+    }
 
-        final List<Locale> locales = new ArrayList<Locale>();
-        final List<String> strLoc = new ArrayList<String>();
-        for (final String l : translations) {
-            if (l.equalsIgnoreCase(referenceLang)) {
+    private ArrayList<Locale> generateLocales(final String[] translations, final String referenceLanguage) {
+
+        final ArrayList<Locale> locales = new ArrayList<Locale>();
+        languageLocales.clear();
+        languageLocales.clear();
+        for (final String languageCode : translations) {
+            if (languageCode.equalsIgnoreCase(referenceLanguage)) {
                 continue;
             }
-            final String[] locDef = l.split("_");
-            final Locale locale = locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0], locDef[1])) : new Locale(locDef[0], locDef[1], locDef[2]);
-            locales.add(locale);
-            strLoc.add(l);
+            locales.add(LocaleUtils.getLocaleFromLanguageCode(languageCode));
+            languageLocales.add(LocaleUtils.getLocaleFromLanguageCode(languageCode));
+            languageCodes.add(languageCode);
         }
         return locales;
     }

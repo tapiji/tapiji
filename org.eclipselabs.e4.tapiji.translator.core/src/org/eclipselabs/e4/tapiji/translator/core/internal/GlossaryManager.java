@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
@@ -52,7 +53,7 @@ public final class GlossaryManager implements IGlossaryService {
 
     @Override
     public final void reloadGlossary() {
-        if(file != null) {
+        if (file != null) {
             loadGlossary(file);
         }
     }
@@ -100,8 +101,8 @@ public final class GlossaryManager implements IGlossaryService {
             marshaller.setProperty(Marshaller.JAXB_ENCODING, FileUtils.ENCODING_TYPE_UTF_16);
 
             try (OutputStream fout = new FileOutputStream(file.getAbsolutePath());
-                            OutputStream bout = new BufferedOutputStream(fout);
-                            OutputStreamWriter osw = new OutputStreamWriter(bout, FileUtils.ENCODING_TYPE_UTF_16)) {
+                 OutputStream bout = new BufferedOutputStream(fout);
+                 OutputStreamWriter osw = new OutputStreamWriter(bout, FileUtils.ENCODING_TYPE_UTF_16)) {
 
                 marshaller.marshal(glossary, osw);
                 Log.d(TAG, String.format("Glossary saved: %s ", glossary.toString()));
@@ -120,7 +121,6 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
 
-
     @Override
     public final String[] getTranslations() {
         if (glossary != null) {
@@ -131,17 +131,22 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
     @Override
-    public final void removeLocales(final Object[] locales) {
-        for (final Object localeToRemove : locales) {
-
-        }
+    public final void removeLocales(final List<String> locales) {
+        glossary.info.translations.removeAll(locales);
+        saveGlossary();
+        eventBroker.send(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, glossary);
+        Log.d(TAG, String.format("Glossary: %s ", glossary.toString()));
     }
 
     @Override
     public final void addLocales(final Object[] locales) {
-        for (final Object localeToAdd : locales) {
-            glossary.info.translations.add(((Locale) localeToAdd).toString());
-            Log.d(TAG, String.format("Locale %s added", ((Locale) localeToAdd).toString()));
+        if (glossary != null) {
+            for (final Object localeToAdd : locales) {
+                glossary.info.translations.add(((Locale) localeToAdd).toString());
+                Log.d(TAG, String.format("Locale %s added", ((Locale) localeToAdd).toString()));
+            }
+            saveGlossary();
+            eventBroker.send(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, glossary);
         }
     }
 

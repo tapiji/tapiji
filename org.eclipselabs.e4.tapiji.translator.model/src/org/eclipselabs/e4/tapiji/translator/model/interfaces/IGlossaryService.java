@@ -13,6 +13,7 @@ package org.eclipselabs.e4.tapiji.translator.model.interfaces;
  ******************************************************************************/
 
 import java.io.File;
+import java.util.List;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 
@@ -33,8 +34,6 @@ public interface IGlossaryService {
 
     void addLocales(final Object[] locales);
 
-    void removeLocales(final Object[] locales);
-
     String[] getTranslations();
 
     void saveGlossary();
@@ -42,4 +41,6 @@ public interface IGlossaryService {
     void createGlossary(final File file);
 
     void reloadGlossary();
+
+    void removeLocales(List<String> locales);
 }

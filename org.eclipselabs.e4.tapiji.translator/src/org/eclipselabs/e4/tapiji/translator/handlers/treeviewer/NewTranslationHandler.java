@@ -22,6 +22,7 @@ import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.views.providers.LocaleContentProvider;
 import org.eclipselabs.e4.tapiji.translator.views.providers.LocaleLabelProvider;
+import org.eclipselabs.e4.tapiji.utils.LocaleUtils;
 
 
 public final class NewTranslationHandler {
@@ -33,8 +34,7 @@ public final class NewTranslationHandler {
         localeDialog.setTitle("Translation Selection");
 
         if (localeDialog.open() == Window.OK) {
-            glossaryService.addLocales(localeDialog.getResult());
-            saveGlossaryAsync(glossaryService);
+            addTranslationAsync(glossaryService, localeDialog.getResult());
         }
     }
 
@@ -42,10 +42,11 @@ public final class NewTranslationHandler {
         final List<Locale> allLocales = new ArrayList<Locale>();
         final List<Locale> locales = new ArrayList<Locale>();
 
-        for (final String l : translations) {
-            final String[] locDef = l.split("_");
-            final Locale locale = locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0], locDef[1])) : new Locale(locDef[0], locDef[1], locDef[2]);
-            locales.add(locale);
+        for (final String languageCode : translations) {
+            if (languageCode.equalsIgnoreCase("default")) {
+                continue;
+            }
+            locales.add(LocaleUtils.getLocaleFromLanguageCode(languageCode));
         }
 
         for (final Locale locale : Locale.getAvailableLocales()) {
@@ -64,12 +65,12 @@ public final class NewTranslationHandler {
         return allLocales;
     }
 
-    private void saveGlossaryAsync(final IGlossaryService glossaryService) {
-        final Job job = new Job("loading") {
+    private void addTranslationAsync(IGlossaryService glossaryService, Object[] translations) {
+        final Job job = new Job("Add New Translation") {
 
             @Override
             protected IStatus run(final IProgressMonitor monitor) {
-                glossaryService.saveGlossary();
+                glossaryService.addLocales(translations);
                 return Status.OK_STATUS;
             }
         };
