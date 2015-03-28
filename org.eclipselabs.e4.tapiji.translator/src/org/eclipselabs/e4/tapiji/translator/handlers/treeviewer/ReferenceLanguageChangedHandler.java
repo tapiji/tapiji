@@ -1,6 +1,7 @@
 package org.eclipselabs.e4.tapiji.translator.handlers.treeviewer;
 
 
+import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.menu.MMenuItem;
 import org.eclipselabs.e4.tapiji.logger.Log;
@@ -17,5 +18,10 @@ public final class ReferenceLanguageChangedHandler {
             storeInstanceState.setReferenceLanguage(menuItem.getContainerData());
         }
         Log.d(TAG, String.format("Store reference language: %s", menuItem.getContainerData()));
+    }
+
+    @CanExecute
+    public boolean canExecute() {
+        return true;
     }
 }

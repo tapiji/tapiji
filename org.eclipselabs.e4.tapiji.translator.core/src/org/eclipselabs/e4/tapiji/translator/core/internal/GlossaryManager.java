@@ -51,18 +51,27 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
     @Override
-    public void setGlossary(final Glossary glossary) {
+    public void reloadGlossary() {
+        if(file != null) {
+            loadGlossary(file);
+        }
+    }
+
+    @Override
+    public void updateGlossary(final Glossary glossary) {
         this.glossary = glossary;
+        saveGlossary();
     }
 
     @Override
     public void loadGlossary(final File file) {
         Log.i(TAG, String.format("Open Glossary %s", file));
+        this.file = file;
         JAXBContext context;
         try {
             glossary = new Glossary();
             context = JAXBContext.newInstance(glossary.getClass());
-            this.glossary = (Glossary) context.createUnmarshaller().unmarshal(file);
+            glossary = (Glossary) context.createUnmarshaller().unmarshal(file);
             Log.d(TAG, String.format("Loaded glossary: %s ", glossary.toString()));
             eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, glossary);
         } catch (final JAXBException exception) {
@@ -73,23 +82,29 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
     @Override
-    public void saveGlossary(final File file) {
+    public void createGlossary(final File file) {
+        Log.i(TAG, String.format("Create Glossary %s", file));
         this.file = file;
+        glossary = new Glossary();
+        saveGlossary();
+    }
+
+    @Override
+    public void saveGlossary() {
+        Log.i(TAG, String.format("Save Glossary %s", glossary.toString()));
         boolean error = false;
-        this.glossary = new Glossary();
         JAXBContext context;
         try {
             context = JAXBContext.newInstance(glossary.getClass());
             final Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_ENCODING, FileUtils.ENCODING_TYPE_UTF_16);
+
             try (OutputStream fout = new FileOutputStream(file.getAbsolutePath());
                             OutputStream bout = new BufferedOutputStream(fout);
                             OutputStreamWriter osw = new OutputStreamWriter(bout, FileUtils.ENCODING_TYPE_UTF_16)) {
 
                 marshaller.marshal(glossary, osw);
-                // eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, glossary);
                 Log.d(TAG, String.format("Glossary saved: %s ", glossary.toString()));
-
             } catch (final IOException exceptions) {
                 error = true;
                 Log.wtf(TAG, "Interrupted I/O operations", exceptions);
@@ -151,12 +166,5 @@ public final class GlossaryManager implements IGlossaryService {
         }
         glossary.terms.clear();
         glossary.info = Info.newInstance();
-    }
-
-    @Override
-    public void saveGlossary() {
-        if (glossary != null) {
-            saveGlossary(file);
-        }
     }
 }

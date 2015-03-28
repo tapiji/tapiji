@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2012 Martin Reiterer.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Martin Reiterer - initial API and implementation
+ *     Christian Behon - refactor from e3 to e4
+ ******************************************************************************/
 package org.eclipselabs.e4.tapiji.translator.views.providers;
 
 
@@ -94,5 +105,9 @@ public class TreeViewerContentProvider implements ITreeContentProvider {
 
     public void setGrouped(boolean isGrouped) {
         this.isGrouped = isGrouped;
+    }
+
+    public Glossary getGlossary() {
+        return glossary;
     }
 }

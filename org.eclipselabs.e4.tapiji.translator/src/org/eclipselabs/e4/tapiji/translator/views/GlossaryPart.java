@@ -1,7 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2012 Martin Reiterer. All rights reserved. This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html Contributors: Martin Reiterer - initial API and implementation
+ * Copyright (c) 2012 Martin Reiterer.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Martin Reiterer - initial API and implementation
+ *     Christian Behon - refactor from e3 to e4
  ******************************************************************************/
 package org.eclipselabs.e4.tapiji.translator.views;
 
@@ -39,6 +45,7 @@ import org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.ITreeViewerWidget;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.TreeViewerWidget;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
 
@@ -48,7 +55,7 @@ public final class GlossaryPart {
     public static final String ID = "org.eclipselabs.tapiji.translator.views.GlossaryView";
     private static final String TAG = GlossaryPart.class.getSimpleName();
 
-    private TreeViewerWidget treeViewerWidget;
+    private ITreeViewerWidget treeViewerWidget;
     private Scale fuzzyScaler;
     private Label labelScale;
     private Text inputFilter;
@@ -144,7 +151,6 @@ public final class GlossaryPart {
     @Inject
     @Optional
     private void onSearchSelected(@UIEventTopic(TranslatorConstants.TOPIC_GUI) boolean isVisible) {
-
         showHideFuzzyMatching(isVisible);
     }
 
@@ -156,23 +162,7 @@ public final class GlossaryPart {
         }
     }
 
-
-
     protected void initializeTreeViewerWidget(final Composite parent) {
-
-        /* Composite composite = new Composite(this, SWT.NONE);
-         composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-         composite.setLayout(new GridLayout(1, false));
-
-         TreeViewer treeViewer = new TreeViewer(composite, SWT.NONE);
-         Tree tree = treeViewer.getTree();
-         tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-
-         TreeColumn trclmnTest = new TreeColumn(tree, SWT.NONE);
-         trclmnTest.setWidth(100);
-         trclmnTest.setText("Test");*/
-
-
         treeViewerWidget = TreeViewerWidget.create(parent, glossaryService, storeInstanceState);
         treeViewerWidget.getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 
@@ -183,8 +173,6 @@ public final class GlossaryPart {
                 Log.d(TAG, "Selection:" + selection.getFirstElement());
             }
         });
-
-        treeViewerWidget.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         menuService.registerContextMenu(treeViewerWidget.getTreeViewer().getControl(), "org.eclipselabs.e4.tapiji.translator.popupmenu.treeview");
     }
 
@@ -192,7 +180,7 @@ public final class GlossaryPart {
     @Focus
     public void setFocus() {
         if (treeViewerWidget != null) {
-            treeViewerWidget.setFocus();
+            //treeViewerWidget.setFocus();
         }
     }
 
@@ -211,7 +199,4 @@ public final class GlossaryPart {
         fuzzyScaler.setSelection((int) storeInstanceState.getMatchingPrecision());
         showHideFuzzyMatching(storeInstanceState.isFuzzyMode());
     }
-    
-    
-
 }

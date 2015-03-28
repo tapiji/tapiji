@@ -58,7 +58,7 @@ public final class GlossaryManagerTest {
         glossary.terms.add(term);
         glossary.terms.add(term2);
 
-        glossaryService.setGlossary(glossary);
+        glossaryService.updateGlossary(glossary);
     }
 
 

@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -50,19 +49,19 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipselabs.tapiji.translator.compat.SwtRapCompatibilitySWT;
 import org.eclipselabs.tapiji.translator.core.GlossaryManager;
 import org.eclipselabs.tapiji.translator.model.Glossary;
 import org.eclipselabs.tapiji.translator.model.Term;
 import org.eclipselabs.tapiji.translator.model.Translation;
-import org.eclipselabs.tapiji.translator.compat.SwtRapCompatibilitySWT;
 import org.eclipselabs.tapiji.translator.views.widgets.dnd.GlossaryDragSource;
 import org.eclipselabs.tapiji.translator.views.widgets.dnd.GlossaryDropTarget;
 import org.eclipselabs.tapiji.translator.views.widgets.dnd.TermTransfer;
 import org.eclipselabs.tapiji.translator.views.widgets.filter.ExactMatcher;
 import org.eclipselabs.tapiji.translator.views.widgets.filter.FuzzyMatcher;
 import org.eclipselabs.tapiji.translator.views.widgets.filter.SelectiveMatcher;
-import org.eclipselabs.tapiji.translator.views.widgets.provider.GlossaryContentProvider;
 import org.eclipselabs.tapiji.translator.views.widgets.provider.AbstractGlossaryLabelProvider;
+import org.eclipselabs.tapiji.translator.views.widgets.provider.GlossaryContentProvider;
 import org.eclipselabs.tapiji.translator.views.widgets.sorter.GlossaryEntrySorter;
 import org.eclipselabs.tapiji.translator.views.widgets.sorter.SortInfo;
 
@@ -137,7 +136,8 @@ public class GlossaryWidget extends Composite implements
 
 	protected void registerListeners() {
 		treeViewer.getControl().addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent event) {
+			@Override
+            public void keyPressed(KeyEvent event) {
 				if (event.character == SWT.DEL && event.stateMask == 0) {
 					deleteSelectedItems();
 				}
@@ -296,7 +296,7 @@ public class GlossaryWidget extends Composite implements
 			protected void setValue(Object element, Object value) {
 				if (element instanceof Term) {
 					Term term = (Term) element;
-					Translation translation = (Translation) term
+					Translation translation = term
 					        .getTranslation(referenceLocale);
 
 					if (translation != null) {
@@ -351,19 +351,6 @@ public class GlossaryWidget extends Composite implements
 		/** Translations */
 		String[] allLocales = this.translationsToDisplay;
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		int iCol = 1;
 		for (String locale : allLocales) {
 			final int ifCall = iCol;
@@ -390,7 +377,7 @@ public class GlossaryWidget extends Composite implements
 				protected void setValue(Object element, Object value) {
 					if (element instanceof Term) {
 						Term term = (Term) element;
-						Translation translation = (Translation) term
+						Translation translation = term
 						        .getTranslation(sfLocale);
 
 						if (translation != null) {
@@ -498,7 +485,8 @@ public class GlossaryWidget extends Composite implements
 
 	private void hookDoubleClickAction() {
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
-			public void doubleClick(DoubleClickEvent event) {
+			@Override
+            public void doubleClick(DoubleClickEvent event) {
 				doubleClickAction.run();
 			}
 		});

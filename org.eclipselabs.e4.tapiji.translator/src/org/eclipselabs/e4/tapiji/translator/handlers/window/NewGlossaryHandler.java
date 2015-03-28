@@ -32,7 +32,7 @@ public class NewGlossaryHandler {
           return;
         }
       }
-      glossaryService.saveGlossary(new File(fileName));
+            glossaryService.createGlossary(new File(fileName));
     }
   }
 

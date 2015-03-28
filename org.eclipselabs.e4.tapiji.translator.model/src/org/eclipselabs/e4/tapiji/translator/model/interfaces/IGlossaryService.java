@@ -19,8 +19,6 @@ import org.eclipselabs.e4.tapiji.translator.model.Term;
 
 public interface IGlossaryService {
 
-    void saveGlossary(File file);
-
     void loadGlossary(File file);
 
     Glossary getGlossary();
@@ -29,7 +27,7 @@ public interface IGlossaryService {
 
     void evictGlossary();
 
-    void setGlossary(Glossary glossary);
+    void updateGlossary(Glossary glossary);
 
     void addTerm(Term parentTerm, Term term);
 
@@ -40,4 +38,8 @@ public interface IGlossaryService {
     String[] getTranslations();
 
     void saveGlossary();
+
+    void createGlossary(File file);
+
+    void reloadGlossary();
 }

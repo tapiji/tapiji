@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2012 Martin Reiterer.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Christian Behon - refactor from e3 to e4
+ ******************************************************************************/
 package org.eclipselabs.e4.tapiji.translator.views.widgets.storage;
 
 
@@ -17,7 +27,6 @@ import org.eclipselabs.e4.tapiji.logger.Log;
 public class StoreInstanceState {
 
     /*private static final String SELECTIVE_VIEW = "selective_content";
-    private static final String DISPLAYED_LOCALES = "displayed_locales";
     private static final String LOCALE = "locale";
     private static final String ENABLED = "enabled";
     private static final String VALUE = "value";*/
@@ -114,7 +123,7 @@ public class StoreInstanceState {
         final List<String> hiddenLocales = getHiddenLocales();
         if (!hiddenLocales.contains(locale)) {
             hiddenLocales.add(locale);
-            persistedState.put(STORE_DISPLAYED_LOCALES, hiddenLocales.toString().replaceAll("\\[|\\]", ""));
+            // persistedState.put(STORE_DISPLAYED_LOCALES, hiddenLocales.toString().replaceAll("\\[|\\]", ""));
         }
     }
 
@@ -122,7 +131,7 @@ public class StoreInstanceState {
         final List<String> hiddenLocales = getHiddenLocales();
         if (hiddenLocales.contains(locale)) {
             hiddenLocales.remove(locale);
-            persistedState.put(STORE_DISPLAYED_LOCALES, hiddenLocales.toString().replaceAll("\\[|\\]", ""));
+            //persistedState.put(STORE_DISPLAYED_LOCALES, hiddenLocales.toString().replaceAll("\\[|\\]", ""));
         }
     }
 
