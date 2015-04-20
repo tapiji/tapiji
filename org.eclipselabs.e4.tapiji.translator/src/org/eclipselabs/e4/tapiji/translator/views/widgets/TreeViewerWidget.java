@@ -60,7 +60,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     private TreeViewer treeViewer;
     private Tree tree;
 
-    private boolean isColumnEditable = true;
+    private boolean isColumnEditable;
     private String referenceLanguage;
     private String[] translationsToDisplay;
     private TreeViewerLabelProvider treeViewerLabelProvider;
@@ -74,7 +74,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         super(parent, SWT.FILL);
         this.glossaryService = glossaryService;
         translations = glossaryService.getTranslations();
-        if (!storeInstanceState.getReferenceLanguage().isEmpty()) {
+       /* if (!storeInstanceState.getReferenceLanguage().isEmpty()) {
 
             this.referenceLanguage = storeInstanceState.getReferenceLanguage();
             Log.d(TAG, "REFERENCE LANGUAGE IS EMPTY" + referenceLanguage);
@@ -82,7 +82,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
             Log.d(TAG, "REFERENCE USE DEFAULT");
             this.referenceLanguage = translations[0];
             storeInstanceState.setReferenceLanguage(referenceLanguage);
-        }
+        }*/
         /* 
         if(storeInstanceState.getHiddenLocales().isEmpty()) {
           this.translationsToDisplay = translations;
@@ -99,17 +99,13 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         gridLayout.marginWidth = 0;
         setLayout(gridLayout);
         setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        createTreeViewer(parent);
-    }
-
-
-    private void createTreeViewer(final Composite parent) {
         treeViewer = new TreeViewer(this, SWT.FULL_SELECTION | SWT.SINGLE | SWT.BORDER);
         TreeViewerEditor.create(treeViewer, createFocusCellManager(), createColumnActivationStrategy(), TREE_VIEWER_EDITOR_FEATURE);
         tree = treeViewer.getTree();
         tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        initializeWidget();
+
     }
+
 
     private void initializeWidget() {
         if (translations.length > 0) {
@@ -132,7 +128,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         int columnIndex = 0;
         for (final String languageCode : translations) {
             final Locale locale = LocaleUtils.getLocaleFromLanguageCode(languageCode);
-            TreeViewerColumn column = new TreeViewerColumn(treeViewer, SWT.NONE);
+            final TreeViewerColumn column = new TreeViewerColumn(treeViewer, SWT.NONE);
             column.getColumn().setWidth(200);
             column.getColumn().setMoveable(true);
             column.getColumn().setText(locale.getDisplayName());
@@ -173,52 +169,6 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
                                 || (event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED
                                                 && event.keyCode == SWT.CR)
                                 || event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC;
-            }
-        };
-    }
-
-    private EditingSupport createEditingSupportFor(final TreeViewer viewer, final TextCellEditor textCellEditor, final int columnCnt, final String languageCode) {
-        return new EditingSupport(viewer) {
-
-            @Override
-            protected boolean canEdit(Object element) {
-                return isColumnEditable;
-            }
-
-            @Override
-            protected CellEditor getCellEditor(Object element) {
-                return textCellEditor;
-            }
-
-            @Override
-            protected Object getValue(Object element) {
-                return treeViewerLabelProvider.getColumnText(element, columnCnt);
-            }
-
-            @Override
-            protected void setValue(Object element, Object value) {
-                if (element instanceof Term) {
-                    final Translation translation = ((Term) element).getTranslation(languageCode);
-                    if (translation != null) {
-                        Log.d(TAG, "EDIT COLUMN:" + value);
-                        translation.value = (String) value;
-                        getViewer().update(element, null);
-                        saveGlossaryAsync();
-                    }
-                }
-            }
-
-            private void saveGlossaryAsync() {
-                new Job("Update Glossary") {
-
-                    @Override
-                    protected IStatus run(IProgressMonitor monitor) {
-                        final Glossary glossary = ((TreeViewerContentProvider) treeViewer.getContentProvider()).getGlossary();
-                        glossaryService.updateGlossary(glossary);
-                        return Status.OK_STATUS;
-                    }
-
-                }.schedule();
             }
         };
     }
@@ -278,5 +228,52 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
             tree.setRedraw(true);
             treeViewer.refresh();
         }
+    }
+    
+
+    private EditingSupport createEditingSupportFor(final TreeViewer viewer, final TextCellEditor textCellEditor, final int columnCnt, final String languageCode) {
+        return new EditingSupport(viewer) {
+
+            @Override
+            protected boolean canEdit(Object element) {
+                return isColumnEditable;
+            }
+
+            @Override
+            protected CellEditor getCellEditor(Object element) {
+                return textCellEditor;
+            }
+
+            @Override
+            protected Object getValue(Object element) {
+                return treeViewerLabelProvider.getColumnText(element, columnCnt);
+            }
+
+            @Override
+            protected void setValue(Object element, Object value) {
+                if (element instanceof Term) {
+                    final Translation translation = ((Term) element).getTranslation(languageCode);
+                    if (translation != null) {
+                        Log.d(TAG, "EDIT COLUMN:" + value);
+                        translation.value = (String) value;
+                        getViewer().update(element, null);
+                        saveGlossaryAsync();
+                    }
+                }
+            }
+
+            private void saveGlossaryAsync() {
+                new Job("Update Glossary") {
+
+                    @Override
+                    protected IStatus run(IProgressMonitor monitor) {
+                        final Glossary glossary = ((TreeViewerContentProvider) treeViewer.getContentProvider()).getGlossary();
+                        glossaryService.updateGlossary(glossary);
+                        return Status.OK_STATUS;
+                    }
+
+                }.schedule();
+            }
+        };
     }
 }

@@ -4,10 +4,9 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
  * Contributors:
- *     Martin Reiterer - initial API and implementation
- *     Christian Behon - refactor from e3 to e4
+ * Martin Reiterer - initial API and implementation
+ * Christian Behon - refactor from e3 to e4
  ******************************************************************************/
 package org.eclipselabs.e4.tapiji.translator.views;
 
@@ -17,11 +16,9 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.PersistState;
 import org.eclipse.e4.ui.di.UIEventTopic;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
@@ -35,7 +32,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Shell;
@@ -52,48 +48,32 @@ import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceS
 
 public final class GlossaryPart {
 
-    public static final String ID = "org.eclipselabs.tapiji.translator.views.GlossaryView";
+    private static final String ID = "org.eclipselabs.tapiji.translator.views.GlossaryView";
+    private static final String TREE_VIEWER_MENU_ID = "";
     private static final String TAG = GlossaryPart.class.getSimpleName();
-
+    @Inject
+    private ESelectionService selectionService;
+    @Inject
+    private EMenuService menuService;
+    @Inject
+    private StoreInstanceState storeInstanceState;
     private ITreeViewerWidget treeViewerWidget;
     private Scale fuzzyScaler;
     private Label labelScale;
     private Text inputFilter;
-    private Composite parent;
-
     private IGlossaryService glossaryService;
 
-    @Inject
-    private MPart part;
-
-    @Inject
-    private ESelectionService selectionService;
-
-    @Inject
-    private IEventBroker eventBroker;
-
-
-    @Inject
-    EMenuService menuService;
-    private Composite parentComp;
-
-    @Inject
-    StoreInstanceState storeInstanceState;
 
     @PostConstruct
     public void createPartControl(final Composite parent, final IGlossaryService glossaryService) {
 
         this.glossaryService = glossaryService;
-        this.parent = parent;
 
-        final Display display = Display.getCurrent();
         parent.setLayout(new GridLayout(1, false));
-
 
         final Composite parentComp = new Composite(parent, SWT.BORDER);
         parentComp.setLayout(new GridLayout(2, false));
         parentComp.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
-        this.parentComp = parentComp;
 
         final Label labelSearch = new Label(parentComp, SWT.NONE);
         labelSearch.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -118,15 +98,14 @@ public final class GlossaryPart {
             @Override
             public void widgetSelected(final SelectionEvent e) {
                 super.widgetSelected(e);
-                //computeMatchingPrecision();
+                // computeMatchingPrecision();
 
             }
         });
         fuzzyScaler.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 
-
-        onRestoreInstance(storeInstanceState);
+        // onRestoreInstance(storeInstanceState);
         initializeTreeViewerWidget(parent);
     }
 
@@ -144,7 +123,8 @@ public final class GlossaryPart {
 
     @Inject
     @Optional
-    private void onError(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_ERROR) final String[] error, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
+    private void onError(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_ERROR) final String[] error,
+                    @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
         MessageDialog.openError(shell, "Deletion not possible", "No term selected");
     }
 
@@ -177,30 +157,36 @@ public final class GlossaryPart {
 
             @Override
             public void selectionChanged(final SelectionChangedEvent event) {
-                final IStructuredSelection selection = (IStructuredSelection) treeViewerWidget.getTreeViewer().getSelection();
+                final IStructuredSelection selection = (IStructuredSelection) treeViewerWidget.getTreeViewer()
+                                .getSelection();
                 selectionService.setSelection(selection.getFirstElement());
                 Log.d(TAG, "Selection:" + selection.getFirstElement());
             }
         });
-        menuService.registerContextMenu(treeViewerWidget.getTreeViewer().getControl(), "org.eclipselabs.e4.tapiji.translator.popupmenu.treeview");
+        menuService.registerContextMenu(treeViewerWidget.getTreeViewer().getControl(),
+                        "org.eclipselabs.e4.tapiji.translator.popupmenu.treeview");
     }
 
 
     @Focus
     public void setFocus() {
         if (treeViewerWidget != null) {
-            //treeViewerWidget.setFocus();
+            // treeViewerWidget.getTreeViewer().setFocus();
         }
     }
 
     @PersistState
     public void saveInstanceState() {
-        storeInstanceState.setSearchValue(inputFilter.getText());
-        storeInstanceState.setMatchingPrecision(fuzzyScaler.getSelection());
+        if (null != inputFilter) {
+            storeInstanceState.setSearchValue(inputFilter.getText());
+        }
+        if (null != fuzzyScaler) {
+            storeInstanceState.setMatchingPrecision(fuzzyScaler.getSelection());
+        }
         Log.d(TAG, String.format("Array: %s", storeInstanceState.toString()));
     }
 
-    private void onRestoreInstance(StoreInstanceState storeInstanceState) {
+    private void onRestoreInstance(final StoreInstanceState storeInstanceState) {
         if (!storeInstanceState.getGlossaryFile().isEmpty()) {
             glossaryService.loadGlossary(new File(storeInstanceState.getGlossaryFile()));
         }

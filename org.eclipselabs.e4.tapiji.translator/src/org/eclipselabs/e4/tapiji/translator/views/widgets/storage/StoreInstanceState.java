@@ -26,11 +26,6 @@ import org.eclipselabs.e4.tapiji.logger.Log;
 @Singleton
 public class StoreInstanceState {
 
-    /*private static final String SELECTIVE_VIEW = "selective_content";
-    private static final String LOCALE = "locale";
-    private static final String ENABLED = "enabled";
-    private static final String VALUE = "value";*/
-
     private static final String STORE_DISPLAYED_LOCALES = "STORE/DISPLAYED_LOCALES";
     private static final String STORE_REFERENCE_LANGUAGE = "STORE/REFERENCE_LANGUAGE";
     private static final String STORE_MATCHING_PRECISION = "STORE/MATCHING_PRECISION";
@@ -40,6 +35,7 @@ public class StoreInstanceState {
     private static final String STORE_FUZZY_MATCHING_MODE = "STORE/FUZZY_MODE";
 
     private static final String TAG = StoreInstanceState.class.getSimpleName();
+    
     private final Map<String, String> persistedState;
 
     @Inject
