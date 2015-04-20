@@ -10,6 +10,10 @@
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipselabs.e4.tapiji.translator.rcp.feature" type="4"/>
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipselabs.e4.tapiji.translator.rcp.product" type="4"/>
 </workingSet>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1429561226941_6" label="Test" name="Test">
+<item elementID="=org.eclipselabs.e4.tapiji.translator.model.test" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipselabs.e4.tapiji.translator.core.test" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSet>
 <workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1429560128168_8" label="Translator" name="Translator">
 <item elementID="=org.eclipselabs.e4.tapiji.translator.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipselabs.e4.tapiji.translator.model" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
