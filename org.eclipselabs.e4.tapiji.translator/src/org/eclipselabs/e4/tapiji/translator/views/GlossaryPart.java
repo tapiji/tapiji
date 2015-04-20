@@ -49,7 +49,7 @@ import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceS
 public final class GlossaryPart {
 
     private static final String ID = "org.eclipselabs.tapiji.translator.views.GlossaryView";
-    private static final String TREE_VIEWER_MENU_ID = "";
+    private static final String TREE_VIEWER_MENU_ID = "org.eclipselabs.e4.tapiji.translator.popupmenu.treeview";
     private static final String TAG = GlossaryPart.class.getSimpleName();
     @Inject
     private ESelectionService selectionService;
@@ -104,7 +104,7 @@ public final class GlossaryPart {
         });
         fuzzyScaler.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
-
+        Log.d(TAG, String.format("Array: %s", storeInstanceState.toString()));
         // onRestoreInstance(storeInstanceState);
         initializeTreeViewerWidget(parent);
     }
@@ -163,8 +163,7 @@ public final class GlossaryPart {
                 Log.d(TAG, "Selection:" + selection.getFirstElement());
             }
         });
-        menuService.registerContextMenu(treeViewerWidget.getTreeViewer().getControl(),
-                        "org.eclipselabs.e4.tapiji.translator.popupmenu.treeview");
+        menuService.registerContextMenu(treeViewerWidget.getTreeViewer().getControl(), TREE_VIEWER_MENU_ID);
     }
 
 
