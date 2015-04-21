@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
@@ -49,7 +49,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
-import org.eclipselabs.tapiji.translator.compat.SwtRapCompatibilitySWT;
+//import org.eclipselabs.tapiji.translator.compat.SwtRapCompatibilitySWT;
 import org.eclipselabs.tapiji.translator.core.GlossaryManager;
 import org.eclipselabs.tapiji.translator.model.Glossary;
 import org.eclipselabs.tapiji.translator.model.Term;
@@ -201,7 +201,7 @@ public class GlossaryWidget extends Composite implements
 		// init content provider
 		contentProvider = new GlossaryContentProvider(this.glossary);
 		treeViewer.setContentProvider(contentProvider);
-		
+
 		// init label provider
 		try {
 			Class<?> clazz = Class.forName(AbstractGlossaryLabelProvider.INSTANCE_CLASS);
@@ -255,7 +255,7 @@ public class GlossaryWidget extends Composite implements
 
 	/**
 	 * Gets the orientation suited for a given locale.
-	 * 
+	 *
 	 * @param locale
 	 *            the locale
 	 * @return <code>SWT.RIGHT_TO_LEFT</code> or <code>SWT.LEFT_TO_RIGHT</code>
@@ -265,7 +265,7 @@ public class GlossaryWidget extends Composite implements
 			ComponentOrientation orientation = ComponentOrientation
 			        .getOrientation(locale);
 			if (orientation == ComponentOrientation.RIGHT_TO_LEFT) {
-				return SwtRapCompatibilitySWT.RIGHT_TO_LEFT;
+				//return SwtRapCompatibilitySWT.RIGHT_TO_LEFT;
 			}
 		}
 		return SWT.LEFT_TO_RIGHT;
@@ -285,7 +285,7 @@ public class GlossaryWidget extends Composite implements
 		        refDef[0], refDef[1], refDef[2]);
 
 		this.displayedTranslations.add(referenceLocale);
-		termColumn = new TreeColumn(tree, SwtRapCompatibilitySWT.RIGHT_TO_LEFT/* getOrientation(l) */);
+		termColumn = new TreeColumn(tree, 0/* getOrientation(l) */);
 
 		termColumn.setText(l.getDisplayName());
 		TreeViewerColumn termCol = new TreeViewerColumn(treeViewer, termColumn);

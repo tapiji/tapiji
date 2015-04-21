@@ -33,9 +33,15 @@ public class StoreInstanceState {
     private static final String STORE_GLOSSARY_FILE = "STORE/GLOSSARY_FILE";
     private static final String STORE_EDIT_MODE = "STORE/EDIT_MODE";
     private static final String STORE_FUZZY_MATCHING_MODE = "STORE/FUZZY_MODE";
+    private static final String STORE_SORT_COLUMN_INDEX = "STORE/SORT_COLUMN_INDEX";
+    private static final String STORE_SORT_ORDER = "STORE/SORT_ORDER";
+
+    /*public static final String TAG_SORT_INFO = "sort_info";
+    public static final String TAG_COLUMN_INDEX = "col_idx";
+    public static final String TAG_ORDER = "order";*/
 
     private static final String TAG = StoreInstanceState.class.getSimpleName();
-    
+
     private final Map<String, String> persistedState;
 
     @Inject
@@ -45,6 +51,45 @@ public class StoreInstanceState {
 
     public void setEditMode(final boolean isEditMode) {
         persistedState.put(STORE_EDIT_MODE, String.valueOf(isEditMode));
+    }
+
+
+    /* public void saveState(IMemento memento) {
+         IMemento mCI = memento.createChild(TAG_SORT_INFO);
+         mCI.putInteger(TAG_COLUMN_INDEX, colIdx);
+         mCI.putBoolean(TAG_ORDER, DESC);
+     }
+
+     public void init(IMemento memento) {
+         IMemento mCI = memento.getChild(TAG_SORT_INFO);
+         if (mCI == null)
+             return;
+         colIdx = mCI.getInteger(TAG_COLUMN_INDEX);
+         DESC = mCI.getBoolean(TAG_ORDER);
+     }*/
+
+    public void setColumnIndex(final int columnIndex) {
+        persistedState.put(STORE_SORT_COLUMN_INDEX, String.valueOf(columnIndex));
+    }
+
+    public int getColumnIndex() {
+        if (persistedState.containsKey(STORE_SORT_COLUMN_INDEX)) {
+            return Integer.valueOf(persistedState.get(STORE_SORT_COLUMN_INDEX));
+        } else {
+            return 0;
+        }
+    }
+
+    public void setSortOrder(final boolean sortOrder) {
+        persistedState.put(STORE_SORT_ORDER, String.valueOf(sortOrder));
+    }
+
+    public boolean getSortOrder() {
+        if (persistedState.containsKey(STORE_SORT_ORDER)) {
+            return Boolean.valueOf(persistedState.get(STORE_SORT_ORDER));
+        } else {
+            return false;
+        }
     }
 
     public boolean isEditMode() {

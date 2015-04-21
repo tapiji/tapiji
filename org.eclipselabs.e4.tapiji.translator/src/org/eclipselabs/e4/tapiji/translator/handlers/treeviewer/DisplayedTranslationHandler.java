@@ -1,9 +1,17 @@
 package org.eclipselabs.e4.tapiji.translator.handlers.treeviewer;
 
 
+import java.util.List;
 import java.util.Locale;
 import org.eclipse.e4.core.di.annotations.CanExecute;
+import org.eclipse.e4.ui.di.AboutToShow;
+import org.eclipse.e4.ui.model.application.ui.menu.ItemType;
+import org.eclipse.e4.ui.model.application.ui.menu.MDirectMenuItem;
+import org.eclipse.e4.ui.model.application.ui.menu.MMenuElement;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
 
 
 public class DisplayedTranslationHandler {
@@ -11,13 +19,13 @@ public class DisplayedTranslationHandler {
     private static final String CONTRIBUTION_URI = "bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.TranslationVisibilityHandler";
     private static final String TAG = DisplayedTranslationHandler.class.getSimpleName();
 
-    /*@AboutToShow
+    @AboutToShow
     public void aboutToShow(final List<MMenuElement> items, final EModelService modelService, final IGlossaryService glossaryService, final StoreInstanceState storeInstanceState) {
         final String[] translations = glossaryService.getTranslations();
-        
-        
+
+
         Log.d(TAG, "TRANSLATIONS:" + translations.toString());
-        
+
         final List<String> locales = storeInstanceState.getHiddenLocales();
         final String referenceLanguage = storeInstanceState.getReferenceLanguage();
         MDirectMenuItem dynamicItem;
@@ -38,7 +46,7 @@ public class DisplayedTranslationHandler {
             items.add(dynamicItem);
         }
         Log.d(TAG, "TERM: " + storeInstanceState.getHiddenLocales().toString());
-    } */
+    }
 
     public Locale getLocale(final String lang) {
         final String[] locDef = lang.split("_");

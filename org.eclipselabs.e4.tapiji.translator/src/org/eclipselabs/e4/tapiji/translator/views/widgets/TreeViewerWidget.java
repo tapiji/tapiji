@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
@@ -32,6 +31,8 @@ import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.TreeViewerEditor;
 import org.eclipse.jface.viewers.TreeViewerFocusCellManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -44,6 +45,8 @@ import org.eclipselabs.e4.tapiji.translator.model.Translation;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.views.providers.TreeViewerContentProvider;
 import org.eclipselabs.e4.tapiji.translator.views.providers.TreeViewerLabelProvider;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.sorter.TreeViewerSortOrder;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.sorter.SortInfo;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
 import org.eclipselabs.e4.tapiji.utils.LocaleUtils;
 
@@ -53,29 +56,28 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     private static final int TREE_VIEWER_EDITOR_FEATURE = ColumnViewerEditor.TABBING_HORIZONTAL
                     | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL
                     | ColumnViewerEditor.KEYBOARD_ACTIVATION;
-    private final int TERM_COLUMN_WEIGHT = 1;
-    private final int DESCRIPTION_COLUMN_WEIGHT = 1;
+
     private static final String TAG = TreeViewerWidget.class.getSimpleName();
-    private TreeViewer treeViewer;
-    private Tree tree;
+    private final TreeViewer treeViewer;
+    private final Tree tree;
 
     private boolean isColumnEditable;
     private String referenceLanguage;
-    private String[] translationsToDisplay;
     private TreeViewerLabelProvider treeViewerLabelProvider;
-    private TreeColumnLayout basicLayout;
     private String[] translations;
-    private TextCellEditor textCellEditor;
-    private IGlossaryService glossaryService;
-    private StoreInstanceState storeInstanceState;
 
-    private TreeViewerWidget(final Composite parent, IGlossaryService glossaryService,
-                    StoreInstanceState storeInstanceState) {
+    private SortInfo sortInfo;
+    private TextCellEditor textCellEditor;
+    private final IGlossaryService glossaryService;
+    private final StoreInstanceState storeInstanceState;
+    private TreeViewerSortOrder columnSorter;
+
+    private TreeViewerWidget(final Composite parent, final IGlossaryService glossaryService,
+                    final StoreInstanceState storeInstanceState) {
         super(parent, SWT.FILL);
         this.glossaryService = glossaryService;
         this.storeInstanceState = storeInstanceState;
         translations = glossaryService.getTranslations();
-
 
         final GridLayout gridLayout = new GridLayout(1, false);
         gridLayout.marginHeight = 0;
@@ -98,7 +100,6 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
             treeViewerLabelProvider = TreeViewerLabelProvider.newInstance(treeViewer, translations);
             treeViewer.setLabelProvider(treeViewerLabelProvider);
             treeViewer.setContentProvider(TreeViewerContentProvider.newInstance());
-
             tree.setHeaderVisible(true);
             tree.setLinesVisible(true);
 
@@ -116,13 +117,55 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
             column.getColumn().setWidth(200);
             column.getColumn().setMoveable(true);
             column.getColumn().setText(locale.getDisplayName());
+            column.getColumn().addSelectionListener(createColumnSelectionListener(columnIndex));
             column.setEditingSupport(createEditingSupportFor(treeViewer, textCellEditor, columnIndex, languageCode));
             column.getColumn().setMoveable(true);
             columnIndex++;
         }
     }
 
-    private void showHideColumn(final String languageCode, boolean isVisible) {
+    private SelectionListener createColumnSelectionListener(final int columnIndex) {
+        return new SelectionListener() {
+
+            @Override
+            public void widgetSelected(final SelectionEvent selectionEvent) {
+                updateColumnOrder(columnIndex);
+            }
+
+            @Override
+            public void widgetDefaultSelected(final SelectionEvent selectionEvent) {
+                updateColumnOrder(columnIndex);
+            }
+        };
+    }
+
+    private TreeViewerFocusCellManager createFocusCellManager() {
+        return new TreeViewerFocusCellManager(treeViewer, new FocusCellOwnerDrawHighlighter(treeViewer));
+    }
+
+    private ColumnViewerEditorActivationStrategy createColumnActivationStrategy() {
+        return new ColumnViewerEditorActivationStrategy(treeViewer) {
+
+            @Override
+            protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
+                return (event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL)
+                                || (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
+                                || ((event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) && (event.keyCode == SWT.CR))
+                                || (event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC);
+            }
+        };
+    }
+
+
+    private void showTranslationColumn(final String languageCode) {
+        showHideColumn(languageCode, true);
+    }
+
+    private void hideTranslationColumn(final String languageCode) {
+        showHideColumn(languageCode, false);
+    }
+
+    private void showHideColumn(final String languageCode, final boolean isVisible) {
         final String language = LocaleUtils.getLocaleFromLanguageCode(languageCode).getDisplayName();
         final TreeColumn[] columns = tree.getColumns();
         for (final TreeColumn column : columns) {
@@ -139,33 +182,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         }
     }
 
-    private TreeViewerFocusCellManager createFocusCellManager() {
-        return new TreeViewerFocusCellManager(treeViewer, new FocusCellOwnerDrawHighlighter(treeViewer));
-    }
-
-    private ColumnViewerEditorActivationStrategy createColumnActivationStrategy() {
-        return new ColumnViewerEditorActivationStrategy(treeViewer) {
-
-            @Override
-            protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
-                return event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL
-                                || event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION
-                                || (event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED && event.keyCode == SWT.CR)
-                                || event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC;
-            }
-        };
-    }
-
-
-    private void showTranslationColumn(final String languageCode) {
-        showHideColumn(languageCode, true);
-    }
-
-    private void hideTranslationColumn(final String languageCode) {
-        showHideColumn(languageCode, false);
-    }
-
-    private void setTreeStructure(boolean grouped) {
+    private void setTreeStructure(final boolean grouped) {
         ((TreeViewerContentProvider) treeViewer.getContentProvider()).setGrouped(grouped);
         if (treeViewer.getInput() == null) {
             treeViewer.setUseHashlookup(false);
@@ -173,19 +190,19 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         // updateView();
     }
 
-    private void addSelectionChangedListener(ISelectionChangedListener selectionChangedListener) {
+    private void addSelectionChangedListener(final ISelectionChangedListener selectionChangedListener) {
         if (treeViewer != null) {
             treeViewer.addSelectionChangedListener(selectionChangedListener);
         }
     }
 
-    public static ITreeViewerWidget create(final Composite parent, IGlossaryService glossaryService,
-                    StoreInstanceState storeInstanceState) {
+    public static ITreeViewerWidget create(final Composite parent, final IGlossaryService glossaryService,
+                    final StoreInstanceState storeInstanceState) {
         return new TreeViewerWidget(parent, glossaryService, storeInstanceState);
     }
 
     @Override
-    public void resourceChanged(IResourceChangeEvent event) {
+    public void resourceChanged(final IResourceChangeEvent event) {
     }
 
     @Override
@@ -203,14 +220,30 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         if (glossary != null) {
             tree.setRedraw(false);
             treeViewer.getTree().clearAll(true);
-            for (TreeColumn column : tree.getColumns()) {
+            for (final TreeColumn column : tree.getColumns()) {
                 column.dispose();
             }
             translations = glossary.info.getTranslations();
             referenceLanguage();
             initializeWidget();
             treeViewer.setInput(glossary);
+            columnSorter(glossary);
             tree.setRedraw(true);
+            treeViewer.refresh();
+        }
+    }
+
+    protected void updateColumnOrder(final int columnIndex) {
+        if (columnSorter != null) {
+            final SortInfo sortInfo = columnSorter.getSortInfo();
+            if (columnIndex == sortInfo.getColumnIndex()) {
+                sortInfo.setDescending(!sortInfo.isDescending());
+            } else {
+                sortInfo.setColumnIndex(columnIndex);
+                sortInfo.setDescending(false);
+            }
+            columnSorter.setSortInfo(sortInfo);
+            setTreeStructure(columnIndex == 0);
             treeViewer.refresh();
         }
     }
@@ -222,18 +255,15 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         } else {
             this.referenceLanguage = translations[0];
             storeInstanceState.setReferenceLanguage(referenceLanguage);
-            Log.d(TAG, "REFERENCE USE DEFAULT"+referenceLanguage);
+            Log.d(TAG, "REFERENCE USE DEFAULT" + referenceLanguage);
         }
-        /*
-         * if(storeInstanceState.getHiddenLocales().isEmpty()) {
-         * this.translationsToDisplay = translations;
-         * } else {
-         * final List<String> hiddenTranslations = storeInstanceState.getHiddenLocales();
-         * hiddenTranslations.removeAll(Arrays.asList(translations));
-         * this.translationsToDisplay = hiddenTranslations.toArray();
-         * this.translationsToDisplay = translations;
-         * }
-         */
+    }
+
+
+    private void columnSorter(final Glossary glossary) {
+        columnSorter = new TreeViewerSortOrder(treeViewer, sortInfo, glossary.getIndexOfLocale(referenceLanguage),
+                        glossary.info.translations);
+        treeViewer.setSorter(columnSorter);
     }
 
 
@@ -242,22 +272,22 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         return new EditingSupport(viewer) {
 
             @Override
-            protected boolean canEdit(Object element) {
+            protected boolean canEdit(final Object element) {
                 return isColumnEditable;
             }
 
             @Override
-            protected CellEditor getCellEditor(Object element) {
+            protected CellEditor getCellEditor(final Object element) {
                 return textCellEditor;
             }
 
             @Override
-            protected Object getValue(Object element) {
+            protected Object getValue(final Object element) {
                 return treeViewerLabelProvider.getColumnText(element, columnCnt);
             }
 
             @Override
-            protected void setValue(Object element, Object value) {
+            protected void setValue(final Object element, final Object value) {
                 if (element instanceof Term) {
                     final Translation translation = ((Term) element).getTranslation(languageCode);
                     if (translation != null) {
@@ -273,7 +303,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
                 new Job("Update Glossary") {
 
                     @Override
-                    protected IStatus run(IProgressMonitor monitor) {
+                    protected IStatus run(final IProgressMonitor monitor) {
                         final Glossary glossary = ((TreeViewerContentProvider) treeViewer.getContentProvider())
                                         .getGlossary();
                         glossaryService.updateGlossary(glossary);

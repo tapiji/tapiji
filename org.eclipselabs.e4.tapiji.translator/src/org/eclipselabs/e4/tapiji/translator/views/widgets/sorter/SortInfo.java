@@ -4,62 +4,57 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
  * Contributors:
- *     Martin Reiterer - initial API and implementation
+ * Martin Reiterer - initial API and implementation
+ * Christian Behon - refactor from e3 to e4
  ******************************************************************************/
 package org.eclipselabs.e4.tapiji.translator.views.widgets.sorter;
 
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-//import org.eclipse.ui.IMemento;
 
-public class SortInfo {
+public final class SortInfo {
 
-    public static final String TAG_SORT_INFO = "sort_info";
-    public static final String TAG_COLUMN_INDEX = "col_idx";
-    public static final String TAG_ORDER = "order";
-
-    private int colIdx;
-    private boolean DESC;
+    private int columnIndex;
+    private boolean isDescending;
     private List<Locale> visibleLocales;
 
-    public void setDESC(boolean dESC) {
-	DESC = dESC;
+    public SortInfo() {
+        this.columnIndex = 0;
+        this.isDescending = false;
+        this.visibleLocales = new ArrayList<>();
     }
 
-    public boolean isDESC() {
-	return DESC;
+    public void setDescending(final boolean isDescending) {
+        this.isDescending = isDescending;
     }
 
-    public void setColIdx(int colIdx) {
-	this.colIdx = colIdx;
+    public boolean isDescending() {
+        return this.isDescending;
     }
 
-    public int getColIdx() {
-	return colIdx;
+    public void setColumnIndex(final int columnIndex) {
+        this.columnIndex = columnIndex;
     }
 
-    public void setVisibleLocales(List<Locale> visibleLocales) {
-	this.visibleLocales = visibleLocales;
+    public int getColumnIndex() {
+        return this.columnIndex;
+    }
+
+    public void setVisibleLocales(final List<Locale> visibleLocales) {
+        this.visibleLocales = visibleLocales;
     }
 
     public List<Locale> getVisibleLocales() {
-	return visibleLocales;
+        return this.visibleLocales;
     }
 
-   /* public void saveState(IMemento memento) {
-	IMemento mCI = memento.createChild(TAG_SORT_INFO);
-	mCI.putInteger(TAG_COLUMN_INDEX, colIdx);
-	mCI.putBoolean(TAG_ORDER, DESC);
+    @Override
+    public String toString() {
+        return "SortInfo [columnIndex=" + columnIndex + ", isDescending=" + isDescending + ", visibleLocales="
+                        + visibleLocales + "]";
     }
-
-    public void init(IMemento memento) {
-	IMemento mCI = memento.getChild(TAG_SORT_INFO);
-	if (mCI == null)
-	    return;
-	colIdx = mCI.getInteger(TAG_COLUMN_INDEX);
-	DESC = mCI.getBoolean(TAG_ORDER);
-    }*/
 }
