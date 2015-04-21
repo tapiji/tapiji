@@ -31,6 +31,8 @@ import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.TreeViewerEditor;
 import org.eclipse.jface.viewers.TreeViewerFocusCellManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -45,8 +47,11 @@ import org.eclipselabs.e4.tapiji.translator.model.Translation;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.views.providers.TreeViewerContentProvider;
 import org.eclipselabs.e4.tapiji.translator.views.providers.TreeViewerLabelProvider;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.sorter.TreeViewerSortOrder;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.dnd.GlossaryDragSource;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.dnd.GlossaryDropTarget;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.dnd.TermTransfer;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.sorter.SortInfo;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.sorter.TreeViewerSortOrder;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
 import org.eclipselabs.e4.tapiji.utils.LocaleUtils;
 
@@ -220,14 +225,18 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         if (glossary != null) {
             tree.setRedraw(false);
             treeViewer.getTree().clearAll(true);
+
             for (final TreeColumn column : tree.getColumns()) {
                 column.dispose();
             }
             translations = glossary.info.getTranslations();
             referenceLanguage();
+            dragAndDrop();
             initializeWidget();
+
             treeViewer.setInput(glossary);
             columnSorter(glossary);
+
             tree.setRedraw(true);
             treeViewer.refresh();
         }
@@ -243,9 +252,20 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
                 sortInfo.setDescending(false);
             }
             columnSorter.setSortInfo(sortInfo);
+            ;
             setTreeStructure(columnIndex == 0);
+
             treeViewer.refresh();
+
+
         }
+    }
+
+    protected void dragAndDrop() {
+        final int operations = DND.DROP_MOVE;
+        final Transfer[] transferTypes = new Transfer[] {TermTransfer.getInstance()};
+        treeViewer.addDragSupport(operations, transferTypes, GlossaryDragSource.create(treeViewer, glossaryService));
+        treeViewer.addDropSupport(operations, transferTypes, GlossaryDropTarget.create(treeViewer, glossaryService));
     }
 
     private void referenceLanguage() {

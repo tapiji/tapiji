@@ -4,9 +4,8 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
  * Contributors:
- *     Martin Reiterer - initial API and implementation
+ * Martin Reiterer - initial API and implementation
  ******************************************************************************/
 package org.eclipselabs.e4.tapiji.translator.views.widgets.dnd;
 
@@ -16,68 +15,66 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.views.providers.TreeViewerContentProvider;
 
 
 public class GlossaryDropTarget extends DropTargetAdapter {
 
     private final TreeViewer target;
-    private final IGlossaryService manager;
+    private final IGlossaryService glossaryService;
 
-    public GlossaryDropTarget(TreeViewer viewer, IGlossaryService manager) {
+    public GlossaryDropTarget(final TreeViewer viewer, final IGlossaryService glossaryService) {
         super();
         this.target = viewer;
-        this.manager = manager;
+        this.glossaryService = glossaryService;
     }
 
     @Override
-    public void dragEnter(DropTargetEvent event) {
-        if (event.detail == DND.DROP_MOVE || event.detail == DND.DROP_DEFAULT) {
-            if ((event.operations & DND.DROP_MOVE) != 0)
-                event.detail = DND.DROP_MOVE;
-            else
-                event.detail = DND.DROP_NONE;
+    public void dragEnter(final DropTargetEvent dropTargetEvent) {
+        if (dropTargetEvent.detail == DND.DROP_MOVE || dropTargetEvent.detail == DND.DROP_DEFAULT) {
+            if ((dropTargetEvent.operations & DND.DROP_MOVE) != 0) {
+                dropTargetEvent.detail = DND.DROP_MOVE;
+            } else {
+                dropTargetEvent.detail = DND.DROP_NONE;
+            }
         }
     }
 
     @Override
-    public void drop(DropTargetEvent event) {
-        if (TermTransfer.getInstance().isSupportedType(event.currentDataType)) {
+    public void drop(final DropTargetEvent dropTargetEvent) {
+        if (TermTransfer.getInstance().isSupportedType(dropTargetEvent.currentDataType)) {
             Term parentTerm = null;
 
-            event.detail = DND.DROP_MOVE;
-            event.feedback = DND.FEEDBACK_INSERT_AFTER;
+            dropTargetEvent.detail = DND.DROP_MOVE;
+            dropTargetEvent.feedback = DND.FEEDBACK_INSERT_AFTER;
 
-            if (event.item instanceof TreeItem && ((TreeItem) event.item).getData() instanceof Term) {
-                parentTerm = ((Term) ((TreeItem) event.item).getData());
+            if ((dropTargetEvent.item instanceof TreeItem) && (((TreeItem) dropTargetEvent.item).getData() instanceof Term)) {
+                parentTerm = ((Term) ((TreeItem) dropTargetEvent.item).getData());
             }
 
-            Term[] moveTerm = (Term[]) event.data;
-            // Glossary glossary = ((GlossaryContentProvider) target.getContentProvider()).getGlossary();
+            final Term[] moveTerm = (Term[]) dropTargetEvent.data;
+            final Glossary glossary = ((TreeViewerContentProvider) target.getContentProvider()).getGlossary();
 
-            /*
-             * Remove the move term from its initial position for (Term
-             * selectionObject : moveTerm) glossary.removeTerm(selectionObject);
-             */
-
-            /* Insert the move term on its target position */
-            /*  if (parentTerm == null) {
-                  for (Term t : moveTerm)
-                      glossary.terms.add(t);
-              } else {
-                  for (Term t : moveTerm)
-                      parentTerm.subTerms.add(t);
-              }*/
-
-            //  manager.setGlossary(glossary);
-            try {
-                // manager.saveGlossary();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (parentTerm == null) {
+                for (final Term t : moveTerm) {
+                    glossary.terms.add(t);
+                }
+            } else {
+                for (final Term t : moveTerm) {
+                    parentTerm.subTerms.add(t);
+                }
             }
+            glossaryService.updateGlossary(glossary);
             target.refresh();
-        } else
-            event.detail = DND.DROP_NONE;
+        } else {
+            dropTargetEvent.detail = DND.DROP_NONE;
+        }
+    }
+
+    public static GlossaryDropTarget create(final TreeViewer viewer, final IGlossaryService glossaryService) {
+        return new GlossaryDropTarget(viewer, glossaryService);
     }
 }
