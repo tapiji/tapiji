@@ -4,10 +4,9 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
  * Contributors:
- *     Martin Reiterer - initial API and implementation
- *     Christian Behon - refactor from e3 to e4
+ * Martin Reiterer - initial API and implementation
+ * Christian Behon - refactor from e3 to e4
  ******************************************************************************/
 package org.eclipselabs.e4.tapiji.translator.views.providers;
 
@@ -61,13 +60,15 @@ public class TreeViewerLabelProvider extends StyledCellLabelProvider implements 
                 final List<StyleRange> styleRanges = new ArrayList<StyleRange>();
                 final FilterInfo filterInfo = (FilterInfo) ((Term) element).getInfo();
 
-                /*for (Region reg : filterInfo
-                        .getFoundInTranslationRanges(translations
-                                .get(columnIndex < referenceColumn ? columnIndex + 1
-                                        : columnIndex))) {
-                    styleRanges.add(new StyleRange(reg.getOffset(), reg
-                .getLength(), TranslatorConstants.COLOR_BLACK, TranslatorConstants.COLOR_INFO, SWT.BOLD));
-                }*/
+                /*
+                 * for (Region reg : filterInfo
+                 * .getFoundInTranslationRanges(translations
+                 * .get(columnIndex < referenceColumn ? columnIndex + 1
+                 * : columnIndex))) {
+                 * styleRanges.add(new StyleRange(reg.getOffset(), reg
+                 * .getLength(), TranslatorConstants.COLOR_BLACK, TranslatorConstants.COLOR_INFO, SWT.BOLD));
+                 * }
+                 */
 
                 cell.setStyleRanges(styleRanges.toArray(new StyleRange[styleRanges.size()]));
             } else {

@@ -69,7 +69,7 @@ public final class TermTransfer extends ByteArrayTransfer {
             if (null != buffer) {
                 final List<Term> terms = new ArrayList<Term>();
                 try (ByteArrayInputStream in = new ByteArrayInputStream(buffer);
-                     ObjectInputStream readIn = new ObjectInputStream(in);) {
+                                ObjectInputStream readIn = new ObjectInputStream(in);) {
                     // while (readIn.available() > 0) {
                     final Term newTerm = (Term) readIn.readObject();
                     terms.add(newTerm);

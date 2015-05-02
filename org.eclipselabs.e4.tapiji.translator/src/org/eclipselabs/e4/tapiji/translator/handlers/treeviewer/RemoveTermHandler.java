@@ -45,7 +45,7 @@ public final class RemoveTermHandler {
     }
 
     @CanExecute
-    public boolean canExecute(IGlossaryService glossaryService) {
+    public boolean canExecute(final IGlossaryService glossaryService) {
         if (glossaryService.getGlossary() == null) {
             return false;
         }

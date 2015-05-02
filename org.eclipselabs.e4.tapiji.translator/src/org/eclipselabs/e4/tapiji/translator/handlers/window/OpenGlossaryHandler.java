@@ -27,8 +27,10 @@ public class OpenGlossaryHandler {
 
 
     @Execute
-    public void execute(@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService, final StoreInstanceState instanceState) {
-        final String[] fileNames = FileUtils.queryFileName(shell, "Open Glossary", SWT.OPEN, FileUtils.XML_FILE_ENDINGS);
+    public void execute(@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell,
+                    final IGlossaryService glossaryService, final StoreInstanceState instanceState) {
+        final String[] fileNames = FileUtils
+                        .queryFileName(shell, "Open Glossary", SWT.OPEN, FileUtils.XML_FILE_ENDINGS);
         if (fileNames != null) {
             final String fileName = fileNames[0];
             if (FileUtils.isGlossary(fileName)) {
@@ -42,7 +44,8 @@ public class OpenGlossaryHandler {
             }
 
             try {
-                SuggestionProviderUtils.updateConfigurationSetting("glossaryFile", new StringConfigurationSetting(fileName));
+                SuggestionProviderUtils.updateConfigurationSetting("glossaryFile", new StringConfigurationSetting(
+                                fileName));
             } catch (final InvalidConfigurationSetting exception) {
                 Log.e(TAG, exception);
             }
@@ -63,6 +66,7 @@ public class OpenGlossaryHandler {
 
 
     private void showErrorDialog(final Shell shell, final String fileName) {
-        MessageDialog.openError(shell, String.format("Cannot open Glossary %s", fileName), "The choosen file does not represent a Glossary!");
+        MessageDialog.openError(shell, String.format("Cannot open Glossary %s", fileName),
+                        "The choosen file does not represent a Glossary!");
     }
 }

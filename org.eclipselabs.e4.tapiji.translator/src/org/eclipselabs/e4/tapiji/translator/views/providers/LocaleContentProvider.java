@@ -4,10 +4,9 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
  * Contributors:
- *     Martin Reiterer - initial API and implementation
- *     Christian Behon - refactor from e3 to e4
+ * Martin Reiterer - initial API and implementation
+ * Christian Behon - refactor from e3 to e4
  ******************************************************************************/
 package org.eclipselabs.e4.tapiji.translator.views.providers;
 
@@ -49,19 +48,19 @@ public final class LocaleContentProvider implements IStructuredContentProvider, 
     }
 
     @Override
-    public Object[] getChildren(Object parentElement) {
+    public Object[] getChildren(final Object parentElement) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Object getParent(Object element) {
+    public Object getParent(final Object element) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public boolean hasChildren(Object element) {
+    public boolean hasChildren(final Object element) {
         // TODO Auto-generated method stub
         return false;
     }

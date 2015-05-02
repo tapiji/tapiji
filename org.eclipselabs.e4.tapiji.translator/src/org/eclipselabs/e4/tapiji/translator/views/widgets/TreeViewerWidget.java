@@ -50,6 +50,9 @@ import org.eclipselabs.e4.tapiji.translator.views.providers.TreeViewerLabelProvi
 import org.eclipselabs.e4.tapiji.translator.views.widgets.dnd.GlossaryDragSource;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.dnd.GlossaryDropTarget;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.dnd.TermTransfer;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.ExactMatcher;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.FuzzyMatcher;
+import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.SelectiveMatcher;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.sorter.SortInfo;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.sorter.TreeViewerSortOrder;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
@@ -72,10 +75,14 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     private String[] translations;
 
     private SortInfo sortInfo;
+    private boolean fuzzyMatchingEnabled = false;
+    private final boolean selectiveViewEnabled = false;
     private TextCellEditor textCellEditor;
     private final IGlossaryService glossaryService;
     private final StoreInstanceState storeInstanceState;
     private TreeViewerSortOrder columnSorter;
+    private ExactMatcher matcher;
+    private final float matchingPrecision = .75f;
 
     private TreeViewerWidget(final Composite parent, final IGlossaryService glossaryService,
                     final StoreInstanceState storeInstanceState) {
@@ -232,6 +239,8 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
             translations = glossary.info.getTranslations();
             referenceLanguage();
             dragAndDrop();
+            enableFuzzyMatching(true);
+            // initMatchers();
             initializeWidget();
 
             treeViewer.setInput(glossary);
@@ -242,7 +251,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         }
     }
 
-    protected void updateColumnOrder(final int columnIndex) {
+    private void updateColumnOrder(final int columnIndex) {
         if (columnSorter != null) {
             final SortInfo sortInfo = columnSorter.getSortInfo();
             if (columnIndex == sortInfo.getColumnIndex()) {
@@ -252,12 +261,47 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
                 sortInfo.setDescending(false);
             }
             columnSorter.setSortInfo(sortInfo);
-            ;
             setTreeStructure(columnIndex == 0);
-
             treeViewer.refresh();
+        }
+    }
+
+    @Override
+    public void enableFuzzyMatching(final boolean enable) {
+        String pattern = "";
+        if (matcher != null) {
+            pattern = matcher.getPattern();
+
+            if (!fuzzyMatchingEnabled && enable) {
+                if ((matcher.getPattern().trim().length() > 1) && matcher.getPattern().startsWith("*")
+                                && matcher.getPattern().endsWith("*")) {
+                    pattern = pattern.substring(1).substring(0, pattern.length() - 2);
+                }
+                matcher.setPattern(null);
+            }
+        }
+        fuzzyMatchingEnabled = enable;
+        initMatchers();
+
+        matcher.setPattern(pattern);
+        treeViewer.refresh();
+    }
 
 
+    private void initMatchers() {
+        treeViewer.resetFilters();
+        final String patternBefore = matcher != null ? matcher.getPattern() : "";
+        if (fuzzyMatchingEnabled) {
+            matcher = new FuzzyMatcher(treeViewer);
+            ((FuzzyMatcher) matcher).setMinimumSimilarity(matchingPrecision);
+        } else {
+            matcher = new ExactMatcher(treeViewer);
+        }
+
+        matcher.setPattern(patternBefore);
+
+        if (this.selectiveViewEnabled) {
+            new SelectiveMatcher(treeViewer);
         }
     }
 
@@ -333,5 +377,19 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
                 }.schedule();
             }
         };
+    }
+
+
+    @Override
+    public void setSearchString(final String text) {
+        matcher.setPattern(text);
+        boolean grouped;
+        if (matcher.getPattern().trim().length() > 0) {
+            grouped = false;
+        } else {
+            grouped = true;
+        }
+        setTreeStructure(grouped && (columnSorter != null) && (columnSorter.getSortInfo().getColumnIndex() == 0));
+        treeViewer.refresh();
     }
 }

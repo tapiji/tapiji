@@ -1,5 +1,5 @@
- 
 package org.eclipselabs.e4.tapiji.translator.handlers.treeviewer;
+
 
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipselabs.e4.tapiji.logger.Log;
@@ -14,5 +14,5 @@ public final class ReloadTreeViewerHandler {
     public void execute(final IGlossaryService glossaryService) {
         Log.d(TAG, "Jsaddhdhsaudh");
         glossaryService.reloadGlossary();
-	}
+    }
 }

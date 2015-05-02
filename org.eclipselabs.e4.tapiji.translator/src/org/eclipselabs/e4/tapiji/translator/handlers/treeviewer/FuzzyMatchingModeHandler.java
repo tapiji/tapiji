@@ -12,7 +12,8 @@ import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceS
 public final class FuzzyMatchingModeHandler {
 
     @Execute
-    public void execute(final MMenuItem menuItem, final IEventBroker eventBroker, final StoreInstanceState storeInstanceState) {
+    public void execute(final MMenuItem menuItem, final IEventBroker eventBroker,
+                    final StoreInstanceState storeInstanceState) {
         storeInstanceState.setFuzzyMode(!menuItem.isSelected());
         eventBroker.post(TranslatorConstants.TOPIC_GUI, !menuItem.isSelected());
     }

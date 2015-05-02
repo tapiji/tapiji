@@ -20,7 +20,8 @@ public class DisplayedTranslationHandler {
     private static final String TAG = DisplayedTranslationHandler.class.getSimpleName();
 
     @AboutToShow
-    public void aboutToShow(final List<MMenuElement> items, final EModelService modelService, final IGlossaryService glossaryService, final StoreInstanceState storeInstanceState) {
+    public void aboutToShow(final List<MMenuElement> items, final EModelService modelService,
+                    final IGlossaryService glossaryService, final StoreInstanceState storeInstanceState) {
         final String[] translations = glossaryService.getTranslations();
 
 
@@ -50,7 +51,8 @@ public class DisplayedTranslationHandler {
 
     public Locale getLocale(final String lang) {
         final String[] locDef = lang.split("_");
-        return locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0], locDef[1])) : new Locale(locDef[0], locDef[1], locDef[2]);
+        return locDef.length < 3 ? (locDef.length < 2 ? new Locale(locDef[0]) : new Locale(locDef[0], locDef[1]))
+                        : new Locale(locDef[0], locDef[1], locDef[2]);
     }
 
     @CanExecute

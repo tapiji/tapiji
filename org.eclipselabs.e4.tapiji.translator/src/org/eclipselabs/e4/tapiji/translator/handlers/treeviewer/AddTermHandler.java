@@ -24,16 +24,19 @@ public class AddTermHandler {
     private static final String TAG = AddTermHandler.class.getSimpleName();
 
     @Execute
-    public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) final Term parentTerm, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService, final StoreInstanceState storeInstanceState) {
+    public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) final Term parentTerm,
+                    @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService,
+                    final StoreInstanceState storeInstanceState) {
         final InputDialog dialog = new InputDialog(shell, "New Term", "Please, define the new term:", "", null);
         if (dialog.open() == Window.OK) {
-            if (dialog.getValue() != null && dialog.getValue().trim().length() > 0) {
+            if ((dialog.getValue() != null) && (dialog.getValue().trim().length() > 0)) {
                 addTermAsync(glossaryService, dialog.getValue(), storeInstanceState.getReferenceLanguage(), parentTerm);
             }
         }
     }
 
-    private void addTermAsync(final IGlossaryService glossaryService, final String value, String referenceLocale,final Term parentTerm) {
+    private void addTermAsync(final IGlossaryService glossaryService, final String value, final String referenceLocale,
+                    final Term parentTerm) {
         final Job job = new Job("removing") {
 
             @Override
@@ -51,7 +54,7 @@ public class AddTermHandler {
     }
 
     @CanExecute
-    public boolean canExecute(IGlossaryService glossaryService) {
+    public boolean canExecute(final IGlossaryService glossaryService) {
         if (glossaryService.getGlossary() == null) {
             return false;
         }

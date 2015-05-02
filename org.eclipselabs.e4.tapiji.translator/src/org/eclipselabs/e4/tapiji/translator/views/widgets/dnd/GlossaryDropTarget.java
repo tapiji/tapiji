@@ -35,7 +35,7 @@ public final class GlossaryDropTarget extends DropTargetAdapter {
 
     @Override
     public void dragEnter(final DropTargetEvent dropTargetEvent) {
-        if (dropTargetEvent.detail == DND.DROP_MOVE || dropTargetEvent.detail == DND.DROP_DEFAULT) {
+        if ((dropTargetEvent.detail == DND.DROP_MOVE) || (dropTargetEvent.detail == DND.DROP_DEFAULT)) {
             if ((dropTargetEvent.operations & DND.DROP_MOVE) != 0) {
                 dropTargetEvent.detail = DND.DROP_MOVE;
             } else {
@@ -52,7 +52,8 @@ public final class GlossaryDropTarget extends DropTargetAdapter {
             dropTargetEvent.detail = DND.DROP_MOVE;
             dropTargetEvent.feedback = DND.FEEDBACK_INSERT_AFTER;
 
-            if ((dropTargetEvent.item instanceof TreeItem) && (((TreeItem) dropTargetEvent.item).getData() instanceof Term)) {
+            if ((dropTargetEvent.item instanceof TreeItem)
+                            && (((TreeItem) dropTargetEvent.item).getData() instanceof Term)) {
                 parentTerm = ((Term) ((TreeItem) dropTargetEvent.item).getData());
             }
 

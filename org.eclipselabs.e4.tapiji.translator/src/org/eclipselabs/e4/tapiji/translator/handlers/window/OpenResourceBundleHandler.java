@@ -13,26 +13,28 @@ import org.eclipselabs.e4.tapiji.utils.FileUtils;
 
 public class OpenResourceBundleHandler {
 
-  private static final String TAG = OpenResourceBundleHandler.class.getSimpleName();
+    private static final String TAG = OpenResourceBundleHandler.class.getSimpleName();
 
-  @Execute
-  public void execute(final IWorkbench workbench, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
-    final String[] fileNames = FileUtils.queryFileName(shell, "Open Resource-Bundle", SWT.OPEN,
-            FileUtils.PROPERTY_FILE_ENDINGS);
-    if (fileNames != null) {
-      final String fileName = fileNames[0];
-      if (!FileUtils.isResourceBundle(fileName)) {
-        MessageDialog.openError(shell, String.format("Cannot open Resource-Bundle %s", fileName),
-                "The choosen file does not represent a Resource-Bundle!");
-        return;
-      }
+    @Execute
+    public void execute(final IWorkbench workbench, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
+        final String[] fileNames = FileUtils.queryFileName(shell, "Open Resource-Bundle", SWT.OPEN,
+                        FileUtils.PROPERTY_FILE_ENDINGS);
+        if (fileNames != null) {
+            final String fileName = fileNames[0];
+            if (!FileUtils.isResourceBundle(fileName)) {
+                MessageDialog.openError(shell, String.format("Cannot open Resource-Bundle %s", fileName),
+                                "The choosen file does not represent a Resource-Bundle!");
+                return;
+            }
+        }
+
+
+        /*
+         * IWorkbenchPage page = window.getActivePage(); try { page.openEditor( new
+         * FileEditorInput(FileUtils.getResourceBundleRef(fileName, FileUtils.EXTERNAL_RB_PROJECT_NAME)),
+         * RESOURCE_BUNDLE_EDITOR); } catch (CoreException e) { e.printStackTrace(); }
+         */
+
+
     }
-
-
-    /*
-     * IWorkbenchPage page = window.getActivePage(); try { page.openEditor( new FileEditorInput(FileUtils.getResourceBundleRef(fileName, FileUtils.EXTERNAL_RB_PROJECT_NAME)), RESOURCE_BUNDLE_EDITOR); } catch (CoreException e) { e.printStackTrace(); }
-     */
-
-
-  }
 }

@@ -10,19 +10,19 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
 public class SaveHandler {
 
-  private static final String TAG = SaveHandler.class.getSimpleName();
+    private static final String TAG = SaveHandler.class.getSimpleName();
 
-  @Execute
-  public void execute(final EPartService partService, final MPart part) {
-    System.out.println("Execute: " + TAG);
-    partService.savePart(part, false);
-  }
-
-  @CanExecute
-  public boolean canExecute(@Optional final EPartService partService) {
-    if (partService != null) {
-      return partService.getActivePart().isDirty();
+    @Execute
+    public void execute(final EPartService partService, final MPart part) {
+        System.out.println("Execute: " + TAG);
+        partService.savePart(part, false);
     }
-    return false;
-  }
+
+    @CanExecute
+    public boolean canExecute(@Optional final EPartService partService) {
+        if (partService != null) {
+            return partService.getActivePart().isDirty();
+        }
+        return false;
+    }
 }

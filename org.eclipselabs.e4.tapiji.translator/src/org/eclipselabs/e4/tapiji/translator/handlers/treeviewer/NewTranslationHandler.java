@@ -28,8 +28,10 @@ import org.eclipselabs.e4.tapiji.utils.LocaleUtils;
 public final class NewTranslationHandler {
 
     @Execute
-    public void execute(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) final Term term, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService) {
-        final CheckedTreeSelectionDialog localeDialog = new CheckedTreeSelectionDialog(shell, new LocaleLabelProvider(), new LocaleContentProvider());
+    public void execute(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) final Term term,
+                    @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService) {
+        final CheckedTreeSelectionDialog localeDialog = new CheckedTreeSelectionDialog(shell,
+                        new LocaleLabelProvider(), new LocaleContentProvider());
         localeDialog.setInput(generateLocales(glossaryService.getTranslations()));
         localeDialog.setTitle("Translation Selection");
 
@@ -65,7 +67,7 @@ public final class NewTranslationHandler {
         return allLocales;
     }
 
-    private void addTranslationAsync(IGlossaryService glossaryService, Object[] translations) {
+    private void addTranslationAsync(final IGlossaryService glossaryService, final Object[] translations) {
         final Job job = new Job("Add New Translation") {
 
             @Override
@@ -78,7 +80,7 @@ public final class NewTranslationHandler {
     }
 
     @CanExecute
-    public boolean canExecute(IGlossaryService glossaryService) {
+    public boolean canExecute(final IGlossaryService glossaryService) {
         if (glossaryService.getGlossary() == null) {
             return false;
         }

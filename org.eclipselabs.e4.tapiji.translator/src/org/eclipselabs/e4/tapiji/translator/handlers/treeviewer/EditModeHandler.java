@@ -13,7 +13,8 @@ import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceS
 public final class EditModeHandler {
 
     @Execute
-    public void execute(final MMenuItem menuItem, final StoreInstanceState storeInstanceState, final IEventBroker eventBroker) {
+    public void execute(final MMenuItem menuItem, final StoreInstanceState storeInstanceState,
+                    final IEventBroker eventBroker) {
         storeInstanceState.setEditMode(!menuItem.isSelected());
         eventBroker.post(TranslatorConstants.TOPIC_EDIT_MODE, menuItem.isSelected());
     }
