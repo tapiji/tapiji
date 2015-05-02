@@ -11,39 +11,39 @@
 package org.eclipselabs.e4.tapiji.translator.views.providers;
 
 
+import static org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants.COLOR_BLACK;
+import static org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants.COLOR_CROSSREFERENCE_BACKGROUND;
+import static org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants.COLOR_CROSSREFERENCE_FOREGROUND;
+import static org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants.COLOR_GRAY;
+import static org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants.COLOR_INFO;
+import static org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants.COLOR_WHITE;
+import static org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants.FONT_BOLD;
+import static org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants.FONT_ITALIC;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import javax.annotation.PreDestroy;
-import org.eclipse.babel.core.message.tree.IKeyTreeNode;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.jface.text.Region;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.Image;
-import org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants;
+import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.FilterInfo;
 
 
-public class TreeViewerLabelProvider extends StyledCellLabelProvider implements  ISelectionListener, ISelectionChangedListener {
+public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
+
+    private static final String TAG = TreeViewerLabelProvider.class.getSimpleName();
+    private static final List<StyleRange> STYLE_RANGES = new ArrayList<StyleRange>();
 
     private final TreeViewer treeViewer;
     private final String[] translations;
     private boolean isSearchEnabled = true;
-    private int referenceColumn = 0;
+    private final int referenceColumn = 0;
 
     public TreeViewerLabelProvider(final TreeViewer treeViewer, final String[] translations) {
         super();
@@ -53,38 +53,43 @@ public class TreeViewerLabelProvider extends StyledCellLabelProvider implements 
 
 
     @Override
-    public void update(ViewerCell cell) {
-
-
+    public void update(final ViewerCell cell) {
         final Object element = cell.getElement();
         final int columnIndex = cell.getColumnIndex();
         cell.setText(this.getColumnText(element, columnIndex));
 
         if (isCrossRefRegion(cell.getText())) {
-            cell.setFont(TranslatorConstants.FONT_BOLD);
-            cell.setBackground(TranslatorConstants.COLOR_CROSSREFERENCE_BACKGROUND);
-            cell.setForeground(TranslatorConstants.COLOR_CROSSREFERENCE_FOREGROUND);
+            cell.setFont(FONT_BOLD);
+            cell.setBackground(COLOR_CROSSREFERENCE_BACKGROUND);
+            cell.setForeground(COLOR_CROSSREFERENCE_FOREGROUND);
         } else {
             cell.setFont(getColumnFont(element, columnIndex));
-            cell.setBackground(TranslatorConstants.COLOR_WHITE);
+            cell.setBackground(COLOR_WHITE);
         }
 
         if (isSearchEnabled) {
-            if (isMatchingToPattern(element, columnIndex)) {
-                final List<StyleRange> styleRanges = new ArrayList<StyleRange>();
-                final FilterInfo filterInfo = (FilterInfo) ((Term) element).getInfo();
-                List<Region> regions = filterInfo.getFoundInTranslationRanges(getColumnLocale(columnIndex));
-                for (Region reg : regions) {
-                    styleRanges.add(new StyleRange(reg.getOffset(), reg.getLength(), TranslatorConstants.COLOR_BLACK,
-                                    TranslatorConstants.COLOR_INFO, SWT.BOLD));
-                }
-
-                cell.setStyleRanges(styleRanges.toArray(new StyleRange[styleRanges.size()]));
-            } else {
-                cell.setForeground(TranslatorConstants.COLOR_GRAY);
-            }
+            searchStyle(cell, (Term) element, columnIndex);
         }
         super.update(cell);
+    }
+
+
+    private void searchStyle(final ViewerCell cell, final Term term, final int columnIndex) {
+        if (isMatchingToPattern(term, columnIndex)) {
+            final List<Region> regions = ((FilterInfo) term.getInfo())
+                            .getFoundInTranslationRanges(getColumnLocale(columnIndex));
+
+            STYLE_RANGES.clear();
+            StyleRange style;
+            for (final Region reg : regions) {
+                style = new StyleRange(reg.getOffset(), reg.getLength(), COLOR_BLACK, COLOR_INFO, SWT.BOLD);
+                STYLE_RANGES.add(style);
+            }
+
+            cell.setStyleRanges(STYLE_RANGES.toArray(new StyleRange[STYLE_RANGES.size()]));
+        } else {
+            cell.setForeground(COLOR_GRAY);
+        }
     }
 
     private String getColumnLocale(final int columnIndex) {
@@ -101,26 +106,25 @@ public class TreeViewerLabelProvider extends StyledCellLabelProvider implements 
         this.isSearchEnabled = isSearchEnabled;
     }
 
-    protected boolean isMatchingToPattern(final Object element, final int columnIndex) {
+    private boolean isMatchingToPattern(final Term element, final int columnIndex) {
         boolean matching = false;
-        if (element instanceof Term) {
-            final Term term = (Term) element;
-            if (term.getInfo() != null) {
-                matching = ((FilterInfo) term.getInfo()).hasFoundInTranslation(translations[columnIndex]);
-            }
+        final Term term = element;
+        if (term.getInfo() != null) {
+            matching = ((FilterInfo) term.getInfo()).hasFoundInTranslation(translations[columnIndex]);
         }
         return matching;
     }
 
     protected Font getColumnFont(final Object element, final int columnIndex) {
         if (columnIndex == 0) {
-            return TranslatorConstants.FONT_ITALIC;
+            return FONT_ITALIC;
         }
         return null;
     }
 
     protected boolean isCrossRefRegion(final String cellText) {
-        return false;
+        // TODO
+        return true;
     }
 
 
@@ -132,9 +136,8 @@ public class TreeViewerLabelProvider extends StyledCellLabelProvider implements 
                 return transl != null ? transl.value : "";
             }
         } catch (final Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, e);
         }
-
         return "";
     }
 
@@ -147,25 +150,5 @@ public class TreeViewerLabelProvider extends StyledCellLabelProvider implements 
 
     public static TreeViewerLabelProvider newInstance(final TreeViewer treeViewer, final String[] translations) {
         return new TreeViewerLabelProvider(treeViewer, translations);
-    }
-
-
-    @Override
-    public void selectionChanged(MPart part, Object selection) {
-
-    }
-
-
-    @Override
-    public void selectionChanged(SelectionChangedEvent event) {
-        final ISelection selection = event.getSelection();
-
-        if (selection.isEmpty() || !(selection instanceof IStructuredSelection)) {
-            return;
-        }
-
-        final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-       // selectedItem = (IKeyTreeNode) structuredSelection.iterator().next();
-        treeViewer.refresh();
     }
 }
