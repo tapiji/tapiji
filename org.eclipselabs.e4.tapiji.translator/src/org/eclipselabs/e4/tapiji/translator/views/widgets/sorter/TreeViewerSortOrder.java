@@ -22,11 +22,12 @@ public final class TreeViewerSortOrder extends ViewerSorter {
 
     private StructuredViewer viewer;
     private SortInfo sortInfo;
-    private int referenceCol;
-    private List<String> translations;
+    private final int referenceCol;
+    private final List<String> translations;
 
     public TreeViewerSortOrder(final StructuredViewer viewer, final SortInfo sortInfo, final int referenceCol,
                     final List<String> translations) {
+        super();
         this.viewer = viewer;
         this.referenceCol = referenceCol;
         this.translations = translations;
@@ -57,7 +58,7 @@ public final class TreeViewerSortOrder extends ViewerSorter {
     @Override
     public int compare(final Viewer viewer, final Object e1, final Object e2) {
         try {
-            if (!(e1 instanceof Term && e2 instanceof Term)) {
+            if (!((e1 instanceof Term) && (e2 instanceof Term))) {
                 return super.compare(viewer, e1, e2);
             }
 
@@ -65,15 +66,15 @@ public final class TreeViewerSortOrder extends ViewerSorter {
                 return 0;
             }
 
-            Term comp1 = (Term) e1;
-            Term comp2 = (Term) e2;
+            final Term comp1 = (Term) e1;
+            final Term comp2 = (Term) e2;
 
             int result = 0;
 
             if (sortInfo.getColumnIndex() == 0) {
                 final Translation transComp1 = comp1.getTranslation(translations.get(referenceCol));
                 final Translation transComp2 = comp2.getTranslation(translations.get(referenceCol));
-                if (transComp1 != null && transComp2 != null) {
+                if ((transComp1 != null) && (transComp2 != null)) {
                     result = transComp1.value.compareTo(transComp2.value);
                 }
             } else {
@@ -92,7 +93,7 @@ public final class TreeViewerSortOrder extends ViewerSorter {
             }
 
             return result * (sortInfo.isDescending() ? -1 : 1);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             return 0;
         }
     }

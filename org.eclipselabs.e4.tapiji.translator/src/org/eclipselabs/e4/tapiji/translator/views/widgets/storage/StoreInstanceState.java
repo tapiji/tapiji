@@ -4,9 +4,8 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
  * Contributors:
- *     Christian Behon - refactor from e3 to e4
+ * Christian Behon - refactor from e3 to e4
  ******************************************************************************/
 package org.eclipselabs.e4.tapiji.translator.views.widgets.storage;
 
@@ -36,10 +35,6 @@ public class StoreInstanceState {
     private static final String STORE_SORT_COLUMN_INDEX = "STORE/SORT_COLUMN_INDEX";
     private static final String STORE_SORT_ORDER = "STORE/SORT_ORDER";
 
-    /*public static final String TAG_SORT_INFO = "sort_info";
-    public static final String TAG_COLUMN_INDEX = "col_idx";
-    public static final String TAG_ORDER = "order";*/
-
     private static final String TAG = StoreInstanceState.class.getSimpleName();
 
     private final Map<String, String> persistedState;
@@ -54,19 +49,20 @@ public class StoreInstanceState {
     }
 
 
-    /* public void saveState(IMemento memento) {
-         IMemento mCI = memento.createChild(TAG_SORT_INFO);
-         mCI.putInteger(TAG_COLUMN_INDEX, colIdx);
-         mCI.putBoolean(TAG_ORDER, DESC);
-     }
-
-     public void init(IMemento memento) {
-         IMemento mCI = memento.getChild(TAG_SORT_INFO);
-         if (mCI == null)
-             return;
-         colIdx = mCI.getInteger(TAG_COLUMN_INDEX);
-         DESC = mCI.getBoolean(TAG_ORDER);
-     }*/
+    /*
+     * public void saveState(IMemento memento) {
+     * IMemento mCI = memento.createChild(TAG_SORT_INFO);
+     * mCI.putInteger(TAG_COLUMN_INDEX, colIdx);
+     * mCI.putBoolean(TAG_ORDER, DESC);
+     * }
+     * public void init(IMemento memento) {
+     * IMemento mCI = memento.getChild(TAG_SORT_INFO);
+     * if (mCI == null)
+     * return;
+     * colIdx = mCI.getInteger(TAG_COLUMN_INDEX);
+     * DESC = mCI.getBoolean(TAG_ORDER);
+     * }
+     */
 
     public void setColumnIndex(final int columnIndex) {
         persistedState.put(STORE_SORT_COLUMN_INDEX, String.valueOf(columnIndex));
@@ -172,7 +168,7 @@ public class StoreInstanceState {
         final List<String> hiddenLocales = getHiddenLocales();
         if (hiddenLocales.contains(locale)) {
             hiddenLocales.remove(locale);
-            //persistedState.put(STORE_DISPLAYED_LOCALES, hiddenLocales.toString().replaceAll("\\[|\\]", ""));
+            // persistedState.put(STORE_DISPLAYED_LOCALES, hiddenLocales.toString().replaceAll("\\[|\\]", ""));
         }
     }
 
@@ -180,7 +176,7 @@ public class StoreInstanceState {
         final String locales = persistedState.get(STORE_DISPLAYED_LOCALES);
         if (locales != null) {
             Log.d("asdas", locales.toString());
-        return new ArrayList<String>(Arrays.asList(locales.split("\\s*,\\s*")));
+            return new ArrayList<String>(Arrays.asList(locales.split("\\s*,\\s*")));
         } else {
             return new ArrayList<String>();
         }

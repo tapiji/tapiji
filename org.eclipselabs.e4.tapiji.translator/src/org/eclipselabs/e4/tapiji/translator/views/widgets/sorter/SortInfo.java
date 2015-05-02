@@ -23,6 +23,7 @@ public final class SortInfo {
     private List<Locale> visibleLocales;
 
     public SortInfo() {
+        super();
         this.columnIndex = 0;
         this.isDescending = false;
         this.visibleLocales = new ArrayList<>();
