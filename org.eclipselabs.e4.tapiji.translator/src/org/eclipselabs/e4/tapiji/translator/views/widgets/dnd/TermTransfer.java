@@ -6,6 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * Contributors:
  * Martin Reiterer - initial API and implementation
+ * Christian Behon - Refactor
  ******************************************************************************/
 package org.eclipselabs.e4.tapiji.translator.views.widgets.dnd;
 
@@ -20,16 +21,27 @@ import java.util.List;
 import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TransferData;
+import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 
 
 public final class TermTransfer extends ByteArrayTransfer {
 
     private static final String TERM = "term";
-
     private static final int TYPEID = registerType(TERM);
+    private static final String TAG = TermTransfer.class.getSimpleName();
 
     private TermTransfer() {
+        super();
+    }
+
+    private static class TermTransferHolder {
+
+        private static final TermTransfer INSTANCE = new TermTransfer();
+    }
+
+    public static TermTransfer getInstance() {
+        return TermTransferHolder.INSTANCE;
     }
 
     @Override
@@ -38,53 +50,49 @@ public final class TermTransfer extends ByteArrayTransfer {
             DND.error(DND.ERROR_INVALID_DATA);
         }
         final Term[] terms = (Term[]) object;
-        try {
-            final ByteArrayOutputStream out = new ByteArrayOutputStream();
-            final ObjectOutputStream oOut = new ObjectOutputStream(out);
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        ObjectOutputStream oOut = new ObjectOutputStream(out);) {
             for (final Term term2 : terms) {
                 oOut.writeObject(term2);
             }
             final byte[] buffer = out.toByteArray();
-            oOut.close();
-
             super.javaToNative(buffer, transferData);
-        } catch (final IOException e) {
-            e.printStackTrace();
+        } catch (final IOException exception) {
+            Log.e(TAG, exception);
         }
     }
 
     @Override
     public Object nativeToJava(final TransferData transferData) {
         if (isSupportedType(transferData)) {
-
-            byte[] buffer;
-            try {
-                buffer = (byte[]) super.nativeToJava(transferData);
-            } catch (final Exception e) {
-                e.printStackTrace();
-                buffer = null;
+            final byte[] buffer = getBytesFrom(transferData);
+            if (null != buffer) {
+                final List<Term> terms = new ArrayList<Term>();
+                try (ByteArrayInputStream in = new ByteArrayInputStream(buffer);
+                     ObjectInputStream readIn = new ObjectInputStream(in);) {
+                    // while (readIn.available() > 0) {
+                    final Term newTerm = (Term) readIn.readObject();
+                    terms.add(newTerm);
+                    // }
+                } catch (final Exception exception) {
+                    Log.e(TAG, exception);
+                    return null;
+                }
+                return terms.toArray(new Term[terms.size()]);
             }
-            if (buffer == null) {
-                return null;
-            }
-
-            final List<Term> terms = new ArrayList<Term>();
-            try {
-                final ByteArrayInputStream in = new ByteArrayInputStream(buffer);
-                final ObjectInputStream readIn = new ObjectInputStream(in);
-                // while (readIn.available() > 0) {
-                final Term newTerm = (Term) readIn.readObject();
-                terms.add(newTerm);
-                // }
-                readIn.close();
-            } catch (final Exception ex) {
-                ex.printStackTrace();
-                return null;
-            }
-            return terms.toArray(new Term[terms.size()]);
         }
-
         return null;
+    }
+
+    private byte[] getBytesFrom(final TransferData transferData) {
+        byte[] buffer;
+        try {
+            buffer = (byte[]) super.nativeToJava(transferData);
+        } catch (final Exception exception) {
+            Log.e(TAG, exception);
+            buffer = null;
+        }
+        return buffer;
     }
 
     @Override
@@ -113,13 +121,5 @@ public final class TermTransfer extends ByteArrayTransfer {
     @Override
     protected boolean validate(final Object object) {
         return checkType(object);
-    }
-
-    private static class TermTransferHolder {
-        private static final TermTransfer INSTANCE = new TermTransfer();
-    }
-
-    public static TermTransfer getInstance() {
-        return TermTransferHolder.INSTANCE;
     }
 }

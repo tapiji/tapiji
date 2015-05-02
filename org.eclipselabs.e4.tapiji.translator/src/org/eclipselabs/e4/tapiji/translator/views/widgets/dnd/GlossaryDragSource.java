@@ -4,9 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
  * Contributors:
- *
  * Martin Reiterer - initial API and implementation
  * Christian Behon - refactor e3 to e4
  ******************************************************************************/
@@ -25,7 +23,7 @@ import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.views.providers.TreeViewerContentProvider;
 
 
-public class GlossaryDragSource implements DragSourceListener {
+public final class GlossaryDragSource implements DragSourceListener {
 
     private final TreeViewer source;
     private final IGlossaryService glossaryService;

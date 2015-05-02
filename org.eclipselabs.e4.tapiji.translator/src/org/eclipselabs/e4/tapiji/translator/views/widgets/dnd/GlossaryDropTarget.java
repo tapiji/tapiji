@@ -6,6 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * Contributors:
  * Martin Reiterer - initial API and implementation
+ * Christian Behon - Refactor
  ******************************************************************************/
 package org.eclipselabs.e4.tapiji.translator.views.widgets.dnd;
 
@@ -21,7 +22,7 @@ import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.views.providers.TreeViewerContentProvider;
 
 
-public class GlossaryDropTarget extends DropTargetAdapter {
+public final class GlossaryDropTarget extends DropTargetAdapter {
 
     private final TreeViewer target;
     private final IGlossaryService glossaryService;
