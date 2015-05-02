@@ -6,6 +6,7 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipselabs.e4.tapiji.translator.views.dialogs.AboutDialog;
 
 
 public class AboutHandler {
@@ -15,6 +16,6 @@ public class AboutHandler {
     @Execute
     public void execute(final @Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
         System.out.println("Execute: " + TAG);
-        MessageDialog.openInformation(shell, "About", "e4 Application example.");
+        AboutDialog.create(shell).open();
     }
 }
