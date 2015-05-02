@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
@@ -108,8 +109,9 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     private void initializeWidget() {
         if (translations.length > 0) {
             textCellEditor = new TextCellEditor(tree);
-            createLocaleColumns();
             treeViewerLabelProvider = TreeViewerLabelProvider.newInstance(treeViewer, translations);
+            createLocaleColumns();
+
             treeViewer.setLabelProvider(treeViewerLabelProvider);
             treeViewer.setContentProvider(TreeViewerContentProvider.newInstance());
             tree.setHeaderVisible(true);
@@ -199,7 +201,6 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         if (treeViewer.getInput() == null) {
             treeViewer.setUseHashlookup(false);
         }
-        // updateView();
     }
 
     private void addSelectionChangedListener(final ISelectionChangedListener selectionChangedListener) {
@@ -239,14 +240,15 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
             translations = glossary.info.getTranslations();
             referenceLanguage();
             dragAndDrop();
-            enableFuzzyMatching(true);
-            // initMatchers();
+
+
             initializeWidget();
 
             treeViewer.setInput(glossary);
             columnSorter(glossary);
-
+            initMatchers();
             tree.setRedraw(true);
+
             treeViewer.refresh();
         }
     }
@@ -282,7 +284,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         }
         fuzzyMatchingEnabled = enable;
         initMatchers();
-
+        treeViewerLabelProvider.setSearchEnabled(enable);
         matcher.setPattern(pattern);
         treeViewer.refresh();
     }
@@ -306,10 +308,9 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     }
 
     protected void dragAndDrop() {
-        final int operations = DND.DROP_MOVE;
         final Transfer[] transferTypes = new Transfer[] {TermTransfer.getInstance()};
-        treeViewer.addDragSupport(operations, transferTypes, GlossaryDragSource.create(treeViewer, glossaryService));
-        treeViewer.addDropSupport(operations, transferTypes, GlossaryDropTarget.create(treeViewer, glossaryService));
+        treeViewer.addDragSupport(DND.DROP_MOVE, transferTypes, GlossaryDragSource.create(treeViewer, glossaryService));
+        treeViewer.addDropSupport(DND.DROP_MOVE, transferTypes, GlossaryDropTarget.create(treeViewer, glossaryService));
     }
 
     private void referenceLanguage() {
@@ -383,13 +384,18 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     @Override
     public void setSearchString(final String text) {
         matcher.setPattern(text);
-        boolean grouped;
-        if (matcher.getPattern().trim().length() > 0) {
-            grouped = false;
-        } else {
-            grouped = true;
-        }
+        final boolean grouped = (matcher.getPattern().trim().length() > 0) ? false: true;
         setTreeStructure(grouped && (columnSorter != null) && (columnSorter.getSortInfo().getColumnIndex() == 0));
         treeViewer.refresh();
+    }
+
+
+    @Focus
+    public boolean setFocus() {
+        if (treeViewer != null) {
+            treeViewer.getControl().setFocus();
+            return true;
+        }
+        return false;
     }
 }

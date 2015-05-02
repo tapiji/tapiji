@@ -110,8 +110,4 @@ public class TreeViewerContentProvider implements ITreeContentProvider {
         return glossary;
     }
 
-    public void setSearchEnabled(final boolean b) {
-        // TODO Auto-generated method stub
-
-    }
 }

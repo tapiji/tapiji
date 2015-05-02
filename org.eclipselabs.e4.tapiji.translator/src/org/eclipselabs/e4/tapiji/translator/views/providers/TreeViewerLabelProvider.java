@@ -13,12 +13,22 @@ package org.eclipselabs.e4.tapiji.translator.views.providers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import javax.annotation.PreDestroy;
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
+import org.eclipse.jface.text.Region;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
@@ -28,20 +38,24 @@ import org.eclipselabs.e4.tapiji.translator.model.Translation;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.FilterInfo;
 
 
-public class TreeViewerLabelProvider extends StyledCellLabelProvider implements ITableLabelProvider {
+public class TreeViewerLabelProvider extends StyledCellLabelProvider implements  ISelectionListener, ISelectionChangedListener {
 
     private final TreeViewer treeViewer;
     private final String[] translations;
-    private boolean isSearchEnabled;
+    private boolean isSearchEnabled = true;
+    private int referenceColumn = 0;
 
     public TreeViewerLabelProvider(final TreeViewer treeViewer, final String[] translations) {
+        super();
         this.treeViewer = treeViewer;
         this.translations = translations;
     }
 
 
     @Override
-    public void update(final ViewerCell cell) {
+    public void update(ViewerCell cell) {
+
+
         final Object element = cell.getElement();
         final int columnIndex = cell.getColumnIndex();
         cell.setText(this.getColumnText(element, columnIndex));
@@ -59,22 +73,28 @@ public class TreeViewerLabelProvider extends StyledCellLabelProvider implements 
             if (isMatchingToPattern(element, columnIndex)) {
                 final List<StyleRange> styleRanges = new ArrayList<StyleRange>();
                 final FilterInfo filterInfo = (FilterInfo) ((Term) element).getInfo();
-
-                /*
-                 * for (Region reg : filterInfo
-                 * .getFoundInTranslationRanges(translations
-                 * .get(columnIndex < referenceColumn ? columnIndex + 1
-                 * : columnIndex))) {
-                 * styleRanges.add(new StyleRange(reg.getOffset(), reg
-                 * .getLength(), TranslatorConstants.COLOR_BLACK, TranslatorConstants.COLOR_INFO, SWT.BOLD));
-                 * }
-                 */
+                List<Region> regions = filterInfo.getFoundInTranslationRanges(getColumnLocale(columnIndex));
+                for (Region reg : regions) {
+                    styleRanges.add(new StyleRange(reg.getOffset(), reg.getLength(), TranslatorConstants.COLOR_BLACK,
+                                    TranslatorConstants.COLOR_INFO, SWT.BOLD));
+                }
 
                 cell.setStyleRanges(styleRanges.toArray(new StyleRange[styleRanges.size()]));
             } else {
                 cell.setForeground(TranslatorConstants.COLOR_GRAY);
             }
         }
+        super.update(cell);
+    }
+
+    private String getColumnLocale(final int columnIndex) {
+        int index = 0;
+        if (columnIndex < referenceColumn) {
+            index = columnIndex + 1;
+        } else {
+            index = columnIndex;
+        }
+        return translations[index];
     }
 
     public void setSearchEnabled(final boolean isSearchEnabled) {
@@ -103,12 +123,7 @@ public class TreeViewerLabelProvider extends StyledCellLabelProvider implements 
         return false;
     }
 
-    @Override
-    public Image getColumnImage(final Object element, final int columnIndex) {
-        return null;
-    }
 
-    @Override
     public String getColumnText(final Object element, final int columnIndex) {
         try {
             final Term term = (Term) element;
@@ -119,15 +134,10 @@ public class TreeViewerLabelProvider extends StyledCellLabelProvider implements 
         } catch (final Exception e) {
             e.printStackTrace();
         }
+
         return "";
     }
 
-    @Focus
-    public void setFocus() {
-        if (treeViewer != null) {
-            treeViewer.getControl().setFocus();
-        }
-    }
 
     @Override
     @PreDestroy
@@ -137,5 +147,25 @@ public class TreeViewerLabelProvider extends StyledCellLabelProvider implements 
 
     public static TreeViewerLabelProvider newInstance(final TreeViewer treeViewer, final String[] translations) {
         return new TreeViewerLabelProvider(treeViewer, translations);
+    }
+
+
+    @Override
+    public void selectionChanged(MPart part, Object selection) {
+
+    }
+
+
+    @Override
+    public void selectionChanged(SelectionChangedEvent event) {
+        final ISelection selection = event.getSelection();
+
+        if (selection.isEmpty() || !(selection instanceof IStructuredSelection)) {
+            return;
+        }
+
+        final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+       // selectedItem = (IKeyTreeNode) structuredSelection.iterator().next();
+        treeViewer.refresh();
     }
 }
