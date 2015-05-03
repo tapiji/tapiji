@@ -101,7 +101,9 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         TreeViewerEditor.create(treeViewer, createFocusCellManager(), createColumnActivationStrategy(),
                         TREE_VIEWER_EDITOR_FEATURE);
         tree = treeViewer.getTree();
+
         tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        dragAndDrop();
 
     }
 
@@ -239,7 +241,6 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
             }
             translations = glossary.info.getTranslations();
             referenceLanguage();
-            dragAndDrop();
 
 
             initializeWidget();
@@ -248,7 +249,6 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
             columnSorter(glossary);
             initMatchers();
             tree.setRedraw(true);
-
             treeViewer.refresh();
         }
     }
@@ -284,7 +284,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         }
         fuzzyMatchingEnabled = enable;
         initMatchers();
-        treeViewerLabelProvider.setSearchEnabled(enable);
+        treeViewerLabelProvider.isSearchEnabled(enable);
         matcher.setPattern(pattern);
         treeViewer.refresh();
     }
@@ -382,14 +382,27 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
 
 
     @Override
-    public void setSearchString(final String text) {
-        matcher.setPattern(text);
-        final boolean grouped = (matcher.getPattern().trim().length() > 0) ? false: true;
-        setTreeStructure(grouped && (columnSorter != null) && (columnSorter.getSortInfo().getColumnIndex() == 0));
-        treeViewer.refresh();
+    public void setSearchString(final String searchString) {
+
+        if (null != matcher) {
+            if (searchString.isEmpty()) {
+                matcher.setPattern(null);
+                setTreeStructure(true);
+                treeViewerLabelProvider.isSearchEnabled(false);
+            } else {
+                matcher.setPattern(searchString);
+                setTreeStructure(isSearchTreeGrouped());
+                treeViewerLabelProvider.isSearchEnabled(true);
+            }
+            treeViewer.refresh();
+        }
     }
 
+    private boolean isSearchTreeGrouped() {
+        return (matcher.getPattern().trim().length() < 0) && columnSorter.getSortInfo().getColumnIndex() == 0;
+    }
 
+    @Override
     @Focus
     public boolean setFocus() {
         if (treeViewer != null) {

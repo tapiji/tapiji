@@ -57,7 +57,6 @@ public class TreeViewerContentProvider implements ITreeContentProvider {
         Term[] elements = new Term[] {};
         if (isGrouped) {
             if (parentElement instanceof Term) {
-                final Term t = (Term) parentElement;
                 elements = ((Term) parentElement).getAllSubTerms();
             }
         }

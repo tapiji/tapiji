@@ -33,6 +33,7 @@ public final class GlossaryDropTarget extends DropTargetAdapter {
         this.glossaryService = glossaryService;
     }
 
+
     @Override
     public void dragEnter(final DropTargetEvent dropTargetEvent) {
         if ((dropTargetEvent.detail == DND.DROP_MOVE) || (dropTargetEvent.detail == DND.DROP_DEFAULT)) {
@@ -42,10 +43,13 @@ public final class GlossaryDropTarget extends DropTargetAdapter {
                 dropTargetEvent.detail = DND.DROP_NONE;
             }
         }
+        super.dragEnter(dropTargetEvent);
     }
+
 
     @Override
     public void drop(final DropTargetEvent dropTargetEvent) {
+
         if (TermTransfer.getInstance().isSupportedType(dropTargetEvent.currentDataType)) {
             Term parentTerm = null;
 
@@ -74,7 +78,9 @@ public final class GlossaryDropTarget extends DropTargetAdapter {
         } else {
             dropTargetEvent.detail = DND.DROP_NONE;
         }
+        super.drop(dropTargetEvent);
     }
+
 
     public static GlossaryDropTarget create(final TreeViewer viewer, final IGlossaryService glossaryService) {
         return new GlossaryDropTarget(viewer, glossaryService);

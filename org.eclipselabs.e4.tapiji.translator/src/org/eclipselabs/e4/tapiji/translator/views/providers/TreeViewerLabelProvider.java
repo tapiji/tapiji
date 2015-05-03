@@ -42,13 +42,14 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
 
     private final TreeViewer treeViewer;
     private final String[] translations;
-    private boolean isSearchEnabled = true;
-    private final int referenceColumn = 0;
+    private boolean isSearchEnabled;
+    private final int referenceColumn;
 
     public TreeViewerLabelProvider(final TreeViewer treeViewer, final String[] translations) {
         super();
         this.treeViewer = treeViewer;
         this.translations = translations;
+        this.referenceColumn = 0;
     }
 
 
@@ -65,10 +66,13 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
         } else {
             cell.setFont(getColumnFont(element, columnIndex));
             cell.setBackground(COLOR_WHITE);
+            cell.setForeground(COLOR_BLACK);
         }
 
         if (isSearchEnabled) {
             searchStyle(cell, (Term) element, columnIndex);
+        } else {
+            cell.setStyleRanges(null);
         }
         super.update(cell);
     }
@@ -85,7 +89,6 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
                 style = new StyleRange(reg.getOffset(), reg.getLength(), COLOR_BLACK, COLOR_INFO, SWT.BOLD);
                 STYLE_RANGES.add(style);
             }
-
             cell.setStyleRanges(STYLE_RANGES.toArray(new StyleRange[STYLE_RANGES.size()]));
         } else {
             cell.setForeground(COLOR_GRAY);
@@ -102,7 +105,7 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
         return translations[index];
     }
 
-    public void setSearchEnabled(final boolean isSearchEnabled) {
+    public void isSearchEnabled(final boolean isSearchEnabled) {
         this.isSearchEnabled = isSearchEnabled;
     }
 
@@ -124,7 +127,7 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
 
     protected boolean isCrossRefRegion(final String cellText) {
         // TODO
-        return true;
+        return false;
     }
 
 
@@ -145,7 +148,7 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
     @Override
     @PreDestroy
     public void dispose() {
-
+        STYLE_RANGES.clear();
     }
 
     public static TreeViewerLabelProvider newInstance(final TreeViewer treeViewer, final String[] translations) {

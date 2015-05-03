@@ -189,10 +189,11 @@ public final class GlossaryPart implements ModifyListener, SelectionListener {
     }
 
     @Override
-    public void modifyText(final ModifyEvent e) {
-        Log.d(TAG, String.format("Search string: %s", inputFilter.getText()));
-        // if (glossary != null && glossary.getGlossary() != null)
-        treeViewerWidget.setSearchString(inputFilter.getText());
+    public void modifyText(final ModifyEvent modifyEvent) {
+        if (null != treeViewerWidget) {
+            Log.d(TAG, String.format("Search string: %s", inputFilter.getText()));
+            treeViewerWidget.setSearchString(inputFilter.getText());
+        }
     }
 
     @Override
