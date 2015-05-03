@@ -70,13 +70,26 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
         }
 
         if (isSearchEnabled) {
-            searchStyle(cell, (Term) element, columnIndex);
-        } else {
-            cell.setStyleRanges(null);
-        }
-        super.update(cell);
-    }
+            if (isMatchingToPattern((Term) element, columnIndex)) {
+                List<StyleRange> styleRanges = new ArrayList<StyleRange>();
+                FilterInfo filterInfo = (FilterInfo) ((Term) element).getInfo();
 
+                for (Region reg : filterInfo
+                                .getFoundInTranslationRanges(translations[columnIndex < referenceColumn ? columnIndex + 1
+                                                : columnIndex])) {
+                    styleRanges.add(new StyleRange(reg.getOffset(), reg.getLength(), COLOR_BLACK, COLOR_INFO, SWT.BOLD));
+                }
+
+                cell.setStyleRanges(styleRanges.toArray(new StyleRange[styleRanges.size()]));
+            } else {
+                cell.setForeground(COLOR_GRAY);
+            }
+        }
+        // } else {
+        // cell.setStyleRanges(null);
+        // }
+        // super.update(cell);
+    }
 
     private void searchStyle(final ViewerCell cell, final Term term, final int columnIndex) {
         if (isMatchingToPattern(term, columnIndex)) {
