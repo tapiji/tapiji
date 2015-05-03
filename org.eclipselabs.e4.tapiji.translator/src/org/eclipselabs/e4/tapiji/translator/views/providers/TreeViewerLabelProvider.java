@@ -29,7 +29,6 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Font;
-import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.FilterInfo;
@@ -52,7 +51,6 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
         this.referenceColumn = 0;
     }
 
-
     @Override
     public void update(final ViewerCell cell) {
         final Object element = cell.getElement();
@@ -66,29 +64,14 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
         } else {
             cell.setFont(getColumnFont(element, columnIndex));
             cell.setBackground(COLOR_WHITE);
-            cell.setForeground(COLOR_BLACK);
         }
 
         if (isSearchEnabled) {
-            if (isMatchingToPattern((Term) element, columnIndex)) {
-                List<StyleRange> styleRanges = new ArrayList<StyleRange>();
-                FilterInfo filterInfo = (FilterInfo) ((Term) element).getInfo();
-
-                for (Region reg : filterInfo
-                                .getFoundInTranslationRanges(translations[columnIndex < referenceColumn ? columnIndex + 1
-                                                : columnIndex])) {
-                    styleRanges.add(new StyleRange(reg.getOffset(), reg.getLength(), COLOR_BLACK, COLOR_INFO, SWT.BOLD));
-                }
-
-                cell.setStyleRanges(styleRanges.toArray(new StyleRange[styleRanges.size()]));
-            } else {
-                cell.setForeground(COLOR_GRAY);
-            }
+            searchStyle(cell, (Term) element, columnIndex);
+        } else {
+            cell.setStyleRanges(null);
         }
-        // } else {
-        // cell.setStyleRanges(null);
-        // }
-        // super.update(cell);
+        super.update(cell);
     }
 
     private void searchStyle(final ViewerCell cell, final Term term, final int columnIndex) {
@@ -145,16 +128,13 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
 
 
     public String getColumnText(final Object element, final int columnIndex) {
-        try {
+        if (null != element) {
             final Term term = (Term) element;
-            if (term != null) {
-                final Translation transl = term.getTranslation(translations[columnIndex]);
-                return transl != null ? transl.value : "";
-            }
-        } catch (final Exception e) {
-            Log.e(TAG, e);
+            final Translation transl = term.getTranslation(translations[columnIndex]);
+            return transl != null ? transl.value : "";
+        } else {
+            return "";
         }
-        return "";
     }
 
 

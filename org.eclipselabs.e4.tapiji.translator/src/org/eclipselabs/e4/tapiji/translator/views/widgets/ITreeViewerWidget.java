@@ -16,4 +16,6 @@ public interface ITreeViewerWidget {
     void enableFuzzyMatching(boolean enable);
 
     void setSearchString(String text);
+
+    void setMatchingPrecision(float val);
 }

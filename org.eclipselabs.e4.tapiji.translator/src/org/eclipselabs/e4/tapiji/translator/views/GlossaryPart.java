@@ -29,12 +29,12 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -48,28 +48,30 @@ import org.eclipselabs.e4.tapiji.translator.views.widgets.TreeViewerWidget;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
 
 
-public final class GlossaryPart implements ModifyListener, SelectionListener {
+public final class GlossaryPart implements ModifyListener, Listener {
 
-    private static final String ID = "org.eclipselabs.tapiji.translator.views.GlossaryView";
     private static final String TREE_VIEWER_MENU_ID = "org.eclipselabs.e4.tapiji.translator.popupmenu.treeview";
     private static final String TAG = GlossaryPart.class.getSimpleName();
-    @Inject
-    private ESelectionService selectionService;
-    @Inject
-    private EMenuService menuService;
-    @Inject
-    private StoreInstanceState storeInstanceState;
+
     private ITreeViewerWidget treeViewerWidget;
     private Scale fuzzyScaler;
     private Label labelScale;
     private Text inputFilter;
+
+    @Inject
     private IGlossaryService glossaryService;
 
+    @Inject
+    private ESelectionService selectionService;
+
+    @Inject
+    private StoreInstanceState storeInstanceState;
+
+    @Inject
+    private EMenuService menuService;
 
     @PostConstruct
-    public void createPartControl(final Composite parent, final IGlossaryService glossaryService) {
-        this.glossaryService = glossaryService;
-
+    public void createPartControl(final Composite parent) {
         parent.setLayout(new GridLayout(1, false));
 
         final Composite parentComp = new Composite(parent, SWT.BORDER);
@@ -93,26 +95,13 @@ public final class GlossaryPart implements ModifyListener, SelectionListener {
         fuzzyScaler.setMinimum(0);
         fuzzyScaler.setIncrement(1);
         fuzzyScaler.setPageIncrement(5);
-        fuzzyScaler.setSelection(0);
-
-        fuzzyScaler.addSelectionListener(this);
+        fuzzyScaler.addListener(SWT.Selection, this);
         fuzzyScaler.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
-        Log.d(TAG, String.format("Array: %s", storeInstanceState.toString()));
-        // onRestoreInstance(storeInstanceState);
+        onRestoreInstance();
         initializeTreeViewerWidget(parent);
-    }
 
-    private void showHideFuzzyMatching(final boolean isVisible) {
-        if (isVisible) {
-            ((GridData) labelScale.getLayoutData()).heightHint = SWT.DEFAULT;
-            ((GridData) fuzzyScaler.getLayoutData()).heightHint = SWT.DEFAULT;
-        } else {
-            ((GridData) labelScale.getLayoutData()).heightHint = 0;
-            ((GridData) fuzzyScaler.getLayoutData()).heightHint = 0;
-        }
-        labelScale.getParent().layout();
-        labelScale.getParent().getParent().layout();
+        Log.d(TAG, String.format("Array: %s", storeInstanceState.toString()));
     }
 
     @Inject
@@ -134,6 +123,7 @@ public final class GlossaryPart implements ModifyListener, SelectionListener {
     @Inject
     @Optional
     private void onSearchSelected(@UIEventTopic(TranslatorConstants.TOPIC_GUI) final boolean isVisible) {
+        Log.d(TAG, "IsFuzzyMode:" + isVisible);
         showHideFuzzyMatching(isVisible);
     }
 
@@ -157,15 +147,8 @@ public final class GlossaryPart implements ModifyListener, SelectionListener {
                 Log.d(TAG, "Selection:" + selection.getFirstElement());
             }
         });
+
         menuService.registerContextMenu(treeViewerWidget.getTreeViewer().getControl(), TREE_VIEWER_MENU_ID);
-    }
-
-
-    @Focus
-    public void setFocus() {
-        if (treeViewerWidget != null) {
-            // treeViewerWidget.getTreeViewer().setFocus();
-        }
     }
 
     @PersistState
@@ -179,13 +162,28 @@ public final class GlossaryPart implements ModifyListener, SelectionListener {
         Log.d(TAG, String.format("Array: %s", storeInstanceState.toString()));
     }
 
-    private void onRestoreInstance(final StoreInstanceState storeInstanceState) {
+    private void onRestoreInstance() {
         if (!storeInstanceState.getGlossaryFile().isEmpty()) {
             glossaryService.loadGlossary(new File(storeInstanceState.getGlossaryFile()));
         }
         inputFilter.setText(storeInstanceState.getSearchValue());
         fuzzyScaler.setSelection((int) storeInstanceState.getMatchingPrecision());
         showHideFuzzyMatching(storeInstanceState.isFuzzyMode());
+    }
+
+    private void showHideFuzzyMatching(final boolean isVisible) {
+        if (isVisible) {
+            ((GridData) labelScale.getLayoutData()).heightHint = SWT.DEFAULT;
+            ((GridData) fuzzyScaler.getLayoutData()).heightHint = SWT.DEFAULT;
+        } else {
+            ((GridData) labelScale.getLayoutData()).heightHint = 0;
+            ((GridData) fuzzyScaler.getLayoutData()).heightHint = 0;
+        }
+        labelScale.getParent().layout();
+        labelScale.getParent().getParent().layout();
+        if (null != treeViewerWidget) {
+            treeViewerWidget.enableFuzzyMatching(isVisible);
+        }
     }
 
     @Override
@@ -197,13 +195,15 @@ public final class GlossaryPart implements ModifyListener, SelectionListener {
     }
 
     @Override
-    public void widgetSelected(final SelectionEvent e) {
-        // TODO Auto-generated method stub
-
+    public void handleEvent(Event event) {
+        if (null != fuzzyScaler) {
+            float val = 1f - (Float.parseFloat((fuzzyScaler.getMaximum() - fuzzyScaler.getSelection() + fuzzyScaler
+                            .getMinimum()) + "") / 100.f);
+            treeViewerWidget.setMatchingPrecision(val);
+        }
     }
 
-    @Override
-    public void widgetDefaultSelected(final SelectionEvent e) {
-        // computeMatchingPrecision();
+    @Focus
+    public void setFocus() {
     }
 }

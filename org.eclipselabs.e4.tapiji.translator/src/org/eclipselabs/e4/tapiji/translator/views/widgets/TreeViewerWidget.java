@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
@@ -270,6 +269,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
 
     @Override
     public void enableFuzzyMatching(final boolean enable) {
+        Log.d(TAG, String.format("Enable fuzzy logic: %s", enable));
         String pattern = "";
         if (matcher != null) {
             pattern = matcher.getPattern();
@@ -292,7 +292,6 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
 
     private void initMatchers() {
         treeViewer.resetFilters();
-        final String patternBefore = matcher != null ? matcher.getPattern() : "";
         if (fuzzyMatchingEnabled) {
             matcher = new FuzzyMatcher(treeViewer);
             ((FuzzyMatcher) matcher).setMinimumSimilarity(matchingPrecision);
@@ -300,7 +299,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
             matcher = new ExactMatcher(treeViewer);
         }
 
-        matcher.setPattern(patternBefore);
+        matcher.setPattern((matcher != null) ? matcher.getPattern() : "");
 
         if (this.selectiveViewEnabled) {
             new SelectiveMatcher(treeViewer);
@@ -380,10 +379,12 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         };
     }
 
+    private boolean isSearchTreeGrouped() {
+        return (matcher.getPattern().trim().length() < 0) && columnSorter.getSortInfo().getColumnIndex() == 0;
+    }
 
     @Override
     public void setSearchString(final String searchString) {
-
         if (null != matcher) {
             if (searchString.isEmpty()) {
                 matcher.setPattern(null);
@@ -398,17 +399,14 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         }
     }
 
-    private boolean isSearchTreeGrouped() {
-        return (matcher.getPattern().trim().length() < 0) && columnSorter.getSortInfo().getColumnIndex() == 0;
-    }
 
     @Override
-    @Focus
-    public boolean setFocus() {
-        if (treeViewer != null) {
-            treeViewer.getControl().setFocus();
-            return true;
+    public void setMatchingPrecision(float value) {
+        Log.d(TAG, "PRECISSION: " + matcher);
+        if (matcher instanceof FuzzyMatcher) {
+            Log.d(TAG, "PRECISSION2: " + value);
+            ((FuzzyMatcher) matcher).setMinimumSimilarity(value);
+            treeViewer.refresh();
         }
-        return false;
     }
 }
