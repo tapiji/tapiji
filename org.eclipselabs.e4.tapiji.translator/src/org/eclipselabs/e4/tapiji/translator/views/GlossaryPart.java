@@ -100,7 +100,6 @@ public final class GlossaryPart implements ModifyListener, Listener {
 
         onRestoreInstance();
         initializeTreeViewerWidget(parent);
-
         Log.d(TAG, String.format("Array: %s", storeInstanceState.toString()));
     }
 
@@ -162,6 +161,12 @@ public final class GlossaryPart implements ModifyListener, Listener {
         Log.d(TAG, String.format("Array: %s", storeInstanceState.toString()));
     }
 
+    private float getFuzzyPrecission() {
+        final String value = String.valueOf(fuzzyScaler.getMaximum() - fuzzyScaler.getSelection()
+                        + fuzzyScaler.getMinimum());
+        return 1f - (Float.parseFloat(value) / 100.f);
+    }
+
     private void onRestoreInstance() {
         if (!storeInstanceState.getGlossaryFile().isEmpty()) {
             glossaryService.loadGlossary(new File(storeInstanceState.getGlossaryFile()));
@@ -181,15 +186,15 @@ public final class GlossaryPart implements ModifyListener, Listener {
         }
         labelScale.getParent().layout();
         labelScale.getParent().getParent().layout();
-        if (null != treeViewerWidget) {
+        if (null != treeViewerWidget) { // TODO init
             treeViewerWidget.enableFuzzyMatching(isVisible);
         }
+
     }
 
     @Override
     public void modifyText(final ModifyEvent modifyEvent) {
         if (null != treeViewerWidget) {
-            Log.d(TAG, String.format("Search string: %s", inputFilter.getText()));
             treeViewerWidget.setSearchString(inputFilter.getText());
         }
     }
@@ -197,9 +202,7 @@ public final class GlossaryPart implements ModifyListener, Listener {
     @Override
     public void handleEvent(Event event) {
         if (null != fuzzyScaler) {
-            float val = 1f - (Float.parseFloat((fuzzyScaler.getMaximum() - fuzzyScaler.getSelection() + fuzzyScaler
-                            .getMinimum()) + "") / 100.f);
-            treeViewerWidget.setMatchingPrecision(val);
+            treeViewerWidget.setMatchingPrecision(getFuzzyPrecission());
         }
     }
 

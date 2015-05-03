@@ -48,22 +48,6 @@ public class StoreInstanceState {
         persistedState.put(STORE_EDIT_MODE, String.valueOf(isEditMode));
     }
 
-
-    /*
-     * public void saveState(IMemento memento) {
-     * IMemento mCI = memento.createChild(TAG_SORT_INFO);
-     * mCI.putInteger(TAG_COLUMN_INDEX, colIdx);
-     * mCI.putBoolean(TAG_ORDER, DESC);
-     * }
-     * public void init(IMemento memento) {
-     * IMemento mCI = memento.getChild(TAG_SORT_INFO);
-     * if (mCI == null)
-     * return;
-     * colIdx = mCI.getInteger(TAG_COLUMN_INDEX);
-     * DESC = mCI.getBoolean(TAG_ORDER);
-     * }
-     */
-
     public void setColumnIndex(final int columnIndex) {
         persistedState.put(STORE_SORT_COLUMN_INDEX, String.valueOf(columnIndex));
     }

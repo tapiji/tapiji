@@ -64,6 +64,7 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
         } else {
             cell.setFont(getColumnFont(element, columnIndex));
             cell.setBackground(COLOR_WHITE);
+            cell.setForeground(COLOR_BLACK);
         }
 
         if (isSearchEnabled) {
