@@ -5,25 +5,6 @@
 /*/.settings/
 /*/target/
 
-# Eclipse Core
-#.project
-
-# External tool builders
-.externalToolBuilders/
-
-# Locally stored "Eclipse launch configurations"
-*.launch
-
-# CDT-specific
-#.cproject
-
-# JDT-specific (Eclipse Java Development Tools)
-.classpath
-
-# PDT-specific
-.buildpath
-
-
 # binaries for PDE editor extension
 org.eclipse.babel.core.pdeutils/org.eclipse.babel.core.pdeutils.jar
 
