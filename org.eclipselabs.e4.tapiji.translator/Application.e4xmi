@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_Tb38kMAvEeSRGIkNvtWVbw" elementId="org.eclipselabs.e4.tapiji.translator.application">
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_Tb38kMAvEeSRGIkNvtWVbw" elementId="org.eclipselabs.e4.tapiji.translator.application">
   <children xsi:type="basic:TrimmedWindow" xmi:id="_ZcsPgMAvEeSRGIkNvtWVbw" elementId="org.eclipselabs.e4.tapiji.translator.trimmedwindow.tapijiTranslator" label="TapiJI Translator" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resources/icons/16x16/tapiji.png" tooltip="Tooling for agile and process integrated Java Internationalization" bindingContexts="_lv-iAMEfEeS16pfZp0OXPg" x="100" y="100" width="600" height="400">
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_GxIYMMBDEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.perspectivestack.0">
       <children xsi:type="advanced:Perspective" xmi:id="_HCcxsMBDEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.perspective" label="TapiJI Translator">
@@ -27,10 +27,12 @@
               <children xsi:type="menu:HandledMenuItem" xmi:id="_uio3wMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.deleteTranslation" label="Delete Translation ..." command="_00WyQM_oEeS7geCp-xH0Qw"/>
               <children xsi:type="menu:MenuSeparator" xmi:id="_qa8bwMzlEeSHOM1sG85QHg" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.5"/>
               <children xsi:type="menu:Menu" xmi:id="_5ji20M6LEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.menu.referenceTranslation" label="Reference Translation">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_e4qekPcaEeSs5Y_w1k3CXA" coreExpressionId="org.eclipselabs.e4.tapiji.translator.definition.translationreference"/>
                 <children xsi:type="menu:DynamicMenuContribution" xmi:id="_NFvEEM6MEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.dynamicmenucontribution.0" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.ReferenceTranslationHandler"/>
               </children>
-              <children xsi:type="menu:Menu" xmi:id="_7eLXgM6LEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.menu.displayedTranslation" label="Displayed Translation">
-                <children xsi:type="menu:DynamicMenuContribution" xmi:id="_NrSoMM6MEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.dynamicmenucontribution.1" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.DisplayedTranslationHandler"/>
+              <children xsi:type="menu:Menu" xmi:id="_7eLXgM6LEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.menu.visibleTranslation" label="Displayed Translation">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_uj8YwPcnEeSs5Y_w1k3CXA" coreExpressionId="org.eclipselabs.e4.tapiji.translator.definition.translationvisibility"/>
+                <children xsi:type="menu:DynamicMenuContribution" xmi:id="_NrSoMM6MEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.dynamicmenucontribution.1" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.VisibleTranslationHandler"/>
               </children>
             </menus>
           </children>

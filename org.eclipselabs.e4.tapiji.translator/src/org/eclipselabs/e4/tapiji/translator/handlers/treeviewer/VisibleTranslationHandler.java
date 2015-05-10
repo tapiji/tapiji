@@ -14,10 +14,10 @@ import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
 
 
-public class DisplayedTranslationHandler {
+public class VisibleTranslationHandler {
 
     private static final String CONTRIBUTION_URI = "bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.handlers.treeviewer.TranslationVisibilityHandler";
-    private static final String TAG = DisplayedTranslationHandler.class.getSimpleName();
+    private static final String TAG = VisibleTranslationHandler.class.getSimpleName();
 
     @AboutToShow
     public void aboutToShow(final List<MMenuElement> items, final EModelService modelService,
@@ -57,6 +57,6 @@ public class DisplayedTranslationHandler {
 
     @CanExecute
     public boolean canExecute(final IGlossaryService glossaryService) {
-        return true;
+        return false;
     }
 }

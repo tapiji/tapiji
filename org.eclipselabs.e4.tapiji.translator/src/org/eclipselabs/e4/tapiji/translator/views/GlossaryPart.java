@@ -15,6 +15,7 @@ import java.io.File;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.PersistState;
@@ -51,6 +52,9 @@ import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceS
 public final class GlossaryPart implements ModifyListener, Listener {
 
     private static final String TREE_VIEWER_MENU_ID = "org.eclipselabs.e4.tapiji.translator.popupmenu.treeview";
+    private static final String EXPRESSION_TRANSLATION_REFERENCE = "org.eclipselabs.e4.tapiji.translator.popupmenu.TRANSLATION_REFERENCE";
+    private static final String EXPRESSION_TRANSLATION_VISIBILITY = "org.eclipselabs.e4.tapiji.translator.popupmenu.TRANSLATION_VISIBILITY";
+
     private static final String TAG = GlossaryPart.class.getSimpleName();
 
     private ITreeViewerWidget treeViewerWidget;
@@ -69,6 +73,9 @@ public final class GlossaryPart implements ModifyListener, Listener {
 
     @Inject
     private EMenuService menuService;
+
+    @Inject
+    private IEclipseContext eclipseContext;
 
     @PostConstruct
     public void createPartControl(final Composite parent) {
@@ -130,6 +137,8 @@ public final class GlossaryPart implements ModifyListener, Listener {
     @Optional
     private void onReloadGlossary(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD) final Glossary glossary) {
         if (glossary != null) {
+            eclipseContext.set(EXPRESSION_TRANSLATION_REFERENCE, glossary.info.translations.size());
+            eclipseContext.set(EXPRESSION_TRANSLATION_VISIBILITY, glossary.info.translations.size() - 1);
             treeViewerWidget.updateView(glossary);
         }
     }
@@ -171,6 +180,8 @@ public final class GlossaryPart implements ModifyListener, Listener {
         if (!storeInstanceState.getGlossaryFile().isEmpty()) {
             glossaryService.loadGlossary(new File(storeInstanceState.getGlossaryFile()));
         }
+        eclipseContext.set(EXPRESSION_TRANSLATION_REFERENCE, 0);
+        eclipseContext.set(EXPRESSION_TRANSLATION_VISIBILITY, 0);
         inputFilter.setText(storeInstanceState.getSearchValue());
         fuzzyScaler.setSelection((int) storeInstanceState.getMatchingPrecision());
         showHideFuzzyMatching(storeInstanceState.isFuzzyMode());

@@ -20,4 +20,6 @@ public final class TranslationVisibilityHandler {
         }
         Log.d(TAG, String.format("Store reference language: %s", menuItem.isSelected()));
     }
+
+
 }

@@ -22,4 +22,33 @@
          </property>
       </product>
    </extension>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="org.eclipselabs.e4.tapiji.translator.definition.translationreference">
+         <with
+               variable="org.eclipselabs.e4.tapiji.translator.popupmenu.TRANSLATION_REFERENCE">
+            <and>
+               <not>
+                  <equals
+                        value="0">
+                  </equals>
+               </not>
+            </and>
+         </with>
+      </definition>
+      <definition
+            id="org.eclipselabs.e4.tapiji.translator.definition.translationvisibility">
+         <with
+               variable="org.eclipselabs.e4.tapiji.translator.popupmenu.TRANSLATION_VISIBILITY">
+            <and>
+               <not>
+                  <equals
+                        value="0">
+                  </equals>
+               </not>
+            </and>
+         </with>
+      </definition>
+   </extension>
 </plugin>

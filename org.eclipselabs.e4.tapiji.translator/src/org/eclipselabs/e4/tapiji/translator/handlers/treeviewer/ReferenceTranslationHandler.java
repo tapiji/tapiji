@@ -3,6 +3,7 @@ package org.eclipselabs.e4.tapiji.translator.handlers.treeviewer;
 
 import java.util.List;
 import java.util.Locale;
+import org.eclipse.e4.ui.di.AboutToHide;
 import org.eclipse.e4.ui.di.AboutToShow;
 import org.eclipse.e4.ui.model.application.ui.menu.ItemType;
 import org.eclipse.e4.ui.model.application.ui.menu.MDirectMenuItem;
@@ -22,11 +23,15 @@ public final class ReferenceTranslationHandler {
     @AboutToShow
     public void aboutToShow(final List<MMenuElement> items, final EModelService modelService,
                     final IGlossaryService glossaryService, final StoreInstanceState storeInstanceState) {
+
+
         final String[] translations = glossaryService.getTranslations();
         final String referenceLanguage = storeInstanceState.getReferenceLanguage();
 
+
         Log.d(TAG, String.format("Get reference language: %s", referenceLanguage));
         Log.d(TAG, String.format("Get reference language: %s", items));
+
 
         MDirectMenuItem dynamicItem;
         for (final String lang : translations) {
@@ -43,6 +48,12 @@ public final class ReferenceTranslationHandler {
             dynamicItem.setType(ItemType.RADIO);
             items.add(dynamicItem);
         }
+
+    }
+
+    @AboutToHide
+    public void aboutToHide(List<MMenuElement> items) {
+
     }
 
     public Locale getLocale(final String lang) {
@@ -51,4 +62,5 @@ public final class ReferenceTranslationHandler {
                         locDef[1])) : new Locale(locDef[0], locDef[1], locDef[2]);
         return l;
     }
+
 }
