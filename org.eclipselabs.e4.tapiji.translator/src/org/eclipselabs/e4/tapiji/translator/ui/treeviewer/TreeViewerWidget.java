@@ -11,6 +11,8 @@
 package org.eclipselabs.e4.tapiji.translator.ui.treeviewer;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -79,9 +81,11 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     private String referenceLanguage;
     private TreeViewerLabelProvider treeViewerLabelProvider;
     private String[] translations;
-    private TextCellEditor textCellEditor;
+
     private TreeViewerSortOrder columnSorter;
     private ExactMatcher matcher;
+
+    private List<String> displayedTranslations = new ArrayList<String>();
 
     private TreeViewerWidget(final Composite parent, final IGlossaryService glossaryService, final StoreInstanceState storeInstanceState) {
         super(parent, SWT.FILL);
@@ -104,10 +108,11 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
 
     private void initializeWidget() {
         if (translations.length > 0) {
-            textCellEditor = new TextCellEditor(tree);
-            treeViewerLabelProvider = TreeViewerLabelProvider.newInstance(treeViewer, translations);
-            treeViewerLabelProvider.isSearchEnabled(isFuzzyMatchingEnabled);
             createLocaleColumns();
+
+            treeViewerLabelProvider = TreeViewerLabelProvider.newInstance(treeViewer, displayedTranslations, displayedTranslations.indexOf(referenceLanguage));
+            treeViewerLabelProvider.isSearchEnabled(isFuzzyMatchingEnabled);
+
 
             treeViewer.setLabelProvider(treeViewerLabelProvider);
             treeViewer.setContentProvider(TreeViewerContentProvider.newInstance());
@@ -121,18 +126,34 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     }
 
     private void createLocaleColumns() {
+        displayedTranslations.clear();
+        TextCellEditor textCellEditor = new TextCellEditor(tree);
         int columnIndex = 0;
+        createColumn(referenceLanguage, columnIndex, textCellEditor);
+        Log.d(TAG, "" + columnIndex + " " + referenceLanguage);
+        columnIndex++;
+        displayedTranslations.add(referenceLanguage);
+        Log.d(TAG, "" + columnIndex);
         for (final String languageCode : translations) {
-            final Locale locale = LocaleUtils.getLocaleFromLanguageCode(languageCode);
-            final TreeViewerColumn column = new TreeViewerColumn(treeViewer, SWT.NONE);
-            column.getColumn().setWidth(200);
-            column.getColumn().setMoveable(true);
-            column.getColumn().setText(locale.getDisplayName());
-            column.getColumn().addSelectionListener(createColumnSelectionListener(columnIndex));
-            column.setEditingSupport(createEditingSupportFor(treeViewer, textCellEditor, columnIndex, languageCode));
-            column.getColumn().setMoveable(true);
+            if (languageCode.equalsIgnoreCase(referenceLanguage)) {
+                continue;
+            }
+            displayedTranslations.add(languageCode);
+            createColumn(languageCode, columnIndex, textCellEditor);
             columnIndex++;
+            Log.d(TAG, "" + columnIndex + " " + languageCode);
         }
+    }
+
+    private void createColumn(final String languageCode, int columnIndex, TextCellEditor textCellEditor) {
+        final Locale locale = LocaleUtils.getLocaleFromLanguageCode(languageCode);
+        final TreeViewerColumn column = new TreeViewerColumn(treeViewer, SWT.NONE);
+        column.getColumn().setWidth(200);
+        column.getColumn().setMoveable(true);
+        column.getColumn().setText(locale.getDisplayName());
+        column.getColumn().addSelectionListener(createColumnSelectionListener(columnIndex));
+        column.setEditingSupport(createEditingSupportFor(textCellEditor, columnIndex, languageCode));
+        column.getColumn().setMoveable(false);
     }
 
     private SelectionListener createColumnSelectionListener(final int columnIndex) {
@@ -258,8 +279,8 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     }
 
 
-    private EditingSupport createEditingSupportFor(final TreeViewer viewer, final TextCellEditor textCellEditor, final int columnCnt, final String languageCode) {
-        return new EditingSupport(viewer) {
+    private EditingSupport createEditingSupportFor(final TextCellEditor textCellEditor, final int columnCnt, final String languageCode) {
+        return new EditingSupport(treeViewer) {
 
             @Override
             protected boolean canEdit(final Object element) {

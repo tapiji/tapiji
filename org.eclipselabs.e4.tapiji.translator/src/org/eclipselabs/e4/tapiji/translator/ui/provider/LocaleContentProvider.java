@@ -49,19 +49,16 @@ public final class LocaleContentProvider implements IStructuredContentProvider, 
 
     @Override
     public Object[] getChildren(final Object parentElement) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Object getParent(final Object element) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public boolean hasChildren(final Object element) {
-        // TODO Auto-generated method stub
         return false;
     }
 }

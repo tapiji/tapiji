@@ -40,15 +40,15 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
     private static final List<StyleRange> STYLE_RANGES = new ArrayList<StyleRange>();
 
     private final TreeViewer treeViewer;
-    private final String[] translations;
+    private final List<String> translations;
     private boolean isSearchEnabled;
     private final int referenceColumn;
 
-    public TreeViewerLabelProvider(final TreeViewer treeViewer, final String[] translations) {
+    public TreeViewerLabelProvider(final TreeViewer treeViewer, final List<String> displayedTranslations, int referenceColumn) {
         super();
         this.treeViewer = treeViewer;
-        this.translations = translations;
-        this.referenceColumn = 0;
+        this.translations = displayedTranslations;
+        this.referenceColumn = referenceColumn;
     }
 
     @Override
@@ -98,7 +98,7 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
         } else {
             index = columnIndex;
         }
-        return translations[index];
+        return translations.get(index);
     }
 
     public void isSearchEnabled(final boolean isSearchEnabled) {
@@ -109,7 +109,7 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
         boolean matching = false;
         final Term term = element;
         if (term.getInfo() != null) {
-            matching = ((FilterInfo) term.getInfo()).hasFoundInTranslation(translations[columnIndex]);
+            matching = ((FilterInfo) term.getInfo()).hasFoundInTranslation(translations.get(columnIndex));
         }
         return matching;
     }
@@ -130,13 +130,12 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
     public String getColumnText(final Object element, final int columnIndex) {
         if (null != element) {
             final Term term = (Term) element;
-            final Translation transl = term.getTranslation(translations[columnIndex]);
+            final Translation transl = term.getTranslation(translations.get(columnIndex));
             return transl != null ? transl.value : "";
         } else {
             return "";
         }
     }
-
 
     @Override
     @PreDestroy
@@ -144,7 +143,7 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
         STYLE_RANGES.clear();
     }
 
-    public static TreeViewerLabelProvider newInstance(final TreeViewer treeViewer, final String[] translations) {
-        return new TreeViewerLabelProvider(treeViewer, translations);
+    public static TreeViewerLabelProvider newInstance(final TreeViewer treeViewer, final List<String> displayedTranslations, int referenceColumn) {
+        return new TreeViewerLabelProvider(treeViewer, displayedTranslations, referenceColumn);
     }
 }
