@@ -45,6 +45,8 @@ import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.storage.StoreInstanceState;
+import org.eclipselabs.e4.tapiji.translator.ui.handler.treeviewer.LanguageVisibilityChangedHandler.LanguageViewHolder;
+import org.eclipselabs.e4.tapiji.translator.ui.provider.TreeViewerContentProvider;
 import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.ITreeViewerWidget;
 import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.TreeViewerWidget;
 
@@ -119,7 +121,6 @@ public final class GlossaryPart implements ModifyListener, Listener {
     @Inject
     @Optional
     private void onEditModeChanged(@UIEventTopic(TranslatorConstant.TOPIC_EDIT_MODE) final boolean isEditable) {
-        Log.d(TAG, "IsEditMode:" + isEditable);
         if (treeViewerWidget != null) {
             treeViewerWidget.setColumnEditable(isEditable);
         }
@@ -127,8 +128,7 @@ public final class GlossaryPart implements ModifyListener, Listener {
 
     @Inject
     @Optional
-    private void onSearchSelected(@UIEventTopic(TranslatorConstant.TOPIC_GUI) final boolean isVisible) {
-        Log.d(TAG, "IsFuzzyMode:" + isVisible);
+    private void onSearchSelected(@UIEventTopic(TranslatorConstant.TOPIC_SHOW_FUZZY_MATCHING) final boolean isVisible) {
         showHideFuzzyMatching(isVisible);
     }
 
@@ -140,6 +140,23 @@ public final class GlossaryPart implements ModifyListener, Listener {
             eclipseContext.set(EXPRESSION_TRANSLATION_VISIBILITY, glossary.info.translations.size() - 1);
             treeViewerWidget.updateView(glossary);
         }
+    }
+
+    @Inject
+    @Optional
+    private void onLanguageVisibilityChanged(@UIEventTopic(TranslatorConstant.TOPIC_SHOW_LANGUAGE) LanguageViewHolder languageVisibility) {
+        if (languageVisibility.isVIsible) {
+            treeViewerWidget.showTranslationColumn(languageVisibility.locale);
+        } else {
+            treeViewerWidget.hideTranslationColumn(languageVisibility.locale);
+        }
+    }
+
+    @Inject
+    @Optional
+    private void onRefrenceChanged(@UIEventTopic(TranslatorConstant.TOPIC_REFERENCE_LANGUAGE) String referenceLanguage) {
+        treeViewerWidget.setReferenceLanguage(referenceLanguage);
+        treeViewerWidget.updateView(((TreeViewerContentProvider) treeViewerWidget.getTreeViewer().getContentProvider()).getGlossary());
     }
 
     protected void initializeTreeViewerWidget(final Composite parent) {
@@ -194,10 +211,9 @@ public final class GlossaryPart implements ModifyListener, Listener {
         }
         labelScale.getParent().layout();
         labelScale.getParent().getParent().layout();
-        if (null != treeViewerWidget) { // TODO init
+        if (null != treeViewerWidget) {
             treeViewerWidget.enableFuzzyMatching(isVisible);
         }
-
     }
 
     @Override

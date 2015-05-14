@@ -144,7 +144,7 @@ public class StoreInstanceState {
         final List<String> hiddenLocales = getHiddenLocales();
         if (!hiddenLocales.contains(locale)) {
             hiddenLocales.add(locale);
-            // persistedState.put(STORE_DISPLAYED_LOCALES, hiddenLocales.toString().replaceAll("\\[|\\]", ""));
+            persistedState.put(STORE_DISPLAYED_LOCALES, hiddenLocales.toString().replaceAll("\\[|\\]", ""));
         }
     }
 
@@ -152,7 +152,7 @@ public class StoreInstanceState {
         final List<String> hiddenLocales = getHiddenLocales();
         if (hiddenLocales.contains(locale)) {
             hiddenLocales.remove(locale);
-            // persistedState.put(STORE_DISPLAYED_LOCALES, hiddenLocales.toString().replaceAll("\\[|\\]", ""));
+            persistedState.put(STORE_DISPLAYED_LOCALES, hiddenLocales.toString().replaceAll("\\[|\\]", ""));
         }
     }
 

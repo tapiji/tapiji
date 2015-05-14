@@ -14,7 +14,7 @@ public final class FuzzyMatchingModeHandler {
     @Execute
     public void execute(final MMenuItem menuItem, final IEventBroker eventBroker, final StoreInstanceState storeInstanceState) {
         storeInstanceState.setFuzzyMode(!menuItem.isSelected());
-        eventBroker.post(TranslatorConstant.TOPIC_GUI, !menuItem.isSelected());
+        eventBroker.post(TranslatorConstant.TOPIC_SHOW_FUZZY_MATCHING, !menuItem.isSelected());
     }
 
     @CanExecute

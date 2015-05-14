@@ -17,5 +17,11 @@ public interface ITreeViewerWidget {
 
     void setSearchString(String text);
 
-    void setMatchingPrecision(float val);
+    void setMatchingPrecision(float value);
+
+    void showTranslationColumn(String languageCode);
+
+    void hideTranslationColumn(String languageCode);
+
+    void setReferenceLanguage(String referenceLanguage);
 }
