@@ -8,7 +8,7 @@
  * Martin Reiterer - initial API and implementation
  * Christian Behon - refactor e3 to e4
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.views.widgets.dnd;
+package org.eclipselabs.e4.tapiji.translator.ui.widgets.dnd;
 
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.views.providers.TreeViewerContentProvider;
+import org.eclipselabs.e4.tapiji.translator.ui.providers.TreeViewerContentProvider;
 
 
 public final class GlossaryDragSource implements DragSourceListener {

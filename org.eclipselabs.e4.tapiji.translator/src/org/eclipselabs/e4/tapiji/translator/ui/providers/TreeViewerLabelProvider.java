@@ -8,7 +8,7 @@
  * Martin Reiterer - initial API and implementation
  * Christian Behon - refactor from e3 to e4
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.views.providers;
+package org.eclipselabs.e4.tapiji.translator.ui.providers;
 
 
 import static org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants.COLOR_BLACK;
@@ -31,7 +31,7 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Font;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.FilterInfo;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.filter.FilterInfo;
 
 
 public final class TreeViewerLabelProvider extends StyledCellLabelProvider {

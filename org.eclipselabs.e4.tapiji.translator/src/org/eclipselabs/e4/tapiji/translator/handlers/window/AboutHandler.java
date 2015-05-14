@@ -6,7 +6,7 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipselabs.e4.tapiji.translator.views.dialogs.AboutDialog;
+import org.eclipselabs.e4.tapiji.translator.ui.dialogs.AboutDialog;
 
 
 public class AboutHandler {

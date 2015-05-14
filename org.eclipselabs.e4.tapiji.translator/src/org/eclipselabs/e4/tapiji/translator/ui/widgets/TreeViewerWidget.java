@@ -8,7 +8,7 @@
  * Martin Reiterer - initial API and implementation
  * Christian Behon - refactor from e3 to e4
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.views.widgets;
+package org.eclipselabs.e4.tapiji.translator.ui.widgets;
 
 
 import java.util.Locale;
@@ -45,17 +45,17 @@ import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.views.providers.TreeViewerContentProvider;
-import org.eclipselabs.e4.tapiji.translator.views.providers.TreeViewerLabelProvider;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.dnd.GlossaryDragSource;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.dnd.GlossaryDropTarget;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.dnd.TermTransfer;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.ExactMatcher;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.FuzzyMatcher;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.filter.SelectiveMatcher;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.sorter.SortInfo;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.sorter.TreeViewerSortOrder;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
+import org.eclipselabs.e4.tapiji.translator.ui.providers.TreeViewerContentProvider;
+import org.eclipselabs.e4.tapiji.translator.ui.providers.TreeViewerLabelProvider;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.dnd.GlossaryDragSource;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.dnd.GlossaryDropTarget;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.dnd.TermTransfer;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.filter.ExactMatcher;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.filter.FuzzyMatcher;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.filter.SelectiveMatcher;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.sorter.SortInfo;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.sorter.TreeViewerSortOrder;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.storage.StoreInstanceState;
 import org.eclipselabs.e4.tapiji.utils.LocaleUtils;
 
 

@@ -7,7 +7,7 @@
  * Contributors:
  * Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.views.widgets.filter;
+package org.eclipselabs.e4.tapiji.translator.ui.widgets.filter;
 
 
 import org.eclipse.babel.core.message.checks.proximity.IProximityAnalyzer;

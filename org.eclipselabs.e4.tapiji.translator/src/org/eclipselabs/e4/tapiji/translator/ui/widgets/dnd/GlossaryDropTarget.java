@@ -8,7 +8,7 @@
  * Martin Reiterer - initial API and implementation
  * Christian Behon - Refactor
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.views.widgets.dnd;
+package org.eclipselabs.e4.tapiji.translator.ui.widgets.dnd;
 
 
 import org.eclipse.jface.viewers.TreeViewer;
@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.views.providers.TreeViewerContentProvider;
+import org.eclipselabs.e4.tapiji.translator.ui.providers.TreeViewerContentProvider;
 
 
 public final class GlossaryDropTarget extends DropTargetAdapter {

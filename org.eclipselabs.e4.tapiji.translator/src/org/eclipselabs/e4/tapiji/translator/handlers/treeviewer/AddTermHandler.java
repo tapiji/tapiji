@@ -16,7 +16,7 @@ import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.storage.StoreInstanceState;
 
 
 public class AddTermHandler {

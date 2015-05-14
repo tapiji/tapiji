@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.CheckedTreeSelectionDialog;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.views.providers.LocaleContentProvider;
-import org.eclipselabs.e4.tapiji.translator.views.providers.LocaleLabelProvider;
+import org.eclipselabs.e4.tapiji.translator.ui.providers.LocaleContentProvider;
+import org.eclipselabs.e4.tapiji.translator.ui.providers.LocaleLabelProvider;
 import org.eclipselabs.e4.tapiji.utils.LocaleUtils;
 
 

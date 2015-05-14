@@ -8,7 +8,7 @@
  * Martin Reiterer - initial API and implementation
  * Christian Behon - refactor from e3 to e4
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.views.widgets.sorter;
+package org.eclipselabs.e4.tapiji.translator.ui.widgets.sorter;
 
 
 import java.util.ArrayList;

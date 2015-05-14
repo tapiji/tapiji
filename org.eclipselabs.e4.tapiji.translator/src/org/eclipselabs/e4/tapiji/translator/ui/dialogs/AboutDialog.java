@@ -1,4 +1,4 @@
-package org.eclipselabs.e4.tapiji.translator.views.dialogs;
+package org.eclipselabs.e4.tapiji.translator.ui.dialogs;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CBanner;

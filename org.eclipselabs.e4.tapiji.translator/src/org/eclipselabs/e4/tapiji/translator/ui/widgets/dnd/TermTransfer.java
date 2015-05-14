@@ -8,7 +8,7 @@
  * Martin Reiterer - initial API and implementation
  * Christian Behon - Refactor
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.views.widgets.dnd;
+package org.eclipselabs.e4.tapiji.translator.ui.widgets.dnd;
 
 
 import java.io.ByteArrayInputStream;

@@ -7,7 +7,7 @@
  * Contributors:
  * Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.views.widgets.sorter;
+package org.eclipselabs.e4.tapiji.translator.ui.widgets.sorter;
 
 
 import java.util.List;

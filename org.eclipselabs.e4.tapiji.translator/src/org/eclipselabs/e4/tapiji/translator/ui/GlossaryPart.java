@@ -8,7 +8,7 @@
  * Martin Reiterer - initial API and implementation
  * Christian Behon - refactor from e3 to e4
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.views;
+package org.eclipselabs.e4.tapiji.translator.ui;
 
 
 import java.io.File;
@@ -44,9 +44,9 @@ import org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.ITreeViewerWidget;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.TreeViewerWidget;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.ITreeViewerWidget;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.TreeViewerWidget;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.storage.StoreInstanceState;
 
 
 public final class GlossaryPart implements ModifyListener, Listener {

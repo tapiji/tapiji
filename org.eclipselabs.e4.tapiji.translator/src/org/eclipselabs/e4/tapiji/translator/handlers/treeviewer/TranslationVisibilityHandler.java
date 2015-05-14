@@ -4,7 +4,7 @@ package org.eclipselabs.e4.tapiji.translator.handlers.treeviewer;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.menu.MMenuItem;
 import org.eclipselabs.e4.tapiji.logger.Log;
-import org.eclipselabs.e4.tapiji.translator.views.widgets.storage.StoreInstanceState;
+import org.eclipselabs.e4.tapiji.translator.ui.widgets.storage.StoreInstanceState;
 
 
 public final class TranslationVisibilityHandler {
