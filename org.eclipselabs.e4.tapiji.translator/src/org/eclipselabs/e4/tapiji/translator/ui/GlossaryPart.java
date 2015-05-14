@@ -40,13 +40,13 @@ import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipselabs.e4.tapiji.logger.Log;
-import org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants;
+import org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.storage.StoreInstanceState;
 import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.ITreeViewerWidget;
 import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.TreeViewerWidget;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.storage.StoreInstanceState;
 
 
 public final class GlossaryPart implements ModifyListener, Listener {
@@ -112,14 +112,13 @@ public final class GlossaryPart implements ModifyListener, Listener {
 
     @Inject
     @Optional
-    private void onError(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_ERROR) final String[] error,
-                    @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
+    private void onError(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_ERROR) final String[] error, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
         MessageDialog.openError(shell, "Deletion not possible", "No term selected");
     }
 
     @Inject
     @Optional
-    private void onEditModeChanged(@UIEventTopic(TranslatorConstants.TOPIC_EDIT_MODE) final boolean isEditable) {
+    private void onEditModeChanged(@UIEventTopic(TranslatorConstant.TOPIC_EDIT_MODE) final boolean isEditable) {
         Log.d(TAG, "IsEditMode:" + isEditable);
         if (treeViewerWidget != null) {
             treeViewerWidget.setColumnEditable(isEditable);
@@ -128,7 +127,7 @@ public final class GlossaryPart implements ModifyListener, Listener {
 
     @Inject
     @Optional
-    private void onSearchSelected(@UIEventTopic(TranslatorConstants.TOPIC_GUI) final boolean isVisible) {
+    private void onSearchSelected(@UIEventTopic(TranslatorConstant.TOPIC_GUI) final boolean isVisible) {
         Log.d(TAG, "IsFuzzyMode:" + isVisible);
         showHideFuzzyMatching(isVisible);
     }
@@ -149,8 +148,7 @@ public final class GlossaryPart implements ModifyListener, Listener {
 
             @Override
             public void selectionChanged(final SelectionChangedEvent event) {
-                final IStructuredSelection selection = (IStructuredSelection) treeViewerWidget.getTreeViewer()
-                                .getSelection();
+                final IStructuredSelection selection = (IStructuredSelection) treeViewerWidget.getTreeViewer().getSelection();
                 selectionService.setSelection(selection.getFirstElement());
                 Log.d(TAG, "Selection:" + selection.getFirstElement());
             }
@@ -171,8 +169,7 @@ public final class GlossaryPart implements ModifyListener, Listener {
     }
 
     private float getFuzzyPrecission() {
-        final String value = String.valueOf(fuzzyScaler.getMaximum() - fuzzyScaler.getSelection()
-                        + fuzzyScaler.getMinimum());
+        final String value = String.valueOf(fuzzyScaler.getMaximum() - fuzzyScaler.getSelection() + fuzzyScaler.getMinimum());
         return 1f - (Float.parseFloat(value) / 100.f);
     }
 

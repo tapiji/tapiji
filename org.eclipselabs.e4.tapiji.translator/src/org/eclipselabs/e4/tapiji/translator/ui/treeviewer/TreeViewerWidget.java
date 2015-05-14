@@ -45,17 +45,17 @@ import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.ui.providers.TreeViewerContentProvider;
-import org.eclipselabs.e4.tapiji.translator.ui.providers.TreeViewerLabelProvider;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.dnd.GlossaryDragSource;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.dnd.GlossaryDropTarget;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.dnd.TermTransfer;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.filter.ExactMatcher;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.filter.FuzzyMatcher;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.filter.SelectiveMatcher;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.sorter.SortInfo;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.sorter.TreeViewerSortOrder;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.storage.StoreInstanceState;
+import org.eclipselabs.e4.tapiji.translator.storage.StoreInstanceState;
+import org.eclipselabs.e4.tapiji.translator.ui.provider.TreeViewerContentProvider;
+import org.eclipselabs.e4.tapiji.translator.ui.provider.TreeViewerLabelProvider;
+import org.eclipselabs.e4.tapiji.translator.ui.widget.dnd.GlossaryDragSource;
+import org.eclipselabs.e4.tapiji.translator.ui.widget.dnd.GlossaryDropTarget;
+import org.eclipselabs.e4.tapiji.translator.ui.widget.dnd.TermTransfer;
+import org.eclipselabs.e4.tapiji.translator.ui.widget.filter.ExactMatcher;
+import org.eclipselabs.e4.tapiji.translator.ui.widget.filter.FuzzyMatcher;
+import org.eclipselabs.e4.tapiji.translator.ui.widget.filter.SelectiveMatcher;
+import org.eclipselabs.e4.tapiji.translator.ui.widget.sorter.SortInfo;
+import org.eclipselabs.e4.tapiji.translator.ui.widget.sorter.TreeViewerSortOrder;
 import org.eclipselabs.e4.tapiji.utils.LocaleUtils;
 
 
