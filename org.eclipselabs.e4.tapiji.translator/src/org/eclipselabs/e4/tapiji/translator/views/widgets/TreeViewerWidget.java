@@ -61,31 +61,30 @@ import org.eclipselabs.e4.tapiji.utils.LocaleUtils;
 
 public final class TreeViewerWidget extends Composite implements IResourceChangeListener, ITreeViewerWidget {
 
-    private static final int TREE_VIEWER_EDITOR_FEATURE = ColumnViewerEditor.TABBING_HORIZONTAL
-                    | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL
-                    | ColumnViewerEditor.KEYBOARD_ACTIVATION;
+    private static final int TREE_VIEWER_EDITOR_FEATURE = ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
+                    | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION;
 
     private static final String TAG = TreeViewerWidget.class.getSimpleName();
+    private static final float DEFAULT_MATCHING_PRECISION = .75f;
+
+    private boolean isColumnEditable;
+    private boolean isFuzzyMatchingEnabled = false;
+    private final boolean selectiveViewEnabled = false;
+
+    private final StoreInstanceState storeInstanceState;
+    private final IGlossaryService glossaryService;
     private final TreeViewer treeViewer;
     private final Tree tree;
 
-    private boolean isColumnEditable;
+    private SortInfo sortInfo;
     private String referenceLanguage;
     private TreeViewerLabelProvider treeViewerLabelProvider;
     private String[] translations;
-
-    private SortInfo sortInfo;
-    private boolean fuzzyMatchingEnabled = false;
-    private final boolean selectiveViewEnabled = false;
     private TextCellEditor textCellEditor;
-    private final IGlossaryService glossaryService;
-    private final StoreInstanceState storeInstanceState;
     private TreeViewerSortOrder columnSorter;
     private ExactMatcher matcher;
-    private final float matchingPrecision = .75f;
 
-    private TreeViewerWidget(final Composite parent, final IGlossaryService glossaryService,
-                    final StoreInstanceState storeInstanceState) {
+    private TreeViewerWidget(final Composite parent, final IGlossaryService glossaryService, final StoreInstanceState storeInstanceState) {
         super(parent, SWT.FILL);
         this.glossaryService = glossaryService;
         this.storeInstanceState = storeInstanceState;
@@ -97,20 +96,18 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         setLayout(gridLayout);
         setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         treeViewer = new TreeViewer(this, SWT.FULL_SELECTION | SWT.SINGLE | SWT.BORDER);
-        TreeViewerEditor.create(treeViewer, createFocusCellManager(), createColumnActivationStrategy(),
-                        TREE_VIEWER_EDITOR_FEATURE);
+        TreeViewerEditor.create(treeViewer, createFocusCellManager(), createColumnActivationStrategy(), TREE_VIEWER_EDITOR_FEATURE);
         tree = treeViewer.getTree();
 
         tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         dragAndDrop();
-
     }
-
 
     private void initializeWidget() {
         if (translations.length > 0) {
             textCellEditor = new TextCellEditor(tree);
             treeViewerLabelProvider = TreeViewerLabelProvider.newInstance(treeViewer, translations);
+            treeViewerLabelProvider.isSearchEnabled(isFuzzyMatchingEnabled);
             createLocaleColumns();
 
             treeViewer.setLabelProvider(treeViewerLabelProvider);
@@ -163,8 +160,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
 
             @Override
             protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
-                return (event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL)
-                                || (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
+                return (event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL) || (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
                                 || ((event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) && (event.keyCode == SWT.CR))
                                 || (event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC);
             }
@@ -210,8 +206,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         }
     }
 
-    public static ITreeViewerWidget create(final Composite parent, final IGlossaryService glossaryService,
-                    final StoreInstanceState storeInstanceState) {
+    public static ITreeViewerWidget create(final Composite parent, final IGlossaryService glossaryService, final StoreInstanceState storeInstanceState) {
         return new TreeViewerWidget(parent, glossaryService, storeInstanceState);
     }
 
@@ -233,22 +228,22 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     public void updateView(final Glossary glossary) {
         if (glossary != null) {
             tree.setRedraw(false);
-            treeViewer.getTree().clearAll(true);
-
-            for (final TreeColumn column : tree.getColumns()) {
-                column.dispose();
-            }
+            clearTreeViewer();
             translations = glossary.info.getTranslations();
             referenceLanguage();
-
-
             initializeWidget();
-
-            treeViewer.setInput(glossary);
             columnSorter(glossary);
             initMatchers();
+            treeViewer.setInput(glossary);
             tree.setRedraw(true);
             treeViewer.refresh();
+        }
+    }
+
+    private void clearTreeViewer() {
+        treeViewer.getTree().clearAll(true);
+        for (final TreeColumn column : tree.getColumns()) {
+            column.dispose();
         }
     }
 
@@ -270,21 +265,21 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     @Override
     public void enableFuzzyMatching(final boolean enable) {
         Log.d(TAG, String.format("Enable fuzzy logic: %s", enable));
+        isFuzzyMatchingEnabled = enable;
         String pattern = "";
         if (matcher != null) {
             pattern = matcher.getPattern();
-
-            if (!fuzzyMatchingEnabled && enable) {
-                if ((matcher.getPattern().trim().length() > 1) && matcher.getPattern().startsWith("*")
-                                && matcher.getPattern().endsWith("*")) {
+            if (!isFuzzyMatchingEnabled && enable) {
+                if ((matcher.getPattern().trim().length() > 1) && matcher.getPattern().startsWith("*") && matcher.getPattern().endsWith("*")) {
                     pattern = pattern.substring(1).substring(0, pattern.length() - 2);
                 }
                 matcher.setPattern(null);
             }
         }
-        fuzzyMatchingEnabled = enable;
         initMatchers();
-        treeViewerLabelProvider.isSearchEnabled(enable);
+        if (treeViewerLabelProvider != null) {
+            treeViewerLabelProvider.isSearchEnabled(enable);
+        }
         matcher.setPattern(pattern);
         treeViewer.refresh();
     }
@@ -292,9 +287,9 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
 
     private void initMatchers() {
         treeViewer.resetFilters();
-        if (fuzzyMatchingEnabled) {
+        if (isFuzzyMatchingEnabled) {
             matcher = new FuzzyMatcher(treeViewer);
-            ((FuzzyMatcher) matcher).setMinimumSimilarity(matchingPrecision);
+            ((FuzzyMatcher) matcher).setMinimumSimilarity(DEFAULT_MATCHING_PRECISION);
         } else {
             matcher = new ExactMatcher(treeViewer);
         }
@@ -325,14 +320,12 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
 
 
     private void columnSorter(final Glossary glossary) {
-        columnSorter = new TreeViewerSortOrder(treeViewer, sortInfo, glossary.getIndexOfLocale(referenceLanguage),
-                        glossary.info.translations);
+        columnSorter = new TreeViewerSortOrder(treeViewer, sortInfo, glossary.getIndexOfLocale(referenceLanguage), glossary.info.translations);
         treeViewer.setSorter(columnSorter);
     }
 
 
-    private EditingSupport createEditingSupportFor(final TreeViewer viewer, final TextCellEditor textCellEditor,
-                    final int columnCnt, final String languageCode) {
+    private EditingSupport createEditingSupportFor(final TreeViewer viewer, final TextCellEditor textCellEditor, final int columnCnt, final String languageCode) {
         return new EditingSupport(viewer) {
 
             @Override
@@ -368,8 +361,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
 
                     @Override
                     protected IStatus run(final IProgressMonitor monitor) {
-                        final Glossary glossary = ((TreeViewerContentProvider) treeViewer.getContentProvider())
-                                        .getGlossary();
+                        final Glossary glossary = ((TreeViewerContentProvider) treeViewer.getContentProvider()).getGlossary();
                         glossaryService.updateGlossary(glossary);
                         return Status.OK_STATUS;
                     }
@@ -399,12 +391,9 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         }
     }
 
-
     @Override
     public void setMatchingPrecision(float value) {
-        Log.d(TAG, "PRECISSION: " + matcher);
         if (matcher instanceof FuzzyMatcher) {
-            Log.d(TAG, "PRECISSION2: " + value);
             ((FuzzyMatcher) matcher).setMinimumSimilarity(value);
             treeViewer.refresh();
         }
