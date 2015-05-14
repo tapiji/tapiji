@@ -1,4 +1,4 @@
-package org.eclipselabs.e4.tapiji.translator.ui.widgets;
+package org.eclipselabs.e4.tapiji.translator.ui.treeviewer;
 
 
 import org.eclipse.jface.viewers.TreeViewer;

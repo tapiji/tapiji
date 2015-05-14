@@ -31,7 +31,7 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Font;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.filter.FilterInfo;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.filter.FilterInfo;
 
 
 public final class TreeViewerLabelProvider extends StyledCellLabelProvider {

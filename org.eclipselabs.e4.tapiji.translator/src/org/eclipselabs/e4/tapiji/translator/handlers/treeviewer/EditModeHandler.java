@@ -7,7 +7,7 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.menu.MMenuItem;
 import org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.storage.StoreInstanceState;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.storage.StoreInstanceState;
 
 
 public final class EditModeHandler {

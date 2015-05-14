@@ -20,7 +20,7 @@ import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.ui.providers.LocaleContentProvider;
 import org.eclipselabs.e4.tapiji.translator.ui.providers.LocaleLabelProvider;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.storage.StoreInstanceState;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.storage.StoreInstanceState;
 import org.eclipselabs.e4.tapiji.utils.LocaleUtils;
 
 

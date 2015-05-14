@@ -44,9 +44,9 @@ import org.eclipselabs.e4.tapiji.translator.constants.TranslatorConstants;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.ITreeViewerWidget;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.TreeViewerWidget;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.storage.StoreInstanceState;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.ITreeViewerWidget;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.TreeViewerWidget;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.storage.StoreInstanceState;
 
 
 public final class GlossaryPart implements ModifyListener, Listener {

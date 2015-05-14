@@ -17,7 +17,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.storage.StoreInstanceState;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.storage.StoreInstanceState;
 import org.eclipselabs.e4.tapiji.utils.FileUtils;
 
 

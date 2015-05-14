@@ -8,7 +8,7 @@
  * Martin Reiterer - initial API and implementation
  * Christian Behon - refactor from e3 to e4
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.ui.widgets;
+package org.eclipselabs.e4.tapiji.translator.ui.treeviewer;
 
 
 import java.util.Locale;
@@ -47,15 +47,15 @@ import org.eclipselabs.e4.tapiji.translator.model.Translation;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.ui.providers.TreeViewerContentProvider;
 import org.eclipselabs.e4.tapiji.translator.ui.providers.TreeViewerLabelProvider;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.dnd.GlossaryDragSource;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.dnd.GlossaryDropTarget;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.dnd.TermTransfer;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.filter.ExactMatcher;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.filter.FuzzyMatcher;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.filter.SelectiveMatcher;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.sorter.SortInfo;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.sorter.TreeViewerSortOrder;
-import org.eclipselabs.e4.tapiji.translator.ui.widgets.storage.StoreInstanceState;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.dnd.GlossaryDragSource;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.dnd.GlossaryDropTarget;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.dnd.TermTransfer;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.filter.ExactMatcher;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.filter.FuzzyMatcher;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.filter.SelectiveMatcher;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.sorter.SortInfo;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.sorter.TreeViewerSortOrder;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.storage.StoreInstanceState;
 import org.eclipselabs.e4.tapiji.utils.LocaleUtils;
 
 

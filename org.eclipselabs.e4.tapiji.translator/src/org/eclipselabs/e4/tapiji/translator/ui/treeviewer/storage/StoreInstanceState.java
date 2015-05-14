@@ -7,7 +7,7 @@
  * Contributors:
  * Christian Behon - refactor from e3 to e4
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.ui.widgets.storage;
+package org.eclipselabs.e4.tapiji.translator.ui.treeviewer.storage;
 
 
 import java.util.ArrayList;
