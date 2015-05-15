@@ -59,8 +59,8 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="_31HlsMBfEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.aboutTapijiTranslator" label="About TapiJI Translator" command="_FXUuwMEWEeS87-LHw5gOnA"/>
       </children>
     </mainMenu>
-    <trimBars xmi:id="_ouTtoMEaEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.trimbar.0">
-      <children xsi:type="menu:ToolBar" xmi:id="_o14pYMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.toolbar.0">
+    <trimBars xmi:id="_ouTtoMEaEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.trimbar.main">
+      <children xsi:type="menu:ToolBar" xmi:id="_o14pYMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.toolbar.main">
         <children xsi:type="menu:HandledToolItem" xmi:id="_piKgkMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.handledtoolitem.0" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resources/icons/16x16/new_glossary.png" tooltip="Creates a new glossary file" command="_7KpikMEZEeS16pfZp0OXPg"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_rSFmEMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.handledtoolitem.2" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resources/icons/16x16/open_glossary.png" tooltip="Opens a Glossary definition" command="_8xeWcMEZEeS16pfZp0OXPg"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_tC7RkMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.handledtoolitem.3" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resources/icons/16x16/open_resource_bundle.png" tooltip="Opens a Resource-Bundle (Ctrl+O)" command="_QQ2kcMETEeS87-LHw5gOnA"/>

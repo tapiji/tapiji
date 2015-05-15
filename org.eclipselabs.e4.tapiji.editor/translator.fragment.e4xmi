@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_UUp14PtPEeSOvs8tKgi9eA">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_VyRDYPtPEeSOvs8tKgi9eA" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.translator.application">
+    <elements xsi:type="commands:Command" xmi:id="_XBmkUPtPEeSOvs8tKgi9eA" elementId="org.eclipselabs.e4.tapiji.editor.command.keyTressVisibility" commandName="Key tree visibility"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_YoC9sPtPEeSOvs8tKgi9eA" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.translator.application">
+    <elements xsi:type="commands:Handler" xmi:id="_c5m5gPtPEeSOvs8tKgi9eA" elementId="org.eclipselabs.e4.tapiji.editor.handler.keyTreeVisibility" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.editor/org.eclipselabs.e4.tapiji.editor.ui.handler.toolbar.KeyTreeVisibleHandler" command="_XBmkUPtPEeSOvs8tKgi9eA"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_dmiQ8PtPEeSOvs8tKgi9eA" featurename="children" parentElementId="org.eclipselabs.e4.tapiji.translator.trimbar.main">
+    <elements xsi:type="menu:ToolBar" xmi:id="_Ox2iYPtUEeSOvs8tKgi9eA" elementId="org.eclipselabs.e4.tapiji.editor.toolbar.main">
+      <children xsi:type="menu:HandledToolItem" xmi:id="_PeXDEPtUEeSOvs8tKgi9eA" elementId="org.eclipselabs.e4.tapiji.editor.handledtoolitem.keyTreeVisibility" accessibilityPhrase="" label="Show/hide key tree" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.editor/viewLeft.gif" tooltip="Show/hide key tree" type="Check" command="_XBmkUPtPEeSOvs8tKgi9eA"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_hp4_YPtUEeSOvs8tKgi9eA" elementId="org.eclipselabs.e4.tapiji.editor.handledtoolitem.missingkey" label="missingKey" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.editor/viewLeft.gif" type="Check"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_owKegPtUEeSOvs8tKgi9eA" elementId="org.eclipselabs.e4.tapiji.editor.handledtoolitem.keys" label="Keys" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.editor/viewLeft.gif"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_rV5KoPtUEeSOvs8tKgi9eA" elementId="org.eclipselabs.e4.tapiji.editor.handledtoolitem.newLocale" label="New Locale" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.editor/viewLeft.gif"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_txDlgPtUEeSOvs8tKgi9eA" elementId="org.eclipselabs.e4.tapiji.editor.handledtoolitem.unusedKey" label="Unused key" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.editor/viewLeft.gif"/>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>

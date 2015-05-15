@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-
    <extension
-         id="org.eclipselabs.e4.tapiji.editor.fragment"
+         id="editorContribution"
          point="org.eclipse.e4.workbench.model">
       <fragment
             apply="always"
-            uri="editor.fragment.e4xmi">
+            uri="translator.fragment.e4xmi">
       </fragment>
    </extension>
+
 
 </plugin>
