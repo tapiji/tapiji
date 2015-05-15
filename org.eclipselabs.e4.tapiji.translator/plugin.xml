@@ -51,4 +51,12 @@
          </with>
       </definition>
    </extension>
+   <extension id="keybindingfix" point="org.eclipse.e4.workbench.model">
+		<processor
+			beforefragment="true"
+			class="org.eclipselabs.e4.tapiji.translator.BindingContextFixModelProcessor">
+		</processor>
+		<!-- beforefragment="true" : this is important to ensure that it's run before org.eclipse.ui.internal.BindingToModelProcessor -->
+		<!-- class: please use your own fully qualified class here -->
+	</extension>
 </plugin>
