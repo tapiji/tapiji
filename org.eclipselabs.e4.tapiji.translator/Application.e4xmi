@@ -4,7 +4,6 @@
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_GxIYMMBDEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.perspectivestack.0">
       <children xsi:type="advanced:Perspective" xmi:id="_HCcxsMBDEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.perspective" label="TapiJI Translator">
         <children xsi:type="basic:PartSashContainer" xmi:id="_TH6usMBDEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.partsashcontainer.main">
-          <children xsi:type="basic:PartStack" xmi:id="_ga1PQPsoEeSOT_ZezMZqhg" elementId="org.eclipselabs.e4.tapiji.translator.partstack.editor"/>
           <children xsi:type="basic:Part" xmi:id="_sCzawMBKEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.part.glossaryview" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.GlossaryPart">
             <menus xsi:type="menu:PopupMenu" xmi:id="_gtyn0MjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.popupmenu.treeview" label="Tree Menu">
               <children xsi:type="menu:HandledMenuItem" xmi:id="_jGchQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.add" label="Add" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resources/icons/16x16/add.png" command="_bfB6gMnOEeSNbNVYTrKUgg"/>

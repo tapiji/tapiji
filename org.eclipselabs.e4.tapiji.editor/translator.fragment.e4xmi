@@ -26,4 +26,5 @@
       <children xsi:type="menu:HandledToolItem" xmi:id="_hGeSMPu1EeSsj5ryLeXUVg" elementId="org.eclipselabs.e4.tapiji.editor.handledtoolitem.keyMissingUnused" label="Key missing unused" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resources/icons/16x16/key_missing_unused.png" type="Radio" command="_KvEyYPu1EeSsj5ryLeXUVg"/>
     </elements>
   </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_POW3wPvOEeSHTNqWgTuBhg" featurename="children" parentElementId="org.eclipselabs.e4.tapiji.translator.partsashcontainer.main" positionInList=""/>
 </fragment:ModelFragments>
