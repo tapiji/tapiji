@@ -14,7 +14,7 @@ public final class EditModeHandler {
     @Execute
     public void execute(final MMenuItem menuItem, final StoreInstanceState storeInstanceState, final IEventBroker eventBroker) {
         storeInstanceState.setEditMode(!menuItem.isSelected());
-        eventBroker.post(TranslatorConstant.TOPIC_EDIT_MODE, menuItem.isSelected());
+        eventBroker.post(TranslatorConstant.TOPIC_EDIT_MODE, !menuItem.isSelected());
     }
 
     @CanExecute
