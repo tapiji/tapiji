@@ -25,13 +25,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipselabs.e4.tapiji.resources"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"/>
-
-   <plugin
          id="org.eclipse.babel.editor"
          download-size="0"
          install-size="0"
@@ -138,6 +131,13 @@
 
    <plugin
          id="org.eclipselabs.e4.tapiji.editor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipselabs.e4.tapiji.resource"
          download-size="0"
          install-size="0"
          version="0.0.0"

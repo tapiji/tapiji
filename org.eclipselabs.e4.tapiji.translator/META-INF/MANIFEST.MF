@@ -28,13 +28,12 @@ Require-Bundle: org.eclipse.jface,
  org.eclipse.core.expressions;bundle-version="3.4.600",
  org.eclipse.osgi.services,
  org.eclipse.e4.core.commands;bundle-version="0.10.2",
- org.eclipse.e4.tools.services,
- org.eclipselabs.e4.tapiji.resource;bundle-version="1.0.0"
+ org.eclipselabs.e4.tapiji.resource,
+ org.eclipse.e4.tools.services
 Bundle-ManifestVersion: 2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Vienna University of Technology
 Import-Package: javax.annotation,
  javax.inject,
- org.eclipse.babel.editor.api,
- org.eclipselabs.e4.tapiji.resource
+ org.eclipse.babel.editor.api
 
