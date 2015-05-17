@@ -26,7 +26,8 @@ Require-Bundle: org.eclipse.jface,
  org.eclipse.core.resources,
  org.eclipse.jface.text;bundle-version="3.9.2",
  org.eclipse.core.expressions;bundle-version="3.4.600",
- org.eclipse.osgi.services
+ org.eclipse.osgi.services,
+ org.eclipse.e4.core.commands;bundle-version="0.10.2"
 Bundle-ManifestVersion: 2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Vienna University of Technology

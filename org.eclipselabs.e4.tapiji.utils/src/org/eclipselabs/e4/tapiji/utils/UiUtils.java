@@ -34,4 +34,14 @@ public final class UiUtils {
         gc.dispose();
         return numOfChars * pointExtent.x;
     }
+
+    /*
+     * public static Image getImage(Class<Object> clazz, String path) {
+     * Bundle bundle = FrameworkUtil.getBundle(clazz);
+     * IPath paths = (IPath) new Path("ss");
+     * URL url = FileLocator.find(bundle, paths, null);
+     * ImageDescriptor image = ImageDescriptor.createFromURL(url);
+     * return image.createImage();
+     * }
+     */
 }

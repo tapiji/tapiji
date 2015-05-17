@@ -44,7 +44,7 @@ import org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
-import org.eclipselabs.e4.tapiji.translator.storage.StoreInstanceState;
+import org.eclipselabs.e4.tapiji.translator.preference.StoreInstanceState;
 import org.eclipselabs.e4.tapiji.translator.ui.handler.treeviewer.LanguageVisibilityChangedHandler.LanguageViewHolder;
 import org.eclipselabs.e4.tapiji.translator.ui.provider.TreeViewerContentProvider;
 import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.ITreeViewerWidget;

@@ -1,5 +1,6 @@
 package org.eclipselabs.e4.tapiji.translator.ui.dialog;
 
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CBanner;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -34,9 +35,6 @@ public class AboutDialog extends Dialog implements SelectionListener {
         }
     }
 
-    public static AboutDialog create(Shell shell) {
-        return new AboutDialog(shell);
-    }
 
     private void createContents() {
         shell = new Shell(getParent(), SWT.CLOSE | SWT.TITLE);
@@ -54,6 +52,7 @@ public class AboutDialog extends Dialog implements SelectionListener {
 
         Button btnNewButton_1 = new Button(shell, SWT.NONE);
         btnNewButton_1.addSelectionListener(new SelectionAdapter() {
+
             @Override
             public void widgetSelected(SelectionEvent e) {
             }
@@ -82,8 +81,8 @@ public class AboutDialog extends Dialog implements SelectionListener {
 
     @Override
     public void widgetSelected(SelectionEvent e) {
-        Button btn = ((Button)e.widget);
-        if(btn.getData().equals("btn_ok")) {
+        Button btn = ((Button) e.widget);
+        if (btn.getData().equals("btn_ok")) {
             shell.close();
         }
     }
