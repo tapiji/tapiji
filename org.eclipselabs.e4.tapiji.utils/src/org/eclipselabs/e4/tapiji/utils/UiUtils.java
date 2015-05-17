@@ -1,9 +1,16 @@
 package org.eclipselabs.e4.tapiji.utils;
 
 
+import java.net.URL;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Control;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 
 /**
@@ -35,13 +42,11 @@ public final class UiUtils {
         return numOfChars * pointExtent.x;
     }
 
-    /*
-     * public static Image getImage(Class<Object> clazz, String path) {
-     * Bundle bundle = FrameworkUtil.getBundle(clazz);
-     * IPath paths = (IPath) new Path("ss");
-     * URL url = FileLocator.find(bundle, paths, null);
-     * ImageDescriptor image = ImageDescriptor.createFromURL(url);
-     * return image.createImage();
-     * }
-     */
+    public static Image getImage(Class<Object> clazz, String path) {
+        Bundle bundle = FrameworkUtil.getBundle(clazz);
+        URL url = FileLocator.find(bundle, new Path(path), null);
+        ImageDescriptor descriptor = ImageDescriptor.createFromURL(url);
+        return descriptor.createImage();
+
+    }
 }

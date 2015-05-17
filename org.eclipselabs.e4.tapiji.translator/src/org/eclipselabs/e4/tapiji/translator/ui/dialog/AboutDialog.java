@@ -1,6 +1,7 @@
 package org.eclipselabs.e4.tapiji.translator.ui.dialog;
 
 
+import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CBanner;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -11,15 +12,18 @@ import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipselabs.e4.tapiji.resource.TapijiResourceProvider;
 
 
 public class AboutDialog extends Dialog implements SelectionListener {
 
     private Shell shell;
     private Button btnNewButton;
+    private IResourcePool resource;
 
-    public AboutDialog(Shell parent) {
+    public AboutDialog(Shell parent, IResourcePool resource) {
         super(parent);
+        this.resource = resource;
         createContents();
     }
 
@@ -61,7 +65,7 @@ public class AboutDialog extends Dialog implements SelectionListener {
         btnNewButton_1.setText("License");
 
         Label lblNewLabel = new Label(shell, SWT.NONE);
-        //lblNewLabel.setImage(getClass().getResource("/media/nucle/xubuntu/tapiji/tapiji/org.eclipselabs.e4.tapiji.resources/icons/128x128/tapiji.png"));
+        lblNewLabel.setImage(resource.getImageUnchecked(TapijiResourceProvider.IMG_TAPIJI_LOGO_128));
         lblNewLabel.setBounds(10, 10, 138, 135);
 
         Label lblTapijiTranslator = new Label(shell, SWT.NONE);
