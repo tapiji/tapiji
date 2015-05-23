@@ -24,6 +24,10 @@
                name="lifeCycleURI"
                value="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.LifeCycleManager">
          </property>
+         <property
+               name="applicationCSS"
+               value="platform:/plugin/org.eclipselabs.e4.tapiji.translator/css/translator.css">
+         </property>
       </product>
    </extension>
    <extension

@@ -3,9 +3,6 @@ package org.eclipselabs.e4.tapiji.translator.ui.handler.window;
 
 import java.io.File;
 import javax.inject.Named;
-import org.eclipse.babel.editor.widgets.suggestion.exception.InvalidConfigurationSetting;
-import org.eclipse.babel.editor.widgets.suggestion.provider.StringConfigurationSetting;
-import org.eclipse.babel.editor.widgets.suggestion.provider.SuggestionProviderUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -41,11 +38,14 @@ public class OpenGlossaryHandler {
                 return;
             }
 
-            try {
-                SuggestionProviderUtils.updateConfigurationSetting("glossaryFile", new StringConfigurationSetting(fileName));
-            } catch (final InvalidConfigurationSetting exception) {
-                Log.e(TAG, exception);
-            }
+            /*
+             * try {
+             * SuggestionProviderUtils.updateConfigurationSetting("glossaryFile", new
+             * StringConfigurationSetting(fileName));
+             * } catch (final InvalidConfigurationSetting exception) {
+             * Log.e(TAG, exception);
+             * }
+             */
         }
     }
 
