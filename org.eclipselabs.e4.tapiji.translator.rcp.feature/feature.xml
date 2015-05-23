@@ -130,14 +130,14 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipselabs.e4.tapiji.editor"
+         id="org.eclipselabs.e4.tapiji.resource"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipselabs.e4.tapiji.resource"
+         id="org.eclipse.e4.babel.editor"
          download-size="0"
          install-size="0"
          version="0.0.0"
