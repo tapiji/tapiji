@@ -4,7 +4,6 @@
 
 Shell {
     swt-background-mode: default;
-    background-color: #EBEBEB 60%
 }
 
 .MPartStack {
@@ -12,4 +11,13 @@ Shell {
   swt-simple: true;
   swt-mru-visible: true;
 }
+
+#org-eclipse-e4-primaryDataStack {
+    swt-tab-position: bottom;
+}
+
+.EditorStack {
+    swt-tab-position: bottom;
+}
+
 
