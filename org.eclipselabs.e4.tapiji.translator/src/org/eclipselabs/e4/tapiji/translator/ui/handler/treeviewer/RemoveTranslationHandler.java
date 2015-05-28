@@ -37,6 +37,7 @@ public final class RemoveTranslationHandler {
     @Execute
     public void execute(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) final Term term, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell,
                     final IGlossaryService glossaryService, final StoreInstanceState storeInstanceState) {
+
         final CheckedTreeSelectionDialog localeDialog = new CheckedTreeSelectionDialog(shell, new LocaleLabelProvider(), new LocaleContentProvider());
 
         localeDialog.setInput(generateLocales(glossaryService.getTranslations(), storeInstanceState.getReferenceLanguage()));
