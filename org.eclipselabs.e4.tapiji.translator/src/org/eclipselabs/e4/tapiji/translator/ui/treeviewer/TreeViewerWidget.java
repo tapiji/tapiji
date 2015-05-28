@@ -85,7 +85,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     private TreeViewerSortOrder columnSorter;
     private ExactMatcher matcher;
 
-    private List<String> displayedTranslations = new ArrayList<String>();
+    private final List<String> displayedTranslations = new ArrayList<String>();
 
     private TreeViewerWidget(final Composite parent, final IGlossaryService glossaryService, final StoreInstanceState storeInstanceState) {
         super(parent, SWT.FILL);
@@ -127,7 +127,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
 
     private void createLocaleColumns() {
         displayedTranslations.clear();
-        TextCellEditor textCellEditor = new TextCellEditor(tree);
+        final TextCellEditor textCellEditor = new TextCellEditor(tree);
         int columnIndex = 0;
         createColumn(referenceLanguage, columnIndex, textCellEditor);
         Log.d(TAG, "" + columnIndex + " " + referenceLanguage);
@@ -145,7 +145,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
         }
     }
 
-    private void createColumn(final String languageCode, int columnIndex, TextCellEditor textCellEditor) {
+    private void createColumn(final String languageCode, final int columnIndex, final TextCellEditor textCellEditor) {
         final Locale locale = LocaleUtils.getLocaleFromLanguageCode(languageCode);
         final TreeViewerColumn column = new TreeViewerColumn(treeViewer, SWT.NONE);
         column.getColumn().setWidth(200);
@@ -326,7 +326,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     }
 
     private boolean isSearchTreeGrouped() {
-        return (matcher.getPattern().trim().length() < 0) && columnSorter.getSortInfo().getColumnIndex() == 0;
+        return (matcher.getPattern().trim().length() < 0) && (columnSorter.getSortInfo().getColumnIndex() == 0);
     }
 
     @Override
@@ -368,7 +368,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     }
 
     @Override
-    public void setMatchingPrecision(float value) {
+    public void setMatchingPrecision(final float value) {
         if (matcher instanceof FuzzyMatcher) {
             ((FuzzyMatcher) matcher).setMinimumSimilarity(value);
             treeViewer.refresh();
@@ -376,7 +376,7 @@ public final class TreeViewerWidget extends Composite implements IResourceChange
     }
 
     @Override
-    public void setReferenceLanguage(String referenceLanguage) {
+    public void setReferenceLanguage(final String referenceLanguage) {
         this.referenceLanguage = referenceLanguage;
     }
 

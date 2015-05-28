@@ -144,7 +144,7 @@ public final class GlossaryPart implements ModifyListener, Listener {
 
     @Inject
     @Optional
-    private void onLanguageVisibilityChanged(@UIEventTopic(TranslatorConstant.TOPIC_SHOW_LANGUAGE) LanguageViewHolder languageVisibility) {
+    private void onLanguageVisibilityChanged(@UIEventTopic(TranslatorConstant.TOPIC_SHOW_LANGUAGE) final LanguageViewHolder languageVisibility) {
         if (languageVisibility.isVIsible) {
             treeViewerWidget.showTranslationColumn(languageVisibility.locale);
         } else {
@@ -154,7 +154,7 @@ public final class GlossaryPart implements ModifyListener, Listener {
 
     @Inject
     @Optional
-    private void onRefrenceChanged(@UIEventTopic(TranslatorConstant.TOPIC_REFERENCE_LANGUAGE) String referenceLanguage) {
+    private void onRefrenceChanged(@UIEventTopic(TranslatorConstant.TOPIC_REFERENCE_LANGUAGE) final String referenceLanguage) {
         treeViewerWidget.setReferenceLanguage(referenceLanguage);
         treeViewerWidget.updateView(((TreeViewerContentProvider) treeViewerWidget.getTreeViewer().getContentProvider()).getGlossary());
     }
@@ -186,7 +186,7 @@ public final class GlossaryPart implements ModifyListener, Listener {
     }
 
     private float getFuzzyPrecission() {
-        final String value = String.valueOf(fuzzyScaler.getMaximum() - fuzzyScaler.getSelection() + fuzzyScaler.getMinimum());
+        final String value = String.valueOf((fuzzyScaler.getMaximum() - fuzzyScaler.getSelection()) + fuzzyScaler.getMinimum());
         return 1f - (Float.parseFloat(value) / 100.f);
     }
 
@@ -224,7 +224,7 @@ public final class GlossaryPart implements ModifyListener, Listener {
     }
 
     @Override
-    public void handleEvent(Event event) {
+    public void handleEvent(final Event event) {
         if (null != fuzzyScaler) {
             treeViewerWidget.setMatchingPrecision(getFuzzyPrecission());
         }

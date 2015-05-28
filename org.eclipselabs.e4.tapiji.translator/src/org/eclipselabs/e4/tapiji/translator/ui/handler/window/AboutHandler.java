@@ -15,7 +15,7 @@ public class AboutHandler {
     private static final String TAG = AboutHandler.class.getSimpleName();
 
     @Execute
-    public void execute(final IEclipseContext context, IResourcePool resource) {
+    public void execute(final IEclipseContext context, final IResourcePool resource) {
         System.out.println("Execute: " + TAG + "context" + TapijiResourceProvider.IMG_TAPIJI_LOGO_128);
         new AboutDialog(new Shell(SWT.SHELL_TRIM), resource).open();
 

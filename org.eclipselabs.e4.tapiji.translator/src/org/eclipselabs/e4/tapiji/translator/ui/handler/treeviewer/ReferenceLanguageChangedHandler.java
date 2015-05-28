@@ -16,7 +16,7 @@ public final class ReferenceLanguageChangedHandler {
 
     @Execute
     public void execute(final MMenuItem menuItem, final StoreInstanceState storeInstanceState, final IEventBroker eventBroker) {
-        if (menuItem.getContainerData() != null && menuItem.isSelected()) {
+        if ((menuItem.getContainerData() != null) && menuItem.isSelected()) {
             storeInstanceState.setReferenceLanguage(menuItem.getContainerData());
             eventBroker.post(TranslatorConstant.TOPIC_REFERENCE_LANGUAGE, menuItem.getContainerData());
         }

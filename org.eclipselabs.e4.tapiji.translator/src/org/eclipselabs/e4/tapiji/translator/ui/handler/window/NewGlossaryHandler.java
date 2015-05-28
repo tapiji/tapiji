@@ -38,8 +38,7 @@ public class NewGlossaryHandler {
 
     public boolean showQuestionDialog(final Shell shell, final String fileName) {
         final String recallPattern = "The file \"{0}\" already exists. Do you want to replace this file with an empty translation glossary?";
-        final boolean result = MessageDialog.openQuestion(shell, "File already exists!", new MessageFormat(
-                        recallPattern).format(new String[] {fileName}));
+        final boolean result = MessageDialog.openQuestion(shell, "File already exists!", new MessageFormat(recallPattern).format(new String[] {fileName}));
         return result;
     }
 }

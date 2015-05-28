@@ -31,13 +31,13 @@ public final class LanguageVisibilityChangedHandler {
         public boolean isVIsible;
         public String locale;
 
-        private LanguageViewHolder(boolean isVIsible, String locale) {
+        private LanguageViewHolder(final boolean isVIsible, final String locale) {
             super();
             this.isVIsible = isVIsible;
             this.locale = locale;
         }
 
-        public static LanguageViewHolder create(boolean isVIsible, String locale) {
+        public static LanguageViewHolder create(final boolean isVIsible, final String locale) {
             return new LanguageViewHolder(isVIsible, locale);
         }
 

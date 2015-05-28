@@ -47,9 +47,9 @@ public final class LifeCycleManager {
         private final IEventBroker eventBroker;
         private final IEclipseContext context;
         private TrayItem trayItem;
-        private IResourcePool resourcePool;
+        private final IResourcePool resourcePool;
 
-        private AppStartupCompleteEventHandler(final IEventBroker eventBroker, final IEclipseContext context, IResourcePool resourcePool) {
+        private AppStartupCompleteEventHandler(final IEventBroker eventBroker, final IEclipseContext context, final IResourcePool resourcePool) {
             this.eventBroker = eventBroker;
             this.context = context;
             this.resourcePool = resourcePool;
@@ -138,7 +138,7 @@ public final class LifeCycleManager {
             });
         }
 
-        public static AppStartupCompleteEventHandler create(final IEventBroker eventBroker, final IEclipseContext context, IResourcePool resourcePool) {
+        public static AppStartupCompleteEventHandler create(final IEventBroker eventBroker, final IEclipseContext context, final IResourcePool resourcePool) {
             return new AppStartupCompleteEventHandler(eventBroker, context, resourcePool);
         }
     }

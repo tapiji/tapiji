@@ -51,7 +51,7 @@ public final class ReferenceLanguageHandler {
     }
 
     @AboutToHide
-    public void aboutToHide(List<MMenuElement> items) {
+    public void aboutToHide(final List<MMenuElement> items) {
 
     }
 

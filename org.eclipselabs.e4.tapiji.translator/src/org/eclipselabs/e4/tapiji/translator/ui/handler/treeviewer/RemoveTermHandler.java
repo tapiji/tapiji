@@ -22,8 +22,8 @@ public final class RemoveTermHandler {
     private static final String TAG = RemoveTermHandler.class.getSimpleName();
 
     @Execute
-    public void execute(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) final Term term,
-                    @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService) {
+    public void execute(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) final Term term, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell,
+                    final IGlossaryService glossaryService) {
         if (term != null) {
             removeTermAsync(glossaryService, term);
             Log.d(TAG, String.format("Selected Term: %s ", term.toString()));

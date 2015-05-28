@@ -81,7 +81,7 @@ public final class RemoveTranslationHandler {
 
     @CanExecute
     public boolean canExecute(final IGlossaryService glossaryService) {
-        if (null == glossaryService.getGlossary() || glossaryService.getTranslations().length == 1 || glossaryService.getTranslations().length == 0) {
+        if ((null == glossaryService.getGlossary()) || (glossaryService.getTranslations().length == 1) || (glossaryService.getTranslations().length == 0)) {
             return false;
         }
         return true;

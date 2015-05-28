@@ -44,7 +44,7 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
     private boolean isSearchEnabled;
     private final int referenceColumn;
 
-    public TreeViewerLabelProvider(final TreeViewer treeViewer, final List<String> displayedTranslations, int referenceColumn) {
+    public TreeViewerLabelProvider(final TreeViewer treeViewer, final List<String> displayedTranslations, final int referenceColumn) {
         super();
         this.treeViewer = treeViewer;
         this.translations = displayedTranslations;
@@ -143,7 +143,7 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
         STYLE_RANGES.clear();
     }
 
-    public static TreeViewerLabelProvider newInstance(final TreeViewer treeViewer, final List<String> displayedTranslations, int referenceColumn) {
+    public static TreeViewerLabelProvider newInstance(final TreeViewer treeViewer, final List<String> displayedTranslations, final int referenceColumn) {
         return new TreeViewerLabelProvider(treeViewer, displayedTranslations, referenceColumn);
     }
 }

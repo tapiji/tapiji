@@ -17,13 +17,11 @@ public class OpenResourceBundleHandler {
 
     @Execute
     public void execute(final IWorkbench workbench, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell) {
-        final String[] fileNames = FileUtils.queryFileName(shell, "Open Resource-Bundle", SWT.OPEN,
-                        FileUtils.PROPERTY_FILE_ENDINGS);
+        final String[] fileNames = FileUtils.queryFileName(shell, "Open Resource-Bundle", SWT.OPEN, FileUtils.PROPERTY_FILE_ENDINGS);
         if (fileNames != null) {
             final String fileName = fileNames[0];
             if (!FileUtils.isResourceBundle(fileName)) {
-                MessageDialog.openError(shell, String.format("Cannot open Resource-Bundle %s", fileName),
-                                "The choosen file does not represent a Resource-Bundle!");
+                MessageDialog.openError(shell, String.format("Cannot open Resource-Bundle %s", fileName), "The choosen file does not represent a Resource-Bundle!");
                 return;
             }
         }
