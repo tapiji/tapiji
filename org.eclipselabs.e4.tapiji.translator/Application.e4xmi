@@ -37,7 +37,6 @@
           </children>
         </children>
       </children>
-      <children xsi:type="advanced:Perspective" xmi:id="_xtzYMAMFEeWqjNbSt62xLw" elementId="org.eclipselabs.e4.tapiji.translator.perspective.asddad" label="asddad" tooltip="asdsad"/>
     </children>
     <mainMenu xmi:id="_caJTwMBeEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.menu.main" mnemonics="">
       <children xsi:type="menu:Menu" xmi:id="_bCXzEMBfEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.menu.file" label="File" mnemonics="F">
