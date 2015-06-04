@@ -122,7 +122,6 @@ public final class LifeCycleManager {
 
                 @Override
                 public void shellIconified(final ShellEvent e) {
-                    shell.setVisible(false);
                     shell.setMinimized(true);
                 }
             });
@@ -130,10 +129,7 @@ public final class LifeCycleManager {
 
                 @Override
                 public void widgetSelected(final SelectionEvent e) {
-                    if (!shell.isVisible()) {
-                        shell.setVisible(true);
-                        shell.setMinimized(false);
-                    }
+                    shell.setMinimized(false);
                 }
             });
         }

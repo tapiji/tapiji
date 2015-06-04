@@ -13,6 +13,7 @@ package org.eclipselabs.e4.tapiji.translator.ui;
 
 import java.io.File;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -232,5 +233,21 @@ public final class GlossaryPart implements ModifyListener, Listener {
 
     @Focus
     public void setFocus() {
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        if (treeViewerWidget != null) {
+            treeViewerWidget.getTreeViewer().getTree().dispose();
+        }
+        if (null != fuzzyScaler) {
+            fuzzyScaler.dispose();
+        }
+        if (null != inputFilter) {
+            inputFilter.dispose();
+        }
+        if (null != labelScale) {
+            labelScale.dispose();
+        }
     }
 }
