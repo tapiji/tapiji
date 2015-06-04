@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.eclipselabs.e4.tapiji.resource">
-   <implementation class="org.eclipselabs.e4.tapiji.resource.TapijiResourceProvider"/>
+   <implementation class="org.eclipselabs.e4.tapiji.resource.internal.ResourceLoader"/>
       <service>
-      <provide interface="org.eclipse.e4.tools.services.IResourceProviderService"/>
+      <provide interface="org.eclipselabs.e4.tapiji.resource.ITapijiResourceProvider"/>
    </service>
-   <properties entry="OSGI-INF/resources.properties"/>
 </scr:component>

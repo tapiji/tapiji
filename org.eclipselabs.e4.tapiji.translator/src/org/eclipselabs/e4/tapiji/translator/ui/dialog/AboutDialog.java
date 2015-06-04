@@ -1,7 +1,6 @@
 package org.eclipselabs.e4.tapiji.translator.ui.dialog;
 
 
-import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CBanner;
 import org.eclipse.swt.events.SelectionEvent;
@@ -11,7 +10,8 @@ import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipselabs.e4.tapiji.resource.TapijiResourceProvider;
+import org.eclipselabs.e4.tapiji.resource.ITapijiResourceProvider;
+import org.eclipselabs.e4.tapiji.resource.TapijiResourceConstants;
 
 
 @SuppressWarnings("restriction")
@@ -19,9 +19,9 @@ public final class AboutDialog extends Dialog implements SelectionListener {
 
     private Shell shell;
     private Button btnConfirm;
-    private final IResourcePool resource;
+    private final ITapijiResourceProvider resource;
 
-    public AboutDialog(final Shell parent, final IResourcePool resource) {
+    public AboutDialog(final Shell parent, final ITapijiResourceProvider resource) {
         super(parent);
         this.resource = resource;
         createContents();
@@ -55,7 +55,7 @@ public final class AboutDialog extends Dialog implements SelectionListener {
         btnConfirm.setText("OK");
 
         final Label lblNewLabel = new Label(shell, SWT.NONE);
-        lblNewLabel.setImage(resource.getImageUnchecked(TapijiResourceProvider.IMG_TAPIJI_LOGO_128));
+        lblNewLabel.setImage(resource.loadImage(TapijiResourceConstants.IMG_TAPIJI_128x128));
         lblNewLabel.setBounds(10, 10, 138, 135);
 
         final Label lblTapijiTranslator = new Label(shell, SWT.NONE);

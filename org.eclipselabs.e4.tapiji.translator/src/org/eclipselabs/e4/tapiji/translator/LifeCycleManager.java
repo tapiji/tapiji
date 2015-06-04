@@ -7,7 +7,6 @@ import org.eclipse.e4.core.commands.ECommandService;
 import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.UIEvents;
 import org.eclipse.e4.ui.workbench.lifecycle.PostContextCreate;
@@ -23,7 +22,8 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
-import org.eclipselabs.e4.tapiji.resource.TapijiResourceProvider;
+import org.eclipselabs.e4.tapiji.resource.ITapijiResourceProvider;
+import org.eclipselabs.e4.tapiji.resource.TapijiResourceConstants;
 import org.eclipselabs.e4.tapiji.translator.ui.handler.window.AboutHandler;
 import org.eclipselabs.e4.tapiji.translator.ui.handler.window.ExitHandler;
 import org.osgi.service.event.EventHandler;
@@ -38,8 +38,8 @@ public final class LifeCycleManager {
 
 
     @PostContextCreate
-    void postContextCreate(final IEventBroker eventBroker, final IEclipseContext context, final IResourcePool resourcePool) {
-        eventBroker.subscribe(UIEvents.UILifeCycle.APP_STARTUP_COMPLETE, AppStartupCompleteEventHandler.create(eventBroker, context, resourcePool));
+    void postContextCreate(final IEventBroker eventBroker, final IEclipseContext context, final ITapijiResourceProvider resourceProvider) {
+        eventBroker.subscribe(UIEvents.UILifeCycle.APP_STARTUP_COMPLETE, AppStartupCompleteEventHandler.create(eventBroker, context, resourceProvider));
     }
 
     private static final class AppStartupCompleteEventHandler implements EventHandler {
@@ -47,12 +47,12 @@ public final class LifeCycleManager {
         private final IEventBroker eventBroker;
         private final IEclipseContext context;
         private TrayItem trayItem;
-        private final IResourcePool resourcePool;
+        private final ITapijiResourceProvider resourceProvider;
 
-        private AppStartupCompleteEventHandler(final IEventBroker eventBroker, final IEclipseContext context, final IResourcePool resourcePool) {
+        private AppStartupCompleteEventHandler(final IEventBroker eventBroker, final IEclipseContext context, final ITapijiResourceProvider resourceProvider) {
             this.eventBroker = eventBroker;
             this.context = context;
-            this.resourcePool = resourcePool;
+            this.resourceProvider = resourceProvider;
         }
 
         @Override
@@ -61,7 +61,7 @@ public final class LifeCycleManager {
             final Tray systemTray = shell.getDisplay().getSystemTray();
             if (null != systemTray) {
                 trayItem = new TrayItem(systemTray, SWT.None);
-                trayItem.setImage(resourcePool.getImageUnchecked(TapijiResourceProvider.IMG_TAPIJI_LOGO_32));
+                trayItem.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_TAPIJI_64x64));
                 trayItem.setToolTipText("TapiJI - Translator");
 
                 if (null != trayItem) {
@@ -73,6 +73,7 @@ public final class LifeCycleManager {
         }
 
         private void popupMenu(final Shell shell) {
+
             final ECommandService commandService = context.get(ECommandService.class);
             final EHandlerService handlerService = context.get(EHandlerService.class);
             trayItem.addListener(SWT.MenuDetect, new Listener() {
@@ -134,8 +135,8 @@ public final class LifeCycleManager {
             });
         }
 
-        public static AppStartupCompleteEventHandler create(final IEventBroker eventBroker, final IEclipseContext context, final IResourcePool resourcePool) {
-            return new AppStartupCompleteEventHandler(eventBroker, context, resourcePool);
+        public static AppStartupCompleteEventHandler create(final IEventBroker eventBroker, final IEclipseContext context, final ITapijiResourceProvider resourceProvider) {
+            return new AppStartupCompleteEventHandler(eventBroker, context, resourceProvider);
         }
     }
 }
