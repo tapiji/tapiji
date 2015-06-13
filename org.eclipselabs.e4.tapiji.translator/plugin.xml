@@ -26,7 +26,7 @@
          </property>
          <property
                name="applicationCSS"
-               value="platform:/plugin/org.eclipselabs.e4.tapiji.translator/css/translator.css">
+               value="platform:/plugin/org.eclipselabs.e4.tapiji.translator/css/translator_default.css">
          </property>
       </product>
    </extension>
