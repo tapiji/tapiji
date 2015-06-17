@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.eclipselabs.e4.tapiji</groupId>
+  <artifactId>org.eclipselabs.e4.tapiji.parent</artifactId>
+  <version>0.9.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>../org.eclipselabs.e4.tapiji.logger</module>
+    <module>../org.eclipselabs.e4.tapiji.resource</module>
+    <module>../org.eclipselabs.e4.tapiji.translator</module>
+    <module>../org.eclipselabs.e4.tapiji.translator.core</module>
+    <module>../org.eclipselabs.e4.tapiji.translator.core.test</module>
+    <module>../org.eclipselabs.e4.tapiji.translator.model</module>
+    <module>../org.eclipselabs.e4.tapiji.translator.model.test</module>
+    <module>../org.eclipselabs.e4.tapiji.utils</module>
+  </modules>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>0.23.0</version>
+        <extensions>true</extensions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
