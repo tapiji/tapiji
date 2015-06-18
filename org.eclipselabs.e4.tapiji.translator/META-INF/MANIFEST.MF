@@ -1,8 +1,7 @@
 Manifest-Version: 1.0
-Bundle-SymbolicName: org.eclipselabs.e4.tapiji.translator;singleton:=t
- rue
+Bundle-SymbolicName: org.eclipselabs.e4.tapiji.translator;singleton:=true
 Bundle-Name: TapiJI Translator
-Bundle-Version: 1.0.0
+Bundle-Version: 0.9.1.qualifier
 Require-Bundle: org.eclipse.jface,
  org.eclipse.core.runtime,
  org.eclipse.e4.ui.di,
@@ -12,9 +11,6 @@ Require-Bundle: org.eclipse.jface,
  org.eclipse.e4.core.di,
  org.eclipse.e4.ui.services,
  org.eclipse.e4.core.contexts,
- org.eclipselabs.e4.tapiji.logger,
- org.eclipselabs.e4.tapiji.utils,
- org.eclipselabs.e4.tapiji.translator.model,
  org.eclipse.e4.core.services,
  org.eclipse.swt,
  org.eclipse.core.resources,
@@ -22,12 +18,14 @@ Require-Bundle: org.eclipse.jface,
  org.eclipse.core.expressions;bundle-version="3.4.600",
  org.eclipse.osgi.services,
  org.eclipse.e4.core.commands;bundle-version="0.10.2",
- org.eclipselabs.e4.tapiji.resource,
  org.eclipse.e4.tools.services,
  org.eclipse.babel.editor,
  org.eclipse.ui.workbench,
- org.eclipse.e4.ui.workbench;bundle-version="1.2.2"
+ org.eclipse.e4.ui.workbench;bundle-version="1.2.2",
+ org.eclipselabs.e4.tapiji.logger,
+ org.eclipselabs.e4.tapiji.utils,
+ org.eclipselabs.e4.tapiji.translator.model,
+ org.eclipselabs.e4.tapiji.resource
 Bundle-ManifestVersion: 2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Vienna University of Technology
-
