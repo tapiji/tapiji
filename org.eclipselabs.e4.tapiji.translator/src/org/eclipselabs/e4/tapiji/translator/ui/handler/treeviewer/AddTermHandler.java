@@ -26,7 +26,7 @@ public class AddTermHandler {
     @Execute
     public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) final Term parentTerm, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell,
                     final IGlossaryService glossaryService, final StoreInstanceState storeInstanceState) {
-        final InputDialog dialog = new InputDialog(shell, "New Term", "Please, define the new term:", "", null);
+        final InputDialog dialog = new InputDialog(shell, "New Term", "Please, define the new term:", "", null);// TODO Translate
         if (dialog.open() == Window.OK) {
             if ((dialog.getValue() != null) && (dialog.getValue().trim().length() > 0)) {
                 addTermAsync(glossaryService, dialog.getValue(), storeInstanceState.getReferenceLanguage(), parentTerm);

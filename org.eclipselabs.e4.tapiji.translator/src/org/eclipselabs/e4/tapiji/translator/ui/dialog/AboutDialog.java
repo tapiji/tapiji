@@ -68,7 +68,7 @@ public final class AboutDialog extends Dialog implements SelectionListener {
 
         final Label lblStefanStroblMartin = new Label(shell, SWT.NONE);
         lblStefanStroblMartin.setBounds(154, 82, 284, 63);
-        lblStefanStroblMartin.setText("Stefan Strobl, Martin Reiterer, Christian Behon");
+        lblStefanStroblMartin.setText("Stefan Strobl, Martin Reiterer, Christian Behon"); // TODO Translate
 
     }
 
