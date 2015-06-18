@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.services.nls.Translation;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.PersistState;
 import org.eclipse.e4.ui.di.UIEventTopic;
@@ -42,6 +43,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant;
+import org.eclipselabs.e4.tapiji.translator.i18n.Messages;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
@@ -80,8 +82,9 @@ public final class GlossaryPart implements ModifyListener, Listener {
     @Inject
     private IEclipseContext eclipseContext;
 
+
     @PostConstruct
-    public void createPartControl(final Composite parent) {
+    public void createPartControl(final Composite parent, @Translation Messages message) {
         parent.setLayout(new GridLayout(1, false));
 
         final Composite parentComp = new Composite(parent, SWT.BORDER);
@@ -90,14 +93,14 @@ public final class GlossaryPart implements ModifyListener, Listener {
 
         final Label labelSearch = new Label(parentComp, SWT.NONE);
         labelSearch.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-        labelSearch.setText("Search expression:");
+        labelSearch.setText(message.glossarySearchExpression);
 
         inputFilter = new Text(parentComp, SWT.BORDER | SWT.SEARCH | SWT.CANCEL | SWT.ICON_SEARCH);
         inputFilter.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         inputFilter.addModifyListener(this);
 
         labelScale = new Label(parentComp, SWT.NONE);
-        labelScale.setText("Precision:");
+        labelScale.setText(message.glossarySearchPrecision);
         labelScale.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, false, false, 1, 1));
 
         fuzzyScaler = new Scale(parentComp, SWT.NONE);

@@ -5,9 +5,11 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Martin Reiterer - initial API and implementation
- *     Christian Behon
+ * @author Martin Reiterer
+ * @author Christian Behon
+ * @author Pascal Essiembre
+ *
+ * @since 0.0.1
  ******************************************************************************/
 package org.eclipselabs.e4.tapiji.utils;
 
@@ -43,8 +45,7 @@ public final class FileUtils {
     /** Token to replace in a regular expression with a file extension. */
     private static final String TOKEN_FILE_EXTENSION = "FILEEXTENSION";
     /** Regex to match a properties file. */
-    public static final String PROPERTIES_FILE_REGEX = "^(" + TOKEN_BUNDLE_NAME + ")"
-                    + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\."
+    public static final String PROPERTIES_FILE_REGEX = "^(" + TOKEN_BUNDLE_NAME + ")" + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\."
                     + TOKEN_FILE_EXTENSION + ")$";
     /** Project name for external resource bundles */
     public static final String EXTERNAL_RB_PROJECT_NAME = "ExternalResourceBundles";
@@ -120,16 +121,13 @@ public final class FileUtils {
 
     protected static String getPropertiesFileRegEx(final IPath file) {
         final String bundleName = getBundleName(file);
-        return PROPERTIES_FILE_REGEX.replaceFirst(TOKEN_BUNDLE_NAME, bundleName).replaceFirst(TOKEN_FILE_EXTENSION,
-                        file.getFileExtension());
+        return PROPERTIES_FILE_REGEX.replaceFirst(TOKEN_BUNDLE_NAME, bundleName).replaceFirst(TOKEN_FILE_EXTENSION, file.getFileExtension());
     }
 
     public static String getBundleName(final IPath file) {
         final String name = file.toFile().getName();
         final String regex = "^(.*?)" //$NON-NLS-1$
-                        + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})"
-                        + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\."
-                        + file.getFileExtension() + ")$";
+                        + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." + file.getFileExtension() + ")$";
         return name.replaceFirst(regex, "$1");
     }
 
@@ -138,8 +136,7 @@ public final class FileUtils {
         return getBundleName(path);
     }
 
-    public static String[] queryFileName(final Shell shell, final String title, final int dialogOptions,
-                    final String[] endings) {
+    public static String[] queryFileName(final Shell shell, final String title, final int dialogOptions, final String[] endings) {
         final FileDialog dialog = new FileDialog(shell, dialogOptions);
         dialog.setText(title);
         dialog.setFilterExtensions(endings);

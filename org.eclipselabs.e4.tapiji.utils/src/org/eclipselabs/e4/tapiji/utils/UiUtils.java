@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2012 Martin Reiterer.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * @author Martin Reiterer
+ * @author Christian Behon
+ * @author Pascal Essiembre
+ *
+ * @since 0.0.1
+ ******************************************************************************/
 package org.eclipselabs.e4.tapiji.utils;
 
 
@@ -15,10 +28,6 @@ import org.osgi.framework.FrameworkUtil;
 
 /**
  * Utility methods related to application UI.
- *
- * @author Pascal Essiembre
- * @author Tobias Langner
- * @author Christian behon
  */
 public final class UiUtils {
 
