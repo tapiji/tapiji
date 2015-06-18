@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workingSets>
 <workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1432387700114_7" label="Babel" name="Babel">
+<item elementID="=org.eclipse.e4.babel.editor.text" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.babel.editor" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.e4.babel.editor" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.babel.resource" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSet>
 <workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1429560058992_5" label="Common" name="Common">
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipselabs.e4.tapiji.logger" type="4"/>
