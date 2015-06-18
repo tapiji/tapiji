@@ -69,14 +69,14 @@
 
 	<!-- Submodules -->
 	<modules>
-		<module>../org.eclipselabs.e4.tapiji.logger</module>
-		<module>../org.eclipselabs.e4.tapiji.resource</module>
-		<module>../org.eclipselabs.e4.tapiji.translator</module>
-		<module>../org.eclipselabs.e4.tapiji.translator.core</module>
-		<module>../org.eclipselabs.e4.tapiji.translator.core.test</module>
-		<module>../org.eclipselabs.e4.tapiji.translator.model</module>
-		<module>../org.eclipselabs.e4.tapiji.translator.model.test</module>
-		<module>../org.eclipselabs.e4.tapiji.utils</module>
+		<module>org.eclipselabs.e4.tapiji.logger</module>
+		<module>org.eclipselabs.e4.tapiji.resource</module>
+		<module>org.eclipselabs.e4.tapiji.translator</module>
+		<module>org.eclipselabs.e4.tapiji.translator.core</module>
+		<module>org.eclipselabs.e4.tapiji.translator.core.test</module>
+		<module>org.eclipselabs.e4.tapiji.translator.model</module>
+		<module>org.eclipselabs.e4.tapiji.translator.model.test</module>
+		<module>org.eclipselabs.e4.tapiji.utils</module>
 	</modules>
 
 	<!-- Tycho build configuration -->

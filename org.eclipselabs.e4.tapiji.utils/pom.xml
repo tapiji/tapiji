@@ -6,10 +6,8 @@
     <groupId>org.eclipselabs.e4.tapiji</groupId>
     <artifactId>org.eclipselabs.e4.tapiji.parent</artifactId>
     <version>0.9.1-SNAPSHOT</version>
-    <relativePath>../org.eclipselabs.e4.tapiji.parent/</relativePath>
+    <relativePath>../</relativePath>
   </parent>
-  <groupId>org.eclipselabs.e4.tapiji</groupId>
   <artifactId>org.eclipselabs.e4.tapiji.utils</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
 </project>

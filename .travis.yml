@@ -1,0 +1,10 @@
+language: java
+jdk:
+  - oraclejdk8
+notifications:
+  email:
+    recipients:
+      - martin.reiterer@inso.tuwien.ac.at
+      - christian.behon@gmail.com
+    on_success: change
+    on_failure: always

@@ -6,7 +6,7 @@
     <groupId>org.eclipselabs.e4.tapiji</groupId>
     <artifactId>org.eclipselabs.e4.tapiji.parent</artifactId>
     <version>0.9.1-SNAPSHOT</version>
-    <relativePath>../org.eclipselabs.e4.tapiji.parent/</relativePath>
+    <relativePath>../</relativePath>
   </parent>
   <artifactId>org.eclipselabs.e4.tapiji.translator.model</artifactId>
   <packaging>eclipse-plugin</packaging>
