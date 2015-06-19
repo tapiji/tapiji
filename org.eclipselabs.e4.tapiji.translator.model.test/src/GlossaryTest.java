@@ -73,7 +73,7 @@ public class GlossaryTest {
         final JAXBContext context = JAXBContext.newInstance(Glossary.class);
         final Unmarshaller unMarshaller = context.createUnmarshaller();
         final Glossary loadedGlossary = (Glossary) unMarshaller.unmarshal(new FileReader(GLOSSARY_XML));
-        assertEquals(loadedGlossary.toString(), glossary.toString());
+        assertEquals(loadedGlossary.toString(), "hello world");
     }
 
     @Test

@@ -77,6 +77,7 @@
 		<module>org.eclipselabs.e4.tapiji.translator.model</module>
 		<module>org.eclipselabs.e4.tapiji.translator.model.test</module>
 		<module>org.eclipselabs.e4.tapiji.utils</module>
+		<module>org.eclipselabs.e4.tapiji.translator.i18n</module>
 	</modules>
 
 	<!-- Tycho build configuration -->
@@ -147,3 +148,4 @@
 		</pluginManagement>
 	</build>
 </project>
+

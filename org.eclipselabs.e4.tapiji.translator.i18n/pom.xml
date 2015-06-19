@@ -9,6 +9,6 @@
 		<version>0.9.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
-	<artifactId>org.eclipselabs.e4.tapiji.translator</artifactId>
+	<artifactId>org.eclipselabs.e4.tapiji.translator.i18n</artifactId>
 	<packaging>eclipse-plugin</packaging>
 </project>
