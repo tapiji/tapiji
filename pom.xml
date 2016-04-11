@@ -1,151 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.eclipselabs.e4.tapiji</groupId>
-	<artifactId>org.eclipselabs.e4.tapiji.parent</artifactId>
-	<version>0.9.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.eclipselabs.e4.tapiji</groupId>
+    <artifactId>org.eclipselabs.e4.tapiji.root</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <parent>
+            <groupId>org.eclipselabs.e4.tapiji</groupId>
+            <artifactId>org.eclipselabs.e4.tapiji.configuration</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        <relativePath>./releng/org.eclipselabs.e4.tapiji.configuration</relativePath>
+    </parent>
 
-	<!-- Project meta information -->
-	<name>TapiJI - Tooling for agile and process-integrated Internationalization</name>
-	<organization>
-		<name>Technical University of Vienna</name>
-		<url>http://inso.tuwien.ac.at</url>
-	</organization>
-	<scm>
-		<url>https://github.com/tapiji/tapiji.git</url>
-		<developerConnection>tapiji</developerConnection>
-	</scm>
-	<issueManagement>
-		<url>https://github.com/tapiji/tapiji/issues</url>
-		<system>GitHub</system>
-	</issueManagement>
-	<ciManagement>
-		<url>https://travis-ci.org/tapiji/tapiji</url>
-		<system>Travis</system>
-	</ciManagement>
-
-	<!-- Profiles / Luna platform definition -->
-	<profiles>
-		<profile>
-			<id>platform-luna</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-				<property>
-					<name>platform-version-name</name>
-					<value>luna</value>
-				</property>
-			</activation>
-			<properties>
-				<eclipse.repo.url>http://download.eclipse.org/releases/luna</eclipse.repo.url>
-				<rap.repo.url>http://download.eclipse.org/rt/rap/2.3</rap.repo.url>
-				<e4tools.repo.url>http://download.eclipse.org/e4/downloads/drops/S-0.17-201501051100/repository/</e4tools.repo.url>
-				<platform.version>[3.8,3.9)</platform.version>
-				<tycho.version>0.23.0</tycho.version>
-			</properties>
-		</profile>
-	</profiles>
-
-	<!-- Repositories used for resolving dependencies -->
-	<repositories>
-		<repository>
-			<id>eclipse platform</id>
-			<url>${eclipse.repo.url}</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>rap platform</id>
-			<url>${rap.repo.url}</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>E4 Tools</id>
-			<url>${e4tools.repo.url}</url>
-			<layout>p2</layout>
-		</repository>
-	</repositories>
-
-	<!-- Submodules -->
-	<modules>
-		<module>org.eclipselabs.e4.tapiji.logger</module>
-		<module>org.eclipselabs.e4.tapiji.resource</module>
-		<module>org.eclipselabs.e4.tapiji.translator</module>
-		<module>org.eclipselabs.e4.tapiji.translator.core</module>
-		<module>org.eclipselabs.e4.tapiji.translator.core.test</module>
-		<module>org.eclipselabs.e4.tapiji.translator.model</module>
-		<module>org.eclipselabs.e4.tapiji.translator.model.test</module>
-		<module>org.eclipselabs.e4.tapiji.utils</module>
-		<module>org.eclipselabs.e4.tapiji.translator.i18n</module>
-	</modules>
-
-	<!-- Tycho build configuration -->
-	<build>
-		<plugins>
-			<!-- Enable Tycho -->
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-maven-plugin</artifactId>
-				<version>${tycho.version}</version>
-				<extensions>true</extensions>
-			</plugin>
-
-			<!-- Specify Target Runtime -->
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<configuration>
-					<environments>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
-							<arch>x86_64</arch>
-						</environment>
-					</environments>
-				</configuration>
-			</plugin>
-		</plugins>
-
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.eclipse.tycho</groupId>
-					<artifactId>target-platform-configuration</artifactId>
-					<version>${tycho.version}</version>
-					<configuration>
-						<filters>
-							<!-- work around Equinox bug 348045 -->
-							<filter>
-								<type>p2-installable-unit</type>
-								<id>org.eclipse.equinox.servletbridge.extensionbundle</id>
-								<removeAll />
-							</filter>
-						</filters>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
-</project>
-
+    <modules>
+		<module>bundles</module>
+		<!--<module>features</module>
+		<module>tests</module>-->
+		<module>releng</module>
+    </modules>
+</project> 

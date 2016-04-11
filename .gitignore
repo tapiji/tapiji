@@ -11,3 +11,7 @@ org.eclipse.babel.core.pdeutils/org.eclipse.babel.core.pdeutils.jar
 # PMD
 .pmd
 
+target/
+*~
+.class
+.metadata
