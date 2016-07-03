@@ -25,6 +25,7 @@ public class ResourceLoader implements ITapijiResourceProvider {
             final URL url = FileLocator.find(bundle, new Path(path), null);
             final ImageDescriptor imageDescr = ImageDescriptor.createFromURL(url);
             img = imageDescr.createImage();
+            IMAGES.put(path, img);
         }
         return img;
     }

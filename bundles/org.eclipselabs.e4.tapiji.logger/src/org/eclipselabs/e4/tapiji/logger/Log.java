@@ -66,7 +66,7 @@ public final class Log {
    */
   public static void w(final String tag, final String message) {
     if (DEBUG) {
-      LOGGER.warning(String.format("%1s: %2s", tag, message));
+      LOGGER.warning(String.format("%1s %2s: %3s","[WARN]", tag, message));
     }
   }
 
@@ -78,7 +78,7 @@ public final class Log {
    */
   public static void i(final String tag, final String message) {
     if (DEBUG) {
-      LOGGER.info(String.format("%1s: %2s", tag, message));
+      LOGGER.info(String.format("%1s %2s: %3s","[INFO]", tag, message));
     }
   }
 
@@ -90,7 +90,7 @@ public final class Log {
    */
   public static void d(final String tag, final String message) {
     if (DEBUG) {
-      LOGGER.log(LEVEL_DEBUG, String.format("%1s: %2s", tag, message));
+      LOGGER.log(LEVEL_DEBUG, String.format("%1s %2s: %3s","[DEBUG]", tag, message));
     }
   }
 
@@ -102,7 +102,7 @@ public final class Log {
    */
   public static void e(final String tag, final Exception e) {
     if (DEBUG) {
-      LOGGER.log(LEVEL_EXCEPTION, String.format("%1s:\n %2s", tag, stackTraceToString(e)));
+      LOGGER.log(LEVEL_EXCEPTION, String.format("%1s %2s:\n %3s","[ERROR]", tag, stackTraceToString(e)));
     }
   }
 
@@ -116,7 +116,7 @@ public final class Log {
    */
   public static void wtf(final String tag, final String message, final Exception exception) {
     if (DEBUG) {
-      LOGGER.log(LEVEL_WTF, String.format("%1s:\n %2s", tag, stackTraceToString(exception)));
+      LOGGER.log(LEVEL_WTF, String.format("%1s %2s:\n %3s", "[WTF]",tag, stackTraceToString(exception)));
     }
   }
 
