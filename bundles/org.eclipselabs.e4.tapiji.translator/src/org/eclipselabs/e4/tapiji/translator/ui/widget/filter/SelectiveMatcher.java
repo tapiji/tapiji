@@ -11,8 +11,6 @@ package org.eclipselabs.e4.tapiji.translator.ui.widget.filter;
 
 
 import javax.inject.Inject;
-import org.eclipse.babel.core.message.IMessage;
-import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
@@ -24,8 +22,6 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipselabs.e4.tapiji.logger.Log;
-import org.eclipselabs.e4.tapiji.translator.model.Term;
-import org.eclipselabs.e4.tapiji.translator.model.Translation;
 
 
 public class SelectiveMatcher extends ViewerFilter implements ISelectionListener, ISelectionChangedListener {
@@ -36,7 +32,7 @@ public class SelectiveMatcher extends ViewerFilter implements ISelectionListener
     protected final StructuredViewer viewer;
     protected String pattern = "";
     protected StringMatcher matcher;
-    protected IKeyTreeNode selectedItem;
+  // protected IKeyTreeNode selectedItem;
 
     // protected IWorkbenchPage page;
 
@@ -53,7 +49,7 @@ public class SelectiveMatcher extends ViewerFilter implements ISelectionListener
 
     @Override
     public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-        if (null != selectedItem) {
+       /* if (null != selectedItem) {
             final Term term = (Term) element;
             for (final Translation translation : term.getAllTranslations()) {
                 final String value = translation.value;
@@ -73,7 +69,7 @@ public class SelectiveMatcher extends ViewerFilter implements ISelectionListener
                     }
                 }
             }
-        }
+        }*/
         return false;
     }
 
@@ -86,7 +82,7 @@ public class SelectiveMatcher extends ViewerFilter implements ISelectionListener
         }
 
         final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-        selectedItem = (IKeyTreeNode) structuredSelection.iterator().next();
+        //selectedItem = (IKeyTreeNode) structuredSelection.iterator().next();
         viewer.refresh();
     }
 
