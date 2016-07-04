@@ -1,6 +1,6 @@
 
 .MWindow {
-    background-color:  #EEF2F7 #DEEBF3 100%;
+    background-color:  #171818 #171818 100%;
 }
 
 .MTrimmedWindow {  
@@ -45,4 +45,22 @@
 
 }
 
+ 
+Label {
+    font: Verdana 8px;
+    color:rgb(178,34,34);
+}
+ 
+Button {
+    font: Verdana 8px;
+}
+ 
+ 
+Text {
+    font: Verdana 8px;
+}
 
+Composite Text {
+	font: Verdana 8px;
+	background-color: white;
+}
