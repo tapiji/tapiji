@@ -3,9 +3,11 @@ package org.eclipselabs.e4.tapiji.translator.ui.treeviewer;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
+import org.eclipselabs.e4.tapiji.translator.ui.BasePresenter;
+import org.eclipselabs.e4.tapiji.translator.ui.BaseView;
 
 
-public interface ITreeViewerWidget {
+public interface TreeViewerContract {
 
     TreeViewer getTreeViewer();
 
@@ -24,4 +26,12 @@ public interface ITreeViewerWidget {
     void hideTranslationColumn(String languageCode);
 
     void setReferenceLanguage(String referenceLanguage);
+    
+    interface View extends BaseView<Presenter> {
+           void bla();
+    }
+    
+    interface Presenter extends BasePresenter<View> {
+        
+    }
 }

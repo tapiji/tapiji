@@ -8,7 +8,7 @@
  * Martin Reiterer - initial API and implementation
  * Christian Behon - refactor from e3 to e4
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.ui;
+package org.eclipselabs.e4.tapiji.translator.ui.glossary;
 
 
 import java.io.File;
@@ -16,19 +16,16 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.nls.Translation;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.PersistState;
 import org.eclipse.e4.ui.di.UIEventTopic;
-import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -48,21 +45,21 @@ import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.preference.StoreInstanceState;
-import org.eclipselabs.e4.tapiji.translator.ui.handler.treeviewer.LanguageVisibilityChangedHandler.LanguageViewHolder;
 import org.eclipselabs.e4.tapiji.translator.ui.provider.TreeViewerContentProvider;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.ITreeViewerWidget;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.TreeViewerWidget;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.TreeViewerContract;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.TreeViewerView;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler.LanguageVisibilityChangedHandler.LanguageViewHolder;
 
 
-public final class GlossaryPart implements ModifyListener, Listener {
+public final class GlossaryView implements ModifyListener, Listener {
 
-    private static final String TREE_VIEWER_MENU_ID = "org.eclipselabs.e4.tapiji.translator.popupmenu.treeview";
+
     private static final String EXPRESSION_TRANSLATION_REFERENCE = "org.eclipselabs.e4.tapiji.translator.popupmenu.TRANSLATION_REFERENCE";
     private static final String EXPRESSION_TRANSLATION_VISIBILITY = "org.eclipselabs.e4.tapiji.translator.popupmenu.TRANSLATION_VISIBILITY";
 
-    private static final String TAG = GlossaryPart.class.getSimpleName();
+    private static final String TAG = GlossaryView.class.getSimpleName();
 
-    private ITreeViewerWidget treeViewerWidget;
+    private TreeViewerContract treeViewerWidget;
     private Scale fuzzyScaler;
     private Label labelScale;
     private Text inputFilter;
@@ -76,8 +73,6 @@ public final class GlossaryPart implements ModifyListener, Listener {
     @Inject
     private StoreInstanceState storeInstanceState;
 
-    @Inject
-    private EMenuService menuService;
 
     @Inject
     private IEclipseContext eclipseContext;
@@ -112,7 +107,8 @@ public final class GlossaryPart implements ModifyListener, Listener {
         fuzzyScaler.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
         onRestoreInstance();
-        initializeTreeViewerWidget(parent);
+        treeViewerWidget = TreeViewerView.create(parent);
+        ContextInjectionFactory.inject(treeViewerWidget, eclipseContext);
         Log.d(TAG, String.format("Array: %s", storeInstanceState.toString()));
     }
 
@@ -161,32 +157,6 @@ public final class GlossaryPart implements ModifyListener, Listener {
     private void onRefrenceChanged(@UIEventTopic(TranslatorConstant.TOPIC_REFERENCE_LANGUAGE) final String referenceLanguage) {
         treeViewerWidget.setReferenceLanguage(referenceLanguage);
         treeViewerWidget.updateView(((TreeViewerContentProvider) treeViewerWidget.getTreeViewer().getContentProvider()).getGlossary());
-    }
-
-    protected void initializeTreeViewerWidget(final Composite parent) {
-        treeViewerWidget = TreeViewerWidget.create(parent, glossaryService, storeInstanceState);
-        treeViewerWidget.getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
-
-            @Override
-            public void selectionChanged(final SelectionChangedEvent event) {
-                final IStructuredSelection selection = (IStructuredSelection) treeViewerWidget.getTreeViewer().getSelection();
-                selectionService.setSelection(selection.getFirstElement());
-                Log.d(TAG, "Selection:" + selection.getFirstElement());
-            }
-        });
-
-        menuService.registerContextMenu(treeViewerWidget.getTreeViewer().getControl(), TREE_VIEWER_MENU_ID);
-    }
-
-    @PersistState
-    public void saveInstanceState() {
-        if (null != inputFilter) {
-            storeInstanceState.setSearchValue(inputFilter.getText());
-        }
-        if (null != fuzzyScaler) {
-            storeInstanceState.setMatchingPrecision(fuzzyScaler.getSelection());
-        }
-        Log.d(TAG, String.format("Array: %s", storeInstanceState.toString()));
     }
 
     private float getFuzzyPrecission() {
@@ -238,6 +208,18 @@ public final class GlossaryPart implements ModifyListener, Listener {
     public void setFocus() {
     }
 
+    
+    @PersistState
+    public void saveInstanceState() {
+        if (null != inputFilter) {
+            storeInstanceState.setSearchValue(inputFilter.getText());
+        }
+        if (null != fuzzyScaler) {
+            storeInstanceState.setMatchingPrecision(fuzzyScaler.getSelection());
+        }
+        Log.d(TAG, String.format("Array: %s", storeInstanceState.toString()));
+    }
+    
     @PreDestroy
     public void preDestroy() {
         if (treeViewerWidget != null) {

@@ -1,4 +1,4 @@
-package org.eclipselabs.e4.tapiji.translator.ui.handler.treeviewer;
+package org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler;
 
 
 import org.eclipse.e4.core.di.annotations.Execute;

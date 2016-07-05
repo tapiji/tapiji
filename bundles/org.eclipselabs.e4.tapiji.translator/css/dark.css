@@ -6,37 +6,37 @@ Shell {
 	font-size: 12;
 }
 
-CTabItem, ToolBar, Button,Tree, CBanner, CoolBar {
+CTabItem, ToolBar, Button, CBanner, CoolBar {
 	font-size: 9;
-	background-color: white;
+	background-color: green;
 }
 
 CTabFolder, CTabItem {
-    background-color: #F0F1F7;
+    background-color: red;
 }
 
 CTabItem:selected {
-    background-color: #FDFDFD;
+    background-color: blue;
 }
 
 Text {
 	font-size: 11;
 	color: #666666;
-	background-color: #FAFAFA;
+	background-color: red;
 }
 
 #navigation {
 	font-size: 8;
-	color: #595959;
-	background-color: #f0f1f7;
+	color: orange;
+	background-color: blue;
 }
 
 .messageBanner {
-    background-color: #f0f1f7;
+    background-color: yellow;
 }
 
 .messageBanner Composite, Label, Link {
-    background-color: #f0f1f7;
+    background-color: pink;
 }
 
 .messageSender {
@@ -49,25 +49,17 @@ Text {
 	font-size: 9;
 }
 
+
 .messageSubjectUnRead {
     font-size: 14;
 	font-style: italic;
     font-weight: bold;
-	color: #F2973D;
+	color: red;
 }
 
 .messageSubjectRead {
     font-size: 12;
 	font-style: normal;
     font-weight: normal;
-	color: #666666;
-}
-
-CTabItem, ToolBar, Button, CBanner, CoolBar {
- font-size: 9;
- background-color: white;
-}
-
-CTabFolder, CTabItem {
- background-color: #F0F1F7;
+	color: green;
 }

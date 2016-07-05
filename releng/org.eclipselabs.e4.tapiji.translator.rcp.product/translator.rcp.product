@@ -57,4 +57,12 @@ Christian Behon
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
    </configurations>
 
+   <preferencesInfo>
+      <targetfile overwrite="false"/>
+   </preferencesInfo>
+
+   <cssInfo>
+      <file path="/org.eclipselabs.e4.tapiji.translator/css/default.css"/>
+   </cssInfo>
+
 </product>

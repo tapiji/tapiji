@@ -24,8 +24,8 @@ import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
 import org.eclipselabs.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipselabs.e4.tapiji.resource.TapijiResourceConstants;
-import org.eclipselabs.e4.tapiji.translator.ui.handler.window.AboutHandler;
-import org.eclipselabs.e4.tapiji.translator.ui.handler.window.ExitHandler;
+import org.eclipselabs.e4.tapiji.translator.ui.window.AboutHandler;
+import org.eclipselabs.e4.tapiji.translator.ui.window.ExitHandler;
 import org.osgi.service.event.EventHandler;
 
 

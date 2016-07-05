@@ -37,7 +37,8 @@ public class StoreInstanceState {
 
     private static final String TAG = StoreInstanceState.class.getSimpleName();
 
-    private final Map<String, String> persistedState;
+
+    private Map<String, String> persistedState;
 
     @Inject
     public StoreInstanceState(final MPart part) {

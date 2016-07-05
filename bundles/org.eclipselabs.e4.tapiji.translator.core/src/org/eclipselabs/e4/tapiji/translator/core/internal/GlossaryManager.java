@@ -151,6 +151,12 @@ public final class GlossaryManager implements IGlossaryService {
     }
 
 
+    public void containsTerm(final String term) {
+    }
+    
+    
+    
+    
     @Override
     public final void addTerm(final Term parentTerm, final Term term) {
         glossary.addTerm(parentTerm, term);
@@ -171,13 +177,13 @@ public final class GlossaryManager implements IGlossaryService {
 
     @Override
     public final void evictGlossary() {
-        for (final Term term : glossary.terms) {
+        glossary.terms.forEach(term-> {
             term.translations.clear();
             term.subTerms.clear();
             term.parentTerm = null;
             term.subTerms = null;
             term.translations = null;
-        }
+        });
         glossary.terms.clear();
         glossary.info = Info.newInstance();
     }

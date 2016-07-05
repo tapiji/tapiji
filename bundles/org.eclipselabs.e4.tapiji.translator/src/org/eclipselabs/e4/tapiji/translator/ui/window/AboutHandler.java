@@ -1,4 +1,4 @@
-package org.eclipselabs.e4.tapiji.translator.ui.handler.window;
+package org.eclipselabs.e4.tapiji.translator.ui.window;
 
 
 import org.eclipse.e4.core.contexts.IEclipseContext;
