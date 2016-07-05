@@ -178,4 +178,11 @@
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="org.eclipselabs.e4.tapiji.translator.core.api"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>

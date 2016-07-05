@@ -3,7 +3,7 @@ package org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler;
 
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
 
 
 public final class ReloadTreeViewerHandler {

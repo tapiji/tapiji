@@ -16,9 +16,9 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
-import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.ui.provider.TreeViewerContentProvider;
 
 

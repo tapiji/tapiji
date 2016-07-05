@@ -4,7 +4,7 @@
    <property 
    		name="service.context.key" 
    		type="String" 
-   		value="org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService"/>
+   		value="org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService"/>
    <service>
       <provide interface="org.eclipse.e4.core.contexts.IContextFunction"/>
    </service>

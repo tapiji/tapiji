@@ -16,7 +16,7 @@ import org.eclipse.e4.core.contexts.ContextFunction;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
 
 
 public final class GlossaryManagerContextFunction extends ContextFunction {

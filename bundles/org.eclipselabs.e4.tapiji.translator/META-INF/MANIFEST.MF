@@ -29,4 +29,5 @@ Require-Bundle: org.eclipse.jface,
 Bundle-ManifestVersion: 2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Vienna University of Technology
-Import-Package: org.eclipse.e4.babel.editor.model.checks.proximity
+Import-Package: org.eclipse.e4.babel.editor.model.checks.proximity,
+ org.eclipselabs.e4.tapiji.translator.core.api

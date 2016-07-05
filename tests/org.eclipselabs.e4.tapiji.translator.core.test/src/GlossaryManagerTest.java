@@ -5,12 +5,12 @@ import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipselabs.e4.tapiji.logger.Log;
+import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.core.internal.GlossaryManager;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Info;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
-import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

@@ -17,9 +17,9 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
+import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
-import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.ui.provider.TreeViewerContentProvider;
 
 

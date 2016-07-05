@@ -11,7 +11,7 @@ import org.eclipse.e4.ui.model.application.ui.menu.MMenuElement;
 import org.eclipse.e4.ui.model.application.ui.menu.MMenuFactory;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipselabs.e4.tapiji.logger.Log;
-import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.preference.StoreInstanceState;
 
 

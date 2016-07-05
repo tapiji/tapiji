@@ -1,4 +1,4 @@
-package org.eclipselabs.e4.tapiji.translator.model.interfaces;
+package org.eclipselabs.e4.tapiji.translator.core.api;
 
 
 /*******************************************************************************

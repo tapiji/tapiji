@@ -26,12 +26,12 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipselabs.e4.tapiji.logger.Log;
+import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.messages.ErrorMessage;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Info;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
-import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
 import org.eclipselabs.e4.tapiji.utils.FileUtils;
 
 

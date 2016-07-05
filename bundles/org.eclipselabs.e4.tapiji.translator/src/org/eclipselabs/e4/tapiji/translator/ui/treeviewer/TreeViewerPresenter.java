@@ -3,7 +3,7 @@ package org.eclipselabs.e4.tapiji.translator.ui.treeviewer;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.eclipse.e4.core.di.annotations.Creatable;
-import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.TreeViewerContract.View;
 
 @Creatable

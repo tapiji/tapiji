@@ -13,7 +13,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipselabs.e4.tapiji.logger.Log;
-import org.eclipselabs.e4.tapiji.translator.model.interfaces.IGlossaryService;
+import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.preference.StoreInstanceState;
 import org.eclipselabs.e4.tapiji.utils.FileUtils;
 
