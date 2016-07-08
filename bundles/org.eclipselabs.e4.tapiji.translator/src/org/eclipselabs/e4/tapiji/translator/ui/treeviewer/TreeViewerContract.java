@@ -26,11 +26,11 @@ public interface TreeViewerContract {
 
         void setMatchingPrecision(float value);
 
-        void registerTreeMenu();
-        
         void setReferenceLanguage(String referenceLanguage);
 
         void addSelection(Term term);
+
+        void registerTreeMenu(String menuId);
     }
 
     interface Presenter extends BasePresenter<View> {

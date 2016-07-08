@@ -9,8 +9,8 @@
               <children xsi:type="menu:HandledMenuItem" xmi:id="_jGchQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.add" label="Add" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/add.png" command="_bfB6gMnOEeSNbNVYTrKUgg"/>
               <children xsi:type="menu:HandledMenuItem" xmi:id="_lnbQQMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.remove" label="Remove" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/delete.png" command="_Dme0MMnSEeSNbNVYTrKUgg"/>
               <children xsi:type="menu:HandledMenuItem" xmi:id="_Z76OENVXEeSRsokyixGtOQ" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.refreshTreeViewer" label="Refresh" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/refresh.png" command="_VqqJYNVZEeSRsokyixGtOQ"/>
-              <children xsi:type="menu:MenuSeparator" xmi:id="_nDgzwMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.2"/>
-              <children xsi:type="menu:Menu" xmi:id="_n3w7MMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menu.show" label="Show">
+              <children xsi:type="menu:MenuSeparator" xmi:id="_nDgzwMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.2" toBeRendered="false" visible="false"/>
+              <children xsi:type="menu:Menu" xmi:id="_n3w7MMjxEeSbUa7KzIYvCA" elementId="org.eclipselabs.e4.tapiji.translator.menu.show" toBeRendered="false" visible="false" label="Show">
                 <children xsi:type="menu:HandledMenuItem" xmi:id="_ifBHAMzlEeSHOM1sG85QHg" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.show" label="Show"/>
                 <children xsi:type="menu:HandledMenuItem" xmi:id="_j56XsMzlEeSHOM1sG85QHg" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.relevantTerms" label="Relevant terms"/>
               </children>
@@ -33,6 +33,13 @@
                 <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_uj8YwPcnEeSs5Y_w1k3CXA" coreExpressionId="org.eclipselabs.e4.tapiji.translator.definition.translationvisibility"/>
                 <children xsi:type="menu:DynamicMenuContribution" xmi:id="_NrSoMM6MEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.dynamicmenucontribution.1" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler.LanguageVisibilityHandler"/>
               </children>
+              <children xsi:type="menu:MenuSeparator" xmi:id="_X1GJQEVTEeaQcqJhuhV2kA" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.6"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_ZvpxcEVTEeaQcqJhuhV2kA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.openglossary" label="Open glossary" command="_8xeWcMEZEeS16pfZp0OXPg"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_VepPQEVTEeaQcqJhuhV2kA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.newfile" label="Save as..." command="_7KpikMEZEeS16pfZp0OXPg"/>
+            </menus>
+            <menus xsi:type="menu:PopupMenu" xmi:id="_c6M3UEVSEeaQcqJhuhV2kA" elementId="org.eclipselabs.e4.tapiji.translator.popupmenu.treeview.empty">
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_fH6sEEVSEeaQcqJhuhV2kA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.newfile" label="New file..." command="_7KpikMEZEeS16pfZp0OXPg"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_jsH3EEVSEeaQcqJhuhV2kA" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.openglossary" label="Open glossary" command="_8xeWcMEZEeS16pfZp0OXPg"/>
             </menus>
           </children>
         </children>

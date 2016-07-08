@@ -82,6 +82,8 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
 
     private static final String TAG = TreeViewerView.class.getSimpleName();
     private static final String TREE_VIEWER_MENU_ID = "org.eclipselabs.e4.tapiji.translator.popupmenu.treeview";
+    private static final String TREE_VIEWER_MENU_EMPTY_ID = "org.eclipselabs.e4.tapiji.translator.popupmenu.treeview.empty";
+    
 
 
     private static final float DEFAULT_MATCHING_PRECISION = .75f;
@@ -140,8 +142,8 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
         this.presenter.setView(this);
         this.translations = presenter.getGlossary().getTranslations();
         this.treeViewer = new TreeViewer(this, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE);
-        this.treeViewer.getTree().setHeaderVisible(true);
-        this.treeViewer.getTree().setLinesVisible(true);
+        this.treeViewer.getTree().setHeaderVisible(false);
+        this.treeViewer.getTree().setLinesVisible(false);
         this.treeViewer.setAutoExpandLevel(2);
 
         this.treeViewer.addSelectionChangedListener((event) -> {
@@ -179,7 +181,7 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
 
         TreeViewerEditor.create(treeViewer,  new TreeViewerFocusCellManager(treeViewer, new FocusCellOwnerDrawHighlighter(treeViewer)), createColumnActivationStrategy(), ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
         dragAndDrop();
-        registerTreeMenu();
+        registerTreeMenu(TREE_VIEWER_MENU_EMPTY_ID);
     }
 
     private void initializeWidget() {
@@ -243,8 +245,8 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
 
 
     @Override
-    public void registerTreeMenu() {
-        this.menuService.registerContextMenu(this.treeViewer.getControl(), TREE_VIEWER_MENU_ID);
+    public void registerTreeMenu(String menuId) {
+        this.menuService.registerContextMenu(this.treeViewer.getControl(),menuId);
     }
 
     private void setTreeStructure(final boolean grouped) {
@@ -426,6 +428,7 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
             columnSorter(glossary);
             initMatchers();
             treeViewer.setInput(glossary);
+            registerTreeMenu(TREE_VIEWER_MENU_ID);
             tree.setRedraw(true);
             treeViewer.refresh();
         }
