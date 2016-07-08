@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
+import org.eclipselabs.e4.tapiji.translator.model.filter.FilterInfo;
 
 
 public class FuzzyMatcher extends ExactMatcher {
@@ -63,5 +64,4 @@ public class FuzzyMatcher extends ExactMatcher {
         term.setInfo(filterInfo);
         return match;
     }
-
 }

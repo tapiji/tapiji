@@ -12,13 +12,11 @@ package org.eclipselabs.e4.tapiji.translator.ui.treeviewer.provider;
 
 
 import static org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant.COLOR_BLACK;
-import static org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant.COLOR_GRAY;
 import static org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant.COLOR_INFO;
 import static org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant.FONT_ITALIC;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PreDestroy;
-import org.eclipse.jface.text.Region;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -27,7 +25,8 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Font;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
-import org.eclipselabs.e4.tapiji.translator.ui.widget.filter.FilterInfo;
+import org.eclipselabs.e4.tapiji.translator.model.filter.FilterInfo;
+import org.eclipselabs.e4.tapiji.translator.model.filter.FilterRegion;
 
 
 public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
@@ -73,17 +72,16 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
 
     private void searchStyle(final ViewerCell cell, final Term term, final int columnIndex) {
         if (isMatchingToPattern(term, columnIndex)) {
-            final List<Region> regions = ((FilterInfo) term.getInfo()).getFoundInTranslationRanges(getColumnLocale(columnIndex));
+            final List<FilterRegion> regions = ((FilterInfo) term.getInfo()).getFoundInTranslationRanges(getColumnLocale(columnIndex));
 
-            STYLE_RANGES.clear();
             StyleRange style;
-            for (final Region reg : regions) {
+            for (final FilterRegion reg : regions) {
                 style = new StyleRange(reg.getOffset(), reg.getLength(), COLOR_BLACK, COLOR_INFO, SWT.BOLD);
                 STYLE_RANGES.add(style);
             }
             cell.setStyleRanges(STYLE_RANGES.toArray(new StyleRange[STYLE_RANGES.size()]));
         } else {
-            cell.setForeground(COLOR_GRAY);
+            cell.setForeground(COLOR_BLACK);
         }
     }
 

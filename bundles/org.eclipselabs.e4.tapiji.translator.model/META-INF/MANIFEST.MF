@@ -6,6 +6,8 @@ Bundle-Version: 0.9.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipselabs.e4.tapiji.translator.messages,
  org.eclipselabs.e4.tapiji.translator.model,
- org.eclipselabs.e4.tapiji.translator.model.constants
+ org.eclipselabs.e4.tapiji.translator.model.constants,
+ org.eclipselabs.e4.tapiji.translator.model.filter
 Import-Package: javax.inject,
- org.eclipse.e4.core.di.annotations
+ org.eclipse.e4.core.di.annotations,
+ org.eclipse.jface.text

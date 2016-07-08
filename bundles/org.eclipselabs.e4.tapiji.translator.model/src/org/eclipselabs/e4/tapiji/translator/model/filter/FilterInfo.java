@@ -7,20 +7,22 @@
  * Contributors:
  * Martin Reiterer - initial API and implementation
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.ui.widget.filter;
+package org.eclipselabs.e4.tapiji.translator.model.filter;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.eclipse.jface.text.Region;
 
 
-public final class FilterInfo {
+public final class FilterInfo implements Serializable {
+    
+    private static final long serialVersionUID = -6117869799503980234L;
 
     private final List<String> foundInTranslation = new ArrayList<String>();
-    private final Map<String, List<Region>> occurrences = new HashMap<String, List<Region>>();
+    private final Map<String, List<FilterRegion>> occurrences = new HashMap<String, List<FilterRegion>>();
     private final Map<String, Double> localeSimilarity = new HashMap<String, Double>();
 
     public FilterInfo() {
@@ -51,17 +53,22 @@ public final class FilterInfo {
         return foundInTranslation.contains(l);
     }
 
-    public List<Region> getFoundInTranslationRanges(final String locale) {
-        final List<Region> reg = occurrences.get(locale);
-        return (reg == null ? new ArrayList<Region>() : reg);
+    public List<FilterRegion> getFoundInTranslationRanges(final String locale) {
+        final List<FilterRegion> reg = occurrences.get(locale);
+        return (reg == null ? new ArrayList<FilterRegion>() : reg);
     }
 
     public void addFoundInTranslationRange(final String locale, final int start, final int length) {
-        List<Region> regions = occurrences.get(locale);
+        List<FilterRegion> regions = occurrences.get(locale);
         if (regions == null) {
-            regions = new ArrayList<Region>();
+            regions = new ArrayList<FilterRegion>();
         }
-        regions.add(new Region(start, length));
+        regions.add(new FilterRegion(start, length));
         occurrences.put(locale, regions);
+    }
+
+    @Override
+    public String toString() {
+        return "FilterInfo [foundInTranslation=" + foundInTranslation + ", occurrences=" + occurrences + ", localeSimilarity=" + localeSimilarity + "]";
     }
 }

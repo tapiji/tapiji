@@ -63,6 +63,7 @@ public final class TermTransfer extends ByteArrayTransfer {
 
     @Override
     public Object nativeToJava(final TransferData transferData) {
+        
         if (isSupportedType(transferData)) {
             final byte[] buffer = getBytesFrom(transferData);
             if (null != buffer) {

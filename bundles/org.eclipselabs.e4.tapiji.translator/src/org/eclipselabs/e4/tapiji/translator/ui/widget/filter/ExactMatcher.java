@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
+import org.eclipselabs.e4.tapiji.translator.model.filter.FilterInfo;
 
 
 public class ExactMatcher extends ViewerFilter {

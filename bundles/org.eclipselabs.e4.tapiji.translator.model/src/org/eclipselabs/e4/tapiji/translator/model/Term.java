@@ -89,11 +89,11 @@ public class Term implements Serializable {
 
         return newTranslation;
     }
-
+    
     public boolean removeTerm(final Term elem) {
         boolean hasFound = false;
         for (final Term subTerm : subTerms) {
-            if (subTerm == elem) {
+            if (subTerm.equals(elem)) {
                 subTerms.remove(elem);
                 hasFound = true;
                 break;
@@ -110,7 +110,7 @@ public class Term implements Serializable {
     public boolean addTerm(final Term parentTerm, final Term newTerm) {
         boolean hasFound = false;
         for (final Term subTerm : subTerms) {
-            if (subTerm == parentTerm) {
+            if (subTerm.equals(parentTerm)) {
                 subTerms.add(newTerm);
                 hasFound = true;
                 break;
@@ -147,7 +147,6 @@ public class Term implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((info == null) ? 0 : info.hashCode());
         result = prime * result + ((parentTerm == null) ? 0 : parentTerm.hashCode());
         result = prime * result + ((subTerms == null) ? 0 : subTerms.hashCode());
         result = prime * result + ((translations == null) ? 0 : translations.hashCode());
@@ -160,9 +159,6 @@ public class Term implements Serializable {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         Term other = (Term) obj;
-        if (info == null) {
-            if (other.info != null) return false;
-        } else if (!info.equals(other.info)) return false;
         if (parentTerm == null) {
             if (other.parentTerm != null) return false;
         } else if (!parentTerm.equals(other.parentTerm)) return false;
@@ -174,6 +170,4 @@ public class Term implements Serializable {
         } else if (!translations.equals(other.translations)) return false;
         return true;
     }
-    
-    
 }

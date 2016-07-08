@@ -105,7 +105,7 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
 
     @Inject
     private EHandlerService handlerService;
-    
+
     private boolean isColumnEditable;
     private boolean isFuzzyMatchingEnabled = false;
     private final boolean selectiveViewEnabled = false;
@@ -144,13 +144,11 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
         this.treeViewer.getTree().setLinesVisible(true);
         this.treeViewer.setAutoExpandLevel(2);
 
-        treeViewer.addSelectionChangedListener((event) -> {
-            final IStructuredSelection selection = (IStructuredSelection) treeViewer.getSelection();
-
-            selectionService.setSelection(selection.getFirstElement());
+        this.treeViewer.addSelectionChangedListener((event) -> {
+            selectionService.setSelection(((IStructuredSelection) treeViewer.getSelection()).getFirstElement());
         });
 
-        treeViewer.getTree().addMouseListener(new MouseAdapter() {
+        this.treeViewer.getTree().addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseDoubleClick(MouseEvent event) {
@@ -166,7 +164,7 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
         });
 
 
-        treeViewer.getTree().addKeyListener(new KeyAdapter() {
+        this.treeViewer.getTree().addKeyListener(new KeyAdapter() {
 
             @SuppressWarnings("restriction")
             @Override
@@ -176,14 +174,10 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
                 }
             }
         });
-
-
-        TreeViewerFocusCellManager focusCellManager = new TreeViewerFocusCellManager(treeViewer, new FocusCellOwnerDrawHighlighter(treeViewer));
-
         this.tree = treeViewer.getTree();
         this.tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-        TreeViewerEditor.create(treeViewer, focusCellManager, createColumnActivationStrategy(), ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
+        TreeViewerEditor.create(treeViewer,  new TreeViewerFocusCellManager(treeViewer, new FocusCellOwnerDrawHighlighter(treeViewer)), createColumnActivationStrategy(), ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
         dragAndDrop();
         registerTreeMenu();
     }
@@ -283,7 +277,7 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
         }
     }
 
-    protected void dragAndDrop() {
+    private void dragAndDrop() {
         final Transfer[] transferTypes = new Transfer[] {TermTransfer.getInstance()};
         treeViewer.addDragSupport(DND.DROP_MOVE, transferTypes, GlossaryDragSource.create(treeViewer, presenter.getGlossary()));
         treeViewer.addDropSupport(DND.DROP_MOVE, transferTypes, GlossaryDropTarget.create(treeViewer));
@@ -384,6 +378,7 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
                 setTreeStructure(isSearchTreeGrouped());
                 treeViewerLabelProvider.isSearchEnabled(true);
             }
+            tree.setRedraw(true);
             treeViewer.refresh();
         }
     }
@@ -471,7 +466,7 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
             public void widgetSelected(final SelectionEvent selectionEvent) {
                 updateColumnOrder(columnIndex);
             }
-            
+
             private void updateColumnOrder(final int columnIndex) {
                 if (columnSorter != null) {
                     final SortInfo sortInfo = columnSorter.getSortInfo();
