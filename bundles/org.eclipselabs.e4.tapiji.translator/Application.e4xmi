@@ -70,8 +70,6 @@
         <children xsi:type="menu:HandledToolItem" xmi:id="_rSFmEMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.handledtoolitem.2" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/open_glossary.png" tooltip="Opens a Glossary definition" command="_8xeWcMEZEeS16pfZp0OXPg"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_tC7RkMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.handledtoolitem.3" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/open_resource_bundle.png" tooltip="Opens a Resource-Bundle (Ctrl+O)"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_qjZUEMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.handledtoolitem.1" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/save.png" tooltip="Save (Ctrl+S)" command="_3-kvgMEWEeS87-LHw5gOnA"/>
-        <children xsi:type="menu:ToolBarSeparator" xmi:id="_qL9EcMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.toolbarseparator.0"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_4j3IsMEoEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.handledtoolitem.4"/>
       </children>
     </trimBars>
   </children>

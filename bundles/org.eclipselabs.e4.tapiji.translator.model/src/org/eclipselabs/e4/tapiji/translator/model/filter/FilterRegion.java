@@ -4,6 +4,8 @@ import java.io.Serializable;
 import org.eclipse.jface.text.IRegion;
 
 public class FilterRegion implements Serializable {
+
+    private static final long serialVersionUID = -7191749808571689883L;
     /** The region offset */
     private int fOffset;
     /** The region length */
