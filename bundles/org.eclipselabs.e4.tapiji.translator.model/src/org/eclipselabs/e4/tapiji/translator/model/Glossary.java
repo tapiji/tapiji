@@ -17,13 +17,16 @@ package org.eclipselabs.e4.tapiji.translator.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Singleton;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.eclipse.e4.core.di.annotations.Creatable;
 
-
+@Creatable
+@Singleton
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Glossary implements Serializable {
@@ -38,7 +41,7 @@ public class Glossary implements Serializable {
 
     public Glossary() {
         this.terms = new ArrayList<Term>();
-        this.info = Info.newInstance();
+        this.info = Info.create();
     }
 
     public synchronized Term[] getAllTerms() {

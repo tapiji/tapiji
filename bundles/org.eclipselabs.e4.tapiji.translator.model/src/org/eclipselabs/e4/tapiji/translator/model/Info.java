@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Info implements Serializable {
+public final class Info implements Serializable {
 
     private static final long serialVersionUID = 8607746669906026928L;
 
@@ -46,7 +46,29 @@ public class Info implements Serializable {
         return "Info [translations=" + translations + "]";
     }
 
-    public static Info newInstance() {
+    public static Info create() {
         return new Info();
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((translations == null) ? 0 : translations.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        Info other = (Info) obj;
+        if (translations == null) {
+            if (other.translations != null) return false;
+        } else if (!translations.equals(other.translations)) return false;
+        return true;
+    }
+    
+    
 }

@@ -13,12 +13,12 @@ package org.eclipselabs.e4.tapiji.translator.ui.widget.sorter;
 import java.util.List;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.model.Translation;
 
 
-public final class TreeViewerSortOrder extends ViewerSorter {
+public final class TreeViewerSortOrder extends ViewerComparator {
 
     private StructuredViewer viewer;
     private SortInfo sortInfo;
@@ -84,10 +84,10 @@ public final class TreeViewerSortOrder extends ViewerSorter {
                 Translation transComp2 = comp2.getTranslation(translations.get(col));
 
                 if (transComp1 == null) {
-                    transComp1 = Translation.newInstance();
+                    transComp1 = Translation.create();
                 }
                 if (transComp2 == null) {
-                    transComp2 = Translation.newInstance();
+                    transComp2 = Translation.create();
                 }
                 result = transComp1.value.compareTo(transComp2.value);
             }

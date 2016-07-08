@@ -36,21 +36,21 @@ public final class GlossaryManagerTest {
 
 
     private void initializeTestData() {
-        info = Info.newInstance();
+        info = Info.create();
         info.translations = new ArrayList<String>();
         info.translations.add("default");
 
         // Hello world
         term = Term.newInstance();
-        term.translations.add(Translation.newInstance("default", "Hallo Welt!"));
-        term.translations.add(Translation.newInstance("de", "Hallo Welt!"));
-        term.translations.add(Translation.newInstance("en", "Hello World!"));
+        term.translations.add(Translation.create("default", "Hallo Welt!"));
+        term.translations.add(Translation.create("de", "Hallo Welt!"));
+        term.translations.add(Translation.create("en", "Hello World!"));
         term.parentTerm = null;
 
         term2 = Term.newInstance();
-        term2.translations.add(Translation.newInstance("default", "Welt!"));
-        term2.translations.add(Translation.newInstance("de", "Welt!"));
-        term2.translations.add(Translation.newInstance("en", "World!"));
+        term2.translations.add(Translation.create("default", "Welt!"));
+        term2.translations.add(Translation.create("de", "Welt!"));
+        term2.translations.add(Translation.create("en", "World!"));
         term2.parentTerm = null;
 
         final Glossary glossary = new Glossary();

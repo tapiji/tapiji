@@ -6,9 +6,9 @@ Shell {
 	font-size: 12;
 }
 
-CTabItem, ToolBar, Button,Tree, CBanner, CoolBar {
+CTabItem, ToolBar, Button,Tree, CBanner, CoolBar,TableItem {
 	font-size: 9;
-	background-color: white;
+	background-color: F0F1F7;
 }
 
 CTabFolder, CTabItem {
@@ -48,7 +48,9 @@ Text {
 	color: #808080;
 	font-size: 9;
 }
-
+TableItem:even {
+	background-color:#edb5f4; 
+}
 .messageSubjectUnRead {
     font-size: 14;
 	font-style: italic;
@@ -63,9 +65,9 @@ Text {
 	color: #666666;
 }
 
-CTabItem, ToolBar, Button, CBanner, CoolBar {
+CTabItem, ToolBar, Button, CBanner, CoolBar,TableItem {
  font-size: 9;
- background-color: white;
+ background-color: F0F1F7;
 }
 
 CTabFolder, CTabItem {

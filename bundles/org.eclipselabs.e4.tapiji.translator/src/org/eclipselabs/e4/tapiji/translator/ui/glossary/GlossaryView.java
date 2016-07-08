@@ -16,19 +16,15 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.eclipse.e4.core.contexts.ContextInjectionFactory;
-import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.nls.Translation;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.di.PersistState;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -40,7 +36,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant;
-import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.i18n.Messages;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
@@ -48,39 +43,30 @@ import org.eclipselabs.e4.tapiji.translator.preference.StoreInstanceState;
 import org.eclipselabs.e4.tapiji.translator.ui.provider.TreeViewerContentProvider;
 import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.TreeViewerContract;
 import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.TreeViewerView;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler.LanguageVisibilityChangedHandler.LanguageViewHolder;
 
 
-public final class GlossaryView implements ModifyListener, Listener {
-
+public final class GlossaryView implements Listener, GlossaryContract.View {
 
     private static final String EXPRESSION_TRANSLATION_REFERENCE = "org.eclipselabs.e4.tapiji.translator.popupmenu.TRANSLATION_REFERENCE";
     private static final String EXPRESSION_TRANSLATION_VISIBILITY = "org.eclipselabs.e4.tapiji.translator.popupmenu.TRANSLATION_VISIBILITY";
 
     private static final String TAG = GlossaryView.class.getSimpleName();
 
-    private TreeViewerContract treeViewerWidget;
+    private TreeViewerContract.View treeViewer;
     private Scale fuzzyScaler;
     private Label labelScale;
     private Text inputFilter;
 
     @Inject
-    private IGlossaryService glossaryService;
-
-    @Inject
-    private ESelectionService selectionService;
+    private GlossaryPresenter presenter;
 
     @Inject
     private StoreInstanceState storeInstanceState;
 
-
-    @Inject
-    private IEclipseContext eclipseContext;
-
-
     @PostConstruct
     public void createPartControl(final Composite parent, @Translation Messages message) {
         parent.setLayout(new GridLayout(1, false));
+        presenter.setView(this);
 
         final Composite parentComp = new Composite(parent, SWT.BORDER);
         parentComp.setLayout(new GridLayout(2, false));
@@ -92,7 +78,11 @@ public final class GlossaryView implements ModifyListener, Listener {
 
         inputFilter = new Text(parentComp, SWT.BORDER | SWT.SEARCH | SWT.CANCEL | SWT.ICON_SEARCH);
         inputFilter.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        inputFilter.addModifyListener(this);
+        inputFilter.addModifyListener(e -> {
+            if (treeViewer != null) {
+                treeViewer.setSearchString(inputFilter.getText());
+            }
+        });
 
         labelScale = new Label(parentComp, SWT.NONE);
         labelScale.setText(message.glossarySearchPrecision);
@@ -107,9 +97,14 @@ public final class GlossaryView implements ModifyListener, Listener {
         fuzzyScaler.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
         onRestoreInstance();
-        treeViewerWidget = TreeViewerView.create(parent);
-        ContextInjectionFactory.inject(treeViewerWidget, eclipseContext);
+        treeViewer = TreeViewerView.create(parent, presenter.getContext());
+
         Log.d(TAG, String.format("Array: %s", storeInstanceState.toString()));
+    }
+
+    @Override
+    public TreeViewerContract.View getTreeViewerView() {
+        return this.treeViewer;
     }
 
     @Inject
@@ -120,95 +115,55 @@ public final class GlossaryView implements ModifyListener, Listener {
 
     @Inject
     @Optional
-    private void onEditModeChanged(@UIEventTopic(TranslatorConstant.TOPIC_EDIT_MODE) final boolean isEditable) {
-        if (treeViewerWidget != null) {
-            treeViewerWidget.setColumnEditable(isEditable);
-        }
-    }
-
-    @Inject
-    @Optional
-    private void onSearchSelected(@UIEventTopic(TranslatorConstant.TOPIC_SHOW_FUZZY_MATCHING) final boolean isVisible) {
-        showHideFuzzyMatching(isVisible);
-    }
-
-    @Inject
-    @Optional
     private void onReloadGlossary(@UIEventTopic(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD) final Glossary glossary) {
         if (glossary != null) {
-            eclipseContext.set(EXPRESSION_TRANSLATION_REFERENCE, glossary.info.translations.size());
-            eclipseContext.set(EXPRESSION_TRANSLATION_VISIBILITY, glossary.info.translations.size() - 1);
-            treeViewerWidget.updateView(glossary);
-        }
-    }
-
-    @Inject
-    @Optional
-    private void onLanguageVisibilityChanged(@UIEventTopic(TranslatorConstant.TOPIC_SHOW_LANGUAGE) final LanguageViewHolder languageVisibility) {
-        if (languageVisibility.isVIsible) {
-            treeViewerWidget.showTranslationColumn(languageVisibility.locale);
-        } else {
-            treeViewerWidget.hideTranslationColumn(languageVisibility.locale);
+            presenter.getContext().set(EXPRESSION_TRANSLATION_REFERENCE, glossary.info.translations.size());
+            presenter.getContext().set(EXPRESSION_TRANSLATION_VISIBILITY, glossary.info.translations.size() - 1);
+            treeViewer.updateView(glossary);
         }
     }
 
     @Inject
     @Optional
     private void onRefrenceChanged(@UIEventTopic(TranslatorConstant.TOPIC_REFERENCE_LANGUAGE) final String referenceLanguage) {
-        treeViewerWidget.setReferenceLanguage(referenceLanguage);
-        treeViewerWidget.updateView(((TreeViewerContentProvider) treeViewerWidget.getTreeViewer().getContentProvider()).getGlossary());
+        treeViewer.setReferenceLanguage(referenceLanguage);
+        treeViewer.updateView(((TreeViewerContentProvider) treeViewer.getTreeViewer().getContentProvider()).getGlossary());
     }
 
-    private float getFuzzyPrecission() {
-        final String value = String.valueOf((fuzzyScaler.getMaximum() - fuzzyScaler.getSelection()) + fuzzyScaler.getMinimum());
-        return 1f - (Float.parseFloat(value) / 100.f);
-    }
 
     private void onRestoreInstance() {
         if (!storeInstanceState.getGlossaryFile().isEmpty()) {
-            glossaryService.loadGlossary(new File(storeInstanceState.getGlossaryFile()));
+            presenter.openGlossary(new File(storeInstanceState.getGlossaryFile()));
         }
-        eclipseContext.set(EXPRESSION_TRANSLATION_REFERENCE, 0);
-        eclipseContext.set(EXPRESSION_TRANSLATION_VISIBILITY, 0);
+        presenter.getContext().set(EXPRESSION_TRANSLATION_REFERENCE, 0);
+        presenter.getContext().set(EXPRESSION_TRANSLATION_VISIBILITY, 0);
         inputFilter.setText(storeInstanceState.getSearchValue());
         fuzzyScaler.setSelection((int) storeInstanceState.getMatchingPrecision());
         showHideFuzzyMatching(storeInstanceState.isFuzzyMode());
     }
 
-    private void showHideFuzzyMatching(final boolean isVisible) {
-        if (isVisible) {
-            ((GridData) labelScale.getLayoutData()).heightHint = SWT.DEFAULT;
-            ((GridData) fuzzyScaler.getLayoutData()).heightHint = SWT.DEFAULT;
-        } else {
-            ((GridData) labelScale.getLayoutData()).heightHint = 0;
-            ((GridData) fuzzyScaler.getLayoutData()).heightHint = 0;
-        }
-        labelScale.getParent().layout();
-        labelScale.getParent().getParent().layout();
-        if (null != treeViewerWidget) {
-            treeViewerWidget.enableFuzzyMatching(isVisible);
-        }
-    }
 
     @Override
-    public void modifyText(final ModifyEvent modifyEvent) {
-        if (null != treeViewerWidget) {
-            treeViewerWidget.setSearchString(inputFilter.getText());
-        }
+    public void showHideFuzzyMatching(final boolean isVisible) {
+        ((GridData) labelScale.getLayoutData()).exclude = !isVisible;
+        ((GridData) fuzzyScaler.getLayoutData()).exclude = !isVisible;
+
+        labelScale.getParent().getParent().layout();
+        treeViewer.enableFuzzyMatching(isVisible);
     }
 
     @Override
     public void handleEvent(final Event event) {
         if (null != fuzzyScaler) {
-            treeViewerWidget.setMatchingPrecision(getFuzzyPrecission());
+            treeViewer.setMatchingPrecision(presenter.getFuzzyPrecission((fuzzyScaler.getMaximum() - fuzzyScaler.getSelection()) + fuzzyScaler.getMinimum()));
         }
     }
 
     @Focus
     public void setFocus() {
+        treeViewer.getTreeViewer().getControl().setFocus();
     }
 
-    
     @PersistState
     public void saveInstanceState() {
         if (null != inputFilter) {
@@ -219,11 +174,16 @@ public final class GlossaryView implements ModifyListener, Listener {
         }
         Log.d(TAG, String.format("Array: %s", storeInstanceState.toString()));
     }
-    
+
+    @Persist
+    public void onSave() {
+        presenter.saveGlossary();
+    }
+
     @PreDestroy
     public void preDestroy() {
-        if (treeViewerWidget != null) {
-            treeViewerWidget.getTreeViewer().getTree().dispose();
+        if (treeViewer != null) {
+            treeViewer.getTreeViewer().getTree().dispose();
         }
         if (null != fuzzyScaler) {
             fuzzyScaler.dispose();

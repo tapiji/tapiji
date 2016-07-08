@@ -56,8 +56,7 @@ public class ExactMatcher extends ViewerFilter {
         final FilterInfo filterInfo = new FilterInfo();
         boolean selected = false;
 
-        // Iterate translations
-        for (final Translation translation : term.getAllTranslations()) {
+        for (final Translation translation : term.getTranslations()) {
             final String value = translation.value;
             final String locale = translation.id;
             if (matcher.match(value)) {

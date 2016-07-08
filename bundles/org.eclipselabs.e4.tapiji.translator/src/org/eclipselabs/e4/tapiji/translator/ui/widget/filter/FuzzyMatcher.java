@@ -45,7 +45,7 @@ public class FuzzyMatcher extends ExactMatcher {
 
         final FilterInfo filterInfo = (FilterInfo) term.getInfo();
 
-        for (final Translation translation : term.getAllTranslations()) {
+        for (final Translation translation : term.getTranslations()) {
             final String value = translation.value;
             final String locale = translation.id;
             if (filterInfo.hasFoundInTranslation(locale)) {

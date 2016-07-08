@@ -17,7 +17,7 @@ import java.util.Map;
 import org.eclipse.jface.text.Region;
 
 
-public class FilterInfo {
+public final class FilterInfo {
 
     private final List<String> foundInTranslation = new ArrayList<String>();
     private final Map<String, List<Region>> occurrences = new HashMap<String, List<Region>>();
@@ -64,5 +64,4 @@ public class FilterInfo {
         regions.add(new Region(start, length));
         occurrences.put(locale, regions);
     }
-
 }

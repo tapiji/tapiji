@@ -27,7 +27,7 @@ public class GlossaryTest {
 
     @BeforeClass
     public static void setup() {
-        info = Info.newInstance();
+        info = Info.create();
         info.translations = new ArrayList<String>();
         info.translations.add("default");
         info.translations.add("de");
@@ -35,23 +35,23 @@ public class GlossaryTest {
 
         // Hello world
         final Term term = Term.newInstance();
-        term.translations.add(Translation.newInstance("default", "Hallo Welt!"));
-        term.translations.add(Translation.newInstance("de", "Hallo Welt!"));
-        term.translations.add(Translation.newInstance("en", "Hello World!"));
+        term.translations.add(Translation.create("default", "Hallo Welt!"));
+        term.translations.add(Translation.create("de", "Hallo Welt!"));
+        term.translations.add(Translation.create("en", "Hello World!"));
         term.parentTerm = null;
 
         // Hello world 2
         final Term subTerms = Term.newInstance();
-        subTerms.translations.add(Translation.newInstance("default", "Hallo Welt!"));
-        subTerms.translations.add(Translation.newInstance("de", "Hallo Welt!"));
-        subTerms.translations.add(Translation.newInstance("en", "Hello World!"));
+        subTerms.translations.add(Translation.create("default", "Hallo Welt!"));
+        subTerms.translations.add(Translation.create("de", "Hallo Welt!"));
+        subTerms.translations.add(Translation.create("en", "Hello World!"));
         term.subTerms.add(subTerms);
 
         // Hello World 3
         term2 = Term.newInstance();
-        term2.translations.add(Translation.newInstance("default", "Hallo Welt!"));
-        term2.translations.add(Translation.newInstance("de", "Hallo Welt!"));
-        term2.translations.add(Translation.newInstance("en", "Hello World!"));
+        term2.translations.add(Translation.create("default", "Hallo Welt!"));
+        term2.translations.add(Translation.create("de", "Hallo Welt!"));
+        term2.translations.add(Translation.create("en", "Hello World!"));
         term2.parentTerm = null;
 
         glossary = new Glossary();

@@ -27,11 +27,11 @@
               <children xsi:type="menu:MenuSeparator" xmi:id="_qa8bwMzlEeSHOM1sG85QHg" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.5"/>
               <children xsi:type="menu:Menu" xmi:id="_5ji20M6LEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.menu.referenceTranslation" label="Reference Translation">
                 <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_e4qekPcaEeSs5Y_w1k3CXA" coreExpressionId="org.eclipselabs.e4.tapiji.translator.definition.translationreference"/>
-                <children xsi:type="menu:DynamicMenuContribution" xmi:id="_NFvEEM6MEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.dynamicmenucontribution.0" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.handler.treeviewer.ReferenceLanguageHandler"/>
+                <children xsi:type="menu:DynamicMenuContribution" xmi:id="_NFvEEM6MEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.dynamicmenucontribution.0" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler.ReferenceLanguageHandler"/>
               </children>
               <children xsi:type="menu:Menu" xmi:id="_7eLXgM6LEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.menu.visibleTranslation" label="Displayed Translation">
                 <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_uj8YwPcnEeSs5Y_w1k3CXA" coreExpressionId="org.eclipselabs.e4.tapiji.translator.definition.translationvisibility"/>
-                <children xsi:type="menu:DynamicMenuContribution" xmi:id="_NrSoMM6MEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.dynamicmenucontribution.1" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.handler.treeviewer.LanguageVisibilityHandler"/>
+                <children xsi:type="menu:DynamicMenuContribution" xmi:id="_NrSoMM6MEeSwQYgLIg6mtg" elementId="org.eclipselabs.e4.tapiji.translator.dynamicmenucontribution.1" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler.LanguageVisibilityHandler"/>
               </children>
             </menus>
           </children>

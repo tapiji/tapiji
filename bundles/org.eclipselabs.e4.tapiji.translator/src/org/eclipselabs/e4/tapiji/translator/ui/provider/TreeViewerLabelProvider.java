@@ -12,12 +12,8 @@ package org.eclipselabs.e4.tapiji.translator.ui.provider;
 
 
 import static org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant.COLOR_BLACK;
-import static org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant.COLOR_CROSSREFERENCE_BACKGROUND;
-import static org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant.COLOR_CROSSREFERENCE_FOREGROUND;
 import static org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant.COLOR_GRAY;
 import static org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant.COLOR_INFO;
-import static org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant.COLOR_WHITE;
-import static org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant.FONT_BOLD;
 import static org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant.FONT_ITALIC;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +53,7 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
         final int columnIndex = cell.getColumnIndex();
         cell.setText(this.getColumnText(element, columnIndex));
 
-        if (isCrossRefRegion(cell.getText())) {
+        /*if (isCrossRefRegion(cell.getText())) {
             cell.setFont(FONT_BOLD);
             cell.setBackground(COLOR_CROSSREFERENCE_BACKGROUND);
             cell.setForeground(COLOR_CROSSREFERENCE_FOREGROUND);
@@ -65,7 +61,7 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
             cell.setFont(getColumnFont(element, columnIndex));
             cell.setBackground(COLOR_WHITE);
             cell.setForeground(COLOR_BLACK);
-        }
+        }*/
 
         if (isSearchEnabled) {
             searchStyle(cell, (Term) element, columnIndex);
@@ -122,7 +118,6 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
     }
 
     protected boolean isCrossRefRegion(final String cellText) {
-        // TODO
         return false;
     }
 

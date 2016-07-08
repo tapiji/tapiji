@@ -17,7 +17,7 @@ import org.eclipselabs.e4.tapiji.translator.preference.StoreInstanceState;
 
 public final class ReferenceLanguageHandler {
 
-    private static final String CONTRIBUTION_URI = "bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.handler.treeviewer.ReferenceLanguageChangedHandler";
+    private static final String CONTRIBUTION_URI = "bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler.ReferenceLanguageChangedHandler";
     private static final String TAG = ReferenceLanguageHandler.class.getSimpleName();
 
     @AboutToShow

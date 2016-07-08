@@ -50,8 +50,7 @@ public final class TermTransfer extends ByteArrayTransfer {
             DND.error(DND.ERROR_INVALID_DATA);
         }
         final Term[] terms = (Term[]) object;
-        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-                        ObjectOutputStream oOut = new ObjectOutputStream(out);) {
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream(); ObjectOutputStream oOut = new ObjectOutputStream(out);) {
             for (final Term term2 : terms) {
                 oOut.writeObject(term2);
             }
@@ -68,12 +67,8 @@ public final class TermTransfer extends ByteArrayTransfer {
             final byte[] buffer = getBytesFrom(transferData);
             if (null != buffer) {
                 final List<Term> terms = new ArrayList<Term>();
-                try (ByteArrayInputStream in = new ByteArrayInputStream(buffer);
-                                ObjectInputStream readIn = new ObjectInputStream(in);) {
-                    // while (readIn.available() > 0) {
-                    final Term newTerm = (Term) readIn.readObject();
-                    terms.add(newTerm);
-                    // }
+                try (ByteArrayInputStream in = new ByteArrayInputStream(buffer); ObjectInputStream readIn = new ObjectInputStream(in);) {
+                    terms.add((Term) readIn.readObject());
                 } catch (final Exception exception) {
                     Log.e(TAG, exception);
                     return null;
@@ -85,14 +80,7 @@ public final class TermTransfer extends ByteArrayTransfer {
     }
 
     private byte[] getBytesFrom(final TransferData transferData) {
-        byte[] buffer;
-        try {
-            buffer = (byte[]) super.nativeToJava(transferData);
-        } catch (final Exception exception) {
-            Log.e(TAG, exception);
-            buffer = null;
-        }
-        return buffer;
+        return (byte[]) super.nativeToJava(transferData);
     }
 
     @Override

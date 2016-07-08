@@ -16,7 +16,7 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
+import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.ui.provider.TreeViewerContentProvider;
@@ -24,15 +24,14 @@ import org.eclipselabs.e4.tapiji.translator.ui.provider.TreeViewerContentProvide
 
 public final class GlossaryDropTarget extends DropTargetAdapter {
 
+    private static final String TAG = GlossaryDropTarget.class.getSimpleName();
     private final TreeViewer target;
-    private final IGlossaryService glossaryService;
+    public boolean sameNode = false;
 
-    public GlossaryDropTarget(final TreeViewer viewer, final IGlossaryService glossaryService) {
+    public GlossaryDropTarget(final TreeViewer viewer) {
         super();
         this.target = viewer;
-        this.glossaryService = glossaryService;
     }
-
 
     @Override
     public void dragEnter(final DropTargetEvent dropTargetEvent) {
@@ -46,43 +45,69 @@ public final class GlossaryDropTarget extends DropTargetAdapter {
         super.dragEnter(dropTargetEvent);
     }
 
-
     @Override
     public void drop(final DropTargetEvent dropTargetEvent) {
-
         if (TermTransfer.getInstance().isSupportedType(dropTargetEvent.currentDataType)) {
             Term parentTerm = null;
 
             dropTargetEvent.detail = DND.DROP_MOVE;
             dropTargetEvent.feedback = DND.FEEDBACK_INSERT_AFTER;
 
-            if ((dropTargetEvent.item instanceof TreeItem)
-                            && (((TreeItem) dropTargetEvent.item).getData() instanceof Term)) {
+            if ((dropTargetEvent.item instanceof TreeItem) && (((TreeItem) dropTargetEvent.item).getData() instanceof Term)) {
                 parentTerm = ((Term) ((TreeItem) dropTargetEvent.item).getData());
             }
 
             final Term[] moveTerm = (Term[]) dropTargetEvent.data;
             final Glossary glossary = ((TreeViewerContentProvider) target.getContentProvider()).getGlossary();
 
-            if (parentTerm == null) {
-                for (final Term t : moveTerm) {
-                    glossary.terms.add(t);
-                }
+            if (moveTerm == null) {
+                Log.w(TAG, "Move Term is null!!");
             } else {
-                for (final Term t : moveTerm) {
-                    parentTerm.subTerms.add(t);
+                if (parentTerm == null) {
+                    for (final Term t : moveTerm) {
+                        glossary.terms.add(t);
+                    }
+                } else {
+                    this.sameNode = false;
+                    if (moveTerm.length == 1 && moveTerm[0].getAllSubTerms().length == 0) {
+                        sameNode = parentTerm.equals(moveTerm[0]);
+                    } else {
+                        childrenOnSameNode(parentTerm, moveTerm);
+                    }
+
+                    if (!sameNode) {
+                        for (final Term t : moveTerm) {
+                            parentTerm.subTerms.add(t);
+                        }
+                    } else {
+                        dropTargetEvent.feedback = DND.FEEDBACK_NONE;
+                        dropTargetEvent.detail = DND.DROP_NONE;
+                    }
                 }
             }
-            glossaryService.updateGlossary(glossary);
-            target.refresh();
         } else {
             dropTargetEvent.detail = DND.DROP_NONE;
         }
         super.drop(dropTargetEvent);
     }
 
+    public void childrenOnSameNode(Term parentTerm, Term[] moveTerm) {
+        if (!sameNode) {
+            for (final Term t : moveTerm) {
+                if (sameNode) {
+                    break;
+                }
+                if (t.equals(parentTerm)) {
+                    sameNode = true;
+                    break;
+                } else {
+                    childrenOnSameNode(parentTerm, t.getAllSubTerms());
+                }
+            }
+        }
+    }
 
-    public static GlossaryDropTarget create(final TreeViewer viewer, final IGlossaryService glossaryService) {
-        return new GlossaryDropTarget(viewer, glossaryService);
+    public static GlossaryDropTarget create(final TreeViewer viewer) {
+        return new GlossaryDropTarget(viewer);
     }
 }

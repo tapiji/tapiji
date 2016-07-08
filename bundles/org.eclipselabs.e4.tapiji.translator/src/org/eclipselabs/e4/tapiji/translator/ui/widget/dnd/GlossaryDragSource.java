@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
@@ -38,20 +39,22 @@ public final class GlossaryDragSource implements DragSourceListener {
 
     @Override
     public void dragFinished(final DragSourceEvent event) {
-        final TreeViewerContentProvider contentProvider = ((TreeViewerContentProvider) source.getContentProvider());
-        final Glossary glossary = contentProvider.getGlossary();
-        for (final Term selectionObject : selectionList) {
-            glossary.removeTerm(selectionObject);
+        if (event.detail == DND.DROP_MOVE) {
+            final TreeViewerContentProvider contentProvider = ((TreeViewerContentProvider) source.getContentProvider());
+            final Glossary glossary = contentProvider.getGlossary();
+            for (final Term selectionObject : selectionList) {
+                glossary.removeTerm(selectionObject);
+            }
+            this.glossaryService.updateGlossary(glossary);
+            this.source.refresh();
         }
-        this.glossaryService.updateGlossary(glossary);
-        this.source.refresh();
     }
 
     @Override
     public void dragSetData(final DragSourceEvent dragSourceEvent) {
-        selectionList.clear();
+        this.selectionList.clear();
         for (final Object selectionObject : ((IStructuredSelection) source.getSelection()).toList()) {
-            selectionList.add((Term) selectionObject);
+            this.selectionList.add((Term) selectionObject);
         }
         dragSourceEvent.data = selectionList.toArray(new Term[selectionList.size()]);
     }

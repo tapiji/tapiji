@@ -37,15 +37,6 @@ public class OpenGlossaryHandler {
                 Log.i(TAG, String.format("Cannot open Glossary %s", fileName));
                 return;
             }
-
-            /*
-             * try {
-             * SuggestionProviderUtils.updateConfigurationSetting("glossaryFile", new
-             * StringConfigurationSetting(fileName));
-             * } catch (final InvalidConfigurationSetting exception) {
-             * Log.e(TAG, exception);
-             * }
-             */
         }
     }
 
@@ -54,7 +45,7 @@ public class OpenGlossaryHandler {
 
             @Override
             protected IStatus run(final IProgressMonitor monitor) {
-                glossaryService.loadGlossary(file);
+                glossaryService.openGlossary(file);
                 return Status.OK_STATUS;
             }
         };

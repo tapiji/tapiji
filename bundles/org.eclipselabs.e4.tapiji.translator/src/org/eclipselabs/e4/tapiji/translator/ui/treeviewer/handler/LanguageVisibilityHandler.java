@@ -15,7 +15,7 @@ import org.eclipselabs.e4.tapiji.translator.preference.StoreInstanceState;
 
 public class LanguageVisibilityHandler {
 
-    private static final String CONTRIBUTION_URI = "bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.handler.treeviewer.LanguageVisibilityChangedHandler";
+    private static final String CONTRIBUTION_URI = "bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler.LanguageVisibilityChangedHandler";
     private static final String TAG = LanguageVisibilityHandler.class.getSimpleName();
 
     @AboutToShow

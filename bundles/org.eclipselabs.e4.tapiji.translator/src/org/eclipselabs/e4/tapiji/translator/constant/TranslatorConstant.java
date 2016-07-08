@@ -15,9 +15,6 @@ public final class TranslatorConstant {
         // Hide constructor. Only static access allowed
     }
 
-    public static final String TOPIC_SHOW_FUZZY_MATCHING = "TOPIC_GUI/SHOW_HIDE_FUZZY_MATCHING";
-    public static final String TOPIC_EDIT_MODE = "TOPIC_GUI/EDIT_MODE";
-    public static final String TOPIC_SHOW_LANGUAGE = "TOPIC_GUI/SHOW_LANGUAGE";
     public static final String TOPIC_REFERENCE_LANGUAGE = "TOPIC_GUI/TOPIC_REFERENCE_LANGUAGE";
 
     public static final Color COLOR_GRAY = ColorUtils.getSystemColor(SWT.COLOR_GRAY);

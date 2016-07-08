@@ -2,36 +2,40 @@ package org.eclipselabs.e4.tapiji.translator.ui.treeviewer;
 
 
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
+import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.ui.BasePresenter;
-import org.eclipselabs.e4.tapiji.translator.ui.BaseView;
 
 
 public interface TreeViewerContract {
 
-    TreeViewer getTreeViewer();
+    interface View {
 
-    void updateView(Glossary glossary);
+        void showHideTranslationColumn(String languageCode);
 
-    void setColumnEditable(boolean isEditable);
+        TreeViewer getTreeViewer();
 
-    void enableFuzzyMatching(boolean enable);
+        void updateView(Glossary glossary);
 
-    void setSearchString(String text);
+        void setColumnEditable(boolean isEditable);
 
-    void setMatchingPrecision(float value);
+        void enableFuzzyMatching(boolean enable);
 
-    void showTranslationColumn(String languageCode);
+        void setSearchString(String text);
 
-    void hideTranslationColumn(String languageCode);
+        void setMatchingPrecision(float value);
 
-    void setReferenceLanguage(String referenceLanguage);
-    
-    interface View extends BaseView<Presenter> {
-           void bla();
-    }
-    
-    interface Presenter extends BasePresenter<View> {
+        void registerTreeMenu();
         
+        void setReferenceLanguage(String referenceLanguage);
+
+        void addSelection(Term term);
+    }
+
+    interface Presenter extends BasePresenter<View> {
+
+        IGlossaryService getGlossary();
+
     }
 }

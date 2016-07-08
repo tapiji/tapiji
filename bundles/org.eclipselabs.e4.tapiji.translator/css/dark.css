@@ -1,65 +1,183 @@
-CTabItem, Label, Tree, Text {
-	font-family: "Arial";
-}
-	
-Shell {
-	font-size: 12;
+//@import url("platform:/plugin/org.eclipse.ui.themes/css/e4-dark.css"); 
+.MTrimmedWindow {
+	background-color: #444;
 }
 
-CTabItem, ToolBar, Button, CBanner, CoolBar {
-	font-size: 9;
-	background-color: green;
+.MPartStack {
+	swt-tab-renderer: null;
+	swt-simple: true;
+	swt-mru-visible: true;
+	swt-unselected-tabs-color: #333 #333 #333 100% 100%;
+	swt-selected-tabs-background: #D8D8D8;
+	swt-outer-keyline-color: #333;
+	swt-inner-keyline-color: #333;
+	swt-shadow-visible: false;
+	swt-tab-outline: #444;
 }
 
-CTabFolder, CTabItem {
-    background-color: red;
+.MPlaceholder {
+	background-color: #333;
+	color: #FFF;
+}
+
+.MTrimBar {
+	background-color: #333;
+}
+
+.MTrimBar CLabel {
+	color: #999;
+}
+
+.MToolControl CLabel {
+	color: #DDD;
+}
+
+.MToolControl Label {
+	color: #DDD;
+}
+
+.MToolControl Canvas {
+	color: #DDD;
+}
+
+.MPart Composite {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MPart Label {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MPart Text {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MPart Link {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MPart StyledText {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MPart Section {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MPart Composite {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MPart LayoutComposite {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MPart Table {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MPart Button {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MPart ProgressInfoItem {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MPart Form {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MPart FormHeading {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MPart FormText {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MPart FormText:a {
+	background-color: #333;
+	color: #DDD;
+}
+
+.MTrimBar#org-eclipse-ui-main-toolbar {
+	background-color: #444 #111 100%;
+}
+
+.MPartStack.active {
+	swt-unselected-tabs-color: #333333 #444444 100% 100%;
+	swt-outer-keyline-color: #222;
+	swt-inner-keyline-color: #222;
+	swt-shadow-visible: false;
+	swt-tab-outline: #222;
+}
+
+#PerspectiveSwitcher {
+	background-color: #444 #111 100%;
+	eclipse-perspective-keyline-color: #000;
+	color: #FFF;
+}
+
+#org-eclipse-ui-editorss {
+	swt-unselected-tabs-color: #444 #333 #111 100% 100%;
+	swt-outer-keyline-color: #444;
+	swt-inner-keyline-color: #444;
+	swt-tab-outline: #000;
+	color: #FFF;
+	swt-tab-height: 8px;
+	padding: 0px 5px 7px;
+}
+
+#org-eclipse-jdt-ui-PackageExplorer {
+	background-color: #333;
+	color: #FFF;
+}
+
+CTabFolder {
+	swt-tab-renderer: null;
+	swt-simple: true;
+	swt-mru-visible: true;
+	swt-unselected-tabs-color: #444;
+	swt-outer-keyline-color: #444;
+	swt-inner-keyline-color: #444;
+	swt-tab-outline: #444;
+	swt-shadow-visible: false;
+}
+
+CTabFolder Tree {
+	background-color: #333;
+	color: #FFF;
+}
+
+CTabFolder Canvas {
+	background-color: #333;
+	color: #FFF;
+}
+
+CTabItem {
+	background-color: #333;
+	color: #DDD;
 }
 
 CTabItem:selected {
-    background-color: blue;
+	color: #FFF;
 }
 
-Text {
-	font-size: 11;
-	color: #666666;
-	background-color: red;
-}
-
-#navigation {
-	font-size: 8;
-	color: orange;
-	background-color: blue;
-}
-
-.messageBanner {
-    background-color: yellow;
-}
-
-.messageBanner Composite, Label, Link {
-    background-color: pink;
-}
-
-.messageSender {
-	color: #3e9cfa;
-	font-size: 11;
-}
-
-.messageDate {
-	color: #808080;
-	font-size: 9;
-}
-
-
-.messageSubjectUnRead {
-    font-size: 14;
-	font-style: italic;
-    font-weight: bold;
-	color: red;
-}
-
-.messageSubjectRead {
-    font-size: 12;
-	font-style: normal;
-    font-weight: normal;
-	color: green;
+ToolBar {
+	color: #DDD;
 }
