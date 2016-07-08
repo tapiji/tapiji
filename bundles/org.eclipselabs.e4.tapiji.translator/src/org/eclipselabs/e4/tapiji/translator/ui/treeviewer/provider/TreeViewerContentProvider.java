@@ -8,7 +8,7 @@
  * Martin Reiterer - initial API and implementation
  * Christian Behon - refactor from e3 to e4
  ******************************************************************************/
-package org.eclipselabs.e4.tapiji.translator.ui.provider;
+package org.eclipselabs.e4.tapiji.translator.ui.treeviewer.provider;
 
 
 import java.util.ArrayList;

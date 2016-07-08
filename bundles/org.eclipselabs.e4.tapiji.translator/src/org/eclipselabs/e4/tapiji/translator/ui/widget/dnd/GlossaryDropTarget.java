@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
-import org.eclipselabs.e4.tapiji.translator.ui.provider.TreeViewerContentProvider;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.provider.TreeViewerContentProvider;
 
 
 public final class GlossaryDropTarget extends DropTargetAdapter {

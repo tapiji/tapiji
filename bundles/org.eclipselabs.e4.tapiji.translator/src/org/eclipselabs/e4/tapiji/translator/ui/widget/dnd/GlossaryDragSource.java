@@ -21,7 +21,7 @@ import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
-import org.eclipselabs.e4.tapiji.translator.ui.provider.TreeViewerContentProvider;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.provider.TreeViewerContentProvider;
 
 
 public final class GlossaryDragSource implements DragSourceListener {

@@ -40,9 +40,9 @@ import org.eclipselabs.e4.tapiji.translator.i18n.Messages;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.preference.StoreInstanceState;
-import org.eclipselabs.e4.tapiji.translator.ui.provider.TreeViewerContentProvider;
 import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.TreeViewerContract;
 import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.TreeViewerView;
+import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.provider.TreeViewerContentProvider;
 
 
 public final class GlossaryView implements Listener, GlossaryContract.View {
@@ -149,7 +149,9 @@ public final class GlossaryView implements Listener, GlossaryContract.View {
         ((GridData) fuzzyScaler.getLayoutData()).exclude = !isVisible;
 
         labelScale.getParent().getParent().layout();
-        treeViewer.enableFuzzyMatching(isVisible);
+        if (treeViewer != null) {
+            treeViewer.enableFuzzyMatching(isVisible);
+        }
     }
 
     @Override
