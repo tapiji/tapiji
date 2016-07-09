@@ -15,8 +15,6 @@ public final class TranslatorConstant {
         // Hide constructor. Only static access allowed
     }
 
-    public static final String TOPIC_REFERENCE_LANGUAGE = "TOPIC_GUI/TOPIC_REFERENCE_LANGUAGE";
-
     public static final Color COLOR_GRAY = ColorUtils.getSystemColor(SWT.COLOR_GRAY);
     public static final Color COLOR_BLACK = ColorUtils.getSystemColor(SWT.COLOR_BLACK);
     public static final Color COLOR_INFO = ColorUtils.getSystemColor(SWT.COLOR_YELLOW);

@@ -12,7 +12,7 @@ import org.eclipselabs.e4.tapiji.translator.ui.glossary.GlossaryContract;
 public final class FuzzyMatchingModeHandler {
 
     @Execute
-    public void execute(final MMenuItem menuItem, final StoreInstanceState storeInstanceState, MPart part) {
+    public void execute(final MMenuItem menuItem, final StoreInstanceState storeInstanceState, final MPart part) {
         if (part.getObject() instanceof GlossaryContract.View) {
             final GlossaryContract.View glossaryView = (GlossaryContract.View) part.getObject();
             storeInstanceState.setFuzzyMode(!menuItem.isSelected());

@@ -36,11 +36,11 @@ public class Term implements Serializable {
     @XmlElement(name = "term")
     public List<Term> subTerms;
 
-    public Term parentTerm;
-
     @XmlTransient
     private Object info;
 
+    public Term parentTerm;
+    
     private Term() {
         this(new ArrayList<Translation>(), new ArrayList<Term>(), null, null);
     }
@@ -75,6 +75,7 @@ public class Term implements Serializable {
     public Translation[] getTranslations() {
         return translations.toArray(new Translation[translations.size()]);
     }
+    
 
     public Translation getTranslation(final String language) {
         for (final Translation translation : translations) {
@@ -89,8 +90,8 @@ public class Term implements Serializable {
 
         return newTranslation;
     }
-    
-    public boolean removeTerm(final Term elem) {
+   
+    public boolean remove(final Term elem) {
         boolean hasFound = false;
         for (final Term subTerm : subTerms) {
             if (subTerm.equals(elem)) {
@@ -98,7 +99,7 @@ public class Term implements Serializable {
                 hasFound = true;
                 break;
             } else {
-                hasFound = subTerm.removeTerm(elem);
+                hasFound = subTerm.remove(elem);
                 if (hasFound) {
                     break;
                 }
@@ -107,7 +108,7 @@ public class Term implements Serializable {
         return hasFound;
     }
 
-    public boolean addTerm(final Term parentTerm, final Term newTerm) {
+    public boolean add(final Term parentTerm, final Term newTerm) {
         boolean hasFound = false;
         for (final Term subTerm : subTerms) {
             if (subTerm.equals(parentTerm)) {
@@ -115,7 +116,7 @@ public class Term implements Serializable {
                 hasFound = true;
                 break;
             } else {
-                hasFound = subTerm.addTerm(parentTerm, newTerm);
+                hasFound = subTerm.add(parentTerm, newTerm);
                 if (hasFound) {
                     break;
                 }

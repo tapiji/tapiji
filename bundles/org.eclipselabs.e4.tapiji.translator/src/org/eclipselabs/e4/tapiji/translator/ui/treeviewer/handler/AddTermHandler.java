@@ -62,8 +62,8 @@ public class AddTermHandler implements IInputValidator {
     }
 
     @Override
-    public String isValid(String newText) {
-        Log.d(TAG, "INPUT: " + newText);
+    public String isValid(String newTerm) {
+        Log.d(TAG, "INPUT: " + newTerm);
         return null;
     }
 }

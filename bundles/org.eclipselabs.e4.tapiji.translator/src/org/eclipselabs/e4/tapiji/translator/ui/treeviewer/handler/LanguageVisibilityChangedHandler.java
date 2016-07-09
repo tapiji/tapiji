@@ -14,7 +14,7 @@ public final class LanguageVisibilityChangedHandler {
     private static final String TAG = LanguageVisibilityChangedHandler.class.getSimpleName();
 
     @Execute
-    public void execute(final MMenuItem menuItem, final StoreInstanceState storeInstanceState, MPart part) {
+    public void execute(final MMenuItem menuItem, final StoreInstanceState storeInstanceState, final MPart part) {
         if (part.getObject() instanceof GlossaryContract.View) {
             final GlossaryContract.View glossaryView = (GlossaryContract.View) part.getObject();
             Log.d(TAG, String.format("Store reference language: %s", menuItem.isSelected()));

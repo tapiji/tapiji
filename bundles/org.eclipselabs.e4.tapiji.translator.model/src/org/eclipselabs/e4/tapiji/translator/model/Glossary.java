@@ -7,10 +7,9 @@ package org.eclipselabs.e4.tapiji.translator.model;
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
  * Contributors:
- *     Martin Reiterer - initial API and implementation
- *     Christian Behon
+ * Martin Reiterer - initial API and implementation
+ * Christian Behon
  ******************************************************************************/
 
 
@@ -24,6 +23,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.eclipse.e4.core.di.annotations.Creatable;
+
 
 @Creatable
 @Singleton
@@ -50,14 +50,12 @@ public class Glossary implements Serializable {
 
     public int getIndexOfLocale(final String referenceLocale) {
         int i = 0;
-
         for (final String locale : info.translations) {
             if (locale.equalsIgnoreCase(referenceLocale)) {
                 return i;
             }
             i++;
         }
-
         return 0;
     }
 
@@ -69,7 +67,7 @@ public class Glossary implements Serializable {
                     break;
                 }
 
-                if (term.removeTerm(elem)) {
+                if (term.remove(elem)) {
                     break;
                 }
             }
@@ -89,7 +87,7 @@ public class Glossary implements Serializable {
                     break;
                 }
 
-                if (term.addTerm(parentTerm, newTerm)) {
+                if (term.add(parentTerm, newTerm)) {
                     break;
                 }
             }

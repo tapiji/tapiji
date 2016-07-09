@@ -28,13 +28,11 @@ public final class GlossaryDragSource implements DragSourceListener {
 
     private final TreeViewer source;
     private final IGlossaryService glossaryService;
-    private final List<Term> selectionList;
 
     private GlossaryDragSource(final TreeViewer sourceView, final IGlossaryService manager) {
         super();
         this.source = sourceView;
         this.glossaryService = manager;
-        this.selectionList = new ArrayList<Term>();
     }
 
     @Override
@@ -49,9 +47,9 @@ public final class GlossaryDragSource implements DragSourceListener {
 
     @Override
     public void dragSetData(final DragSourceEvent dragSourceEvent) {
-        this.selectionList.clear();
+        final List<Term> selectionList = new ArrayList<>();
         for (final Object selectionObject : ((IStructuredSelection) source.getSelection()).toList()) {
-            this.selectionList.add((Term) selectionObject);
+            selectionList.add((Term) selectionObject);
         }
         dragSourceEvent.data = selectionList.toArray(new Term[selectionList.size()]);
     }

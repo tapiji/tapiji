@@ -35,14 +35,12 @@ import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipselabs.e4.tapiji.logger.Log;
-import org.eclipselabs.e4.tapiji.translator.constant.TranslatorConstant;
 import org.eclipselabs.e4.tapiji.translator.i18n.Messages;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.constants.GlossaryServiceConstants;
 import org.eclipselabs.e4.tapiji.translator.preference.StoreInstanceState;
 import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.TreeViewerContract;
 import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.TreeViewerView;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.provider.TreeViewerContentProvider;
 
 
 public final class GlossaryView implements Listener, GlossaryContract.View {
@@ -123,12 +121,12 @@ public final class GlossaryView implements Listener, GlossaryContract.View {
         }
     }
 
-    @Inject
+/*    @Inject
     @Optional
     private void onRefrenceChanged(@UIEventTopic(TranslatorConstant.TOPIC_REFERENCE_LANGUAGE) final String referenceLanguage) {
         treeViewer.setReferenceLanguage(referenceLanguage);
         treeViewer.updateView(((TreeViewerContentProvider) treeViewer.getTreeViewer().getContentProvider()).getGlossary());
-    }
+    }*/
 
 
     private void onRestoreInstance() {

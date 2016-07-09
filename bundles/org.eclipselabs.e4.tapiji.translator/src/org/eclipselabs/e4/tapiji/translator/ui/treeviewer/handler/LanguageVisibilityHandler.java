@@ -35,6 +35,7 @@ public class LanguageVisibilityHandler {
             dynamicItem = modelService.createModelElement(MDirectMenuItem.class);
             dynamicItem.setLabel(getLocale(lang).getDisplayName());
             dynamicItem.setContributionURI(CONTRIBUTION_URI);
+            
             if (locales.contains(lang)) {
                 dynamicItem.setSelected(false);
             } else {
