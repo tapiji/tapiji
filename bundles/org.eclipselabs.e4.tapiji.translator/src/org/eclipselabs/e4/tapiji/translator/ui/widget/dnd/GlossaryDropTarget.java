@@ -64,6 +64,7 @@ public final class GlossaryDropTarget extends DropTargetAdapter {
                 Log.w(TAG, "Move Term is null!!");
             } else {
                 if (parentTerm == null) {
+                    removeTerms(moveTerm, glossary);
                     for (final Term t : moveTerm) {
                         glossary.terms.add(t);
                     }
@@ -72,10 +73,10 @@ public final class GlossaryDropTarget extends DropTargetAdapter {
                     if (moveTerm.length == 1 && moveTerm[0].getAllSubTerms().length == 0) {
                         sameNode = parentTerm.equals(moveTerm[0]);
                     } else {
-                        childrenOnSameNode(parentTerm, moveTerm);
+                        onSameNode(parentTerm, moveTerm);
                     }
-
                     if (!sameNode) {
+                        removeTerms(moveTerm, glossary);
                         for (final Term t : moveTerm) {
                             parentTerm.subTerms.add(t);
                         }
@@ -85,13 +86,20 @@ public final class GlossaryDropTarget extends DropTargetAdapter {
                     }
                 }
             }
+
         } else {
             dropTargetEvent.detail = DND.DROP_NONE;
         }
         super.drop(dropTargetEvent);
     }
 
-    public void childrenOnSameNode(Term parentTerm, Term[] moveTerm) {
+    private void removeTerms(Term[] termsToRemove, Glossary glossary) {
+        for (final Term selectionObject : termsToRemove) {
+            glossary.removeTerm(selectionObject);
+        }
+    }
+
+    private void onSameNode(Term parentTerm, Term[] moveTerm) {
         if (!sameNode) {
             for (final Term t : moveTerm) {
                 if (sameNode) {
@@ -101,7 +109,7 @@ public final class GlossaryDropTarget extends DropTargetAdapter {
                     sameNode = true;
                     break;
                 } else {
-                    childrenOnSameNode(parentTerm, t.getAllSubTerms());
+                    onSameNode(parentTerm, t.getAllSubTerms());
                 }
             }
         }

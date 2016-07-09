@@ -42,9 +42,6 @@ public final class GlossaryDragSource implements DragSourceListener {
         if (event.detail == DND.DROP_MOVE) {
             final TreeViewerContentProvider contentProvider = ((TreeViewerContentProvider) source.getContentProvider());
             final Glossary glossary = contentProvider.getGlossary();
-            for (final Term selectionObject : selectionList) {
-                glossary.removeTerm(selectionObject);
-            }
             this.glossaryService.updateGlossary(glossary);
             this.source.refresh();
         }

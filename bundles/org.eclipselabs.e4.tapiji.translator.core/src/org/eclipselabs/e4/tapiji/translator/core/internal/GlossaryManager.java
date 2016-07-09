@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
@@ -73,7 +74,8 @@ public final class GlossaryManager implements IGlossaryService {
 
         try {
             glossaryContext = JAXBContext.newInstance(glossary.getClass());
-            glossary = (Glossary) glossaryContext.createUnmarshaller().unmarshal(file);
+            Unmarshaller unmarshaller = glossaryContext.createUnmarshaller();
+            glossary = (Glossary) unmarshaller.unmarshal(file);
             eventBroker.post(GlossaryServiceConstants.TOPIC_GLOSSARY_RELOAD, glossary);
             Log.d(TAG, String.format("Loaded glossary: %s ", glossary.toString()));
         } catch (final JAXBException exception) {
@@ -104,9 +106,11 @@ public final class GlossaryManager implements IGlossaryService {
         boolean error = false;
 
         try {
+            
+            
             final Marshaller marshaller = glossaryContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_ENCODING, FileUtils.ENCODING_TYPE_UTF_16);
-
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             try (OutputStream fout = new FileOutputStream(file.getAbsolutePath()); OutputStream bout = new BufferedOutputStream(fout); OutputStreamWriter osw = new OutputStreamWriter(bout, FileUtils.ENCODING_TYPE_UTF_16)) {
                 marshaller.marshal(glossary, osw);
                 Log.d(TAG, String.format("Glossary saved: %s ", glossary.toString()));

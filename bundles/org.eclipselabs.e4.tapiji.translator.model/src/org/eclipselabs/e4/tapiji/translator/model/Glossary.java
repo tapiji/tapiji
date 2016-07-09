@@ -64,7 +64,7 @@ public class Glossary implements Serializable {
     public void removeTerm(final Term elem) {
         synchronized (terms) {
             for (final Term term : terms) {
-                if (term == elem) {
+                if (term.equals(elem)) {
                     terms.remove(term);
                     break;
                 }
@@ -84,7 +84,7 @@ public class Glossary implements Serializable {
             }
 
             for (final Term term : terms) {
-                if (term == parentTerm) {
+                if (term.equals(parentTerm)) {
                     term.subTerms.add(newTerm);
                     break;
                 }
