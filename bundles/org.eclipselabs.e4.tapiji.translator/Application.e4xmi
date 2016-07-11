@@ -58,7 +58,15 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="_sYwQEMBfEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.exit" label="Exit" mnemonics="E" command="_qRUnQMEUEeS87-LHw5gOnA"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_cAZhkMBfEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.menu.window" label="Window" mnemonics="W">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_w1BAAMBfEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.showView" label="Show View"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_w1BAAMBfEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.showView" toBeRendered="false" visible="false" label="Show View"/>
+        <children xsi:type="menu:Menu" xmi:id="_yzU-MEesEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.menu.theme" label="Theme">
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_zeXfQEesEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.darktheme" label="Tapiji Theme" command="_L7RTAEetEeawZrw6O_sgrw">
+            <parameters xmi:id="_1wOiQEeuEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.parameter.0" name="theme_id" value="org.eclipselabs.e4.tapiji.translator.tapiji"/>
+          </children>
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_1HuCsEesEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.defaulttheme" label="Default Theme" command="_L7RTAEetEeawZrw6O_sgrw">
+            <parameters xmi:id="_76V7IEeuEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.parameter.theme.default" name="theme_id" value="org.eclipselabs.e4.tapiji.translator.default"/>
+          </children>
+        </children>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_cUYNgMBfEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.menu.help" label="Help" mnemonics="H">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_31HlsMBfEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.aboutTapijiTranslator" label="About TapiJI Translator" command="_FXUuwMEWEeS87-LHw5gOnA"/>
@@ -86,6 +94,7 @@
   <handlers xmi:id="_wOXQ0M_jEeS7geCp-xH0Qw" elementId="org.eclipselabs.e4.tapiji.translator.handler.newTranslation" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler.NewTranslationHandler" command="_uvffEM_jEeS7geCp-xH0Qw"/>
   <handlers xmi:id="_2dCAQM_oEeS7geCp-xH0Qw" elementId="org.eclipselabs.e4.tapiji.translator.handler.removeTranslation" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler.RemoveTranslationHandler" command="_00WyQM_oEeS7geCp-xH0Qw"/>
   <handlers xmi:id="_XF9CsNVZEeSRsokyixGtOQ" elementId="org.eclipselabs.e4.tapiji.translator.handler.reloadTreeViewer" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler.ReloadTreeViewerHandler" command="_VqqJYNVZEeSRsokyixGtOQ"/>
+  <handlers xmi:id="_Ov4IoEetEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.handler.1" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.window.ThemeHandler" command="_L7RTAEetEeawZrw6O_sgrw"/>
   <bindingTables xmi:id="_r8bWUPp8EeSgTJHhupBYBg" elementId="org.eclipselabs.e4.tapiji.translator.bindingtable.menu" bindingContext="_eWH4sPp8EeSgTJHhupBYBg">
     <bindings xmi:id="_zchqsPp8EeSgTJHhupBYBg" elementId="org.eclipselabs.e4.tapiji.translator.keybinding.exit" keySequence="M3+E" command="_qRUnQMEUEeS87-LHw5gOnA">
       <tags>dasda</tags>
@@ -105,6 +114,9 @@
   <commands xmi:id="_uvffEM_jEeS7geCp-xH0Qw" elementId="org.eclipselabs.e4.tapiji.translator.command.newTranslation" commandName="New Translation"/>
   <commands xmi:id="_00WyQM_oEeS7geCp-xH0Qw" elementId="org.eclipselabs.e4.tapiji.translator.command.removeTranslation" commandName="Remove Translation"/>
   <commands xmi:id="_VqqJYNVZEeSRsokyixGtOQ" elementId="org.eclipselabs.e4.tapiji.translator.command.reloadTreeViewer" commandName="Reload Tree Viewer"/>
+  <commands xmi:id="_L7RTAEetEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.command.theme" commandName="Theme">
+    <parameters xmi:id="_Fnt_YEevEeawZrw6O_sgrw" elementId="theme_id" name="Theme Id"/>
+  </commands>
   <addons xmi:id="_Tb38kcAvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_Tb38ksAvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_Tb38k8AvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

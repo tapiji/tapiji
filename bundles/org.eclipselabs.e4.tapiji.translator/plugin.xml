@@ -26,7 +26,7 @@
          </property>
          <property
                name="cssTheme"
-               value="org.eclipselabs.e4.tapiji.translator.dark">
+               value="org.eclipselabs.e4.tapiji.translator.default">
          </property>
       </product>
    </extension>
@@ -67,9 +67,9 @@
             label="Default theme">
       </theme>
       <theme
-            basestylesheeturi="css/dark.css"
-            id="org.eclipselabs.e4.tapiji.translator.dark"
-            label="Dark theme">
+            basestylesheeturi="css/tapiji.css"
+            id="org.eclipselabs.e4.tapiji.translator.tapiji"
+            label="Tapiji theme">
       </theme>
    </extension>
 </plugin>
