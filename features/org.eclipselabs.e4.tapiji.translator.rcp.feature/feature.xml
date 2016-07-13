@@ -2,7 +2,7 @@
 <feature
       id="org.eclipselabs.e4.tapiji.translator.rcp.feature"
       label="Feature"
-      version="1.0.0"
+      version="1.0.1"
       provider-name="RCP Translator">
 
    <description url="http://www.example.com/description">
@@ -184,8 +184,7 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
-         
+
    <plugin
          id="org.eclipse.equinox.p2.core"
          download-size="0"
@@ -276,6 +275,12 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
+   <plugin
+         id="org.eclipse.equinox.concurrent"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>

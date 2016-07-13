@@ -7,7 +7,7 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.eclipse.e4.ui.workbench.swt.E4Application"
-            name="translator">
+            name="Tapiji Translator">
          <property
                name="windowImages"
                value="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/tapiji.png,platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/32x32/tapiji.png,platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/48x48/tapiji.png,platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/64x64/tapiji.png,platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/128x128/tapiji.png">
@@ -18,7 +18,7 @@
          </property>
          <property
                name="appName"
-               value="translator">
+               value="Tapiji Translator">
          </property>
          <property
                name="lifeCycleURI"
@@ -27,6 +27,18 @@
          <property
                name="cssTheme"
                value="org.eclipselabs.e4.tapiji.translator.default">
+         </property>
+         <property
+               name="applicationCSS"
+               value="platform:/plugin/org.eclipselabs.e4.tapiji.translator/css/default.css">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="5,275,445,15">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
          </property>
       </product>
    </extension>

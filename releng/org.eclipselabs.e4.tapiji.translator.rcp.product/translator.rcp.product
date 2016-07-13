@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="translator" uid="org.eclipselabs.e4.tapiji.translator.rcp.product" id="org.eclipselabs.e4.tapiji.translator.product" application="org.eclipse.e4.ui.workbench.swt.E4Application" version="1.0.0" useFeatures="true" includeLaunchers="true">
+<product name="Tapiji Translator" uid="org.eclipselabs.e4.tapiji.translator.rcp.product" id="org.eclipselabs.e4.tapiji.translator.product" application="org.eclipse.e4.ui.workbench.swt.E4Application" version="1.0.1" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <text>
@@ -26,14 +26,14 @@ Christian Behon
    <windowImages i16="/org.eclipselabs.e4.tapiji.resource/icons/16x16/tapiji.png" i32="/org.eclipselabs.e4.tapiji.resource/icons/32x32/tapiji.png" i48="/org.eclipselabs.e4.tapiji.resource/icons/48x48/tapiji.png" i64="/org.eclipselabs.e4.tapiji.resource/icons/64x64/tapiji.png" i128="/org.eclipselabs.e4.tapiji.resource/icons/128x128/tapiji.png"/>
 
    <splash
-      location="org.eclipselabs.e4.tapiji.resource" />
+      location="org.eclipselabs.e4.tapiji.resource"
+      startupProgressRect="5,275,445,15" />
    <launcher name="Tapiji Translator">
       <solaris/>
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
    </vm>
@@ -50,12 +50,26 @@ Christian Behon
       <feature id="org.eclipse.e4.rcp"/>
       <feature id="org.eclipse.emf.ecore"/>
       <feature id="org.eclipse.emf.common"/>
+      <feature id="org.eclipse.equinox.p2.core.feature"/>
+      <feature id="org.eclipse.ecf.filetransfer.httpclient4.feature"/>
+      <feature id="org.eclipse.ecf.core.ssl.feature"/>
+      <feature id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature"/>
+      <feature id="org.eclipse.ecf.filetransfer.ssl.feature"/>
+      <feature id="org.eclipse.ecf.core.feature"/>
+      <feature id="org.eclipse.ecf.filetransfer.feature"/>
    </features>
 
    <configurations>
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
    </configurations>
+
+   <repositories>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.6/" enabled="true" />
+   </repositories>
 
    <preferencesInfo>
       <targetfile overwrite="false"/>

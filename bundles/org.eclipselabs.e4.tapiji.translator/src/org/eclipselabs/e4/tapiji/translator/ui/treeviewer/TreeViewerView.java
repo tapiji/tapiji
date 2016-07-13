@@ -23,7 +23,6 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.e4.core.commands.ECommandService;
 import org.eclipse.e4.core.commands.EHandlerService;
-import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.ui.di.Focus;
@@ -416,6 +415,7 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
     public void setColumnEditable(final boolean isEditable) {
         this.isColumnEditable = isEditable;
     }
+    
 
     @Override
     public void updateView(final Glossary glossary) {
@@ -441,7 +441,8 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
 
     public static TreeViewerContract.View create(final Composite parent, IEclipseContext eclipseContext) {
         final TreeViewerView view = new TreeViewerView(parent);
-        ContextInjectionFactory.inject(view, eclipseContext);
+        org.eclipse.e4.core.contexts.ContextInjectionFactory.inject(view, eclipseContext);
+        
         return view;
     }
 

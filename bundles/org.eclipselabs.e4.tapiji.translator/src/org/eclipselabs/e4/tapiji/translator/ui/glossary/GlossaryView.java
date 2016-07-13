@@ -161,7 +161,7 @@ public final class GlossaryView implements Listener, GlossaryContract.View {
 
     @Focus
     public void setFocus() {
-        treeViewer.getTreeViewer().getControl().setFocus();
+      //  treeViewer.getTreeViewer().getControl().setFocus();
     }
 
     @PersistState
