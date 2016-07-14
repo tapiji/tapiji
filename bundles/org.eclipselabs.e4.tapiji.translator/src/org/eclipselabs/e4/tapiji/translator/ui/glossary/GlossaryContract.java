@@ -25,5 +25,7 @@ public interface GlossaryContract {
         void openGlossary(File file);
 
         IEclipseContext getContext();
+
+        boolean hasGlossaryTerms();
     }
 }

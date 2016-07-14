@@ -227,6 +227,7 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
         column.getColumn().setText(locale.getDisplayName());
         column.getColumn().addSelectionListener(createColumnSelectionListener(columnIndex));
         column.setEditingSupport(createEditingSupportFor(textCellEditor, columnIndex, languageCode));
+        
     }
 
     private void showHideColumn(final String languageCode) {
@@ -241,7 +242,6 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
             }
         });
     }
-
 
     @Override
     public void registerTreeMenu(String menuId) {

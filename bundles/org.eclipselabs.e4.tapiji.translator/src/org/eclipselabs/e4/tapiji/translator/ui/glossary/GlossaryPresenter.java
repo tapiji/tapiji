@@ -1,5 +1,6 @@
 package org.eclipselabs.e4.tapiji.translator.ui.glossary;
 
+
 import java.io.File;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -8,18 +9,19 @@ import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.ui.glossary.GlossaryContract.View;
 
+
 @Creatable
 @Singleton
 public final class GlossaryPresenter implements GlossaryContract.Presenter {
 
     @Inject
     private IGlossaryService glossaryService;
-    
+
     @Inject
     private IEclipseContext eclipseContext;
 
     private GlossaryContract.View view;
-    
+
     @Override
     public void init() {
         // TODO Auto-generated method stub
@@ -43,6 +45,11 @@ public final class GlossaryPresenter implements GlossaryContract.Presenter {
     @Override
     public void saveGlossary() {
         glossaryService.saveGlossary();
+    }
+
+    @Override
+    public boolean hasGlossaryTerms() {
+        return glossaryService.getGlossary().terms.isEmpty();
     }
 
     @Override

@@ -76,6 +76,9 @@ public final class GlossaryView implements Listener, GlossaryContract.View {
 
         inputFilter = new Text(parentComp, SWT.BORDER | SWT.SEARCH | SWT.CANCEL | SWT.ICON_SEARCH);
         inputFilter.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        if(presenter.hasGlossaryTerms()) {
+            inputFilter.setEnabled(false);
+        }
         inputFilter.addModifyListener(e -> {
             if (treeViewer != null) {
                 treeViewer.setSearchString(inputFilter.getText());
@@ -118,15 +121,13 @@ public final class GlossaryView implements Listener, GlossaryContract.View {
             presenter.getContext().set(EXPRESSION_TRANSLATION_REFERENCE, glossary.info.translations.size());
             presenter.getContext().set(EXPRESSION_TRANSLATION_VISIBILITY, glossary.info.translations.size() - 1);
             treeViewer.updateView(glossary);
+            if(presenter.hasGlossaryTerms()) {
+                inputFilter.setEnabled(false);
+            } else {
+                inputFilter.setEnabled(true);
+            }
         }
     }
-
-/*    @Inject
-    @Optional
-    private void onRefrenceChanged(@UIEventTopic(TranslatorConstant.TOPIC_REFERENCE_LANGUAGE) final String referenceLanguage) {
-        treeViewer.setReferenceLanguage(referenceLanguage);
-        treeViewer.updateView(((TreeViewerContentProvider) treeViewer.getTreeViewer().getContentProvider()).getGlossary());
-    }*/
 
 
     private void onRestoreInstance() {
@@ -161,7 +162,7 @@ public final class GlossaryView implements Listener, GlossaryContract.View {
 
     @Focus
     public void setFocus() {
-      //  treeViewer.getTreeViewer().getControl().setFocus();
+        treeViewer.getTreeViewer().getControl().setFocus();
     }
 
     @PersistState

@@ -86,7 +86,6 @@ public class Glossary implements Serializable {
                     term.subTerms.add(newTerm);
                     break;
                 }
-
                 if (term.add(parentTerm, newTerm)) {
                     break;
                 }
@@ -97,5 +96,14 @@ public class Glossary implements Serializable {
     @Override
     public String toString() {
         return "Glossary [info=" + info + ", terms=" + terms + "]";
+    }
+
+    public boolean containsTerm(Term moveTerm) {
+     /*   for (final Term term : terms) {
+               if(term.subTerms.contains(moveTerm) && term.parentTerm == null) {
+                   return true;
+               }
+        }*/
+        return false;
     }
 }
