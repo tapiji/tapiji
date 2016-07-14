@@ -70,6 +70,9 @@
       </children>
       <children xsi:type="menu:Menu" xmi:id="_cUYNgMBfEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.menu.help" label="Help" mnemonics="H">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_4yWaAEevEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.checkforupdates" label="Check for Updates" command="_9xDvsEevEeawZrw6O_sgrw"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_7IoOkElUEea9cOqAyQ8_OQ" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.updatehistory" label="Update History" command="_7LrtIElVEea9cOqAyQ8_OQ">
+          <parameters xmi:id="_i84xYElWEea9cOqAyQ8_OQ" elementId="org.eclipselabs.e4.tapiji.translator.parameter.changelogfile" name="changelog_file" value="platform:/plugin/org.eclipselabs.e4.tapiji.translator/files/changelog.txt"/>
+        </children>
         <children xsi:type="menu:MenuSeparator" xmi:id="_RBrEwEewEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.menuseparator.7"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_31HlsMBfEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.aboutTapijiTranslator" label="About TapiJI" command="_FXUuwMEWEeS87-LHw5gOnA"/>
       </children>
@@ -98,6 +101,7 @@
   <handlers xmi:id="_XF9CsNVZEeSRsokyixGtOQ" elementId="org.eclipselabs.e4.tapiji.translator.handler.reloadTreeViewer" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler.ReloadTreeViewerHandler" command="_VqqJYNVZEeSRsokyixGtOQ"/>
   <handlers xmi:id="_Ov4IoEetEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.handler.1" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.window.ThemeHandler" command="_L7RTAEetEeawZrw6O_sgrw"/>
   <handlers xmi:id="__gMyEEevEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.handler.2" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.window.CheckForUpdatesHandler" command="_9xDvsEevEeawZrw6O_sgrw"/>
+  <handlers xmi:id="_9_WuoElVEea9cOqAyQ8_OQ" elementId="org.eclipselabs.e4.tapiji.translator.handler.3" contributionURI="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.ui.window.UpdateHistory" command="_7LrtIElVEea9cOqAyQ8_OQ"/>
   <bindingTables xmi:id="_r8bWUPp8EeSgTJHhupBYBg" elementId="org.eclipselabs.e4.tapiji.translator.bindingtable.menu" bindingContext="_eWH4sPp8EeSgTJHhupBYBg">
     <bindings xmi:id="_zchqsPp8EeSgTJHhupBYBg" elementId="org.eclipselabs.e4.tapiji.translator.keybinding.exit" keySequence="M3+E" command="_qRUnQMEUEeS87-LHw5gOnA">
       <tags>dasda</tags>
@@ -121,6 +125,9 @@
     <parameters xmi:id="_Fnt_YEevEeawZrw6O_sgrw" elementId="theme_id" name="Theme Id"/>
   </commands>
   <commands xmi:id="_9xDvsEevEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.command.checkforupdates" commandName="Check for Updates"/>
+  <commands xmi:id="_7LrtIElVEea9cOqAyQ8_OQ" elementId="org.eclipselabs.e4.tapiji.translator.command.updatehistory" commandName="Update History">
+    <parameters xmi:id="_0r-CQElWEea9cOqAyQ8_OQ" elementId="changelog_file" name="Changelog File"/>
+  </commands>
   <addons xmi:id="_Tb38kcAvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_Tb38ksAvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_Tb38k8AvEeSRGIkNvtWVbw" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
