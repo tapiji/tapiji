@@ -67,7 +67,6 @@ public final class RemoveTranslationHandler {
 
         final ArrayList<Locale> locales = new ArrayList<Locale>();
         languageLocales.clear();
-        languageLocales.clear();
         for (final String languageCode : translations) {
             if (languageCode.equalsIgnoreCase(referenceLanguage)) {
                 continue;
