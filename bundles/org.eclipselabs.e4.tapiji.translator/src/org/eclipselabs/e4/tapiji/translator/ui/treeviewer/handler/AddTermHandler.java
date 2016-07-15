@@ -37,15 +37,17 @@ public class AddTermHandler implements IInputValidator {
     private Term selectedTerm;
 
     @Execute
-    public void execute(final StoreInstanceState storeInstanceState, final MPart part) {
+    public void execute(final StoreInstanceState storeInstanceState, final MPart part,@Optional @Named(IServiceConstants.ACTIVE_SELECTION) final Term parentTerm) {
         if (part.getObject() instanceof GlossaryContract.View) {
             GlossaryContract.View glossaryView = (GlossaryContract.View) part.getObject();
             final InputDialog dialog = new InputDialog(shell, "New Term", "Please, define the new term:", "", this);
             if (dialog.open() == Window.OK) {
                 if ((dialog.getValue() != null) && (dialog.getValue().trim().length() > 0)) {
+                    
                     final Term term = Term.newInstance(Translation.create(storeInstanceState.getReferenceLanguage(), dialog.getValue()));
                     glossaryService.addTerm(selectedTerm, term);
                     glossaryView.getTreeViewerView().addSelection(term);
+                    glossaryView.getTreeViewerView().getTreeViewer().expandToLevel(term, 1);
                     Log.d(TAG, String.format("Term %s added with id %s", dialog.getValue(), storeInstanceState.getReferenceLanguage()));
                 }
             }

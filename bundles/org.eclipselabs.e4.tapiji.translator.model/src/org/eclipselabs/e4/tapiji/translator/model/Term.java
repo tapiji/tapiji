@@ -40,11 +40,11 @@ public class Term implements Serializable {
     private Object info;
 
     public Term parentTerm;
-    
+
     private Term() {
         this(new ArrayList<Translation>(), new ArrayList<Term>(), null, null);
     }
-    
+
     public Term(final List<Translation> translations, final List<Term> subTerms, final Term parentTerm, final Info info) {
         this.translations = translations;
         this.subTerms = subTerms;
@@ -75,7 +75,7 @@ public class Term implements Serializable {
     public Translation[] getTranslations() {
         return translations.toArray(new Translation[translations.size()]);
     }
-    
+
 
     public Translation getTranslation(final String language) {
         for (final Translation translation : translations) {
@@ -90,16 +90,16 @@ public class Term implements Serializable {
 
         return newTranslation;
     }
-   
+
     public boolean remove(final Term elem) {
         boolean hasFound = false;
-        for (final Term subTerm : subTerms) {
-            if (subTerm.equals(elem)) {
+        for (final Term term : subTerms) {
+            if (term.equals(elem)) {
                 subTerms.remove(elem);
                 hasFound = true;
                 break;
             } else {
-                hasFound = subTerm.remove(elem);
+                hasFound = term.remove(elem);
                 if (hasFound) {
                     break;
                 }
@@ -110,13 +110,13 @@ public class Term implements Serializable {
 
     public boolean add(final Term parentTerm, final Term newTerm) {
         boolean hasFound = false;
-        for (final Term subTerm : subTerms) {
-            if (subTerm.equals(parentTerm)) {
-                subTerms.add(newTerm);
+        for (final Term term : subTerms) {
+            if (term.equals(parentTerm)) {
+                term.subTerms.add(newTerm);
                 hasFound = true;
                 break;
             } else {
-                hasFound = subTerm.add(parentTerm, newTerm);
+                hasFound = term.add(parentTerm, newTerm);
                 if (hasFound) {
                     break;
                 }
@@ -128,10 +128,10 @@ public class Term implements Serializable {
     private void addTranslation(Translation translation) {
         this.translations.add(translation);
     }
-    
+
     @Override
     public String toString() {
-        return "Term [translations=" + translations + ", subTerms=" + subTerms + ", parentTerm=" + parentTerm + ", info=" + info + "]";
+        return "Term [translations=" + translations + ", subTerms=" + subTerms + ", info=" + info + ", parentTerm=" + parentTerm + "]";
     }
 
     public static Term newInstance(Translation translation) {
@@ -148,6 +148,7 @@ public class Term implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((info == null) ? 0 : info.hashCode());
         result = prime * result + ((parentTerm == null) ? 0 : parentTerm.hashCode());
         result = prime * result + ((subTerms == null) ? 0 : subTerms.hashCode());
         result = prime * result + ((translations == null) ? 0 : translations.hashCode());
@@ -160,6 +161,9 @@ public class Term implements Serializable {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         Term other = (Term) obj;
+        if (info == null) {
+            if (other.info != null) return false;
+        } else if (!info.equals(other.info)) return false;
         if (parentTerm == null) {
             if (other.parentTerm != null) return false;
         } else if (!parentTerm.equals(other.parentTerm)) return false;
@@ -171,4 +175,6 @@ public class Term implements Serializable {
         } else if (!translations.equals(other.translations)) return false;
         return true;
     }
+
+
 }

@@ -63,10 +63,14 @@ public final class GlossaryDropTarget extends DropTargetAdapter {
             if (moveTerm == null) {
                 Log.w(TAG, "Move Term is null!!");
             } else {
+
+
                 if (parentTerm == null) {
-                    removeTerms(moveTerm, glossary);
-                    for (final Term t : moveTerm) {
-                        glossary.terms.add(t);
+                    if (!glossary.containsTerm(moveTerm[0])) {
+                        removeTerms(moveTerm, glossary);
+                        for (final Term t : moveTerm) {
+                            glossary.terms.add(t);
+                        }
                     }
                 } else {
                     this.sameNode = false;
