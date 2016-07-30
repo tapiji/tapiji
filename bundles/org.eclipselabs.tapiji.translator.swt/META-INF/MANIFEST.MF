@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: RCP fragment for TapiJI Translator
-Bundle-SymbolicName: org.eclipselabs.tapiji.translator.swt;singleton:=true
-Bundle-Version: 0.9.0.B1
-Fragment-Host: org.eclipselabs.tapiji.translator;bundle-version="0.9.0.B1"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.eclipse.babel.editor.widgets.suggestion.exception

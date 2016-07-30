@@ -173,6 +173,7 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
                 if (event.character == SWT.DEL) {
                     handlerService.executeHandler(commandService.createCommand(COMMAND_DELETE_KEY, Collections.emptyMap()));
                 }
+                
             }
         });
         this.tree = treeViewer.getTree();
