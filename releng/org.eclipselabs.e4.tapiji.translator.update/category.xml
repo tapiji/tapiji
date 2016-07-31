@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipselabs.e4.tapiji.translator.feature_1.0.1.jar" id="org.eclipselabs.e4.tapiji.translator.feature" version="1.0.1"/>
+   <category-def name="tapiji_translator" label="Tapiji Translator"/>
+</site>

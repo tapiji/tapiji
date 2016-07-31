@@ -15,13 +15,9 @@ import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.dialogs.CheckedTreeSelectionDialog;
 import org.eclipselabs.e4.tapiji.translator.core.api.IGlossaryService;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler.provider.LocaleContentProvider;
-import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.handler.provider.LocaleLabelProvider;
 import org.eclipselabs.e4.tapiji.utils.LocaleUtils;
 
 
@@ -30,13 +26,13 @@ public final class NewTranslationHandler {
     @Execute
     public void execute(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) final Term term, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell,
                     final IGlossaryService glossaryService) {
-        final CheckedTreeSelectionDialog localeDialog = new CheckedTreeSelectionDialog(shell, new LocaleLabelProvider(), new LocaleContentProvider());
+      /*  final CheckedTreeSelectionDialog localeDialog = new CheckedTreeSelectionDialog(shell, new LocaleLabelProvider(), new LocaleContentProvider());
         localeDialog.setInput(generateLocales(glossaryService.getTranslations()));
         localeDialog.setTitle("Translation Selection");
 
         if (localeDialog.open() == Window.OK) {
             addTranslationAsync(glossaryService, localeDialog.getResult());
-        }
+        }*/
     }
 
     private List<Locale> generateLocales(final String[] translations) {

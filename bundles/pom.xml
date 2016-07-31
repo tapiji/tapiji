@@ -2,25 +2,23 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipselabs.e4.tapiji</groupId>
     <artifactId>org.eclipselabs.e4.tapiji.bundles</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     
     <parent>
         <groupId>org.eclipselabs.e4.tapiji</groupId>
         <artifactId>org.eclipselabs.e4.tapiji.root</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-
-	
     <modules>
-	<module>org.eclipselabs.e4.tapiji.utils</module>
 		<module>org.eclipselabs.e4.tapiji.logger</module>
 		<module>org.eclipselabs.e4.tapiji.resource</module>
 		<module>org.eclipselabs.e4.tapiji.translator</module>
 		<module>org.eclipselabs.e4.tapiji.translator.core</module>
-		<module>org.eclipselabs.e4.tapiji.translator.model</module>
+		<module>org.eclipselabs.e4.tapiji.translator.core.api</module>
 		<module>org.eclipselabs.e4.tapiji.translator.i18n</module>
+		<module>org.eclipselabs.e4.tapiji.translator.model</module>
+		<module>org.eclipselabs.e4.tapiji.utils</module>
     </modules>
 </project> 

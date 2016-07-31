@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipselabs.e4.tapiji.translator.rcp.feature"
+      id="org.eclipselabs.e4.tapiji.translator.feature"
       label="Feature"
       version="1.0.1"
       provider-name="RCP Translator">
@@ -16,6 +16,10 @@
    <license url="http://www.example.com/license">
       [Enter License Description here.]
    </license>
+
+   <includes
+         id="org.eclipse.babel.tapiji.feature"
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipselabs.e4.tapiji.translator"
