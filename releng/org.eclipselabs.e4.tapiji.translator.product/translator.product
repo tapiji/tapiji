@@ -57,7 +57,8 @@ Christian Behon
       <feature id="org.eclipse.ecf.filetransfer.ssl.feature"/>
       <feature id="org.eclipse.ecf.core.feature"/>
       <feature id="org.eclipse.ecf.filetransfer.feature"/>
-      <feature id="org.eclipselabs.e4.tapiji.translator.feature" version="1.0.1"/>
+      <feature id="org.eclipse.babel.tapiji.feature"/>
+      <feature id="org.eclipselabs.e4.tapiji.translator.feature" version="1.0.0"/>
    </features>
 
    <configurations>

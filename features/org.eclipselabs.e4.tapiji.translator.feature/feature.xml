@@ -2,7 +2,7 @@
 <feature
       id="org.eclipselabs.e4.tapiji.translator.feature"
       label="Feature"
-      version="1.0.1"
+      version="1.0.0"
       provider-name="RCP Translator">
 
    <description url="http://www.example.com/description">
@@ -17,9 +17,9 @@
       [Enter License Description here.]
    </license>
 
-   <includes
-         id="org.eclipse.babel.tapiji.feature"
-         version="0.0.0"/>
+   <requires>
+      <import feature="org.eclipse.babel.tapiji.feature" version="1.0.0"/>
+   </requires>
 
    <plugin
          id="org.eclipselabs.e4.tapiji.translator"
@@ -107,41 +107,6 @@
 
    <plugin
          id="org.eclipselabs.e4.tapiji.resource"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.e4.babel.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.e4.babel.editor.model"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.e4.babel.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.e4.babel.editor.text"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.e4.babel.resource"
          download-size="0"
          install-size="0"
          version="0.0.0"
