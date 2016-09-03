@@ -1,1 +1,8 @@
-HUHUHUHUHUU
+Change Log
+==========
+
+Version 1.0.0 *(jjjj-mm-dd)*
+----------------------------
+
+ * New: Copy key
+ * Fix: NPE

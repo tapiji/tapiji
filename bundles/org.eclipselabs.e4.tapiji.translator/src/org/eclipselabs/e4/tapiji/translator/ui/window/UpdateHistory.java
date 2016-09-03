@@ -1,34 +1,17 @@
 package org.eclipselabs.e4.tapiji.translator.ui.window;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import javax.inject.Named;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipselabs.e4.tapiji.translator.ui.dialog.UpdateHistoryDialog;
 
 
-public class UpdateHistory {
-
+public class UpdateHistory {    
+   
     @Execute
-    public void execute(@Named("changelog_file") String changeLogFile ) {
-        URL url;
-        try {
-            url = new URL(changeLogFile);
-            InputStream inputStream = url.openConnection().getInputStream();
-            BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
-            String inputLine;
-
-            while ((inputLine = in.readLine()) != null) {
-                System.out.println(inputLine);
-            }
-
-            in.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void execute(final IEclipseContext context, Shell shell,@Named("changelog_file") String changeLogFile ) {       
+        UpdateHistoryDialog.show(context, shell, changeLogFile);
     }
 }
