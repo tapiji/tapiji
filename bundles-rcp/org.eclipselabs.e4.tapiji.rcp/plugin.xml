@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
-   <extension
+<extension
          id="product"
+         name="Tapiji Rich Client Platform"
          point="org.eclipse.core.runtime.products">
       <product
             application="org.eclipse.e4.ui.workbench.swt.E4Application"
-            name="Tapiji Translator">
+            name="org.eclipselabs.e4.tapiji.rcp">
+         <property
+               name="appName"
+               value="org.eclipselabs.e4.tapiji.rcp">
+         </property>
+         <property
+               name="applicationXMI"
+               value="org.eclipselabs.e4.tapiji.translator/Application.e4xmi">
+         </property>
          <property
                name="windowImages"
                value="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/tapiji.png,platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/32x32/tapiji.png,platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/48x48/tapiji.png,platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/64x64/tapiji.png,platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/128x128/tapiji.png">
@@ -25,39 +33,34 @@
                value="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.LifeCycleManager">
          </property>
          <property
+               name="cssTheme"
+               value="org.eclipselabs.e4.tapiji.rcp.default">
+         </property>
+         <property
+               name="applicationCSS"
+               value="platform:/plugin/org.eclipselabs.e4.tapiji.rcp/css/default.css">
+         </property>
+         <property
                name="startupProgressRect"
                value="5,275,445,15">
          </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
       </product>
    </extension>
-   <extension
-         point="org.eclipse.core.expressions.definitions">
-      <definition
-            id="org.eclipselabs.e4.tapiji.translator.definition.translationreference">
-         <with
-               variable="org.eclipselabs.e4.tapiji.translator.popupmenu.TRANSLATION_REFERENCE">
-            <and>
-               <not>
-                  <equals
-                        value="0">
-                  </equals>
-               </not>
-            </and>
-         </with>
-      </definition>
-      <definition
-            id="org.eclipselabs.e4.tapiji.translator.definition.translationvisibility">
-         <with
-               variable="org.eclipselabs.e4.tapiji.translator.popupmenu.TRANSLATION_VISIBILITY">
-            <and>
-               <not>
-                  <equals
-                        value="0">
-                  </equals>
-               </not>
-            </and>
-         </with>
-      </definition>
+    <extension
+         point="org.eclipse.e4.ui.css.swt.theme">
+      <theme
+            basestylesheeturi="css/default.css"
+            id="org.eclipselabs.e4.tapiji.rcp.default"
+            label="Default theme">
+      </theme>
+      <theme
+            basestylesheeturi="css/tapiji.css"
+            id="org.eclipselabs.e4.tapiji.rcp.tapiji"
+            label="Tapiji theme">
+      </theme>
    </extension>
-
 </plugin>

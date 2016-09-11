@@ -61,10 +61,10 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="_w1BAAMBfEeSbVYAaYyc4_A" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.showView" toBeRendered="false" visible="false" label="Show View"/>
         <children xsi:type="menu:Menu" xmi:id="_yzU-MEesEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.menu.theme" label="Theme">
           <children xsi:type="menu:HandledMenuItem" xmi:id="_zeXfQEesEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.darktheme" label="Tapiji Theme" command="_L7RTAEetEeawZrw6O_sgrw">
-            <parameters xmi:id="_1wOiQEeuEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.parameter.0" name="theme_id" value="org.eclipselabs.e4.tapiji.translator.tapiji"/>
+            <parameters xmi:id="_1wOiQEeuEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.parameter.0" name="theme_id" value="org.eclipselabs.e4.tapiji.rcp.tapiji"/>
           </children>
           <children xsi:type="menu:HandledMenuItem" xmi:id="_1HuCsEesEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.handledmenuitem.defaulttheme" label="Default Theme" command="_L7RTAEetEeawZrw6O_sgrw">
-            <parameters xmi:id="_76V7IEeuEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.parameter.theme.default" name="theme_id" value="org.eclipselabs.e4.tapiji.translator.default"/>
+            <parameters xmi:id="_76V7IEeuEeawZrw6O_sgrw" elementId="org.eclipselabs.e4.tapiji.translator.parameter.theme.default" name="theme_id" value="org.eclipselabs.e4.tapiji.rcp.default"/>
           </children>
         </children>
       </children>
