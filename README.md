@@ -16,4 +16,14 @@ The basic architecture of TapiJI is separated into three Eclipse plug-ins:
 ### Resource-Bundle editor
 The Resource-Bundle editor is a central UI component that is shared by both other plug-ins. It is based on the work of [http://sourceforge.net/users/essiembre Pascal Essiembre] and allows editing multiple property files of a Resource-Bundle like a single resource under modification. In the near future it is planned to reimplement this plug-in to get an editor that better integrates into new Eclipse versions.
 
+### Git Repository Structure
+
+| directory   | content                                                     |
+|-------------|-------------------------------------------------------------|
+| `bundles/`  | bundles for the project                                     |
+| `tests/`    | unit test                                                   |
+| `features/` | feature projects                                            |
+| `releng/`   | projects for release engineering                            |
+
+
 
