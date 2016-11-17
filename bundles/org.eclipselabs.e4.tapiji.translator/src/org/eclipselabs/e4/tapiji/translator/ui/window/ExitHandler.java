@@ -17,12 +17,15 @@ public class ExitHandler {
 
     @Execute
     public void execute(final IWorkbench workbench, final EPartService partService, final IEclipseContext context) {
-        final IEclipseContext activeWindowContext = context.getActiveChild();
         final Shell shell = new Shell(SWT.SHELL_TRIM);
-        if ((null != activeWindowContext) && !partService.getDirtyParts().isEmpty()) {// TODO Does this work?
+        if (!partService.getDirtyParts().isEmpty()) {
             final boolean result = showDialog(shell, "Unsaved", "Unsaved data, do you want to save?");
             if (result) {
-                partService.saveAll(false);
+                partService.getDirtyParts().forEach(part-> {
+                	if(partService.savePart(part, false)) {
+                	part.setDirty(false);
+                	}
+                });
                 workbench.close();
                 Log.i(TAG, "Data saved. Close workbench!");
                 return;
