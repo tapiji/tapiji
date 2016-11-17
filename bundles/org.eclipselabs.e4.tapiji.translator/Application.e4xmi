@@ -79,10 +79,9 @@
     </mainMenu>
     <trimBars xmi:id="_ouTtoMEaEeS16pfZp0OXPg" elementId="org.eclipselabs.e4.tapiji.translator.trimbar.main">
       <children xsi:type="menu:ToolBar" xmi:id="_o14pYMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.toolbar.main">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_qjZUEMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.handledtoolitem.1" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/save.png" tooltip="Save (Ctrl+S)" command="_3-kvgMEWEeS87-LHw5gOnA"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_piKgkMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.handledtoolitem.0" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/new_glossary.png" tooltip="Creates a new glossary file" command="_7KpikMEZEeS16pfZp0OXPg"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_rSFmEMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.handledtoolitem.2" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/open_glossary.png" tooltip="Opens a Glossary definition" command="_8xeWcMEZEeS16pfZp0OXPg"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_tC7RkMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.handledtoolitem.3" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/open_resource_bundle.png" tooltip="Opens a Resource-Bundle (Ctrl+O)"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_qjZUEMEnEeS_ZcFw9lkKSA" elementId="org.eclipselabs.e4.tapiji.translator.handledtoolitem.1" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/save.png" tooltip="Save (Ctrl+S)" command="_3-kvgMEWEeS87-LHw5gOnA"/>
       </children>
     </trimBars>
   </children>

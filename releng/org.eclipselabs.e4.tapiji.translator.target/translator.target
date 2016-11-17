@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Running Platform" sequenceNumber="20">
+<?pde version="3.8"?><target name="Running Platform" sequenceNumber="22">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.platform.sdk" version="4.6.0.I20160606-1100"/>
-<unit id="org.eclipse.equinox.sdk.feature.group" version="3.12.0.v20160606-1311"/>
-<unit id="org.eclipse.jdt.feature.group" version="3.12.0.v20160606-1100"/>
-<repository location="http://download.eclipse.org/eclipse/updates/4.6/"/>
+<unit id="org.eclipse.jdt.feature.group" version="3.13.0.v20161027-0700"/>
+<unit id="org.eclipse.equinox.sdk.feature.group" version="3.12.0.v20161027-1053"/>
+<unit id="org.eclipse.platform.sdk" version="4.7.0.I20161027-0700"/>
+<repository location="http://download.eclipse.org/eclipse/updates/4.7milestones/"/>
 </location>
 </locations>
 <launcherArgs>

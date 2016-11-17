@@ -28,6 +28,14 @@
                name="startupProgressRect"
                value="5,275,445,15">
          </property>
+         <property
+               name="applicationCSS"
+               value="platform:/plugin/org.eclipselabs.e4.tapiji.translator/css/default.css">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
       </product>
    </extension>
    <extension
