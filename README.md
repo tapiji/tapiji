@@ -3,6 +3,20 @@
 
 <a href="http://tapiji.github.io/">TapiJI Website</a>
 
+## Download 1.0.0-Snapshot Pre Release
+
+[Linux]  
+[Tapiji Translator 32Bit](https://github.com/tapiji/tapiji/releases/download/1.0.0-SNAPSHOT/tapiji_translator-linux.gtk.x86.zip)
+[Tapiji Translator 64Bit](https://github.com/tapiji/tapiji/releases/download/1.0.0-SNAPSHOT/tapiji_translator-linux.gtk.x86_64.zip)
+  
+[MacOSX]  
+[Tapiji Translator 64Bit](https://github.com/tapiji/tapiji/releases/download/1.0.0-SNAPSHOT/tapiji_translator-macosx.cocoa.x86_64.zip)
+  
+[Windows]  
+[Tapiji Translator 32Bit](https://github.com/tapiji/tapiji/releases/download/1.0.0-SNAPSHOT/tapiji_translator-win32.win32.x86.zip)
+[Tapiji Translator 64Bit](https://github.com/tapiji/tapiji/releases/download/1.0.0-SNAPSHOT/tapiji_translator-win32.win32.x86_64.zip)
+
+
 ## Introduction
 
 Since the first steps of the Java, language-integrated Internationalization assistance has been considered as a basic requirement. Nowadays, Java programs can be easily prepared for supporting multiple output languages by using Java provided Internationalization mechanisms. But in daily development, the corresponding tasks can be very tedious, which often leads to inconsistent and incomplete Internationalizations.  The primary goal of the TapiJI project is to assist developers for making Java Internationalization more convenient for real live software projects. This is accomplished with the help of tooling support on different stages in development. 
