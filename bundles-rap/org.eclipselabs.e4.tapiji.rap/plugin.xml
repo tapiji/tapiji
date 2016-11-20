@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="rap"
+         name="RAP"
+         point="org.eclipse.core.runtime.products">
+      <product
+            name="Tapiji Translator RAP"
+            application="org.eclipse.e4.ui.workbench.swt.E4Application">
+         <property
+               name="appName"
+               value="org.eclipselabs.e4.tapiji.rap">
+         </property>
+         <property
+               name="applicationXMI"
+               value="org.eclipselabs.e4.tapiji/Application.e4xmi">
+         </property>
+      </product>
+   </extension>
+
+
+</plugin>

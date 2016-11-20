@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipse.rap.e4.target.feature_0.9.0.rap-20161119-0705.jar" id="org.eclipse.rap.e4.target.feature" version="0.9.0.rap-20161119-0705">
+      <category name="e4-target"/>
+   </feature>
+   <category-def name="e4-target" label="RAP Eclipse 4 Targetplatform"/>
+</site>
