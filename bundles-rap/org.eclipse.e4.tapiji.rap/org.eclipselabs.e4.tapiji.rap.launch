@@ -37,5 +37,5 @@
 <booleanAttribute key="tracing" value="false"/>
 <booleanAttribute key="useCustomFeatures" value="false"/>
 <booleanAttribute key="useDefaultConfigArea" value="true"/>
-<stringAttribute key="workspace_bundles" value="org.eclipselabs.e4.tapiji.rap@default:default,org.eclipselabs.e4.tapiji@default:default"/>
+<stringAttribute key="workspace_bundles" value="org.eclipse.e4.tapiji.app@default:default,org.eclipse.e4.tapiji.rap@default:default"/>
 </launchConfiguration>

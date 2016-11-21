@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Tapiji
-Bundle-SymbolicName: org.eclipselabs.e4.tapiji
+Bundle-SymbolicName: org.eclipse.e4.tapiji.app
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.eclipse.e4.core.di.annotations,
@@ -9,4 +9,4 @@ Import-Package: org.eclipse.e4.core.di.annotations,
  org.eclipse.swt.events,
  org.eclipse.swt.layout,
  org.eclipse.swt.widgets
-Export-Package: org.eclipselabs.e4.tapiji
+Export-Package: org.eclipse.e4.tapiji.app

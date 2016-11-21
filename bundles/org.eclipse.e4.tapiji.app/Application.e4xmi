@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ASCII"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_Lvp3AK82Eea7Br2sj4MS9g" elementId="org.eclipselabs.e4.tapiji.application">
   <children xsi:type="basic:TrimmedWindow" xmi:id="_S7ZsAK82Eea7Br2sj4MS9g" elementId="org.eclipselabs.e4.tapiji.trimmedwindow.0">
-    <children xsi:type="basic:Part" xmi:id="_36L84K8_Eea7Br2sj4MS9g" elementId="org.eclipselabs.e4.tapiji.part.0" contributionURI="bundleclass://org.eclipselabs.e4.tapiji/org.eclipselabs.e4.tapiji.MainPart"/>
+    <children xsi:type="basic:Part" xmi:id="_36L84K8_Eea7Br2sj4MS9g" elementId="org.eclipselabs.e4.tapiji.part.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.app/org.eclipse.e4.tapiji.app.MainPart"/>
     <mainMenu xmi:id="_twgtQK82Eea7Br2sj4MS9g" elementId="org.eclipselabs.e4.tapiji.menu.0">
       <children xsi:type="menu:HandledMenuItem" xmi:id="_ukK-0K82Eea7Br2sj4MS9g" elementId="org.eclipselabs.e4.tapiji.handledmenuitem.adasdsd" label="Exit" tooltip="Exit the application" command="_16108K83Eea7Br2sj4MS9g"/>
     </mainMenu>
   </children>
-  <handlers xmi:id="_34ud8K83Eea7Br2sj4MS9g" elementId="org.eclipselabs.e4.tapiji.handler.exit" contributionURI="bundleclass://org.eclipselabs.e4.tapiji/org.eclipselabs.e4.tapiji.ExitHandler" command="_16108K83Eea7Br2sj4MS9g"/>
+  <handlers xmi:id="_34ud8K83Eea7Br2sj4MS9g" elementId="org.eclipselabs.e4.tapiji.handler.exit" contributionURI="bundleclass://org.eclipse.e4.tapiji.app/org.eclipse.e4.tapiji.app.ExitHandler" command="_16108K83Eea7Br2sj4MS9g"/>
   <commands xmi:id="_16108K83Eea7Br2sj4MS9g" elementId="org.eclipselabs.e4.tapiji.command.exit" commandName="Exit"/>
   <addons xmi:id="_Lvp3Aa82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_Lvp3Aq82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>

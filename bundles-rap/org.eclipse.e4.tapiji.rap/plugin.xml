@@ -15,7 +15,7 @@
          </property>
          <property
                name="applicationXMI"
-               value="org.eclipselabs.e4.tapiji/Application.e4xmi">
+               value="org.eclipse.e4.tapiji.app/Application.e4xmi">
          </property>
       </product>
    </extension>

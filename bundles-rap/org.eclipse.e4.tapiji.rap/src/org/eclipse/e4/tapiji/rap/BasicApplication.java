@@ -1,4 +1,4 @@
-package org.eclipselabs.e4.tapiji.rap;
+package org.eclipse.e4.tapiji.rap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class BasicApplication implements ApplicationConfiguration {
 		
 		properties.put(WebClient.PAGE_TITLE, "e4 RAP App");
 		properties.put(WebClient.THEME_ID, "tapiji.business");
-        application.addEntryPoint("/rap", new E4EntryPointFactory(E4ApplicationConfig.create("org.eclipselabs.e4.tapiji/Application.e4xmi")), properties);
+        application.addEntryPoint("/rap", new E4EntryPointFactory(E4ApplicationConfig.create("org.eclipse.e4.tapiji.app/Application.e4xmi")), properties);
         application.setOperationMode( OperationMode.SWT_COMPATIBILITY );
         
         application.setExceptionHandler(new ExceptionHandler() {

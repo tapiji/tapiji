@@ -1,4 +1,4 @@
-package org.eclipselabs.e4.tapiji;
+package org.eclipse.e4.tapiji.app;
 
 import org.eclipse.e4.core.di.annotations.Execute;
 
