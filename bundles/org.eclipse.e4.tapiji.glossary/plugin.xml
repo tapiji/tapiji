@@ -22,7 +22,7 @@
          </property>
          <property
                name="lifeCycleURI"
-               value="bundleclass://org.eclipselabs.e4.tapiji.translator/org.eclipselabs.e4.tapiji.translator.LifeCycleManager">
+               value="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.LifeCycleManager">
          </property>
          <property
                name="startupProgressRect"
@@ -30,7 +30,7 @@
          </property>
          <property
                name="applicationCSS"
-               value="platform:/plugin/org.eclipselabs.e4.tapiji.translator/css/default.css">
+               value="platform:/plugin/org.eclipse.e4.tapiji.glossary/css/default.css">
          </property>
          <property
                name="preferenceCustomization"
@@ -41,9 +41,9 @@
    <extension
          point="org.eclipse.core.expressions.definitions">
       <definition
-            id="org.eclipselabs.e4.tapiji.translator.definition.translationreference">
+            id="org.eclipse.e4.tapiji.glossary.definition.translationreference">
          <with
-               variable="org.eclipselabs.e4.tapiji.translator.popupmenu.TRANSLATION_REFERENCE">
+               variable="org.eclipse.e4.tapiji.glossary.popupmenu.TRANSLATION_REFERENCE">
             <and>
                <not>
                   <equals
@@ -54,9 +54,9 @@
          </with>
       </definition>
       <definition
-            id="org.eclipselabs.e4.tapiji.translator.definition.translationvisibility">
+            id="org.eclipse.e4.tapiji.glossary.definition.translationvisibility">
          <with
-               variable="org.eclipselabs.e4.tapiji.translator.popupmenu.TRANSLATION_VISIBILITY">
+               variable="org.eclipse.e4.tapiji.glossary.popupmenu.TRANSLATION_VISIBILITY">
             <and>
                <not>
                   <equals

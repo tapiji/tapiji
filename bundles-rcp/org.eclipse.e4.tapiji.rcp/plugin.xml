@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<extension
+         id="product"
+         name="Tapiji Rich Client Platform"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.e4.ui.workbench.swt.E4Application"
+            name="org.eclipse.e4.tapiji.rcp">
+         <property
+               name="appName"
+               value="org.eclipse.e4.tapiji.rcp">
+         </property>
+         <property
+               name="applicationXMI"
+               value="org.eclipse.e4.tapiji.glossary/Application.e4xmi">
+         </property>
+         <property
+               name="windowImages"
+               value="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/tapiji.png,platform:/plugin/org.eclipse.e4.tapiji.resource/icons/32x32/tapiji.png,platform:/plugin/org.eclipse.e4.tapiji.resource/icons/48x48/tapiji.png,platform:/plugin/org.eclipse.e4.tapiji.resource/icons/64x64/tapiji.png,platform:/plugin/org.eclipse.e4.tapiji.resource/icons/128x128/tapiji.png">
+         </property>
+         <property
+               name="aboutText"
+               value="TapiJI - Translator &#x0A;Version 1.0.0&#x0A;by Stefan Strobl &amp;amp;&#x0A;Martin Reiterer &amp;amp;&#x0A;Christian Behon">
+         </property>
+         <property
+               name="appName"
+               value="Tapiji Translator">
+         </property>
+         <property
+               name="lifeCycleURI"
+               value="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.LifeCycleManager">
+         </property>
+         <property
+               name="cssTheme"
+               value="org.eclipse.e4.tapiji.rcp.default">
+         </property>
+         <property
+               name="applicationCSS"
+               value="platform:/plugin/org.eclipse.e4.tapiji.rcp/css/default.css">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="5,275,445,15">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+      </product>
+   </extension>
+    <extension
+         point="org.eclipse.e4.ui.css.swt.theme">
+      <theme
+            basestylesheeturi="css/default.css"
+            id="org.eclipse.e4.tapiji.rcp.default"
+            label="Default theme">
+      </theme>
+      <theme
+            basestylesheeturi="css/tapiji.css"
+            id="org.eclipse.e4.tapiji.rcp.tapiji"
+            label="Tapiji theme">
+      </theme>
+   </extension>
+</plugin>

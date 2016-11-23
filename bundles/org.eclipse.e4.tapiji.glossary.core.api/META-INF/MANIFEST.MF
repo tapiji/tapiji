@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Api
-Bundle-SymbolicName: org.eclipselabs.e4.tapiji.translator.core.api
+Bundle-SymbolicName: org.eclipse.e4.tapiji.glossary.core.api
 Bundle-Version: 1.0.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: org.eclipselabs.e4.tapiji.translator.model
-Export-Package: org.eclipselabs.e4.tapiji.translator.core.api
+Import-Package: org.eclipse.e4.tapiji.glossary.model
+Export-Package: org.eclipse.e4.tapiji.glossary.core.api

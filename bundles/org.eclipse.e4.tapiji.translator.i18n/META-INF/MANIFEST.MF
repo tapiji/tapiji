@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: I18n
-Bundle-SymbolicName: org.eclipselabs.e4.tapiji.translator.i18n
+Bundle-SymbolicName: org.eclipse.e4.tapiji.translator.i18n
 Bundle-Version: 0.9.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.10.0"
-Export-Package: org.eclipselabs.e4.tapiji.translator.i18n
+Export-Package: org.eclipse.e4.tapiji.translator.i18n
