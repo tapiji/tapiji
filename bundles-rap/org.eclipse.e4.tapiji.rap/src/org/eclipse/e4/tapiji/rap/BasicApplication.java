@@ -6,16 +6,16 @@ import java.util.Map;
 import org.eclipse.rap.e4.E4ApplicationConfig;
 import org.eclipse.rap.e4.E4EntryPointFactory;
 import org.eclipse.rap.rwt.application.Application;
+import org.eclipse.rap.rwt.application.Application.OperationMode;
 import org.eclipse.rap.rwt.application.ApplicationConfiguration;
 import org.eclipse.rap.rwt.application.ExceptionHandler;
-import org.eclipse.rap.rwt.application.Application.OperationMode;
 import org.eclipse.rap.rwt.client.WebClient;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 
 
 public class BasicApplication implements ApplicationConfiguration {
 
+	private static String APPLICATION_XMI = "org.eclipse.e4.tapiji.translator/Application.e4xmi";
+	
     public void configure(Application application) {
     	
     	application.addStyleSheet("tapiji.business", "theme/business/business.css");
@@ -24,7 +24,7 @@ public class BasicApplication implements ApplicationConfiguration {
 		
 		properties.put(WebClient.PAGE_TITLE, "e4 RAP App");
 		properties.put(WebClient.THEME_ID, "tapiji.business");
-        application.addEntryPoint("/rap", new E4EntryPointFactory(E4ApplicationConfig.create("org.eclipse.e4.tapiji.app/Application.e4xmi")), properties);
+        application.addEntryPoint("/rap", new E4EntryPointFactory(E4ApplicationConfig.create(APPLICATION_XMI)), properties);
         application.setOperationMode( OperationMode.SWT_COMPATIBILITY );
         
         application.setExceptionHandler(new ExceptionHandler() {

@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.app;
+package org.eclipse.e4.tapiji.translator;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="tapiji.rap" sequenceNumber="22">
+<?pde version="3.8"?><target name="tapiji.rap" sequenceNumber="23">
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.rap.e4.tooling.feature.feature.group" version="0.9.0.201611200708"/>
+<unit id="org.eclipse.rap.e4.tooling.feature.feature.group" version="0.9.0.201611230711"/>
 <repository location="http://download.eclipse.org/rt/rap/incubator/nightly/e4/tooling/site/"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
