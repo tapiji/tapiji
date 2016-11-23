@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.workbench.IWorkbench;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
@@ -20,7 +21,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipselabs.e4.tapiji.logger.Log;
 
 
 public final class CheckForUpdatesHandler {

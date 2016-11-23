@@ -3,12 +3,12 @@ package org.eclipselabs.e4.tapiji.translator.ui.window;
 
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.workbench.IWorkbench;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipselabs.e4.tapiji.logger.Log;
 
 
 public class ExitHandler {

@@ -1,4 +1,4 @@
-package org.eclipselabs.e4.tapiji.logger;
+package org.eclipse.e4.tapiji.logger;
 
 
 import java.io.IOException;

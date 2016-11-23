@@ -18,10 +18,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TransferData;
-import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 
 

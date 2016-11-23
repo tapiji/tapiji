@@ -11,12 +11,12 @@
 package org.eclipselabs.e4.tapiji.translator.ui.widget.dnd;
 
 
+import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.translator.model.Glossary;
 import org.eclipselabs.e4.tapiji.translator.model.Term;
 import org.eclipselabs.e4.tapiji.translator.ui.treeviewer.provider.TreeViewerContentProvider;

@@ -17,8 +17,8 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.eclipse.e4.core.di.annotations.Creatable;
+import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipselabs.e4.tapiji.logger.Log;
 
 
 @Creatable
