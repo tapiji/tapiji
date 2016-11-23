@@ -5,6 +5,8 @@ import javax.inject.Inject;
 
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
+import org.eclipse.e4.tapiji.resource.TapijiResourceConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -13,8 +15,6 @@ import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipselabs.e4.tapiji.resource.ITapijiResourceProvider;
-import org.eclipselabs.e4.tapiji.resource.TapijiResourceConstants;
 
 
 public final class AboutDialog extends Dialog implements SelectionListener {

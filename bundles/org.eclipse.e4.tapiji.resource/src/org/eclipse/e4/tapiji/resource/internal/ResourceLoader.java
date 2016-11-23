@@ -1,4 +1,4 @@
-package org.eclipselabs.e4.tapiji.resource.internal;
+package org.eclipse.e4.tapiji.resource.internal;
 
 
 import java.net.URL;
@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-import org.eclipselabs.e4.tapiji.resource.ITapijiResourceProvider;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 

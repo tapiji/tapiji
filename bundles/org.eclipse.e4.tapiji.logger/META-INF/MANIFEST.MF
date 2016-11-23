@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Logger
-Bundle-SymbolicName: org.eclipselabs.e4.tapiji.logger
+Bundle-SymbolicName: org.eclipse.e4.tapiji.logger
 Bundle-Version: 0.9.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: javax.inject,

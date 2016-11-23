@@ -1,4 +1,4 @@
-package org.eclipselabs.e4.tapiji.resource;
+package org.eclipse.e4.tapiji.resource;
 
 
 import org.eclipse.swt.graphics.Image;
