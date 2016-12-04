@@ -4,6 +4,9 @@
     <elements xsi:type="menu:MenuContribution" xmi:id="_sngRwLpCEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.glossary.menucontribution.rcp" positionInParent="?before=org.eclipse.e4.tapiji.glossary.handledmenuitem.newglossary" parentId="org.eclipse.e4.tapiji.glossary.menu.file">
       <children xsi:type="menu:HandledMenuItem" xmi:id="_3raEELpCEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.openglossary" label="Open Glossary" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/open_glossary.png" command="__roC8LpCEeakeOgmvKbJcw"/>
     </elements>
+    <elements xsi:type="menu:MenuContribution" xmi:id="_F2SmsLpJEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.rcp.glossary.menucontribution.treeview.empty" parentId="org.eclipse.e4.tapiji.glossary.popupmenu.treeview.empty">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_IpgVMLpJEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.openglossary" label="Open Glossary" command="__roC8LpCEeakeOgmvKbJcw"/>
+    </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_x0U78LpCEeakeOgmvKbJcw" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="commands:Command" xmi:id="__roC8LpCEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.rcp.glossary.command.openglossary" commandName="Open Glossary"/>
