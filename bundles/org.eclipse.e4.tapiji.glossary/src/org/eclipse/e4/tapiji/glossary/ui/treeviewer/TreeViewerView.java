@@ -19,8 +19,6 @@ import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.e4.core.commands.ECommandService;
 import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -56,7 +54,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.TreeViewerEditor;
-import org.eclipse.jface.viewers.TreeViewerFocusCellManager;
+
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -77,7 +75,7 @@ import org.eclipse.swt.widgets.TreeColumn;
 
 @Creatable
 @Singleton
-public final class TreeViewerView extends Composite implements IResourceChangeListener, TreeViewerContract.View {
+public final class TreeViewerView extends Composite implements TreeViewerContract.View {
 
     private static final String TAG = TreeViewerView.class.getSimpleName();
     private static final String TREE_VIEWER_MENU_ID = "org.eclipse.e4.tapiji.glossary.popupmenu.treeview";
@@ -179,7 +177,7 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
         this.tree = treeViewer.getTree();
         this.tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-        TreeViewerEditor.create(treeViewer,  new TreeViewerFocusCellManager(treeViewer, new FocusCellOwnerDrawHighlighter(treeViewer)), createColumnActivationStrategy(), ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
+      //  TreeViewerEditor.create(treeViewer,  new TreeViewerFocusCellManager(treeViewer, new FocusCellOwnerDrawHighlighter(treeViewer)), createColumnActivationStrategy(), ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
         dragAndDrop();
         registerTreeMenu(TREE_VIEWER_MENU_EMPTY_ID);
     }
@@ -396,10 +394,6 @@ public final class TreeViewerView extends Composite implements IResourceChangeLi
     @Override
     public void setReferenceLanguage(final String referenceLanguage) {
         this.referenceLanguage = referenceLanguage;
-    }
-
-    @Override
-    public void resourceChanged(final IResourceChangeEvent event) {
     }
 
     @Override

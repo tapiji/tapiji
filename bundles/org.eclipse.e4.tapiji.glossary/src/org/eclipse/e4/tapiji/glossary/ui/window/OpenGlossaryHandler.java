@@ -18,18 +18,19 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
 
-public class OpenGlossaryHandler {
+public abstract class OpenGlossaryHandler {
 
     private static final String TAG = OpenGlossaryHandler.class.getSimpleName();
 
 
     @Execute
     public void execute(@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService, final StoreInstanceState instanceState) {
-        final String[] fileNames = FileUtils.queryFileName(shell, "Open Glossary", SWT.OPEN, FileUtils.XML_FILE_ENDINGS);
+        final String[] fileNames = recentlyOpenedFiles(shell);
         if (fileNames != null) {
             final String fileName = fileNames[0];
             if (FileUtils.isGlossary(fileName)) {
                 final File file = new File(fileName);
+                System.out.println("LOAD ASYNC");
                 loadGlossaryAsync(glossaryService, file);
                 instanceState.setGlossaryFile(file.toString());
             } else {
@@ -38,6 +39,7 @@ public class OpenGlossaryHandler {
                 return;
             }
         }
+        // FileUtils.openFiles(shell, "Open Glossary", SWT.OPEN, FileUtils.XML_FILE_ENDINGS)
     }
 
     private void loadGlossaryAsync(final IGlossaryService glossaryService, final File file) {
@@ -45,6 +47,8 @@ public class OpenGlossaryHandler {
 
             @Override
             protected IStatus run(final IProgressMonitor monitor) {
+            	System.out.println("OPEN GLOSSARYS");
+            	Log.d(TAG, "OPEN GLOSSARY");
                 glossaryService.openGlossary(file);
                 return Status.OK_STATUS;
             }
@@ -56,4 +60,6 @@ public class OpenGlossaryHandler {
     private void showErrorDialog(final Shell shell, final String fileName) {
         MessageDialog.openError(shell, String.format("Cannot open Glossary %s", fileName), "The choosen file does not represent a Glossary!");
     }
+    
+    protected abstract String[] recentlyOpenedFiles(Shell shell);
 }

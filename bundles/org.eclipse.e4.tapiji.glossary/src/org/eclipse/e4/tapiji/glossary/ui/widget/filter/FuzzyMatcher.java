@@ -10,8 +10,8 @@
 package org.eclipse.e4.tapiji.glossary.ui.widget.filter;
 
 
-import org.eclipse.e4.babel.editor.model.checks.proximity.LevenshteinDistanceAnalyzer;
-import org.eclipse.e4.babel.editor.model.checks.proximity.ProximityAnalyzer;
+//import org.eclipse.e4.babel.editor.model.checks.proximity.LevenshteinDistanceAnalyzer;
+//import org.eclipse.e4.babel.editor.model.checks.proximity.ProximityAnalyzer;
 import org.eclipse.e4.tapiji.glossary.model.Term;
 import org.eclipse.e4.tapiji.glossary.model.Translation;
 import org.eclipse.e4.tapiji.glossary.model.filter.FilterInfo;
@@ -21,12 +21,12 @@ import org.eclipse.jface.viewers.Viewer;
 
 public class FuzzyMatcher extends ExactMatcher {
 
-    protected ProximityAnalyzer lvda;
+  //  protected ProximityAnalyzer lvda;
     protected float minimumSimilarity = 0.75f;
 
     public FuzzyMatcher(final StructuredViewer viewer) {
         super(viewer);
-        lvda = LevenshteinDistanceAnalyzer.getInstance();
+       // lvda = LevenshteinDistanceAnalyzer.getInstance();
     }
 
     public double getMinimumSimilarity() {
@@ -39,7 +39,7 @@ public class FuzzyMatcher extends ExactMatcher {
 
     @Override
     public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-        final boolean exactMatch = super.select(viewer, parentElement, element);
+      /*  final boolean exactMatch = super.select(viewer, parentElement, element);
         boolean match = exactMatch;
 
         final Term term = (Term) element;
@@ -62,6 +62,7 @@ public class FuzzyMatcher extends ExactMatcher {
         }
 
         term.setInfo(filterInfo);
-        return match;
+        return match;*/
+    	return false;
     }
 }

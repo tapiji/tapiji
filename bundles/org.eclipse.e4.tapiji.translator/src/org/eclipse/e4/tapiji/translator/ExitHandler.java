@@ -8,7 +8,7 @@ public class ExitHandler
 	@Execute
 	public void execute()
 	{
-		
+		System.out.println("WAHHHHHH");
 	}
 
 }

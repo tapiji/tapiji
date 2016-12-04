@@ -20,7 +20,7 @@ public class NewGlossaryHandler {
 
     @Execute
     public void execute(@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService) {
-        final String[] fileNames = FileUtils.queryFileName(shell, "New Glossary", SWT.SAVE, FileUtils.XML_FILE_ENDINGS);
+        final String[] fileNames = FileUtils.openFiles(shell, "New Glossary", SWT.SAVE, FileUtils.XML_FILE_ENDINGS);
         if (fileNames != null) {
             String fileName = fileNames[0];
             fileName = FileUtils.checkXmlFileEnding(fileName);

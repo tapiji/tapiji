@@ -8,7 +8,6 @@ Service-Component: OSGI-INF/service.xml
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation,
  javax.inject,
- org.eclipse.e4.babel.core.api,
  org.eclipse.e4.core.contexts,
  org.eclipse.e4.core.services.events,
  org.eclipse.e4.tapiji.glossary.core.api,

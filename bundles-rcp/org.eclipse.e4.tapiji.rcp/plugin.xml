@@ -14,7 +14,7 @@
          </property>
          <property
                name="applicationXMI"
-               value="org.eclipse.e4.tapiji.glossary/Application.e4xmi">
+               value="org.eclipse.e4.tapiji.translator/Application.e4xmi">
          </property>
          <property
                name="windowImages"

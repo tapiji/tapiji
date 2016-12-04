@@ -11,7 +11,8 @@ import org.eclipse.swt.widgets.Shell;
 public class UpdateHistory {    
    
     @Execute
-    public void execute(final IEclipseContext context, Shell shell,@Named("changelog_file") String changeLogFile ) {       
+    public void execute(final IEclipseContext context, Shell shell,@Named("changelog_file") String changeLogFile ) {
+    	System.out.println("Updte log");
         UpdateHistoryDialog.show(context, shell, changeLogFile);
     }
 }

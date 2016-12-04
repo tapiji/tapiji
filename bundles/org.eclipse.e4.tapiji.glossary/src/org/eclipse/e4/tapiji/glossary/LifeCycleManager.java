@@ -121,7 +121,6 @@ public final class LifeCycleManager {
         private void minimizeBehavior(final Shell shell) {
             shell.addShellListener(new ShellAdapter() {
 
-                @Override
                 public void shellIconified(final ShellEvent e) {
                     shell.setMinimized(true);
                 }

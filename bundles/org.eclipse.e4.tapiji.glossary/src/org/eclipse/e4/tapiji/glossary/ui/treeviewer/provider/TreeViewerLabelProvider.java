@@ -23,6 +23,7 @@ import org.eclipse.e4.tapiji.glossary.model.Term;
 import org.eclipse.e4.tapiji.glossary.model.Translation;
 import org.eclipse.e4.tapiji.glossary.model.filter.FilterInfo;
 import org.eclipse.e4.tapiji.glossary.model.filter.FilterRegion;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -31,7 +32,7 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Font;
 
 
-public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
+public final class TreeViewerLabelProvider extends CellLabelProvider {
 
     private static final String TAG = TreeViewerLabelProvider.class.getSimpleName();
     private static final List<StyleRange> STYLE_RANGES = new ArrayList<StyleRange>();
@@ -64,12 +65,12 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
             cell.setForeground(COLOR_BLACK);
         }*/
 
-        if (isSearchEnabled) {
+       if (isSearchEnabled) {
             searchStyle(cell, (Term) element, columnIndex);
         } else {
-            cell.setStyleRanges(null);
+          //  cell.setStyleRanges(null);
         }
-        super.update(cell);
+       /// super.update(cell);
     }
 
     private void searchStyle(final ViewerCell cell, final Term term, final int columnIndex) {
@@ -81,7 +82,7 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
                 style = new StyleRange(reg.getOffset(), reg.getLength(), COLOR_BLACK, COLOR_INFO, SWT.BOLD);
                 STYLE_RANGES.add(style);
             }
-            cell.setStyleRanges(STYLE_RANGES.toArray(new StyleRange[STYLE_RANGES.size()]));
+           // cell.setStyleRanges(STYLE_RANGES.toArray(new StyleRange[STYLE_RANGES.size()]));
         } else {
             cell.setForeground(COLOR_BLACK);
         }
@@ -132,7 +133,7 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
         }
     }
 
-    @Override
+
     @PreDestroy
     public void dispose() {
         STYLE_RANGES.clear();
@@ -141,4 +142,5 @@ public final class TreeViewerLabelProvider extends StyledCellLabelProvider {
     public static TreeViewerLabelProvider newInstance(final TreeViewer treeViewer, final List<String> displayedTranslations, final int referenceColumn) {
         return new TreeViewerLabelProvider(treeViewer, displayedTranslations, referenceColumn);
     }
+
 }

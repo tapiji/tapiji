@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.4"?>
 <plugin>
 
    <extension
-         id="product"
          point="org.eclipse.core.runtime.products">
       <product
             application="org.eclipse.e4.ui.workbench.swt.E4Application"
@@ -14,7 +12,11 @@
          </property>
          <property
                name="aboutText"
-               value="TapiJI - Translator &#x0A;Version 1.0.0&#x0A;by Stefan Strobl &amp;amp;&#x0A;Martin Reiterer &amp;amp;&#x0A;Christian Behon">
+               value="TapiJI - Translator 
+Version 1.0.0
+by Stefan Strobl &amp;amp;
+Martin Reiterer &amp;amp;
+Christian Behon">
          </property>
          <property
                name="appName"
@@ -66,6 +68,13 @@
             </and>
          </with>
       </definition>
+   </extension>
+   <extension
+         id="org.eclipse.e4.tapiji.glossary.fragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
    </extension>
 
 </plugin>

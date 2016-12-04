@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Tapiji RAP
 Bundle-SymbolicName: org.eclipse.e4.tapiji.rap;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: INSO
 Require-Bundle: org.eclipse.rap.rwt;bundle-version="[3.0.0,4.0.0)",
  org.eclipse.rap.e4;bundle-version="0.9.0",
  org.eclipse.e4.core.di,
@@ -12,11 +12,21 @@ Require-Bundle: org.eclipse.rap.rwt;bundle-version="[3.0.0,4.0.0)",
  org.eclipse.e4.core.services,
  org.eclipse.e4.ui.di,
  org.eclipse.equinox.common,
- org.eclipse.e4.tapiji.translator;bundle-version="1.0.0"
+ org.eclipse.e4.tapiji.translator;bundle-version="1.0.0",
+ org.eclipse.e4.ui.model.workbench;bundle-version="1.2.0.v20160229-1459"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: com.ibm.icu.text;version="0.0.0",
  javax.annotation;version="1.2.0",
  javax.inject;version="1.0.0",
+ org.eclipse.core.runtime.jobs,
+ org.eclipse.e4.tapiji.glossary.core.api,
+ org.eclipse.e4.tapiji.glossary.preference,
+ org.eclipse.e4.tapiji.glossary.ui.window,
+ org.eclipse.e4.tapiji.rap.utils,
  org.eclipse.e4.tapiji.translator,
+ org.eclipse.e4.tapiji.utils,
+ org.eclipse.e4.ui.services,
+ org.eclipse.rap.fileupload;version="3.1.1",
+ org.eclipse.rap.fileupload.internal;version="3.1.1",
  org.osgi.framework
 Service-Component: OSGI-INF/contribution.xml
-Bundle-Vendor: INSO

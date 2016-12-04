@@ -15,11 +15,11 @@ package org.eclipse.e4.tapiji.utils;
 
 
 import java.io.File;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
+//import org.eclipse.core.resources.IFile;
+//import org.eclipse.core.resources.IProject;
+//import org.eclipse.core.resources.IResource;
+//import org.eclipse.core.resources.IWorkspace;
+//import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -51,7 +51,7 @@ public final class FileUtils {
     public static final String EXTERNAL_RB_PROJECT_NAME = "ExternalResourceBundles";
 
     /** The singleton instance of Workspace */
-    private static IWorkspace workspace;
+    //private static IWorkspace workspace;
 
     public static boolean isResourceBundle(final String fileName) {
         return fileName.toLowerCase().endsWith(".properties");
@@ -60,15 +60,15 @@ public final class FileUtils {
     public static boolean isGlossary(final String fileName) {
         return fileName.toLowerCase().endsWith(".xml");
     }
-
+/*
     public static IWorkspace getWorkspace() {
         if (workspace == null) {
             workspace = ResourcesPlugin.getWorkspace();
         }
         return workspace;
-    }
+    }*/
 
-    public static IProject getProject(final String projectName) throws CoreException {
+ /*   public static IProject getProject(final String projectName) throws CoreException {
         final IProject project = getWorkspace().getRoot().getProject(projectName);
         if (!project.exists()) {
             project.create(null);
@@ -77,14 +77,12 @@ public final class FileUtils {
             project.open(null);
         }
         return project;
-    }
+    }*/
 
-    public static IFile getResourceBundleRef(final String location, final String projectName) throws CoreException {
+ /*   public static IFile getResourceBundleRef(final String location, final String projectName) throws CoreException {
         final IPath path = new Path(location);
 
-        /**
-         * Create all files of the Resource-Bundle within the project space and link them to the original file
-         */
+ 
         final String regex = getPropertiesFileRegEx(path);
         final String projPathName = toProjectRelativePathName(path);
         final IProject project = getProject(projectName);
@@ -108,7 +106,7 @@ public final class FileUtils {
         }
 
         return file;
-    }
+    }*/
 
     protected static String toProjectRelativePathName(final IPath path) {
         String projectRelativeName = "";
@@ -136,36 +134,7 @@ public final class FileUtils {
         return getBundleName(path);
     }
 
-    public static String[] queryFileName(final Shell shell, final String title, final int dialogOptions, final String[] endings) {
-        final FileDialog dialog = new FileDialog(shell, dialogOptions);
-        dialog.setText(title);
-        dialog.setFilterExtensions(endings);
-
-        final String filepath = dialog.open();
-
-        // if single option, return path
-        if ((dialogOptions & SWT.SINGLE) == SWT.SINGLE) {
-            return new String[] {filepath};
-        } else {
-            // [RAP] In RAP1.5 getFilterPath is always empty!!!
-            final String path = dialog.getFilterPath();
-            // [RAP] In RAP1.5 getFileNames returns full filename (+ path)!!!
-            final String[] filenames = dialog.getFileNames();
-
-            // append filenames to path
-            if (!path.isEmpty()) {
-                for (int i = 0; i < filenames.length; i++) {
-                    filenames[i] = path + File.separator + filenames[i];
-                }
-
-            }
-            if (filenames.length > 0) {
-                return filenames;
-            }
-            return null;
-        }
-    }
-
+  
     public static String checkXmlFileEnding(String fileName) {
         if (!fileName.endsWith(".xml")) {
             if (fileName.endsWith(".")) {

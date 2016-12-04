@@ -11,3 +11,4 @@ Export-Package: org.eclipse.e4.tapiji.glossary.messages,
 Import-Package: javax.inject,
  org.eclipse.e4.core.di.annotations,
  org.eclipse.jface.text
+Require-Bundle: org.eclipse.e4.rap.support;bundle-version="1.0.0";resolution:=optional

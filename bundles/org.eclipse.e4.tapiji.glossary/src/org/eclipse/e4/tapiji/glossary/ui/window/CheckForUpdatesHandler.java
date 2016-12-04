@@ -13,10 +13,10 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.workbench.IWorkbench;
-import org.eclipse.equinox.p2.core.IProvisioningAgent;
-import org.eclipse.equinox.p2.operations.ProvisioningJob;
-import org.eclipse.equinox.p2.operations.ProvisioningSession;
-import org.eclipse.equinox.p2.operations.UpdateOperation;
+//import org.eclipse.equinox.p2.core.IProvisioningAgent;
+//import org.eclipse.equinox.p2.operations.ProvisioningJob;
+//import org.eclipse.equinox.p2.operations.ProvisioningSession;
+//import org.eclipse.equinox.p2.operations.UpdateOperation;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public final class CheckForUpdatesHandler {
 
-    private static final String TAG = CheckForUpdatesHandler.class.getSimpleName();
+ /*   private static final String TAG = CheckForUpdatesHandler.class.getSimpleName();
     private static final String UPDATE_SITE_URL = System.getProperty("UpdateHandler.Repo", "http://localhost/tapiji/repository");
 
     @Execute
@@ -126,5 +126,5 @@ public final class CheckForUpdatesHandler {
             return null;
         }
         return operation;
-    }
+    }*/
 }
