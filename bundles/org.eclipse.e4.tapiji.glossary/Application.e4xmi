@@ -84,7 +84,7 @@
     </trimBars>
   </children>
   <handlers xmi:id="_ACaiwMEaEeS16pfZp0OXPg" elementId="org.eclipse.e4.tapiji.glossary.handler.exit" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.window.ExitHandler" command="_qRUnQMEUEeS87-LHw5gOnA"/>
-  <handlers xmi:id="_N-jtgMEaEeS16pfZp0OXPg" elementId="org.eclipse.e4.tapiji.glossary.handler.openGlossary" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.window.OpenGlossaryHandler" command="_8xeWcMEZEeS16pfZp0OXPg"/>
+  <handlers xmi:id="_N-jtgMEaEeS16pfZp0OXPg" elementId="org.eclipse.e4.tapiji.glossary.handler.openGlossary" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.window.AOpenGlossaryHandler" command="_8xeWcMEZEeS16pfZp0OXPg"/>
   <handlers xmi:id="_VkaroMEaEeS16pfZp0OXPg" elementId="org.eclipse.e4.tapiji.glossary.handler.newGlossary" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.window.NewGlossaryHandler" command="_7KpikMEZEeS16pfZp0OXPg"/>
   <handlers xmi:id="_U3jwMMEbEeS16pfZp0OXPg" elementId="org.eclipse.e4.tapiji.glossary.handler.about" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.window.AboutHandler" command="_FXUuwMEWEeS87-LHw5gOnA"/>
   <handlers xmi:id="_iUG04MEbEeS16pfZp0OXPg" elementId="org.eclipse.e4.tapiji.glossary.handler.save" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.window.SaveHandler" command="_3-kvgMEWEeS87-LHw5gOnA"/>

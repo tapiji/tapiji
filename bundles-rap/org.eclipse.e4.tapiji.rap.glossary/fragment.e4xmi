@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_NM-dMLpFEea2j6Vdo2WkOA">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_N9mo4LpFEea2j6Vdo2WkOA" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="menu:MenuContribution" xmi:id="_RjejYLpFEea2j6Vdo2WkOA" elementId="org.eclipse.e4.tapiji.rap.glossary.menucontribution.file" positionInParent="?before=org.eclipse.e4.tapiji.glossary.handledmenuitem.newglossary" parentId="org.eclipse.e4.tapiji.glossary.menu.file">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_XPGCYLpFEea2j6Vdo2WkOA" elementId="org.eclipse.e4.tapiji.rap.glossary.handledmenuitem.openglossary" label="Open Glossary" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/open_glossary.png" command="_ibtr0LpFEea2j6Vdo2WkOA"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_d1E34LpFEea2j6Vdo2WkOA" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="commands:Command" xmi:id="_ibtr0LpFEea2j6Vdo2WkOA" elementId="org.eclipse.e4.tapiji.rap.glossary.command.openglossary" commandName="Open Glossary"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_eGsMULpFEea2j6Vdo2WkOA" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="commands:Handler" xmi:id="_jZcfYLpFEea2j6Vdo2WkOA" elementId="org.eclipse.e4.tapiji.rap.glossary.handler.openglossary" contributionURI="bundleclass://org.eclipse.e4.tapiji.rap.glossary/org.eclipse.e4.tapiji.rap.glossary.window.UploadGlossaryHandler" command="_ibtr0LpFEea2j6Vdo2WkOA"/>
+  </fragments>
+</fragment:ModelFragments>

@@ -4,8 +4,7 @@
     <elements xsi:type="menu:MenuContribution" xmi:id="_tArkELGtEea1SPQzlkSYSA" elementId="org.eclipse.e4.tapiji.glossary.menucontribution.test" parentId="org.eclipse.e4.tapiji.menu.translator">
       <children xsi:type="menu:Menu" xmi:id="_ShQ30LIiEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.menu.file" label="File" mnemonics="F">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_YwW3ULIiEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.newglossary" label="New Glossary" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/new_glossary.png"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_gRKWULIiEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.openglosssary" label="Open Glosssary" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/open_glossary.png" command="_3kY6ULIkEeal-_h9GBjgAw"/>
-        <children xsi:type="menu:MenuSeparator" xmi:id="_lTRlULIiEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.menuseparator.1"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_lTRlULIiEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.menuseparator.fileone"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_lrsFULIiEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.save" label="Save" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/save.png"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_pyI9ULIiEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.saveall" label="Save All" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/save_all.png"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_ttOS0LIiEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.menuseparator.2"/>
@@ -27,13 +26,12 @@
     </elements>
     <elements xsi:type="commands:Command" xmi:id="_Fnc3ULIjEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.command.about" commandName="About"/>
     <elements xsi:type="commands:Command" xmi:id="_2FJ8MLIkEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.command.newglossary" commandName="New Glossary"/>
-    <elements xsi:type="commands:Command" xmi:id="_3kY6ULIkEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.command.openglossary" commandName="Open Glossary"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_jWUngLHBEeal-_h9GBjgAw" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="commands:Handler" xmi:id="_HiEJ4LIjEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.handler.about" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.window.AboutHandler" command="_Fnc3ULIjEeal-_h9GBjgAw"/>
     <elements xsi:type="commands:Handler" xmi:id="_IQAN8LIjEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.handler.changelog" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.window.UpdateHistory" command="_CZl0MLIjEeal-_h9GBjgAw"/>
     <elements xsi:type="commands:Handler" xmi:id="_5xec8LIkEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.handler.newglossary" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.window.NewGlossaryHandler" command="_2FJ8MLIkEeal-_h9GBjgAw"/>
-    <elements xsi:type="commands:Handler" xmi:id="_8vyBILIkEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.handler.openglossary" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.window.OpenGlossaryHandler" command="_3kY6ULIkEeal-_h9GBjgAw"/>
+    <elements xsi:type="commands:Handler" xmi:id="_8vyBILIkEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.handler.openglossary" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.window.AOpenGlossaryHandler"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_IW71ALImEeal-_h9GBjgAw" featurename="children" parentElementId="org.eclipse.e4.tapiji.glossary.partsashcontainer.main" positionInList="index:2">
     <elements xsi:type="basic:Part" xmi:id="_gN7fULImEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.part.glossaryview" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.glossary.GlossaryView">

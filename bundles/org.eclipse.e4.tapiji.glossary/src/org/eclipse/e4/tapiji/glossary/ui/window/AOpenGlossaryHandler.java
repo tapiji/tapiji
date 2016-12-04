@@ -18,9 +18,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
 
-public abstract class OpenGlossaryHandler {
+public abstract class AOpenGlossaryHandler {
 
-    private static final String TAG = OpenGlossaryHandler.class.getSimpleName();
+    private static final String TAG = AOpenGlossaryHandler.class.getSimpleName();
 
 
     @Execute
@@ -39,7 +39,6 @@ public abstract class OpenGlossaryHandler {
                 return;
             }
         }
-        // FileUtils.openFiles(shell, "Open Glossary", SWT.OPEN, FileUtils.XML_FILE_ENDINGS)
     }
 
     private void loadGlossaryAsync(final IGlossaryService glossaryService, final File file) {
