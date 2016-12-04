@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_-QGVkLpBEeakeOgmvKbJcw">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_jTSUYLpCEeakeOgmvKbJcw" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="menu:MenuContribution" xmi:id="_sngRwLpCEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.glossary.menucontribution.rcp" positionInParent="?before=org.eclipse.e4.tapiji.glossary.handledmenuitem.newglossary" parentId="org.eclipse.e4.tapiji.glossary.menu.file">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_3raEELpCEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.openglossary" label="Open Glossary" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/open_glossary.png" command="__roC8LpCEeakeOgmvKbJcw"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_x0U78LpCEeakeOgmvKbJcw" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="commands:Command" xmi:id="__roC8LpCEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.rcp.glossary.command.openglossary" commandName="Open Glossary"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_0gve4LpCEeakeOgmvKbJcw" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="commands:Handler" xmi:id="_A5cg8LpDEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.rcp.glossary.handler.openglossary" contributionURI="bundleclass://org.eclipse.e4.tapiji.rcp.glossary/org.eclipse.e4.tapiji.rcp.glossary.window.OpenGlossaryHandler" command="__roC8LpCEeakeOgmvKbJcw"/>
+  </fragments>
+</fragment:ModelFragments>

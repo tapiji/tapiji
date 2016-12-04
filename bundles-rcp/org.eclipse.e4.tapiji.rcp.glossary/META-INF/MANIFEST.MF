@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Glossary
+Bundle-SymbolicName: org.eclipse.e4.tapiji.rcp.glossary;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: org.eclipse.e4.ui.model.workbench;bundle-version="1.2.0.v20160229-1459"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.eclipse.e4.tapiji.glossary.ui.window,
+ org.eclipse.e4.tapiji.rcp.utils,
+ org.eclipse.e4.tapiji.utils,
+ org.eclipse.swt,
+ org.eclipse.swt.widgets
