@@ -1,17 +1,31 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_-QGVkLpBEeakeOgmvKbJcw">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_jTSUYLpCEeakeOgmvKbJcw" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
-    <elements xsi:type="menu:MenuContribution" xmi:id="_sngRwLpCEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.glossary.menucontribution.rcp" positionInParent="?before=org.eclipse.e4.tapiji.glossary.handledmenuitem.newglossary" parentId="org.eclipse.e4.tapiji.glossary.menu.file">
+    <elements xsi:type="menu:MenuContribution" xmi:id="_sngRwLpCEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.glossary.menucontribution.rcp" positionInParent="?before=org.eclipse.e4.tapiji.glossary.menuseparator.sepone" parentId="org.eclipse.e4.tapiji.glossary.menu.file">
       <children xsi:type="menu:HandledMenuItem" xmi:id="_3raEELpCEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.openglossary" label="Open Glossary" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/open_glossary.png" command="__roC8LpCEeakeOgmvKbJcw"/>
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_DAEq0Ls2EeaBepQNk7EkBg" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.newglossary" label="New Glossary" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/new_glossary.png" command="_3uj6ULs1EeaBepQNk7EkBg"/>
     </elements>
     <elements xsi:type="menu:MenuContribution" xmi:id="_F2SmsLpJEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.rcp.glossary.menucontribution.treeview.empty" parentId="org.eclipse.e4.tapiji.glossary.popupmenu.treeview.empty">
       <children xsi:type="menu:HandledMenuItem" xmi:id="_IpgVMLpJEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.openglossary" label="Open Glossary" command="__roC8LpCEeakeOgmvKbJcw"/>
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_epdWwLs4EeaBepQNk7EkBg" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.newglossary" label="New Glossary" command="_3uj6ULs1EeaBepQNk7EkBg"/>
+    </elements>
+    <elements xsi:type="menu:MenuContribution" xmi:id="_t4WKgLsyEeaBepQNk7EkBg" elementId="org.eclipse.e4.tapiji.rcp.glossary.menucontribution.treeview" parentId="org.eclipse.e4.tapiji.glossary.popupmenu.treeview">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_5y-wgLsyEeaBepQNk7EkBg" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.openglossary" label="Open Glossary" command="__roC8LpCEeakeOgmvKbJcw"/>
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_Gki-gLszEeaBepQNk7EkBg" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.newfile" label="Save as..."/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_x0U78LpCEeakeOgmvKbJcw" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="commands:Command" xmi:id="__roC8LpCEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.rcp.glossary.command.openglossary" commandName="Open Glossary"/>
+    <elements xsi:type="commands:Command" xmi:id="_3uj6ULs1EeaBepQNk7EkBg" elementId="org.eclipse.e4.tapiji.rcp.glossary.command.newglossary" commandName="New Glossary"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_0gve4LpCEeakeOgmvKbJcw" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="commands:Handler" xmi:id="_A5cg8LpDEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.rcp.glossary.handler.openglossary" contributionURI="bundleclass://org.eclipse.e4.tapiji.rcp.glossary/org.eclipse.e4.tapiji.rcp.glossary.window.OpenGlossaryHandler" command="__roC8LpCEeakeOgmvKbJcw"/>
+    <elements xsi:type="commands:Handler" xmi:id="_-IaYULs1EeaBepQNk7EkBg" elementId="org.eclipse.e4.tapiji.rcp.glossary.handler.newglossary" contributionURI="bundleclass://org.eclipse.e4.tapiji.rcp.glossary/org.eclipse.e4.tapiji.rcp.glossary.window.NewGlossaryHandler" command="_3uj6ULs1EeaBepQNk7EkBg"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Qcba4Ls5EeaWz7ufhSPmeA" featurename="toolBarContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="menu:ToolBarContribution" xmi:id="_RuccYLs5EeaWz7ufhSPmeA" elementId="org.eclipse.e4.tapiji.rcp.glossary.toolbarcontribution.main" accessibilityPhrase="" parentId="org.eclipse.e4.tapiji.translator.toolbar.main">
+      <children xsi:type="menu:HandledToolItem" xmi:id="_XJGuQLs5EeaWz7ufhSPmeA" elementId="org.eclipse.e4.tapiji.rcp.glossary.handledtoolitem.1" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/open_glossary.png" tooltip="Opens a Glossary definition" command="__roC8LpCEeakeOgmvKbJcw"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_WF49wLs5EeaWz7ufhSPmeA" elementId="org.eclipse.e4.tapiji.rcp.glossary.handledtoolitem." label="" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/new_glossary.png" tooltip="Creates a new glossary file" command="_3uj6ULs1EeaBepQNk7EkBg"/>
+    </elements>
   </fragments>
 </fragment:ModelFragments>

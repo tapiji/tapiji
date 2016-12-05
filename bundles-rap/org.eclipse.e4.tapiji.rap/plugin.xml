@@ -16,12 +16,5 @@
          </property>
       </product>
    </extension>
-   <extension
-         id="org.eclipse.e4.tapiji.rap.fragment"
-         point="org.eclipse.e4.workbench.model">
-      <fragment
-            uri="fragment.e4xmi">
-      </fragment>
-   </extension>
 
 </plugin>
