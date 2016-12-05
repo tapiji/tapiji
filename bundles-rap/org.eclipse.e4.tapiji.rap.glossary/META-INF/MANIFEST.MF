@@ -4,9 +4,22 @@ Bundle-Name: Glossary
 Bundle-SymbolicName: org.eclipse.e4.tapiji.rap.glossary;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.e4.ui.model.workbench;bundle-version="1.2.0.v20160229-1459"
-Import-Package: org.eclipse.e4.tapiji.glossary.ui.window,
+Import-Package: javax.inject;version="1.0.0",
+ javax.servlet;version="3.1.0",
+ javax.servlet.http;version="3.1.0",
+ org.eclipse.e4.core.di.annotations,
+ org.eclipse.e4.tapiji.glossary.ui.window,
  org.eclipse.e4.tapiji.rap.utils,
  org.eclipse.e4.tapiji.utils,
+ org.eclipse.e4.ui.services,
+ org.eclipse.jface.dialogs,
+ org.eclipse.jface.window,
+ org.eclipse.rap.rwt;version="3.1.1",
+ org.eclipse.rap.rwt.service;version="3.1.1",
  org.eclipse.swt,
+ org.eclipse.swt.browser,
+ org.eclipse.swt.events,
+ org.eclipse.swt.graphics,
+ org.eclipse.swt.layout,
  org.eclipse.swt.widgets
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

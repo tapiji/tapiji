@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_Lvp3AK82Eea7Br2sj4MS9g" elementId="org.eclipselabs.e4.tapiji.application">
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_S7ZsAK82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.trimmedwindow.main">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_S7ZsAK82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.trimmedwindow.main" label="TapiJI Translator" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/tapiji.png" tooltip="Tooling for agile and process integrated Java Internationalization" x="150" y="150" width="800" height="800">
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_2vIQ0LIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.perspectivestack.main">
       <children xsi:type="advanced:Perspective" xmi:id="_5YRdULIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.perspective.main" label="TapiJI Translator">
         <children xsi:type="basic:PartSashContainer" xmi:id="__P9CYLIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.partsashcontainer.main"/>
