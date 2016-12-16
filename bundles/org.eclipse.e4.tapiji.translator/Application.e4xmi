@@ -3,7 +3,7 @@
   <children xsi:type="basic:TrimmedWindow" xmi:id="_S7ZsAK82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.trimmedwindow.main" label="TapiJI Translator" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/tapiji.png" tooltip="Tooling for agile and process integrated Java Internationalization" x="150" y="150" width="800" height="800">
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_2vIQ0LIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.perspectivestack.main">
       <children xsi:type="advanced:Perspective" xmi:id="_5YRdULIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.perspective.main" label="TapiJI Translator">
-        <children xsi:type="basic:PartSashContainer" xmi:id="__P9CYLIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.partsashcontainer.main"/>
+        <children xsi:type="basic:PartSashContainer" xmi:id="__P9CYLIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.partsashcontainer.main"/>
       </children>
     </children>
     <mainMenu xmi:id="_twgtQK82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.menu.translator"/>
