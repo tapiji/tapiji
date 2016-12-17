@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="tapiji.rap" sequenceNumber="23">
+<?pde version="3.8"?><target name="tapiji.rap" sequenceNumber="25">
 <locations>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.rap.e4.tooling.feature.feature.group" version="0.9.0.201611230711"/>
-<repository location="http://download.eclipse.org/rt/rap/incubator/nightly/e4/tooling/site/"/>
-</location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.rap.sdk.feature.feature.group" version="3.1.1.20160831-0710"/>
 <unit id="org.eclipse.rap.tools.feature.feature.group" version="3.1.1.20160912-1200"/>
@@ -12,6 +8,14 @@
 <repository location="http://download.eclipse.org/releases/neon"/>
 </location>
 <location path="${project_loc:org.eclipse.e4.tapiji.rap.target}/rap-e4" type="Directory"/>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.rap.e4.tooling.feature.feature.group" version="0.9.0.201612170713"/>
+<repository location="http://download.eclipse.org/rt/rap/incubator/nightly/e4/tooling/site/"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.jdt.feature.group" version="3.12.1.v20160907-1200"/>
+<repository location="http://download.eclipse.org/eclipse/updates/4.6/"/>
+</location>
 </locations>
 <targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.8.0_31"/>
 <implicitDependencies>
