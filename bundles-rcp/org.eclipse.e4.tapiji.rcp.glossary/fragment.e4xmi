@@ -24,8 +24,8 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Qcba4Ls5EeaWz7ufhSPmeA" featurename="toolBarContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="menu:ToolBarContribution" xmi:id="_RuccYLs5EeaWz7ufhSPmeA" elementId="org.eclipse.e4.tapiji.rcp.glossary.toolbarcontribution.main" accessibilityPhrase="" parentId="org.eclipse.e4.tapiji.translator.toolbar.main">
-      <children xsi:type="menu:HandledToolItem" xmi:id="_XJGuQLs5EeaWz7ufhSPmeA" elementId="org.eclipse.e4.tapiji.rcp.glossary.handledtoolitem.1" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/open_glossary.png" tooltip="Opens a Glossary definition" command="__roC8LpCEeakeOgmvKbJcw"/>
-      <children xsi:type="menu:HandledToolItem" xmi:id="_WF49wLs5EeaWz7ufhSPmeA" elementId="org.eclipse.e4.tapiji.rcp.glossary.handledtoolitem." label="" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/new_glossary.png" tooltip="Creates a new glossary file" command="_3uj6ULs1EeaBepQNk7EkBg"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_XJGuQLs5EeaWz7ufhSPmeA" elementId="org.eclipse.e4.tapiji.rcp.glossary.handledtoolitem.openglossary" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/open_glossary.png" tooltip="Opens a Glossary definition" command="__roC8LpCEeakeOgmvKbJcw"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_WF49wLs5EeaWz7ufhSPmeA" elementId="org.eclipse.e4.tapiji.rcp.glossary.handledtoolitem.newglossary" label="" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/new_glossary.png" tooltip="Creates a new glossary file" command="_3uj6ULs1EeaBepQNk7EkBg"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>
