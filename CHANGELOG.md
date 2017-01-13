@@ -1,16 +1,26 @@
 Change Log
 ==========
-## Version PRE-RELEASE 1.0.1
-_2016-xx-xx_  
- * New: Auto-adjust for text view, if you dont like this feature you can disable it in the settings
+## [Unreleased]
 
+### Added
+ * Auto-adjust for text view, if you dont like this feature you can disable it in the settings
+ * New RAP plugins for compatibility
+ * Jface, Eclipse and swt stubs to the support package, because they are not available in rap
+ 
+### Changed
+ *	Move rap text to rap text plugin
 
-## Version PRE-RELEASE 1.0.0
-_2016-11-18_  
- * Fix: File name ending
- * Fix Save and Save all handler
+## [1.0.0] - 2015-12-03, PRE-RELEASE
+
+### Added
+ * Copy key
+ 
+### Changed 
  * Clean Up: Clean up code
- * Fix: Some minor bugs
- * Fix: Now you can open resources from the toolbar menu
- * New: Copy key
- * Fix: NPE - null pointer exception
+ 
+### Fixed 
+ * File name ending
+ * Save and Save all handler
+ * Some minor bugs
+ * Now you can open resources from the toolbar menu
+ * NPE - null pointer exception
