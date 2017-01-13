@@ -1,17 +1,29 @@
 Change Log
 ==========
 -------------------------------------
-Version PRE-RELEASE 1.0.1 (2016-xx-xx)
+Unreleased
 -------------------------------------
- * New: Auto-adjust for text view, if you dont like this feature you can disable it in the settings
+
+Added
+ * Auto-adjust for text view, if you dont like this feature you can disable it in the settings
+ * RAP babel editor
+ * RAP and RCP bundles
+ * RAP text editor plugin
 
 -------------------------------------
-Version PRE-RELEASE 1.0.0 (2016-11-18)
+1.0.0 - 2016-11-18 PRE-RELEASE
 -------------------------------------
- * Fix: File name ending
- * Fix Save and Save all handler
- * Clean Up: Clean up code
- * Fix: Some minor bugs
- * Fix: Now you can open resources from the toolbar menu
- * New: Copy key
- * Fix: NPE - null pointer exception
+
+Changed
+ * Clean up code
+
+Added
+ * Copy key
+
+Fixed
+ * File name ending
+ * Save and Save all handler
+ * Some minor bugs
+ * Open resources from the toolbar menu
+ * Null pointer exception
+ 
