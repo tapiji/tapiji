@@ -2,15 +2,23 @@ package org.eclipse.jface.text;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.graphics.Point;
 
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 
 public class TextViewer implements ITextViewer, ITextViewerExtension6 {
 
-	public TextViewer(Composite parent, int styles) {
+	private Text text;
+	private IDocument document;
+	private StyledText widget;
 
+	public TextViewer(Composite parent, int styles) {
+		text = new Text(parent, SWT.HORIZONTAL);
+		document = new Document();
+		widget= new StyledText(text);
 	}
 
 	@Override
@@ -21,8 +29,7 @@ public class TextViewer implements ITextViewer, ITextViewerExtension6 {
 
 	@Override
 	public StyledText getTextWidget() {
-		// TODO Auto-generated method stub
-		return null;
+		return widget;
 	}
 
 	@Override
@@ -45,7 +52,7 @@ public class TextViewer implements ITextViewer, ITextViewerExtension6 {
 
 	@Override
 	public void addTextListener(ITextListener listener) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
@@ -57,32 +64,27 @@ public class TextViewer implements ITextViewer, ITextViewerExtension6 {
 
 	@Override
 	public void setDocument(IDocument document) {
-		// TODO Auto-generated method stub
-		
+		this.document = document;
 	}
 
 	@Override
 	public IDocument getDocument() {
-		// TODO Auto-generated method stub
-		return null;
+		return document;
 	}
 
 	@Override
 	public void setEditable(boolean editable) {
-		// TODO Auto-generated method stub
-		
+		text.setEnabled(editable);
 	}
 
 	@Override
 	public boolean isEditable() {
-		// TODO Auto-generated method stub
-		return false;
+		return text.getEnabled();
 	}
 
 	@Override
 	public void setDocument(IDocument document, int modelRangeOffset, int modelRangeLength) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

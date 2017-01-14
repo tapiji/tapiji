@@ -9,7 +9,8 @@ Change Log
  
 ### Changed
  *	Move rap text to rap text plugin
-
+ *	Refactor Styled text and Source Viewer in support package, now compatible with RAP
+ 
 ## [1.0.0] - 2015-12-03, PRE-RELEASE
 
 ### Added
