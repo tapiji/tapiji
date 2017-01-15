@@ -147,6 +147,9 @@ public final class GlossaryView implements Listener, GlossaryContract.View {
         ((GridData) labelScale.getLayoutData()).exclude = !isVisible;
         ((GridData) fuzzyScaler.getLayoutData()).exclude = !isVisible;
 
+        labelScale.setVisible(isVisible);
+        fuzzyScaler.setVisible(isVisible);
+        
         labelScale.getParent().getParent().layout();
         if (treeViewer != null) {
             treeViewer.enableFuzzyMatching(isVisible);
