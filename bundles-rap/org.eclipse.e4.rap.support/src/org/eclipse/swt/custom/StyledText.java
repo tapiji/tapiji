@@ -1,5 +1,6 @@
 package org.eclipse.swt.custom;
 
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.TraverseListener;
@@ -14,8 +15,11 @@ public class StyledText {
 
 	private Text text;
 
-	public StyledText(Text text) {
+	private IDocument document;
+
+	public StyledText(Text text, IDocument document) {
 		this.text = text;
+		this.document = document;
 	}
 
 	public void setLayoutData(GridData textViewStyleData) {
@@ -38,6 +42,10 @@ public class StyledText {
 		return text.getText();
 	}
 
+	public void setText(String content) {
+		document.set(content);
+		text.setText(content);
+	}
 	public int getCaretOffset() {
 		return 0;
 	}

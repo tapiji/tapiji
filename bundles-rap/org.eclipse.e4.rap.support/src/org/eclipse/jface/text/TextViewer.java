@@ -4,21 +4,23 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.graphics.Point;
-
+import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 
 public class TextViewer implements ITextViewer, ITextViewerExtension6 {
 
+	protected static final String TAG = TextViewer.class.getSimpleName();
 	private Text text;
 	private IDocument document;
 	private StyledText widget;
 
 	public TextViewer(Composite parent, int styles) {
 		text = new Text(parent, SWT.HORIZONTAL);
-		document = new Document();
-		widget= new StyledText(text);
+		widget= new StyledText(text, document);
 	}
 
 	@Override
@@ -52,7 +54,16 @@ public class TextViewer implements ITextViewer, ITextViewerExtension6 {
 
 	@Override
 	public void addTextListener(ITextListener listener) {
+			text.addModifyListener(new ModifyListener() {
+				
+				@Override
+				public void modifyText(ModifyEvent event) {
 
+					document.set(((Text)event.getSource()).getText());
+					Log.d(TAG, "TEXT: " + ((Text)event.getSource()).getText());
+						listener.textChanged(null);
+				}
+			});
 		
 	}
 
@@ -64,6 +75,9 @@ public class TextViewer implements ITextViewer, ITextViewerExtension6 {
 
 	@Override
 	public void setDocument(IDocument document) {
+		if(document.get() != null) {
+			text.setText(document.get());
+		}
 		this.document = document;
 	}
 

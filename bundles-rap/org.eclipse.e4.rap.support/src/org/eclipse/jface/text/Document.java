@@ -2,8 +2,11 @@ package org.eclipse.jface.text;
 
 import javax.swing.text.BadLocationException;
 
+import org.eclipse.e4.babel.logger.Log;
+
 public class Document  implements IDocument {
 
+	private static final String TAG = null;
 	private String text;
 	
 	public Document() {
@@ -16,6 +19,7 @@ public class Document  implements IDocument {
 	
 	@Override
 	public void set(String text) {
+		 Log.d(TAG, "set" + text);
 		this.text = text;
 	}
 
