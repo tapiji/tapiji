@@ -20,9 +20,8 @@ public class BasicApplication implements ApplicationConfiguration {
     	
     	application.addStyleSheet("tapiji.business", "theme/business/business.css");
 		Map<String, String> properties = new HashMap<String, String>();
-
 		
-		properties.put(WebClient.PAGE_TITLE, "e4 RAP App");
+		properties.put(WebClient.PAGE_TITLE, "Tapiji Translator");
 		properties.put(WebClient.THEME_ID, "tapiji.business");
         application.addEntryPoint("/rap", new E4EntryPointFactory(E4ApplicationConfig.create(APPLICATION_XMI)), properties);
         application.setOperationMode( OperationMode.SWT_COMPATIBILITY );

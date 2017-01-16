@@ -14,7 +14,7 @@
 
 * {
   color: #4a4a4a;
-  background-color: white;
+  background-color: #000000;
   background-image: none;
   font: 12px Verdana, "Lucida Sans", Arial, Helvetica, sans-serif;
 }
@@ -26,7 +26,7 @@
 Widget-ToolTip {
   padding: 1px 3px 2px 3px;
   background-color: #dae9f7;
-  border: 1px solid #00589f;
+  border: 1px solid #D96428;
   border-radius: 2px 2px 2px 2px;
   font: 12px Verdana, "Lucida Sans", Arial, Helvetica, sans-serif;
   color: #4a4a4a;
@@ -385,8 +385,8 @@ CTabItem {
 }
 
 CTabItem:selected {
-  color: white;
-  background-color: #00589f;
+  color: #4a4a4a;
+  background-color: none;
 }
 
 /* Do not gray out disabled CTabItems, this is SWT behavior */
@@ -475,7 +475,7 @@ Link {
 }
 
 Link-Hyperlink {
-  color: #00589f;
+  color: #D96428;
   text-shadow: none;
   text-decoration: underline;
 }
@@ -515,11 +515,11 @@ List-Item:hover {
 
 List-Item:selected {
   color: white;
-  background-color: #00589f;
+  background-color: #D96428;
   background-image: gradient(
     linear, left top, left bottom,
     from( #0078Bf ),
-    to( #00589f )
+    to( #D96428 )
   );
 }
 
@@ -543,11 +543,11 @@ List-Item:even:hover {
 
 List-Item:even:selected {
   color: white;
-  background-color: #00589f;
+  background-color: #D96428;
   background-image: gradient(
     linear, left top, left bottom,
     from( #0078Bf ),
-    to( #00589f )
+    to( #D96428 )
   );
 }
 
@@ -568,7 +568,7 @@ Menu {
   padding: 2px 0px;
   opacity: 1;
   animation: none;
-  color: #0059a5;
+  color: #D96428;
   background-color: white;
   border: 1px #0059a5;
   border-radius: 2px;
@@ -589,12 +589,12 @@ MenuItem[SEPARATOR] {
 }
 
 MenuItem:hover {
-  background-color: #dae9f7;
+  background-color: #fee5de;
   color: #4a4a4a;
 }
 
 MenuItem:pressed {
-  background-color: #00589f;
+  background-color: #fa7c59 ;
   color: white;
 }
 
@@ -621,7 +621,7 @@ ProgressBar {
 }
 
 ProgressBar-Indicator {
-  background-color: #00589f;
+  background-color: #D96428;
   background-image: none;
   border: none;
   opacity: 1;
@@ -650,7 +650,7 @@ Shell {
 Shell[TITLE], Shell[BORDER] {
   box-shadow: 5px 5px 3px rgba( 0, 0, 0, 0.5 );
   background-color: white;
-  border: 2px solid #005092;
+  border: 2px solid #D96428;
   border-radius: 5px 5px 0px 0px;
   padding: 5px;
 }
@@ -679,7 +679,7 @@ Shell-Titlebar {
   background-color: #0080c0;
   background-gradient-color: #0080c0;
   color: white;
-  background-image: gradient( linear, left top, left bottom, from( #005fac ), to( #005092 ) );
+  background-image: gradient( linear, left top, left bottom, from( #D96428 ), to( #F98452 ) );
   padding: 2px 5px 2px;
   margin: 0px;
   height: 22px;
@@ -694,7 +694,7 @@ Shell-Titlebar:inactive {
   background-gradient-color: #7996a5;
   color: #aaaaaa;
   background-image: gradient( linear, left top, left bottom,
-                              from( #595959 ), to( #4b4b4b ) );
+                              from( #D96428 ), to( #F98452 ) );
 }
 
 /* Shell buttons */
@@ -901,8 +901,8 @@ TabItem {
 
 TabItem:selected {
   background-color: white;
-  border-top-color: #00589f;
-  border-bottom-color: #00589f;
+  border-top-color: #D96428;
+  border-bottom-color: #D96428;
   background-image: none;
   padding : 2px 8px 3px 7px;
 }
@@ -949,7 +949,7 @@ Table-RowOverlay:hover {
 
 Table-RowOverlay:selected {
   color: white;
-  background-color: #00589f;
+  background-color: #D96428;
 }
 
 Table-RowOverlay:selected:unfocused {
@@ -962,7 +962,7 @@ Table-RowOverlay:linesvisible:even:hover {
 }
 
 Table-RowOverlay:linesvisible:even:selected {
-  background-color: #00589f;
+  background-color: #D96428;
   color: white;
 }
 
@@ -1052,7 +1052,7 @@ Table-Checkbox:checked:grayed:hover {
 /* Text default theme */
 
 Text {
-  border: none;
+  border: 1px solid #a4a4a4;
   padding: 2px 3px;
   color: #464a4e;
   background-color: #fcfcfc;
@@ -1214,7 +1214,7 @@ Tree-RowOverlay:hover {
 }
 
 Tree-RowOverlay:selected {
-  background-color: #00589f;
+  background-color: #D96428;
   color: #ffffff;
 }
 
@@ -1228,7 +1228,7 @@ Tree-RowOverlay:linesvisible:even:hover {
 }
 
 Tree-RowOverlay:linesvisible:even:selected {
-  background-color: #00589f;
+  background-color: #D96428;
   color: white;
 }
 
@@ -1403,7 +1403,7 @@ Scale {
 }
 
 Scale-Thumb {
-  background-color: #00589f;
+  background-color: #D96428;
   border: 1px solid #a4a4a4;
   border-radius: 2px 2px 2px 2px;
 }
@@ -2443,7 +2443,7 @@ Label.standaloneView {
 /* Composite */
 
 Composite.tabActive {
-  border: 1px solid #00589f;
+  border: 1px solid #D96428;
   border-radius: 0px 7px 0px 0px;
 }
 
@@ -2495,18 +2495,18 @@ ToolItem-DropDownIcon.header-toolbar:hover {
 }
 
 Menu.header-toolbar {
-  color: #3b8fc2;
+  color: #F98452;
   background-color: white;
   border: 1px solid #005499;
   border-radius: 0px 0px 2px 2px;
 }
 
 MenuItem.header-toolbar {
-  color: #004277;
+  color: #D96428;
 }
 
 MenuItem.header-toolbar:hover {
-  color: #0369bc;
+  color: #F98452;
   background-color: transparent;
 }
 
@@ -2514,14 +2514,14 @@ MenuItem.header-toolbar:hover {
 /* Header overflow toolbar */
 
 ToolItem.header-overflow {
-  color: #004277;
+  color: #D96428;
   border: none;
   padding: 0px 25px 0px 0px;
 }
 
 ToolItem.header-overflow:hover {
   background-color: transparent;
-  color: #0369bc;
+  color: #D96428;
   border: none;
 }
 
@@ -2542,11 +2542,11 @@ Menu.header-overflow {
 }
 
 MenuItem.header-overflow {
-  color: #004277;
+  color: #D96428;
 }
 
 MenuItem.header-overflow:hover {
-  color: #0369bc;
+  color: #F98452;
   background-color: transparent;
 }
 
@@ -2555,7 +2555,7 @@ MenuItem.header-overflow:hover {
 ToolBar.menuBar {
   background-color: transparent;
   padding: 0px;
-  color: #0059a5;
+  color: #D96428;
   spacing: 25px;
 }
 
@@ -2563,7 +2563,7 @@ ToolItem.menuBar {
   background-color: transparent;
   background-image: none;
   border: none;
-  color: #0059a5;
+  color: #D96428;
   padding: 0px 10px 0px 10px;
   spacing: 5px;
 }
@@ -2577,7 +2577,7 @@ ToolItem.menuBar:hover {
   );
   border: 1px solid #cccccc;
   border-radius: 2px 2px 0px 0px;
-  color: #0059a5;
+  color: #D96428;
   padding: 0px 10px 0px 10px;
 }
 
@@ -2591,18 +2591,18 @@ ToolItem-DropDownIcon.menuBar:hover {
 }
 
 Menu.menuBar {
-  color: #0059a5;
+  color: #D96428;
   background-color: white;
   border: 1px solid #cccccc;
   border-radius: 0px 0px 2px 2px;
 }
 
 MenuItem.menuBar {
-  color: #004277;
+  color: #D96428;
 }
 
 MenuItem.menuBar:hover {
-  color: #0369bc;
+  color: #F98452;
   background-color: transparent;
 }
 
@@ -2620,7 +2620,7 @@ ToolItem.viewToolbar {
 
 ToolItem:selected.viewToolbar {
   padding: 0px;
-  border: 1px solid #0059a5;
+  border: 1px solid #D96428;
 }
 
 ToolItem-DropDownIcon.viewToolbar {
@@ -2687,6 +2687,6 @@ FileUpload-FocusIndicator {
 }
 
 SystemMessage-DisplayOverlay {
-  background-color: rgba( 128, 128, 128, 0.3 );
+  background-color: rgba( 100, 100, 128, 0.3 );
   background-image: none;
 }
