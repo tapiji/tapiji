@@ -6,7 +6,7 @@
 <booleanAttribute key="automaticValidate" value="true"/>
 <stringAttribute key="bootstrap" value=""/>
 <stringAttribute key="checked" value="[NONE]"/>
-<booleanAttribute key="clearConfig" value="false"/>
+<booleanAttribute key="clearConfig" value="true"/>
 <booleanAttribute key="clearws" value="true"/>
 <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/org.eclipselabs.e4.tapiji.rap"/>
 <booleanAttribute key="default" value="true"/>
@@ -21,7 +21,7 @@
 <stringAttribute key="org.eclipse.rap.launch.browserMode" value="EXTERNAL"/>
 <stringAttribute key="org.eclipse.rap.launch.contextpath" value="/tapiji"/>
 <stringAttribute key="org.eclipse.rap.launch.dataLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.rap.tools.launch/org.eclipselabs.e4.tapiji.rap"/>
-<booleanAttribute key="org.eclipse.rap.launch.developmentMode" value="true"/>
+<booleanAttribute key="org.eclipse.rap.launch.developmentMode" value="false"/>
 <booleanAttribute key="org.eclipse.rap.launch.openBrowser" value="true"/>
 <intAttribute key="org.eclipse.rap.launch.port" value="10080"/>
 <stringAttribute key="org.eclipse.rap.launch.servletPath" value="/rap"/>
@@ -37,5 +37,5 @@
 <booleanAttribute key="tracing" value="false"/>
 <booleanAttribute key="useCustomFeatures" value="false"/>
 <booleanAttribute key="useDefaultConfigArea" value="true"/>
-<stringAttribute key="workspace_bundles" value="org.eclipse.e4.babel.core@default:default,org.eclipse.e4.babel.editor.model@default:default,org.eclipse.e4.babel.editor@default:default,org.eclipse.e4.babel.logger@default:default,org.eclipse.e4.babel.rap.editor.text@default:default,org.eclipse.e4.babel.rap.editor@default:default,org.eclipse.e4.babel.resource@default:default,org.eclipse.e4.rap.support@default:default,org.eclipse.e4.tapiji.glossary.core.api@default:default,org.eclipse.e4.tapiji.glossary.core@default:default,org.eclipse.e4.tapiji.glossary.model@default:default,org.eclipse.e4.tapiji.glossary@default:default,org.eclipse.e4.tapiji.logger@default:default,org.eclipse.e4.tapiji.rap.glossary@default:default,org.eclipse.e4.tapiji.rap.utils@default:default,org.eclipse.e4.tapiji.rap@default:default,org.eclipse.e4.tapiji.resource@default:default,org.eclipse.e4.tapiji.translator.i18n@default:default,org.eclipse.e4.tapiji.translator@default:default,org.eclipse.e4.tapiji.utils@default:default"/>
+<stringAttribute key="workspace_bundles" value="org.eclipse.e4.babel.core@default:default,org.eclipse.e4.babel.editor*1.0.0@default:default,org.eclipse.e4.babel.editor.model@default:default,org.eclipse.e4.babel.logger@default:default,org.eclipse.e4.babel.rap.editor.text@default:default,org.eclipse.e4.babel.rap.editor@default:default,org.eclipse.e4.babel.resource@default:default,org.eclipse.e4.rap.support@default:default,org.eclipse.e4.tapiji.glossary.core.api@default:default,org.eclipse.e4.tapiji.glossary.core@default:default,org.eclipse.e4.tapiji.glossary.model@default:default,org.eclipse.e4.tapiji.glossary@default:default,org.eclipse.e4.tapiji.logger@default:default,org.eclipse.e4.tapiji.rap.glossary@default:default,org.eclipse.e4.tapiji.rap.utils@default:default,org.eclipse.e4.tapiji.rap@default:default,org.eclipse.e4.tapiji.resource@default:default,org.eclipse.e4.tapiji.translator.i18n@default:default,org.eclipse.e4.tapiji.translator@default:default,org.eclipse.e4.tapiji.utils@default:default"/>
 </launchConfiguration>
