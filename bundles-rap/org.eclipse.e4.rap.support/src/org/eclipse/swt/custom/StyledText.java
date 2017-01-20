@@ -81,4 +81,8 @@ public class StyledText {
 	public void setBackground(Color color) {
 		text.setBackground(color);
 	}
+
+	public void setOrientation(int orientation) {
+		text.setOrientation(orientation);
+	}
 }
