@@ -38,7 +38,7 @@
          </property>
          <property
                name="applicationCSS"
-               value="platform:/plugin/org.eclipse.e4.tapiji.rcp/css/default.css">
+               value="platform:/plugin/org.eclipse.e4.tapiji.rcp.product/css/default.css">
          </property>
          <property
                name="startupProgressRect"

@@ -11,8 +11,6 @@
       <children xsi:type="menu:ToolBar" xmi:id="_TwsGELInEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.toolbar.main"/>
     </trimBars>
   </children>
-  <handlers xmi:id="_34ud8K83Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.handler.exit" contributionURI="bundleclass://org.eclipse.e4.tapiji.translator/org.eclipse.e4.tapiji.translator.ExitHandler" command="_16108K83Eea7Br2sj4MS9g"/>
-  <commands xmi:id="_16108K83Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.command.exit" commandName="Exit"/>
   <addons xmi:id="_Lvp3Aa82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_Lvp3Aq82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_Lvp3A682Eea7Br2sj4MS9g" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

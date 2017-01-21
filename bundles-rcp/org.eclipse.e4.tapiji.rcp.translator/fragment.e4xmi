@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_xUG-kOAEEeaKjeU3dF0ytQ">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_IznV8OAFEeaKjeU3dF0ytQ" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="menu:MenuContribution" xmi:id="_KQrw4OAFEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.tapiji.rcp.translator.menucontribution.menu" positionInParent="?befor=org.eclipse.e4.tapiji.glossary.menu.window" parentId="org.eclipse.e4.tapiji.menu.translator">
+      <children xsi:type="menu:Menu" xmi:id="_UtdRwOAFEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.tapiji.rcp.translator.menu.file" label="File" mnemonics="F">
+        <children xsi:type="menu:MenuSeparator" xmi:id="_GPn5wOAGEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.tapiji.rcp.translator.menuseparator.save"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_dgbjQOAFEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.tapiji.rcp.translator.handledmenuitem.save" label="Save" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/save.png" tooltip="Save" command="_WFPAMOAJEeaKjeU3dF0ytQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_AU_HUOAGEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.tapiji.rcp.translator.handledmenuitem.saveall" label="Save All" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/save_all.png" tooltip="Save All" command="_WVaKMOAJEeaKjeU3dF0ytQ"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_Kg2o8OAHEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.tapiji.rcp.translator.menuseparator.exit"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_GybE0OAGEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.tapiji.rcp.translator.handledmenuitem.exit" label="Exit" tooltip="Exit" command="_UrNSMOAJEeaKjeU3dF0ytQ"/>
+      </children>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Nrxa4OAJEeaKjeU3dF0ytQ" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="commands:Command" xmi:id="_UrNSMOAJEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.tapiji.rcp.translator.command.exit" commandName="Exit"/>
+    <elements xsi:type="commands:Command" xmi:id="_WFPAMOAJEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.tapiji.rcp.translator.command.save" commandName="Save"/>
+    <elements xsi:type="commands:Command" xmi:id="_WVaKMOAJEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.tapiji.rcp.translator.command.saveall" commandName="Save All"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_N9dn0OAJEeaKjeU3dF0ytQ" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="commands:Handler" xmi:id="_ataFMOAJEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.tapiji.rcp.translator.handler.exit" contributionURI="bundleclass://org.eclipse.e4.tapiji.rcp.translator/org.eclipse.e4.tapiji.rcp.translator.ui.handler.window.ExitHandler" command="_UrNSMOAJEeaKjeU3dF0ytQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_bONsMOAJEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.tapiji.rcp.translator.handler.save" contributionURI="bundleclass://org.eclipse.e4.tapiji.rcp.translator/org.eclipse.e4.tapiji.rcp.translator.ui.handler.window.SaveHandler" command="_WFPAMOAJEeaKjeU3dF0ytQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_bdUfMOAJEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.tapiji.rcp.translator.handler.saveall" contributionURI="bundleclass://org.eclipse.e4.tapiji.rcp.translator/org.eclipse.e4.tapiji.rcp.translator.ui.handler.window.SaveAllHandler" command="_WVaKMOAJEeaKjeU3dF0ytQ"/>
+  </fragments>
+</fragment:ModelFragments>

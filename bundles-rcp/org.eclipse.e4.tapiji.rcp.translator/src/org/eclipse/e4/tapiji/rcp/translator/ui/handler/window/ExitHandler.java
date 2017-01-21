@@ -1,8 +1,10 @@
-package org.eclipse.e4.tapiji.glossary.ui.window;
+package org.eclipse.e4.tapiji.rcp.translator.ui.handler.window;
 
 
 import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.workbench.IWorkbench;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -40,5 +42,10 @@ public class ExitHandler {
 
     public boolean showDialog(final Shell shell, final String title, final String message) {
         return MessageDialog.openConfirm(shell, title, message);
+    }
+    
+    @CanExecute
+    public boolean canExecute(@Optional final EPartService partService) {
+    	return true;
     }
 }

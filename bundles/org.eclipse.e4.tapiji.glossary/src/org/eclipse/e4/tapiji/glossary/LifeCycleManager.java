@@ -8,7 +8,6 @@ import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.tapiji.glossary.ui.window.AboutHandler;
-import org.eclipse.e4.tapiji.glossary.ui.window.ExitHandler;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.resource.TapijiResourceConstants;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -99,7 +98,7 @@ public final class LifeCycleManager {
 
                         @Override
                         public void handleEvent(final Event event) {
-                            executeCommand(commandService, handlerService, COMMAND_EXIT, new ExitHandler());
+                            //executeCommand(commandService, handlerService, COMMAND_EXIT, new ExitHandler());
                         }
                     });
                     menu.setVisible(true);

@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.glossary.ui.window;
+package org.eclipse.e4.tapiji.rcp.translator.ui.handler.window;
 
 
 import org.eclipse.e4.core.di.annotations.CanExecute;
