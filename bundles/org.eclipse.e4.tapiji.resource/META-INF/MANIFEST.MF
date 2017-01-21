@@ -6,12 +6,10 @@ Bundle-Version: 1.0.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.e4.tapiji.resource
 Service-Component: OSGI-INF/resourceprovider.xml
-Require-Bundle: org.eclipse.osgi,
- org.eclipse.equinox.registry
+Require-Bundle: org.eclipse.osgi
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.jface,
+Import-Package: org.eclipse.core.runtime,
  org.eclipse.jface.resource,
- org.eclipse.swt,
  org.eclipse.swt.graphics
 Bundle-Vendor: INSO
 

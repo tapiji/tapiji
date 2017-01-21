@@ -35,7 +35,6 @@ Christian Behon
       </win>
    </launcher>
 
-
    <vm>
    </vm>
 
@@ -49,8 +48,6 @@ Christian Behon
    <features>
       <feature id="org.eclipse.e4.rcp"/>
       <feature id="org.eclipse.equinox.p2.core.feature"/>
-      <feature id="org.eclipse.babel.tapiji.feature"/>
-      <feature id="org.eclipselabs.e4.tapiji.translator.feature" version="1.0.0"/>
       <feature id="org.eclipse.emf.ecore"/>
       <feature id="org.eclipse.ecf.filetransfer.httpclient4.feature"/>
       <feature id="org.eclipse.ecf.core.ssl.feature"/>
