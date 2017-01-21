@@ -5,12 +5,25 @@
       <children xsi:type="advanced:Perspective" xmi:id="_5YRdULIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.perspective.main" label="TapiJI Translator">
         <children xsi:type="basic:PartSashContainer" xmi:id="__P9CYLIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.partsashcontainer.main"/>
       </children>
+      <children xsi:type="advanced:Perspective" xmi:id="_46xPIOAeEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.perspective.git" label="Git">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_bEBW8OAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.partsashcontainer.git"/>
+      </children>
     </children>
-    <mainMenu xmi:id="_twgtQK82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.menu.translator"/>
+    <mainMenu xmi:id="_twgtQK82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.menu.translator">
+      <children xsi:type="menu:Menu" xmi:id="_LzucsOAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.menu.perspective" label="Perspective">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_NlTIAOAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.handledmenuitem.perpectiveswitch" label="PerpectiveSwitch" tooltip="sdadasd" command="_Pux9AOAgEeahm60FyqfB4g"/>
+      </children>
+    </mainMenu>
     <trimBars xmi:id="_RHmj8LInEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.trimbar.main">
       <children xsi:type="menu:ToolBar" xmi:id="_TwsGELInEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.toolbar.main"/>
+      <children xsi:type="menu:ToolBar" xmi:id="_l-nm0OAhEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.toolbar.perspectiveswitcher">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_pfpdkOAhEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.handledtoolitem.git" label="GIT"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_qfpiAOAhEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.handledtoolitem.main" label="MAIN"/>
+      </children>
     </trimBars>
   </children>
+  <handlers xmi:id="_SaUWMOAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.handler.switch" contributionURI="bundleclass://org.eclipse.e4.tapiji.translator/org.eclipse.e4.tapiji.translator.ui.handler.window.PerpectiveSwitchHandler" command="_Pux9AOAgEeahm60FyqfB4g"/>
+  <commands xmi:id="_Pux9AOAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.command.perspectiveswitch" commandName="Perspective Switch"/>
   <addons xmi:id="_Lvp3Aa82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_Lvp3Aq82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_Lvp3A682Eea7Br2sj4MS9g" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
