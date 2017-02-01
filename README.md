@@ -31,10 +31,10 @@ The TapiJI Translator represents a stand-alone application for translating progr
 ### Downloads
 
 #### Download 1.0.0-Snapshot Pre Release
-**Linux:**
+**Linux:** 
 [Tapiji Translator 32Bit](https://github.com/tapiji/tapiji/releases/download/1.0.0-SNAPSHOT/tapiji_translator-linux.gtk.x86.zip)  
 [Tapiji Translator 64Bit](https://github.com/tapiji/tapiji/releases/download/1.0.0-SNAPSHOT/tapiji_translator-linux.gtk.x86_64.zip)  
  
-**Windows:**
+**Windows:** 
 [Tapiji Translator 32Bit](https://github.com/tapiji/tapiji/releases/download/1.0.0-SNAPSHOT/tapiji_translator-win32.win32.x86.zip)  
 [Tapiji Translator 64Bit](https://github.com/tapiji/tapiji/releases/download/1.0.0-SNAPSHOT/tapiji_translator-win32.win32.x86_64.zip)  
