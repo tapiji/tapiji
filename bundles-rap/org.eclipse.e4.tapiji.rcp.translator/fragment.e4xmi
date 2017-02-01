@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_qBdHcOijEeafcY2IoVsiRA">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_sxKO8OijEeafcY2IoVsiRA" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="menu:MenuContribution" xmi:id="_vhRmIOijEeafcY2IoVsiRA" elementId="org.eclipse.e4.tapiji.rap.translator.menucontribution.menu" positionInParent="?befor=org.eclipse.e4.tapiji.glossary.menu.window" parentId="org.eclipse.e4.tapiji.menu.translator">
+      <children xsi:type="menu:Menu" xmi:id="_ze7ugOijEeafcY2IoVsiRA" elementId="org.eclipse.e4.tapiji.rap.translator.menu.file" label="File" mnemonics="F">
+        <children xsi:type="menu:MenuSeparator" xmi:id="_D-0BUOikEeafcY2IoVsiRA" elementId="org.eclipse.e4.tapiji.rap.translator.menuseparator.openresourcebundle"/>
+      </children>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>
