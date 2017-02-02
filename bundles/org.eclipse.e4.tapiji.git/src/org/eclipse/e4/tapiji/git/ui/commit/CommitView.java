@@ -1,18 +1,18 @@
 package org.eclipse.e4.tapiji.git.ui.commit;
 
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+
 public class CommitView implements CommitContract.View {
 
-
-	@Inject
-	CommitPresenter presenter;
+    @Inject
+    CommitPresenter presenter;
 
     @PostConstruct
     public void createPartControl(final Composite parent) {
