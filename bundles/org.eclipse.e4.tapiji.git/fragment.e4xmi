@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_Q6GNIOmCEear1K70oDQV4Q">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Rqg9cOmCEear1K70oDQV4Q" featurename="toolBarContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="menu:ToolBarContribution" xmi:id="_oYzTQOmCEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.toolbarcontribution.0" parentId="org.eclipse.e4.tapiji.translator.toolbar.perspectiveswitcher">
+      <children xsi:type="menu:HandledToolItem" xmi:id="_puGSQOmCEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.git" label="GIT" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/view_git.png" command="_zniVMOmFEear1K70oDQV4Q">
+        <parameters xmi:id="_JIqe4OmHEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.parameter.perspective" name="org.eclipse.e4.tapiji.git.commandparameter.perspective" value="org.eclipse.e4.tapiji.git.perspective.git"/>
+      </children>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_nAG6oOmFEear1K70oDQV4Q" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="commands:Handler" xmi:id="_noskoOmFEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.handler.perspective.git" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.window.PerpectiveSwitchHandler" command="_zniVMOmFEear1K70oDQV4Q"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_vAgfsOmFEear1K70oDQV4Q" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="commands:Command" xmi:id="_zniVMOmFEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.command.perspective.git" commandName="Perspective Git">
+      <parameters xmi:id="_HMJu4OmHEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.commandparameter.perspective" name="perspective" optional="false"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8h59QOmHEear1K70oDQV4Q" featurename="children" parentElementId="org.eclipse.e4.tapiji.translator.perspectivestack.main">
+    <elements xsi:type="advanced:Perspective" xmi:id="_TPZo4OmIEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.perspective.git" label="TapiJI Git">
+      <children xsi:type="basic:PartSashContainer" xmi:id="_cFEpEOmIEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.partsashcontainer.git" horizontal="true">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_WK43sOmKEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.partsashcontainer.1" horizontal="true">
+          <children xsi:type="basic:Part" xmi:id="_pX7e4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.4" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.repository.RepositoryView"/>
+          <children xsi:type="basic:Part" xmi:id="_YeD0MOmKEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.1" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.filediff.FileDiffView"/>
+          <children xsi:type="basic:PartSashContainer" xmi:id="_jQUncOmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.partsashcontainer.2">
+            <children xsi:type="basic:Part" xmi:id="_nLFz4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.unstaged.UnstagedView"/>
+            <children xsi:type="basic:Part" xmi:id="_nwPvYOmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.2" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.staged.StagedView"/>
+            <children xsi:type="basic:Part" xmi:id="_oVtM4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.3" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.commit.CommitView"/>
+          </children>
+        </children>
+      </children>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>

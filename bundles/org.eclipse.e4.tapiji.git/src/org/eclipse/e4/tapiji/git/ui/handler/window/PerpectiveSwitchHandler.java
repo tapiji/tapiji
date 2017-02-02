@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.translator.ui.handler.window;
+package org.eclipse.e4.tapiji.git.ui.handler.window;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
 public class PerpectiveSwitchHandler {
 
-	private static final String PARAMETER_PERSPECTIVE_ID = "org.eclipse.e4.tapiji.translator.commandparameter.perspective";
+	private static final String PARAMETER_PERSPECTIVE_ID = "org.eclipse.e4.tapiji.git.commandparameter.perspective";
 
 	@Execute
 	public void switchPerspective(MPerspective activePerspective, MApplication application, EPartService partService, EModelService modelService,  @Named(PARAMETER_PERSPECTIVE_ID) String perspectiveId) {

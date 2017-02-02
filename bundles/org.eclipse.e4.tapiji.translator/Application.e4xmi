@@ -5,9 +5,6 @@
       <children xsi:type="advanced:Perspective" xmi:id="_5YRdULIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.perspective.main" label="TapiJI Translator">
         <children xsi:type="basic:PartSashContainer" xmi:id="__P9CYLIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.partsashcontainer.main"/>
       </children>
-      <children xsi:type="advanced:Perspective" xmi:id="_46xPIOAeEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.perspective.git" label="Git">
-        <children xsi:type="basic:PartSashContainer" xmi:id="_bEBW8OAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.partsashcontainer.git"/>
-      </children>
     </children>
     <mainMenu xmi:id="_twgtQK82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.menu.translator">
       <children xsi:type="menu:Menu" xmi:id="_LzucsOAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.menu.perspective" label="Perspective">
@@ -16,14 +13,19 @@
     </mainMenu>
     <trimBars xmi:id="_RHmj8LInEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.trimbar.main">
       <children xsi:type="menu:ToolBar" xmi:id="_TwsGELInEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.toolbar.main"/>
+    </trimBars>
+    <trimBars xmi:id="_l35EcOl8Eear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.translator.trimbar.perspective" side="Bottom">
       <children xsi:type="menu:ToolBar" xmi:id="_l-nm0OAhEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.toolbar.perspectiveswitcher">
-        <children xsi:type="menu:HandledToolItem" xmi:id="_pfpdkOAhEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.handledtoolitem.git" label="GIT"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_qfpiAOAhEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.handledtoolitem.main" label="MAIN"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_qfpiAOAhEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.handledtoolitem.main" label="Resource Bundle Editor" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/view_resource_editor.png" command="_Pux9AOAgEeahm60FyqfB4g">
+          <parameters xmi:id="_cJcIgOmEEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.translator.parameter.resource.editor" name="org.eclipse.e4.tapiji.translator.commandparameter.perspective" value="org.eclipse.e4.tapiji.translator.perspective.main"/>
+        </children>
       </children>
     </trimBars>
   </children>
   <handlers xmi:id="_SaUWMOAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.handler.switch" contributionURI="bundleclass://org.eclipse.e4.tapiji.translator/org.eclipse.e4.tapiji.translator.ui.handler.window.PerpectiveSwitchHandler" command="_Pux9AOAgEeahm60FyqfB4g"/>
-  <commands xmi:id="_Pux9AOAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.command.perspectiveswitch" commandName="Perspective Switch"/>
+  <commands xmi:id="_Pux9AOAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.command.perspectiveswitch" commandName="Perspective Switch">
+    <parameters xmi:id="_VPnxAOmEEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.translator.commandparameter.perspective" name="perspective"/>
+  </commands>
   <addons xmi:id="_Lvp3Aa82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_Lvp3Aq82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_Lvp3A682Eea7Br2sj4MS9g" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
