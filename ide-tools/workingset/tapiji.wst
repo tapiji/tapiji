@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workingSets>
-<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1432387700114_7" label="Babel" name="Babel">
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1486065364538_5" label="babel" name="babel">
 <item elementID="=org.eclipse.e4.babel.editor.text" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item elementID="=org.eclipse.babel.editor" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item elementID="=org.eclipse.e4.babel.editor" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.e4.babel.resource" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.babel.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.babel.logger" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.babel.editor.model" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.babel.editor" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSet>
-<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1429560058992_5" label="Common" name="Common">
-<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipselabs.e4.tapiji.logger" type="4"/>
-<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipselabs.e4.tapiji.utils" type="4"/>
-<item elementID="=org.eclipselabs.e4.tapiji.resource" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1486065601203_13" label="babel-rcp" name="babel-rcp">
+<item elementID="=org.eclipse.e4.babel.rcp.editor" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSet>
-<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1429560144120_9" label="Rcp" name="Rcp">
-<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipselabs.e4.tapiji.translator.rcp.target" type="4"/>
-<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipselabs.e4.tapiji.translator.rcp.feature" type="4"/>
-<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipselabs.e4.tapiji.translator.rcp.product" type="4"/>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1486065417298_6" label="tapiji" name="tapiji">
+<item elementID="=org.eclipse.e4.tapiji.logger" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.tapiji.resource" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.tapiji.utils" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.tapiji.translator.i18n" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.tapiji.translator" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSet>
-<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1429561226941_6" label="Test" name="Test">
-<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipselabs.e4.tapiji.translator.model.test" type="4"/>
-<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipselabs.e4.tapiji.translator.core.test" type="4"/>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1486065481410_9" label="tapiji-git" name="tapiji-git">
+<item elementID="=org.eclipse.e4.tapiji.git" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.tapiji.git.core.api" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.tapiji.git.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.tapiji.git.model" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSet>
-<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1429560128168_8" label="Translator" name="Translator">
-<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipselabs.e4.tapiji.translator.core" type="4"/>
-<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipselabs.e4.tapiji.translator.model" type="4"/>
-<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipselabs.e4.tapiji.translator" type="4"/>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1486065346937_4" label="tapiji-glossary" name="tapiji-glossary">
+<item elementID="=org.eclipse.e4.tapiji.glossary.model" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.tapiji.glossary.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.tapiji.glossary.core.api" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.tapiji.glossary" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSet>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1486065559018_11" label="tapiji-rcp" name="tapiji-rcp">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipse.e4.tapiji.rcp.product" type="4"/>
+<item elementID="=org.eclipse.e4.tapiji.rcp.utils" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipse.e4.tapiji.rcp.target" type="4"/>
+<item elementID="=org.eclipse.e4.tapiji.rcp.translator" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.tapiji.rcp.glossary" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSet>
 </workingSets>
