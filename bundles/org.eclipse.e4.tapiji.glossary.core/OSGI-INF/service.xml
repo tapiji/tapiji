@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="Tapiji Glossary Service">
-<implementation class="org.eclipse.e4.tapiji.glossary.core.internal.GlossaryManagerContextFunction" />
+<implementation class="org.eclipse.e4.tapiji.glossary.core.internal.GlossaryServiceContextFactory" />
    <property
    		name="service.context.key"
    		type="String"

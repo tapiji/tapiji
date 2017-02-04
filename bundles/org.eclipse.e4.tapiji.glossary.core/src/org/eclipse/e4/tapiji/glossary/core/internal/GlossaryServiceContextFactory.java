@@ -19,11 +19,11 @@ import org.eclipse.e4.tapiji.glossary.core.api.IGlossaryService;
 import org.eclipse.e4.ui.model.application.MApplication;
 
 
-public final class GlossaryManagerContextFunction extends ContextFunction {
+public final class GlossaryServiceContextFactory extends ContextFunction {
 
     @Override
     public Object compute(final IEclipseContext context, final String contextKey) {
-        final IGlossaryService glossaryManager = ContextInjectionFactory.make(GlossaryManager.class, context);
+        final IGlossaryService glossaryManager = ContextInjectionFactory.make(GlossaryService.class, context);
         final MApplication application = context.get(MApplication.class);
         final IEclipseContext applicationContext = application.getContext();
         applicationContext.set(IGlossaryService.class, glossaryManager);

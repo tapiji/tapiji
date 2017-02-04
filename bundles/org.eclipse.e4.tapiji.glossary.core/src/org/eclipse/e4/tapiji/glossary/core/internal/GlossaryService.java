@@ -35,9 +35,9 @@ import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.tapiji.utils.FileUtils;
 
 
-public final class GlossaryManager implements IGlossaryService {
+public final class GlossaryService implements IGlossaryService {
 
-    private static final String TAG = GlossaryManager.class.getSimpleName();
+    private static final String TAG = GlossaryService.class.getSimpleName();
 
     @Inject
     private Glossary glossary;
