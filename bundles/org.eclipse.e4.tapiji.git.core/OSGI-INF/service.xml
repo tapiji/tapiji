@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="Tapiji Git Service">
+<implementation class="org.eclipse.e4.tapiji.git.core.internal.GitServiceContextFactory" />
+   <property
+   		name="service.context.key"
+   		type="String"
+   		value="org.eclipse.e4.tapiji.git.core.api.IGitService"/>
+   <service>
+      <provide interface="org.eclipse.e4.core.contexts.IContextFunction"/>
+   </service>
+</scr:component>
