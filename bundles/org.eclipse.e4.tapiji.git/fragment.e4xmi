@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_Q6GNIOmCEear1K70oDQV4Q">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_Q6GNIOmCEear1K70oDQV4Q">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Rqg9cOmCEear1K70oDQV4Q" featurename="toolBarContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="menu:ToolBarContribution" xmi:id="_oYzTQOmCEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.toolbarcontribution.0" parentId="org.eclipse.e4.tapiji.translator.toolbar.perspectiveswitcher">
       <children xsi:type="menu:HandledToolItem" xmi:id="_puGSQOmCEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.git" label="GIT" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/view_git.png" command="_zniVMOmFEear1K70oDQV4Q">
@@ -9,11 +9,17 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_nAG6oOmFEear1K70oDQV4Q" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="commands:Handler" xmi:id="_noskoOmFEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.handler.perspective.git" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.window.PerpectiveSwitchHandler" command="_zniVMOmFEear1K70oDQV4Q"/>
+    <elements xsi:type="commands:Handler" xmi:id="_ub4uMOrOEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handler.push" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.PushHandler" command="_tNwuMOrOEeah_qW_gJKbyQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_c3i4QOrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handler.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.PullHandler" command="_emaN0OrPEeah_qW_gJKbyQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_HkUD0OrSEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handler.1" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.window.CloneRepoHandler" command="_F0x_4OrSEeah_qW_gJKbyQ"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_vAgfsOmFEear1K70oDQV4Q" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="commands:Command" xmi:id="_zniVMOmFEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.command.perspective.git" commandName="Perspective Git">
       <parameters xmi:id="_HMJu4OmHEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.commandparameter.perspective" name="perspective" optional="false"/>
     </elements>
+    <elements xsi:type="commands:Command" xmi:id="_tNwuMOrOEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.command.push" commandName="Push"/>
+    <elements xsi:type="commands:Command" xmi:id="_emaN0OrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.command.pull" commandName="Pull"/>
+    <elements xsi:type="commands:Command" xmi:id="_F0x_4OrSEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.command.clonerepo" commandName="Clone Repo"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8h59QOmHEear1K70oDQV4Q" featurename="children" parentElementId="org.eclipse.e4.tapiji.translator.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_TPZo4OmIEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.perspective.git" label="TapiJI Git">
@@ -27,6 +33,25 @@
             <children xsi:type="basic:Part" xmi:id="_oVtM4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.3" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.commit.CommitView"/>
           </children>
         </children>
+      </children>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_OaGMsOrOEeah_qW_gJKbyQ" featurename="trimContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="menu:TrimContribution" xmi:id="_QCNaAOrOEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.trimcontribution.toolbar" parentId="org.eclipse.e4.tapiji.translator.trimbar.main" positionInParent="?before=org.eclipse.e4.babel.editor.toolbar.main">
+      <children xsi:type="menu:ToolBar" xmi:id="_VvXxIOrOEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.toolbar.git">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_Xi4WIOrOEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.push" label="Push" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_push.png" command="_tNwuMOrOEeah_qW_gJKbyQ">
+          <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_C5vDsOrVEeah_qW_gJKbyQ" coreExpressionId="org.eclipse.e4.tapiji.active.perspective"/>
+        </children>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_aeRTwOrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.pull" label="Pull" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_pull.png" command="_emaN0OrPEeah_qW_gJKbyQ">
+          <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_J0i5sOrVEeah_qW_gJKbyQ" coreExpressionId="org.eclipse.e4.tapiji.active.perspective"/>
+        </children>
+      </children>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_161rsOrREeah_qW_gJKbyQ" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="menu:MenuContribution" xmi:id="_4rspwOrREeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.menucontribution.git" positionInParent="?after=org.eclipse.e4.tapiji.glossary.menu.window" parentId="org.eclipse.e4.tapiji.menu.translator">
+      <children xsi:type="menu:Menu" xmi:id="_--myQOrREeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.menu.git" label="Git">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_CeJbQOrSEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.clonerepo" label="Clone Repo" command="_F0x_4OrSEeah_qW_gJKbyQ"/>
       </children>
     </elements>
   </fragments>

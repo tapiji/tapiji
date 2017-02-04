@@ -1,18 +1,18 @@
 package org.eclipse.e4.tapiji.git.ui.repository;
 
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+
 public class RepositoryView implements RepositoryContract.View {
 
-
-	@Inject
-	RepositoryPresenter presenter;
+    @Inject
+    RepositoryPresenter presenter;
 
     @PostConstruct
     public void createPartControl(final Composite parent) {

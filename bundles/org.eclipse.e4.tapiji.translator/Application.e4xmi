@@ -6,11 +6,7 @@
         <children xsi:type="basic:PartSashContainer" xmi:id="__P9CYLIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.partsashcontainer.main"/>
       </children>
     </children>
-    <mainMenu xmi:id="_twgtQK82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.menu.translator">
-      <children xsi:type="menu:Menu" xmi:id="_LzucsOAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.menu.perspective" label="Perspective">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_NlTIAOAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.handledmenuitem.perpectiveswitch" label="PerpectiveSwitch" tooltip="sdadasd" command="_Pux9AOAgEeahm60FyqfB4g"/>
-      </children>
-    </mainMenu>
+    <mainMenu xmi:id="_twgtQK82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.menu.translator"/>
     <trimBars xmi:id="_RHmj8LInEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.trimbar.main">
       <children xsi:type="menu:ToolBar" xmi:id="_TwsGELInEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.toolbar.main"/>
     </trimBars>
