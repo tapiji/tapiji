@@ -24,4 +24,6 @@ public interface IGitService {
 
     void uncommittedChanges(String directory, IGitServiceCallback<Map<GitStatus, Set<String>>> callback);
 
+    void tags(String directory, IGitServiceCallback<List<String>> callback);
+
 }

@@ -1,6 +1,7 @@
 package org.eclipse.e4.tapiji.git.ui.handler.window;
 
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -81,6 +82,21 @@ public class DebugHandler {
             @Override
             public void onSuccess(GitServiceResult<Map<GitStatus, Set<String>>> result) {
                 Log.d("STATES: ", result.getResult().toString());
+            }
+
+            @Override
+            public void onError(GitServiceException exception) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+        service.tags("E:/cloni/.git", new IGitServiceCallback<List<String>>() {
+
+            @Override
+            public void onSuccess(GitServiceResult<List<String>> response) {
+                // TODO Auto-generated method stub
+                Log.d("TAGS: ", response.getResult().toString());
             }
 
             @Override

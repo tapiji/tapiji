@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
@@ -108,6 +110,26 @@ public class GitService implements IGitService {
                     states.put(GitStatus.UNTRACKED, status.getUntracked());
                     states.put(GitStatus.UNTRACKED_FOLDERS, status.getUntrackedFolders());
                     callback.onSuccess(new GitServiceResult<Map<GitStatus, Set<String>>>(states));
+                }
+            }
+        } catch (IOException | GitAPIException exception) {
+            callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+        }
+    }
+
+    @Override
+    public void tags(String directory, IGitServiceCallback<List<String>> callback) {
+        try {
+
+            FileRepositoryBuilder builder = new FileRepositoryBuilder();
+            try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
+                try (Git git = new Git(repository)) {
+                    List<Ref> refs = git.tagList().call();
+                    List<String> tags = new ArrayList<>(refs.size());
+                    for (Ref ref : refs) {
+                        tags.add(ref.getName().substring(ref.getName().lastIndexOf('/') + 1, ref.getName().length()));
+                    }
+                    callback.onSuccess(new GitServiceResult<List<String>>(tags));
                 }
             }
         } catch (IOException | GitAPIException exception) {
