@@ -7,7 +7,9 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Service-Component: OSGI-INF/service.xml
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.e4.core.contexts,
- org.eclipse.e4.core.di
+ org.eclipse.e4.core.di,
+ org.eclipse.jgit,
+ org.eclipse.e4.tapiji.git.model
 Import-Package: javax.annotation,
  javax.inject,
  org.eclipse.e4.core.di.extensions,

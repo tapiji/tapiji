@@ -1,6 +1,7 @@
 package org.eclipse.e4.tapiji.git.ui.dialog;
 
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -8,6 +9,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
+import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
+import org.eclipse.e4.tapiji.git.model.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -28,7 +32,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 
-public class CloneRepositoryDialog extends Dialog implements SelectionListener, ModifyListener {
+public class CloneRepositoryDialog extends Dialog implements SelectionListener, ModifyListener, IGitServiceCallback<File> {
 
     @Inject
     IGitService service;
@@ -109,24 +113,7 @@ public class CloneRepositoryDialog extends Dialog implements SelectionListener, 
         if (btn.getData().equals("btn_clone")) {
 
             try {
-                new ProgressMonitorDialog(shell).run(true, true, new LongRunningOperation(txtRepoUrl.getText(), service, new CloneRepositoryCallback() {
-
-                    @Override
-                    public void onSuccess() {
-                        sync.syncExec(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                shell.close();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError() {
-
-                    }
-                }));
+                new ProgressMonitorDialog(shell).run(true, true, new LongRunningOperation(txtRepoUrl.getText(), txtRepoPath.getText(), service, this));
             } catch (InvocationTargetException invocationTargetException) {
                 MessageDialog.openError(shell, "Error: ", invocationTargetException.getMessage());
             } catch (InterruptedException interruptedException) {
@@ -170,10 +157,12 @@ public class CloneRepositoryDialog extends Dialog implements SelectionListener, 
 
         private String repoUrl;
         private IGitService gitService;
-        private CloneRepositoryCallback callback;
+        private IGitServiceCallback<File> callback;
+        private String localDirectory;
 
-        public LongRunningOperation(String repoUrl, IGitService service, CloneRepositoryCallback callback) {
+        public LongRunningOperation(String repoUrl, String localDirectory, IGitService service, IGitServiceCallback<File> callback) {
             this.repoUrl = repoUrl;
+            this.localDirectory = localDirectory;
             this.gitService = service;
             this.callback = callback;
         }
@@ -182,25 +171,34 @@ public class CloneRepositoryDialog extends Dialog implements SelectionListener, 
         public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
             monitor.beginTask("Cloning repo: " + repoUrl, IProgressMonitor.UNKNOWN);
 
-            Thread.sleep(800);
-
-            gitService.cloneRepository();
+            gitService.cloneRepository(repoUrl, localDirectory, callback);
 
             if (monitor.isCanceled()) {
                 throw new InterruptedException("Cloning operation was cancelled!");
             }
-
-            callback.onSuccess();
             monitor.done();
         }
     }
 
-    public interface CloneRepositoryCallback {
+    @Override
+    public void onSuccess(GitServiceResult<File> gitServiceResult) {
+        sync.syncExec(new Runnable() {
 
-        void onSuccess();
-
-        void onError();
-
+            @Override
+            public void run() {
+                shell.close();
+            }
+        });
     }
 
+    @Override
+    public void onError(GitServiceException exception) {
+        sync.syncExec(new Runnable() {
+
+            @Override
+            public void run() {
+                MessageDialog.openError(shell, "Error: ", exception.getMessage());
+            }
+        });
+    }
 }
