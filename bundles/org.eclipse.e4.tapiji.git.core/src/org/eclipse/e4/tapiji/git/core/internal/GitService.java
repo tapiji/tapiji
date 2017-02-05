@@ -10,7 +10,7 @@ public class GitService implements IGitService {
     @Override
     public void cloneRepository() {
         // TODO Auto-generated method stub
-
+        Log.d("WAHHH", "COMMIT ALL CHANGES");
     }
 
     @Override
