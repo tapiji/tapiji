@@ -7,17 +7,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.core.internal.file.FileFinder;
 import org.eclipse.e4.tapiji.git.model.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.GitStatus;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.InvalidRemoteException;
-import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 
 public class GitService implements IGitService {
@@ -25,8 +30,8 @@ public class GitService implements IGitService {
     private static final String TAG = GitService.class.getSimpleName();
 
     @Override
-    public void cloneRepository(String url, String directory, IGitServiceCallback<File> callback) {
-        Log.d(TAG, "cloneRepository(" + url + " to " + directory + ")");
+    public void cloneRepository(String gitRepository, String directory, IGitServiceCallback<File> callback) {
+        Log.d(TAG, "cloneRepository(" + gitRepository + " to " + directory + ")");
 
         File localPath = new File(directory, "");
         if (!localPath.exists()) {
@@ -36,12 +41,8 @@ public class GitService implements IGitService {
         if (!localPath.delete()) {
             callback.onError(new GitServiceException("Could not delete temporary file " + localPath));
         }
-        try (Git result = Git.cloneRepository().setURI(url).setDirectory(localPath).call()) {
+        try (Git result = Git.cloneRepository().setURI(gitRepository).setBare(false).setDirectory(localPath).call()) {
             callback.onSuccess(new GitServiceResult<File>(result.getRepository().getDirectory()));
-        } catch (InvalidRemoteException e) {
-            callback.onError(new GitServiceException(e.getMessage(), e.getCause()));
-        } catch (TransportException e) {
-            callback.onError(new GitServiceException(e.getMessage(), e.getCause()));
         } catch (GitAPIException e) {
             callback.onError(new GitServiceException(e.getMessage(), e.getCause()));
         }
@@ -49,20 +50,69 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void commitAllChanges() {
-        // TODO Auto-generated method stub
-        Log.d("WAHHH", "COMMIT ALL CHANGES");
+    public void commitChanges(String directory, String summary, String description, IGitServiceCallback<Void> callback) {
+        try {
+            FileRepositoryBuilder builder = new FileRepositoryBuilder();
+            try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
+                try (Git git = new Git(repository)) {
+                    git.commit().setMessage(summary + "\n" + description).call();
+                }
+            }
+        } catch (IOException | GitAPIException exception) {
+            callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+        }
     }
 
     @Override
-    public void commitFile() {
-        // TODO Auto-generated method stub
-
+    public void stageAll(String directory, IGitServiceCallback<Void> callback) {
+        try {
+            FileRepositoryBuilder builder = new FileRepositoryBuilder();
+            try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
+                try (Git git = new Git(repository)) {
+                    git.add().addFilepattern(".").call();
+                }
+            }
+        } catch (IOException | GitAPIException exception) {
+            callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+        }
     }
 
     @Override
-    public void discardChanges() {
-        // TODO Auto-generated method stub
+    public void unstageAll(String directory, IGitServiceCallback<Void> callback) {
+        try {
+            FileRepositoryBuilder builder = new FileRepositoryBuilder();
+            try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
+                try (Git git = new Git(repository)) {
+                    git.reset().call();
+                }
+            }
+        } catch (IOException | GitAPIException exception) {
+            callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+        }
+    }
+
+    @Override
+    public void uncommittedChanges(String directory, IGitServiceCallback<Map<GitStatus, Set<String>>> callback) {
+        Map<GitStatus, Set<String>> states = new HashMap<>();
+        try {
+            FileRepositoryBuilder builder = new FileRepositoryBuilder();
+            try (Repository repository = builder.setMustExist(true).setGitDir(new File("E:/cloni/.git")).readEnvironment().findGitDir().build()) {
+                try (Git git = new Git(repository)) {
+                    Status status = git.status().call();
+                    states.put(GitStatus.ADDED, status.getAdded());
+                    states.put(GitStatus.CHANGED, status.getChanged());
+                    states.put(GitStatus.MISSING, status.getMissing());
+                    states.put(GitStatus.MODIFIED, status.getModified());
+                    states.put(GitStatus.REMOVED, status.getRemoved());
+                    states.put(GitStatus.UNCOMMITTED, status.getUncommittedChanges());
+                    states.put(GitStatus.UNTRACKED, status.getUntracked());
+                    states.put(GitStatus.UNTRACKED_FOLDERS, status.getUntrackedFolders());
+                    callback.onSuccess(new GitServiceResult<Map<GitStatus, Set<String>>>(states));
+                }
+            }
+        } catch (IOException | GitAPIException exception) {
+            callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+        }
     }
 
     @Override
