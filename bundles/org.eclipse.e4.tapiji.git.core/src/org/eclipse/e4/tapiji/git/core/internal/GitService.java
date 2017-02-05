@@ -2,7 +2,14 @@ package org.eclipse.e4.tapiji.git.core.internal;
 
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.List;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
+import org.eclipse.e4.tapiji.git.core.internal.file.FileFinder;
 import org.eclipse.e4.tapiji.git.model.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
@@ -58,4 +65,21 @@ public class GitService implements IGitService {
         // TODO Auto-generated method stub
     }
 
+    @Override
+    public void findPropertyFiles(String directory, String filePattern, IGitServiceCallback<List<Path>> callback) {
+        Path fileDir = Paths.get(directory);
+        FileFinder finder = new FileFinder(filePattern);
+        try {
+            Files.walkFileTree(fileDir, finder);
+        } catch (IOException ioException) {
+            callback.onError(new GitServiceException(ioException.getMessage(), ioException.getCause()));
+        }
+
+        List<Path> paths = finder.paths();
+        if (paths.size() > 0) {
+            callback.onSuccess(new GitServiceResult<List<Path>>(paths));
+        } else {
+            callback.onSuccess(new GitServiceResult<List<Path>>(Collections.emptyList()));
+        }
+    }
 }
