@@ -22,9 +22,21 @@ import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.diff.DiffFormatter;
+import org.eclipse.jgit.diff.RawTextComparator;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.patch.FileHeader;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevTree;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.treewalk.AbstractTreeIterator;
+import org.eclipse.jgit.treewalk.CanonicalTreeParser;
+import org.eclipse.jgit.treewalk.FileTreeIterator;
 
 
 public class GitService implements IGitService {
@@ -98,7 +110,7 @@ public class GitService implements IGitService {
         Map<GitStatus, Set<String>> states = new HashMap<>();
         try {
             FileRepositoryBuilder builder = new FileRepositoryBuilder();
-            try (Repository repository = builder.setMustExist(true).setGitDir(new File("E:/cloni/.git")).readEnvironment().findGitDir().build()) {
+            try (Repository repository = builder.setMustExist(true).setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
                 try (Git git = new Git(repository)) {
                     Status status = git.status().call();
                     states.put(GitStatus.ADDED, status.getAdded());
@@ -153,5 +165,56 @@ public class GitService implements IGitService {
         } else {
             callback.onSuccess(new GitServiceResult<List<Path>>(Collections.emptyList()));
         }
+    }
+
+    @Override
+    public void showFileDiff(String directory, IGitServiceCallback<Void> callback) {
+        try {
+            FileRepositoryBuilder builder = new FileRepositoryBuilder();
+            try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
+                try (Git git = new Git(repository)) {
+
+                    DiffFormatter formatter = new DiffFormatter(System.out);
+                    formatter.setDiffComparator(RawTextComparator.DEFAULT);
+                    formatter.setRepository(git.getRepository());
+                    AbstractTreeIterator commitTreeIterator = prepareTreeParser(git.getRepository(), Constants.HEAD);
+                    FileTreeIterator workTreeIterator = new FileTreeIterator(git.getRepository());
+                    List<DiffEntry> diffEntries = formatter.scan(commitTreeIterator, workTreeIterator);
+
+                    for (DiffEntry entry : diffEntries) {
+                        System.out.println("Entry: " + entry + ", from: " + entry.getOldId() + ", to: " + entry.getNewId());
+                        FileHeader fileHeader = formatter.toFileHeader(entry);
+                        System.out.println(fileHeader.toEditList().toString());
+                        formatter.format(entry);
+
+                        // formatter.format(entry);
+                    }
+                }
+            }
+        } catch (IOException exception) {
+            callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+        }
+    }
+
+    private static AbstractTreeIterator prepareTreeParser(Repository repository, String ref) {
+        try {
+            Ref head = repository.exactRef(ref);
+            RevWalk walk = new RevWalk(repository);
+            RevCommit commit = walk.parseCommit(head.getObjectId());
+            RevTree tree = walk.parseTree(commit.getTree().getId());
+
+            CanonicalTreeParser oldTreeParser = new CanonicalTreeParser();
+            ObjectReader oldReader = repository.newObjectReader();
+            try {
+                oldTreeParser.reset(oldReader, tree.getId());
+            } finally {
+                oldReader.close();
+            }
+
+            return oldTreeParser;
+        } catch (Exception e) {
+
+        }
+        return null;
     }
 }

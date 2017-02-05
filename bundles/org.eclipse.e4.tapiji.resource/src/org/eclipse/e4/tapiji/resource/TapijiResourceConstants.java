@@ -21,5 +21,8 @@ public final class TapijiResourceConstants {
 
     public static final String IMG_FOLDER_FLAGS = "icons/flags/";
 
+    public static final String IMG_GIT_ADDED = "icons/16x16/git_added.png";
+    public static final String IMG_GIT_DELETED = "icons/16x16/git_deleted.png";
+    public static final String IMG_GIT_MODIFIED = "icons/16x16/git_modified.png";
 
 }

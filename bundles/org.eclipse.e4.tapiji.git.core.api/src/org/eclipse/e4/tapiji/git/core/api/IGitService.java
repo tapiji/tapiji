@@ -26,4 +26,6 @@ public interface IGitService {
 
     void tags(String directory, IGitServiceCallback<List<String>> callback);
 
+    void showFileDiff(String directory, IGitServiceCallback<Void> callback);
+
 }

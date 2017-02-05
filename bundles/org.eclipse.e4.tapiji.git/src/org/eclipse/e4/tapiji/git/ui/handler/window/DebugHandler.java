@@ -106,5 +106,20 @@ public class DebugHandler {
             }
         });
 
+        service.showFileDiff("E:/cloni/.git", new IGitServiceCallback<Void>() {
+
+            @Override
+            public void onSuccess(GitServiceResult<Void> response) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onError(GitServiceException exception) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
     }
 }

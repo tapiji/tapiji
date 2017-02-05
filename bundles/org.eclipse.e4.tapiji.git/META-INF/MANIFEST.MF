@@ -18,8 +18,11 @@ Require-Bundle: org.eclipse.e4.ui.model.workbench;bundle-version="1.2.0.v2016022
  org.eclipse.equinox.registry,
  org.eclipse.e4.ui.di
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: org.eclipse.e4.tapiji.git.core.api,
+Import-Package: org.eclipse.core.runtime.jobs,
+ org.eclipse.e4.tapiji.git.core.api,
  org.eclipse.e4.tapiji.git.model,
  org.eclipse.e4.tapiji.glossary.core.api,
  org.eclipse.e4.tapiji.logger,
- org.eclipse.jface.dialogs
+ org.eclipse.e4.tapiji.resource,
+ org.eclipse.jface.dialogs,
+ org.osgi.service.event;version="1.3.1"
