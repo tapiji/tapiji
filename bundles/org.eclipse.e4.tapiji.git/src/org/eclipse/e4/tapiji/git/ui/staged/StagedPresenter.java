@@ -15,8 +15,8 @@ import org.eclipse.e4.tapiji.git.model.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.GitStatus;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
+import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.staged.StagedContract.View;
-import org.eclipse.e4.tapiji.git.ui.util.UIEventConstants;
 import org.eclipse.e4.tapiji.logger.Log;
 
 
@@ -85,6 +85,7 @@ public class StagedPresenter implements StagedContract.Presenter {
                 loadStagedFiles();
                 view.setCursorWaitVisibility(false);
                 view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_UNSTAGED_FILE);
+                view.sendUIEvent(UIEventConstants.TOPIC_FILES_UNSTAGED);
             }
 
             @Override

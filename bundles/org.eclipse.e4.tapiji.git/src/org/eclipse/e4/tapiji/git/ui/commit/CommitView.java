@@ -3,7 +3,16 @@ package org.eclipse.e4.tapiji.git.ui.commit;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.tapiji.git.model.GitServiceException;
+import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
+import org.eclipse.e4.tapiji.utils.FontUtils;
+import org.eclipse.e4.ui.di.UIEventTopic;
+import org.eclipse.e4.ui.di.UISynchronize;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -15,29 +24,128 @@ import org.eclipse.swt.widgets.Text;
 public class CommitView implements CommitContract.View {
 
     @Inject
+    IEventBroker eventBroker;
+
+    @Inject
     CommitPresenter presenter;
+
+    @Inject
+    UISynchronize sync;
+
+    private Button btnCommit;
+    private Text txtSummary;
+    private Composite parent;
+    private Text txtDescription;
+
+    private boolean stagedFilesAvailable;
 
     @PostConstruct
     public void createPartControl(final Composite parent) {
+        this.parent = parent;
+        presenter.setView(this);
+        GridLayout glParent = new GridLayout(1, false);
+        glParent.horizontalSpacing = 0;
+        parent.setLayout(glParent);
 
-        parent.setLayout(new GridLayout(1, false));
+        Label lblCommit = new Label(parent, SWT.NONE);
+        lblCommit.setFont(FontUtils.createFont(lblCommit, "Segoe UI", 11, SWT.BOLD));
+        lblCommit.setText("Commit Message");
 
-        Label lblCommitMessage = new Label(parent, SWT.NONE);
-        //lblCommitMessage.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
-        lblCommitMessage.setText("Commit Message");
+        GridLayout glComposite = new GridLayout(1, false);
+        glComposite.marginHeight = 0;
+        glComposite.marginWidth = 0;
+        glComposite.horizontalSpacing = 0;
+        glComposite.verticalSpacing = 0;
 
-        Text txtSdsd = new Text(parent, SWT.BORDER | SWT.SEARCH);
-        //txtSdsd.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.BOLD));
-        txtSdsd.setText("sdsd");
-        txtSdsd.setToolTipText("");
+        Composite txtComposite = new Composite(parent, SWT.BORDER);
+        txtComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        txtComposite.setLayout(glComposite);
 
-        txtSdsd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        GridData gdTxtSummary = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+        gdTxtSummary.heightHint = 25;
 
-        Text text_1 = new Text(parent, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
-        text_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        txtSummary = new Text(txtComposite, SWT.NONE);
+        txtSummary.setMessage("Summary");
+        txtSummary.addListener(SWT.CHANGED, listener -> presenter.checkTextSummary(txtSummary.getText()));
+        txtSummary.setFont(FontUtils.createFont(txtSummary, "Segoe UI", 10, SWT.BOLD));
+        txtSummary.setLayoutData(gdTxtSummary);
 
-        Button btnNewButton = new Button(parent, SWT.NONE);
-        btnNewButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        btnNewButton.setText("Commmit");
+        txtDescription = new Text(txtComposite, SWT.MULTI | SWT.NONE);
+        txtDescription.setFont(FontUtils.createFont(txtDescription, "Segoe UI", 8, SWT.BOLD));
+        txtDescription.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+        btnCommit = new Button(parent, SWT.NONE);
+        btnCommit.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        btnCommit.addListener(SWT.MouseDown, listener -> {
+            presenter.commitChanges(txtSummary.getText(), txtDescription.getText());
+        });
+        disableCommitButton();
+    }
+
+    @Override
+    public void disableCommitButton() {
+        btnCommit.setEnabled(false);
+        if (!stagedFilesAvailable && !txtSummary.getText().isEmpty()) {
+            btnCommit.setText("Stage files/changes to commit");
+        } else {
+            btnCommit.setText("Type a message to commit");
+        }
+    }
+
+    @Override
+    public void enableCommitButton() {
+        if (stagedFilesAvailable) {
+            btnCommit.setEnabled(true);
+            btnCommit.setText("Commit");
+        } else {
+            btnCommit.setText("Stage files/changes to commit");
+        }
+    }
+
+    @Override
+    public void sendUIEvent(String topic) {
+        sync.asyncExec(() -> eventBroker.post(topic, ""));
+    }
+
+    @Inject
+    @Optional
+    public void stagedFileHandler(@UIEventTopic(UIEventConstants.TOPIC_FILES_STAGED) String payload) {
+        stagedFilesAvailable = true;
+        presenter.checkTextSummary(txtSummary.getText());
+    }
+
+    @Inject
+    @Optional
+    public void unstageFileHandler(@UIEventTopic(UIEventConstants.TOPIC_FILES_UNSTAGED) String payload) {
+        stagedFilesAvailable = false;
+        disableCommitButton();
+    }
+
+    @Override
+    public void setCursorWaitVisibility(boolean visibility) {
+        sync.asyncExec(() -> {
+            if (visibility) {
+                parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_WAIT));
+            } else {
+                parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
+            }
+        });
+    }
+
+    @Override
+    public void resetCommitView() {
+        sync.asyncExec(() -> {
+            txtSummary.setText("");
+            txtDescription.setText("");
+            disableCommitButton();
+        });
+    }
+
+    @Override
+    public void showError(GitServiceException exception) {
+        sync.asyncExec(() -> {
+            parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
+            MessageDialog.openError(parent.getShell(), "Error: ", exception.getMessage());
+        });
     }
 }

@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.model.GitFile;
@@ -15,8 +16,8 @@ import org.eclipse.e4.tapiji.git.model.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.GitStatus;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
+import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.unstaged.UnstagedContract.View;
-import org.eclipse.e4.tapiji.git.ui.util.UIEventConstants;
 import org.eclipse.e4.tapiji.logger.Log;
 
 
@@ -25,6 +26,9 @@ import org.eclipse.e4.tapiji.logger.Log;
 public class UnstagedPresenter implements UnstagedContract.Presenter {
 
     private static final String TAG = UnstagedPresenter.class.getSimpleName();
+
+    @Inject
+    IEclipseContext context;
 
     @Inject
     IGitService service;
@@ -86,6 +90,7 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
                 view.setCursorWaitVisibility(false);
                 loadUnCommittedChanges();
                 view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_STAGED_FILE);
+                view.sendUIEvent(UIEventConstants.TOPIC_FILES_STAGED);
             }
 
             @Override

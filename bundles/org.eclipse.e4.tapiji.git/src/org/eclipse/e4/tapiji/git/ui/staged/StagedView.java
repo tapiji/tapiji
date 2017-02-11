@@ -8,7 +8,7 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.tapiji.git.model.GitFile;
 import org.eclipse.e4.tapiji.git.model.GitServiceException;
-import org.eclipse.e4.tapiji.git.ui.util.UIEventConstants;
+import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.utils.FontUtils;
 import org.eclipse.e4.ui.di.UIEventTopic;

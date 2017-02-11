@@ -76,16 +76,25 @@ public class GitService implements IGitService {
 
     @Override
     public void commitChanges(String directory, String summary, String description, IGitServiceCallback<Void> callback) {
-        try {
-            FileRepositoryBuilder builder = new FileRepositoryBuilder();
-            try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
-                try (Git git = new Git(repository)) {
-                    git.commit().setMessage(summary + "\n" + description).call();
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                FileRepositoryBuilder builder = new FileRepositoryBuilder();
+                try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
+                    try (Git git = new Git(repository)) {
+                        git.commit().setMessage(summary + "\n\n" + description).call();
+                    }
                 }
+            } catch (IOException | GitAPIException exception) {
+                throwAsUnchecked(exception);
             }
-        } catch (IOException | GitAPIException exception) {
-            callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-        }
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
     }
 
     @Override
