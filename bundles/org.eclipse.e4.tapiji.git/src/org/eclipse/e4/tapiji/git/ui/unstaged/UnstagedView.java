@@ -9,7 +9,7 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.tapiji.git.model.GitFile;
 import org.eclipse.e4.tapiji.git.model.GitServiceException;
 import org.eclipse.e4.tapiji.git.ui.handler.window.PerpectiveSwitchHandler;
-import org.eclipse.e4.tapiji.logger.Log;
+import org.eclipse.e4.tapiji.git.ui.util.UIEventConstants;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.utils.FontUtils;
 import org.eclipse.e4.ui.di.UIEventTopic;
@@ -87,58 +87,48 @@ public class UnstagedView implements UnstagedContract.View {
     @Inject
     @Optional
     public void closeHandler(@UIEventTopic(PerpectiveSwitchHandler.TOPIC_UPDATE_FILES) String payload) {
-        Log.d("EVENT", "asddsdsd");
-        parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_WAIT));
+        presenter.loadUnCommittedChanges();
+    }
+
+    @Inject
+    @Optional
+    public void reloadUnstagedFiles(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_UNSTAGED_FILE) String payload) {
         presenter.loadUnCommittedChanges();
     }
 
     @Override
     public void showUnCommittedChanges(List<GitFile> files) {
-        sync.asyncExec(new Runnable() {
+        sync.asyncExec(() -> {
+            table.removeAll();
+            table.clearAll();
 
-            @Override
-            public void run() {
-                table.removeAll();
-                table.clearAll();
-
-                if (!files.isEmpty()) {
-                    files.stream().forEach(file -> {
-                        TableItem item = new TableItem(table, SWT.NONE);
-                        item.setText(file.getName());
-                        if (file.getImage() != null) {
-                            item.setImage(resourceProvider.loadImage(file.getImage()));
-                        }
-                    });
-                    lblUnstaged.setText(String.format("Unstaged Files (%1$d)", files.size()));
-                } else {
-                    lblUnstaged.setText("Unstaged Files");
-                }
-                parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
-                parent.layout();
+            if (!files.isEmpty()) {
+                files.stream().forEach(file -> {
+                    TableItem item = new TableItem(table, SWT.NONE);
+                    item.setText(file.getName());
+                    if (file.getImage() != null) {
+                        item.setImage(resourceProvider.loadImage(file.getImage()));
+                    }
+                });
+                lblUnstaged.setText(String.format("Unstaged Files (%1$d)", files.size()));
+            } else {
+                lblUnstaged.setText("Unstaged Files");
             }
+            parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
+            parent.layout();
         });
     }
 
     @Override
     public void showError(GitServiceException exception) {
-        sync.asyncExec(new Runnable() {
-
-            @Override
-            public void run() {
-                parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
-                MessageDialog.openError(parent.getShell(), "Error: ", exception.getMessage());
-            }
+        sync.asyncExec(() -> {
+            parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
+            MessageDialog.openError(parent.getShell(), "Error: ", exception.getMessage());
         });
     }
 
     @Override
     public void sendUIEvent(String topic) {
-        sync.asyncExec(new Runnable() {
-
-            @Override
-            public void run() {
-                eventBroker.post(topic, "");
-            }
-        });
+        sync.asyncExec(() -> eventBroker.post(topic, ""));
     }
 }

@@ -15,6 +15,10 @@ public interface StagedContract {
 
         void showStagedChanges(List<GitFile> files);
 
+        void setCursorWaitVisibility(boolean visibility);
+
+        void sendUIEvent(String topic);
+
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -22,6 +26,5 @@ public interface StagedContract {
         void loadStagedFiles();
 
         void unstageChanges();
-
     }
 }

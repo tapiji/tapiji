@@ -8,10 +8,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.model.GitFile;
@@ -51,83 +47,63 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
 
     @Override
     public void loadUnCommittedChanges() {
-        new Job("uncommitted changes") {
+        service.uncommittedChanges("E:/cloni/.git", new IGitServiceCallback<Map<GitStatus, Set<String>>>() {
 
             @Override
-            protected IStatus run(IProgressMonitor monitor) {
-                service.uncommittedChanges("E:/cloni/.git", new IGitServiceCallback<Map<GitStatus, Set<String>>>() {
-
-                    @Override
-                    public void onSuccess(GitServiceResult<Map<GitStatus, Set<String>>> response) {
-                        Log.d(TAG, "FILES( " + response.getResult().toString() + ")");
-                        List<GitFile> files = null;
-                        if (response == null || response.getResult() == null || response.getResult().isEmpty()) {
-                            files = Collections.emptyList();
-                        } else {
-                            files = response.getResult()
-                                .entrySet()
-                                .stream()
-                                .filter(entry -> entry.getKey() == GitStatus.MODIFIED || entry.getKey() == GitStatus.UNTRACKED || entry.getKey() == GitStatus.MISSING)
-                                .flatMap(entry -> entry.getValue().stream().map(f -> new GitFile(f, entry.getKey())))
-                                .collect(Collectors.toList());
-                        }
-                        view.showUnCommittedChanges(files);
-                    }
-
-                    @Override
-                    public void onError(GitServiceException exception) {
-                        view.showError(exception);
-                    }
-                });
-                return Status.OK_STATUS;
+            public void onSuccess(GitServiceResult<Map<GitStatus, Set<String>>> response) {
+                Log.d(TAG, "FILES( " + response.getResult().toString() + ")");
+                List<GitFile> files = null;
+                if (response == null || response.getResult() == null || response.getResult().isEmpty()) {
+                    files = Collections.emptyList();
+                } else {
+                    files = response.getResult()
+                        .entrySet()
+                        .stream()
+                        .filter(entry -> entry.getKey() == GitStatus.MODIFIED || entry.getKey() == GitStatus.UNTRACKED || entry.getKey() == GitStatus.MISSING)
+                        .flatMap(entry -> entry.getValue().stream().map(f -> new GitFile(f, entry.getKey())))
+                        .collect(Collectors.toList());
+                }
+                view.showUnCommittedChanges(files);
             }
-        }.schedule();
+
+            @Override
+            public void onError(GitServiceException exception) {
+                view.showError(exception);
+            }
+        });
     }
 
     @Override
     public void stageChanges() {
-        new Job("stage changes") {
+        service.stageAll("E:/cloni/.git", new IGitServiceCallback<Void>() {
 
             @Override
-            protected IStatus run(IProgressMonitor monitor) {
-                service.stageAll("E:/cloni/.git", new IGitServiceCallback<Void>() {
-
-                    @Override
-                    public void onSuccess(GitServiceResult<Void> response) {
-                        loadUnCommittedChanges();
-                        view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_STAGED_FILE);
-                    }
-
-                    @Override
-                    public void onError(GitServiceException exception) {
-                        view.showError(exception);
-                    }
-
-                });
-                return Status.OK_STATUS;
+            public void onSuccess(GitServiceResult<Void> response) {
+                loadUnCommittedChanges();
+                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_STAGED_FILE);
             }
-        }.schedule();
+
+            @Override
+            public void onError(GitServiceException exception) {
+                view.showError(exception);
+            }
+
+        });
     }
 
     public void discardChanges() {
-        new Job("discard changes") {
+        service.discardChanges("E:/cloni/.git", new IGitServiceCallback<Void>() {
 
             @Override
-            protected IStatus run(IProgressMonitor monitor) {
-                service.discardChanges("E:/cloni/.git", new IGitServiceCallback<Void>() {
-
-                    @Override
-                    public void onSuccess(GitServiceResult<Void> response) {
-                        loadUnCommittedChanges();
-                    }
-
-                    @Override
-                    public void onError(GitServiceException exception) {
-                        view.showError(exception);
-                    }
-                });
-                return Status.OK_STATUS;
+            public void onSuccess(GitServiceResult<Void> response) {
+                loadUnCommittedChanges();
             }
-        }.schedule();
+
+            @Override
+            public void onError(GitServiceException exception) {
+                view.showError(exception);
+            }
+        });
+
     }
 }

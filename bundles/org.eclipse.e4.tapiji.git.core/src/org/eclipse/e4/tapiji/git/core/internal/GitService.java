@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.core.internal.file.FileFinder;
 import org.eclipse.e4.tapiji.git.model.GitServiceException;
@@ -27,6 +30,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
+import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Ref;
@@ -44,6 +48,11 @@ import org.eclipse.jgit.treewalk.FileTreeIterator;
 public class GitService implements IGitService {
 
     private static final String TAG = GitService.class.getSimpleName();
+    private ExecutorService executorService;
+
+    public GitService() {
+        executorService = Executors.newFixedThreadPool(10);
+    }
 
     @Override
     public void cloneRepository(String gitRepository, String directory, IGitServiceCallback<File> callback) {
@@ -81,57 +90,83 @@ public class GitService implements IGitService {
 
     @Override
     public void stageAll(String directory, IGitServiceCallback<Void> callback) {
-        try {
-            FileRepositoryBuilder builder = new FileRepositoryBuilder();
-            try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
-                try (Git git = new Git(repository)) {
-                    git.add().addFilepattern(".").call();
-                    callback.onSuccess(new GitServiceResult<Void>(null));
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                FileRepositoryBuilder builder = new FileRepositoryBuilder();
+                try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
+                    try (Git git = new Git(repository)) {
+                        git.add().addFilepattern(".").call();
+                    }
                 }
+            } catch (IOException | GitAPIException exception) {
+                throwAsUnchecked(exception);
             }
-        } catch (IOException | GitAPIException exception) {
-            callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-        }
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
     }
 
     @Override
     public void unstageAll(String directory, IGitServiceCallback<Void> callback) {
-        try {
-            FileRepositoryBuilder builder = new FileRepositoryBuilder();
-            try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
-                try (Git git = new Git(repository)) {
-                    git.reset().call();
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                FileRepositoryBuilder builder = new FileRepositoryBuilder();
+                try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
+                    try (Git git = new Git(repository)) {
+                        git.reset().call();
+                    }
                 }
+            } catch (IOException | GitAPIException exception) {
+                throwAsUnchecked(exception);
             }
-        } catch (IOException | GitAPIException exception) {
-            callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-        }
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
     }
 
     @Override
     public void discardChanges(String directory, IGitServiceCallback<Void> callback) {
-        try {
-            FileRepositoryBuilder builder = new FileRepositoryBuilder();
-            try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
-                try (Git git = new Git(repository)) {
-                    ResetCommand reset = git.reset();
-                    reset.setMode(ResetType.HARD);
-                    reset.setRef(Constants.HEAD);
-                    reset.call();
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                FileRepositoryBuilder builder = new FileRepositoryBuilder();
+                try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
+                    try (Git git = new Git(repository)) {
 
-                    git.clean().setCleanDirectories(true).call();
-                    callback.onSuccess(new GitServiceResult<Void>(null));
+                        ResetCommand reset = git.reset();
+                        reset.setMode(ResetType.HARD);
+                        reset.setRef(Constants.HEAD);
+                        reset.call();
+
+                        git.clean().setCleanDirectories(true).call();
+                    }
                 }
+            } catch (IOException | GitAPIException exception) {
+                throwAsUnchecked(exception);
             }
-        } catch (IOException | GitAPIException exception) {
-            callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-        }
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
     }
 
     @Override
     public void uncommittedChanges(String directory, IGitServiceCallback<Map<GitStatus, Set<String>>> callback) {
-        Map<GitStatus, Set<String>> states = new HashMap<>();
-        try {
+        CompletableFuture.supplyAsync(() -> {
+            Map<GitStatus, Set<String>> states = new HashMap<>();
             FileRepositoryBuilder builder = new FileRepositoryBuilder();
             try (Repository repository = builder.setMustExist(true).setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
                 try (Git git = new Git(repository)) {
@@ -144,12 +179,20 @@ public class GitService implements IGitService {
                     states.put(GitStatus.UNCOMMITTED, status.getUncommittedChanges());
                     states.put(GitStatus.UNTRACKED, status.getUntracked());
                     states.put(GitStatus.UNTRACKED_FOLDERS, status.getUntrackedFolders());
-                    callback.onSuccess(new GitServiceResult<Map<GitStatus, Set<String>>>(states));
+                } catch (NoWorkTreeException | GitAPIException exception) {
+                    throwAsUnchecked(exception);
                 }
+            } catch (IOException exception) {
+                throwAsUnchecked(exception);
             }
-        } catch (IOException | GitAPIException exception) {
-            callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-        }
+            return new GitServiceResult<Map<GitStatus, Set<String>>>(states);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
     }
 
     @Override
@@ -239,5 +282,10 @@ public class GitService implements IGitService {
 
         }
         return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <E extends Exception> void throwAsUnchecked(Exception exception) throws E {
+        throw (E) exception;
     }
 }

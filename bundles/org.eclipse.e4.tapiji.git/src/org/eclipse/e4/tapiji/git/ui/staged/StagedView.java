@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.tapiji.git.model.GitFile;
 import org.eclipse.e4.tapiji.git.model.GitServiceException;
 import org.eclipse.e4.tapiji.git.ui.util.UIEventConstants;
@@ -31,6 +32,9 @@ public class StagedView implements StagedContract.View {
 
     @Inject
     StagedPresenter presenter;
+
+    @Inject
+    IEventBroker eventBroker;
 
     @Inject
     ITapijiResourceProvider resourceProvider;
@@ -81,29 +85,40 @@ public class StagedView implements StagedContract.View {
 
     @Override
     public void showStagedChanges(List<GitFile> files) {
-        sync.asyncExec(new Runnable() {
+        sync.asyncExec(() -> {
+            table.removeAll();
+            table.clearAll();
 
-            @Override
-            public void run() {
-                table.removeAll();
-                table.clearAll();
+            if (!files.isEmpty()) {
+                files.stream().forEach(file -> {
+                    TableItem item = new TableItem(table, SWT.NONE);
+                    item.setText(file.getName());
+                    if (file.getImage() != null) {
+                        item.setImage(resourceProvider.loadImage(file.getImage()));
+                    }
+                });
+                lblStagedFiles.setText(String.format("Staged Files (%1$d)", files.size()));
+            } else {
+                lblStagedFiles.setText("Staged Files");
+            }
+            parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
+            parent.layout();
+        });
+    }
 
-                if (!files.isEmpty()) {
-                    files.stream().forEach(file -> {
-                        TableItem item = new TableItem(table, SWT.NONE);
-                        item.setText(file.getName());
-                        if (file.getImage() != null) {
-                            item.setImage(resourceProvider.loadImage(file.getImage()));
-                        }
-                    });
-                    lblStagedFiles.setText(String.format("Staged Files (%1$d)", files.size()));
-                } else {
-                    lblStagedFiles.setText("Staged Files");
-                }
+    @Override
+    public void sendUIEvent(String topic) {
+        sync.asyncExec(() -> eventBroker.post(topic, ""));
+    }
+
+    @Override
+    public void setCursorWaitVisibility(boolean visibility) {
+        sync.asyncExec(() -> {
+            if (visibility) {
+                parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_WAIT));
+            } else {
                 parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
-                parent.layout();
             }
         });
-
     }
 }
