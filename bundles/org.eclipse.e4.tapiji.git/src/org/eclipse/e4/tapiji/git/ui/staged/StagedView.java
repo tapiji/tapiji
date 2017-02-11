@@ -9,11 +9,11 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.tapiji.git.model.GitFile;
 import org.eclipse.e4.tapiji.git.model.GitServiceException;
 import org.eclipse.e4.tapiji.git.ui.util.UIEventConstants;
-import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.utils.FontUtils;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.di.UISynchronize;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.GridData;
@@ -73,14 +73,15 @@ public class StagedView implements StagedContract.View {
     @Inject
     @Optional
     public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_STAGED_FILE) String payload) {
-        Log.d("EVENT", "asddsdsd");
         presenter.loadStagedFiles();
     }
 
     @Override
     public void showError(GitServiceException exception) {
-        // TODO Auto-generated method stub
-
+        sync.asyncExec(() -> {
+            parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
+            MessageDialog.openError(parent.getShell(), "Error: ", exception.getMessage());
+        });
     }
 
     @Override

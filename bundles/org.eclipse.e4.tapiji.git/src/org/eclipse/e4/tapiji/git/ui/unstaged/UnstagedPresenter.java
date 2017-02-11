@@ -47,6 +47,7 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
 
     @Override
     public void loadUnCommittedChanges() {
+        view.setCursorWaitVisibility(true);
         service.uncommittedChanges("E:/cloni/.git", new IGitServiceCallback<Map<GitStatus, Set<String>>>() {
 
             @Override
@@ -63,11 +64,13 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
                         .flatMap(entry -> entry.getValue().stream().map(f -> new GitFile(f, entry.getKey())))
                         .collect(Collectors.toList());
                 }
+                view.setCursorWaitVisibility(false);
                 view.showUnCommittedChanges(files);
             }
 
             @Override
             public void onError(GitServiceException exception) {
+                view.setCursorWaitVisibility(false);
                 view.showError(exception);
             }
         });
@@ -75,16 +78,19 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
 
     @Override
     public void stageChanges() {
+        view.setCursorWaitVisibility(true);
         service.stageAll("E:/cloni/.git", new IGitServiceCallback<Void>() {
 
             @Override
             public void onSuccess(GitServiceResult<Void> response) {
+                view.setCursorWaitVisibility(false);
                 loadUnCommittedChanges();
                 view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_STAGED_FILE);
             }
 
             @Override
             public void onError(GitServiceException exception) {
+                view.setCursorWaitVisibility(false);
                 view.showError(exception);
             }
 
@@ -92,15 +98,18 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
     }
 
     public void discardChanges() {
+        view.setCursorWaitVisibility(true);
         service.discardChanges("E:/cloni/.git", new IGitServiceCallback<Void>() {
 
             @Override
             public void onSuccess(GitServiceResult<Void> response) {
+                view.setCursorWaitVisibility(false);
                 loadUnCommittedChanges();
             }
 
             @Override
             public void onError(GitServiceException exception) {
+                view.setCursorWaitVisibility(false);
                 view.showError(exception);
             }
         });

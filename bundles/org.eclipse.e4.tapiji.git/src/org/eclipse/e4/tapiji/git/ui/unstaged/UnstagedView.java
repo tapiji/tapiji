@@ -114,7 +114,6 @@ public class UnstagedView implements UnstagedContract.View {
             } else {
                 lblUnstaged.setText("Unstaged Files");
             }
-            parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
             parent.layout();
         });
     }
@@ -124,6 +123,17 @@ public class UnstagedView implements UnstagedContract.View {
         sync.asyncExec(() -> {
             parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
             MessageDialog.openError(parent.getShell(), "Error: ", exception.getMessage());
+        });
+    }
+
+    @Override
+    public void setCursorWaitVisibility(boolean visibility) {
+        sync.asyncExec(() -> {
+            if (visibility) {
+                parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_WAIT));
+            } else {
+                parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
+            }
         });
     }
 

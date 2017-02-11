@@ -17,6 +17,8 @@ public interface UnstagedContract {
 
         void sendUIEvent(String topic);
 
+        void setCursorWaitVisibility(boolean visibility);
+
     }
 
     interface Presenter extends BasePresenter<View> {
