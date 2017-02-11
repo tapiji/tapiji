@@ -9,9 +9,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
-import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
+import org.eclipse.e4.tapiji.git.ui.preferences.Preferences;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -36,6 +37,9 @@ public class CloneRepositoryDialog extends Dialog implements SelectionListener, 
 
     @Inject
     IGitService service;
+
+    @Inject
+    Preferences prefs;
 
     @Inject
     UISynchronize sync;
@@ -182,23 +186,14 @@ public class CloneRepositoryDialog extends Dialog implements SelectionListener, 
 
     @Override
     public void onSuccess(GitServiceResult<File> gitServiceResult) {
-        sync.syncExec(new Runnable() {
-
-            @Override
-            public void run() {
-                shell.close();
-            }
+        sync.syncExec(() -> {
+            prefs.addRepository(gitServiceResult.getResult().getAbsolutePath());
+            shell.close();
         });
     }
 
     @Override
     public void onError(GitServiceException exception) {
-        sync.syncExec(new Runnable() {
-
-            @Override
-            public void run() {
-                MessageDialog.openError(shell, "Error: ", exception.getMessage());
-            }
-        });
+        sync.syncExec(() -> MessageDialog.openError(shell, "Error: ", exception.getMessage()));
     }
 }

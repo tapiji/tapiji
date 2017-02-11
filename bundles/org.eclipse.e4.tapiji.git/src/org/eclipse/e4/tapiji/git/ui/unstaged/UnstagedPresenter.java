@@ -17,6 +17,7 @@ import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.GitStatus;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
+import org.eclipse.e4.tapiji.git.ui.preferences.Preferences;
 import org.eclipse.e4.tapiji.git.ui.unstaged.UnstagedContract.View;
 import org.eclipse.e4.tapiji.logger.Log;
 
@@ -26,6 +27,9 @@ import org.eclipse.e4.tapiji.logger.Log;
 public class UnstagedPresenter implements UnstagedContract.Presenter {
 
     private static final String TAG = UnstagedPresenter.class.getSimpleName();
+
+    @Inject
+    Preferences prefs;
 
     @Inject
     IEclipseContext context;
@@ -52,7 +56,7 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
     @Override
     public void loadUnCommittedChanges() {
         view.setCursorWaitVisibility(true);
-        service.uncommittedChanges("E:/cloni/.git", new IGitServiceCallback<Map<GitStatus, Set<String>>>() {
+        service.uncommittedChanges(prefs.getSelectedRepository(), new IGitServiceCallback<Map<GitStatus, Set<String>>>() {
 
             @Override
             public void onSuccess(GitServiceResult<Map<GitStatus, Set<String>>> response) {
@@ -83,7 +87,7 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
     @Override
     public void stageChanges() {
         view.setCursorWaitVisibility(true);
-        service.stageAll("E:/cloni/.git", new IGitServiceCallback<Void>() {
+        service.stageAll(prefs.getSelectedRepository(), new IGitServiceCallback<Void>() {
 
             @Override
             public void onSuccess(GitServiceResult<Void> response) {
@@ -104,7 +108,7 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
 
     public void discardChanges() {
         view.setCursorWaitVisibility(true);
-        service.discardChanges("E:/cloni/.git", new IGitServiceCallback<Void>() {
+        service.discardChanges(prefs.getSelectedRepository(), new IGitServiceCallback<Void>() {
 
             @Override
             public void onSuccess(GitServiceResult<Void> response) {

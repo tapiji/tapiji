@@ -9,6 +9,7 @@ import org.eclipse.e4.tapiji.git.model.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
+import org.eclipse.e4.tapiji.git.ui.preferences.Preferences;
 
 
 @Creatable
@@ -16,6 +17,9 @@ import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
 public class CommitPresenter implements CommitContract.Presenter {
 
     private static final String TAG = CommitPresenter.class.getSimpleName();
+
+    @Inject
+    Preferences prefs;
 
     @Inject
     IGitService service;
@@ -38,7 +42,7 @@ public class CommitPresenter implements CommitContract.Presenter {
     @Override
     public void commitChanges(String summary, String description) {
         view.setCursorWaitVisibility(true);
-        service.commitChanges("E:/cloni/.git", summary, description, new IGitServiceCallback<Void>() {
+        service.commitChanges(prefs.getSelectedRepository(), summary, description, new IGitServiceCallback<Void>() {
 
             @Override
             public void onSuccess(GitServiceResult<Void> response) {
