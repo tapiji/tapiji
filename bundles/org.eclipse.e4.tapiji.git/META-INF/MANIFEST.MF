@@ -24,5 +24,6 @@ Import-Package: org.eclipse.core.runtime.jobs,
  org.eclipse.e4.tapiji.glossary.core.api,
  org.eclipse.e4.tapiji.logger,
  org.eclipse.e4.tapiji.resource,
+ org.eclipse.e4.tapiji.utils,
  org.eclipse.jface.dialogs,
  org.osgi.service.event;version="1.3.1"

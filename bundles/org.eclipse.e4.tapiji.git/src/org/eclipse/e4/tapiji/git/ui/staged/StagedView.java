@@ -1,46 +1,109 @@
 package org.eclipse.e4.tapiji.git.ui.staged;
 
 
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.tapiji.git.model.GitFile;
+import org.eclipse.e4.tapiji.git.model.GitServiceException;
+import org.eclipse.e4.tapiji.git.ui.util.UIEventConstants;
+import org.eclipse.e4.tapiji.logger.Log;
+import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
+import org.eclipse.e4.tapiji.utils.FontUtils;
+import org.eclipse.e4.ui.di.UIEventTopic;
+import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 
 
 public class StagedView implements StagedContract.View {
 
     @Inject
+    UISynchronize sync;
+
+    @Inject
     StagedPresenter presenter;
+
+    @Inject
+    ITapijiResourceProvider resourceProvider;
+
+    private Label lblStagedFiles;
+
+    private Table table;
+
+    private Composite parent;
 
     @PostConstruct
     public void createPartControl(final Composite parent) {
+        presenter.setView(this);
+        this.parent = parent;
         parent.setLayout(new GridLayout(2, false));
 
-        Label lblNewLabel = new Label(parent, SWT.NONE);
-        //lblNewLabel.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
-        lblNewLabel.setText("Staged Files (2)");
+        lblStagedFiles = new Label(parent, SWT.NONE);
+        lblStagedFiles.setFont(FontUtils.createFont(lblStagedFiles, "Segoe UI", 10, SWT.BOLD));
+        lblStagedFiles.setText("Staged Files");
 
         Composite composite = new Composite(parent, SWT.NONE);
         composite.setLayout(new GridLayout(2, false));
         composite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 
-        Button btnNewButton = new Button(composite, SWT.NONE);
-        btnNewButton.setBounds(0, 0, 75, 25);
-        btnNewButton.setText("Unstage all changes");
+        Button btnUnstageChanges = new Button(composite, SWT.NONE);
+        btnUnstageChanges.setBounds(0, 0, 75, 25);
+        btnUnstageChanges.setText("Unstage all changes");
+        btnUnstageChanges.addListener(SWT.MouseDown, event -> presenter.unstageChanges());
 
-        Table table = new Table(parent, SWT.BORDER | SWT.FULL_SELECTION);
+        table = new Table(parent, SWT.BORDER | SWT.FULL_SELECTION);
         table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
-        table.setHeaderVisible(true);
-        table.setLinesVisible(true);
         table.setHeaderVisible(false);
+        table.setLinesVisible(false);
+    }
 
-        TableColumn tblclmnFile = new TableColumn(table, SWT.NONE);
-        tblclmnFile.setWidth(100);
+    @Inject
+    @Optional
+    public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_STAGED_FILE) String payload) {
+        Log.d("EVENT", "asddsdsd");
+        presenter.loadStagedFiles();
+    }
+
+    @Override
+    public void showError(GitServiceException exception) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void showStagedChanges(List<GitFile> files) {
+        sync.asyncExec(new Runnable() {
+
+            @Override
+            public void run() {
+                table.removeAll();
+                table.clearAll();
+
+                if (!files.isEmpty()) {
+                    files.stream().forEach(file -> {
+                        TableItem item = new TableItem(table, SWT.NONE);
+                        item.setText(file.getName());
+                        if (file.getImage() != null) {
+                            item.setImage(resourceProvider.loadImage(file.getImage()));
+                        }
+                    });
+                    lblStagedFiles.setText(String.format("Staged Files (%1$d)", files.size()));
+                } else {
+                    lblStagedFiles.setText("Staged Files");
+                }
+                parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
+                parent.layout();
+            }
+        });
+
     }
 }

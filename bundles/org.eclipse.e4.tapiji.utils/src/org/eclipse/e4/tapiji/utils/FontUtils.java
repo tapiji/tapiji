@@ -14,6 +14,7 @@
 package org.eclipse.e4.tapiji.utils;
 
 
+import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Control;
@@ -25,7 +26,6 @@ public final class FontUtils {
     private FontUtils() {
         // Only static access
     }
-
 
     /**
      * Creates a font by altering the font associated with the given control and applying the provided style (size is
@@ -85,4 +85,10 @@ public final class FontUtils {
         }
         return new Font(display, fontData);
     }
+
+    public static Font createFont(Control control, String fontFamily, int size, int style) {
+        final FontDescriptor boldDescriptor = FontDescriptor.createFrom(fontFamily, size, style);
+        return boldDescriptor.createFont(control.getDisplay());
+    }
+
 }

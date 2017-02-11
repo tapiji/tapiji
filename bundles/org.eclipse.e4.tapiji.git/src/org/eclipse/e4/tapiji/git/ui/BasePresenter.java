@@ -8,5 +8,4 @@ public interface BasePresenter<T> {
     void dispose();
 
     void setView(T view);
-
 }

@@ -28,4 +28,6 @@ public interface IGitService {
 
     void showFileDiff(String directory, IGitServiceCallback<Void> callback);
 
+    void discardChanges(String directory, IGitServiceCallback<Void> callback);
+
 }

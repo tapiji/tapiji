@@ -26,10 +26,10 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8h59QOmHEear1K70oDQV4Q" featurename="children" parentElementId="org.eclipse.e4.tapiji.translator.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_TPZo4OmIEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.perspective.git" label="TapiJI Git">
       <children xsi:type="basic:PartSashContainer" xmi:id="_cFEpEOmIEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.partsashcontainer.git" horizontal="true">
-        <children xsi:type="basic:PartSashContainer" xmi:id="_WK43sOmKEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.partsashcontainer.1" horizontal="true">
-          <children xsi:type="basic:Part" xmi:id="_pX7e4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.4" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.repository.RepositoryView"/>
-          <children xsi:type="basic:Part" xmi:id="_YeD0MOmKEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.1" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.filediff.FileDiffView"/>
-          <children xsi:type="basic:PartSashContainer" xmi:id="_jQUncOmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.partsashcontainer.2">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_WK43sOmKEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.partsashcontainer.1" containerData="" horizontal="true">
+          <children xsi:type="basic:Part" xmi:id="_pX7e4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.4" containerData="5000" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.repository.RepositoryView"/>
+          <children xsi:type="basic:Part" xmi:id="_YeD0MOmKEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.1" containerData="8000" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.filediff.FileDiffView"/>
+          <children xsi:type="basic:PartSashContainer" xmi:id="_jQUncOmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.partsashcontainer.2" containerData="10000">
             <children xsi:type="basic:Part" xmi:id="_nLFz4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.unstaged.UnstagedView"/>
             <children xsi:type="basic:Part" xmi:id="_nwPvYOmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.2" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.staged.StagedView"/>
             <children xsi:type="basic:Part" xmi:id="_oVtM4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.3" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.commit.CommitView"/>

@@ -20,6 +20,8 @@ import org.eclipse.e4.tapiji.git.model.GitStatus;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ResetCommand;
+import org.eclipse.jgit.api.ResetCommand.ResetType;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -84,6 +86,7 @@ public class GitService implements IGitService {
             try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
                 try (Git git = new Git(repository)) {
                     git.add().addFilepattern(".").call();
+                    callback.onSuccess(new GitServiceResult<Void>(null));
                 }
             }
         } catch (IOException | GitAPIException exception) {
@@ -98,6 +101,26 @@ public class GitService implements IGitService {
             try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
                 try (Git git = new Git(repository)) {
                     git.reset().call();
+                }
+            }
+        } catch (IOException | GitAPIException exception) {
+            callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+        }
+    }
+
+    @Override
+    public void discardChanges(String directory, IGitServiceCallback<Void> callback) {
+        try {
+            FileRepositoryBuilder builder = new FileRepositoryBuilder();
+            try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
+                try (Git git = new Git(repository)) {
+                    ResetCommand reset = git.reset();
+                    reset.setMode(ResetType.HARD);
+                    reset.setRef(Constants.HEAD);
+                    reset.call();
+
+                    git.clean().setCleanDirectories(true).call();
+                    callback.onSuccess(new GitServiceResult<Void>(null));
                 }
             }
         } catch (IOException | GitAPIException exception) {
