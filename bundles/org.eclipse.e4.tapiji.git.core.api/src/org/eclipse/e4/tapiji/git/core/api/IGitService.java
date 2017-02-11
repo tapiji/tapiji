@@ -30,4 +30,8 @@ public interface IGitService {
 
     void discardChanges(String directory, IGitServiceCallback<Void> callback);
 
+    void pushChanges(String directory, IGitServiceCallback<Void> callback);
+
+    void pushChangesWithCredentials(String passowrd, String username, String directory, IGitServiceCallback<Void> callback);
+
 }

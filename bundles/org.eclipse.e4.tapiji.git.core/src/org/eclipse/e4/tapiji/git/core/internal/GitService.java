@@ -40,6 +40,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.FileTreeIterator;
@@ -47,11 +48,60 @@ import org.eclipse.jgit.treewalk.FileTreeIterator;
 
 public class GitService implements IGitService {
 
+    private static final String REMOTE_URL = "ssh://<user>:<pwd>@<host>:22/<path-to-remote-repo>/";
     private static final String TAG = GitService.class.getSimpleName();
     private ExecutorService executorService;
 
     public GitService() {
         executorService = Executors.newFixedThreadPool(10);
+    }
+
+    @Override
+    public void pushChanges(String directory, IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                FileRepositoryBuilder builder = new FileRepositoryBuilder();
+                try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
+
+                    try (Git git = new Git(repository)) {
+
+                        git.push().setRemote("origin").call();
+                    }
+                }
+            } catch (IOException | GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
+    }
+
+    @Override
+    public void pushChangesWithCredentials(String password, String username, String directory, IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                FileRepositoryBuilder builder = new FileRepositoryBuilder();
+                try (Repository repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build()) {
+                    try (Git git = new Git(repository)) {
+                        git.push().setRemote("origin").setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password)).call();
+                    }
+                }
+            } catch (IOException | GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
     }
 
     @Override
