@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
+import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.ui.preferences.Preferences;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.swt.SWT;
@@ -34,8 +35,15 @@ public class LoginDialog extends Dialog {
 
     private Shell shell;
 
-    public LoginDialog(Shell parent) {
+    private Text txtPassword;
+
+    private Text txtUsername;
+
+    private IGitServiceCallback<Void> callback;
+
+    public LoginDialog(Shell parent, IGitServiceCallback<Void> callback) {
         super(parent);
+        this.callback = callback;
     }
 
     public void open() {
@@ -68,29 +76,36 @@ public class LoginDialog extends Dialog {
         lblUserName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
         lblUserName.setText("User name:");
 
-        Text text = new Text(composite, SWT.BORDER);
-        text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        txtUsername = new Text(composite, SWT.BORDER);
+        txtUsername.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
         Label lblPassword = new Label(composite, SWT.NONE);
         lblPassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
         lblPassword.setText("Password:");
 
-        Text text_1 = new Text(composite, SWT.BORDER | SWT.PASSWORD);
-        text_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        txtPassword = new Text(composite, SWT.BORDER | SWT.PASSWORD);
+        txtPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         new Label(composite, SWT.NONE);
 
-        Composite composite_1 = new Composite(composite, SWT.NONE);
-        composite_1.setLayout(new FillLayout(SWT.HORIZONTAL));
+        Composite compositeBtn = new Composite(composite, SWT.NONE);
+        compositeBtn.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-        Button btnNewButton = new Button(composite_1, SWT.NONE);
-        btnNewButton.setText("Log In");
+        Button btnLogin = new Button(compositeBtn, SWT.NONE);
+        btnLogin.addListener(SWT.MouseDown, listener -> pushChanges());
+        btnLogin.setText("Log In");
 
-        Button btnNewButton_1 = new Button(composite_1, SWT.NONE);
-        btnNewButton_1.setText("Cancel");
+        Button btnCancel = new Button(compositeBtn, SWT.NONE);
+        btnCancel.addListener(SWT.MouseDown, listener -> shell.close());
+        btnCancel.setText("Cancel");
     }
 
-    public static void show(final IEclipseContext context, final Shell shell) {
-        LoginDialog dialog = new LoginDialog(shell);
+    private void pushChanges() {
+        service.pushChangesWithCredentials(txtPassword.getText(), txtUsername.getText(), prefs.getSelectedRepository(), callback);
+        shell.close();
+    }
+
+    public static void show(final IEclipseContext context, final Shell shell, IGitServiceCallback<Void> callback) {
+        LoginDialog dialog = new LoginDialog(shell, callback);
         ContextInjectionFactory.inject(dialog, context);
         dialog.open();
     }

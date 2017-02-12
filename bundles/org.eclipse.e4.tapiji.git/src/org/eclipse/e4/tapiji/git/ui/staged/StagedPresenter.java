@@ -11,12 +11,11 @@ import javax.inject.Singleton;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.model.GitFile;
+import org.eclipse.e4.tapiji.git.model.GitFileStatus;
 import org.eclipse.e4.tapiji.git.model.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
-import org.eclipse.e4.tapiji.git.model.GitStatus;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
-import org.eclipse.e4.tapiji.git.ui.preferences.Preferences;
 import org.eclipse.e4.tapiji.git.ui.staged.StagedContract.View;
 import org.eclipse.e4.tapiji.logger.Log;
 
@@ -29,9 +28,6 @@ public class StagedPresenter implements StagedContract.Presenter {
 
     @Inject
     IGitService service;
-
-    @Inject
-    Preferences prefs;
 
     private View view;
 
@@ -51,10 +47,10 @@ public class StagedPresenter implements StagedContract.Presenter {
     @Override
     public void loadStagedFiles() {
         view.setCursorWaitVisibility(true);
-        service.uncommittedChanges(prefs.getSelectedRepository(), new IGitServiceCallback<Map<GitStatus, Set<String>>>() {
+        service.uncommittedChanges(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
 
             @Override
-            public void onSuccess(GitServiceResult<Map<GitStatus, Set<String>>> response) {
+            public void onSuccess(GitServiceResult<Map<GitFileStatus, Set<String>>> response) {
                 view.setCursorWaitVisibility(false);
                 Log.d(TAG, "STAGED FILES( " + response.getResult().toString() + ")");
                 List<GitFile> files = null;
@@ -64,7 +60,7 @@ public class StagedPresenter implements StagedContract.Presenter {
                     files = response.getResult()
                         .entrySet()
                         .stream()
-                        .filter(entry -> entry.getKey() == GitStatus.ADDED || entry.getKey() == GitStatus.CHANGED)
+                        .filter(entry -> entry.getKey() == GitFileStatus.ADDED || entry.getKey() == GitFileStatus.CHANGED)
                         .flatMap(entry -> entry.getValue().stream().map(f -> new GitFile(f, entry.getKey())))
                         .collect(Collectors.toList());
                 }
@@ -82,7 +78,7 @@ public class StagedPresenter implements StagedContract.Presenter {
     @Override
     public void unstageChanges() {
         view.setCursorWaitVisibility(true);
-        service.unstageAll(prefs.getSelectedRepository(), new IGitServiceCallback<Void>() {
+        service.unstageAll(new IGitServiceCallback<Void>() {
 
             @Override
             public void onSuccess(GitServiceResult<Void> response) {

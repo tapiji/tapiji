@@ -7,10 +7,10 @@ import org.eclipse.e4.tapiji.resource.TapijiResourceConstants;
 public class GitFile {
 
     private final String name;
-    private final GitStatus status;
+    private final GitFileStatus status;
     private String image;
 
-    public GitFile(String name, GitStatus status) {
+    public GitFile(String name, GitFileStatus status) {
         super();
         this.name = name;
         this.status = status;
@@ -20,7 +20,7 @@ public class GitFile {
         return name;
     }
 
-    public GitStatus getStatus() {
+    public GitFileStatus getStatus() {
         return status;
     }
 

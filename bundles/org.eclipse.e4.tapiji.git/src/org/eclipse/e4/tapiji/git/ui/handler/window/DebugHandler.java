@@ -7,9 +7,9 @@ import java.util.Set;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
+import org.eclipse.e4.tapiji.git.model.GitFileStatus;
 import org.eclipse.e4.tapiji.git.model.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
-import org.eclipse.e4.tapiji.git.model.GitStatus;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.swt.widgets.Shell;
@@ -20,10 +20,10 @@ public class DebugHandler {
     @Execute
     public void debug(final IEclipseContext context, Shell shell, IGitService service) {
 
-        service.uncommittedChanges("E:/cloni/.git", new IGitServiceCallback<Map<GitStatus, Set<String>>>() {
+        service.uncommittedChanges(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
 
             @Override
-            public void onSuccess(GitServiceResult<Map<GitStatus, Set<String>>> result) {
+            public void onSuccess(GitServiceResult<Map<GitFileStatus, Set<String>>> result) {
                 Log.d("STATES: ", result.getResult().toString());
 
             }
@@ -35,7 +35,7 @@ public class DebugHandler {
             }
         });
 
-        service.stageAll("E:/cloni/.git", new IGitServiceCallback<Void>() {
+        service.stageAll(new IGitServiceCallback<Void>() {
 
             @Override
             public void onSuccess(GitServiceResult<Void> gitServiceResult) {
@@ -49,10 +49,10 @@ public class DebugHandler {
 
             }
         });
-        service.uncommittedChanges("E:/cloni/.git", new IGitServiceCallback<Map<GitStatus, Set<String>>>() {
+        service.uncommittedChanges(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
 
             @Override
-            public void onSuccess(GitServiceResult<Map<GitStatus, Set<String>>> result) {
+            public void onSuccess(GitServiceResult<Map<GitFileStatus, Set<String>>> result) {
                 Log.d("STATES: ", result.getResult().toString());
 
             }
@@ -64,7 +64,7 @@ public class DebugHandler {
             }
         });
 
-        service.unstageAll("E:/cloni/.git", new IGitServiceCallback<Void>() {
+        service.unstageAll(new IGitServiceCallback<Void>() {
 
             @Override
             public void onSuccess(GitServiceResult<Void> gitServiceResult) {
@@ -77,10 +77,10 @@ public class DebugHandler {
 
             }
         });
-        service.uncommittedChanges("E:/cloni/.git", new IGitServiceCallback<Map<GitStatus, Set<String>>>() {
+        service.uncommittedChanges(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
 
             @Override
-            public void onSuccess(GitServiceResult<Map<GitStatus, Set<String>>> result) {
+            public void onSuccess(GitServiceResult<Map<GitFileStatus, Set<String>>> result) {
                 Log.d("STATES: ", result.getResult().toString());
             }
 
@@ -91,7 +91,7 @@ public class DebugHandler {
             }
         });
 
-        service.tags("E:/cloni/.git", new IGitServiceCallback<List<String>>() {
+        service.tags(new IGitServiceCallback<List<String>>() {
 
             @Override
             public void onSuccess(GitServiceResult<List<String>> response) {
@@ -106,7 +106,7 @@ public class DebugHandler {
             }
         });
 
-        service.showFileDiff("E:/cloni/.git", new IGitServiceCallback<Void>() {
+        service.showFileDiff(new IGitServiceCallback<Void>() {
 
             @Override
             public void onSuccess(GitServiceResult<Void> response) {
