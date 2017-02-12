@@ -22,6 +22,7 @@ public class Preferences {
     IEclipsePreferences preferences;
 
     public void addRepository(String path) {
+
         List<String> repos = ListUtil.unpackList(preferences.get(KEY_REPOSITORIES, ""), ",");
         if (!repos.contains(path)) {
             repos.add(path);
@@ -36,10 +37,11 @@ public class Preferences {
     }
 
     public List<String> getRepositories() {
-        return ListUtil.unpackList(preferences.get(KEY_REPOSITORIES, ""), ",");
+        return ListUtil.unpackList(preferences.get(KEY_REPOSITORIES, "E:/cloni/.git"), ",");
     }
 
     public void setSelectedRepository(String path) {
+
         preferences.put(KEY_SELECTED_REPOSITORY, path);
     }
 

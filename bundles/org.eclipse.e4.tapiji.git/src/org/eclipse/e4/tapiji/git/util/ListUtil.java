@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.eclipse.e4.tapiji.git.model.GitRepository;
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonArray;
 
 
 public class ListUtil {
@@ -35,6 +38,24 @@ public class ListUtil {
         } else {
             return Stream.of(strs).collect(Collectors.joining(","));
         }
+    }
+
+    public static String packGitRepositoryList(List<GitRepository> repos) {
+        final JsonArray jsonRepos = new JsonArray();
+        repos.stream()
+            .flatMap(repo -> Stream.of(Json.object().add("url", repo.getUrl()).add("directory", repo.getDirectory())))
+            .forEach(jsonObject -> jsonRepos.add(jsonObject.toString()));
+        return jsonRepos.toString();
+    }
+
+    public static List<GitRepository> unpackGitRepositoryList(String repos) {
+        return Json.parse(repos)
+            .asArray()
+            .values()
+            .stream()
+            .map(value -> Json.parse(value.asString()).asObject())
+            .map(obj -> new GitRepository(obj.get("url").asString(), obj.get("directory").asString()))
+            .collect(Collectors.toList());
     }
 
     public static String[] unpackArray(final String str, final String sep) {

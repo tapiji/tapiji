@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Tapiji Target RCP" sequenceNumber="1">
+<?pde version="3.8"?><target name="Tapiji Target RCP" sequenceNumber="2">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.platform.sdk" version="4.6.0.I20160606-1100"/>
@@ -12,5 +12,6 @@
 <unit id="org.eclipse.jgit.source.feature.group" version="4.6.0.201612231935-r"/>
 <repository location="http://download.eclipse.org/egit/updates"/>
 </location>
+<location path="E:\github\tapiji\tapiji\releng\org.eclipselabs.e4.tapiji.translator.target\libs" type="Directory"/>
 </locations>
 </target>

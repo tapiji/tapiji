@@ -56,19 +56,26 @@ public class GitService implements IGitService {
         if (!new File(directory).exists()) {
             throw new IllegalStateException("Git repository not available at " + directory);
         }
+        unmount();
         this.directory = directory;
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         this.repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build();
         this.git = new Git(repository);
+
+        repository.getRemoteNames().forEach(remot -> System.out.println(remot));
+
+        Log.d("ssS", repository.getDirectory().toString());
     }
 
     @Override
     public void unmount() {
         if (repository != null) {
             repository.close();
+            repository = null;
         }
         if (git != null) {
             git.close();
+            git = null;
         }
     }
 
