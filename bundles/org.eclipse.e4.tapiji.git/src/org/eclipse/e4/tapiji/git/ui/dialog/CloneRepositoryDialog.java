@@ -52,6 +52,8 @@ public class CloneRepositoryDialog extends Dialog implements SelectionListener, 
 
     private Button btnCloneRepo;
 
+    private String gitUrl;
+
     public CloneRepositoryDialog(Shell parent) {
         super(parent);
     }
@@ -117,7 +119,8 @@ public class CloneRepositoryDialog extends Dialog implements SelectionListener, 
         if (btn.getData().equals("btn_clone")) {
 
             try {
-                new ProgressMonitorDialog(shell).run(true, true, new LongRunningOperation(txtRepoUrl.getText(), txtRepoPath.getText(), service, this));
+                this.gitUrl = txtRepoUrl.getText();
+                new ProgressMonitorDialog(shell).run(true, true, new LongRunningOperation(gitUrl, txtRepoPath.getText(), service, this));
             } catch (InvocationTargetException invocationTargetException) {
                 MessageDialog.openError(shell, "Error: ", invocationTargetException.getMessage());
             } catch (InterruptedException interruptedException) {
@@ -187,7 +190,7 @@ public class CloneRepositoryDialog extends Dialog implements SelectionListener, 
     @Override
     public void onSuccess(GitServiceResult<File> gitServiceResult) {
         sync.syncExec(() -> {
-            prefs.addRepository(gitServiceResult.getResult().getAbsolutePath());
+            prefs.addRepository(gitUrl, gitServiceResult.getResult().getAbsolutePath());
             shell.close();
         });
     }

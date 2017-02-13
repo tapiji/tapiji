@@ -1,16 +1,20 @@
 package org.eclipse.e4.tapiji.git.ui.handler.window;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
+import org.eclipse.e4.tapiji.git.model.GitRepository;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
+import org.eclipse.e4.tapiji.git.ui.preferences.Preferences;
+import org.eclipse.e4.tapiji.git.util.ListUtil;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.swt.widgets.Shell;
 
@@ -121,5 +125,11 @@ public class DebugHandler {
             }
         });
 
+        List<GitRepository> repos = new ArrayList<>();
+        List<GitRepository> wahh = ListUtil.unpackGitRepositoryList(Preferences.TEST_REPO);
+        Log.d("Repos unpacked: ", wahh.toString());
+        repos.add(new GitRepository("https://github.com/tapiji/git.extension.test.git", "E:/cloni/.git"));
+        String result = ListUtil.packGitRepositoryList(repos);
+        Log.d("Repos packed: ", result);
     }
 }

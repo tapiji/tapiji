@@ -42,20 +42,18 @@ public class ListUtil {
 
     public static String packGitRepositoryList(List<GitRepository> repos) {
         final JsonArray jsonRepos = new JsonArray();
-        repos.stream()
-            .flatMap(repo -> Stream.of(Json.object().add("url", repo.getUrl()).add("directory", repo.getDirectory())))
-            .forEach(jsonObject -> jsonRepos.add(jsonObject.toString()));
+        repos.stream().flatMap(repo -> Stream.of(JsonParserUtil.parseGitRepository(repo))).forEach(jsonObject -> jsonRepos.add(jsonObject.toString()));
         return jsonRepos.toString();
     }
 
     public static List<GitRepository> unpackGitRepositoryList(String repos) {
-        return Json.parse(repos)
-            .asArray()
-            .values()
-            .stream()
-            .map(value -> Json.parse(value.asString()).asObject())
-            .map(obj -> new GitRepository(obj.get("url").asString(), obj.get("directory").asString()))
-            .collect(Collectors.toList());
+        return Json.parse(repos).asArray().values().stream().map(value -> {
+            if (value.isString()) {
+                return Json.parse(value.asString()).asObject();
+            } else {
+                return value.asObject();
+            }
+        }).map(obj -> JsonParserUtil.parseGitRepository(obj)).collect(Collectors.toList());
     }
 
     public static String[] unpackArray(final String str, final String sep) {

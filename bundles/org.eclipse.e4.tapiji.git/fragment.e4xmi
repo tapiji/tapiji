@@ -13,7 +13,7 @@
     <elements xsi:type="commands:Handler" xmi:id="_c3i4QOrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handler.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.PullHandler" command="_emaN0OrPEeah_qW_gJKbyQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_HkUD0OrSEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handler.1" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.window.CloneRepoHandler" command="_F0x_4OrSEeah_qW_gJKbyQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_Dk7AwOu8Eeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handler.debug" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.window.DebugHandler" command="_GA23sOu8Eeah_qW_gJKbyQ"/>
-    <elements xsi:type="commands:Handler" xmi:id="_80OJwPExEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.handler.selectrepository" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.SelectRepositoryHandler" command="__XZ4MPExEeaWMuJeVV3wjA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_frBTAPICEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.handler.repositories" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.GitRepositoriesHandler" command="_c5kfEPICEeaWMuJeVV3wjA"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_vAgfsOmFEear1K70oDQV4Q" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="commands:Command" xmi:id="_zniVMOmFEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.command.perspective.git" commandName="Perspective Git">
@@ -23,7 +23,7 @@
     <elements xsi:type="commands:Command" xmi:id="_emaN0OrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.command.pull" commandName="Pull"/>
     <elements xsi:type="commands:Command" xmi:id="_F0x_4OrSEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.command.clonerepo" commandName="Clone Repo"/>
     <elements xsi:type="commands:Command" xmi:id="_GA23sOu8Eeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.command.debug" commandName="Debug"/>
-    <elements xsi:type="commands:Command" xmi:id="__XZ4MPExEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.command.selectrepository" commandName="Select Repository"/>
+    <elements xsi:type="commands:Command" xmi:id="_c5kfEPICEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.command.repositories" commandName="Repositories"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8h59QOmHEear1K70oDQV4Q" featurename="children" parentElementId="org.eclipse.e4.tapiji.translator.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_TPZo4OmIEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.perspective.git" label="TapiJI Git">
@@ -49,7 +49,7 @@
         <children xsi:type="menu:HandledToolItem" xmi:id="_aeRTwOrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.pull" label="Pull" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_pull.png" command="_emaN0OrPEeah_qW_gJKbyQ">
           <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_J0i5sOrVEeah_qW_gJKbyQ" coreExpressionId="org.eclipse.e4.tapiji.active.perspective"/>
         </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_1HcLoPEuEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.asdaddasd" label="Select Repository" command="__XZ4MPExEeaWMuJeVV3wjA">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_1HcLoPEuEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.selected.repository" label="Select Repository" command="_c5kfEPICEeaWMuJeVV3wjA">
           <menu xmi:id="_1-kA4PEuEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.menu.gitrepositories">
             <children xsi:type="menu:DynamicMenuContribution" xmi:id="_4jslMPEwEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.dynamicmenucontribution.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.GitRepositoriesHandler"/>
           </menu>
