@@ -9,6 +9,7 @@ public final class TapijiResourceConstants {
 
     public static final String IMG_TAPIJI_128x128 = "icons/128x128/tapiji.png";
     public static final String IMG_TAPIJI_64x64 = "icons/64x64/tapiji.png";
+    public static final String IMG_TAPIJI_16x16 = "icons/16x16/tapiji.png";
 
     public static final String IMG_RESOURCE_BUNDLE = "icons/16x16/resource_bundle.png";
     public static final String IMG_RESOURCE_PROPERTY = "icons/16x16/resource_property.png";
@@ -25,5 +26,8 @@ public final class TapijiResourceConstants {
     public static final String IMG_GIT_MODIFIED = "icons/16x16/git_modified.png";
     public static final String IMG_GIT_UNTRACKED = "icons/16x16/git_added.png";
     public static final String IMG_GIT_MISSING = "icons/16x16/git_deleted.png";
+
+    public static final String IMG_INFORMATION = "icons/16x16/information.png";
+    public static final String IMG_INFORMATION_32x32 = "icons/32x32/information.png";
 
 }

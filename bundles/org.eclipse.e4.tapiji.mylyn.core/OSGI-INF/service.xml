@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="Tapiji Mylyn Service">
+<implementation class="org.eclipse.e4.tapiji.mylyn.core.internal.MylynServiceContextFactory" />
+   <property
+   		name="service.context.key"
+   		type="String"
+   		value="org.eclipse.e4.tapiji.mylyn.core.api.IMylynService"/>
+   <service>
+      <provide interface="org.eclipse.e4.core.contexts.IContextFunction"/>
+   </service>
+</scr:component>

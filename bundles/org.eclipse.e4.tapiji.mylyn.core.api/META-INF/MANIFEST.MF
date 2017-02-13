@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Api
+Bundle-SymbolicName: org.eclipse.e4.tapiji.mylyn.core.api
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.eclipse.e4.tapiji.mylyn.core.api
+Import-Package: org.eclipse.e4.tapiji.mylyn.model,
+ org.eclipse.swt.widgets

@@ -17,7 +17,8 @@ Require-Bundle: org.eclipse.e4.ui.model.workbench;bundle-version="1.2.0.v2016022
  org.eclipse.jface,
  org.eclipse.equinox.registry,
  org.eclipse.e4.ui.di,
- minimal-json
+ minimal-json,
+ org.eclipse.e4.tapiji.mylyn.core;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.eclipse.core.runtime.jobs,
  org.eclipse.core.runtime.preferences;version="3.3.0",
@@ -26,8 +27,10 @@ Import-Package: org.eclipse.core.runtime.jobs,
  org.eclipse.e4.tapiji.git.model,
  org.eclipse.e4.tapiji.glossary.core.api,
  org.eclipse.e4.tapiji.logger,
+ org.eclipse.e4.tapiji.mylyn.core.api,
  org.eclipse.e4.tapiji.resource,
  org.eclipse.e4.tapiji.utils,
+ org.eclipse.e4.ui.services,
  org.eclipse.jface.dialogs,
  org.osgi.service.event;version="1.3.1",
  org.osgi.service.prefs;version="1.1.1"
