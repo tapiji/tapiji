@@ -15,12 +15,16 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.core.internal.file.FileFinder;
-import org.eclipse.e4.tapiji.git.model.GitFileStatus;
-import org.eclipse.e4.tapiji.git.model.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
+import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
+import org.eclipse.e4.tapiji.git.model.push.GitPushMessage;
+import org.eclipse.e4.tapiji.git.model.push.GitRemoteStatus;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ResetCommand;
@@ -32,6 +36,7 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 
@@ -82,12 +87,13 @@ public class GitService implements IGitService {
     @Override
     public void pushChanges(IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
+            Iterable<PushResult> results = null;
             try {
-                git.push().setRemote("origin").call();
+                results = git.push().setRemote("origin").call();
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitServiceResult<Void>(null, parsePushResults(results));
         }, executorService).whenCompleteAsync((result, exception) -> {
             if (exception == null) {
                 callback.onSuccess(result);
@@ -100,12 +106,13 @@ public class GitService implements IGitService {
     @Override
     public void pushChangesWithCredentials(String password, String username, String directory, IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
+            Iterable<PushResult> results = null;
             try {
-                git.push().setRemote("origin").setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password)).call();
+                results = git.push().setRemote("origin").setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password)).call();
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitServiceResult<Void>(null, parsePushResults(results));
         }, executorService).whenCompleteAsync((result, exception) -> {
             if (exception == null) {
                 callback.onSuccess(result);
@@ -281,6 +288,20 @@ public class GitService implements IGitService {
     @Override
     public void showFileDiff(IGitServiceCallback<Void> callback) {
 
+    }
+
+    private List<GitPushMessage> parsePushResults(Iterable<PushResult> results) {
+        if (results == null) {
+            return Collections.emptyList();
+        } else {
+            return StreamSupport.stream(results.spliterator(), false).flatMap(result -> result.getRemoteUpdates().stream().map(update -> {
+                GitPushMessage message = new GitPushMessage();
+                message.setRemoteStatus(GitRemoteStatus.valueOf(update.getStatus().toString()));
+                message.setRemoteName(update.getTrackingRefUpdate().getRemoteName());
+                message.setLocalName(update.getTrackingRefUpdate().getLocalName());
+                return message;
+            })).collect(Collectors.toList());
+        }
     }
 
     @SuppressWarnings("unchecked")

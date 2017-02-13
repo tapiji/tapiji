@@ -60,7 +60,7 @@ public class LoginDialog extends Dialog {
     @PostConstruct
     private void createContents() {
         shell = new Shell(getParent(), SWT.CLOSE | SWT.TITLE);
-        shell.setSize(450, 136);
+        shell.setSize(450, 150);
         shell.setText(getText());
 
         shell.setLayout(new GridLayout(1, false));

@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.model;
+package org.eclipse.e4.tapiji.git.model.exception;
 
 
 public class GitServiceException extends Exception {

@@ -1,7 +1,7 @@
 package org.eclipse.e4.tapiji.git.ui.commit;
 
 
-import org.eclipse.e4.tapiji.git.model.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.ui.BasePresenter;
 
 

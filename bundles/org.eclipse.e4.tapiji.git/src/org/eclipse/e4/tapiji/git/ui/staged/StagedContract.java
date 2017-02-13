@@ -2,8 +2,8 @@ package org.eclipse.e4.tapiji.git.ui.staged;
 
 
 import java.util.List;
-import org.eclipse.e4.tapiji.git.model.GitFile;
-import org.eclipse.e4.tapiji.git.model.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.file.GitFile;
 import org.eclipse.e4.tapiji.git.ui.BasePresenter;
 
 

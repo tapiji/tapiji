@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.model;
+package org.eclipse.e4.tapiji.git.model.file;
 
 
 import org.eclipse.e4.tapiji.resource.TapijiResourceConstants;
