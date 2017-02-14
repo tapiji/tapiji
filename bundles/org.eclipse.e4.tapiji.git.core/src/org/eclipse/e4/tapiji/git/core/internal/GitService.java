@@ -165,7 +165,7 @@ public class GitService implements IGitService {
     public void stageAll(IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
             try {
-                git.add().addFilepattern(".").call();
+                git.add().setUpdate(true).addFilepattern(".").call();
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }

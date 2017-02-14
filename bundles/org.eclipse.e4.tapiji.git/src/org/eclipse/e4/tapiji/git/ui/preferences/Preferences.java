@@ -17,8 +17,9 @@ import org.eclipse.e4.tapiji.logger.Log;
 @Singleton
 public class Preferences {
 
-    public static String TEST_REPO = "[{\"url\":\"https://github.com/tapiji/tapiji.git\",\"directory\":\"E:/asdasdadsd/.git\"},{\"url\":\"https://github.com/tapiji/git.extension.test.git\",\"directory\":\"E:/cloni/.git\"}]";
-    public static String DEFAULT_REPO = "{\"url\":\"https://github.com/tapiji/git.extension.test.git\",\"directory\":\"E:/cloni/.git\"}";
+    //public static String TEST_REPO = "[{\"url\":\"https://github.com/tapiji/tapiji.git\",\"directory\":\"E:/asdasdadsd/.git\"},{\"url\":\"https://github.com/tapiji/git.extension.test.git\",\"directory\":\"D:/cloni/.git\"}]";
+	public static String TEST_REPO = "[{\"url\":\"https://github.com/tapiji/git.extension.test.git\",\"directory\":\"D:/cloni/.git\"}]";
+    public static String DEFAULT_REPO = "{\"url\":\"https://github.com/tapiji/git.extension.test.git\",\"directory\":\"D:/cloni/.git\"}";
 
     private static final String KEY_REPOSITORIES = Preferences.class.getPackage() + "_KEY_REPOSITORIES";
     private static final String KEY_SELECTED_REPOSITORY = Preferences.class.getPackage() + "_KEY_SELECTED_REPOSITORY";

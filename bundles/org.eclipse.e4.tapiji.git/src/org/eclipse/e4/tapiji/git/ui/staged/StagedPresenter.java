@@ -60,7 +60,7 @@ public class StagedPresenter implements StagedContract.Presenter {
                     files = response.getResult()
                         .entrySet()
                         .stream()
-                        .filter(entry -> entry.getKey() == GitFileStatus.ADDED || entry.getKey() == GitFileStatus.CHANGED)
+                        .filter(entry -> entry.getKey() == GitFileStatus.ADDED || entry.getKey() == GitFileStatus.REMOVED ||entry.getKey() == GitFileStatus.CHANGED)
                         .flatMap(entry -> entry.getValue().stream().map(f -> new GitFile(f, entry.getKey())))
                         .collect(Collectors.toList());
                 }

@@ -9,7 +9,7 @@
 </location>
 <location path="${project_loc:org.eclipse.e4.tapiji.rap.target}/rap-e4" type="Directory"/>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.rap.e4.tooling.feature.feature.group" version="0.9.0.201701010809"/>
+<unit id="org.eclipse.rap.e4.tooling.feature.feature.group" version="0.9.0.201702020715"/>
 <repository location="http://download.eclipse.org/rt/rap/incubator/nightly/e4/tooling/site/"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
