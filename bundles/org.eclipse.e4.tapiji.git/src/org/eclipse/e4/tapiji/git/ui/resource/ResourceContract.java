@@ -1,9 +1,9 @@
-package org.eclipse.e4.tapiji.git.ui.repository;
+package org.eclipse.e4.tapiji.git.ui.resource;
 
 import org.eclipse.e4.tapiji.git.ui.BasePresenter;
 
 
-public interface RepositoryContract {
+public interface ResourceContract {
 
 	interface View {
 

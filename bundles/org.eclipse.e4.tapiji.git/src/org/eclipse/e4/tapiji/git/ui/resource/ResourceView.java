@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.repository;
+package org.eclipse.e4.tapiji.git.ui.resource;
 
 
 import javax.annotation.PostConstruct;
@@ -9,10 +9,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 
-public class RepositoryView implements RepositoryContract.View {
+public class ResourceView implements ResourceContract.View {
 
     @Inject
-    RepositoryPresenter presenter;
+    ResourcePresenter presenter;
 
     @PostConstruct
     public void createPartControl(final Composite parent) {

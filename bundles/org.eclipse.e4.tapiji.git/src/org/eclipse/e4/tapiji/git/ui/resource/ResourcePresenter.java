@@ -1,13 +1,13 @@
-package org.eclipse.e4.tapiji.git.ui.repository;
+package org.eclipse.e4.tapiji.git.ui.resource;
 
 import javax.inject.Singleton;
 
 import org.eclipse.e4.core.di.annotations.Creatable;
-import org.eclipse.e4.tapiji.git.ui.repository.RepositoryContract.View;
+import org.eclipse.e4.tapiji.git.ui.resource.ResourceContract.View;
 
 @Creatable
 @Singleton
-public class RepositoryPresenter implements RepositoryContract.Presenter {
+public class ResourcePresenter implements ResourceContract.Presenter {
 
 	private View view;
 
