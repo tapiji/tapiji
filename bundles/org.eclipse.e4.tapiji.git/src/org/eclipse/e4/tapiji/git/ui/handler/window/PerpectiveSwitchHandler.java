@@ -25,6 +25,7 @@ public class PerpectiveSwitchHandler {
     private static final String PARAMETER_PERSPECTIVE_ID = "org.eclipse.e4.tapiji.git.commandparameter.perspective";
     public static final String TOPIC_UPDATE_FILES = "UPDATEFILES";
     public static final String TOPIC_ALL = "org/eclipse/e4/ui/model/ui/UILabel/*"; //$NON-NLS-1$
+    private static final String TAG = PerpectiveSwitchHandler.class.getSimpleName();
     @Inject
     IEventBroker eventBroker;
 
@@ -33,21 +34,28 @@ public class PerpectiveSwitchHandler {
     public void switchPerspective(IEclipseContext context, MApplication application, EPartService partService, EModelService modelService, @Named(PARAMETER_PERSPECTIVE_ID) String perspectiveId, IGitService service, Preferences prefs, MApplication app) {
         List<MPerspective> perspectives = modelService.findElements(application, perspectiveId, MPerspective.class, null);
         if (!perspectives.isEmpty()) {
-            try {
-                GitRepository repository = prefs.getSelectedRepository();
-                if (repository != null) {
-                    MUIElement dropDownMenu = modelService.find(UIEventConstants.MENU_REPOSITORY_ID, app);
-                    if (dropDownMenu instanceof HandledToolItemImpl) {
-                        ((HandledToolItemImpl) dropDownMenu).setLabel(repository.getName());
+            perspectives.forEach(perspective -> {
+                if (perspective.getElementId().equals("org.eclipse.e4.tapiji.translator.perspective.main")) {
+                    partService.switchPerspective(perspective);
+                } else if (perspective.getElementId().equals("org.eclipse.e4.tapiji.git.perspective.git")) {
+                    try {
+                        GitRepository repository = prefs.getSelectedRepository();
+                        if (repository != null) {
+                            MUIElement dropDownMenu = modelService.find(UIEventConstants.MENU_REPOSITORY_ID, app);
+                            if (dropDownMenu instanceof HandledToolItemImpl) {
+                                ((HandledToolItemImpl) dropDownMenu).setLabel(repository.getName());
+                            }
+                            service.mount(repository.getDirectory());
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    service.mount(repository.getDirectory());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
-            partService.switchPerspective(perspectives.get(0));
-            eventBroker.send(TOPIC_UPDATE_FILES, null);
+                    partService.switchPerspective(perspective);
+                    eventBroker.send(TOPIC_UPDATE_FILES, null);
+                }
+
+            });
 
         }
 

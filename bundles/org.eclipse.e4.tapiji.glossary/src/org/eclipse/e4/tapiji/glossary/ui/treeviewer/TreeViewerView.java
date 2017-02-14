@@ -43,18 +43,14 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.FocusCellOwnerDrawHighlighter;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
-import org.eclipse.jface.viewers.TreeViewerEditor;
-
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -80,8 +76,6 @@ public final class TreeViewerView extends Composite implements TreeViewerContrac
     private static final String TAG = TreeViewerView.class.getSimpleName();
     private static final String TREE_VIEWER_MENU_ID = "org.eclipse.e4.tapiji.glossary.popupmenu.treeview";
     private static final String TREE_VIEWER_MENU_EMPTY_ID = "org.eclipse.e4.tapiji.glossary.popupmenu.treeview.empty";
-    
-
 
     private static final float DEFAULT_MATCHING_PRECISION = .75f;
     protected static final String COMMAND_DELETE_KEY = "org.eclipse.e4.tapiji.glossary.command.removeTerm";
@@ -98,7 +92,6 @@ public final class TreeViewerView extends Composite implements TreeViewerContrac
     @Inject
     private EMenuService menuService;
 
-
     @Inject
     private ECommandService commandService;
 
@@ -108,7 +101,6 @@ public final class TreeViewerView extends Composite implements TreeViewerContrac
     private boolean isColumnEditable;
     private boolean isFuzzyMatchingEnabled = false;
     private final boolean selectiveViewEnabled = false;
-
 
     private TreeViewer treeViewer;
 
@@ -123,7 +115,6 @@ public final class TreeViewerView extends Composite implements TreeViewerContrac
     private final List<String> displayedTranslations = new ArrayList<String>();
 
     private Tree tree;
-
 
     public TreeViewerView(Composite parent) {
         super(parent, SWT.FILL);
@@ -162,7 +153,6 @@ public final class TreeViewerView extends Composite implements TreeViewerContrac
             }
         });
 
-
         this.treeViewer.getTree().addKeyListener(new KeyAdapter() {
 
             @SuppressWarnings("restriction")
@@ -171,13 +161,13 @@ public final class TreeViewerView extends Composite implements TreeViewerContrac
                 if (event.character == SWT.DEL) {
                     handlerService.executeHandler(commandService.createCommand(COMMAND_DELETE_KEY, Collections.emptyMap()));
                 }
-                
+
             }
         });
         this.tree = treeViewer.getTree();
         this.tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-      //  TreeViewerEditor.create(treeViewer,  new TreeViewerFocusCellManager(treeViewer, new FocusCellOwnerDrawHighlighter(treeViewer)), createColumnActivationStrategy(), ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
+        //  TreeViewerEditor.create(treeViewer,  new TreeViewerFocusCellManager(treeViewer, new FocusCellOwnerDrawHighlighter(treeViewer)), createColumnActivationStrategy(), ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
         dragAndDrop();
         registerTreeMenu(TREE_VIEWER_MENU_EMPTY_ID);
     }
@@ -226,7 +216,7 @@ public final class TreeViewerView extends Composite implements TreeViewerContrac
         column.getColumn().setText(locale.getDisplayName());
         column.getColumn().addSelectionListener(createColumnSelectionListener(columnIndex));
         column.setEditingSupport(createEditingSupportFor(textCellEditor, columnIndex, languageCode));
-        
+
     }
 
     private void showHideColumn(final String languageCode) {
@@ -244,7 +234,7 @@ public final class TreeViewerView extends Composite implements TreeViewerContrac
 
     @Override
     public void registerTreeMenu(String menuId) {
-        this.menuService.registerContextMenu(this.treeViewer.getControl(),menuId);
+        this.menuService.registerContextMenu(this.treeViewer.getControl(), menuId);
     }
 
     private void setTreeStructure(final boolean grouped) {
@@ -322,7 +312,6 @@ public final class TreeViewerView extends Composite implements TreeViewerContrac
 
                 if (element instanceof Term) {
                     treeViewer.setSelection(new StructuredSelection(element), true);
-
 
                     final Translation translation = ((Term) element).getTranslation(languageCode);
                     if (translation != null) {
@@ -410,7 +399,6 @@ public final class TreeViewerView extends Composite implements TreeViewerContrac
     public void setColumnEditable(final boolean isEditable) {
         this.isColumnEditable = isEditable;
     }
-    
 
     @Override
     public void updateView(final Glossary glossary) {
@@ -437,7 +425,7 @@ public final class TreeViewerView extends Composite implements TreeViewerContrac
     public static TreeViewerContract.View create(final Composite parent, IEclipseContext eclipseContext) {
         final TreeViewerView view = new TreeViewerView(parent);
         org.eclipse.e4.core.contexts.ContextInjectionFactory.inject(view, eclipseContext);
-        
+
         return view;
     }
 

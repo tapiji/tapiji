@@ -3,9 +3,6 @@ package org.eclipse.e4.tapiji.git.core.internal;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,12 +14,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import javax.inject.Inject;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
-import org.eclipse.e4.tapiji.git.core.internal.file.FileFinder;
+import org.eclipse.e4.tapiji.git.core.internal.file.FileService;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
+import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 import org.eclipse.e4.tapiji.git.model.push.GitPushMessage;
 import org.eclipse.e4.tapiji.git.model.push.GitRemoteStatus;
 import org.eclipse.e4.tapiji.logger.Log;
@@ -43,6 +42,10 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 public class GitService implements IGitService {
 
     private static final String TAG = GitService.class.getSimpleName();
+
+    @Inject
+    FileService fileService;
+
     private ExecutorService executorService;
     private Repository repository;
     private Git git;
@@ -260,21 +263,12 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void findPropertyFiles(String filePattern, IGitServiceCallback<List<Path>> callback) {
-        Path fileDir = Paths.get(directory);
-        FileFinder finder = new FileFinder(filePattern);
-        try {
-            Files.walkFileTree(fileDir, finder);
-        } catch (IOException ioException) {
-            callback.onError(new GitServiceException(ioException.getMessage(), ioException.getCause()));
+    public void findPropertyFiles(String filePattern, IGitServiceCallback<List<PropertyDirectory>> callback) {
+        String dir = directory;
+        if (dir.endsWith("/.git")) {
+            dir = directory.replace("/.git", "");
         }
-
-        List<Path> paths = finder.paths();
-        if (paths.size() > 0) {
-            callback.onSuccess(new GitServiceResult<List<Path>>(paths));
-        } else {
-            callback.onSuccess(new GitServiceResult<List<Path>>(Collections.emptyList()));
-        }
+        fileService.searchPropertyFile(dir, filePattern, callback, executorService);
     }
 
     @Override
@@ -297,7 +291,7 @@ public class GitService implements IGitService {
     }
 
     @SuppressWarnings("unchecked")
-    private static <E extends Exception> void throwAsUnchecked(Exception exception) throws E {
+    public static <E extends Exception> void throwAsUnchecked(Exception exception) throws E {
         throw (E) exception;
     }
 

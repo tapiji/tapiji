@@ -7,5 +7,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.e4.tapiji.git.model,
  org.eclipse.e4.tapiji.git.model.exception,
  org.eclipse.e4.tapiji.git.model.file,
+ org.eclipse.e4.tapiji.git.model.property,
  org.eclipse.e4.tapiji.git.model.push
 Import-Package: org.eclipse.e4.tapiji.resource

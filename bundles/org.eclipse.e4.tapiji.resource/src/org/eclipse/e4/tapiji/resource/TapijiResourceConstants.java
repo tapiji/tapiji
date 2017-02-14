@@ -29,5 +29,5 @@ public final class TapijiResourceConstants {
 
     public static final String IMG_INFORMATION = "icons/16x16/information.png";
     public static final String IMG_INFORMATION_32x32 = "icons/32x32/information.png";
-
+    public static final String IMG_FOLDER = "icons/16x16/folder.png";
 }

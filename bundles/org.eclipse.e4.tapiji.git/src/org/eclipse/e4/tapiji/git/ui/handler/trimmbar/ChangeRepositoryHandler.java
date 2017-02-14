@@ -23,9 +23,11 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 
 
-public class GitRepositoriesHandler {
+public class ChangeRepositoryHandler {
 
-    private static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.GitRepositoriesHandler";
+    private static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeRepositoryHandler";
+
+    private static final String TAG = ChangeRepositoryHandler.class.getSimpleName();
 
     @Inject
     IGitService service;

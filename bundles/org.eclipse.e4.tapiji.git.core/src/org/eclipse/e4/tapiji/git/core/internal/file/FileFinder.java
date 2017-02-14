@@ -10,27 +10,38 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
+import org.eclipse.e4.tapiji.git.model.property.PropertyFile;
 
 
 public class FileFinder extends SimpleFileVisitor<Path> {
 
     private PathMatcher matcher;
-    private List<Path> paths = new ArrayList<>();
+    private List<PropertyDirectory> directories;
 
     public FileFinder(String pattern) {
-        matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
+        super();
+        this.directories = new ArrayList<>();
+        this.matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
     }
 
     @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        Path name = file.getFileName();
-        if (matcher.matches(name)) {
-            paths.add(file);
+    public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
+        if (matcher.matches(path.getFileName())) {
+            Optional<PropertyDirectory> found = directories.stream().filter(dir -> dir.getDirectory().equals(path.getParent())).findFirst();
+            if (found.isPresent()) {
+                found.get().addFile(PropertyFile.create(path.toFile()));
+            } else {
+                PropertyDirectory dir = PropertyDirectory.create(path.getParent());
+                dir.addFile(PropertyFile.create(path.toFile()));
+                directories.add(dir);
+            }
         }
         return FileVisitResult.CONTINUE;
     }
 
-    public List<Path> paths() {
-        return paths;
+    public List<PropertyDirectory> directories() {
+        return directories;
     }
 }
