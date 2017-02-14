@@ -49,13 +49,10 @@
         <children xsi:type="menu:HandledToolItem" xmi:id="_aeRTwOrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.pull" label="Pull" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_pull.png" command="_emaN0OrPEeah_qW_gJKbyQ">
           <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_J0i5sOrVEeah_qW_gJKbyQ" coreExpressionId="org.eclipse.e4.tapiji.active.perspective"/>
         </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_1HcLoPEuEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.selected.repository" label="Select Repository" command="_c5kfEPICEeaWMuJeVV3wjA">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_1HcLoPEuEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.selected.repository" label="Select Repository" tooltip="Selected Repository" command="_c5kfEPICEeaWMuJeVV3wjA">
           <menu xmi:id="_1-kA4PEuEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.menu.gitrepositories">
             <children xsi:type="menu:DynamicMenuContribution" xmi:id="_4jslMPEwEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.dynamicmenucontribution.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.GitRepositoriesHandler"/>
           </menu>
-        </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_BMSdkPEvEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.0">
-          <menu xmi:id="_Bi7b8PEvEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.menu.1"/>
         </children>
       </children>
     </elements>

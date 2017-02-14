@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.e4.tapiji.git.model.GitRepository;
+import org.eclipse.e4.tapiji.git.util.JsonParserUtil;
 import org.eclipse.e4.tapiji.git.util.ListUtil;
 import org.eclipse.e4.tapiji.logger.Log;
 
@@ -17,11 +18,13 @@ import org.eclipse.e4.tapiji.logger.Log;
 public class Preferences {
 
     public static String TEST_REPO = "[{\"url\":\"https://github.com/tapiji/tapiji.git\",\"directory\":\"E:/asdasdadsd/.git\"},{\"url\":\"https://github.com/tapiji/git.extension.test.git\",\"directory\":\"E:/cloni/.git\"}]";
+    public static String DEFAULT_REPO = "{\"url\":\"https://github.com/tapiji/git.extension.test.git\",\"directory\":\"E:/cloni/.git\"}";
 
     private static final String KEY_REPOSITORIES = Preferences.class.getPackage() + "_KEY_REPOSITORIES";
     private static final String KEY_SELECTED_REPOSITORY = Preferences.class.getPackage() + "_KEY_SELECTED_REPOSITORY";
 
     @Inject
+    @SuppressWarnings("restriction")
     @Preference(nodePath = "org.eclipse.e4.tapiji.git")
     IEclipsePreferences preferences;
 
@@ -35,9 +38,9 @@ public class Preferences {
             preferences.put(KEY_REPOSITORIES, ListUtil.packGitRepositoryList(repos));
 
             if (repos.size() >= 1) {
-                setSelectedRepository(repository.getDirectory());
+                setSelectedRepository(repository);
             } else if (repos.size() == 0) {
-                setSelectedRepository("E:/cloni/.git");
+                setSelectedRepository(JsonParserUtil.parseGitRepository(DEFAULT_REPO));
             }
         }
     }
@@ -46,11 +49,11 @@ public class Preferences {
         return ListUtil.unpackGitRepositoryList(preferences.get(KEY_REPOSITORIES, TEST_REPO));
     }
 
-    public void setSelectedRepository(String path) {
-        preferences.put(KEY_SELECTED_REPOSITORY, path);
+    public void setSelectedRepository(GitRepository repository) {
+        preferences.put(KEY_SELECTED_REPOSITORY, JsonParserUtil.parseGitRepositoryString(repository));
     }
 
-    public String getSelectedRepository() {
-        return preferences.get(KEY_SELECTED_REPOSITORY, "E:/cloni/.git");
+    public GitRepository getSelectedRepository() {
+        return JsonParserUtil.parseGitRepository(preferences.get(KEY_SELECTED_REPOSITORY, DEFAULT_REPO));
     }
 }

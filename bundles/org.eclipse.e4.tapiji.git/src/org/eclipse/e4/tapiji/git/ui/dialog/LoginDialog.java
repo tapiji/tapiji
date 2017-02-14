@@ -100,7 +100,7 @@ public class LoginDialog extends Dialog {
     }
 
     private void pushChanges() {
-        service.pushChangesWithCredentials(txtPassword.getText(), txtUsername.getText(), prefs.getSelectedRepository(), callback);
+        service.pushChangesWithCredentials(txtPassword.getText(), txtUsername.getText(), prefs.getSelectedRepository().getDirectory(), callback);
         shell.close();
     }
 

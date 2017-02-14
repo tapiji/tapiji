@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Shell;
 public class GitRepositoriesHandler {
 
     private static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.GitRepositoriesHandler";
-    private static final String MENU_REPOSITORY_ID = "org.eclipse.e4.tapiji.git.handledtoolitem.selected.repository";
 
     @Inject
     IGitService service;
@@ -45,6 +44,7 @@ public class GitRepositoriesHandler {
             dynamicItem.setLabel(repository.getName());
             dynamicItem.setContributionURI(CONTRIBUTION_URI);
             dynamicItem.setContainerData(JsonParserUtil.parseGitRepositoryString(repository));
+            dynamicItem.setTooltip(repository.getDirectory());
             dynamicItem.setType(ItemType.PUSH);
             items.add(dynamicItem);
         });
@@ -56,11 +56,13 @@ public class GitRepositoriesHandler {
         try {
             GitRepository selectedRepository = JsonParserUtil.parseGitRepository(item.getContainerData());
             service.mount(selectedRepository.getDirectory());
-            prefs.setSelectedRepository(selectedRepository.getDirectory());
-            MUIElement dropDownMenu = modelService.find(MENU_REPOSITORY_ID, app);
+            prefs.setSelectedRepository(selectedRepository);
+
+            MUIElement dropDownMenu = modelService.find(UIEventConstants.MENU_REPOSITORY_ID, app);
             if (dropDownMenu instanceof HandledToolItemImpl) {
                 ((HandledToolItemImpl) dropDownMenu).setLabel(selectedRepository.getName());
             }
+
             eventBroker.post(UIEventConstants.TOPIC_RELOAD_STAGED_FILE, "");
             eventBroker.post(UIEventConstants.TOPIC_RELOAD_UNSTAGED_FILE, "");
         } catch (Exception exception) {
