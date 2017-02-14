@@ -62,17 +62,18 @@ public class StagedView implements StagedContract.View {
         Button btnUnstageChanges = new Button(composite, SWT.NONE);
         btnUnstageChanges.setBounds(0, 0, 75, 25);
         btnUnstageChanges.setText("Unstage all changes");
-        btnUnstageChanges.addListener(SWT.MouseDown, event -> presenter.unstageChanges());
+        btnUnstageChanges.addListener(SWT.MouseDown, event -> 
+        	presenter.unstageChanges());
 
         table = new Table(parent, SWT.BORDER | SWT.FULL_SELECTION);
         table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
         table.setHeaderVisible(false);
         table.setLinesVisible(false);
     }
-
+    
     @Inject
     @Optional
-    public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_STAGED_FILE) String payload) {
+    public void updateView(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW) String payload) {
         presenter.loadStagedFiles();
     }
 

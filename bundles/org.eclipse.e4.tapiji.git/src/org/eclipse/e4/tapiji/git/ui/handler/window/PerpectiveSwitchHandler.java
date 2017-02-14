@@ -23,7 +23,6 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 public class PerpectiveSwitchHandler {
 
     private static final String PARAMETER_PERSPECTIVE_ID = "org.eclipse.e4.tapiji.git.commandparameter.perspective";
-    public static final String TOPIC_UPDATE_FILES = "UPDATEFILES";
     public static final String TOPIC_ALL = "org/eclipse/e4/ui/model/ui/UILabel/*"; //$NON-NLS-1$
     private static final String TAG = PerpectiveSwitchHandler.class.getSimpleName();
     @Inject
@@ -52,7 +51,9 @@ public class PerpectiveSwitchHandler {
                     }
 
                     partService.switchPerspective(perspective);
-                    eventBroker.send(TOPIC_UPDATE_FILES, null);
+                    eventBroker.post(UIEventConstants.TOPIC_RELOAD_PROPERTY_VIEW, "");
+                    eventBroker.post(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW, "");
+                    eventBroker.post(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW, "");
                 }
 
             });

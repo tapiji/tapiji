@@ -15,6 +15,7 @@
     <elements xsi:type="commands:Handler" xmi:id="_Dk7AwOu8Eeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handler.debug" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.window.DebugHandler" command="_GA23sOu8Eeah_qW_gJKbyQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_frBTAPICEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.handler.repositories" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeRepositoryHandler" command="_c5kfEPICEeaWMuJeVV3wjA"/>
     <elements xsi:type="commands:Handler" xmi:id="_PMz5cPLZEeaW8vJ8432J5w" elementId="org.eclipse.e4.tapiji.git.handler.openresourcebundle" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.property.handler.OpenResourceBundleHandler" command="_M-0-8PLZEeaW8vJ8432J5w"/>
+    <elements xsi:type="commands:Handler" xmi:id="_uF7R8PL1EeaJd6fFNxps9g" elementId="org.eclipse.e4.tapiji.git.handler.deletefile" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.property.handler.DeleteFileHandler" command="_sclVkPL1EeaJd6fFNxps9g"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_vAgfsOmFEear1K70oDQV4Q" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="commands:Command" xmi:id="_zniVMOmFEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.command.perspective.git" commandName="Perspective Git">
@@ -26,6 +27,7 @@
     <elements xsi:type="commands:Command" xmi:id="_GA23sOu8Eeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.command.debug" commandName="Debug"/>
     <elements xsi:type="commands:Command" xmi:id="_c5kfEPICEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.command.change.repositories" commandName="Change Repositories"/>
     <elements xsi:type="commands:Command" xmi:id="_M-0-8PLZEeaW8vJ8432J5w" elementId="org.eclipse.e4.tapiji.git.command.openresourcebundle" commandName="Open Resource Bundle"/>
+    <elements xsi:type="commands:Command" xmi:id="_sclVkPL1EeaJd6fFNxps9g" elementId="org.eclipse.e4.tapiji.git.command.deletefile" commandName="Delete File"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8h59QOmHEear1K70oDQV4Q" featurename="children" parentElementId="org.eclipse.e4.tapiji.translator.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_TPZo4OmIEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.perspective.git" label="TapiJI Git">
@@ -34,6 +36,7 @@
           <children xsi:type="basic:Part" xmi:id="_pX7e4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.propertyview" containerData="5000" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.property.PropertyView" label="Property View">
             <menus xsi:type="menu:PopupMenu" xmi:id="_uItL4PLDEeaW8vJ8432J5w" elementId="org.eclipse.e4.tapiji.git.popupmenu.pv.treeviewer">
               <children xsi:type="menu:HandledMenuItem" xmi:id="_yLYXIPLDEeaW8vJ8432J5w" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.openresourcebundle" label="Open Resource Bundle" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/open_resource_bundle.png" command="_M-0-8PLZEeaW8vJ8432J5w"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_pfQBwPL1EeaJd6fFNxps9g" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.deletefile" label="Delete File" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/delete.png" command="_sclVkPL1EeaJd6fFNxps9g"/>
             </menus>
           </children>
           <children xsi:type="basic:Part" xmi:id="_YeD0MOmKEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.1" containerData="8000" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.filediff.FileDiffView"/>

@@ -89,8 +89,8 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
             public void onSuccess(GitServiceResult<Void> response) {
                 view.setCursorWaitVisibility(false);
                 loadUnCommittedChanges();
-                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_STAGED_FILE);
-                view.sendUIEvent(UIEventConstants.TOPIC_ON_FILES_STAGED);
+                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW);
+                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_PROPERTY_VIEW);
             }
 
             @Override
@@ -110,6 +110,8 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
             public void onSuccess(GitServiceResult<Void> response) {
                 view.setCursorWaitVisibility(false);
                 loadUnCommittedChanges();
+                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW);
+                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_PROPERTY_VIEW);
             }
 
             @Override

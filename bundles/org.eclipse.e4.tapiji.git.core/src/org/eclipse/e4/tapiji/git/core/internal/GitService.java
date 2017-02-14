@@ -308,4 +308,14 @@ public class GitService implements IGitService {
         }
         directory = null;
     }
+
+	@Override
+	public void deleteFile(File file) {
+		if(file.delete()){
+			System.out.println(file.getName() + " is deleted!");
+		}else{
+			System.out.println("Delete operation is failed.");
+		}
+
+	}
 }

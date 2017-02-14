@@ -78,6 +78,7 @@ public class PropertyView implements PropertyContract.View {
         lblProperties.setText("Property Files");
 
         treeViewer = new TreeViewer(composite, SWT.BORDER);
+        treeViewer.setAutoExpandLevel(2);
         treeViewer.addSelectionChangedListener((event) -> {
             selectionService.setSelection(((IStructuredSelection) treeViewer.getSelection()).getFirstElement());
         });
@@ -100,7 +101,7 @@ public class PropertyView implements PropertyContract.View {
 
     @Inject
     @Optional
-    public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_STAGED_FILE) String payload) {
+    public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_PROPERTY_VIEW) String payload) {
         presenter.loadProperties();
     }
 

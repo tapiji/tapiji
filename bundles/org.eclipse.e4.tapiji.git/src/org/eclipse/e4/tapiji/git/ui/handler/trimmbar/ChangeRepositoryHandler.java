@@ -65,8 +65,9 @@ public class ChangeRepositoryHandler {
                 ((HandledToolItemImpl) dropDownMenu).setLabel(selectedRepository.getName());
             }
 
-            eventBroker.post(UIEventConstants.TOPIC_RELOAD_STAGED_FILE, "");
-            eventBroker.post(UIEventConstants.TOPIC_RELOAD_UNSTAGED_FILE, "");
+            eventBroker.post(UIEventConstants.TOPIC_RELOAD_PROPERTY_VIEW, "");
+            eventBroker.post(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW, "");
+            eventBroker.post(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW, "");
         } catch (Exception exception) {
             MessageDialog.openError(shell, "Error: ", exception.getMessage());
         }

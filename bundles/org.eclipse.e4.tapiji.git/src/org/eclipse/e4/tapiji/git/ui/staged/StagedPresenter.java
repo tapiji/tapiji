@@ -84,8 +84,8 @@ public class StagedPresenter implements StagedContract.Presenter {
             public void onSuccess(GitServiceResult<Void> response) {
                 loadStagedFiles();
                 view.setCursorWaitVisibility(false);
-                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_UNSTAGED_FILE);
-                view.sendUIEvent(UIEventConstants.TOPIC_ON_FILES_UNSTAGED);
+                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW);
+                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_PROPERTY_VIEW);
             }
 
             @Override

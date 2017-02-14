@@ -76,6 +76,7 @@ public class UnstagedView implements UnstagedContract.View {
         btnStageAll.setText("Stage all files");
         btnStageAll.addListener(SWT.MouseDown, listener -> {
             presenter.stageChanges();
+            eventBroker.post(UIEventConstants.TOPIC_RELOAD_GIT_VIEW, "");
         });
 
         table = new Table(parent, SWT.BORDER | SWT.FULL_SELECTION);
@@ -86,16 +87,10 @@ public class UnstagedView implements UnstagedContract.View {
 
     @Inject
     @Optional
-    public void closeHandler(@UIEventTopic(PerpectiveSwitchHandler.TOPIC_UPDATE_FILES) String payload) {
+    public void updateView(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW) String payload) {
         presenter.loadUnCommittedChanges();
     }
-
-    @Inject
-    @Optional
-    public void reloadUnstagedFiles(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_UNSTAGED_FILE) String payload) {
-        presenter.loadUnCommittedChanges();
-    }
-
+    
     @Override
     public void showUnCommittedChanges(List<GitFile> files) {
         sync.asyncExec(() -> {
