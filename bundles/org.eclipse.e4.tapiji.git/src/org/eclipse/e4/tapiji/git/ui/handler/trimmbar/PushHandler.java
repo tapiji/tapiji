@@ -38,7 +38,7 @@ public class PushHandler {
                     Log.d(TAG, message.toString());
                     switch (message.getRemoteStatus()) {
                         case UP_TO_DATE:
-                            sync.asyncExec(() -> mylyn.sendNotification(new Notification("Up-To-Date", "Everything up-to-date")));
+                            sync.asyncExec(() -> mylyn.sendNotification(new Notification("Up-To-Date", "Nothing to push.")));
                             break;
                         case OK:
                             sync.asyncExec(() -> mylyn.sendNotification(new Notification("Pushed Successfully", message.getLocalName() + "to origin")));

@@ -90,7 +90,7 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
                 view.setCursorWaitVisibility(false);
                 loadUnCommittedChanges();
                 view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_STAGED_FILE);
-                view.sendUIEvent(UIEventConstants.TOPIC_FILES_STAGED);
+                view.sendUIEvent(UIEventConstants.TOPIC_ON_FILES_STAGED);
             }
 
             @Override

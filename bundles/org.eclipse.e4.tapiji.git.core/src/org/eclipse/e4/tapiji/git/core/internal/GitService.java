@@ -54,33 +54,26 @@ public class GitService implements IGitService {
 
     @Override
     public void mount(String directory) throws IOException {
+        Log.d(TAG, "mount(" + directory + ")");
+        if (directory != null) {
+            if (!directory.endsWith(".git") && !directory.endsWith(".git/")) {
+                directory = directory + "/.git";
+            }
+            if (!new File(directory).exists()) {
+                throw new IllegalStateException("Git repository not available at " + directory);
+            }
+            if (!directory.equals(this.directory)) {
+                unmount();
+                this.directory = directory;
+                this.repository = new FileRepositoryBuilder().setGitDir(new File(directory)).readEnvironment().findGitDir().build();
+                this.git = new Git(repository);
 
-        if (!directory.endsWith(".git") && !directory.endsWith(".git/")) {
-            directory = directory + "/.git";
-        }
-        if (!new File(directory).exists()) {
-            throw new IllegalStateException("Git repository not available at " + directory);
-        }
-        unmount();
-        this.directory = directory;
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        this.repository = builder.setGitDir(new File(directory)).readEnvironment().findGitDir().build();
-        this.git = new Git(repository);
-
-        repository.getRemoteNames().forEach(remot -> System.out.println(remot));
-
-        Log.d("ssS", repository.getDirectory().toString());
-    }
-
-    @Override
-    public void unmount() {
-        if (repository != null) {
-            repository.close();
-            repository = null;
-        }
-        if (git != null) {
-            git.close();
-            git = null;
+                repository.getRemoteNames().forEach(remot -> System.out.println(remot));
+            } else {
+                Log.d(TAG, "Directory already mounted: " + directory);
+            }
+        } else {
+            throw new IllegalStateException("Directory must not be null.");
         }
     }
 
@@ -255,7 +248,6 @@ public class GitService implements IGitService {
     @Override
     public void tags(IGitServiceCallback<List<String>> callback) {
         try {
-
             List<Ref> refs = git.tagList().call();
             List<String> tags = new ArrayList<>(refs.size());
             for (Ref ref : refs) {
@@ -307,5 +299,19 @@ public class GitService implements IGitService {
     @SuppressWarnings("unchecked")
     private static <E extends Exception> void throwAsUnchecked(Exception exception) throws E {
         throw (E) exception;
+    }
+
+    @Override
+    public void unmount() {
+        Log.d(TAG, "unmount(" + directory + ")");
+        if (repository != null) {
+            repository.close();
+            repository = null;
+        }
+        if (git != null) {
+            git.close();
+            git = null;
+        }
+        directory = null;
     }
 }

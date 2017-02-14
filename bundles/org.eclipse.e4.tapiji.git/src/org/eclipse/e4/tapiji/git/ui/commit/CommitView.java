@@ -109,14 +109,14 @@ public class CommitView implements CommitContract.View {
 
     @Inject
     @Optional
-    public void stagedFileHandler(@UIEventTopic(UIEventConstants.TOPIC_FILES_STAGED) String payload) {
+    public void stagedFileHandler(@UIEventTopic(UIEventConstants.TOPIC_ON_FILES_STAGED) String payload) {
         stagedFilesAvailable = true;
         presenter.checkTextSummary(txtSummary.getText());
     }
 
     @Inject
     @Optional
-    public void unstageFileHandler(@UIEventTopic(UIEventConstants.TOPIC_FILES_UNSTAGED) String payload) {
+    public void unstageFileHandler(@UIEventTopic(UIEventConstants.TOPIC_ON_FILES_UNSTAGED) String payload) {
         stagedFilesAvailable = false;
         disableCommitButton();
     }

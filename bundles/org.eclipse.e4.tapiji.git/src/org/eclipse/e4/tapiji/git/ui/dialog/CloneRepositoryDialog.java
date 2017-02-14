@@ -13,6 +13,8 @@ import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.ui.preferences.Preferences;
+import org.eclipse.e4.tapiji.mylyn.core.api.IMylynService;
+import org.eclipse.e4.tapiji.mylyn.model.Notification;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -43,6 +45,9 @@ public class CloneRepositoryDialog extends Dialog implements SelectionListener, 
 
     @Inject
     UISynchronize sync;
+
+    @Inject
+    IMylynService mylyn;
 
     private Shell shell;
 
@@ -120,7 +125,7 @@ public class CloneRepositoryDialog extends Dialog implements SelectionListener, 
 
             try {
                 this.gitUrl = txtRepoUrl.getText();
-                new ProgressMonitorDialog(shell).run(true, true, new LongRunningOperation(gitUrl, txtRepoPath.getText(), service, this));
+                new ProgressMonitorDialog(shell).run(true, true, new ProgressTask(gitUrl, txtRepoPath.getText(), service, this));
             } catch (InvocationTargetException invocationTargetException) {
                 MessageDialog.openError(shell, "Error: ", invocationTargetException.getMessage());
             } catch (InterruptedException interruptedException) {
@@ -160,14 +165,14 @@ public class CloneRepositoryDialog extends Dialog implements SelectionListener, 
         }
     }
 
-    static class LongRunningOperation implements IRunnableWithProgress {
+    static class ProgressTask implements IRunnableWithProgress {
 
         private String repoUrl;
         private IGitService gitService;
         private IGitServiceCallback<File> callback;
         private String localDirectory;
 
-        public LongRunningOperation(String repoUrl, String localDirectory, IGitService service, IGitServiceCallback<File> callback) {
+        public ProgressTask(String repoUrl, String localDirectory, IGitService service, IGitServiceCallback<File> callback) {
             this.repoUrl = repoUrl;
             this.localDirectory = localDirectory;
             this.gitService = service;
@@ -190,6 +195,7 @@ public class CloneRepositoryDialog extends Dialog implements SelectionListener, 
     @Override
     public void onSuccess(GitServiceResult<File> gitServiceResult) {
         sync.syncExec(() -> {
+            mylyn.sendNotification(new Notification("Repository cloned successfully", gitUrl));
             prefs.addRepository(gitUrl, gitServiceResult.getResult().getAbsolutePath());
             shell.close();
         });
