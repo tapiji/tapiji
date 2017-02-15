@@ -60,7 +60,6 @@ public class PushHandler {
                     if (throwable.getCause() instanceof UnknownHostException) {
                         sync.asyncExec(() -> mylyn.sendNotification(new Notification("Unknown Host", throwable.getMessage())));
                     } else {
-                        // TODO check real authentication
                         sync.asyncExec(() -> LoginDialog.show(context, shell, this));
                     }
 

@@ -35,8 +35,12 @@ public interface IGitService {
 
     void pushChangesWithCredentials(String passowrd, String username, String directory, IGitServiceCallback<Void> callback);
 
+    void stash(IGitServiceCallback<Void> callback);
+
+    void popFirst(IGitServiceCallback<Void> callback);
+
     void mount(String directory) throws IOException;
-    
+
     void deleteFile(File file);
 
     void unmount();

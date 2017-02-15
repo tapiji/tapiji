@@ -4,6 +4,7 @@ package org.eclipse.e4.tapiji.git.core.internal;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +34,10 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.errors.TransportException;
 import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -321,5 +324,49 @@ public class GitService implements IGitService {
             System.out.println("Delete operation is failed.");
         }
 
+    }
+
+    @Override
+    public void stash(IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            RevCommit stash = null;
+            try {
+                stash = git.stashCreate().call();
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            Log.d(TAG, "stash(" + stash + ")");
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
+    }
+
+    @Override
+    public void popFirst(IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            ObjectId applied = null;
+            ObjectId droped = null;
+            try {
+                Collection<RevCommit> stashes = git.stashList().call();
+                applied = git.stashApply().setStashRef(stashes.stream().findFirst().get().getName()).call();
+                droped = git.stashDrop().setStashRef(0).call();
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            Log.d(TAG, "apply(" + applied + ")");
+            Log.d(TAG, "apply(" + droped + ")");
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
     }
 }

@@ -16,6 +16,8 @@
     <elements xsi:type="commands:Handler" xmi:id="_frBTAPICEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.handler.repositories" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeRepositoryHandler" command="_c5kfEPICEeaWMuJeVV3wjA"/>
     <elements xsi:type="commands:Handler" xmi:id="_PMz5cPLZEeaW8vJ8432J5w" elementId="org.eclipse.e4.tapiji.git.handler.openresourcebundle" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.property.handler.OpenResourceBundleHandler" command="_M-0-8PLZEeaW8vJ8432J5w"/>
     <elements xsi:type="commands:Handler" xmi:id="_uF7R8PL1EeaJd6fFNxps9g" elementId="org.eclipse.e4.tapiji.git.handler.deletefile" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.property.handler.DeleteFileHandler" command="_sclVkPL1EeaJd6fFNxps9g"/>
+    <elements xsi:type="commands:Handler" xmi:id="_qu47QPPSEea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.handler.stash" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.StashHandler" command="_oF-_UPPSEea2ELhYKKDJOg"/>
+    <elements xsi:type="commands:Handler" xmi:id="_wwt60PPSEea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.handler.pop" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.PopHandler" command="_pU30UPPSEea2ELhYKKDJOg"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_vAgfsOmFEear1K70oDQV4Q" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="commands:Command" xmi:id="_zniVMOmFEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.command.perspective.git" commandName="Perspective Git">
@@ -28,6 +30,8 @@
     <elements xsi:type="commands:Command" xmi:id="_c5kfEPICEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.command.change.repositories" commandName="Change Repositories"/>
     <elements xsi:type="commands:Command" xmi:id="_M-0-8PLZEeaW8vJ8432J5w" elementId="org.eclipse.e4.tapiji.git.command.openresourcebundle" commandName="Open Resource Bundle"/>
     <elements xsi:type="commands:Command" xmi:id="_sclVkPL1EeaJd6fFNxps9g" elementId="org.eclipse.e4.tapiji.git.command.deletefile" commandName="Delete File"/>
+    <elements xsi:type="commands:Command" xmi:id="_oF-_UPPSEea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.command.stash" commandName="Stash"/>
+    <elements xsi:type="commands:Command" xmi:id="_pU30UPPSEea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.command.pop" commandName="Pop"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8h59QOmHEear1K70oDQV4Q" featurename="children" parentElementId="org.eclipse.e4.tapiji.translator.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_TPZo4OmIEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.perspective.git" label="TapiJI Git">
@@ -51,14 +55,18 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_OaGMsOrOEeah_qW_gJKbyQ" featurename="trimContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="menu:TrimContribution" xmi:id="_QCNaAOrOEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.trimcontribution.toolbar" parentId="org.eclipse.e4.tapiji.translator.trimbar.main" positionInParent="?before=org.eclipse.e4.babel.editor.toolbar.main">
-      <children xsi:type="menu:ToolBar" xmi:id="_VvXxIOrOEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.toolbar.git">
+      <children xsi:type="menu:ToolBar" xmi:id="_VvXxIOrOEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.toolbar.git.repositories">
         <children xsi:type="menu:HandledToolItem" xmi:id="_1HcLoPEuEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.selected.repository" label="Select Repository" tooltip="Selected Repository" command="_c5kfEPICEeaWMuJeVV3wjA">
           <menu xmi:id="_1-kA4PEuEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.menu.gitrepositories">
             <children xsi:type="menu:DynamicMenuContribution" xmi:id="_4jslMPEwEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.dynamicmenucontribution.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeRepositoryHandler"/>
           </menu>
         </children>
+      </children>
+      <children xsi:type="menu:ToolBar" xmi:id="_f1MqUPPREea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.toolbar.git.tools">
         <children xsi:type="menu:HandledToolItem" xmi:id="_Xi4WIOrOEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.push" label="Push" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_push.png" command="_tNwuMOrOEeah_qW_gJKbyQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_aeRTwOrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.pull" label="Pull" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_pull.png" command="_emaN0OrPEeah_qW_gJKbyQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_qOZSwPPREea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.stash" label="Stash" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_stash.png" command="_oF-_UPPSEea2ELhYKKDJOg"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_wEsXwPPREea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.pop" label="Pop" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_pop.png" command="_pU30UPPSEea2ELhYKKDJOg"/>
       </children>
     </elements>
   </fragments>
