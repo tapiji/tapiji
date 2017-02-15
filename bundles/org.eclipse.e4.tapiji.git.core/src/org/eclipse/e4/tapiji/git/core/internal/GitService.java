@@ -107,9 +107,9 @@ public class GitService implements IGitService {
             try {
                 results = git.push().setRemote("origin").setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password)).call();
             } catch (GitAPIException exception) {
-            	if(exception.getCause() instanceof TransportException) {
-            		
-            	}
+                if (exception.getCause() instanceof TransportException) {
+
+                }
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<Void>(null, parsePushResults(results));
@@ -269,8 +269,8 @@ public class GitService implements IGitService {
     @Override
     public void findPropertyFiles(String filePattern, IGitServiceCallback<List<PropertyDirectory>> callback) {
         String dir = directory;
-        if (dir.endsWith("/.git")) {
-            dir = directory.replace("/.git", "");
+        if (dir.endsWith(".git")) {
+            dir = directory.replace(".git", "");
         }
         fileService.searchPropertyFile(dir, filePattern, callback, executorService);
     }
@@ -313,13 +313,13 @@ public class GitService implements IGitService {
         directory = null;
     }
 
-	@Override
-	public void deleteFile(File file) {
-		if(file.delete()){
-			System.out.println(file.getName() + " is deleted!");
-		}else{
-			System.out.println("Delete operation is failed.");
-		}
+    @Override
+    public void deleteFile(File file) {
+        if (file.delete()) {
+            System.out.println(file.getName() + " is deleted!");
+        } else {
+            System.out.println("Delete operation is failed.");
+        }
 
-	}
+    }
 }

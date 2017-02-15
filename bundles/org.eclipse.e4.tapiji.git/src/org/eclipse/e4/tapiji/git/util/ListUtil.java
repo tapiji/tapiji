@@ -41,19 +41,27 @@ public class ListUtil {
     }
 
     public static String packGitRepositoryList(List<GitRepository> repos) {
-        final JsonArray jsonRepos = new JsonArray();
-        repos.stream().flatMap(repo -> Stream.of(JsonParserUtil.parseGitRepository(repo))).forEach(jsonObject -> jsonRepos.add(jsonObject.toString()));
-        return jsonRepos.toString();
+        if (repos == null) {
+            return "";
+        } else {
+            final JsonArray jsonRepos = new JsonArray();
+            repos.stream().flatMap(repo -> Stream.of(JsonParserUtil.parseGitRepository(repo))).forEach(jsonObject -> jsonRepos.add(jsonObject.toString()));
+            return jsonRepos.toString();
+        }
     }
 
     public static List<GitRepository> unpackGitRepositoryList(String repos) {
-        return Json.parse(repos).asArray().values().stream().map(value -> {
-            if (value.isString()) {
-                return Json.parse(value.asString()).asObject();
-            } else {
-                return value.asObject();
-            }
-        }).map(obj -> JsonParserUtil.parseGitRepository(obj)).collect(Collectors.toList());
+        if (repos == null) {
+            return new ArrayList<>();
+        } else {
+            return Json.parse(repos).asArray().values().stream().map(value -> {
+                if (value.isString()) {
+                    return Json.parse(value.asString()).asObject();
+                } else {
+                    return value.asObject();
+                }
+            }).map(obj -> JsonParserUtil.parseGitRepository(obj)).collect(Collectors.toList());
+        }
     }
 
     public static String[] unpackArray(final String str, final String sep) {

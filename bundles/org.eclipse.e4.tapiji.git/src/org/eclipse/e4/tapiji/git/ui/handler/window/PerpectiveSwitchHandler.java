@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
@@ -53,5 +54,16 @@ public class PerpectiveSwitchHandler {
                 }
             });
         }
+    }
+
+    @CanExecute
+    public boolean canExecute(Preferences prefs, IEclipseContext ictx) {
+        //        final EclipseContext ctx = (EclipseContext) ictx.getParent();
+        //        System.out.println("### START ###");
+        //        for (final Entry<String, Object> entry : ctx.localData().entrySet()) {
+        //            System.out.println(String.format("Key'%s', value: '%s'", entry.getKey(), entry.getValue()));
+        //        }
+        //        System.out.println("### END ###");
+        return !prefs.getRepositories().isEmpty();
     }
 }

@@ -17,10 +17,6 @@ import org.eclipse.e4.tapiji.logger.Log;
 @Singleton
 public class Preferences {
 
-    //public static String TEST_REPO = "[{\"url\":\"https://github.com/tapiji/tapiji.git\",\"directory\":\"E:/asdasdadsd/.git\"},{\"url\":\"https://github.com/tapiji/git.extension.test.git\",\"directory\":\"D:/cloni/.git\"}]";
-	public static String TEST_REPO = "[{\"url\":\"https://github.com/tapiji/git.extension.test.git\",\"directory\":\"D:/cloni/.git\"}]";
-    public static String DEFAULT_REPO = "{\"url\":\"https://github.com/tapiji/git.extension.test.git\",\"directory\":\"D:/cloni/.git\"}";
-
     private static final String KEY_REPOSITORIES = Preferences.class.getPackage() + "_KEY_REPOSITORIES";
     private static final String KEY_SELECTED_REPOSITORY = Preferences.class.getPackage() + "_KEY_SELECTED_REPOSITORY";
 
@@ -32,22 +28,17 @@ public class Preferences {
     public void addRepository(String name, String path) {
         Log.d("NEW REPO: ", name + " == " + path);
         GitRepository repository = new GitRepository(name, path);
-        List<GitRepository> repos = ListUtil.unpackGitRepositoryList(preferences.get(KEY_REPOSITORIES, TEST_REPO));
+        List<GitRepository> repos = ListUtil.unpackGitRepositoryList(preferences.get(KEY_REPOSITORIES, null));
         if (!repos.contains(repository)) {
             Log.d("ADD NEW REPO: ", name + " == " + path);
             repos.add(repository);
             preferences.put(KEY_REPOSITORIES, ListUtil.packGitRepositoryList(repos));
-
-            if (repos.size() >= 1) {
-                setSelectedRepository(repository);
-            } else if (repos.size() == 0) {
-                setSelectedRepository(JsonParserUtil.parseGitRepository(DEFAULT_REPO));
-            }
         }
+        setSelectedRepository(repository);
     }
 
     public List<GitRepository> getRepositories() {
-        return ListUtil.unpackGitRepositoryList(preferences.get(KEY_REPOSITORIES, TEST_REPO));
+        return ListUtil.unpackGitRepositoryList(preferences.get(KEY_REPOSITORIES, null));
     }
 
     public void setSelectedRepository(GitRepository repository) {
@@ -55,6 +46,11 @@ public class Preferences {
     }
 
     public GitRepository getSelectedRepository() {
-        return JsonParserUtil.parseGitRepository(preferences.get(KEY_SELECTED_REPOSITORY, DEFAULT_REPO));
+        String repository = preferences.get(KEY_SELECTED_REPOSITORY, null);
+        if (repository != null) {
+            return JsonParserUtil.parseGitRepository(repository);
+        } else {
+            return null;
+        }
     }
 }

@@ -3,6 +3,7 @@ package org.eclipse.e4.tapiji.git.ui.handler.trimmbar;
 
 import java.util.List;
 import javax.inject.Inject;
+import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
@@ -24,8 +25,6 @@ import org.eclipse.swt.widgets.Shell;
 
 
 public class ChangeRepositoryHandler {
-
- 
 
     @Inject
     IGitService service;
@@ -69,5 +68,10 @@ public class ChangeRepositoryHandler {
         } catch (Exception exception) {
             MessageDialog.openError(shell, "Error: ", exception.getMessage());
         }
+    }
+
+    @CanExecute
+    public boolean canExecute(Preferences prefs) {
+        return !prefs.getRepositories().isEmpty();
     }
 }
