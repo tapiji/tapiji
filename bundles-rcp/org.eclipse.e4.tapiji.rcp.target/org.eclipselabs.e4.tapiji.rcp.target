@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Tapiji Target RCP" sequenceNumber="6">
+<?pde version="3.8"?><target name="Tapiji Target RCP" sequenceNumber="11">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.platform.sdk" version="4.6.0.I20160606-1100"/>
@@ -20,6 +20,6 @@
 <unit id="org.eclipse.mylyn.commons.notifications.feature.group" version="1.13.0.v20160721-2347"/>
 <repository location="http://download.eclipse.org/mylyn/releases/latest"/>
 </location>
-<location path="D:\github\tapiji\releng\org.eclipselabs.e4.tapiji.translator.target\libs" type="Directory"/>
+<location path="${project_loc}\libs" type="Directory"/>
 </locations>
 </target>
