@@ -41,7 +41,7 @@ public class NotificationPopup extends AbstractNotificationPopup {
         lblTitle.setFont(FontUtils.createFont(lblTitle, "Segoe UI", 10, SWT.BOLD));
         lblTitle.setText(title);
 
-        Label lblSubtext = new Label(composite, SWT.NONE);
+        Label lblSubtext = new Label(composite, SWT.NONE | SWT.WRAP);
         lblSubtext.setFont(FontUtils.createFont(lblTitle, "Segoe UI", 9, SWT.NORMAL));
         lblSubtext.setText(subTitle);
     }

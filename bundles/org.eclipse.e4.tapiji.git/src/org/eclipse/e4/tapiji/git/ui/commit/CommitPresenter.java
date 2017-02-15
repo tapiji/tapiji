@@ -43,8 +43,9 @@ public class CommitPresenter implements CommitContract.Presenter {
             @Override
             public void onSuccess(GitServiceResult<Void> response) {
                 view.setCursorWaitVisibility(false);
-                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_STAGED_FILE);
-                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_UNSTAGED_FILE);
+                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW);
+                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW);
+                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_PROPERTY_VIEW);
                 view.resetCommitView();
             }
 

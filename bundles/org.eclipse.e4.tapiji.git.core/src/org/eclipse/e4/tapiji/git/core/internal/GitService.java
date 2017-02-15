@@ -31,6 +31,7 @@ import org.eclipse.jgit.api.ResetCommand.ResetType;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
+import org.eclipse.jgit.errors.TransportException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
@@ -106,6 +107,9 @@ public class GitService implements IGitService {
             try {
                 results = git.push().setRemote("origin").setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password)).call();
             } catch (GitAPIException exception) {
+            	if(exception.getCause() instanceof TransportException) {
+            		
+            	}
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<Void>(null, parsePushResults(results));

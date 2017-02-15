@@ -25,9 +25,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ChangeRepositoryHandler {
 
-    private static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeRepositoryHandler";
-
-    private static final String TAG = ChangeRepositoryHandler.class.getSimpleName();
+ 
 
     @Inject
     IGitService service;
@@ -44,7 +42,7 @@ public class ChangeRepositoryHandler {
         repositories.forEach(repository -> {
             MDirectMenuItem dynamicItem = modelService.createModelElement(MDirectMenuItem.class);
             dynamicItem.setLabel(repository.getName());
-            dynamicItem.setContributionURI(CONTRIBUTION_URI);
+            dynamicItem.setContributionURI(UIEventConstants.MENU_CHANGE_REPOSITORY_CONTRIBUTION_URI);
             dynamicItem.setContainerData(JsonParserUtil.parseGitRepositoryString(repository));
             dynamicItem.setTooltip(repository.getDirectory());
             dynamicItem.setType(ItemType.PUSH);
@@ -60,7 +58,7 @@ public class ChangeRepositoryHandler {
             service.mount(selectedRepository.getDirectory());
             prefs.setSelectedRepository(selectedRepository);
 
-            MUIElement dropDownMenu = modelService.find(UIEventConstants.MENU_REPOSITORY_ID, app);
+            MUIElement dropDownMenu = modelService.find(UIEventConstants.MENU_CHANGE_REPOSITORY_ID, app);
             if (dropDownMenu instanceof HandledToolItemImpl) {
                 ((HandledToolItemImpl) dropDownMenu).setLabel(selectedRepository.getName());
             }

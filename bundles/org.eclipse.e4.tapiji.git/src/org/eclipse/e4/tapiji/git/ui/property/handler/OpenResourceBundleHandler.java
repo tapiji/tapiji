@@ -17,20 +17,20 @@ import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.swt.widgets.Shell;
 
-
+@SuppressWarnings("restriction")
 public class OpenResourceBundleHandler extends AOpenResourceBundleHandler {
 
     private static final String TAG = OpenResourceBundleHandler.class.getSimpleName();
     private PropertyFile propertyFile;
-    @Inject
+    
+	@Inject
     private ECommandService commandService;
 
-    @Inject
+	@Inject
     private EHandlerService handlerService;
 
     @Override
     protected String[] recentlyOpenedFiles(Shell shell) {
-
         return new String[] {propertyFile.getPath()};
     }
 
@@ -42,15 +42,11 @@ public class OpenResourceBundleHandler extends AOpenResourceBundleHandler {
         super.execute();
     }
 
-    @SuppressWarnings("restriction")
     private void executeCommand() {
-
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("org.eclipse.e4.tapiji.git.commandparameter.perspective", "org.eclipse.e4.tapiji.translator.perspective.main");
-
         Command cmd = commandService.getCommand("org.eclipse.e4.tapiji.git.command.perspective.git");
         ParameterizedCommand pCmd = ParameterizedCommand.generateCommand(cmd, parameters);
-        //ParameterizedCommand pCmd = new ParameterizedCommand(cmd, null);
         if (handlerService.canExecute(pCmd)) {
             handlerService.executeHandler(pCmd);
         }

@@ -1,6 +1,7 @@
 package org.eclipse.e4.tapiji.git.ui.handler.trimmbar;
 
 
+import java.net.UnknownHostException;
 import java.util.List;
 import javax.inject.Inject;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -53,8 +54,14 @@ public class PushHandler {
             public void onError(GitServiceException exception) {
                 Log.d(TAG, "onError(" + exception.toString() + ")");
                 if (exception.getCause() instanceof TransportException) {
-                    // TODO check real authentication
-                    sync.asyncExec(() -> LoginDialog.show(context, shell, this));
+                	Throwable throwable = ((TransportException)exception.getCause()).getCause();
+                	if(throwable.getCause() instanceof UnknownHostException) {
+                		 sync.asyncExec(() -> mylyn.sendNotification(new Notification("Unknown Host",throwable.getMessage())));
+                	} else {
+                		 // TODO check real authentication
+                        sync.asyncExec(() -> LoginDialog.show(context, shell, this));
+                	}
+                   
                 } else {
                     sync.asyncExec(() -> MessageDialog.openError(shell, "Error: ", exception.getMessage()));
                 }

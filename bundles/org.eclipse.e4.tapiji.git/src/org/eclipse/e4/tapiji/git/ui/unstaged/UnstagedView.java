@@ -76,7 +76,7 @@ public class UnstagedView implements UnstagedContract.View {
         btnStageAll.setText("Stage all files");
         btnStageAll.addListener(SWT.MouseDown, listener -> {
             presenter.stageChanges();
-            eventBroker.post(UIEventConstants.TOPIC_RELOAD_GIT_VIEW, "");
+ 
         });
 
         table = new Table(parent, SWT.BORDER | SWT.FULL_SELECTION);

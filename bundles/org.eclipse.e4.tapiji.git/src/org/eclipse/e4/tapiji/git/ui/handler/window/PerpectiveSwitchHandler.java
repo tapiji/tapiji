@@ -22,25 +22,22 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
 public class PerpectiveSwitchHandler {
 
-    private static final String PARAMETER_PERSPECTIVE_ID = "org.eclipse.e4.tapiji.git.commandparameter.perspective";
-    public static final String TOPIC_ALL = "org/eclipse/e4/ui/model/ui/UILabel/*"; //$NON-NLS-1$
-    private static final String TAG = PerpectiveSwitchHandler.class.getSimpleName();
     @Inject
     IEventBroker eventBroker;
 
     @SuppressWarnings("restriction")
     @Execute
-    public void switchPerspective(IEclipseContext context, MApplication application, EPartService partService, EModelService modelService, @Named(PARAMETER_PERSPECTIVE_ID) String perspectiveId, IGitService service, Preferences prefs, MApplication app) {
+    public void switchPerspective(IEclipseContext context, MApplication application, EPartService partService, EModelService modelService, @Named(UIEventConstants.PARAMETER_PERSPECTIVE_ID) String perspectiveId, IGitService service, Preferences prefs, MApplication app) {
         List<MPerspective> perspectives = modelService.findElements(application, perspectiveId, MPerspective.class, null);
         if (!perspectives.isEmpty()) {
             perspectives.forEach(perspective -> {
-                if (perspective.getElementId().equals("org.eclipse.e4.tapiji.translator.perspective.main")) {
+                if (perspective.getElementId().equals(UIEventConstants.PERSPECTIVE_MAIN)) {
                     partService.switchPerspective(perspective);
-                } else if (perspective.getElementId().equals("org.eclipse.e4.tapiji.git.perspective.git")) {
+                } else if (perspective.getElementId().equals(UIEventConstants.PERSPECTIVE_GIT)) {
                     try {
                         GitRepository repository = prefs.getSelectedRepository();
                         if (repository != null) {
-                            MUIElement dropDownMenu = modelService.find(UIEventConstants.MENU_REPOSITORY_ID, app);
+                            MUIElement dropDownMenu = modelService.find(UIEventConstants.MENU_CHANGE_REPOSITORY_ID, app);
                             if (dropDownMenu instanceof HandledToolItemImpl) {
                                 ((HandledToolItemImpl) dropDownMenu).setLabel(repository.getName());
                             }
@@ -49,16 +46,12 @@ public class PerpectiveSwitchHandler {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                     partService.switchPerspective(perspective);
                     eventBroker.post(UIEventConstants.TOPIC_RELOAD_PROPERTY_VIEW, "");
                     eventBroker.post(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW, "");
                     eventBroker.post(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW, "");
                 }
-
             });
-
         }
-
     }
 }

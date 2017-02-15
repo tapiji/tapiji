@@ -32,8 +32,6 @@ import org.eclipse.swt.widgets.Tree;
 
 public class PropertyView implements PropertyContract.View {
 
-    private static final String TREE_VIEWER_MENU_ID = "org.eclipse.e4.tapiji.git.popupmenu.pv.treeviewer";
-
     @Inject
     ITapijiResourceProvider resourceProvider;
 
@@ -106,7 +104,7 @@ public class PropertyView implements PropertyContract.View {
     }
 
     private void registerTreeMenu() {
-        this.menuService.registerContextMenu(this.treeViewer.getControl(), TREE_VIEWER_MENU_ID);
+        this.menuService.registerContextMenu(this.treeViewer.getControl(), UIEventConstants.PROPERTY_TREE_VIEWER_MENU_ID);
     }
 
     @Override
