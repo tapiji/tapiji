@@ -48,7 +48,6 @@ public class PerpectiveSwitchHandler {
                         e.printStackTrace();
                     }
                     partService.switchPerspective(perspective);
-                    eventBroker.post(UIEventConstants.TOPIC_RELOAD_PROPERTY_VIEW, "");
                     eventBroker.post(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW, "");
                     eventBroker.post(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW, "");
                 }

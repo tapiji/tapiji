@@ -60,7 +60,7 @@ public class StagedPresenter implements StagedContract.Presenter {
                     files = response.getResult()
                         .entrySet()
                         .stream()
-                        .filter(entry -> entry.getKey() == GitFileStatus.ADDED || entry.getKey() == GitFileStatus.REMOVED ||entry.getKey() == GitFileStatus.CHANGED)
+                        .filter(entry -> entry.getKey() == GitFileStatus.ADDED || entry.getKey() == GitFileStatus.REMOVED || entry.getKey() == GitFileStatus.CHANGED)
                         .flatMap(entry -> entry.getValue().stream().map(f -> new GitFile(f, entry.getKey())))
                         .collect(Collectors.toList());
                 }
@@ -85,7 +85,6 @@ public class StagedPresenter implements StagedContract.Presenter {
                 loadStagedFiles();
                 view.setCursorWaitVisibility(false);
                 view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW);
-                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_PROPERTY_VIEW);
             }
 
             @Override

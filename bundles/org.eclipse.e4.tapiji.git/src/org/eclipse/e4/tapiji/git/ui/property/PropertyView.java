@@ -99,7 +99,7 @@ public class PropertyView implements PropertyContract.View {
 
     @Inject
     @Optional
-    public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_PROPERTY_VIEW) String payload) {
+    public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD) String payload) {
         presenter.loadProperties();
     }
 

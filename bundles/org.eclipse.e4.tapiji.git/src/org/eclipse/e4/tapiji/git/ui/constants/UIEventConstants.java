@@ -8,10 +8,9 @@ public class UIEventConstants {
     public static final String TOPIC_ON_FILES_STAGED = "TOPIC_FILES/ON_STAGED";
     public static final String TOPIC_ON_FILES_UNSTAGED = "TOPIC_FILES/ON_UNSTAGED";
 
-    public static final String TOPIC_RELOAD = "TOPIC_RELLOAD/*";
+    public static final String TOPIC_RELOAD = "TOPIC_RELOAD/*";
     public static final String TOPIC_RELOAD_STAGE_VIEW = "TOPIC_RELOAD/STAGE_VIEW";
     public static final String TOPIC_RELOAD_UNSTAGE_VIEW = "TOPIC_RELOAD/UNSTAGE_VIEW";
-    public static final String TOPIC_RELOAD_PROPERTY_VIEW = "TOPIC_RELOAD/PROPERTY_VIEW";
 
     public static final String PERSPECTIVE_MAIN = "org.eclipse.e4.tapiji.translator.perspective.main";
     public static final String PERSPECTIVE_GIT = "org.eclipse.e4.tapiji.git.perspective.git";

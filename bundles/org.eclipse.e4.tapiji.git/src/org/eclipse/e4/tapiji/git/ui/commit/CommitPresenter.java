@@ -45,7 +45,6 @@ public class CommitPresenter implements CommitContract.Presenter {
                 view.setCursorWaitVisibility(false);
                 view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW);
                 view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW);
-                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_PROPERTY_VIEW);
                 view.resetCommitView();
             }
 
