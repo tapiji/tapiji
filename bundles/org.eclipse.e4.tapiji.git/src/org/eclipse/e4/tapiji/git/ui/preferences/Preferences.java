@@ -17,6 +17,8 @@ import org.eclipse.e4.tapiji.logger.Log;
 @Singleton
 public class Preferences {
 
+    public static String TEST_REPO = "[{\"url\":\"https://github.com/tapiji/git.extension.test.git\",\"directory\":\"E:/cloni/.git\"}]";
+
     private static final String KEY_REPOSITORIES = Preferences.class.getPackage() + "_KEY_REPOSITORIES";
     private static final String KEY_SELECTED_REPOSITORY = Preferences.class.getPackage() + "_KEY_SELECTED_REPOSITORY";
 
@@ -28,7 +30,7 @@ public class Preferences {
     public void addRepository(String name, String path) {
         Log.d("NEW REPO: ", name + " == " + path);
         GitRepository repository = new GitRepository(name, path);
-        List<GitRepository> repos = ListUtil.unpackGitRepositoryList(preferences.get(KEY_REPOSITORIES, null));
+        List<GitRepository> repos = ListUtil.unpackGitRepositoryList(preferences.get(KEY_REPOSITORIES, TEST_REPO));
         if (!repos.contains(repository)) {
             Log.d("ADD NEW REPO: ", name + " == " + path);
             repos.add(repository);
@@ -38,7 +40,7 @@ public class Preferences {
     }
 
     public List<GitRepository> getRepositories() {
-        return ListUtil.unpackGitRepositoryList(preferences.get(KEY_REPOSITORIES, null));
+        return ListUtil.unpackGitRepositoryList(preferences.get(KEY_REPOSITORIES, TEST_REPO));
     }
 
     public void setSelectedRepository(GitRepository repository) {
@@ -46,7 +48,7 @@ public class Preferences {
     }
 
     public GitRepository getSelectedRepository() {
-        String repository = preferences.get(KEY_SELECTED_REPOSITORY, null);
+        String repository = preferences.get(KEY_SELECTED_REPOSITORY, TEST_REPO);
         if (repository != null) {
             return JsonParserUtil.parseGitRepository(repository);
         } else {

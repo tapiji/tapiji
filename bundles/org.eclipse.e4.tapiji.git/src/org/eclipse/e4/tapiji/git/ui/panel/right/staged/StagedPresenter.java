@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.staged;
+package org.eclipse.e4.tapiji.git.ui.panel.right.staged;
 
 
 import java.util.Collections;
@@ -16,7 +16,7 @@ import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFile;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
-import org.eclipse.e4.tapiji.git.ui.staged.StagedContract.View;
+import org.eclipse.e4.tapiji.git.ui.panel.right.staged.StagedContract.View;
 import org.eclipse.e4.tapiji.logger.Log;
 
 

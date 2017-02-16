@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.commit;
+package org.eclipse.e4.tapiji.git.ui.panel.right.commit;
 
 
 import javax.inject.Inject;

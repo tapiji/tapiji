@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.property;
+package org.eclipse.e4.tapiji.git.ui.panel.left.reference;
 
 
 import java.util.List;
@@ -10,12 +10,12 @@ import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
-import org.eclipse.e4.tapiji.git.ui.property.PropertyContract.View;
+import org.eclipse.e4.tapiji.git.ui.panel.left.reference.PropertiesContract.View;
 
 
 @Creatable
 @Singleton
-public class PropertyPresenter implements PropertyContract.Presenter {
+public class PropertiesPresenter implements PropertiesContract.Presenter {
 
     protected static final String TAG = null;
 

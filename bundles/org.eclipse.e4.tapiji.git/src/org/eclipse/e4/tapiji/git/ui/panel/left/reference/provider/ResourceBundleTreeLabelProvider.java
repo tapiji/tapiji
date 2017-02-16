@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.property.provider;
+package org.eclipse.e4.tapiji.git.ui.panel.left.reference.provider;
 
 
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
@@ -7,12 +7,12 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 
-public class PropertyTreeLabelProvider extends LabelProvider {
+public class ResourceBundleTreeLabelProvider extends LabelProvider {
 
     private final Image folderImage;
     private final Image propertyImage;
 
-    public PropertyTreeLabelProvider(Image folderImage, Image propertyImage) {
+    public ResourceBundleTreeLabelProvider(Image folderImage, Image propertyImage) {
         this.folderImage = folderImage;
         this.propertyImage = propertyImage;
     }

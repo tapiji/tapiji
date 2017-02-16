@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.property.provider;
+package org.eclipse.e4.tapiji.git.ui.panel.left.reference.provider;
 
 
 import java.util.List;
@@ -6,7 +6,7 @@ import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
 
-public class PropertyTreeContentProvider implements ITreeContentProvider {
+public class ResourceBundleTreeContentProvider implements ITreeContentProvider {
 
     @SuppressWarnings("unchecked")
     @Override

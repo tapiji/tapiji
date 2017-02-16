@@ -14,8 +14,8 @@
     <elements xsi:type="commands:Handler" xmi:id="_HkUD0OrSEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handler.1" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.window.CloneRepoHandler" command="_F0x_4OrSEeah_qW_gJKbyQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_Dk7AwOu8Eeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handler.debug" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.window.DebugHandler" command="_GA23sOu8Eeah_qW_gJKbyQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_frBTAPICEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.handler.repositories" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeRepositoryHandler" command="_c5kfEPICEeaWMuJeVV3wjA"/>
-    <elements xsi:type="commands:Handler" xmi:id="_PMz5cPLZEeaW8vJ8432J5w" elementId="org.eclipse.e4.tapiji.git.handler.openresourcebundle" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.property.handler.OpenResourceBundleHandler" command="_M-0-8PLZEeaW8vJ8432J5w"/>
-    <elements xsi:type="commands:Handler" xmi:id="_uF7R8PL1EeaJd6fFNxps9g" elementId="org.eclipse.e4.tapiji.git.handler.deletefile" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.property.handler.DeleteFileHandler" command="_sclVkPL1EeaJd6fFNxps9g"/>
+    <elements xsi:type="commands:Handler" xmi:id="_PMz5cPLZEeaW8vJ8432J5w" elementId="org.eclipse.e4.tapiji.git.handler.openresourcebundle" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.panel.left.reference.handler.OpenResourceBundleHandler" command="_M-0-8PLZEeaW8vJ8432J5w"/>
+    <elements xsi:type="commands:Handler" xmi:id="_uF7R8PL1EeaJd6fFNxps9g" elementId="org.eclipse.e4.tapiji.git.handler.deletefile" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.panel.left.reference.handler.DeleteFileHandler" command="_sclVkPL1EeaJd6fFNxps9g"/>
     <elements xsi:type="commands:Handler" xmi:id="_qu47QPPSEea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.handler.stash" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.StashHandler" command="_oF-_UPPSEea2ELhYKKDJOg"/>
     <elements xsi:type="commands:Handler" xmi:id="_wwt60PPSEea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.handler.pop" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.PopHandler" command="_pU30UPPSEea2ELhYKKDJOg"/>
   </fragments>
@@ -37,17 +37,17 @@
     <elements xsi:type="advanced:Perspective" xmi:id="_TPZo4OmIEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.perspective.git" label="TapiJI Git">
       <children xsi:type="basic:PartSashContainer" xmi:id="_cFEpEOmIEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.partsashcontainer.git" horizontal="true">
         <children xsi:type="basic:PartSashContainer" xmi:id="_WK43sOmKEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.partsashcontainer.1" containerData="" horizontal="true">
-          <children xsi:type="basic:Part" xmi:id="_pX7e4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.propertyview" containerData="5000" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.property.PropertyView" label="Property View">
+          <children xsi:type="basic:Part" xmi:id="_pX7e4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.panel.view" containerData="5000" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.panel.left.reference.PropertiesView" label="Panel View">
             <menus xsi:type="menu:PopupMenu" xmi:id="_uItL4PLDEeaW8vJ8432J5w" elementId="org.eclipse.e4.tapiji.git.popupmenu.pv.treeviewer">
               <children xsi:type="menu:HandledMenuItem" xmi:id="_yLYXIPLDEeaW8vJ8432J5w" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.openresourcebundle" label="Open Resource Bundle" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/open_resource_bundle.png" command="_M-0-8PLZEeaW8vJ8432J5w"/>
               <children xsi:type="menu:HandledMenuItem" xmi:id="_pfQBwPL1EeaJd6fFNxps9g" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.deletefile" label="Delete File" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/delete.png" command="_sclVkPL1EeaJd6fFNxps9g"/>
             </menus>
           </children>
-          <children xsi:type="basic:Part" xmi:id="_YeD0MOmKEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.1" containerData="8000" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.filediff.FileDiffView"/>
-          <children xsi:type="basic:PartSashContainer" xmi:id="_jQUncOmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.partsashcontainer.2" containerData="10000">
-            <children xsi:type="basic:Part" xmi:id="_nLFz4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.unstaged.UnstagedView"/>
-            <children xsi:type="basic:Part" xmi:id="_nwPvYOmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.2" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.staged.StagedView"/>
-            <children xsi:type="basic:Part" xmi:id="_oVtM4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.3" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.commit.CommitView"/>
+          <children xsi:type="basic:Part" xmi:id="_YeD0MOmKEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.file.view" containerData="8000" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.filediff.FileDiffView" label="File View"/>
+          <children xsi:type="basic:PartSashContainer" xmi:id="_jQUncOmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.partsashcontainer.right" containerData="10000">
+            <children xsi:type="basic:Part" xmi:id="_nLFz4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.panel.right.unstaged.UnstagedView"/>
+            <children xsi:type="basic:Part" xmi:id="_nwPvYOmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.2" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.panel.right.staged.StagedView"/>
+            <children xsi:type="basic:Part" xmi:id="_oVtM4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.3" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.panel.right.commit.CommitView"/>
           </children>
         </children>
       </children>

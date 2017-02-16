@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.property;
+package org.eclipse.e4.tapiji.git.ui.panel.left.reference;
 
 
 import java.util.List;
@@ -7,7 +7,7 @@ import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 import org.eclipse.e4.tapiji.git.ui.BasePresenter;
 
 
-public interface PropertyContract {
+public interface PropertiesContract {
 
     interface View {
 

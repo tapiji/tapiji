@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.property;
+package org.eclipse.e4.tapiji.git.ui.panel.left.reference;
 
 
 import java.util.List;
@@ -8,8 +8,8 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
-import org.eclipse.e4.tapiji.git.ui.property.provider.PropertyTreeContentProvider;
-import org.eclipse.e4.tapiji.git.ui.property.provider.PropertyTreeLabelProvider;
+import org.eclipse.e4.tapiji.git.ui.panel.left.reference.provider.ResourceBundleTreeContentProvider;
+import org.eclipse.e4.tapiji.git.ui.panel.left.reference.provider.ResourceBundleTreeLabelProvider;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.resource.TapijiResourceConstants;
 import org.eclipse.e4.tapiji.utils.FontUtils;
@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
 
 
-public class PropertyView implements PropertyContract.View {
+public class PropertiesView implements PropertiesContract.View {
 
     @Inject
     ITapijiResourceProvider resourceProvider;
@@ -45,7 +45,7 @@ public class PropertyView implements PropertyContract.View {
     ESelectionService selectionService;
 
     @Inject
-    PropertyPresenter presenter;
+    PropertiesPresenter presenter;
 
     private Composite parent;
 
@@ -82,8 +82,8 @@ public class PropertyView implements PropertyContract.View {
         });
         tree = treeViewer.getTree();
         tree.setLayoutData(new GridData(GridData.FILL_BOTH));
-        treeViewer.setContentProvider(new PropertyTreeContentProvider());
-        treeViewer.setLabelProvider(new PropertyTreeLabelProvider(image(TapijiResourceConstants.IMG_FOLDER), image(TapijiResourceConstants.IMG_RESOURCE_PROPERTY)));
+        treeViewer.setContentProvider(new ResourceBundleTreeContentProvider());
+        treeViewer.setLabelProvider(new ResourceBundleTreeLabelProvider(image(TapijiResourceConstants.IMG_FOLDER), image(TapijiResourceConstants.IMG_RESOURCE_PROPERTY)));
     }
 
     private Image image(String image) {

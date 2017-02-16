@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.unstaged;
+package org.eclipse.e4.tapiji.git.ui.panel.right.unstaged;
 
 
 import java.util.List;
