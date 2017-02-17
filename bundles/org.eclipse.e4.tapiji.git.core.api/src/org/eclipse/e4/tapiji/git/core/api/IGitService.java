@@ -45,4 +45,6 @@ public interface IGitService {
 
     void unmount();
 
+    void stashes(IGitServiceCallback<Void> callback);
+
 }

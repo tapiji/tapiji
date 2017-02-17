@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.panel.left.reference.provider;
+package org.eclipse.e4.tapiji.git.ui.panel.left.file.provider;
 
 
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;

@@ -347,6 +347,27 @@ public class GitService implements IGitService {
     }
 
     @Override
+    public void stashes(IGitServiceCallback<Void> callback) {
+        //        CompletableFuture.supplyAsync(() -> {
+        //            Collection<RevCommit> stashes = null;
+        //            try {
+        //                stashes = git.stashList().call();
+        //                git.s
+        //            } catch (GitAPIException exception) {
+        //                throwAsUnchecked(exception);
+        //            }
+        //            Log.d(TAG, "stash(" + stashes + ")");
+        //            return new GitServiceResult<Void>(null);
+        //        }, executorService).whenCompleteAsync((result, exception) -> {
+        //            if (exception == null) {
+        //                callback.onSuccess(result);
+        //            } else {
+        //                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+        //            }
+        //        });
+    }
+
+    @Override
     public void popFirst(IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
             ObjectId applied = null;

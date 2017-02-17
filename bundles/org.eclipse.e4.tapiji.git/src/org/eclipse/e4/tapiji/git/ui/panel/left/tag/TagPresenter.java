@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.panel.left.reference;
+package org.eclipse.e4.tapiji.git.ui.panel.left.tag;
 
 
 import java.util.List;
@@ -9,15 +9,12 @@ import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
-import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
-import org.eclipse.e4.tapiji.git.ui.panel.left.reference.PropertiesContract.View;
+import org.eclipse.e4.tapiji.git.ui.panel.left.tag.TagContract.View;
 
 
 @Creatable
 @Singleton
-public class PropertiesPresenter implements PropertiesContract.Presenter {
-
-    protected static final String TAG = null;
+public class TagPresenter implements TagContract.Presenter {
 
     @Inject
     IGitService service;
@@ -25,10 +22,14 @@ public class PropertiesPresenter implements PropertiesContract.Presenter {
 
     @Override
     public void init() {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
     public void dispose() {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
@@ -36,14 +37,13 @@ public class PropertiesPresenter implements PropertiesContract.Presenter {
         this.view = view;
     }
 
-    public void loadProperties() {
-        service.findPropertyFiles("*.properties", new IGitServiceCallback<List<PropertyDirectory>>() {
+    @Override
+    public void loadTags() {
+        service.tags(new IGitServiceCallback<List<String>>() {
 
             @Override
-            public void onSuccess(GitServiceResult<List<PropertyDirectory>> response) {
-                List<PropertyDirectory> result = response.getResult();
-                int cntFiles = result.stream().mapToInt(dir -> dir.getFiles().size()).sum();
-                view.showProperties(response.getResult(), cntFiles);
+            public void onSuccess(GitServiceResult<List<String>> response) {
+                view.showTags(response.getResult());
             }
 
             @Override
@@ -52,4 +52,5 @@ public class PropertiesPresenter implements PropertiesContract.Presenter {
             }
         });
     }
+
 }

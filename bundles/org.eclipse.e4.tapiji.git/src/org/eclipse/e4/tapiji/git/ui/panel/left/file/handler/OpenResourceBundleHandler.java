@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.property.handler;
+package org.eclipse.e4.tapiji.git.ui.panel.left.file.handler;
 
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.panel.left.reference;
+package org.eclipse.e4.tapiji.git.ui.panel.left.file;
 
 
 import java.util.List;
@@ -7,17 +7,19 @@ import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 import org.eclipse.e4.tapiji.git.ui.BasePresenter;
 
 
-public interface PropertiesContract {
+public interface FileContract {
 
     interface View {
 
-        void showError(GitServiceException exception);
+        void showFiles(List<PropertyDirectory> result, int cntFiles);
 
-        void showProperties(List<PropertyDirectory> directories, int cntFiles);
+        void showError(GitServiceException exception);
 
     }
 
     interface Presenter extends BasePresenter<View> {
+
+        void loadFiles();
 
     }
 }
