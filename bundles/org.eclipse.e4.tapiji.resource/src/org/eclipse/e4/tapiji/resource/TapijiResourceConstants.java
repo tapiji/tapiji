@@ -32,4 +32,5 @@ public final class TapijiResourceConstants {
     public static final String IMG_FOLDER = "icons/16x16/folder.png";
 
     public static final String IMG_TAG = "icons/16x16/tag.png";
+    public static final String IMG_STASH_SAVED = "icons/16x16/git_stash_saved.png";
 }

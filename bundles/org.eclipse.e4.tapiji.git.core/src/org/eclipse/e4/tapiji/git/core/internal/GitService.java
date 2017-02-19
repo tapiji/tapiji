@@ -18,6 +18,7 @@ import java.util.stream.StreamSupport;
 import javax.inject.Inject;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.core.internal.file.FileService;
+import org.eclipse.e4.tapiji.git.model.CommitReference;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
@@ -25,12 +26,16 @@ import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 import org.eclipse.e4.tapiji.git.model.push.GitPushMessage;
 import org.eclipse.e4.tapiji.git.model.push.GitRemoteStatus;
+import org.eclipse.e4.tapiji.git.model.stash.StashReference;
 import org.eclipse.e4.tapiji.logger.Log;
+import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.InvalidRefNameException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.errors.TransportException;
 import org.eclipse.jgit.lib.Constants;
@@ -85,11 +90,11 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void pushChanges(IGitServiceCallback<Void> callback) {
+    public void pushAll(IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
             Iterable<PushResult> results = null;
             try {
-                results = git.push().setRemote("origin").call();
+                results = git.push().setRemote("origin").setPushAll().setPushTags().call();
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
@@ -327,15 +332,10 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void stash(IGitServiceCallback<Void> callback) {
+    public void branches(IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
-            RevCommit stash = null;
-            try {
-                stash = git.stashCreate().call();
-            } catch (GitAPIException exception) {
-                throwAsUnchecked(exception);
-            }
-            Log.d(TAG, "stash(" + stash + ")");
+            ListBranchCommand branches = git.branchList();
+            Log.d(TAG, "stash(" + branches + ")");
             return new GitServiceResult<Void>(null);
         }, executorService).whenCompleteAsync((result, exception) -> {
             if (exception == null) {
@@ -347,24 +347,18 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void stashes(IGitServiceCallback<Void> callback) {
-        //        CompletableFuture.supplyAsync(() -> {
-        //            Collection<RevCommit> stashes = null;
-        //            try {
-        //                stashes = git.stashList().call();
-        //                git.s
-        //            } catch (GitAPIException exception) {
-        //                throwAsUnchecked(exception);
-        //            }
-        //            Log.d(TAG, "stash(" + stashes + ")");
-        //            return new GitServiceResult<Void>(null);
-        //        }, executorService).whenCompleteAsync((result, exception) -> {
-        //            if (exception == null) {
-        //                callback.onSuccess(result);
-        //            } else {
-        //                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-        //            }
-        //        });
+    public void fetch(IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            FetchCommand fetch = git.fetch().setCheckFetchedObjects(true).setRemoveDeletedRefs(true);
+            Log.d(TAG, "stash(" + fetch + ")");
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
     }
 
     @Override
@@ -390,4 +384,129 @@ public class GitService implements IGitService {
             }
         });
     }
+
+    @Override
+    public void stashes(IGitServiceCallback<List<CommitReference>> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            List<CommitReference> stashes = null;
+            try {
+                stashes = git.stashList().call().stream().map(commit -> {
+                    Log.d(TAG, "apply()" + commit.getAuthorIdent());
+                    Log.d(TAG, "apply()" + commit.getCommitterIdent());
+
+                    return new CommitReference(commit.getFullMessage(), commit.getCommitTime(), commit.getType(), commit.getName());
+                }).collect(Collectors.toList());
+
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<List<CommitReference>>(stashes);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
+    }
+
+    @Override
+    public void applyStash(String hash, IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                git.stashApply().setStashRef(hash).call();
+                //   droped = git.stashDrop().setStashRef(applied.get)
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
+    }
+
+    @Override
+    public void popStash(String hash, IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                StashReference stashReference = stashRef(hash);
+                if (stashReference != null) {
+                    git.stashApply().setStashRef(hash).call();
+                    git.stashDrop().setStashRef(stashReference.getReference()).call();
+                } else {
+                    throw new IllegalArgumentException("Invalid stash reference " + hash);
+                }
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
+    }
+
+    @Override
+    public void dropStash(String hash, IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                StashReference stashReference = stashRef(hash);
+                if (stashReference != null) {
+                    git.stashDrop().setStashRef(stashReference.getReference()).call();
+                } else {
+                    throw new IllegalArgumentException("Invalid stash reference " + hash);
+                }
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
+    }
+
+    @Override
+    public void stash(IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            RevCommit stash = null;
+            try {
+                stash = git.stashCreate().call();
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            Log.d(TAG, "stash(" + stash + ")");
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
+    }
+
+    private StashReference stashRef(String commitHash) throws InvalidRefNameException, GitAPIException {
+        int ref = 0;
+        Collection<RevCommit> list = git.stashList().call();
+        for (RevCommit revCommit : list) {
+            if (revCommit.getName().equals(commitHash)) {
+                return new StashReference(ref);
+            } else {
+                ref++;
+            }
+        }
+        return null;
+    }
+
 }

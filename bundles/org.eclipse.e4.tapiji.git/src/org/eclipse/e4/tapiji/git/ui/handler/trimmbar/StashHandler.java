@@ -16,6 +16,7 @@ import org.eclipse.e4.tapiji.git.ui.preferences.Preferences;
 import org.eclipse.e4.tapiji.mylyn.core.api.IMylynService;
 import org.eclipse.e4.tapiji.mylyn.model.Notification;
 import org.eclipse.e4.ui.di.UISynchronize;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 
 
@@ -42,10 +43,10 @@ public class StashHandler {
 
             @Override
             public void onError(GitServiceException exception) {
-                // TODO Auto-generated method stub
-
+                sync.asyncExec(() -> MessageDialog.openError(shell, "Error: ", exception.getMessage()));
             }
         });
+
     }
 
     @CanExecute

@@ -8,5 +8,6 @@ Export-Package: org.eclipse.e4.tapiji.git.model,
  org.eclipse.e4.tapiji.git.model.exception,
  org.eclipse.e4.tapiji.git.model.file,
  org.eclipse.e4.tapiji.git.model.property,
- org.eclipse.e4.tapiji.git.model.push
+ org.eclipse.e4.tapiji.git.model.push,
+ org.eclipse.e4.tapiji.git.model.stash
 Import-Package: org.eclipse.e4.tapiji.resource

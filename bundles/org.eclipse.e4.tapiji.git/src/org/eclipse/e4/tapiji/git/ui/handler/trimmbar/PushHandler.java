@@ -32,7 +32,7 @@ public class PushHandler {
 
     @Execute
     public void exec(final IEclipseContext context, final Shell shell, final IGitService service, final IMylynService mylyn) {
-        service.pushChanges(new IGitServiceCallback<Void>() {
+        service.pushAll(new IGitServiceCallback<Void>() {
 
             @Override
             public void onSuccess(GitServiceResult<Void> response) {

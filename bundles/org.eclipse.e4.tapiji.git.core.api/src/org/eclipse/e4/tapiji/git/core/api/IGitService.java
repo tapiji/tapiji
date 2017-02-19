@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.eclipse.e4.tapiji.git.model.CommitReference;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
@@ -31,13 +32,15 @@ public interface IGitService {
 
     void discardChanges(IGitServiceCallback<Void> callback);
 
-    void pushChanges(IGitServiceCallback<Void> callback);
+    void pushAll(IGitServiceCallback<Void> callback);
 
     void pushChangesWithCredentials(String passowrd, String username, String directory, IGitServiceCallback<Void> callback);
 
-    void stash(IGitServiceCallback<Void> callback);
-
     void popFirst(IGitServiceCallback<Void> callback);
+
+    void branches(IGitServiceCallback<Void> callback);
+
+    void fetch(IGitServiceCallback<Void> callback);
 
     void mount(String directory) throws IOException;
 
@@ -45,6 +48,14 @@ public interface IGitService {
 
     void unmount();
 
-    void stashes(IGitServiceCallback<Void> callback);
+    void applyStash(String hash, IGitServiceCallback<Void> callback);
+
+    void popStash(String hash, IGitServiceCallback<Void> callback);
+
+    void dropStash(String hash, IGitServiceCallback<Void> callback);
+
+    void stashes(IGitServiceCallback<List<CommitReference>> callback);
+
+    void stash(IGitServiceCallback<Void> callback);
 
 }

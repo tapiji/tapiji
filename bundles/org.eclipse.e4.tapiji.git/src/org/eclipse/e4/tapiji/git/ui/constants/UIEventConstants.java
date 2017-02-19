@@ -19,5 +19,6 @@ public class UIEventConstants {
 
     public static final String MENU_CHANGE_REPOSITORY_CONTRIBUTION_URI = "bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeRepositoryHandler";
     public static final String PROPERTY_TREE_VIEWER_MENU_ID = "org.eclipse.e4.tapiji.git.popupmenu.pv.treeviewer";
+    public static final String PROPERTY_TABLE_VIEW_STASH_MENU_ID = "org.eclipse.e4.tapiji.git.popupmenu.stash.table";
 
 }

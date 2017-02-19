@@ -47,10 +47,10 @@
             <children xsi:type="menu:HandledMenuItem" xmi:id="_yLYXIPLDEeaW8vJ8432J5w" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.openresourcebundle" label="Open Resource Bundle" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/open_resource_bundle.png" command="_M-0-8PLZEeaW8vJ8432J5w"/>
             <children xsi:type="menu:HandledMenuItem" xmi:id="_pfQBwPL1EeaJd6fFNxps9g" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.deletefile" label="Delete File" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/delete.png" command="_sclVkPL1EeaJd6fFNxps9g"/>
           </menus>
-          <menus xsi:type="menu:PopupMenu" xmi:id="_P7IZMPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.popupmenu.pv.stash">
-            <children xsi:type="menu:HandledMenuItem" xmi:id="_QjjEEPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.applystash" label="Apply Stash"/>
-            <children xsi:type="menu:HandledMenuItem" xmi:id="_VSlmEPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.popstash" label="Pop Stash"/>
-            <children xsi:type="menu:HandledMenuItem" xmi:id="_X3FjIPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.dropstash" label="Drop Stash"/>
+          <menus xsi:type="menu:PopupMenu" xmi:id="_P7IZMPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.popupmenu.stash.table">
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_QjjEEPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.applystash" label="Apply Stash" command="_cVuRoPVkEeacE9emdy7F_g"/>
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_VSlmEPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.popstash" label="Pop Stash" command="_eHUyIPVkEeacE9emdy7F_g"/>
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_X3FjIPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.dropstash" label="Drop Stash" command="_f988kPVkEeacE9emdy7F_g"/>
           </menus>
         </children>
         <children xsi:type="basic:Part" xmi:id="_YeD0MOmKEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.file.view" containerData="5000" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.filediff.FileDiffView" label="File View"/>

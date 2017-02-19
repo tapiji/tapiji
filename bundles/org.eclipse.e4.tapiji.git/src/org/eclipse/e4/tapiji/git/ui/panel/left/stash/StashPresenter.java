@@ -1,10 +1,15 @@
 package org.eclipse.e4.tapiji.git.ui.panel.left.stash;
 
 
+import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
+import org.eclipse.e4.tapiji.git.model.CommitReference;
+import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
+import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.ui.panel.left.stash.StashContract.View;
 
 
@@ -18,14 +23,10 @@ public class StashPresenter implements StashContract.Presenter {
 
     @Override
     public void init() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -33,8 +34,20 @@ public class StashPresenter implements StashContract.Presenter {
         this.view = view;
     }
 
+    @Override
     public void loadStashes() {
-        //service.stash(callback);
-    }
+        service.stashes(new IGitServiceCallback<List<CommitReference>>() {
 
+            @Override
+            public void onSuccess(GitServiceResult<List<CommitReference>> response) {
+                view.showStashes(response.getResult());
+
+            }
+
+            @Override
+            public void onError(GitServiceException exception) {
+                view.showError(exception);
+            }
+        });
+    }
 }
