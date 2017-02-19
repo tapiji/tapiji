@@ -1,8 +1,14 @@
 package org.eclipse.e4.tapiji.git.core.internal;
 
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,6 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import javax.inject.Inject;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
+import org.eclipse.e4.tapiji.git.core.internal.diff.TapijiDiffFormatter;
 import org.eclipse.e4.tapiji.git.core.internal.file.FileService;
 import org.eclipse.e4.tapiji.git.model.CommitReference;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
@@ -40,12 +47,21 @@ import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.errors.TransportException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectLoader;
+import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevTree;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.eclipse.jgit.treewalk.AbstractTreeIterator;
+import org.eclipse.jgit.treewalk.CanonicalTreeParser;
+import org.eclipse.jgit.treewalk.FileTreeIterator;
+import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
 
 
 public class GitService implements IGitService {
@@ -364,17 +380,13 @@ public class GitService implements IGitService {
     @Override
     public void popFirst(IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
-            ObjectId applied = null;
-            ObjectId droped = null;
             try {
                 Collection<RevCommit> stashes = git.stashList().call();
-                applied = git.stashApply().setStashRef(stashes.stream().findFirst().get().getName()).call();
-                droped = git.stashDrop().setStashRef(0).call();
+                git.stashApply().setStashRef(stashes.stream().findFirst().get().getName()).call();
+                git.stashDrop().setStashRef(0).call();
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            Log.d(TAG, "apply(" + applied + ")");
-            Log.d(TAG, "apply(" + droped + ")");
             return new GitServiceResult<Void>(null);
         }, executorService).whenCompleteAsync((result, exception) -> {
             if (exception == null) {
@@ -387,13 +399,11 @@ public class GitService implements IGitService {
 
     @Override
     public void stashes(IGitServiceCallback<List<CommitReference>> callback) {
+        readFile();
         CompletableFuture.supplyAsync(() -> {
             List<CommitReference> stashes = null;
             try {
                 stashes = git.stashList().call().stream().map(commit -> {
-                    Log.d(TAG, "apply()" + commit.getAuthorIdent());
-                    Log.d(TAG, "apply()" + commit.getCommitterIdent());
-
                     return new CommitReference(commit.getFullMessage(), commit.getCommitTime(), commit.getType(), commit.getName());
                 }).collect(Collectors.toList());
 
@@ -415,7 +425,6 @@ public class GitService implements IGitService {
         CompletableFuture.supplyAsync(() -> {
             try {
                 git.stashApply().setStashRef(hash).call();
-                //   droped = git.stashDrop().setStashRef(applied.get)
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
@@ -496,6 +505,112 @@ public class GitService implements IGitService {
         });
     }
 
+    private static AbstractTreeIterator prepareTreeParser(Repository repository, String objectId) throws IOException {
+        // from the commit we can build the tree which allows us to construct the TreeParser
+        try (RevWalk walk = new RevWalk(repository)) {
+            RevCommit commit = walk.parseCommit(ObjectId.fromString(objectId));
+            RevTree tree = walk.parseTree(commit.getTree().getId());
+
+            CanonicalTreeParser oldTreeParser = new CanonicalTreeParser();
+            try (ObjectReader oldReader = repository.newObjectReader()) {
+                oldTreeParser.reset(oldReader, tree.getId());
+            }
+
+            walk.dispose();
+            return oldTreeParser;
+        }
+    }
+
+    public void readFile() {
+        try {
+            ByteArrayOutputStream diffOutputStream = new ByteArrayOutputStream();
+            TapijiDiffFormatter formatter = new TapijiDiffFormatter(diffOutputStream);
+
+            formatter.setRepository(repository);
+            //formatter.setPathFilter(PathFilter.create(this.pathFilter.replaceAll("\\\\", "/")));
+
+            AbstractTreeIterator commitTreeIterator = prepareTreeParser(repository, repository.resolve("HEAD").getName());
+            FileTreeIterator workTreeIterator = new FileTreeIterator(repository);
+
+            // Scan gets difference between the two iterators.
+            formatter.format(commitTreeIterator, workTreeIterator);
+
+            String diffText = diffOutputStream.toString();
+            String[] liness = diffText.split("\n");
+            for (String line : liness) {
+                Log.d("DIFF", "sds" + line);
+            }
+
+            Log.d("DIFF", "sds" + formatter.getHtml());
+        } catch (Exception e) {
+
+        }
+
+        //    final String[] file = new File("README.md").list();
+        //  for (String file : list) {
+        //  if (new File(file).isDirectory()) {
+        //     continue;
+        // }
+        //
+        //            final BlameResult result = git.blame().setFilePath("README.md").call();
+        //            final RawText rawText = result.getResultContents();
+        //            for (int i = 0; i < rawText.size(); i++) {
+        //                final PersonIdent sourceAuthor = result.getSourceAuthor(i);
+        //                final RevCommit sourceCommit = result.getSourceCommit(i);
+        //                System.out.println(sourceAuthor.getName() + (sourceCommit != null ? "/" + sourceCommit.getCommitTime() + "/" + sourceCommit.getName() : "") + ": " + rawText
+        //                    .getString(i));
+        //            }
+        //            //   }
+        //
+        //            BlameCommand blamer = new BlameCommand(repository);
+        //            ObjectId commitID;
+        //
+        //            commitID = repository.resolve("HEAD");
+        //
+        //            blamer.setStartCommit(commitID);
+        //            blamer.setFilePath("README.md");
+        //            BlameResult blame = blamer.call();
+        //
+        //            // read the number of lines from the commit to not look at changes in the working copy
+        //            int lines = countFiles(repository, commitID, "README.md");
+        //            for (int i = 0; i < lines; i++) {
+        //                RevCommit commit = blame.getSourceCommit(i);
+        //                System.out.println("Line: " + i + ": " + commit + " commit ");
+        //            }
+        //
+        //            System.out.println("Displayed commits responsible for " + lines + " lines of README.md");
+
+    }
+
+    private static int countFiles(Repository repository, ObjectId commitID, String name) throws IOException {
+        try (RevWalk revWalk = new RevWalk(repository)) {
+            RevCommit commit = revWalk.parseCommit(commitID);
+            RevTree tree = commit.getTree();
+            System.out.println("Having tree: " + tree);
+
+            // now try to find a specific file
+            try (TreeWalk treeWalk = new TreeWalk(repository)) {
+                treeWalk.addTree(tree);
+                treeWalk.setRecursive(true);
+                treeWalk.setFilter(PathFilter.create(name));
+                if (!treeWalk.next()) {
+                    throw new IllegalStateException("Did not find expected file 'README.md'");
+                }
+
+                ObjectId objectId = treeWalk.getObjectId(0);
+                ObjectLoader loader = repository.open(objectId);
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                // and then one can the loader to read the file
+                loader.copyTo(stream);
+
+                revWalk.dispose();
+
+                return readLines(new ByteArrayInputStream(stream.toByteArray()), "UTF-8").size();
+            }
+        }
+    }
+
     private StashReference stashRef(String commitHash) throws InvalidRefNameException, GitAPIException {
         int ref = 0;
         Collection<RevCommit> list = git.stashList().call();
@@ -507,6 +622,22 @@ public class GitService implements IGitService {
             }
         }
         return null;
+    }
+
+    public static List readLines(InputStream input, String encoding) throws IOException {
+        InputStreamReader reader = new InputStreamReader(input, encoding);
+        return readLines(reader);
+    }
+
+    public static List readLines(Reader input) throws IOException {
+        BufferedReader reader = new BufferedReader(input);
+        List list = new ArrayList();
+        String line = reader.readLine();
+        while (line != null) {
+            list.add(line);
+            line = reader.readLine();
+        }
+        return list;
     }
 
 }
