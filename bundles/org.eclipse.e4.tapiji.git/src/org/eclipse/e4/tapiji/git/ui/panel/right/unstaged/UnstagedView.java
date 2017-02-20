@@ -14,8 +14,12 @@ import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.utils.FontUtils;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.di.UISynchronize;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -31,6 +35,9 @@ public class UnstagedView implements UnstagedContract.View {
     @Inject
     UISynchronize sync;
 
+    @Inject
+    ESelectionService selectionService;
+    
     @Inject
     UnstagedPresenter presenter;
 
@@ -83,6 +90,20 @@ public class UnstagedView implements UnstagedContract.View {
         table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
         table.setLinesVisible(false);
         table.setHeaderVisible(false);
+  	  table.addSelectionListener(new SelectionListener() {
+			
+  			@Override
+  			public void widgetSelected(SelectionEvent e) {
+  				eventBroker.post(UIEventConstants.LOAD_DIFF, table.getSelection()[0].getText());
+  				
+  			}
+  			
+  			@Override
+  			public void widgetDefaultSelected(SelectionEvent e) {
+  				// TODO Auto-generated method stub
+  				
+  			}
+  		});
     }
 
     @Inject

@@ -78,14 +78,14 @@ public class TapijiDiffFormatter extends DiffFormatter {
         switch (prefix) {
             case '+':
                 linesAdded++;
-                os.write(("|+" + (linesRight++) + "|" + text.getString(cur) + "\n").getBytes());
+                os.write(("|+" + (linesRight++) + "| " + text.getString(cur) + "\n").getBytes());
                 break;
             case '-':
                 linesDeleted++;
-                os.write(("-" + (linesLeft++) + "||" + text.getString(cur) + "\n").getBytes());
+                os.write(("-" + (linesLeft++) + "| | " + text.getString(cur) + "\n").getBytes());
                 break;
             default:
-                os.write((+(linesLeft++) + "|" + (linesRight++) + "|" + text.getString(cur) + "\n").getBytes());
+                os.write((+(linesLeft++) + " |" + (linesRight++) + "| " + text.getString(cur) + "\n").getBytes());
                 break;
         }
     }
@@ -110,8 +110,6 @@ public class TapijiDiffFormatter extends DiffFormatter {
                         String[] diff = line.split("\\|");
                         if (diff.length >= 3) {
                             section.addLineDiff(new DiffLine(diff[0], diff[1], diff[2]));
-                        } else {
-                            section.addLineDiff(new DiffLine("", "", line));
                         }
                     }
 

@@ -12,8 +12,12 @@ import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.utils.FontUtils;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.di.UISynchronize;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -37,6 +41,8 @@ public class StagedView implements StagedContract.View {
 	@Inject
 	ITapijiResourceProvider resourceProvider;
 
+
+	
 	private Label lblStagedFiles;
 
 	private Table table;
@@ -66,6 +72,7 @@ public class StagedView implements StagedContract.View {
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
 		table.setHeaderVisible(false);
 		table.setLinesVisible(false);
+	
 	}
 
 	@Inject

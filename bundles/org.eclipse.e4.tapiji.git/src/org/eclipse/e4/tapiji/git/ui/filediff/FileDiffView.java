@@ -9,15 +9,24 @@ import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.diff.DiffSection;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
+import org.eclipse.e4.tapiji.utils.ColorUtils;
+import org.eclipse.e4.tapiji.utils.FontUtils;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -25,7 +34,9 @@ import org.eclipse.swt.widgets.TableItem;
 
 
 public class FileDiffView implements FileDiffContract.View {
-
+    private static final int[] COLUMN_ALIGNMENTS = new int[] {SWT.CENTER, SWT.CENTER, SWT.LEFT};
+    private static final int[] COLUMN_WEIGHTS = new int[] {10,10,100};
+	
     @Inject
     FileDiffPresenter presenter;
     @Inject
@@ -34,6 +45,7 @@ public class FileDiffView implements FileDiffContract.View {
     private ScrolledComposite scrolledComposite;
     private Composite composite_1;
     private TableColumnLayout tableViewerLayout;
+	private Label lblNewLabel;
 
     @PostConstruct
     public void createPartControl(final Composite parent) {
@@ -41,9 +53,9 @@ public class FileDiffView implements FileDiffContract.View {
         presenter.setView(this);
         parent.setLayout(new GridLayout(1, false));
 
-        Label lblNewLabel = new Label(parent, SWT.NONE);
-
+        lblNewLabel = new Label(parent, SWT.NONE);
         lblNewLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        lblNewLabel.setFont(FontUtils.createFont(lblNewLabel, "Segoe UI", 10, SWT.BOLD));
         lblNewLabel.setText("README.md with 2 additions and  3 deletions");
 
         scrolledComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -53,58 +65,68 @@ public class FileDiffView implements FileDiffContract.View {
 
         composite_1 = new Composite(scrolledComposite, SWT.NONE);
         composite_1.setLayout(new FillLayout(SWT.VERTICAL));
+        Stream.of(composite_1.getChildren()).forEach(child -> child.dispose());
+        presenter.loadFileDiffFrom("README.md");
     }
 
     @Inject
     @Optional
-    public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD) String payload) {
-        presenter.loadFileDiffFrom("README.md");
+    public void closeHandler(@UIEventTopic(UIEventConstants.LOAD_DIFF) String payload) {
+    	Stream.of(composite_1.getChildren()).forEach(child -> child.dispose());
+     System.out.println(payload);
+     presenter.loadFileDiffFrom(payload);
     }
 
     @Override
     public void showFileDiff(DiffFile diff) {
         sync.syncExec(() -> {
-            diff.getSections().stream().forEach(section -> createSections(section));
+            diff.getSections().stream().forEach(section -> createSections(section, diff.getAdded(), diff.getDeleted()));
         });
     }
 
-    private void createSections(DiffSection section) {
-        Stream.of(composite_1.getChildren()).forEach(child -> child.dispose());
+    private void createSections(DiffSection section, int additions, int deletions) {
+    	lblNewLabel.setText(String.format("README.md with %1$d additions and  %2$d deletions", additions, deletions));
 
         Composite composite = new Composite(composite_1, SWT.NONE);
         composite.setLayout(new GridLayout(1, false));
 
-        Label lblNewLabel_1 = new Label(composite, SWT.NONE);
-        lblNewLabel_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        lblNewLabel_1.setText("@@ 1,1 12,18 @@");
+        Label lblDiffHeader = new Label(composite, SWT.NONE);
+        lblDiffHeader.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        lblDiffHeader.setText(section.getHeader());
 
-        Composite composite_2 = new Composite(composite, SWT.NONE);
-        composite_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        TableColumnLayout layout = new TableColumnLayout();
-        composite_2.setLayout(layout);
+        Composite layoutComposite = new Composite(composite, SWT.NONE);
+        layoutComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, true, 1, 1));
+        
+      
 
-        Table table = new Table(composite_2, SWT.BORDER | SWT.FULL_SELECTION);
-        table.setHeaderVisible(true);
+        Table table = new Table(layoutComposite, SWT.BORDER | SWT.FULL_SELECTION);
+        table.setHeaderVisible(false);
         table.setLinesVisible(true);
-        scrolledComposite.setContent(composite_1);
-        scrolledComposite.setMinSize(composite_1.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
-        int[] columnWidths = new int[] {35, 35, 100};
-        int[] columnAlignments = new int[] {SWT.CENTER, SWT.CENTER, SWT.LEFT};
+        
         for (int i = 0; i < 3; i++) {
-            TableColumn tableColumn = new TableColumn(table, columnAlignments[i]);
-            tableColumn.setWidth(columnWidths[i]);
+           TableColumn column = new TableColumn(table, COLUMN_ALIGNMENTS[i]);
+           column.pack();
         }
         section.getLines().stream().forEach(line -> {
             TableItem item = new TableItem(table, SWT.NONE);
             item.setText(0, line.getLineNumberLeft());
             item.setText(1, line.getLineNumberRight());
+            if(line.getLineNumberRight().contains("+") || line.getLineNumberLeft().contains("+")) {
+            	item.setBackground(2, new Color (Display.getCurrent(), 144,238,144));
+            } else if(line.getLineNumberRight().contains("-") || line.getLineNumberLeft().contains("-")) {
+            	item.setBackground(2, new Color (Display.getCurrent(), 240,128,128));
+            }
             item.setText(2, line.getLine());
         });
-        for (int i = 0; i < 3; i++) {
-            table.getColumn(i).pack();
-        }
 
+        TableColumnLayout layout = new TableColumnLayout();
+        for(int i = 0; i< table.getColumnCount();i++) {
+        	layout.setColumnData(table.getColumns()[i], new ColumnWeightData(COLUMN_WEIGHTS[i], COLUMN_WEIGHTS[i]));
+        }
+        layoutComposite.setLayout(layout);
+       
+        scrolledComposite.setContent(composite_1);
+        scrolledComposite.setMinSize(composite_1.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
 
     @Override
