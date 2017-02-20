@@ -541,7 +541,7 @@ public class GitService implements IGitService {
                 Log.d("DIFF", "sds" + line);
             }
 
-            Log.d("DIFF", "sds" + formatter.getHtml());
+            Log.d("DIFF", "sds" + formatter.toHtml());
         } catch (Exception e) {
 
         }

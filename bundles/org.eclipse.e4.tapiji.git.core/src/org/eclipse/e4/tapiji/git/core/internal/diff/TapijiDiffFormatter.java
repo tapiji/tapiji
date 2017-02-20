@@ -6,6 +6,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.stream.Stream;
+
+import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.util.RawParseUtils;
@@ -20,8 +22,10 @@ public class TapijiDiffFormatter extends DiffFormatter {
         this.os = out;
     }
 
-    private int linesLeft, linesRight;
+    private int linesLeft, linesRight, linesAdded, linesDeleted;
 
+    private String css = "<style>td {padding:0; margin:0;}</style>";
+    
     @Override
     protected void writeHunkHeader(int aStartLine, int aEndLine, int bStartLine, int bEndLine) throws IOException {
         os.write("<tr><td colspan=\"3\">".getBytes());
@@ -68,32 +72,52 @@ public class TapijiDiffFormatter extends DiffFormatter {
 
     @Override
     protected void writeLine(final char prefix, final RawText text, final int cur) throws IOException {
-        os.write("<tr>".getBytes());
+    	
+    	os.write("<tr>".getBytes());
         switch (prefix) {
             case '+':
+            	linesAdded++;
                 os.write(("<th></th><th>+" + (linesRight++) + "</th>").getBytes());
+                os.write(("<td bgColor=\"#32CD32\">"+text.getString(cur)+"</td>").getBytes());
                 break;
             case '-':
-                linesLeft++;
+            	linesDeleted++;
                 os.write(("<th>-" + (linesLeft++) + "</th><th></th>").getBytes());
+                os.write(("<td bgColor=\"#DC143C\">"+text.getString(cur)+"</td>").getBytes());
                 break;
             default:
                 os.write(("<th>" + (linesLeft++) + "</th><th>" + (linesRight++) + "</th>").getBytes());
-                os.write("<td>".getBytes());
+                os.write(("<td>"+text.getString(cur)+"</td>").getBytes());
                 break;
         }
-        os.write(prefix);
+       os.write("</tr>".getBytes());
+        
     }
-
-    public String getHtml() {
+    boolean startDiff = false;
+    public String toHtml() {
+    	
+    	Log.d("ADDED",""+linesAdded);
+    	Log.d("DELETED",""+linesDeleted);
+    	startDiff = false;
         StringBuilder sb = new StringBuilder();
+        sb.append(css);
         Stream.of(RawParseUtils.decode(((ByteArrayOutputStream) os).toByteArray()).split("\n"))
             .filter(line -> !line.startsWith("index") && !line.startsWith("new file") && !line.startsWith("\\ No newline") && !line.startsWith("---") && !line.startsWith("+++"))
             .forEach(line -> {
                 if (line.startsWith("diff")) {
-                    sb.append("</table>");
+                	
+                	if(startDiff) {
+                		sb.append("</table>");
+                		startDiff= false;
+                	} else {
+                	
+                    sb.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+                    startDiff  = true; 
+                	}
                 } else {
+                
                     sb.append(line);
+                  
                 }
             });
         return sb.toString();
