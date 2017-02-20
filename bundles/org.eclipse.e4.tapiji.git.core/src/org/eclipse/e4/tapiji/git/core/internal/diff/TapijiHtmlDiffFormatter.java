@@ -6,40 +6,35 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.stream.Stream;
-import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
-import org.eclipse.e4.tapiji.git.model.diff.DiffLine;
-import org.eclipse.e4.tapiji.git.model.diff.DiffSection;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.util.RawParseUtils;
 
 
-public class TapijiDiffFormatter extends DiffFormatter {
+public class TapijiHtmlDiffFormatter extends DiffFormatter {
 
-    private int linesLeft = 0;
-    private int linesRight = 0;
-    private int linesAdded = 0;
-    private int linesDeleted = 0;
+    private OutputStream os;
 
-    private DiffSection section = null;
-    private final OutputStream os;
-    private final DiffFile fileDiff;
-
-    public TapijiDiffFormatter(OutputStream out) {
+    public TapijiHtmlDiffFormatter(OutputStream out) {
         super(out);
         this.os = out;
-        this.fileDiff = new DiffFile();
     }
+
+    private int linesLeft, linesRight, linesAdded, linesDeleted;
+
+    private String css = "<style>td {padding:0; margin:0;}</style>";
 
     @Override
     protected void writeHunkHeader(int aStartLine, int aEndLine, int bStartLine, int bEndLine) throws IOException {
+        os.write("<tr><td colspan=\"3\">".getBytes());
         os.write('@');
         os.write('@');
         writeRange('-', aStartLine + 1, aEndLine - aStartLine);
         writeRange('+', bStartLine + 1, bEndLine - bStartLine);
         os.write(' ');
         os.write('@');
-        os.write("@\n".getBytes());
+        os.write('@');
+        os.write("</td></tr>\n".getBytes());
         linesLeft = aStartLine + 1;
         linesRight = bStartLine + 1;
     }
@@ -75,49 +70,54 @@ public class TapijiDiffFormatter extends DiffFormatter {
 
     @Override
     protected void writeLine(final char prefix, final RawText text, final int cur) throws IOException {
+
+        os.write("<tr>".getBytes());
         switch (prefix) {
             case '+':
                 linesAdded++;
-                os.write(("|+" + (linesRight++) + "|" + text.getString(cur) + "\n").getBytes());
+                os.write(("<th></th><th>+" + (linesRight++) + "</th>").getBytes());
+                os.write(("<td bgColor=\"#32CD32\">" + text.getString(cur) + "</td>").getBytes());
                 break;
             case '-':
                 linesDeleted++;
-                os.write(("-" + (linesLeft++) + "||" + text.getString(cur) + "\n").getBytes());
+                os.write(("<th>-" + (linesLeft++) + "</th><th></th>").getBytes());
+                os.write(("<td bgColor=\"#DC143C\">" + text.getString(cur) + "</td>").getBytes());
                 break;
             default:
-                os.write((+(linesLeft++) + "|" + (linesRight++) + "|" + text.getString(cur) + "\n").getBytes());
+                os.write(("<th>" + (linesLeft++) + "</th><th>" + (linesRight++) + "</th>").getBytes());
+                os.write(("<td>" + text.getString(cur) + "</td>").getBytes());
                 break;
         }
+        os.write("</tr>".getBytes());
+
     }
 
-    public DiffFile get() {
-        fileDiff.setDeleted(linesDeleted);
-        fileDiff.setAdded(linesAdded);
+    boolean startDiff = false;
+
+    public String toHtml() {
+        startDiff = false;
+        StringBuilder sb = new StringBuilder();
+        sb.append(css);
         Stream.of(RawParseUtils.decode(((ByteArrayOutputStream) os).toByteArray()).split("\n"))
             .filter(line -> !line.startsWith("index") && !line.startsWith("new file") && !line.startsWith("\\ No newline") && !line.startsWith("---") && !line.startsWith("+++"))
             .forEach(line -> {
-                System.out.println("LINE: " + line);
-                if (line.startsWith("@@") && line.endsWith("@@")) {
-                    if (section != null) {
-                        fileDiff.addSection(section);
-                    }
-                    section = new DiffSection();
-                    section.setHeader(line);
-                } else if (line.startsWith("diff")) {
+                if (line.startsWith("diff")) {
 
-                } else {
-                    if (section != null) {
-                        String[] diff = line.split("\\|");
-                        if (diff.length >= 3) {
-                            section.addLineDiff(new DiffLine(diff[0], diff[1], diff[2]));
-                        } else {
-                            section.addLineDiff(new DiffLine("", "", line));
-                        }
+                    if (startDiff) {
+                        sb.append("</table>");
+                        startDiff = false;
+                    } else {
+
+                        sb.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+                        startDiff = true;
                     }
+                } else {
+
+                    sb.append(line);
 
                 }
             });
-        fileDiff.addSection(section);
-        return fileDiff;
+        return sb.toString();
     }
+
 }

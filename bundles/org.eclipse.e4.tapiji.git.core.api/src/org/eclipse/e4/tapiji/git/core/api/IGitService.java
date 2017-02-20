@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import org.eclipse.e4.tapiji.git.model.CommitReference;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
+import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 
@@ -57,5 +58,7 @@ public interface IGitService {
     void stashes(IGitServiceCallback<List<CommitReference>> callback);
 
     void stash(IGitServiceCallback<Void> callback);
+
+    void diffFromFile(String hash, IGitServiceCallback<DiffFile> callback);
 
 }
