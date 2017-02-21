@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import org.eclipse.e4.tapiji.git.model.CommitReference;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
+import org.eclipse.e4.tapiji.git.model.Reference;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
@@ -27,7 +28,7 @@ public interface IGitService {
 
     void uncommittedChanges(IGitServiceCallback<Map<GitFileStatus, Set<String>>> callback);
 
-    void tags(IGitServiceCallback<List<String>> callback);
+    void tags(IGitServiceCallback<List<Reference>> callback);
 
     void showFileDiff(IGitServiceCallback<Void> callback);
 
@@ -38,8 +39,6 @@ public interface IGitService {
     void pushChangesWithCredentials(String passowrd, String username, String directory, IGitServiceCallback<Void> callback);
 
     void popFirst(IGitServiceCallback<Void> callback);
-
-    void branches(IGitServiceCallback<Void> callback);
 
     void fetch(IGitServiceCallback<Void> callback);
 
@@ -60,5 +59,11 @@ public interface IGitService {
     void stash(IGitServiceCallback<Void> callback);
 
     void diffFromFile(String hash, IGitServiceCallback<DiffFile> callback);
+
+    void branches(IGitServiceCallback<List<Reference>> callback);
+
+    List<Reference> branches() throws IOException;
+
+    void checkout(String branch);
 
 }

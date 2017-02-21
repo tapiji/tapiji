@@ -22,6 +22,8 @@ import org.eclipse.e4.tapiji.git.core.internal.util.JGitUtils;
 import org.eclipse.e4.tapiji.git.model.CommitReference;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
+import org.eclipse.e4.tapiji.git.model.Reference;
+import org.eclipse.e4.tapiji.git.model.ReferenceType;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
@@ -30,9 +32,9 @@ import org.eclipse.e4.tapiji.git.model.push.GitPushMessage;
 import org.eclipse.e4.tapiji.git.model.push.GitRemoteStatus;
 import org.eclipse.e4.tapiji.git.model.stash.StashReference;
 import org.eclipse.e4.tapiji.logger.Log;
+import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
 import org.eclipse.jgit.api.StashApplyCommand;
@@ -263,17 +265,48 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void tags(IGitServiceCallback<List<String>> callback) {
-        try {
-            List<Ref> refs = git.tagList().call();
-            List<String> tags = new ArrayList<>(refs.size());
-            for (Ref ref : refs) {
-                tags.add(ref.getName().substring(ref.getName().lastIndexOf('/') + 1, ref.getName().length()));
+    public void tags(IGitServiceCallback<List<Reference>> callback) {
+        getReferences(callback, ReferenceType.TAGS);
+    }
+
+    @Override
+    public List<Reference> branches() throws IOException {
+        return JGitUtils.getBranches(repository, 10);
+    }
+
+    @Override
+    public void branches(IGitServiceCallback<List<Reference>> callback) {
+        getReferences(callback, ReferenceType.HEADS);
+    }
+
+    private void getReferences(IGitServiceCallback<List<Reference>> callback, ReferenceType referenceType) {
+        CompletableFuture.supplyAsync(() -> {
+            List<Reference> references = new ArrayList<>();
+            try {
+                switch (referenceType) {
+                    case HEADS:
+                        references = JGitUtils.getBranches(repository, -1);
+                        break;
+                    case TAGS:
+                        references = JGitUtils.getTags(repository, -1);
+                        break;
+                    case STASHES:
+                        references = JGitUtils.getStashes(repository, -1);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Wrong reference type " + referenceType);
+                }
+            } catch (IOException exception) {
+                throwAsUnchecked(exception);
             }
-            callback.onSuccess(new GitServiceResult<List<String>>(tags));
-        } catch (GitAPIException exception) {
-            callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-        }
+            return new GitServiceResult<List<Reference>>(references);
+        }, executorService).whenCompleteAsync((result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        });
     }
 
     @Override
@@ -334,18 +367,18 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void branches(IGitServiceCallback<Void> callback) {
-        CompletableFuture.supplyAsync(() -> {
-            ListBranchCommand branches = git.branchList();
-            Log.d(TAG, "stash(" + branches + ")");
-            return new GitServiceResult<Void>(null);
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+    public void checkout(String branch) {
+        try {
+            Ref ref = git.checkout()
+                .setCreateBranch(false)
+                .setName(branch)
+                .setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK)
+                .setStartPoint(Constants.R_HEADS + branch)
+                .call();
+        } catch (GitAPIException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -522,5 +555,4 @@ public class GitService implements IGitService {
         }
         return null;
     }
-
 }

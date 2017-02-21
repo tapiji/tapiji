@@ -21,6 +21,7 @@
     <elements xsi:type="commands:Handler" xmi:id="_iGNpkPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.handler.applystash" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.panel.left.stash.handler.ApplyStashHandler" command="_cVuRoPVkEeacE9emdy7F_g"/>
     <elements xsi:type="commands:Handler" xmi:id="_p9yCwPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.handler.popstash" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.panel.left.stash.handler.PopStashHandler" command="_eHUyIPVkEeacE9emdy7F_g"/>
     <elements xsi:type="commands:Handler" xmi:id="_xMVUIPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.handler.dropstash" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.panel.left.stash.handler.DropStashHandler" command="_f988kPVkEeacE9emdy7F_g"/>
+    <elements xsi:type="commands:Handler" xmi:id="_D8FnIPg_EeaaytU_-jBGDw" elementId="org.eclipse.e4.tapiji.git.handler.changebranch" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeBranchHandler" command="_BS3iIPg_EeaaytU_-jBGDw"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_vAgfsOmFEear1K70oDQV4Q" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="commands:Command" xmi:id="_zniVMOmFEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.command.perspective.git" commandName="Perspective Git">
@@ -38,6 +39,7 @@
     <elements xsi:type="commands:Command" xmi:id="_cVuRoPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.command.applystash" commandName="Apply Stash"/>
     <elements xsi:type="commands:Command" xmi:id="_eHUyIPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.command.popstash" commandName="Pop Stash"/>
     <elements xsi:type="commands:Command" xmi:id="_f988kPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.command.dropstash" commandName="Drop Stash"/>
+    <elements xsi:type="commands:Command" xmi:id="_BS3iIPg_EeaaytU_-jBGDw" elementId="org.eclipse.e4.tapiji.git.command.change.branch" commandName="Change Branch"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8h59QOmHEear1K70oDQV4Q" featurename="children" parentElementId="org.eclipse.e4.tapiji.translator.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_TPZo4OmIEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.perspective.git" label="TapiJI Git">
@@ -66,8 +68,13 @@
     <elements xsi:type="menu:TrimContribution" xmi:id="_QCNaAOrOEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.trimcontribution.toolbar" parentId="org.eclipse.e4.tapiji.translator.trimbar.main" positionInParent="?before=org.eclipse.e4.babel.editor.toolbar.main">
       <children xsi:type="menu:ToolBar" xmi:id="_VvXxIOrOEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.toolbar.git.repositories">
         <children xsi:type="menu:HandledToolItem" xmi:id="_1HcLoPEuEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.selected.repository" label="Select Repository" tooltip="Selected Repository" command="_c5kfEPICEeaWMuJeVV3wjA">
-          <menu xmi:id="_1-kA4PEuEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.menu.gitrepositories">
-            <children xsi:type="menu:DynamicMenuContribution" xmi:id="_4jslMPEwEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.dynamicmenucontribution.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeRepositoryHandler"/>
+          <menu xmi:id="_1-kA4PEuEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.menu.gitrepositories" label="Git Repositories">
+            <children xsi:type="menu:DynamicMenuContribution" xmi:id="_4jslMPEwEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.dynamicmenucontribution.changerepository" label="Change Repository" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeRepositoryHandler"/>
+          </menu>
+        </children>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_nqsYoPg_EeaaytU_-jBGDw" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.select.branch" label="Select Branch" command="_BS3iIPg_EeaaytU_-jBGDw">
+          <menu xmi:id="_qoxTUPg_EeaaytU_-jBGDw" elementId="org.eclipse.e4.tapiji.git.menu.selectbranch" label="Select Branch">
+            <children xsi:type="menu:DynamicMenuContribution" xmi:id="_47PI0Pg-EeaaytU_-jBGDw" elementId="org.eclipse.e4.tapiji.git.dynamicmenucontribution.changebranch" label="Change Branch" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeBranchHandler"/>
           </menu>
         </children>
       </children>

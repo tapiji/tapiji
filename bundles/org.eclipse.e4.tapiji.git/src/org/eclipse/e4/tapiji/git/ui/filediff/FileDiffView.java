@@ -115,7 +115,7 @@ public class FileDiffView implements FileDiffContract.View {
 
         Table table = new Table(layoutComposite, SWT.FULL_SELECTION);
         table.setHeaderVisible(false);
-        table.setLinesVisible(true);
+        table.setLinesVisible(false);
 
         for (int i = 0; i < 3; i++) {
             TableColumn column = new TableColumn(table, COLUMN_ALIGNMENTS[i]);

@@ -4,6 +4,7 @@ package org.eclipse.e4.tapiji.git.ui.panel.left.tag;
 import java.util.List;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Creatable;
+import org.eclipse.e4.tapiji.git.model.Reference;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.resource.TapijiResourceConstants;
@@ -100,14 +101,14 @@ public class TagView implements TagContract.View {
     }
 
     @Override
-    public void showTags(List<String> tags) {
+    public void showTags(List<Reference> tags) {
         sync.asyncExec(() -> {
             table.removeAll();
             table.clearAll();
             if (!tags.isEmpty()) {
                 tags.stream().forEach(tag -> {
                     TableItem item = new TableItem(table, SWT.NONE);
-                    item.setText(tag);
+                    item.setText(tag.getName());
                     item.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_TAG));
                 });
                 lblTagCnt.setText(String.valueOf(tags.size()));

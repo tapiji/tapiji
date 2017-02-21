@@ -8,6 +8,7 @@ import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
+import org.eclipse.e4.tapiji.git.model.Reference;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.ui.panel.left.tag.TagContract.View;
 
@@ -27,10 +28,10 @@ public class TagPresenter implements TagContract.Presenter {
 
     @Override
     public void loadTags() {
-        service.tags(new IGitServiceCallback<List<String>>() {
+        service.tags(new IGitServiceCallback<List<Reference>>() {
 
             @Override
-            public void onSuccess(GitServiceResult<List<String>> response) {
+            public void onSuccess(GitServiceResult<List<Reference>> response) {
                 view.showTags(response.getResult());
             }
 
