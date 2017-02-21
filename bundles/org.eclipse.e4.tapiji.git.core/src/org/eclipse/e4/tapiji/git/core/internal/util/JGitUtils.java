@@ -33,8 +33,8 @@ public class JGitUtils {
      * Returns the diff between the primary parent (HEAD) and
      * current work tree.
      *
-     * @param filePath
-     *            If filePath is not specified, the diff returns the entire commit otherwise it is restricted to
+     * @param file
+     *            If file is not specified, the diff returns the entire commit otherwise it is restricted to
      *            that file.
      * @param repository
      *            Represents the current git repository.
@@ -42,7 +42,7 @@ public class JGitUtils {
      *         Represents the diff between old and new file
      * @throws IOException
      */
-    public static DiffFile getDiff(final Repository repository, final String filePath) throws IOException {
+    public static DiffFile getDiff(final Repository repository, final String file) throws IOException {
         try {
 
             try (ByteArrayOutputStream diffOutputStream = new ByteArrayOutputStream(); RevWalk walk = new RevWalk(repository); TapijiDiffFormatter formatter = new TapijiDiffFormatter(diffOutputStream)) {
@@ -57,13 +57,12 @@ public class JGitUtils {
 
                 formatter.setRepository(repository);
                 final List<DiffEntry> diffEntries = formatter.scan(oldTreeParser, new FileTreeIterator(repository));
-                if (filePath != null && filePath.length() > 0) {
+                if (file != null && file.length() > 0) {
                     Optional<DiffEntry> diffEntry = diffEntries.stream().filter(entry -> {
                         if (entry.getChangeType() == ChangeType.DELETE) {
-                            return entry.getOldPath().equalsIgnoreCase(filePath);
-
+                            return entry.getOldPath().equalsIgnoreCase(file);
                         } else {
-                            return entry.getNewPath().equalsIgnoreCase(filePath);
+                            return entry.getNewPath().equalsIgnoreCase(file);
                         }
                     }).findFirst();
                     if (diffEntry.isPresent()) {
@@ -75,7 +74,9 @@ public class JGitUtils {
                     formatter.format(diffEntries);
                 }
                 walk.dispose();
-                return formatter.get();
+                DiffFile diff = formatter.get();
+                diff.setFile(file);
+                return diff;
             }
         } catch (IOException e) {
             throw new IOException(e.getMessage(), e.getCause());

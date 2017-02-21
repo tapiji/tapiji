@@ -49,6 +49,7 @@ public class FileDiffView implements FileDiffContract.View {
     @Inject
     Shell shell;
     private Composite parent;
+    private String selectedFile;
 
     @PostConstruct
     public void createPartControl(final Composite parent) {
@@ -75,22 +76,27 @@ public class FileDiffView implements FileDiffContract.View {
     @Inject
     @Optional
     public void closeHandler(@UIEventTopic(UIEventConstants.LOAD_DIFF) String file) {
-        clearScrollView();
-        presenter.loadFileDiffFrom(file);
+        if (selectedFile == null || !selectedFile.equals(file)) {
+            clearScrollView();
+            presenter.loadFileDiffFrom(file);
+        }
 
     }
 
     @Override
     public void showFileDiff(DiffFile diff) {
         sync.syncExec(() -> {
-            diff.getSections().stream().forEach(section -> createSections(section, diff.getAdded(), diff.getDeleted()));
+            this.selectedFile = diff.getFile();
+            this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
+            diff.getSections().stream().forEach(section -> createSections(section));
             updateScrollView();
-            parent.layout(true, true);
+            this.parent.layout(true, true);
         });
     }
 
     @Override
     public void clearScrollView() {
+
         Stream.of(composite.getChildren()).forEach(child -> child.dispose());
     }
 
@@ -98,8 +104,7 @@ public class FileDiffView implements FileDiffContract.View {
         scrollView.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
 
-    private void createSections(DiffSection section, int additions, int deletions) {
-        lblHeader.setText(String.format("README.md with %1$d additions and %2$d deletions", additions, deletions));
+    private void createSections(DiffSection section) {
 
         Label lblDiffHeader = new Label(composite, SWT.NONE);
         lblDiffHeader.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));

@@ -10,6 +10,7 @@ public class DiffFile {
     private int added;
     private int deleted;
     private List<DiffSection> sections = new ArrayList<>();
+    private String file;
 
     public DiffFile() {
         super();
@@ -43,9 +44,16 @@ public class DiffFile {
         return sections;
     }
 
-    @Override
-    public String toString() {
-        return "DiffFile [added=" + added + ", deleted=" + deleted + ", sections=" + sections + "]";
+    public void setFile(String file) {
+        this.file = file;
     }
 
+    public String getFile() {
+        return file;
+    }
+
+    @Override
+    public String toString() {
+        return "DiffFile [added=" + added + ", deleted=" + deleted + ", sections=" + sections + ", file=" + file + "]";
+    }
 }
