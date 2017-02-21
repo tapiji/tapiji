@@ -9,17 +9,15 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFile;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
-import org.eclipse.e4.tapiji.git.ui.handler.window.PerpectiveSwitchHandler;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.utils.FontUtils;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -27,6 +25,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 
@@ -37,7 +36,7 @@ public class UnstagedView implements UnstagedContract.View {
 
     @Inject
     ESelectionService selectionService;
-    
+
     @Inject
     UnstagedPresenter presenter;
 
@@ -81,29 +80,22 @@ public class UnstagedView implements UnstagedContract.View {
         Button btnStageAll = new Button(composite, SWT.NONE);
         btnStageAll.setBounds(0, 0, 75, 25);
         btnStageAll.setText("Stage all files");
-        btnStageAll.addListener(SWT.MouseDown, listener -> {
-            presenter.stageChanges();
- 
-        });
+        btnStageAll.addListener(SWT.MouseDown, listener -> presenter.stageChanges());
 
-        table = new Table(parent, SWT.BORDER | SWT.FULL_SELECTION);
-        table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
+        Composite layoutComposite = new Composite(parent, SWT.NONE);
+        layoutComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+        TableColumnLayout tableLayout = new TableColumnLayout();
+        layoutComposite.setLayout(tableLayout);
+
+        table = new Table(layoutComposite, SWT.BORDER | SWT.FULL_SELECTION);
+        table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         table.setLinesVisible(false);
         table.setHeaderVisible(false);
-  	  table.addSelectionListener(new SelectionListener() {
-			
-  			@Override
-  			public void widgetSelected(SelectionEvent e) {
-  				eventBroker.post(UIEventConstants.LOAD_DIFF, table.getSelection()[0].getText());
-  				
-  			}
-  			
-  			@Override
-  			public void widgetDefaultSelected(SelectionEvent e) {
-  				// TODO Auto-generated method stub
-  				
-  			}
-  		});
+        table.addListener(SWT.Selection, listener -> eventBroker.post(UIEventConstants.LOAD_DIFF, table.getSelection()[0].getText()));
+
+        TableColumn column = new TableColumn(table, SWT.LEFT);
+        column.pack();
+        tableLayout.setColumnData(column, new ColumnWeightData(100, 100));
     }
 
     @Inject
@@ -111,7 +103,7 @@ public class UnstagedView implements UnstagedContract.View {
     public void updateView(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW) String payload) {
         presenter.loadUnCommittedChanges();
     }
-    
+
     @Override
     public void showUnCommittedChanges(List<GitFile> files) {
         sync.asyncExec(() -> {

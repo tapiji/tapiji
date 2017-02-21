@@ -64,6 +64,7 @@ public class FileDiffView implements FileDiffContract.View {
         scrollView.setExpandHorizontal(true);
         scrollView.setExpandVertical(true);
         scrollView.setAlwaysShowScrollBars(true);
+        scrollView.setVisible(false);
 
         composite = new Composite(scrollView, SWT.NONE);
         composite.setLayout(new GridLayout(1, false));
@@ -79,6 +80,9 @@ public class FileDiffView implements FileDiffContract.View {
     @Override
     public void showFileDiff(DiffFile diff) {
         sync.syncExec(() -> {
+            if (!diff.getSections().isEmpty()) {
+                scrollView.setVisible(true);
+            }
             diff.getSections().stream().forEach(section -> createSections(section, diff.getAdded(), diff.getDeleted()));
             updateScrollView();
         });
@@ -86,6 +90,7 @@ public class FileDiffView implements FileDiffContract.View {
 
     @Override
     public void clearScrollView() {
+        scrollView.setVisible(false);
         Stream.of(composite.getChildren()).forEach(child -> child.dispose());
     }
 
@@ -102,7 +107,7 @@ public class FileDiffView implements FileDiffContract.View {
         lblDiffHeader.setText(section.getHeader());
 
         Composite layoutComposite = new Composite(composite, SWT.NONE);
-        layoutComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 2));
+        layoutComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));
 
         Table table = new Table(layoutComposite, SWT.BORDER | SWT.FULL_SELECTION);
         table.setHeaderVisible(false);
