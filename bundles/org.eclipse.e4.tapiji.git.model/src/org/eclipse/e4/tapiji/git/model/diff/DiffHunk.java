@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DiffSection {
+public class DiffHunk {
 
     private String header;
     List<DiffLine> lines = new ArrayList<>();
 
-    public DiffSection() {
+    public DiffHunk() {
         super();
     }
 
@@ -32,7 +32,7 @@ public class DiffSection {
 
     @Override
     public String toString() {
-        return "DiffSection [header=" + header + ", lines=" + lines + "]";
+        return "DiffHunk [header=" + header + ", lines=" + lines + "]";
     }
 
     public void addLineDiff(DiffLine lineDiff) {

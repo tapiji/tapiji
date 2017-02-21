@@ -6,7 +6,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
-import org.eclipse.e4.tapiji.git.model.diff.DiffSection;
+import org.eclipse.e4.tapiji.git.model.diff.DiffHunk;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
 import org.eclipse.e4.tapiji.utils.FontUtils;
@@ -88,7 +88,7 @@ public class FileDiffView implements FileDiffContract.View {
         sync.syncExec(() -> {
             this.selectedFile = diff.getFile();
             this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
-            diff.getSections().stream().forEach(section -> createSections(section));
+            diff.getHunks().stream().forEach(section -> createSections(section));
             updateScrollView();
             this.parent.layout(true, true);
         });
@@ -104,7 +104,7 @@ public class FileDiffView implements FileDiffContract.View {
         scrollView.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
 
-    private void createSections(DiffSection section) {
+    private void createSections(DiffHunk section) {
 
         Label lblDiffHeader = new Label(composite, SWT.NONE);
         lblDiffHeader.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));

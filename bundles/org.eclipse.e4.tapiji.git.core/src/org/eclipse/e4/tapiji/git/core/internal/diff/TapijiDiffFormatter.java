@@ -8,7 +8,7 @@ import java.io.OutputStream;
 import java.util.stream.Stream;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.diff.DiffLine;
-import org.eclipse.e4.tapiji.git.model.diff.DiffSection;
+import org.eclipse.e4.tapiji.git.model.diff.DiffHunk;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.util.RawParseUtils;
@@ -21,7 +21,7 @@ public class TapijiDiffFormatter extends DiffFormatter {
     private int linesAdded = 0;
     private int linesDeleted = 0;
 
-    private DiffSection section = null;
+    private DiffHunk section = null;
     private final OutputStream os;
 
     public TapijiDiffFormatter(OutputStream out) {
@@ -98,9 +98,9 @@ public class TapijiDiffFormatter extends DiffFormatter {
                 System.out.println("LINE: " + line);
                 if (line.startsWith("@@") && line.endsWith("@@")) {
                     if (section != null) {
-                        fileDiff.addSection(section);
+                        fileDiff.addHunk(section);
                     }
-                    section = new DiffSection();
+                    section = new DiffHunk();
                     section.setHeader(line);
                 } else if (line.startsWith("diff")) {
 
@@ -114,7 +114,7 @@ public class TapijiDiffFormatter extends DiffFormatter {
 
                 }
             });
-        fileDiff.addSection(section);
+        fileDiff.addHunk(section);
         return fileDiff;
     }
 }

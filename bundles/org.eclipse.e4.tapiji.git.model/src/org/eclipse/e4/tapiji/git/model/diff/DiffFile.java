@@ -9,7 +9,8 @@ public class DiffFile {
 
     private int added;
     private int deleted;
-    private List<DiffSection> sections = new ArrayList<>();
+
+    private List<DiffHunk> hunks = new ArrayList<>();
     private String file;
 
     public DiffFile() {
@@ -24,12 +25,12 @@ public class DiffFile {
         this.deleted = deleted;
     }
 
-    public void setSections(List<DiffSection> sections) {
-        this.sections = sections;
+    public void setHunks(List<DiffHunk> sections) {
+        this.hunks = sections;
     }
 
-    public void addSection(DiffSection section) {
-        sections.add(section);
+    public void addHunk(DiffHunk section) {
+        hunks.add(section);
     }
 
     public int getAdded() {
@@ -40,8 +41,8 @@ public class DiffFile {
         return deleted;
     }
 
-    public List<DiffSection> getSections() {
-        return sections;
+    public List<DiffHunk> getHunks() {
+        return hunks;
     }
 
     public void setFile(String file) {
@@ -54,6 +55,6 @@ public class DiffFile {
 
     @Override
     public String toString() {
-        return "DiffFile [added=" + added + ", deleted=" + deleted + ", sections=" + sections + ", file=" + file + "]";
+        return "DiffFile [added=" + added + ", deleted=" + deleted + ", hunks=" + hunks + ", file=" + file + "]";
     }
 }
