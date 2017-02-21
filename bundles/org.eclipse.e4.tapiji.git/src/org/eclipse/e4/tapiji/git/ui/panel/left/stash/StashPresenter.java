@@ -22,14 +22,6 @@ public class StashPresenter implements StashContract.Presenter {
     private View view;
 
     @Override
-    public void init() {
-    }
-
-    @Override
-    public void dispose() {
-    }
-
-    @Override
     public void setView(View view) {
         this.view = view;
     }

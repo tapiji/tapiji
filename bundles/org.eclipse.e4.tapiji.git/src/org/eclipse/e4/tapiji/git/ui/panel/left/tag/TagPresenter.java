@@ -21,18 +21,6 @@ public class TagPresenter implements TagContract.Presenter {
     private View view;
 
     @Override
-    public void init() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void dispose() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void setView(View view) {
         this.view = view;
     }

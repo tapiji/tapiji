@@ -14,6 +14,8 @@ public interface FileDiffContract {
 
         void showError(GitServiceException exception);
 
+        void clearScrollView();
+
     }
 
     interface Presenter extends BasePresenter<View> {

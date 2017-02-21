@@ -32,14 +32,6 @@ public class StagedPresenter implements StagedContract.Presenter {
     private View view;
 
     @Override
-    public void init() {
-    }
-
-    @Override
-    public void dispose() {
-    }
-
-    @Override
     public void setView(StagedContract.View view) {
         this.view = view;
     }

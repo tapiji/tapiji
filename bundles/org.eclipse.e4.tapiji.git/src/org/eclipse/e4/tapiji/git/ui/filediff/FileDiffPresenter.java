@@ -1,6 +1,8 @@
 package org.eclipse.e4.tapiji.git.ui.filediff;
 
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.eclipse.e4.core.di.annotations.Creatable;
@@ -10,6 +12,7 @@ import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.ui.filediff.FileDiffContract.View;
+import org.eclipse.e4.tapiji.logger.Log;
 
 
 @Creatable
@@ -21,16 +24,14 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
     private View view;
 
-    @Override
-    public void init() {
-        // TODO Auto-generated method stub
-
+    @PostConstruct
+    public void create() {
+        Log.d("ON", "CREATE");
     }
 
-    @Override
+    @PreDestroy
     public void dispose() {
-        // TODO Auto-generated method stub
-
+        Log.d("ON", "DISPOSE");
     }
 
     @Override

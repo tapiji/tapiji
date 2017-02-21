@@ -36,15 +36,6 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
     private View view;
 
     @Override
-    public void init() {
-
-    }
-
-    @Override
-    public void dispose() {
-    }
-
-    @Override
     public void setView(UnstagedContract.View view) {
         this.view = view;
     }

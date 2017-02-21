@@ -23,14 +23,6 @@ public class CommitPresenter implements CommitContract.Presenter {
     private CommitContract.View view;
 
     @Override
-    public void init() {
-    }
-
-    @Override
-    public void dispose() {
-    }
-
-    @Override
     public void setView(CommitContract.View view) {
         this.view = view;
     }
