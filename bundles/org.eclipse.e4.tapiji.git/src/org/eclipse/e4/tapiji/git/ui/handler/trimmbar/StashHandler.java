@@ -51,6 +51,6 @@ public class StashHandler {
 
     @CanExecute
     public boolean canExecute(Preferences prefs) {
-        return !prefs.getRepositories().isEmpty();
+        return prefs.getSelectedRepository() != null;
     }
 }
