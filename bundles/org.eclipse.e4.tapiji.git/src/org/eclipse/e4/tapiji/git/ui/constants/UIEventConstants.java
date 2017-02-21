@@ -6,7 +6,6 @@ public class UIEventConstants {
     public static final String TOPIC_ON_FILES_STAGED = "TOPIC_FILES/ON_STAGED";
     public static final String TOPIC_ON_FILES_UNSTAGED = "TOPIC_FILES/ON_UNSTAGED";
 
-    public static final String TOPIC_RELOAD = "TOPIC_RELOAD/*";
     public static final String TOPIC_RELOAD_STAGE_VIEW = "TOPIC_RELOAD/STAGE_VIEW";
     public static final String TOPIC_RELOAD_UNSTAGE_VIEW = "TOPIC_RELOAD/UNSTAGE_VIEW";
 
@@ -16,6 +15,11 @@ public class UIEventConstants {
     public static final String PARAMETER_PERSPECTIVE_ID = "org.eclipse.e4.tapiji.git.commandparameter.perspective";
 
     public static final String LOAD_DIFF = "loadDiff";
+
+    //===================================================
+    // Reload View
+    //===================================================
+    public static final String TOPIC_RELOAD_VIEW = "TOPICRELOAD_VIEW";
 
     //===================================================
     // Menu

@@ -77,7 +77,7 @@ public class PropertiesView implements PropertiesContract.View {
 
     @Inject
     @Optional
-    public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD) String payload) {
+    public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_VIEW) String payload) {
         filesView.getPresenter().loadFiles();
         stashView.getPresenter().loadStashes();
         tagView.getPresenter().loadTags();

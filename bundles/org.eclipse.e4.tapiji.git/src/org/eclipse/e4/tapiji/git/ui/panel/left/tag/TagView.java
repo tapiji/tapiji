@@ -45,7 +45,13 @@ public class TagView implements TagContract.View {
 
     private Label lblTagCnt;
 
+    private Composite parent;
+
+    private ScrolledComposite scrolledComposite;
+
     public void createPartControl(Composite parent, ScrolledComposite scrolledComposite) {
+        this.parent = parent;
+        this.scrolledComposite = scrolledComposite;
         presenter.setView(this);
         GridLayout gl_parent = new GridLayout(1, false);
         gl_parent.horizontalSpacing = 0;
@@ -69,12 +75,12 @@ public class TagView implements TagContract.View {
         GridLayout gl_composite = new GridLayout(2, false);
         composite.setLayout(gl_composite);
 
-        Label lblNewLabel = new Label(composite, SWT.NONE);
-        lblNewLabel.setBackground(ColorUtils.getSystemColor(SWT.COLOR_TRANSPARENT));
-        lblNewLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        lblNewLabel.setBounds(0, 0, 55, 15);
-        lblNewLabel.setFont(FontUtils.createFont(lblNewLabel, "Segoe UI", 10, SWT.BOLD));
-        lblNewLabel.setText("Tags");
+        Label lblTags = new Label(composite, SWT.NONE);
+        lblTags.setBackground(ColorUtils.getSystemColor(SWT.COLOR_TRANSPARENT));
+        lblTags.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        lblTags.setBounds(0, 0, 55, 15);
+        lblTags.setFont(FontUtils.createFont(lblTags, "Segoe UI", 10, SWT.BOLD));
+        lblTags.setText("Tags");
 
         lblTagCnt = new Label(composite, SWT.NONE);
         lblTagCnt.setBackground(ColorUtils.getSystemColor(SWT.COLOR_TRANSPARENT));
@@ -87,12 +93,23 @@ public class TagView implements TagContract.View {
         table = tableViewer.getTable();
         table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
-        lblNewLabel.addListener(SWT.MouseDown, listener -> {
-            ((GridData) table.getLayoutData()).exclude = !((GridData) table.getLayoutData()).exclude;
-            table.setVisible(!((GridData) table.getLayoutData()).exclude);
-            scrolledComposite.setMinSize(parent.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-            parent.layout(true, true);
-        });
+        lblTags.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) table.getLayoutData()).exclude));
+        lblTagCnt.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) table.getLayoutData()).exclude));
+    }
+
+    public void collapseView() {
+        viewVisibility(false);
+    }
+
+    private void viewVisibility(boolean visibility) {
+        ((GridData) table.getLayoutData()).exclude = !visibility;
+        table.setVisible(visibility);
+        scrolledComposite.setMinSize(parent.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        parent.layout(true, true);
+    }
+
+    public void expandView() {
+        viewVisibility(true);
     }
 
     @Override
@@ -106,13 +123,16 @@ public class TagView implements TagContract.View {
             table.removeAll();
             table.clearAll();
             if (!tags.isEmpty()) {
+                lblTagCnt.setText(String.valueOf(tags.size()));
                 tags.stream().forEach(tag -> {
                     TableItem item = new TableItem(table, SWT.NONE);
                     item.setText(tag.getName());
                     item.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_TAG));
                 });
-                lblTagCnt.setText(String.valueOf(tags.size()));
+            } else {
+                lblTagCnt.setText("0");
             }
+            collapseView();
         });
     }
 

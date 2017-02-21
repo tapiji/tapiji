@@ -41,6 +41,7 @@ public class ApplyStashHandler {
                 sync.asyncExec(() -> mylyn.sendNotification(new Notification("Apply stash successful!", "TOOD")));
                 eventBroker.post(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW, "");
                 eventBroker.post(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW, "");
+                eventBroker.post(UIEventConstants.TOPIC_RELOAD_VIEW, "");
             }
 
             @Override

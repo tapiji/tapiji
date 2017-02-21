@@ -80,7 +80,6 @@ public class FileDiffView implements FileDiffContract.View {
             clearScrollView();
             presenter.loadFileDiffFrom(file);
         }
-
     }
 
     @Override
@@ -88,7 +87,7 @@ public class FileDiffView implements FileDiffContract.View {
         sync.syncExec(() -> {
             this.selectedFile = diff.getFile();
             this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
-            diff.getHunks().stream().forEach(section -> createSections(section));
+            diff.getHunks().stream().filter(section -> section != null).forEach(section -> createSections(section));
             updateScrollView();
             this.parent.layout(true, true);
         });

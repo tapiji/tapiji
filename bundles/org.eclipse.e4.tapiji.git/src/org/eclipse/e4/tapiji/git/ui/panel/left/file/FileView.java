@@ -55,8 +55,13 @@ public class FileView implements FileContract.View {
 
     private Label lblFilesCnt;
 
-    public void createPartControl(final Composite parent, ScrolledComposite scrolledComposite) {
+    private ScrolledComposite scrolledComposite;
 
+    private Composite parent;
+
+    public void createPartControl(final Composite parent, ScrolledComposite scrolledComposite) {
+        this.scrolledComposite = scrolledComposite;
+        this.parent = parent;
         presenter.setView(this);
 
         GridLayout glParent = new GridLayout(1, false);
@@ -79,7 +84,6 @@ public class FileView implements FileContract.View {
         cg.widthHint = 230;
 
         Composite composite = new Composite(compositeMain, SWT.NONE);
-        //composite.setBackground(new Color(Display.getCurrent(), 220, 220, 220));
         composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         composite.setLayout(new GridLayout(2, false));
 
@@ -88,7 +92,7 @@ public class FileView implements FileContract.View {
         lblFiles.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         lblFiles.setBounds(0, 0, 55, 15);
         lblFiles.setFont(FontUtils.createFont(lblFiles, "Segoe UI", 10, SWT.BOLD));
-        lblFiles.setText("Tags");
+        lblFiles.setText("Files");
 
         lblFilesCnt = new Label(composite, SWT.NONE);
         lblFilesCnt.setBackground(ColorUtils.getSystemColor(SWT.COLOR_TRANSPARENT));
@@ -110,12 +114,23 @@ public class FileView implements FileContract.View {
         treeViewer.setLabelProvider(new ResourceBundleTreeLabelProvider(resourceProvider.loadImage(TapijiResourceConstants.IMG_FOLDER), resourceProvider
             .loadImage(TapijiResourceConstants.IMG_RESOURCE_PROPERTY)));
 
-        lblFiles.addListener(SWT.MouseDown, listener -> {
-            ((GridData) tree.getLayoutData()).exclude = !((GridData) tree.getLayoutData()).exclude;
-            tree.setVisible(!((GridData) tree.getLayoutData()).exclude);
-            scrolledComposite.setMinSize(parent.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-            parent.layout(true, true);
-        });
+        lblFiles.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) tree.getLayoutData()).exclude));
+        lblFilesCnt.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) tree.getLayoutData()).exclude));
+    }
+
+    public void collapseView() {
+        viewVisibility(false);
+    }
+
+    private void viewVisibility(boolean visibility) {
+        ((GridData) tree.getLayoutData()).exclude = !visibility;
+        tree.setVisible(visibility);
+        scrolledComposite.setMinSize(parent.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        parent.layout(true, true);
+    }
+
+    public void expandView() {
+        viewVisibility(true);
     }
 
     private void registerTreeMenu() {
@@ -138,6 +153,7 @@ public class FileView implements FileContract.View {
             treeViewer.setSelection(null);
             treeViewer.setInput(result);
             registerTreeMenu();
+            expandView();
         });
     }
 

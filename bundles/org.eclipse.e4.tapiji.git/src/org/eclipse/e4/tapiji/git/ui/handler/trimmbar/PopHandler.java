@@ -38,6 +38,7 @@ public class PopHandler {
                 sync.asyncExec(() -> {
                     eventBroker.post(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW, "");
                     eventBroker.post(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW, "");
+                    eventBroker.post(UIEventConstants.TOPIC_RELOAD_VIEW, "");
                     mylyn.sendNotification(new Notification("Pop and applied", "Index 0"));
                 });
             }

@@ -32,15 +32,18 @@ import org.eclipse.e4.tapiji.git.model.push.GitPushMessage;
 import org.eclipse.e4.tapiji.git.model.push.GitRemoteStatus;
 import org.eclipse.e4.tapiji.git.model.stash.StashReference;
 import org.eclipse.e4.tapiji.logger.Log;
+import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
+import org.eclipse.jgit.api.RmCommand;
 import org.eclipse.jgit.api.StashApplyCommand;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRefNameException;
+import org.eclipse.jgit.api.errors.NoFilepatternException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.errors.TransportException;
 import org.eclipse.jgit.lib.Constants;
@@ -181,7 +184,9 @@ public class GitService implements IGitService {
     public void stageAll(IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
             try {
-                git.add().setUpdate(true).addFilepattern(".").call();
+                Status status = git.status().call();
+                stageUntrackedFiles(status);
+                stageMissingFiles(status);
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
@@ -193,6 +198,25 @@ public class GitService implements IGitService {
                 callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
             }
         });
+    }
+
+    private void stageMissingFiles(Status status) throws NoFilepatternException, GitAPIException {
+        RmCommand rm = git.rm();
+        if (!status.getMissing().isEmpty()) {
+            status.getMissing().forEach(file -> rm.addFilepattern(file));
+        }
+        rm.call();
+    }
+
+    private void stageUntrackedFiles(Status status) throws NoFilepatternException, GitAPIException {
+        AddCommand add = git.add();
+        if (!status.getUntracked().isEmpty()) {
+            status.getUntracked().forEach(file -> add.addFilepattern(file));
+        }
+        if (!status.getModified().isEmpty()) {
+            status.getModified().forEach(file -> add.addFilepattern(file));
+        }
+        add.call();
     }
 
     @Override

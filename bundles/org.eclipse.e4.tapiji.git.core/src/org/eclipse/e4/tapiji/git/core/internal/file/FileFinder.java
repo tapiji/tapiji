@@ -28,7 +28,7 @@ public class FileFinder extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
-        if (matcher.matches(path.getFileName())) {
+        if (matcher.matches(path.getFileName()) && !path.getFileName().startsWith("build")) {
             Optional<PropertyDirectory> found = directories.stream().filter(dir -> dir.getDirectory().equals(path.getParent())).findFirst();
             if (found.isPresent()) {
                 found.get().addFile(PropertyFile.create(path.toFile()));
