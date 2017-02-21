@@ -4,7 +4,6 @@ package org.eclipse.e4.tapiji.git.ui.panel.left.stash;
 import java.util.List;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Creatable;
-import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tapiji.git.model.CommitReference;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
@@ -12,7 +11,6 @@ import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.resource.TapijiResourceConstants;
 import org.eclipse.e4.tapiji.utils.ColorUtils;
 import org.eclipse.e4.tapiji.utils.FontUtils;
-import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
@@ -20,11 +18,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -82,10 +78,10 @@ public class StashView implements StashContract.View {
         glComposite.marginWidth = 0;
         glComposite.marginHeight = 0;
         compositeMain.setLayout(glComposite);
-        compositeMain.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+        compositeMain.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
         Composite composite = new Composite(compositeMain, SWT.NONE);
-        composite.setBackground(new Color(Display.getCurrent(), 220, 220, 220));
+        // composite.setBackground(new Color(Display.getCurrent(), 220, 220, 220));
         composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         GridLayout gl_composite = new GridLayout(2, false);
         composite.setLayout(gl_composite);
@@ -119,13 +115,6 @@ public class StashView implements StashContract.View {
         table.setVisible(visibility);
         scrolledComposite.setMinSize(parent.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         parent.layout(true, true);
-        scrolledComposite.layout(true, true);
-    }
-
-    @Inject
-    @Optional
-    public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD) String payload) {
-        presenter.loadStashes();
     }
 
     public void collapseView() {
@@ -138,6 +127,11 @@ public class StashView implements StashContract.View {
 
     private void registerTreeMenu() {
         this.menuService.registerContextMenu(this.tableViewer.getControl(), UIEventConstants.PROPERTY_TABLE_VIEW_STASH_MENU_ID);
+    }
+
+    @Override
+    public StashPresenter getPresenter() {
+        return presenter;
     }
 
     @Override
@@ -154,6 +148,7 @@ public class StashView implements StashContract.View {
                 });
                 registerTreeMenu();
                 lblStashCnt.setText(String.valueOf(stashes.size()));
+                expandView();
             } else {
                 lblStashCnt.setText("0");
                 collapseView();

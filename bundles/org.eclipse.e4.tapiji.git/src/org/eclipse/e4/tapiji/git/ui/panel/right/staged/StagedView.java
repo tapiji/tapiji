@@ -63,7 +63,6 @@ public class StagedView implements StagedContract.View {
         composite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 
         Button btnUnstageChanges = new Button(composite, SWT.NONE);
-        btnUnstageChanges.setBounds(0, 0, 75, 25);
         btnUnstageChanges.setText("Unstage all changes");
         btnUnstageChanges.addListener(SWT.MouseDown, event -> presenter.unstageChanges());
 

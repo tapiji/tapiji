@@ -4,7 +4,6 @@ package org.eclipse.e4.tapiji.git.ui.panel.left.file;
 import java.util.List;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Creatable;
-import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
@@ -14,7 +13,6 @@ import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.resource.TapijiResourceConstants;
 import org.eclipse.e4.tapiji.utils.ColorUtils;
 import org.eclipse.e4.tapiji.utils.FontUtils;
-import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
@@ -23,12 +21,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
@@ -78,12 +74,12 @@ public class FileView implements FileContract.View {
 
         Composite compositeMain = new Composite(parent, SWT.NONE);
         compositeMain.setLayout(glCompositeMain);
-        GridData cg = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+        GridData cg = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
         compositeMain.setLayoutData(cg);
         cg.widthHint = 230;
 
         Composite composite = new Composite(compositeMain, SWT.NONE);
-        composite.setBackground(new Color(Display.getCurrent(), 220, 220, 220));
+        //composite.setBackground(new Color(Display.getCurrent(), 220, 220, 220));
         composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         composite.setLayout(new GridLayout(2, false));
 
@@ -108,7 +104,6 @@ public class FileView implements FileContract.View {
         });
         tree = treeViewer.getTree();
         GridData gd2 = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
-        gd2.minimumHeight = 500;
 
         tree.setLayoutData(gd2);
         treeViewer.setContentProvider(new ResourceBundleTreeContentProvider());
@@ -116,25 +111,24 @@ public class FileView implements FileContract.View {
             .loadImage(TapijiResourceConstants.IMG_RESOURCE_PROPERTY)));
 
         lblFiles.addListener(SWT.MouseDown, listener -> {
-
             ((GridData) tree.getLayoutData()).exclude = !((GridData) tree.getLayoutData()).exclude;
             tree.setVisible(!((GridData) tree.getLayoutData()).exclude);
             scrolledComposite.setMinSize(parent.computeSize(SWT.DEFAULT, SWT.DEFAULT));
             parent.layout(true, true);
-            scrolledComposite.layout(true, true);
-
         });
-
     }
 
     private void registerTreeMenu() {
         this.menuService.registerContextMenu(this.treeViewer.getControl(), UIEventConstants.PROPERTY_TREE_VIEWER_MENU_ID);
     }
 
-    @Inject
-    @Optional
-    public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD) String payload) {
-        presenter.loadFiles();
+    @Override
+    public FilePresenter getPresenter() {
+        return presenter;
+    }
+
+    public void setPresenter(FilePresenter presenter) {
+        this.presenter = presenter;
     }
 
     @Override
@@ -144,7 +138,6 @@ public class FileView implements FileContract.View {
             treeViewer.setSelection(null);
             treeViewer.setInput(result);
             registerTreeMenu();
-            //  xpndtmNewExpanditem.setHeight(treeViewer.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y + 150);
         });
     }
 

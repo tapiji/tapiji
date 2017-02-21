@@ -4,24 +4,19 @@ package org.eclipse.e4.tapiji.git.ui.panel.left.tag;
 import java.util.List;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Creatable;
-import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
-import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.resource.TapijiResourceConstants;
 import org.eclipse.e4.tapiji.utils.ColorUtils;
 import org.eclipse.e4.tapiji.utils.FontUtils;
-import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -65,10 +60,10 @@ public class TagView implements TagContract.View {
         gl_composite_1.marginWidth = 0;
         gl_composite_1.marginHeight = 0;
         composite_1.setLayout(gl_composite_1);
-        composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+        composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
         Composite composite = new Composite(composite_1, SWT.NONE);
-        composite.setBackground(new Color(Display.getCurrent(), 220, 220, 220));
+        //composite.setBackground(new Color(Display.getCurrent(), 220, 220, 220));
         composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         GridLayout gl_composite = new GridLayout(2, false);
         composite.setLayout(gl_composite);
@@ -96,24 +91,12 @@ public class TagView implements TagContract.View {
             table.setVisible(!((GridData) table.getLayoutData()).exclude);
             scrolledComposite.setMinSize(parent.computeSize(SWT.DEFAULT, SWT.DEFAULT));
             parent.layout(true, true);
-            scrolledComposite.layout(true, true);
         });
-
-        presenter.loadTags();
     }
 
-    private void expand() {
-
-    }
-
-    public void collapse() {
-
-    }
-
-    @Inject
-    @Optional
-    public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD) String payload) {
-        presenter.loadTags();
+    @Override
+    public TagPresenter getPresenter() {
+        return presenter;
     }
 
     @Override

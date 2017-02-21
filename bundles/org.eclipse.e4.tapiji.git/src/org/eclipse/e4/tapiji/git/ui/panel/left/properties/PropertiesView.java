@@ -3,11 +3,14 @@ package org.eclipse.e4.tapiji.git.ui.panel.left.properties;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.panel.left.file.FileView;
 import org.eclipse.e4.tapiji.git.ui.panel.left.stash.StashView;
 import org.eclipse.e4.tapiji.git.ui.panel.left.tag.TagView;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
+import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
@@ -46,25 +49,40 @@ public class PropertiesView implements PropertiesContract.View {
     @Inject
     TagView tagView;
 
+    private Composite compositeMain;
+
+    private ScrolledComposite scrollView;
+
     @PostConstruct
     public void createPartControl(final Composite parent) {
         this.parent = parent;
         presenter.setView(this);
 
-        ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.V_SCROLL);
-        scrolledComposite.setAlwaysShowScrollBars(true);
+        scrollView = new ScrolledComposite(parent, SWT.V_SCROLL);
+        scrollView.setAlwaysShowScrollBars(true);
+        scrollView.setExpandHorizontal(true);
+        scrollView.setExpandVertical(true);
 
-        Composite compositeMain = new Composite(scrolledComposite, SWT.NONE);
+        compositeMain = new Composite(scrollView, SWT.NONE);
         compositeMain.setLayout(new GridLayout(1, false));
 
-        filesView.createPartControl(compositeMain, scrolledComposite);
-        stashView.createPartControl(compositeMain, scrolledComposite);
-        tagView.createPartControl(compositeMain, scrolledComposite);
+        filesView.createPartControl(compositeMain, scrollView);
+        stashView.createPartControl(compositeMain, scrollView);
+        tagView.createPartControl(compositeMain, scrollView);
 
-        scrolledComposite.setContent(compositeMain);
-        scrolledComposite.setExpandHorizontal(true);
-        scrolledComposite.setExpandVertical(true);
-        scrolledComposite.setMinSize(compositeMain.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        scrollView.setContent(compositeMain);
+        scrollView.setMinSize(compositeMain.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        scrollView.setVisible(false);
+    }
+
+    @Inject
+    @Optional
+    public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD) String payload) {
+        filesView.getPresenter().loadFiles();
+        stashView.getPresenter().loadStashes();
+        tagView.getPresenter().loadTags();
+        scrollView.setMinSize(compositeMain.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        scrollView.setVisible(true);
     }
 
     @Override

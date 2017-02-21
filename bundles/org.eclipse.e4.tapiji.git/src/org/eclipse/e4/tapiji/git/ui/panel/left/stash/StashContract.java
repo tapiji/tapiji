@@ -14,6 +14,8 @@ public interface StashContract {
         void showStashes(List<CommitReference> result);
 
         void showError(GitServiceException exception);
+
+        StashPresenter getPresenter();
     }
 
     interface Presenter extends BasePresenter<View> {

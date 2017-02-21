@@ -48,26 +48,28 @@ public class FileDiffView implements FileDiffContract.View {
 
     @Inject
     Shell shell;
+    private Composite parent;
 
     @PostConstruct
     public void createPartControl(final Composite parent) {
+        this.parent = parent;
         presenter.setView(this);
         parent.setLayout(new GridLayout(1, false));
 
         lblHeader = new Label(parent, SWT.NONE);
         lblHeader.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         lblHeader.setFont(FontUtils.createFont(lblHeader, "Segoe UI", 10, SWT.BOLD));
-        lblHeader.setText("No file selected");
+        lblHeader.setText("No diff available");
 
-        scrollView = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+        scrollView = new ScrolledComposite(parent, SWT.V_SCROLL);
         scrollView.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         scrollView.setExpandHorizontal(true);
         scrollView.setExpandVertical(true);
         scrollView.setAlwaysShowScrollBars(true);
-        scrollView.setVisible(false);
 
         composite = new Composite(scrollView, SWT.NONE);
         composite.setLayout(new GridLayout(1, false));
+        scrollView.setContent(composite);
     }
 
     @Inject
@@ -75,32 +77,29 @@ public class FileDiffView implements FileDiffContract.View {
     public void closeHandler(@UIEventTopic(UIEventConstants.LOAD_DIFF) String file) {
         clearScrollView();
         presenter.loadFileDiffFrom(file);
+
     }
 
     @Override
     public void showFileDiff(DiffFile diff) {
         sync.syncExec(() -> {
-            if (!diff.getSections().isEmpty()) {
-                scrollView.setVisible(true);
-            }
             diff.getSections().stream().forEach(section -> createSections(section, diff.getAdded(), diff.getDeleted()));
             updateScrollView();
+            parent.layout(true, true);
         });
     }
 
     @Override
     public void clearScrollView() {
-        scrollView.setVisible(false);
         Stream.of(composite.getChildren()).forEach(child -> child.dispose());
     }
 
     private void updateScrollView() {
-        scrollView.setContent(composite);
         scrollView.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
 
     private void createSections(DiffSection section, int additions, int deletions) {
-        lblHeader.setText(String.format("README.md with %1$d additions and  %2$d deletions", additions, deletions));
+        lblHeader.setText(String.format("README.md with %1$d additions and %2$d deletions", additions, deletions));
 
         Label lblDiffHeader = new Label(composite, SWT.NONE);
         lblDiffHeader.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));
@@ -109,7 +108,7 @@ public class FileDiffView implements FileDiffContract.View {
         Composite layoutComposite = new Composite(composite, SWT.NONE);
         layoutComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));
 
-        Table table = new Table(layoutComposite, SWT.BORDER | SWT.FULL_SELECTION);
+        Table table = new Table(layoutComposite, SWT.FULL_SELECTION);
         table.setHeaderVisible(false);
         table.setLinesVisible(true);
 

@@ -15,6 +15,8 @@ public interface FileContract {
 
         void showError(GitServiceException exception);
 
+        FilePresenter getPresenter();
+
     }
 
     interface Presenter extends BasePresenter<View> {

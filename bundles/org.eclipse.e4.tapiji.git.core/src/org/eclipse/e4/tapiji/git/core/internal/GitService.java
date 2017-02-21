@@ -41,7 +41,6 @@ import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRefNameException;
 import org.eclipse.jgit.diff.DiffEntry;
-import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.errors.AmbiguousObjectException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -400,22 +399,6 @@ public class GitService implements IGitService {
 
     @Override
     public void stashes(IGitServiceCallback<List<CommitReference>> callback) {
-
-        diffFromFile("README.md", new IGitServiceCallback<DiffFile>() {
-
-            @Override
-            public void onSuccess(GitServiceResult<DiffFile> response) {
-                Log.d("AADDD", response.getResult().toString());
-
-            }
-
-            @Override
-            public void onError(GitServiceException exception) {
-                // TODO Auto-generated method stub
-
-            }
-        });
-
         CompletableFuture.supplyAsync(() -> {
             List<CommitReference> stashes = null;
             try {
@@ -719,50 +702,6 @@ public class GitService implements IGitService {
     //
     //        System.out.println("FILEDIFF: " + formatter.get());
     //        walk.dispose();
-
-    public void getDiff(Repository repository, RevCommit baseCommit, RevCommit commit, String path) throws IOException {
-        final ByteArrayOutputStream os = new ByteArrayOutputStream();
-        RawTextComparator cmp = RawTextComparator.DEFAULT;
-        TapijiDiffFormatter df = new TapijiDiffFormatter(os);
-
-        df.setRepository(repository);
-        df.setDiffComparator(cmp);
-        df.setDetectRenames(true);
-
-        RevTree commitTree = commit.getTree();
-        RevTree baseTree;
-        if (baseCommit == null) {
-            if (commit.getParentCount() > 0) {
-                final RevWalk rw = new RevWalk(repository);
-                RevCommit parent = rw.parseCommit(commit.getParent(0).getId());
-                rw.dispose();
-                baseTree = parent.getTree();
-            } else {
-                // FIXME initial commit. no parent?!
-                baseTree = commitTree;
-            }
-        } else {
-            baseTree = baseCommit.getTree();
-        }
-
-        try {
-            List<DiffEntry> diffEntries = df.scan(null, commitTree);
-            if (path != null && path.length() > 0) {
-                for (DiffEntry diffEntry : diffEntries) {
-                    if (diffEntry.getNewPath().equalsIgnoreCase(path)) {
-                        df.format(diffEntry);
-                        break;
-                    }
-                }
-            } else {
-                df.format(diffEntries);
-            }
-            Log.d("DIFF CONTENT: ", "-->" + df.get());
-        } catch (IOException exception) {
-            Log.d("EXCEPTION IO: ", "-->" + exception);
-        }
-
-    }
 
     private StashReference stashRef(String commitHash) throws InvalidRefNameException, GitAPIException {
         int ref = 0;

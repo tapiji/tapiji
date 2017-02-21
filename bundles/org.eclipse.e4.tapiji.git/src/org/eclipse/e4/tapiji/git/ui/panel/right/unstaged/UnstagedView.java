@@ -67,7 +67,6 @@ public class UnstagedView implements UnstagedContract.View {
         composite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 
         Button btnDiscard = new Button(composite, SWT.NONE);
-        btnDiscard.setBounds(0, 0, 75, 25);
         btnDiscard.setText("Discard all changes");
         btnDiscard.addListener(SWT.MouseDown, listener -> {
             boolean result = MessageDialog
@@ -78,7 +77,6 @@ public class UnstagedView implements UnstagedContract.View {
         });
 
         Button btnStageAll = new Button(composite, SWT.NONE);
-        btnStageAll.setBounds(0, 0, 75, 25);
         btnStageAll.setText("Stage all files");
         btnStageAll.addListener(SWT.MouseDown, listener -> presenter.stageChanges());
 

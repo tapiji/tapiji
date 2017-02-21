@@ -14,6 +14,8 @@ public interface TagContract {
 
         void showError(GitServiceException exception);
 
+        TagPresenter getPresenter();
+
     }
 
     interface Presenter extends BasePresenter<View> {

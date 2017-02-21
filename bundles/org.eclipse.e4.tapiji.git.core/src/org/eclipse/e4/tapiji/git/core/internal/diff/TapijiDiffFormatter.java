@@ -23,12 +23,10 @@ public class TapijiDiffFormatter extends DiffFormatter {
 
     private DiffSection section = null;
     private final OutputStream os;
-    private final DiffFile fileDiff;
 
     public TapijiDiffFormatter(OutputStream out) {
         super(out);
         this.os = out;
-        this.fileDiff = new DiffFile();
     }
 
     @Override
@@ -91,6 +89,7 @@ public class TapijiDiffFormatter extends DiffFormatter {
     }
 
     public DiffFile get() {
+        DiffFile fileDiff = new DiffFile();
         fileDiff.setDeleted(linesDeleted);
         fileDiff.setAdded(linesAdded);
         Stream.of(RawParseUtils.decode(((ByteArrayOutputStream) os).toByteArray()).split("\n"))
