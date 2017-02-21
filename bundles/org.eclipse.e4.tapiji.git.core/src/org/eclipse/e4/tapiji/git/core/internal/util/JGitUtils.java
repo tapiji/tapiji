@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.eclipse.e4.tapiji.git.core.internal.diff.TapijiDiffFormatter;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 import org.eclipse.jgit.errors.AmbiguousObjectException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.RevisionSyntaxException;
@@ -43,6 +44,7 @@ public class JGitUtils {
      */
     public static DiffFile getDiff(final Repository repository, final String filePath) throws IOException {
         try {
+
             try (ByteArrayOutputStream diffOutputStream = new ByteArrayOutputStream(); RevWalk walk = new RevWalk(repository); TapijiDiffFormatter formatter = new TapijiDiffFormatter(diffOutputStream)) {
 
                 RevCommit root = walk.parseCommit(getDefaultBranch(repository));
@@ -56,7 +58,14 @@ public class JGitUtils {
                 formatter.setRepository(repository);
                 final List<DiffEntry> diffEntries = formatter.scan(oldTreeParser, new FileTreeIterator(repository));
                 if (filePath != null && filePath.length() > 0) {
-                    Optional<DiffEntry> diffEntry = diffEntries.stream().filter(entry -> entry.getNewPath().equalsIgnoreCase(filePath)).findFirst();
+                    Optional<DiffEntry> diffEntry = diffEntries.stream().filter(entry -> {
+                        if (entry.getChangeType() == ChangeType.DELETE) {
+                            return entry.getOldPath().equalsIgnoreCase(filePath);
+
+                        } else {
+                            return entry.getNewPath().equalsIgnoreCase(filePath);
+                        }
+                    }).findFirst();
                     if (diffEntry.isPresent()) {
                         formatter.format(diffEntry.get());
                     } else {
