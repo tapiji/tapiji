@@ -72,6 +72,12 @@ public class GitService implements IGitService {
     }
 
     @Override
+    public File getDirectory() {
+        String dir = repository.getDirectory().getPath().replace(".git", "");
+        return new File(dir);
+    }
+
+    @Override
     public void mount(String directory) throws IOException {
         Log.d(TAG, "mount(" + directory + ")");
         if (directory != null) {

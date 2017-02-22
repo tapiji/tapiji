@@ -34,4 +34,9 @@ public class UIEventConstants {
     public static final String MENU_CHANGE_REPOSITORY_ID = "org.eclipse.e4.tapiji.git.handledtoolitem.selected.repository";
     public static final String MENU_CHANGE_BRANCH_ID = "org.eclipse.e4.tapiji.git.handledtoolitem.select.branch";
 
+    //===================================================
+    // Menu
+    //===================================================
+    public static final String TOPIC_REGISTER_WATCH_SERVICE = "TOPIC_REGISTER_WATCH_SERVICE";
+
 }

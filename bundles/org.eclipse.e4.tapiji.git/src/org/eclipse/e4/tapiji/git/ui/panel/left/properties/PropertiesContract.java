@@ -11,6 +11,10 @@ public interface PropertiesContract {
 
         void showError(GitServiceException exception);
 
+        void sendUIEvent(String topic);
+
+        void showError(Exception exception);
+
     }
 
     interface Presenter extends BasePresenter<View> {

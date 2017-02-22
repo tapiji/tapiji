@@ -2,13 +2,16 @@ package org.eclipse.e4.tapiji.git.ui.panel.left.properties;
 
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.panel.left.file.FileView;
 import org.eclipse.e4.tapiji.git.ui.panel.left.stash.StashView;
 import org.eclipse.e4.tapiji.git.ui.panel.left.tag.TagView;
+import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.di.UISynchronize;
@@ -25,6 +28,8 @@ public class PropertiesView implements PropertiesContract.View {
 
     @Inject
     ITapijiResourceProvider resourceProvider;
+    @Inject
+    IEventBroker eventBroker;
 
     @Inject
     UISynchronize sync;
@@ -73,11 +78,26 @@ public class PropertiesView implements PropertiesContract.View {
         scrollView.setContent(compositeMain);
         scrollView.setMinSize(compositeMain.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         scrollView.setVisible(false);
+        presenter.watchService();
+    }
+
+    @PreDestroy
+    public void destroy() {
+    }
+
+    @Override
+    public void sendUIEvent(String topic) {
+        sync.asyncExec(() -> eventBroker.post(topic, ""));
+    }
+
+    public void registerWatchService(@UIEventTopic(UIEventConstants.TOPIC_REGISTER_WATCH_SERVICE) String payload) {
+        presenter.watchService();
     }
 
     @Inject
     @Optional
     public void closeHandler(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_VIEW) String payload) {
+        Log.d("RELOAD", "VIEW");
         filesView.getPresenter().loadFiles();
         stashView.getPresenter().loadStashes();
         tagView.getPresenter().loadTags();
@@ -90,5 +110,10 @@ public class PropertiesView implements PropertiesContract.View {
         sync.asyncExec(() -> {
             MessageDialog.openError(parent.getShell(), "Error: ", exception.getMessage());
         });
+    }
+
+    @Override
+    public void showError(Exception exception) {
+        MessageDialog.openError(parent.getShell(), "Error: ", exception.getMessage());
     }
 }

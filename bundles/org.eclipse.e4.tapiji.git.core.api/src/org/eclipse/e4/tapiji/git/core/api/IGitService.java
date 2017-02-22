@@ -66,4 +66,6 @@ public interface IGitService {
 
     void checkout(String branch);
 
+    File getDirectory();
+
 }
