@@ -52,6 +52,7 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.transport.FetchResult;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
@@ -332,20 +333,6 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void unmount() {
-        Log.d(TAG, "unmount(" + directory + ")");
-        if (repository != null) {
-            repository.close();
-            repository = null;
-        }
-        if (git != null) {
-            git.close();
-            git = null;
-        }
-        directory = null;
-    }
-
-    @Override
     public void deleteFile(File file) {
         if (file.delete()) {
             System.out.println(file.getName() + " is deleted!");
@@ -511,5 +498,38 @@ public class GitService implements IGitService {
                 callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
             }
         };
+    }
+
+    @Override
+    public void unmount() {
+        Log.d(TAG, "unmount(" + directory + ")");
+        if (repository != null) {
+            repository.close();
+            repository = null;
+        }
+        if (git != null) {
+            git.close();
+            git = null;
+        }
+        directory = null;
+    }
+
+    @Override
+    public void dispose() {
+        unmount();
+        executorService.shutdown();
+    }
+
+    @Override
+    public void fetchAll(IGitServiceCallback<String> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            FetchResult result = null;
+            try {
+                result = git.fetch().setCheckFetchedObjects(true).call();
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<String>(result.getMessages());
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 }

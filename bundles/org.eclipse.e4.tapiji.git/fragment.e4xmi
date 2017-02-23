@@ -10,7 +10,7 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_nAG6oOmFEear1K70oDQV4Q" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="commands:Handler" xmi:id="_noskoOmFEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.handler.perspective.git" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.window.PerpectiveSwitchHandler" command="_zniVMOmFEear1K70oDQV4Q"/>
     <elements xsi:type="commands:Handler" xmi:id="_ub4uMOrOEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handler.push" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.PushHandler" command="_tNwuMOrOEeah_qW_gJKbyQ"/>
-    <elements xsi:type="commands:Handler" xmi:id="_c3i4QOrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handler.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.PullHandler" command="_emaN0OrPEeah_qW_gJKbyQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_c3i4QOrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handler.pullrebase" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.PullRebaseHandler" command="_emaN0OrPEeah_qW_gJKbyQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_HkUD0OrSEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handler.1" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.window.CloneRepoHandler" command="_F0x_4OrSEeah_qW_gJKbyQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_Dk7AwOu8Eeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handler.debug" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.window.DebugHandler" command="_GA23sOu8Eeah_qW_gJKbyQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_frBTAPICEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.handler.repositories" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeRepositoryHandler" command="_c5kfEPICEeaWMuJeVV3wjA"/>
@@ -22,13 +22,16 @@
     <elements xsi:type="commands:Handler" xmi:id="_p9yCwPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.handler.popstash" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.panel.left.stash.handler.PopStashHandler" command="_eHUyIPVkEeacE9emdy7F_g"/>
     <elements xsi:type="commands:Handler" xmi:id="_xMVUIPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.handler.dropstash" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.panel.left.stash.handler.DropStashHandler" command="_f988kPVkEeacE9emdy7F_g"/>
     <elements xsi:type="commands:Handler" xmi:id="_D8FnIPg_EeaaytU_-jBGDw" elementId="org.eclipse.e4.tapiji.git.handler.changebranch" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeBranchHandler" command="_BS3iIPg_EeaaytU_-jBGDw"/>
+    <elements xsi:type="commands:Handler" xmi:id="_WR6-wPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handler.fetchall" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.FetchAllHandler" command="_OJv9wPnbEeaw0el0AXi7EQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_qmaysPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handler.pullfastforward" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.PullFastForwardHandler" command="_TFYKQPnbEeaw0el0AXi7EQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_JYyTsPncEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handler.pull" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.PullHandler" command="_OllvwPncEeaw0el0AXi7EQ"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_vAgfsOmFEear1K70oDQV4Q" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="commands:Command" xmi:id="_zniVMOmFEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.command.perspective.git" commandName="Perspective Git">
       <parameters xmi:id="_HMJu4OmHEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.commandparameter.perspective" name="perspective" optional="false"/>
     </elements>
     <elements xsi:type="commands:Command" xmi:id="_tNwuMOrOEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.command.push" commandName="Push"/>
-    <elements xsi:type="commands:Command" xmi:id="_emaN0OrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.command.pull" commandName="Pull"/>
+    <elements xsi:type="commands:Command" xmi:id="_emaN0OrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.command.pullrebase" commandName="Pull Rebase"/>
     <elements xsi:type="commands:Command" xmi:id="_F0x_4OrSEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.command.clonerepo" commandName="Clone Repo"/>
     <elements xsi:type="commands:Command" xmi:id="_GA23sOu8Eeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.command.debug" commandName="Debug"/>
     <elements xsi:type="commands:Command" xmi:id="_c5kfEPICEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.command.change.repositories" commandName="Change Repositories"/>
@@ -40,6 +43,9 @@
     <elements xsi:type="commands:Command" xmi:id="_eHUyIPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.command.popstash" commandName="Pop Stash"/>
     <elements xsi:type="commands:Command" xmi:id="_f988kPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.command.dropstash" commandName="Drop Stash"/>
     <elements xsi:type="commands:Command" xmi:id="_BS3iIPg_EeaaytU_-jBGDw" elementId="org.eclipse.e4.tapiji.git.command.change.branch" commandName="Change Branch"/>
+    <elements xsi:type="commands:Command" xmi:id="_OJv9wPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.command.fetchall" commandName="Fetch all"/>
+    <elements xsi:type="commands:Command" xmi:id="_TFYKQPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.command.pullfastforwardonly" commandName="Pull Fast Forward Only"/>
+    <elements xsi:type="commands:Command" xmi:id="_OllvwPncEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.command.pull" commandName="Pull"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8h59QOmHEear1K70oDQV4Q" featurename="children" parentElementId="org.eclipse.e4.tapiji.translator.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_TPZo4OmIEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.perspective.git" label="TapiJI Git">
@@ -80,7 +86,13 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_f1MqUPPREea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.toolbar.git.tools">
         <children xsi:type="menu:HandledToolItem" xmi:id="_Xi4WIOrOEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.push" label="Push" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_push.png" command="_tNwuMOrOEeah_qW_gJKbyQ"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_aeRTwOrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.pull" label="Pull" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_pull.png" command="_emaN0OrPEeah_qW_gJKbyQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_aeRTwOrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.pull" label="Pull" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_pull.png" command="_OllvwPncEeaw0el0AXi7EQ">
+          <menu xmi:id="_DLAYQPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.menu.pull">
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_Dum0kPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.fetchall" label="Fetch all" type="Radio" command="_OJv9wPnbEeaw0el0AXi7EQ"/>
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_FmGhsPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.pullfast-forward-only" label="Pull (fast-forward-only)" type="Radio" command="_TFYKQPnbEeaw0el0AXi7EQ"/>
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_Irx5MPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.pullrebase" label="Pull (rebase)" type="Radio" command="_emaN0OrPEeah_qW_gJKbyQ"/>
+          </menu>
+        </children>
         <children xsi:type="menu:HandledToolItem" xmi:id="_qOZSwPPREea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.stash" label="Stash" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_stash.png" command="_oF-_UPPSEea2ELhYKKDJOg"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_wEsXwPPREea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.pop" label="Pop" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_pop.png" command="_pU30UPPSEea2ELhYKKDJOg"/>
       </children>

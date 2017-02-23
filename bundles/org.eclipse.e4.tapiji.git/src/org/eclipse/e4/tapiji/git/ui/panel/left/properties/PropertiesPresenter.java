@@ -2,6 +2,7 @@ package org.eclipse.e4.tapiji.git.ui.panel.left.properties;
 
 
 import java.nio.file.Path;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.eclipse.e4.core.di.annotations.Creatable;
@@ -39,4 +40,8 @@ public class PropertiesPresenter implements PropertiesContract.Presenter, FileWa
         view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_VIEW);
     }
 
+    @PreDestroy
+    public void destroy() {
+        service.dispose();
+    }
 }

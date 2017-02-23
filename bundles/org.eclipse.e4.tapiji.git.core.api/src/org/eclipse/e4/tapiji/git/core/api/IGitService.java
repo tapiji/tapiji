@@ -62,10 +62,14 @@ public interface IGitService {
 
     void branches(IGitServiceCallback<List<Reference>> callback);
 
+    void fetchAll(IGitServiceCallback<String> callback);
+
     List<Reference> branches() throws IOException;
 
     void checkout(String branch);
 
     File getDirectory();
+
+    void dispose();
 
 }

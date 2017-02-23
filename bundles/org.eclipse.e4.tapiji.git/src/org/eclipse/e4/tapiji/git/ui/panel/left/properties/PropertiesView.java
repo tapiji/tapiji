@@ -2,7 +2,6 @@ package org.eclipse.e4.tapiji.git.ui.panel.left.properties;
 
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -79,10 +78,6 @@ public class PropertiesView implements PropertiesContract.View {
         scrollView.setMinSize(compositeMain.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         scrollView.setVisible(false);
         presenter.watchService();
-    }
-
-    @PreDestroy
-    public void destroy() {
     }
 
     @Override

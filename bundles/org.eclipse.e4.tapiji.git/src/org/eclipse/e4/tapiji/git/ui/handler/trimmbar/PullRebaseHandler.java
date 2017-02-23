@@ -3,20 +3,17 @@ package org.eclipse.e4.tapiji.git.ui.handler.trimmbar;
 
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.ui.preferences.Preferences;
 import org.eclipse.e4.tapiji.logger.Log;
-import org.eclipse.e4.tapiji.mylyn.core.api.IMylynService;
 
 
-public class PullHandler {
+public class PullRebaseHandler {
 
-    private static final String TAG = PullHandler.class.getSimpleName();
+    private static final String TAG = PullRebaseHandler.class.getSimpleName();
 
     @Execute
-    public void execute(final IGitService service, final IMylynService mylyn) {
+    public void execute() {
         Log.d(TAG, "execute()");
-
     }
 
     @CanExecute
