@@ -17,7 +17,6 @@ import org.eclipse.e4.tapiji.git.model.file.GitFile;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.panel.right.staged.StagedContract.View;
-import org.eclipse.e4.tapiji.logger.Log;
 
 
 @Creatable
@@ -44,7 +43,6 @@ public class StagedPresenter implements StagedContract.Presenter {
             @Override
             public void onSuccess(GitServiceResult<Map<GitFileStatus, Set<String>>> response) {
                 view.setCursorWaitVisibility(false);
-                Log.d(TAG, "STAGED FILES( " + response.getResult().toString() + ")");
                 List<GitFile> files = null;
                 if (response == null || response.getResult() == null || response.getResult().isEmpty()) {
                     files = Collections.emptyList();

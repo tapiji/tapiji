@@ -39,13 +39,10 @@ public class GitFile {
             case REMOVED:
                 return TapijiResourceConstants.IMG_GIT_MISSING;
             case UNCOMMITTED:
-                break;
             case UNTRACKED_FOLDERS:
-                break;
             default:
-                break;
+                return "";
         }
-        return image;
     }
 
     @Override

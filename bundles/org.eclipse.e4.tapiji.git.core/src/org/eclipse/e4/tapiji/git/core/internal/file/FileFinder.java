@@ -28,14 +28,16 @@ public class FileFinder extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
-        if (matcher.matches(path.getFileName()) && !path.getFileName().startsWith("build")) {
-            Optional<PropertyDirectory> found = directories.stream().filter(dir -> dir.getDirectory().equals(path.getParent())).findFirst();
-            if (found.isPresent()) {
-                found.get().addFile(PropertyFile.create(path.toFile()));
-            } else {
-                PropertyDirectory dir = PropertyDirectory.create(path.getParent());
-                dir.addFile(PropertyFile.create(path.toFile()));
-                directories.add(dir);
+        if (path != null) {
+            if (matcher.matches(path.getFileName()) && !path.getFileName().startsWith("build")) {
+                Optional<PropertyDirectory> found = directories.stream().filter(dir -> dir.getDirectory().equals(path.getParent())).findFirst();
+                if (found.isPresent()) {
+                    found.get().addFile(PropertyFile.create(path.toFile()));
+                } else {
+                    PropertyDirectory dir = PropertyDirectory.create(path.getParent());
+                    dir.addFile(PropertyFile.create(path.toFile()));
+                    directories.add(dir);
+                }
             }
         }
         return FileVisitResult.CONTINUE;

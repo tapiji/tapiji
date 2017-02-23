@@ -28,7 +28,11 @@ public class PropertyDirectory {
     }
 
     public String getName() {
-        return directory.getFileName().toString();
+        if (directory.getFileName() != null) {
+            return directory.getFileName().toString();
+        } else {
+            return "";
+        }
     }
 
     @Override

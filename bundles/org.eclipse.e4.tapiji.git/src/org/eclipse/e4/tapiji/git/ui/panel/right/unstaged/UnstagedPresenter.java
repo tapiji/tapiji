@@ -1,6 +1,7 @@
 package org.eclipse.e4.tapiji.git.ui.panel.right.unstaged;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,6 @@ import org.eclipse.e4.tapiji.git.model.file.GitFile;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.panel.right.unstaged.UnstagedContract.View;
-import org.eclipse.e4.tapiji.logger.Log;
 
 
 @Creatable
@@ -47,8 +47,7 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
 
             @Override
             public void onSuccess(GitServiceResult<Map<GitFileStatus, Set<String>>> response) {
-                Log.d(TAG, "FILES( " + response.getResult().toString() + ")");
-                List<GitFile> files = null;
+                List<GitFile> files = new ArrayList<GitFile>();
                 if (response == null || response.getResult() == null || response.getResult().isEmpty()) {
                     files = Collections.emptyList();
                 } else {
