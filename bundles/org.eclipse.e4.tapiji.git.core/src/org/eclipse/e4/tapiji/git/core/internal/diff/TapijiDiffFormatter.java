@@ -5,10 +5,12 @@ import static org.eclipse.jgit.lib.Constants.encodeASCII;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
-import org.eclipse.e4.tapiji.git.model.diff.DiffLine;
 import org.eclipse.e4.tapiji.git.model.diff.DiffHunk;
+import org.eclipse.e4.tapiji.git.model.diff.DiffLine;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.util.RawParseUtils;
@@ -93,9 +95,12 @@ public class TapijiDiffFormatter extends DiffFormatter {
         fileDiff.setDeleted(linesDeleted);
         fileDiff.setAdded(linesAdded);
         Stream.of(RawParseUtils.decode(((ByteArrayOutputStream) os).toByteArray()).split("\n"))
-            .filter(line -> !line.startsWith("index") && !line.startsWith("new file") && !line.startsWith("\\ No newline") && !line.startsWith("---") && !line.startsWith("+++"))
+            .filter(notStartsWith.apply("index")
+                .and(notStartsWith.apply("new file"))
+                .and(notStartsWith.apply("\\ No newline"))
+                .and(notStartsWith.apply("---"))
+                .and(notStartsWith.apply("+++")))
             .forEach(line -> {
-                System.out.println("LINE: " + line);
                 if (line.startsWith("@@") && line.endsWith("@@")) {
                     if (section != null) {
                         fileDiff.addHunk(section);
@@ -117,4 +122,6 @@ public class TapijiDiffFormatter extends DiffFormatter {
         fileDiff.addHunk(section);
         return fileDiff;
     }
+
+    private final Function<String, Predicate<String>> notStartsWith = arg -> line -> !line.startsWith(arg);
 }
