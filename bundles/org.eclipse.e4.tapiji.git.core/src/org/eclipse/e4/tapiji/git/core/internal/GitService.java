@@ -210,19 +210,25 @@ public class GitService implements IGitService {
         RmCommand rm = git.rm();
         if (!status.getMissing().isEmpty()) {
             status.getMissing().forEach(file -> rm.addFilepattern(file));
+            rm.call();
         }
-        rm.call();
     }
 
     private void stageUntrackedFiles(Status status) throws NoFilepatternException, GitAPIException {
+        boolean empty = true;
         AddCommand add = git.add();
         if (!status.getUntracked().isEmpty()) {
             status.getUntracked().forEach(file -> add.addFilepattern(file));
+            empty = false;
         }
+
         if (!status.getModified().isEmpty()) {
             status.getModified().forEach(file -> add.addFilepattern(file));
+            empty = false;
         }
-        add.call();
+        if (!empty) {
+            add.call();
+        }
     }
 
     @Override
