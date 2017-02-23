@@ -57,7 +57,7 @@ public class FileDiffView implements FileDiffContract.View {
         presenter.setView(this);
         parent.setLayout(new GridLayout(1, false));
 
-        lblHeader = new Label(parent, SWT.NONE);
+        lblHeader = new Label(parent, SWT.NONE | SWT.WRAP);
         lblHeader.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         lblHeader.setFont(FontUtils.createFont(lblHeader, "Segoe UI", 10, SWT.BOLD));
         lblHeader.setText("No diff available");

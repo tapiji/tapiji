@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import javax.inject.Inject;
@@ -112,13 +113,7 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<Void>(null, parsePushResults(results));
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
@@ -134,13 +129,7 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<Void>(null, parsePushResults(results));
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
@@ -177,13 +166,7 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<Void>(null);
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
@@ -197,13 +180,7 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<Void>(null);
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     private void stageMissingFiles(Status status) throws NoFilepatternException, GitAPIException {
@@ -240,13 +217,7 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<Void>(null);
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
@@ -264,13 +235,7 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<Void>(null);
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
@@ -291,13 +256,7 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<Map<GitFileStatus, Set<String>>>(states);
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
@@ -336,13 +295,7 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<List<Reference>>(references);
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
@@ -423,13 +376,7 @@ public class GitService implements IGitService {
             FetchCommand fetch = git.fetch().setCheckFetchedObjects(true).setRemoveDeletedRefs(true);
             Log.d(TAG, "stash(" + fetch + ")");
             return new GitServiceResult<Void>(null);
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
@@ -443,13 +390,7 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<Void>(null);
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
@@ -485,13 +426,7 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<Void>(null);
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
@@ -510,13 +445,7 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<Void>(null);
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
@@ -533,13 +462,7 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<Void>(null);
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
@@ -551,13 +474,7 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<Void>(null);
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
@@ -570,13 +487,7 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<DiffFile>(new DiffFile());
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
-            }
-        });
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     private StashReference stashRef(String commitHash) throws InvalidRefNameException, GitAPIException {
@@ -590,5 +501,15 @@ public class GitService implements IGitService {
             }
         }
         return null;
+    }
+
+    private final <T> BiConsumer<GitServiceResult<T>, Throwable> onCompleteAsync(IGitServiceCallback<T> callback) {
+        return (result, exception) -> {
+            if (exception == null) {
+                callback.onSuccess(result);
+            } else {
+                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+            }
+        };
     }
 }
