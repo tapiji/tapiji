@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import javax.inject.Inject;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
@@ -37,14 +38,18 @@ import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.MergeResult;
+import org.eclipse.jgit.api.PullCommand;
+import org.eclipse.jgit.api.PullResult;
 import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
 import org.eclipse.jgit.api.RmCommand;
 import org.eclipse.jgit.api.StashApplyCommand;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.InvalidRefNameException;
 import org.eclipse.jgit.api.errors.NoFilepatternException;
+import org.eclipse.jgit.errors.IncorrectObjectTypeException;
+import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.errors.TransportException;
 import org.eclipse.jgit.lib.Constants;
@@ -204,6 +209,11 @@ public class GitService implements IGitService {
             status.getModified().forEach(file -> add.addFilepattern(file));
             empty = false;
         }
+
+        if (!status.getConflicting().isEmpty()) {
+            status.getConflicting().forEach(file -> add.addFilepattern(file));
+            empty = false;
+        }
         if (!empty) {
             add.call();
         }
@@ -253,6 +263,8 @@ public class GitService implements IGitService {
                 states.put(GitFileStatus.UNCOMMITTED, status.getUncommittedChanges());
                 states.put(GitFileStatus.UNTRACKED, status.getUntracked());
                 states.put(GitFileStatus.UNTRACKED_FOLDERS, status.getUntrackedFolders());
+                states.put(GitFileStatus.CONFLICT, status.getConflicting());
+
             } catch (NoWorkTreeException | GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
@@ -420,7 +432,7 @@ public class GitService implements IGitService {
     public void popStash(String hash, IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
             try {
-                StashReference stashReference = stashRef(hash);
+                StashReference stashReference = JGitUtils.stashRef(hash, git);
                 if (stashReference != null) {
                     StashApplyCommand apply = git.stashApply().setStashRef(hash);
                     apply.call();
@@ -439,7 +451,7 @@ public class GitService implements IGitService {
     public void dropStash(String hash, IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
             try {
-                StashReference stashReference = stashRef(hash);
+                StashReference stashReference = JGitUtils.stashRef(hash, git);
                 if (stashReference != null) {
                     git.stashDrop().setStashRef(stashReference.getReference()).call();
                 } else {
@@ -468,7 +480,7 @@ public class GitService implements IGitService {
     public void diffFromFile(String file, IGitServiceCallback<DiffFile> callback) {
         CompletableFuture.supplyAsync(() -> {
             try {
-                DiffFile diffFile = JGitUtils.getDiff(repository, file);
+                DiffFile diffFile = JGitUtils.getDiff(repository, file, true);
                 return new GitServiceResult<DiffFile>(diffFile);
             } catch (Exception exception) {
                 throwAsUnchecked(exception);
@@ -477,17 +489,96 @@ public class GitService implements IGitService {
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
-    private StashReference stashRef(String commitHash) throws InvalidRefNameException, GitAPIException {
-        int ref = 0;
-        Collection<RevCommit> list = git.stashList().call();
-        for (RevCommit revCommit : list) {
-            if (revCommit.getName().equals(commitHash)) {
-                return new StashReference(ref);
-            } else {
-                ref++;
+    @Override
+    public void pullWithMerge() {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                //MergeCommand pull = git.merge();
+                //MergeResult result = pull.set.setFastForward(FastForwardMode.FF).call();
+
+                return new GitServiceResult<Void>(null);
+            } catch (Exception exception) {
+                throwAsUnchecked(exception);
             }
-        }
-        return null;
+            return new GitServiceResult<DiffFile>(new DiffFile());
+        }, executorService).whenCompleteAsync((r, e) -> System.out.println("sddd"));
+    }
+
+    @Override
+    public void mergeStatus(IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+
+                MergeResult merge = git.merge().include(repository.exactRef(Constants.HEAD)).call();
+
+                Log.d(TAG, "" + merge.getMergeStatus());
+                Log.d(TAG, "" + merge.getConflicts());
+
+                Stream.of(merge.getMergedCommits()).forEach(commit -> {
+                    try {
+                        RevCommit revCommit = JGitUtils.parseCommitFrom(repository, commit);
+                        JGitUtils.getDiff(repository, null, JGitUtils.parseCommitFrom(repository, commit));
+                        //JGitUtils.getDiff(repository, "README - Copy.md");
+                    } catch (MissingObjectException e) {
+                        e.printStackTrace();
+                    } catch (IncorrectObjectTypeException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+            } catch (Exception exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void pullFastForward(IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+
+                // todo return merge result if conflict exists and handle view states
+                PullResult pull = git.pull().call();
+
+            } catch (Exception exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void pullWithRebase() {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                PullCommand pull = git.pull();
+                PullResult result = pull.setRebase(true).call();
+
+                Log.d(TAG, "REBASE: " + result.getRebaseResult());
+
+                return new GitServiceResult<Void>(null);
+            } catch (Exception exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<DiffFile>(new DiffFile());
+        }, executorService).whenCompleteAsync((r, e) -> System.out.println("sddd"));
+
+    }
+
+    @Override
+    public void fetchAll(IGitServiceCallback<String> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            FetchResult result = null;
+            try {
+                result = git.fetch().setRemoveDeletedRefs(true).setCheckFetchedObjects(true).call();
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<String>(result.getMessages());
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     private final <T> BiConsumer<GitServiceResult<T>, Throwable> onCompleteAsync(IGitServiceCallback<T> callback) {
@@ -521,15 +612,15 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void fetchAll(IGitServiceCallback<String> callback) {
+    public void diffFromConflictFile(String file, GitFileStatus conflict, IGitServiceCallback<DiffFile> callback) {
         CompletableFuture.supplyAsync(() -> {
-            FetchResult result = null;
             try {
-                result = git.fetch().setCheckFetchedObjects(true).call();
-            } catch (GitAPIException exception) {
+                DiffFile diffFile = JGitUtils.getDiff(repository, file, false);
+                return new GitServiceResult<DiffFile>(diffFile);
+            } catch (Exception exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<String>(result.getMessages());
+            return new GitServiceResult<DiffFile>(new DiffFile());
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 }

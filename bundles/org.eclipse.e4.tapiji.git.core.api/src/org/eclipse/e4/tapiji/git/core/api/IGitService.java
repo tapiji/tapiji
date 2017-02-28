@@ -72,4 +72,14 @@ public interface IGitService {
 
     void dispose();
 
+    void pullWithRebase();
+
+    void pullWithMerge();
+
+    void pullFastForward(IGitServiceCallback<Void> callback);
+
+    void mergeStatus(IGitServiceCallback<Void> callback);
+
+    void diffFromConflictFile(String name, GitFileStatus conflict, IGitServiceCallback<DiffFile> iGitServiceCallback);
+
 }

@@ -11,6 +11,7 @@ import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.filediff.FileDiffContract.View;
 import org.eclipse.e4.tapiji.logger.Log;
 
@@ -53,6 +54,22 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
                 view.showError(exception);
             }
         });
+    }
+
+    public void loadConflictDif(String name, GitFileStatus conflict) {
+        service.diffFromConflictFile(name, conflict, new IGitServiceCallback<DiffFile>() {
+
+            @Override
+            public void onSuccess(GitServiceResult<DiffFile> response) {
+                view.showFileDiff(response.getResult());
+            }
+
+            @Override
+            public void onError(GitServiceException exception) {
+                view.showError(exception);
+            }
+        });
+
     }
 
 }

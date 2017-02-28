@@ -26,6 +26,7 @@ public final class TapijiResourceConstants {
     public static final String IMG_GIT_MODIFIED = "icons/16x16/git_modified.png";
     public static final String IMG_GIT_UNTRACKED = "icons/16x16/git_added.png";
     public static final String IMG_GIT_MISSING = "icons/16x16/git_deleted.png";
+    public static final String IMG_GIT_CONFLICT = "icons/16x16/git_conflict.png";
 
     public static final String IMG_INFORMATION = "icons/16x16/information.png";
     public static final String IMG_INFORMATION_32x32 = "icons/32x32/information.png";

@@ -38,6 +38,8 @@ public class GitFile {
                 return TapijiResourceConstants.IMG_GIT_MODIFIED;
             case REMOVED:
                 return TapijiResourceConstants.IMG_GIT_MISSING;
+            case CONFLICT:
+                return TapijiResourceConstants.IMG_GIT_CONFLICT;
             case UNCOMMITTED:
             case UNTRACKED_FOLDERS:
             default:

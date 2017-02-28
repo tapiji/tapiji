@@ -89,7 +89,7 @@ public class UnstagedView implements UnstagedContract.View {
         table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         table.setLinesVisible(false);
         table.setHeaderVisible(false);
-        table.addListener(SWT.Selection, listener -> eventBroker.post(UIEventConstants.LOAD_DIFF, table.getSelection()[0].getText()));
+        table.addListener(SWT.Selection, listener -> eventBroker.post(UIEventConstants.LOAD_DIFF, table.getSelection()[0].getData()));
 
         TableColumn column = new TableColumn(table, SWT.LEFT);
         column.pack();
@@ -112,6 +112,7 @@ public class UnstagedView implements UnstagedContract.View {
                 files.stream().forEach(file -> {
                     TableItem item = new TableItem(table, SWT.NONE);
                     item.setText(file.getName());
+                    item.setData(file);
                     if (file.getImage() != null) {
                         item.setImage(resourceProvider.loadImage(file.getImage()));
                     }

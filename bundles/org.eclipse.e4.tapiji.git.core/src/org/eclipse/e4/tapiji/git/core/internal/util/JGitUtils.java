@@ -3,19 +3,27 @@ package org.eclipse.e4.tapiji.git.core.internal.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eclipse.e4.tapiji.git.core.internal.diff.TapijiDiffFormatter;
 import org.eclipse.e4.tapiji.git.model.Reference;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
+import org.eclipse.e4.tapiji.git.model.stash.StashReference;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.InvalidRefNameException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 import org.eclipse.jgit.errors.AmbiguousObjectException;
+import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
+import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.RevisionSyntaxException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -23,6 +31,8 @@ import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.FileTreeIterator;
+import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
 
 
 public class JGitUtils {
@@ -44,9 +54,9 @@ public class JGitUtils {
      *         Represents the diff between old and new file
      * @throws IOException
      */
-    public static DiffFile getDiff(final Repository repository, final String file) throws IOException {
+    public static DiffFile getDiff(final Repository repository, final String file, boolean withHooks) throws IOException {
 
-        try (ByteArrayOutputStream diffOutputStream = new ByteArrayOutputStream(); RevWalk walk = new RevWalk(repository); TapijiDiffFormatter formatter = new TapijiDiffFormatter(diffOutputStream)) {
+        try (ByteArrayOutputStream diffOutputStream = new ByteArrayOutputStream(); RevWalk walk = new RevWalk(repository); TapijiDiffFormatter formatter = new TapijiDiffFormatter(diffOutputStream, withHooks)) {
 
             RevCommit root = walk.parseCommit(getDefaultBranch(repository));
             RevTree rootTree = walk.parseTree(root.getTree().getId());
@@ -78,6 +88,33 @@ public class JGitUtils {
             DiffFile diff = formatter.get();
             diff.setFile(file);
             return diff;
+        }
+    }
+
+    public static void getDiff(final Repository repository, RevCommit baseCommit, RevCommit commit) throws MissingObjectException, IncorrectObjectTypeException, CorruptObjectException, IOException {
+        try (RevWalk revWalk = new RevWalk(repository)) {
+
+            // and using commit's tree find the path
+            RevTree tree = commit.getTree();
+            System.out.println("Having tree: " + tree);
+
+            // now try to find a specific file
+            try (TreeWalk treeWalk = new TreeWalk(repository)) {
+                treeWalk.addTree(tree);
+                treeWalk.setRecursive(true);
+                treeWalk.setFilter(PathFilter.create("README - Copy.md"));
+                if (!treeWalk.next()) {
+                    throw new IllegalStateException("Did not find expected file 'README.md'");
+                }
+
+                ObjectId objectId = treeWalk.getObjectId(0);
+                ObjectLoader loader = repository.open(objectId);
+
+                // and then one can the loader to read the file
+                loader.copyTo(System.out);
+            }
+
+            revWalk.dispose();
         }
     }
 
@@ -173,6 +210,38 @@ public class JGitUtils {
      */
     public static ObjectId getDefaultBranch(Repository repository) throws RevisionSyntaxException, AmbiguousObjectException, IncorrectObjectTypeException, IOException {
         return repository.resolve(Constants.HEAD);
+    }
+
+    /**
+     * @param repository
+     * @param oid
+     * @return
+     * @throws MissingObjectException
+     * @throws IncorrectObjectTypeException
+     * @throws IOException
+     */
+    public static RevCommit parseCommitFrom(Repository repository, ObjectId oid) throws MissingObjectException, IncorrectObjectTypeException, IOException {
+        RevCommit commit = null;
+        try (RevWalk revWalk = new RevWalk(repository)) {
+            commit = revWalk.parseCommit(oid);
+        }
+        return commit;
+    }
+
+    /*
+     *
+     */
+    public static StashReference stashRef(String commitHash, Git git) throws InvalidRefNameException, GitAPIException {
+        int ref = 0;
+        Collection<RevCommit> list = git.stashList().call();
+        for (RevCommit revCommit : list) {
+            if (revCommit.getName().equals(commitHash)) {
+                return new StashReference(ref);
+            } else {
+                ref++;
+            }
+        }
+        return null;
     }
 
 }

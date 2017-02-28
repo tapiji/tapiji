@@ -25,10 +25,12 @@ public class TapijiDiffFormatter extends DiffFormatter {
 
     private DiffHunk section = null;
     private final OutputStream os;
+    private boolean withHooks;
 
-    public TapijiDiffFormatter(OutputStream out) {
+    public TapijiDiffFormatter(OutputStream out, boolean withHooks) {
         super(out);
         this.os = out;
+        this.withHooks = withHooks;
     }
 
     @Override
@@ -101,6 +103,7 @@ public class TapijiDiffFormatter extends DiffFormatter {
                 .and(notStartsWith.apply("---"))
                 .and(notStartsWith.apply("+++")))
             .forEach(line -> {
+                System.out.println(line);
                 if (line.startsWith("@@") && line.endsWith("@@")) {
                     if (section != null) {
                         fileDiff.addHunk(section);

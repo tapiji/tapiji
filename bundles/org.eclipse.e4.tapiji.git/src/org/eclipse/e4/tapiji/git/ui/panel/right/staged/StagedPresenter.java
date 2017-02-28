@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -35,6 +37,8 @@ public class StagedPresenter implements StagedContract.Presenter {
         this.view = view;
     }
 
+    private Function<GitFileStatus, Predicate<Map.Entry<GitFileStatus, Set<String>>>> contains = fileStatus -> entry -> entry.getKey() == fileStatus;
+
     @Override
     public void loadStagedFiles() {
         view.setCursorWaitVisibility(true);
@@ -50,7 +54,7 @@ public class StagedPresenter implements StagedContract.Presenter {
                     files = response.getResult()
                         .entrySet()
                         .stream()
-                        .filter(entry -> entry.getKey() == GitFileStatus.ADDED || entry.getKey() == GitFileStatus.REMOVED || entry.getKey() == GitFileStatus.CHANGED)
+                        .filter(contains.apply(GitFileStatus.ADDED).or(contains.apply(GitFileStatus.REMOVED)).or(contains.apply(GitFileStatus.CHANGED)))
                         .flatMap(entry -> entry.getValue().stream().map(f -> new GitFile(f, entry.getKey())))
                         .collect(Collectors.toList());
                 }

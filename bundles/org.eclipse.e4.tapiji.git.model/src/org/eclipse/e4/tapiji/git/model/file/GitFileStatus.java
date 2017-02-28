@@ -9,5 +9,6 @@ public enum GitFileStatus {
     MISSING,
     MODIFIED,
     REMOVED,
-    UNTRACKED_FOLDERS
+    UNTRACKED_FOLDERS,
+    CONFLICT
 }

@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -40,6 +42,8 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
         this.view = view;
     }
 
+    private Function<GitFileStatus, Predicate<Map.Entry<GitFileStatus, Set<String>>>> contains = fileStatus -> entry -> entry.getKey() == fileStatus;
+
     @Override
     public void loadUnCommittedChanges() {
         view.setCursorWaitVisibility(true);
@@ -54,7 +58,10 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
                     files = response.getResult()
                         .entrySet()
                         .stream()
-                        .filter(entry -> entry.getKey() == GitFileStatus.MODIFIED || entry.getKey() == GitFileStatus.UNTRACKED || entry.getKey() == GitFileStatus.MISSING)
+                        .filter(contains.apply(GitFileStatus.MODIFIED)
+                            .or(contains.apply(GitFileStatus.UNTRACKED))
+                            .or(contains.apply(GitFileStatus.MISSING))
+                            .or(contains.apply(GitFileStatus.CONFLICT)))
                         .flatMap(entry -> entry.getValue().stream().map(f -> new GitFile(f, entry.getKey())))
                         .collect(Collectors.toList());
                 }
@@ -92,6 +99,7 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
         });
     }
 
+    @Override
     public void discardChanges() {
         view.setCursorWaitVisibility(true);
         service.discardChanges(new IGitServiceCallback<Void>() {
