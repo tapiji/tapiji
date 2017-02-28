@@ -145,7 +145,7 @@ public class FileDiffView implements FileDiffContract.View {
             TableItem item = new TableItem(table, SWT.NONE);
             TableEditor editor = new TableEditor(table);
             Button checkBox = new Button(table, SWT.CHECK);
-
+            checkBox.addListener(SWT.Selection, listener -> presenter.onClickCheckBox(line));
             checkBox.pack();
 
             editor.minimumWidth = checkBox.getSize().x;

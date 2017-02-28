@@ -10,6 +10,7 @@ import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
+import org.eclipse.e4.tapiji.git.model.diff.DiffLine;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.filediff.FileDiffContract.View;
@@ -19,6 +20,8 @@ import org.eclipse.e4.tapiji.logger.Log;
 @Creatable
 @Singleton
 public class FileDiffPresenter implements FileDiffContract.Presenter {
+
+    private static final String TAG = FileDiffPresenter.class.getSimpleName();
 
     @Inject
     IGitService service;
@@ -70,6 +73,14 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
             }
         });
 
+    }
+
+    public void onClickCheckBox(DiffLine line) {
+        if (line.isAccepted()) {
+            line.setAccepted(false);
+        } else {
+            line.setAccepted(true);
+        }
     }
 
 }
