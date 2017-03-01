@@ -24,5 +24,7 @@ public interface FileDiffContract {
 
         void loadFileContentDiff(String file);
 
+        void reloadLastSelctedFile();
+
     }
 }

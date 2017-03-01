@@ -95,9 +95,15 @@ public class FileDiffView implements FileDiffContract.View {
         }
     }
 
+    @Inject
+    @Optional
+    public void reloadLastSelectedFile(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_VIEW) String empty) {
+        clearScrollView();
+        presenter.reloadLastSelctedFile();
+    }
+
     @Override
     public void clearScrollView() {
-
         Stream.of(composite.getChildren()).forEach(child -> child.dispose());
     }
 

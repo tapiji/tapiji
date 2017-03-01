@@ -78,7 +78,7 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
     }
 
     @Override
-    public void stageChanges() {
+    public void onClickStageChanges() {
         view.setCursorWaitVisibility(true);
         service.stageAll(new IGitServiceCallback<Void>() {
 
@@ -86,7 +86,6 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
             public void onSuccess(GitServiceResult<Void> response) {
                 view.setCursorWaitVisibility(false);
                 loadUnCommittedChanges();
-                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW);
                 view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_VIEW);
             }
 
@@ -100,7 +99,7 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
     }
 
     @Override
-    public void discardChanges() {
+    public void onClickDiscardChanges() {
         view.setCursorWaitVisibility(true);
         service.discardChanges(new IGitServiceCallback<Void>() {
 
@@ -108,7 +107,6 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
             public void onSuccess(GitServiceResult<Void> response) {
                 view.setCursorWaitVisibility(false);
                 loadUnCommittedChanges();
-                view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW);
                 view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_VIEW);
             }
 

@@ -25,8 +25,8 @@ public interface UnstagedContract {
 
         void loadUnCommittedChanges();
 
-        void stageChanges();
+        void onClickStageChanges();
 
-        void discardChanges();
+        void onClickDiscardChanges();
     }
 }

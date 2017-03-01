@@ -7,6 +7,10 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.annotation.PostConstruct;
@@ -21,6 +25,8 @@ public final class FileWatchService {
 
     private WatchService watcher;
     private ExecutorService executor;
+    private HashSet<String> fileQueue = new HashSet<String>();
+    private Timer processTimer;
 
     @PostConstruct
     public void create() {
@@ -65,15 +71,36 @@ public final class FileWatchService {
                 } catch (InterruptedException ex) {
                     return;
                 }
-                key.pollEvents().stream().filter(event -> event.kind() != StandardWatchEventKinds.OVERFLOW).map(e -> ((WatchEvent<Path>) e).context()).forEach(path -> {
-                    listener.onFileChanged(path);
-                });
+                key.pollEvents()
+                    .stream()
+                    .filter(event -> event.kind() != StandardWatchEventKinds.OVERFLOW)
+                    .map(e -> ((WatchEvent<Path>) e).context())
+                    .forEach(path -> processFile(listener, path));
 
                 if (!key.reset()) {
                     break;
                 }
             }
         });
+    }
+
+    private void processFile(FileWatcher listener, Path path) {
+        fileQueue.add(path.toFile().getAbsolutePath());
+        if (processTimer != null) {
+            processTimer.cancel();
+        }
+        processTimer = new Timer();
+        processTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                for (Iterator<String> it = fileQueue.iterator(); it.hasNext();) {
+                    it.next();
+                    listener.onFileChanged(path);
+                    it.remove();
+                }
+            }
+        }, 500);
     }
 
     interface FileWatcher {

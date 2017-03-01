@@ -84,7 +84,7 @@ public class StagedView implements StagedContract.View {
 
     @Inject
     @Optional
-    public void updateView(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW) String payload) {
+    public void updateView(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_VIEW) String payload) {
         presenter.loadStagedFiles();
     }
 

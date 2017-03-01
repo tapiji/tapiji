@@ -23,6 +23,9 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
     private static final String TAG = FileDiffPresenter.class.getSimpleName();
 
+    private String lastSelectedFile;
+    private boolean conflict;
+
     @Inject
     IGitService service;
 
@@ -35,7 +38,7 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
     @PreDestroy
     public void dispose() {
-        Log.d("ON", "DISPOSE");
+        lastSelectedFile = null;
     }
 
     @Override
@@ -44,7 +47,20 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
     }
 
     @Override
+    public void reloadLastSelctedFile() {
+        if (lastSelectedFile != null) {
+            if (conflict) {
+                loadFileMergeDiff(lastSelectedFile, GitFileStatus.CONFLICT);
+            } else {
+                loadFileContentDiff(lastSelectedFile);
+            }
+        }
+    }
+
+    @Override
     public void loadFileContentDiff(String file) {
+        this.lastSelectedFile = file;
+        this.conflict = false;
         service.fileContent(file, new IGitServiceCallback<DiffFile>() {
 
             @Override
@@ -59,8 +75,10 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
         });
     }
 
-    public void loadFileMergeDiff(String name, GitFileStatus conflict) {
-        service.fileMergeDiff(name, conflict, new IGitServiceCallback<DiffFile>() {
+    public void loadFileMergeDiff(String file, GitFileStatus conflict) {
+        this.lastSelectedFile = file;
+        this.conflict = true;
+        service.fileMergeDiff(file, conflict, new IGitServiceCallback<DiffFile>() {
 
             @Override
             public void onSuccess(GitServiceResult<DiffFile> response) {

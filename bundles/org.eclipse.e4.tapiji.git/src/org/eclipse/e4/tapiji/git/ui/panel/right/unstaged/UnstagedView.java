@@ -72,13 +72,13 @@ public class UnstagedView implements UnstagedContract.View {
             boolean result = MessageDialog
                 .openConfirm(parent.getShell(), "Discard all changes?", "This will discard all staged and unstaged changes, including new untracked files.");
             if (result) {
-                presenter.discardChanges();
+                presenter.onClickDiscardChanges();
             }
         });
 
         Button btnStageAll = new Button(composite, SWT.NONE);
         btnStageAll.setText("Stage all files");
-        btnStageAll.addListener(SWT.MouseDown, listener -> presenter.stageChanges());
+        btnStageAll.addListener(SWT.MouseDown, listener -> presenter.onClickStageChanges());
 
         Composite layoutComposite = new Composite(parent, SWT.NONE);
         layoutComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
@@ -98,7 +98,7 @@ public class UnstagedView implements UnstagedContract.View {
 
     @Inject
     @Optional
-    public void updateView(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW) String payload) {
+    public void updateView(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_VIEW) String empty) {
         presenter.loadUnCommittedChanges();
     }
 
