@@ -1,6 +1,7 @@
 package org.eclipse.e4.tapiji.git.ui.filediff;
 
 
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -177,17 +178,15 @@ public class FileDiffView implements FileDiffContract.View {
     }
 
     private void createColumns(int columns, Table table, int[] alignment) {
-        for (int i = 0; i < columns; i++) {
+        IntStream.rangeClosed(0, columns - 1).forEach(i -> {
             TableColumn column = new TableColumn(table, alignment[i]);
             column.pack();
-        }
+        });
     }
 
     private TableColumnLayout setColumnWeights(Table table, int[] weights) {
         TableColumnLayout layout = new TableColumnLayout();
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            layout.setColumnData(table.getColumns()[i], new ColumnWeightData(weights[i], weights[i]));
-        }
+        IntStream.rangeClosed(0, table.getColumnCount() - 1).forEach(i -> layout.setColumnData(table.getColumns()[i], new ColumnWeightData(weights[i], weights[i])));
         return layout;
     }
 
