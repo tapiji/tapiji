@@ -100,7 +100,7 @@ public final class FileWatchService {
                     it.remove();
                 }
             }
-        }, 500);
+        }, 150);
     }
 
     interface FileWatcher {
