@@ -49,7 +49,7 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
             @Override
             public void onSuccess(GitServiceResult<DiffFile> response) {
-                view.showFileDiff(response.getResult());
+                view.showContentDiff(response.getResult());
             }
 
             @Override
@@ -64,7 +64,7 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
             @Override
             public void onSuccess(GitServiceResult<DiffFile> response) {
-                view.showFileDiff(response.getResult());
+                view.showMergeView(response.getResult());
             }
 
             @Override

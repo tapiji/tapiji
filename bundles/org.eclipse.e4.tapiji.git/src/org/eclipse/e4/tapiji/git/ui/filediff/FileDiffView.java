@@ -92,27 +92,6 @@ public class FileDiffView implements FileDiffContract.View {
         }
     }
 
-    public void showFileConflictDiff(DiffFile diff) {
-        sync.syncExec(() -> {
-            this.selectedFile = diff.getFile();
-            this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
-
-            updateScrollView();
-            this.parent.layout(true, true);
-        });
-    }
-
-    @Override
-    public void showFileDiff(DiffFile diff) {
-        sync.syncExec(() -> {
-            this.selectedFile = diff.getFile();
-            this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
-            diff.getHunks().stream().filter(section -> section != null).forEach(section -> createMergeView(section));
-            updateScrollView();
-            this.parent.layout(true, true);
-        });
-    }
-
     @Override
     public void clearScrollView() {
 
@@ -121,6 +100,17 @@ public class FileDiffView implements FileDiffContract.View {
 
     private void updateScrollView() {
         scrollView.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+    }
+
+    @Override
+    public void showMergeView(DiffFile diff) {
+        sync.syncExec(() -> {
+            this.selectedFile = diff.getFile();
+            this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
+            diff.getHunks().stream().filter(section -> section != null).forEach(section -> createMergeView(section));
+            updateScrollView();
+            this.parent.layout(true, true);
+        });
     }
 
     private void createMergeView(DiffHunk section) {
@@ -175,7 +165,18 @@ public class FileDiffView implements FileDiffContract.View {
 
     }
 
-    private void createHunkView(DiffHunk section) {
+    @Override
+    public void showContentDiff(DiffFile diff) {
+        sync.syncExec(() -> {
+            this.selectedFile = diff.getFile();
+            this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
+            diff.getHunks().stream().filter(section -> section != null).forEach(section -> createContentView(section));
+            updateScrollView();
+            this.parent.layout(true, true);
+        });
+    }
+
+    private void createContentView(DiffHunk section) {
 
         Label lblDiffHeader = new Label(composite, SWT.NONE);
         lblDiffHeader.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));
@@ -198,9 +199,9 @@ public class FileDiffView implements FileDiffContract.View {
             item.setText(0, line.getLineNumberLeft());
             item.setText(1, line.getLineNumberRight());
             if (line.getLineNumberRight().contains("+") || line.getLineNumberLeft().contains("+")) {
-                item.setBackground(2, GREEN);
+                item.setBackground(GREEN);
             } else if (line.getLineNumberRight().contains("-") || line.getLineNumberLeft().contains("-")) {
-                item.setBackground(2, RED);
+                item.setBackground(RED);
             }
             item.setText(2, line.getLine());
         });

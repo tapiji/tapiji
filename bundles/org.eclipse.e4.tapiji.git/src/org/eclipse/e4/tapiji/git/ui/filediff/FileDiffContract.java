@@ -10,7 +10,9 @@ public interface FileDiffContract {
 
     interface View {
 
-        void showFileDiff(DiffFile result);
+        void showContentDiff(DiffFile result);
+
+        void showMergeView(DiffFile result);
 
         void showError(GitServiceException exception);
 
