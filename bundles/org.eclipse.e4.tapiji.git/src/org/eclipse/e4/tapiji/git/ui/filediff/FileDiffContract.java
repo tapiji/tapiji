@@ -22,7 +22,7 @@ public interface FileDiffContract {
 
     interface Presenter extends BasePresenter<View> {
 
-        void loadFileDiffFrom(String file);
+        void loadFileContentDiff(String file);
 
     }
 }

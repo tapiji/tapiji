@@ -477,19 +477,6 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void diffFromFile(String file, IGitServiceCallback<DiffFile> callback) {
-        CompletableFuture.supplyAsync(() -> {
-            try {
-                DiffFile diffFile = JGitUtils.getDiff(repository, file, true);
-                return new GitServiceResult<DiffFile>(diffFile);
-            } catch (Exception exception) {
-                throwAsUnchecked(exception);
-            }
-            return new GitServiceResult<DiffFile>(new DiffFile());
-        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
-    }
-
-    @Override
     public void pullWithMerge() {
         CompletableFuture.supplyAsync(() -> {
             try {
@@ -612,7 +599,20 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void diffFromConflictFile(String file, GitFileStatus conflict, IGitServiceCallback<DiffFile> callback) {
+    public void fileMergeDiff(String file, GitFileStatus conflict, IGitServiceCallback<DiffFile> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                DiffFile diffFile = JGitUtils.getDiff(repository, file, true);
+                return new GitServiceResult<DiffFile>(diffFile);
+            } catch (Exception exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<DiffFile>(new DiffFile());
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void fileContent(String file, IGitServiceCallback<DiffFile> callback) {
         CompletableFuture.supplyAsync(() -> {
             try {
                 DiffFile diffFile = JGitUtils.getDiff(repository, file, false);

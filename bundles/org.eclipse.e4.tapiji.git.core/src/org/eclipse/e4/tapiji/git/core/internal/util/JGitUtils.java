@@ -37,6 +37,9 @@ import org.eclipse.jgit.treewalk.filter.PathFilter;
 
 public class JGitUtils {
 
+    private static final int DIFF_CONTEXT = 3;
+    private static final int CONFLICT_CONTEXT = 100000;
+
     private JGitUtils() {
         // only static access allowed
     }
@@ -50,13 +53,15 @@ public class JGitUtils {
      *            that file.
      * @param repository
      *            Represents the current git repository.
+     * @param conflict
+     *            If merge conflict exists
      * @return DiffFile
      *         Represents the diff between old and new file
      * @throws IOException
      */
-    public static DiffFile getDiff(final Repository repository, final String file, boolean withHooks) throws IOException {
+    public static DiffFile getDiff(final Repository repository, final String file, boolean conflict) throws IOException {
 
-        try (ByteArrayOutputStream diffOutputStream = new ByteArrayOutputStream(); RevWalk walk = new RevWalk(repository); TapijiDiffFormatter formatter = new TapijiDiffFormatter(diffOutputStream, withHooks)) {
+        try (ByteArrayOutputStream diffOutputStream = new ByteArrayOutputStream(); RevWalk walk = new RevWalk(repository); TapijiDiffFormatter formatter = new TapijiDiffFormatter(diffOutputStream, getContextDiff(conflict))) {
 
             RevCommit root = walk.parseCommit(getDefaultBranch(repository));
             RevTree rootTree = walk.parseTree(root.getTree().getId());
@@ -67,6 +72,7 @@ public class JGitUtils {
             }
 
             formatter.setRepository(repository);
+
             final List<DiffEntry> diffEntries = formatter.scan(oldTreeParser, new FileTreeIterator(repository));
             if (file != null && file.length() > 0) {
                 Optional<DiffEntry> diffEntry = diffEntries.stream().filter(entry -> {
@@ -88,6 +94,23 @@ public class JGitUtils {
             DiffFile diff = formatter.get();
             diff.setFile(file);
             return diff;
+        }
+    }
+
+    /**
+     * Change the number of lines of context to display.
+     *
+     * @param if conflict exists we want to see all lines from file
+     * @return lineCount
+     *         number of lines of context to see before the first
+     *         modification and after the last modification within a hunk of
+     *         the modified file.
+     */
+    private static int getContextDiff(boolean conflict) {
+        if (conflict) {
+            return CONFLICT_CONTEXT;
+        } else {
+            return DIFF_CONTEXT;
         }
     }
 

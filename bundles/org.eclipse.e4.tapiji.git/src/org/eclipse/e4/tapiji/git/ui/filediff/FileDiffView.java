@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.diff.DiffHunk;
+import org.eclipse.e4.tapiji.git.model.diff.DiffLine;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFile;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
@@ -41,6 +42,7 @@ public class FileDiffView implements FileDiffContract.View {
     private static final int[] COLUMN_WEIGHTS_MERGE = new int[] {10, 10, 10, 100};
     private static final Color GREEN = new Color(Display.getCurrent(), 144, 238, 144);
     private static final Color RED = new Color(Display.getCurrent(), 240, 128, 128);
+    private static final Color ORANGE = new Color(Display.getCurrent(), 226, 189, 51);
 
     private ScrolledComposite scrollView;
     private Composite composite;
@@ -85,9 +87,9 @@ public class FileDiffView implements FileDiffContract.View {
         if (selectedFile == null || !selectedFile.equals(file)) {
             clearScrollView();
             if (file.getStatus() == GitFileStatus.CONFLICT) {
-                presenter.loadConflictDif(file.getName(), GitFileStatus.CONFLICT);
+                presenter.loadFileMergeDiff(file.getName(), GitFileStatus.CONFLICT);
             } else {
-                presenter.loadFileDiffFrom(file.getName());
+                presenter.loadFileContentDiff(file.getName());
             }
         }
     }
@@ -114,7 +116,6 @@ public class FileDiffView implements FileDiffContract.View {
     }
 
     private void createMergeView(DiffHunk section) {
-
         Label lblDiffHeader = new Label(composite, SWT.NONE);
         lblDiffHeader.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));
         lblDiffHeader.setText(section.getHeader());
@@ -126,16 +127,21 @@ public class FileDiffView implements FileDiffContract.View {
         table.setHeaderVisible(false);
         table.setLinesVisible(false);
 
-        for (int i = 0; i < 4; i++) {
-            TableColumn column = new TableColumn(table, COLUMN_ALIGNMENTS_MERGE[i]);
-            column.pack();
-        }
+        createColumns(4, table, COLUMN_ALIGNMENTS_MERGE);
 
         section.getLines().stream().forEach(line -> {
             TableItem item = new TableItem(table, SWT.NONE);
             TableEditor editor = new TableEditor(table);
             Button checkBox = new Button(table, SWT.CHECK);
-            checkBox.addListener(SWT.Selection, listener -> presenter.onClickCheckBox(line));
+
+            checkBox.addListener(SWT.Selection, listener -> {
+                if (!line.isAccepted()) {
+                    item.setBackground(ORANGE);
+                } else {
+                    colorizeLineBackground(line, item);
+                }
+                presenter.onClickCheckBox(line);
+            });
             checkBox.pack();
 
             editor.minimumWidth = checkBox.getSize().x;
@@ -144,25 +150,45 @@ public class FileDiffView implements FileDiffContract.View {
 
             item.setText(1, line.getLineNumberLeft());
             item.setText(2, line.getLineNumberRight());
-            if (line.getLineNumberRight().contains("+") || line.getLineNumberLeft().contains("+")) {
-                item.setBackground(GREEN);
-                checkBox.setVisible(true);
-            } else if (line.getLineNumberRight().contains("-") || line.getLineNumberLeft().contains("-")) {
-                item.setBackground(RED);
-                checkBox.setVisible(true);
-            } else {
-                checkBox.setVisible(false);
-            }
             item.setText(3, line.getLine());
 
+            colorizeLineBackground(line, item);
+            checkBoxVisibility(line, checkBox);
         });
+        layoutComposite.setLayout(setColumnWeights(table, COLUMN_WEIGHTS_MERGE));
+    }
 
+    private void checkBoxVisibility(DiffLine line, Button checkBox) {
+        if (line.getLineNumberRight().contains("+") || line.getLineNumberLeft().contains("+")) {
+            checkBox.setVisible(true);
+        } else if (line.getLineNumberRight().contains("-") || line.getLineNumberLeft().contains("-")) {
+            checkBox.setVisible(true);
+        } else {
+            checkBox.setVisible(false);
+        }
+    }
+
+    private void colorizeLineBackground(DiffLine line, TableItem item) {
+        if (line.getLineNumberRight().contains("+") || line.getLineNumberLeft().contains("+")) {
+            item.setBackground(GREEN);
+        } else if (line.getLineNumberRight().contains("-") || line.getLineNumberLeft().contains("-")) {
+            item.setBackground(RED);
+        }
+    }
+
+    private void createColumns(int columns, Table table, int[] alignment) {
+        for (int i = 0; i < columns; i++) {
+            TableColumn column = new TableColumn(table, alignment[i]);
+            column.pack();
+        }
+    }
+
+    private TableColumnLayout setColumnWeights(Table table, int[] weights) {
         TableColumnLayout layout = new TableColumnLayout();
         for (int i = 0; i < table.getColumnCount(); i++) {
-            layout.setColumnData(table.getColumns()[i], new ColumnWeightData(COLUMN_WEIGHTS_MERGE[i], COLUMN_WEIGHTS_MERGE[i]));
+            layout.setColumnData(table.getColumns()[i], new ColumnWeightData(weights[i], weights[i]));
         }
-        layoutComposite.setLayout(layout);
-
+        return layout;
     }
 
     @Override
@@ -177,7 +203,6 @@ public class FileDiffView implements FileDiffContract.View {
     }
 
     private void createContentView(DiffHunk section) {
-
         Label lblDiffHeader = new Label(composite, SWT.NONE);
         lblDiffHeader.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));
         lblDiffHeader.setText(section.getHeader());
@@ -189,29 +214,15 @@ public class FileDiffView implements FileDiffContract.View {
         table.setHeaderVisible(false);
         table.setLinesVisible(false);
 
-        for (int i = 0; i < 3; i++) {
-            TableColumn column = new TableColumn(table, COLUMN_ALIGNMENTS_DIFF[i]);
-            column.pack();
-        }
-
+        createColumns(3, table, COLUMN_ALIGNMENTS_DIFF);
         section.getLines().stream().forEach(line -> {
             TableItem item = new TableItem(table, SWT.NONE);
             item.setText(0, line.getLineNumberLeft());
             item.setText(1, line.getLineNumberRight());
-            if (line.getLineNumberRight().contains("+") || line.getLineNumberLeft().contains("+")) {
-                item.setBackground(GREEN);
-            } else if (line.getLineNumberRight().contains("-") || line.getLineNumberLeft().contains("-")) {
-                item.setBackground(RED);
-            }
             item.setText(2, line.getLine());
+            colorizeLineBackground(line, item);
         });
-
-        TableColumnLayout layout = new TableColumnLayout();
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            layout.setColumnData(table.getColumns()[i], new ColumnWeightData(COLUMN_WEIGHTS_DIFF[i], COLUMN_WEIGHTS_DIFF[i]));
-        }
-        layoutComposite.setLayout(layout);
-
+        layoutComposite.setLayout(setColumnWeights(table, COLUMN_WEIGHTS_DIFF));
     }
 
     @Override

@@ -44,8 +44,8 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
     }
 
     @Override
-    public void loadFileDiffFrom(String file) {
-        service.diffFromFile(file, new IGitServiceCallback<DiffFile>() {
+    public void loadFileContentDiff(String file) {
+        service.fileContent(file, new IGitServiceCallback<DiffFile>() {
 
             @Override
             public void onSuccess(GitServiceResult<DiffFile> response) {
@@ -59,8 +59,8 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
         });
     }
 
-    public void loadConflictDif(String name, GitFileStatus conflict) {
-        service.diffFromConflictFile(name, conflict, new IGitServiceCallback<DiffFile>() {
+    public void loadFileMergeDiff(String name, GitFileStatus conflict) {
+        service.fileMergeDiff(name, conflict, new IGitServiceCallback<DiffFile>() {
 
             @Override
             public void onSuccess(GitServiceResult<DiffFile> response) {

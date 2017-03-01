@@ -58,7 +58,7 @@ public interface IGitService {
 
     void stash(IGitServiceCallback<Void> callback);
 
-    void diffFromFile(String hash, IGitServiceCallback<DiffFile> callback);
+    void fileContent(String hash, IGitServiceCallback<DiffFile> callback);
 
     void branches(IGitServiceCallback<List<Reference>> callback);
 
@@ -80,6 +80,6 @@ public interface IGitService {
 
     void mergeStatus(IGitServiceCallback<Void> callback);
 
-    void diffFromConflictFile(String name, GitFileStatus conflict, IGitServiceCallback<DiffFile> iGitServiceCallback);
+    void fileMergeDiff(String name, GitFileStatus conflict, IGitServiceCallback<DiffFile> iGitServiceCallback);
 
 }
