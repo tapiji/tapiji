@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workingSets>
 <workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1486065364538_5" label="babel" name="babel">
+<item elementID="=org.eclipse.e4.tapiji.mylyn.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.e4.babel.editor.text" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.e4.babel.resource" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.e4.babel.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
@@ -19,9 +20,10 @@
 <item elementID="=org.eclipse.e4.tapiji.translator" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSet>
 <workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1486065481410_9" label="tapiji-git" name="tapiji-git">
+<item elementID="=org.eclipse.e4.tapiji.git.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.e4.tapiji.git" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.e4.tapiji.git.core.api" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item elementID="=org.eclipse.e4.tapiji.git.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=WindowBuilder" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.e4.tapiji.git.model" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSet>
 <workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1486065346937_4" label="tapiji-glossary" name="tapiji-glossary">
@@ -29,6 +31,11 @@
 <item elementID="=org.eclipse.e4.tapiji.glossary.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.e4.tapiji.glossary.core.api" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 <item elementID="=org.eclipse.e4.tapiji.glossary" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSet>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1486970487748_11" label="tapiji-mylyn" name="tapiji-mylyn">
+<item elementID="=org.eclipse.e4.tapiji.mylyn.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.tapiji.mylyn.model" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.eclipse.e4.tapiji.mylyn.core.api" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSet>
 <workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1486065559018_11" label="tapiji-rcp" name="tapiji-rcp">
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.eclipse.e4.tapiji.rcp.product" type="4"/>
