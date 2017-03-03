@@ -2,6 +2,7 @@ package org.eclipse.e4.tapiji.git.core.internal.util;
 
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -92,7 +93,8 @@ public class JGitUtils {
             }
             walk.dispose();
             DiffFile diff = formatter.get();
-            diff.setFile(file);
+
+            diff.setFile(repository.getDirectory().getParent() + File.separator + file);
             return diff;
         }
     }

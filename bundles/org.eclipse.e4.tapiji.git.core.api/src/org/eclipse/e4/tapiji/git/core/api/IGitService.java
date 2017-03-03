@@ -82,4 +82,6 @@ public interface IGitService {
 
     void fileMergeDiff(String name, GitFileStatus conflict, IGitServiceCallback<DiffFile> iGitServiceCallback);
 
+    void stageFile(String fileName, IGitServiceCallback<Void> callback);
+
 }

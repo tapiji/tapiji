@@ -623,4 +623,18 @@ public class GitService implements IGitService {
             return new GitServiceResult<DiffFile>(new DiffFile());
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
+
+    @Override
+    public void stageFile(String fileName, IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                AddCommand add = git.add();
+                add.addFilepattern(fileName);
+                add.call();
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<Void>(null);
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
 }

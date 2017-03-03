@@ -1,6 +1,13 @@
 package org.eclipse.e4.tapiji.git.ui.filediff;
 
 
+import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -11,8 +18,10 @@ import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.diff.DiffLine;
+import org.eclipse.e4.tapiji.git.model.diff.DiffLineStatus;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
+import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.filediff.FileDiffContract.View;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.di.UISynchronize;
@@ -29,6 +38,8 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
     @Inject
     UISynchronize sync;
+
+    private DiffFile mergeFile;
 
     @Inject
     IGitService service;
@@ -86,6 +97,7 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
             @Override
             public void onSuccess(GitServiceResult<DiffFile> response) {
+                sync.asyncExec(() -> mergeFile = response.getResult());
                 view.showMergeView(response.getResult());
             }
 
@@ -96,14 +108,6 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
         });
     }
 
-    public void onClickCheckBox(DiffLine line) {
-        if (line.isAccepted()) {
-            line.setAccepted(false);
-        } else {
-            line.setAccepted(true);
-        }
-    }
-
     @Override
     public String getSelectedFileName() {
         return selectedFileName;
@@ -111,7 +115,38 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
     @Override
     public void stageResolvedFile(String selectedFile) {
-        // TODO Auto-generated method stub
+        try {
+            List<String> lines = mergeFile.getHunks()
+                .get(0)
+                .getLines()
+                .stream()
+                .filter(checkLineStatus.apply(DiffLineStatus.DEFAULT).or(checkLineStatus.apply(DiffLineStatus.CHECKED)))
+                .map(line -> line.getText())
+                .collect(Collectors.toList());
+
+            File file = new File(mergeFile.getFile());
+            Files.write(file.toPath(), lines, Charset.defaultCharset());
+            service.stageFile(selectedFile, new IGitServiceCallback<Void>() {
+
+                @Override
+                public void onSuccess(GitServiceResult<Void> response) {
+                    sync.syncExec(() -> {
+                        selectedFileName = null;
+                        mergeFile = null;
+                    });
+                    view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_VIEW);
+                }
+
+                @Override
+                public void onError(GitServiceException exception) {
+                    view.showError(exception);
+                }
+            });
+        } catch (Exception exception) {
+            view.showError(exception);
+        }
     }
+
+    private Function<DiffLineStatus, Predicate<DiffLine>> checkLineStatus = status -> line -> line.getStatus() == status;
 
 }

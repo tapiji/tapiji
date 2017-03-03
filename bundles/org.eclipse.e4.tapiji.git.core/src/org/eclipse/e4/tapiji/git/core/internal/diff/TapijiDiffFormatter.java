@@ -115,7 +115,7 @@ public class TapijiDiffFormatter extends DiffFormatter {
                     if (section != null) {
                         String[] diff = line.split("\\|");
                         if (diff.length >= 3) {
-                            section.addLineDiff(new DiffLine(diff[0], diff[1], diff[2]));
+                            section.addLineDiff(new DiffLine(diff[0].trim(), diff[1].trim(), diff[2].trim()));
                         }
                     }
 

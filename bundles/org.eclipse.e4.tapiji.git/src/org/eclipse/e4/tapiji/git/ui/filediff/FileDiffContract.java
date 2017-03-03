@@ -18,6 +18,10 @@ public interface FileDiffContract {
 
         void clearScrollView();
 
+        void sendUIEvent(String topic);
+
+        void showError(Exception exception);
+
     }
 
     interface Presenter extends BasePresenter<View> {

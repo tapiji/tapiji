@@ -3,41 +3,42 @@ package org.eclipse.e4.tapiji.git.model.diff;
 
 public class DiffLine {
 
-    private final String lineNumberLeft;
-    private final String lineNumberRight;
-    private final String line;
-    private boolean accepted;
+    private final String numberLeft;
+    private final String numberRight;
+    private final String text;
+    private DiffLineStatus status;
 
     public DiffLine(String lineNumberLeft, String lineNumberRight, String line) {
         super();
-        this.lineNumberLeft = lineNumberLeft;
-        this.lineNumberRight = lineNumberRight;
-        this.line = line;
+        this.numberLeft = lineNumberLeft;
+        this.numberRight = lineNumberRight;
+        this.text = line;
+        this.status = DiffLineStatus.DEFAULT;
     }
 
-    public String getLineNumberLeft() {
-        return lineNumberLeft;
+    public String getNumberLeft() {
+        return numberLeft;
     }
 
-    public String getLineNumberRight() {
-        return lineNumberRight;
+    public String getNumberRight() {
+        return numberRight;
     }
 
-    public String getLine() {
-        return line;
+    public String getText() {
+        return text;
     }
 
-    public boolean isAccepted() {
-        return accepted;
+    public DiffLineStatus getStatus() {
+        return status;
     }
 
-    public void setAccepted(boolean accepted) {
-        this.accepted = accepted;
+    public void setStatus(DiffLineStatus status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
-        return "DiffLine [lineNumberLeft=" + lineNumberLeft + ", lineNumberRight=" + lineNumberRight + ", line=" + line + ", accepted=" + accepted + "]";
+        return "DiffLine [numberLeft=" + numberLeft + ", numberRight=" + numberRight + ", text=" + text + ", status=" + status + "]";
     }
 
 }

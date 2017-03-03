@@ -6,9 +6,11 @@ import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.diff.DiffHunk;
 import org.eclipse.e4.tapiji.git.model.diff.DiffLine;
+import org.eclipse.e4.tapiji.git.model.diff.DiffLineStatus;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFile;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
@@ -50,6 +52,9 @@ public class FileDiffView implements FileDiffContract.View {
 
     @Inject
     UISynchronize sync;
+
+    @Inject
+    IEventBroker eventBroker;
 
     @Inject
     Shell shell;
@@ -153,12 +158,13 @@ public class FileDiffView implements FileDiffContract.View {
             Button checkBox = new Button(table, SWT.CHECK);
 
             checkBox.addListener(SWT.Selection, listener -> {
-                if (!line.isAccepted()) {
+                if (line.getStatus() == DiffLineStatus.UNCHECKED) {
                     item.setBackground(ORANGE);
+                    line.setStatus(DiffLineStatus.CHECKED);
                 } else {
                     colorizeLineBackground(line, item);
+                    line.setStatus(DiffLineStatus.UNCHECKED);
                 }
-                presenter.onClickCheckBox(line);
             });
             checkBox.pack();
 
@@ -166,9 +172,9 @@ public class FileDiffView implements FileDiffContract.View {
             editor.horizontalAlignment = SWT.CENTER;
             editor.setEditor(checkBox, item, 0);
 
-            item.setText(1, line.getLineNumberLeft());
-            item.setText(2, line.getLineNumberRight());
-            item.setText(3, line.getLine());
+            item.setText(1, line.getNumberLeft());
+            item.setText(2, line.getNumberRight());
+            item.setText(3, line.getText());
 
             colorizeLineBackground(line, item);
             checkBoxVisibility(line, checkBox);
@@ -178,19 +184,21 @@ public class FileDiffView implements FileDiffContract.View {
     }
 
     private void checkBoxVisibility(DiffLine line, Button checkBox) {
-        if (line.getLineNumberRight().contains("+") || line.getLineNumberLeft().contains("+")) {
+        if (line.getNumberRight().contains("+") || line.getNumberLeft().contains("+")) {
             checkBox.setVisible(true);
-        } else if (line.getLineNumberRight().contains("-") || line.getLineNumberLeft().contains("-")) {
+            line.setStatus(DiffLineStatus.UNCHECKED);
+        } else if (line.getNumberRight().contains("-") || line.getNumberLeft().contains("-")) {
             checkBox.setVisible(true);
+            line.setStatus(DiffLineStatus.UNCHECKED);
         } else {
             checkBox.setVisible(false);
         }
     }
 
     private void colorizeLineBackground(DiffLine line, TableItem item) {
-        if (line.getLineNumberRight().contains("+") || line.getLineNumberLeft().contains("+")) {
+        if (line.getNumberRight().contains("+") || line.getNumberLeft().contains("+")) {
             item.setBackground(GREEN);
-        } else if (line.getLineNumberRight().contains("-") || line.getLineNumberLeft().contains("-")) {
+        } else if (line.getNumberRight().contains("-") || line.getNumberLeft().contains("-")) {
             item.setBackground(RED);
         }
     }
@@ -218,6 +226,11 @@ public class FileDiffView implements FileDiffContract.View {
         });
     }
 
+    @Override
+    public void sendUIEvent(String topic) {
+        sync.asyncExec(() -> eventBroker.post(topic, ""));
+    }
+
     private void createContentDiffView(DiffHunk section) {
         setButtonMarkResolvedVisibility(false);
         Label lblDiffHeader = new Label(composite, SWT.NONE);
@@ -234,9 +247,9 @@ public class FileDiffView implements FileDiffContract.View {
         createColumns(3, table, COLUMN_ALIGNMENTS_DIFF);
         section.getLines().stream().forEach(line -> {
             TableItem item = new TableItem(table, SWT.NONE);
-            item.setText(0, line.getLineNumberLeft());
-            item.setText(1, line.getLineNumberRight());
-            item.setText(2, line.getLine());
+            item.setText(0, line.getNumberLeft());
+            item.setText(1, line.getNumberRight());
+            item.setText(2, line.getText());
             colorizeLineBackground(line, item);
         });
         layoutComposite.setLayout(setColumnWeights(table, COLUMN_WEIGHTS_DIFF));
@@ -252,5 +265,10 @@ public class FileDiffView implements FileDiffContract.View {
         sync.asyncExec(() -> {
             MessageDialog.openError(shell, "Error: ", exception.getMessage());
         });
+    }
+
+    @Override
+    public void showError(Exception exception) {
+        MessageDialog.openError(shell, "Error: ", exception.getMessage());
     }
 }
