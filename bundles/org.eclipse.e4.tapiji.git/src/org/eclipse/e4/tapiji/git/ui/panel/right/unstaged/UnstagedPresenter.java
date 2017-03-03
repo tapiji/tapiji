@@ -63,6 +63,13 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
                             .or(contains.apply(GitFileStatus.CONFLICT)))
                         .flatMap(entry -> entry.getValue().stream().map(f -> new GitFile(f, entry.getKey())))
                         .collect(Collectors.toList());
+
+                    long conflictedFiles = files.stream().filter(file -> file.getStatus() == GitFileStatus.CONFLICT).count();
+                    if (conflictedFiles >= 1) {
+                        view.showConflictHeader((int) conflictedFiles);
+                    } else {
+                        view.showUnstageHeader(files.size());
+                    }
                 }
                 view.setCursorWaitVisibility(false);
                 view.showUnCommittedChanges(files);

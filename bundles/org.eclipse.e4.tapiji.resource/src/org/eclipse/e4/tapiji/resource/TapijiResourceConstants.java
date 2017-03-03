@@ -34,4 +34,6 @@ public final class TapijiResourceConstants {
 
     public static final String IMG_TAG = "icons/16x16/tag.png";
     public static final String IMG_STASH_SAVED = "icons/16x16/git_stash_saved.png";
+
+    public static final String IMG_MERGE_WARNING_32x32 = "icons/32x32/merge_warning.png";
 }

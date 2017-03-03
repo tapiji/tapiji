@@ -48,6 +48,8 @@ public class StagedView implements StagedContract.View {
 
     private Composite parent;
 
+    private Button btnUnstageChanges;
+
     @PostConstruct
     public void createPartControl(final Composite parent) {
         presenter.setView(this);
@@ -62,7 +64,7 @@ public class StagedView implements StagedContract.View {
         composite.setLayout(new GridLayout(2, false));
         composite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 
-        Button btnUnstageChanges = new Button(composite, SWT.NONE);
+        btnUnstageChanges = new Button(composite, SWT.NONE);
         btnUnstageChanges.setText("Unstage all changes");
         btnUnstageChanges.addListener(SWT.MouseDown, event -> presenter.unstageChanges());
 
@@ -86,6 +88,12 @@ public class StagedView implements StagedContract.View {
     @Optional
     public void updateView(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_VIEW) String payload) {
         presenter.loadStagedFiles();
+    }
+
+    @Inject
+    @Optional
+    public void hideShowUnstageButton(@UIEventTopic(UIEventConstants.TOPIC_SHOW_HIDE_UNSTAGE_BTN) boolean visible) {
+        btnUnstageChanges.setVisible(visible);
     }
 
     @Override

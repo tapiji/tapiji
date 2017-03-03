@@ -19,6 +19,10 @@ public interface UnstagedContract {
 
         void setCursorWaitVisibility(boolean visibility);
 
+        void showConflictHeader(int fileCnt);
+
+        void showUnstageHeader(int fileCnt);
+
     }
 
     interface Presenter extends BasePresenter<View> {

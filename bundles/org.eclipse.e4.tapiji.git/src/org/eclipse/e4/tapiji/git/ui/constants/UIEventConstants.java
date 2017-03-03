@@ -16,6 +16,7 @@ public class UIEventConstants {
 
     public static final String LOAD_DIFF = "loadDiff";
 
+    public static final String TOPIC_SHOW_HIDE_UNSTAGE_BTN = "TOPIC_SHOW_HIDE/UNSTAGE_BTN";
     //===================================================
     // Reload View
     //===================================================

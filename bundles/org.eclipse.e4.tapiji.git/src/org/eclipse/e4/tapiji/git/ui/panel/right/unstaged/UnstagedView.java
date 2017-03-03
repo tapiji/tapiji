@@ -2,6 +2,7 @@ package org.eclipse.e4.tapiji.git.ui.panel.right.unstaged;
 
 
 import java.util.List;
+import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -10,6 +11,7 @@ import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFile;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
+import org.eclipse.e4.tapiji.resource.TapijiResourceConstants;
 import org.eclipse.e4.tapiji.utils.FontUtils;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.di.UISynchronize;
@@ -23,6 +25,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -50,7 +53,7 @@ public class UnstagedView implements UnstagedContract.View {
 
     private Table table;
 
-    private Label lblUnstaged;
+    private Composite compositeHeader;
 
     @PostConstruct
     public void createPartControl(final Composite parent) {
@@ -58,27 +61,9 @@ public class UnstagedView implements UnstagedContract.View {
         this.parent = parent;
         parent.setLayout(new GridLayout(2, false));
 
-        lblUnstaged = new Label(parent, SWT.NONE);
-        lblUnstaged.setFont(FontUtils.createFont(lblUnstaged, "Segoe UI", 10, SWT.BOLD));
-        lblUnstaged.setText("Unstaged Files");
-
-        Composite composite = new Composite(parent, SWT.NONE);
-        composite.setLayout(new GridLayout(2, false));
-        composite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
-
-        Button btnDiscard = new Button(composite, SWT.NONE);
-        btnDiscard.setText("Discard all changes");
-        btnDiscard.addListener(SWT.MouseDown, listener -> {
-            boolean result = MessageDialog
-                .openConfirm(parent.getShell(), "Discard all changes?", "This will discard all staged and unstaged changes, including new untracked files.");
-            if (result) {
-                presenter.onClickDiscardChanges();
-            }
-        });
-
-        Button btnStageAll = new Button(composite, SWT.NONE);
-        btnStageAll.setText("Stage all files");
-        btnStageAll.addListener(SWT.MouseDown, listener -> presenter.onClickStageChanges());
+        compositeHeader = new Composite(parent, SWT.NONE);
+        compositeHeader.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
+        compositeHeader.setLayout(new GridLayout(2, false));
 
         Composite layoutComposite = new Composite(parent, SWT.NONE);
         layoutComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
@@ -117,9 +102,7 @@ public class UnstagedView implements UnstagedContract.View {
                         item.setImage(resourceProvider.loadImage(file.getImage()));
                     }
                 });
-                lblUnstaged.setText(String.format("Unstaged Files (%1$d)", files.size()));
-            } else {
-                lblUnstaged.setText("Unstaged Files");
+
             }
             parent.layout();
         });
@@ -147,5 +130,65 @@ public class UnstagedView implements UnstagedContract.View {
     @Override
     public void sendUIEvent(String topic) {
         sync.asyncExec(() -> eventBroker.post(topic, ""));
+    }
+
+    @Override
+    public void showUnstageHeader(int fileCnt) {
+        sync.syncExec(() -> {
+            Stream.of(compositeHeader.getChildren()).forEach(Control::dispose);
+
+            Label lblUnstaged = new Label(compositeHeader, SWT.NONE);
+            lblUnstaged.setFont(FontUtils.createFont(lblUnstaged, "Segoe UI", 10, SWT.BOLD));
+            if (fileCnt >= 1) {
+                lblUnstaged.setText(String.format("Unstaged Files (%1$d)", fileCnt));
+            } else {
+                lblUnstaged.setText("Unstaged Files");
+            }
+
+            Composite composite = new Composite(compositeHeader, SWT.NONE);
+            GridLayout gl = new GridLayout(2, false);
+            gl.marginWidth = 0;
+            gl.verticalSpacing = 0;
+            composite.setLayout(gl);
+            composite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+
+            Button btnDiscard = new Button(composite, SWT.NONE);
+            btnDiscard.setText("Discard all changes");
+            btnDiscard.addListener(SWT.MouseDown, listener -> {
+                boolean result = MessageDialog
+                    .openConfirm(parent.getShell(), "Discard all changes?", "This will discard all staged and unstaged changes, including new untracked files.");
+                if (result) {
+                    presenter.onClickDiscardChanges();
+                }
+            });
+
+            Button btnStageAll = new Button(composite, SWT.NONE);
+            btnStageAll.setText("Stage all files");
+            btnStageAll.addListener(SWT.MouseDown, listener -> presenter.onClickStageChanges());
+
+            compositeHeader.layout(true, true);
+            eventBroker.post(UIEventConstants.TOPIC_SHOW_HIDE_UNSTAGE_BTN, true);
+        });
+    }
+
+    @Override
+    public void showConflictHeader(int fileCnt) {
+        sync.syncExec(() -> {
+            Stream.of(compositeHeader.getChildren()).forEach(Control::dispose);
+            Label lblNewLabel = new Label(compositeHeader, SWT.NONE);
+            lblNewLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+            lblNewLabel.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_MERGE_WARNING_32x32));
+
+            Label lblUnstaged = new Label(compositeHeader, SWT.NONE);
+            lblUnstaged.setFont(FontUtils.createFont(lblUnstaged, "Segoe UI", 10, SWT.BOLD));
+            lblUnstaged.setText(String.format("Conflicted Files (%1$d)", fileCnt));
+
+            Button btnStageAll = new Button(compositeHeader, SWT.NONE);
+            btnStageAll.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+            btnStageAll.setText("Mark all resolved");
+            btnStageAll.addListener(SWT.MouseDown, listener -> presenter.onClickStageChanges());
+            compositeHeader.layout(true, true);
+            eventBroker.post(UIEventConstants.TOPIC_SHOW_HIDE_UNSTAGE_BTN, false);
+        });
     }
 }

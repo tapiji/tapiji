@@ -58,6 +58,7 @@ public class FileDiffView implements FileDiffContract.View {
     @Inject
     Shell shell;
     private Composite parent;
+
     private String selectedFile;
 
     @PostConstruct
@@ -114,6 +115,7 @@ public class FileDiffView implements FileDiffContract.View {
     @Override
     public void showMergeView(DiffFile diff) {
         sync.syncExec(() -> {
+
             this.selectedFile = diff.getFile();
             this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
             diff.getHunks().stream().filter(section -> section != null).forEach(section -> createMergeView(section));
@@ -201,13 +203,13 @@ public class FileDiffView implements FileDiffContract.View {
         sync.syncExec(() -> {
             this.selectedFile = diff.getFile();
             this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
-            diff.getHunks().stream().filter(section -> section != null).forEach(section -> createContentView(section));
+            diff.getHunks().stream().filter(section -> section != null).forEach(section -> createContentDiffView(section));
             updateScrollView();
             this.parent.layout(true, true);
         });
     }
 
-    private void createContentView(DiffHunk section) {
+    private void createContentDiffView(DiffHunk section) {
         Label lblDiffHeader = new Label(composite, SWT.NONE);
         lblDiffHeader.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));
         lblDiffHeader.setText(section.getHeader());
