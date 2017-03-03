@@ -26,5 +26,9 @@ public interface FileDiffContract {
 
         void reloadLastSelctedFile();
 
+        void stageResolvedFile(String selectedFile);
+
+        String getSelectedFileName();
+
     }
 }

@@ -45,10 +45,6 @@ public class FileDiffView implements FileDiffContract.View {
     private static final Color RED = new Color(Display.getCurrent(), 240, 128, 128);
     private static final Color ORANGE = new Color(Display.getCurrent(), 226, 189, 51);
 
-    private ScrolledComposite scrollView;
-    private Composite composite;
-    private Label lblHeader;
-
     @Inject
     FileDiffPresenter presenter;
 
@@ -57,9 +53,15 @@ public class FileDiffView implements FileDiffContract.View {
 
     @Inject
     Shell shell;
+
+    private ScrolledComposite scrollView;
+
+    private Composite composite;
+
+    private Label lblHeader;
+
     private Composite parent;
 
-    private String selectedFile;
     private Button btnMarkResolved;
 
     @PostConstruct
@@ -78,6 +80,7 @@ public class FileDiffView implements FileDiffContract.View {
         gd.verticalIndent = 11;
         btnMarkResolved.setLayoutData(gd);
         btnMarkResolved.setText("Mark resolved");
+        btnMarkResolved.addListener(SWT.Selection, listener -> presenter.stageResolvedFile(presenter.getSelectedFileName()));
 
         scrollView = new ScrolledComposite(parent, SWT.V_SCROLL);
         scrollView.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -93,7 +96,7 @@ public class FileDiffView implements FileDiffContract.View {
     @Inject
     @Optional
     public void closeHandler(@UIEventTopic(UIEventConstants.LOAD_DIFF) GitFile file) {
-        if (selectedFile == null || !selectedFile.equals(file)) {
+        if (presenter.getSelectedFileName() == null || !presenter.getSelectedFileName().equals(file)) {
             clearScrollView();
             if (file.getStatus() == GitFileStatus.CONFLICT) {
                 presenter.loadFileMergeDiff(file.getName(), GitFileStatus.CONFLICT);
@@ -122,8 +125,6 @@ public class FileDiffView implements FileDiffContract.View {
     @Override
     public void showMergeView(DiffFile diff) {
         sync.syncExec(() -> {
-
-            this.selectedFile = diff.getFile();
             this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
             diff.getHunks().stream().filter(section -> section != null).forEach(section -> createMergeView(section));
             updateScrollView();
@@ -210,7 +211,6 @@ public class FileDiffView implements FileDiffContract.View {
     @Override
     public void showContentDiff(DiffFile diff) {
         sync.syncExec(() -> {
-            this.selectedFile = diff.getFile();
             this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
             diff.getHunks().stream().filter(section -> section != null).forEach(section -> createContentDiffView(section));
             updateScrollView();

@@ -15,6 +15,7 @@ import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.filediff.FileDiffContract.View;
 import org.eclipse.e4.tapiji.logger.Log;
+import org.eclipse.e4.ui.di.UISynchronize;
 
 
 @Creatable
@@ -23,8 +24,11 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
     private static final String TAG = FileDiffPresenter.class.getSimpleName();
 
-    private String lastSelectedFile;
+    private String selectedFileName;
     private boolean conflict;
+
+    @Inject
+    UISynchronize sync;
 
     @Inject
     IGitService service;
@@ -38,7 +42,7 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
     @PreDestroy
     public void dispose() {
-        lastSelectedFile = null;
+        selectedFileName = null;
     }
 
     @Override
@@ -48,18 +52,18 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
     @Override
     public void reloadLastSelctedFile() {
-        if (lastSelectedFile != null) {
+        if (selectedFileName != null) {
             if (conflict) {
-                loadFileMergeDiff(lastSelectedFile, GitFileStatus.CONFLICT);
+                loadFileMergeDiff(selectedFileName, GitFileStatus.CONFLICT);
             } else {
-                loadFileContentDiff(lastSelectedFile);
+                loadFileContentDiff(selectedFileName);
             }
         }
     }
 
     @Override
     public void loadFileContentDiff(String file) {
-        this.lastSelectedFile = file;
+        this.selectedFileName = file;
         this.conflict = false;
         service.fileContent(file, new IGitServiceCallback<DiffFile>() {
 
@@ -76,7 +80,7 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
     }
 
     public void loadFileMergeDiff(String file, GitFileStatus conflict) {
-        this.lastSelectedFile = file;
+        this.selectedFileName = file;
         this.conflict = true;
         service.fileMergeDiff(file, conflict, new IGitServiceCallback<DiffFile>() {
 
@@ -90,7 +94,6 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
                 view.showError(exception);
             }
         });
-
     }
 
     public void onClickCheckBox(DiffLine line) {
@@ -99,6 +102,16 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
         } else {
             line.setAccepted(true);
         }
+    }
+
+    @Override
+    public String getSelectedFileName() {
+        return selectedFileName;
+    }
+
+    @Override
+    public void stageResolvedFile(String selectedFile) {
+        // TODO Auto-generated method stub
     }
 
 }
