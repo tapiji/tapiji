@@ -60,17 +60,24 @@ public class FileDiffView implements FileDiffContract.View {
     private Composite parent;
 
     private String selectedFile;
+    private Button btnMarkResolved;
 
     @PostConstruct
     public void createPartControl(final Composite parent) {
         this.parent = parent;
         presenter.setView(this);
         parent.setLayout(new GridLayout(1, false));
-
         lblHeader = new Label(parent, SWT.NONE | SWT.WRAP);
         lblHeader.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         lblHeader.setFont(FontUtils.createFont(lblHeader, "Segoe UI", 10, SWT.BOLD));
         lblHeader.setText("No diff available");
+
+        btnMarkResolved = new Button(parent, SWT.NONE);
+        GridData gd = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+        gd.widthHint = 250;
+        gd.verticalIndent = 11;
+        btnMarkResolved.setLayoutData(gd);
+        btnMarkResolved.setText("Mark resolved");
 
         scrollView = new ScrolledComposite(parent, SWT.V_SCROLL);
         scrollView.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -125,6 +132,7 @@ public class FileDiffView implements FileDiffContract.View {
     }
 
     private void createMergeView(DiffHunk section) {
+
         Label lblDiffHeader = new Label(composite, SWT.NONE);
         lblDiffHeader.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));
         lblDiffHeader.setText(section.getHeader());
@@ -163,6 +171,7 @@ public class FileDiffView implements FileDiffContract.View {
 
             colorizeLineBackground(line, item);
             checkBoxVisibility(line, checkBox);
+            setButtonMarkResolvedVisibility(true);
         });
         layoutComposite.setLayout(setColumnWeights(table, COLUMN_WEIGHTS_MERGE));
     }
@@ -210,6 +219,7 @@ public class FileDiffView implements FileDiffContract.View {
     }
 
     private void createContentDiffView(DiffHunk section) {
+        setButtonMarkResolvedVisibility(false);
         Label lblDiffHeader = new Label(composite, SWT.NONE);
         lblDiffHeader.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));
         lblDiffHeader.setText(section.getHeader());
@@ -230,6 +240,11 @@ public class FileDiffView implements FileDiffContract.View {
             colorizeLineBackground(line, item);
         });
         layoutComposite.setLayout(setColumnWeights(table, COLUMN_WEIGHTS_DIFF));
+    }
+
+    private void setButtonMarkResolvedVisibility(boolean visibility) {
+        ((GridData) btnMarkResolved.getLayoutData()).exclude = !visibility;
+        btnMarkResolved.setVisible(visibility);
     }
 
     @Override
