@@ -116,6 +116,8 @@ public class FileView implements FileContract.View {
 
         lblFiles.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) tree.getLayoutData()).exclude));
         lblFilesCnt.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) tree.getLayoutData()).exclude));
+
+        presenter.loadLogs();
     }
 
     public void collapseView() {

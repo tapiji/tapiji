@@ -23,5 +23,7 @@ public interface FileContract {
 
         void loadFiles();
 
+        void loadLogs();
+
     }
 }

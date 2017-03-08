@@ -26,6 +26,7 @@ import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.Reference;
 import org.eclipse.e4.tapiji.git.model.ReferenceType;
+import org.eclipse.e4.tapiji.git.model.commitlog.CommitLog;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
@@ -38,6 +39,7 @@ import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.LogCommand;
 import org.eclipse.jgit.api.MergeResult;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PullResult;
@@ -56,6 +58,7 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.FetchResult;
 import org.eclipse.jgit.transport.PushResult;
@@ -637,4 +640,30 @@ public class GitService implements IGitService {
             return new GitServiceResult<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
+
+    @Override
+    public void logs(IGitServiceCallback<List<CommitLog>> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            List<CommitLog> logs = new ArrayList<>();
+            try {
+                LogCommand log = git.log();
+                log.setMaxCount(30);
+                Iterable<RevCommit> commitLogs = log.call();
+                try (RevWalk walk = new RevWalk(repository)) {
+                    for (RevCommit rev : commitLogs) {
+                        RevCommit commit = walk.parseCommit(rev.getId());
+                        logs.add(new CommitLog(commit.getShortMessage(), commit.getFullMessage(), commit.getAuthorIdent().getName(), commit.getAuthorIdent()
+                            .getEmailAddress(), commit.getCommitTime()));
+                    }
+                    walk.dispose();
+                } catch (IOException exception) {
+                    throwAsUnchecked(exception);
+                }
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<List<CommitLog>>(new ArrayList<>());
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
 }
