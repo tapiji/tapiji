@@ -25,6 +25,7 @@
     <elements xsi:type="commands:Handler" xmi:id="_WR6-wPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handler.fetchall" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.FetchAllHandler" command="_OJv9wPnbEeaw0el0AXi7EQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_qmaysPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handler.pullfastforward" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.PullFastForwardHandler" command="_TFYKQPnbEeaw0el0AXi7EQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_JYyTsPncEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handler.pull" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.PullHandler" command="_OllvwPncEeaw0el0AXi7EQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_OS5VoARCEeeodIldUFD27g" elementId="org.eclipse.e4.tapiji.git.handler.openrepo" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.window.OpenRepoHandler" command="_QP8RIARCEeeodIldUFD27g"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_vAgfsOmFEear1K70oDQV4Q" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="commands:Command" xmi:id="_zniVMOmFEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.command.perspective.git" commandName="Perspective Git">
@@ -46,6 +47,7 @@
     <elements xsi:type="commands:Command" xmi:id="_OJv9wPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.command.fetchall" commandName="Fetch all"/>
     <elements xsi:type="commands:Command" xmi:id="_TFYKQPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.command.pullfastforwardonly" commandName="Pull Fast Forward Only"/>
     <elements xsi:type="commands:Command" xmi:id="_OllvwPncEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.command.pull" commandName="Pull"/>
+    <elements xsi:type="commands:Command" xmi:id="_QP8RIARCEeeodIldUFD27g" elementId="org.eclipse.e4.tapiji.git.command.openrepo" commandName="Open Repo"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8h59QOmHEear1K70oDQV4Q" featurename="children" parentElementId="org.eclipse.e4.tapiji.translator.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_TPZo4OmIEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.perspective.git" label="TapiJI Git">
@@ -102,6 +104,7 @@
     <elements xsi:type="menu:MenuContribution" xmi:id="_4rspwOrREeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.menucontribution.git" positionInParent="?before=org.eclipse.e4.tapiji.glossary.menu.window" parentId="org.eclipse.e4.tapiji.menu.translator">
       <children xsi:type="menu:Menu" xmi:id="_--myQOrREeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.menu.git" label="Git">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_CeJbQOrSEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.clonerepo" label="Clone Repo" command="_F0x_4OrSEeah_qW_gJKbyQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_HUTL0ARCEeeodIldUFD27g" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.openrepo" label="Open Repo" command="_QP8RIARCEeeodIldUFD27g"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_I2wGwOu8Eeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.debug" label="Debug" command="_GA23sOu8Eeah_qW_gJKbyQ"/>
       </children>
     </elements>

@@ -8,8 +8,8 @@
 <repository location="http://download.eclipse.org/eclipse/updates/4.6/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.jgit.feature.group" version="4.6.0.201612231935-r"/>
-<unit id="org.eclipse.jgit.source.feature.group" version="4.6.0.201612231935-r"/>
+<unit id="org.eclipse.jgit.feature.group" version="4.6.1.201703071140-r"/>
+<unit id="org.eclipse.jgit.source.feature.group" version="4.6.1.201703071140-r"/>
 <repository location="http://download.eclipse.org/egit/updates"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">

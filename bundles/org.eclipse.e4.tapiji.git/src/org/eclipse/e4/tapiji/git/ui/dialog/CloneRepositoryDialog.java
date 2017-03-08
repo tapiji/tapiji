@@ -165,14 +165,14 @@ public class CloneRepositoryDialog extends Dialog implements SelectionListener, 
         }
     }
 
-    static class ProgressTask implements IRunnableWithProgress {
+    private static class ProgressTask implements IRunnableWithProgress {
 
         private String repoUrl;
         private IGitService gitService;
         private IGitServiceCallback<File> callback;
         private String localDirectory;
 
-        public ProgressTask(String repoUrl, String localDirectory, IGitService service, IGitServiceCallback<File> callback) {
+        private ProgressTask(String repoUrl, String localDirectory, IGitService service, IGitServiceCallback<File> callback) {
             this.repoUrl = repoUrl;
             this.localDirectory = localDirectory;
             this.gitService = service;

@@ -30,7 +30,7 @@ public class Preferences {
     public void addRepository(String name, String path) {
         Log.d("NEW REPO: ", name + " == " + path);
         GitRepository repository = new GitRepository(name, path);
-        List<GitRepository> repos = ListUtil.unpackGitRepositoryList(preferences.get(KEY_REPOSITORIES, TEST_REPO));
+        List<GitRepository> repos = ListUtil.unpackGitRepositoryList(preferences.get(KEY_REPOSITORIES, null));
         if (!repos.contains(repository)) {
             Log.d("ADD NEW REPO: ", name + " == " + path);
             repos.add(repository);
@@ -40,7 +40,7 @@ public class Preferences {
     }
 
     public List<GitRepository> getRepositories() {
-        return ListUtil.unpackGitRepositoryList(preferences.get(KEY_REPOSITORIES, TEST_REPO));
+        return ListUtil.unpackGitRepositoryList(preferences.get(KEY_REPOSITORIES, null));
     }
 
     public void setSelectedRepository(GitRepository repository) {
@@ -48,7 +48,7 @@ public class Preferences {
     }
 
     public GitRepository getSelectedRepository() {
-        String repository = preferences.get(KEY_SELECTED_REPOSITORY, TEST_REPO);
+        String repository = preferences.get(KEY_SELECTED_REPOSITORY, null);
         if (repository != null) {
             return JsonParserUtil.parseGitRepository(repository);
         } else {
