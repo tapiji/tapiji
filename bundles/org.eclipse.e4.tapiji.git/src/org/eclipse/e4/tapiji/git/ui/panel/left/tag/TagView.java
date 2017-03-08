@@ -12,6 +12,8 @@ import org.eclipse.e4.tapiji.utils.ColorUtils;
 import org.eclipse.e4.tapiji.utils.FontUtils;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -21,6 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 
@@ -48,6 +51,8 @@ public class TagView implements TagContract.View {
     private Composite parent;
 
     private ScrolledComposite scrolledComposite;
+
+    private Composite layoutComposite;
 
     public void createPartControl(Composite parent, ScrolledComposite scrolledComposite) {
         this.parent = parent;
@@ -89,26 +94,35 @@ public class TagView implements TagContract.View {
         lblTagCnt.setText("1");
         lblTagCnt.setFont(FontUtils.createFont(lblTagCnt, "Segoe UI", 8, SWT.BOLD));
 
-        TableViewer tableViewer = new TableViewer(composite_1, SWT.BORDER | SWT.FULL_SELECTION);
+        layoutComposite = new Composite(composite_1, SWT.NONE);
+        layoutComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+        TableColumnLayout tableLayout = new TableColumnLayout();
+        layoutComposite.setLayout(tableLayout);
+
+        TableViewer tableViewer = new TableViewer(layoutComposite, SWT.BORDER | SWT.FULL_SELECTION);
         table = tableViewer.getTable();
         table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
-        lblTags.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) table.getLayoutData()).exclude));
-        lblTagCnt.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) table.getLayoutData()).exclude));
+        TableColumn column = new TableColumn(table, SWT.LEFT);
+        column.pack();
+        tableLayout.setColumnData(column, new ColumnWeightData(100, 100));
+
+        lblTags.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) layoutComposite.getLayoutData()).exclude));
+        lblTagCnt.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) layoutComposite.getLayoutData()).exclude));
     }
 
-    public void collapseView() {
+    private void collapseView() {
         viewVisibility(false);
     }
 
     private void viewVisibility(boolean visibility) {
-        ((GridData) table.getLayoutData()).exclude = !visibility;
-        table.setVisible(visibility);
+        ((GridData) layoutComposite.getLayoutData()).exclude = !visibility;
+        layoutComposite.setVisible(visibility);
         scrolledComposite.setMinSize(parent.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         parent.layout(true, true);
     }
 
-    public void expandView() {
+    private void expandView() {
         viewVisibility(true);
     }
 

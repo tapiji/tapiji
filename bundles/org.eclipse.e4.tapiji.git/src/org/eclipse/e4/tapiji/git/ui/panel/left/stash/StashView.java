@@ -15,6 +15,8 @@ import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -24,6 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 
@@ -58,6 +61,8 @@ public class StashView implements StashContract.View {
 
     private TableViewer tableViewer;
 
+    private Composite layoutComposite;
+
     public void createPartControl(Composite parent, ScrolledComposite scrolledComposite) {
         this.parent = parent;
         this.scrolledComposite = scrolledComposite;
@@ -81,7 +86,6 @@ public class StashView implements StashContract.View {
         compositeMain.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
         Composite composite = new Composite(compositeMain, SWT.NONE);
-        // composite.setBackground(new Color(Display.getCurrent(), 220, 220, 220));
         composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         GridLayout gl_composite = new GridLayout(2, false);
         composite.setLayout(gl_composite);
@@ -101,27 +105,36 @@ public class StashView implements StashContract.View {
         lblStashCnt.setText("0");
         lblStashCnt.setFont(FontUtils.createFont(lblStashCnt, "Segoe UI", 8, SWT.BOLD));
 
-        tableViewer = new TableViewer(compositeMain, SWT.BORDER | SWT.FULL_SELECTION);
+        layoutComposite = new Composite(compositeMain, SWT.NONE);
+        layoutComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+        TableColumnLayout tableLayout = new TableColumnLayout();
+        layoutComposite.setLayout(tableLayout);
+
+        tableViewer = new TableViewer(layoutComposite, SWT.BORDER | SWT.FULL_SELECTION);
         tableViewer.addSelectionChangedListener(event -> selectionService.setSelection(table.getSelection()[0].getData()));
         table = tableViewer.getTable();
         table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
-        lblStashes.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) table.getLayoutData()).exclude));
-        lblStashCnt.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) table.getLayoutData()).exclude));
+        TableColumn column = new TableColumn(table, SWT.LEFT);
+        column.pack();
+        tableLayout.setColumnData(column, new ColumnWeightData(100, 100));
+
+        lblStashes.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) layoutComposite.getLayoutData()).exclude));
+        lblStashCnt.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) layoutComposite.getLayoutData()).exclude));
     }
 
     private void viewVisibility(boolean visibility) {
-        ((GridData) table.getLayoutData()).exclude = !visibility;
-        table.setVisible(visibility);
+        ((GridData) layoutComposite.getLayoutData()).exclude = !visibility;
+        layoutComposite.setVisible(visibility);
         scrolledComposite.setMinSize(parent.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         parent.layout(true, true);
     }
 
-    public void collapseView() {
+    private void collapseView() {
         viewVisibility(false);
     }
 
-    public void expandView() {
+    private void expandView() {
         viewVisibility(true);
     }
 
