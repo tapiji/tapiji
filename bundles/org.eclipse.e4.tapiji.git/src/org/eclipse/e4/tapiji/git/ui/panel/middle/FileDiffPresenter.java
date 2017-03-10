@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.filediff;
+package org.eclipse.e4.tapiji.git.ui.panel.middle;
 
 
 import java.io.File;
@@ -22,7 +22,7 @@ import org.eclipse.e4.tapiji.git.model.diff.DiffLineStatus;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
-import org.eclipse.e4.tapiji.git.ui.filediff.FileDiffContract.View;
+import org.eclipse.e4.tapiji.git.ui.panel.middle.FileDiffContract.View;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.di.UISynchronize;
 

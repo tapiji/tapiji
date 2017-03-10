@@ -63,7 +63,7 @@
             <children xsi:type="menu:HandledMenuItem" xmi:id="_X3FjIPVkEeacE9emdy7F_g" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.dropstash" label="Drop Stash" command="_f988kPVkEeacE9emdy7F_g"/>
           </menus>
         </children>
-        <children xsi:type="basic:Part" xmi:id="_YeD0MOmKEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.file.view" containerData="5000" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.filediff.FileDiffView" label="File View"/>
+        <children xsi:type="basic:Part" xmi:id="_YeD0MOmKEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.file.view" containerData="5000" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.panel.middle.FileDiffView" label="File View"/>
         <children xsi:type="basic:PartSashContainer" xmi:id="_jQUncOmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.partsashcontainer.right" containerData="4000">
           <children xsi:type="basic:Part" xmi:id="_nLFz4OmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.unstaged" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.panel.right.unstaged.UnstagedView" label="Unstaged"/>
           <children xsi:type="basic:Part" xmi:id="_nwPvYOmLEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.part.staged" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.panel.right.staged.StagedView" label="Staged"/>

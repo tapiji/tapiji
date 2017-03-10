@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.filediff;
+package org.eclipse.e4.tapiji.git.ui.panel.middle;
 
 
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
