@@ -8,7 +8,7 @@ import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
-import org.eclipse.e4.tapiji.git.ui.preferences.Preferences;
+import org.eclipse.e4.tapiji.git.ui.preference.Preferences;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.tapiji.mylyn.core.api.IMylynService;
 import org.eclipse.e4.ui.di.UISynchronize;

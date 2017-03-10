@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.preferences;
+package org.eclipse.e4.tapiji.git.ui.preference;
 
 
 import java.util.List;

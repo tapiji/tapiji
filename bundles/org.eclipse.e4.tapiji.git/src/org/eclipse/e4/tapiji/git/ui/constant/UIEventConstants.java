@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.git.ui.constants;
+package org.eclipse.e4.tapiji.git.ui.constant;
 
 
 public class UIEventConstants {

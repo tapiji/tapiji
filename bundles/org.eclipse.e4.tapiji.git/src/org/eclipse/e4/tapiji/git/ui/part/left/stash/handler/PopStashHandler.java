@@ -1,5 +1,5 @@
 
-package org.eclipse.e4.tapiji.git.ui.panel.left.stash.handler;
+package org.eclipse.e4.tapiji.git.ui.part.left.stash.handler;
 
 
 import javax.inject.Inject;
@@ -11,7 +11,7 @@ import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
-import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
+import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.mylyn.core.api.IMylynService;
 import org.eclipse.e4.tapiji.mylyn.model.Notification;
 import org.eclipse.e4.ui.di.UISynchronize;

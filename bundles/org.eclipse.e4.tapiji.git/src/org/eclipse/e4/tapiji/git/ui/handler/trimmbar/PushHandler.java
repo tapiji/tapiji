@@ -13,7 +13,7 @@ import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.push.GitPushMessage;
 import org.eclipse.e4.tapiji.git.ui.dialog.LoginDialog;
-import org.eclipse.e4.tapiji.git.ui.preferences.Preferences;
+import org.eclipse.e4.tapiji.git.ui.preference.Preferences;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.tapiji.mylyn.core.api.IMylynService;
 import org.eclipse.e4.tapiji.mylyn.model.Notification;

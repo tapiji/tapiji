@@ -6,7 +6,7 @@ import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
-import org.eclipse.e4.tapiji.git.ui.constants.UIEventConstants;
+import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.part.left.file.provider.ResourceBundleTreeContentProvider;
 import org.eclipse.e4.tapiji.git.ui.part.left.file.provider.ResourceBundleTreeLabelProvider;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
