@@ -1,19 +1,21 @@
 package org.eclipse.e4.tapiji.git.ui.part.middle;
 
 
+import java.util.List;
+import java.util.Locale;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.tapiji.git.model.commitlog.CommitLog;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.diff.DiffHunk;
 import org.eclipse.e4.tapiji.git.model.diff.DiffLine;
 import org.eclipse.e4.tapiji.git.model.diff.DiffLineStatus;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFile;
-import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.utils.FontUtils;
 import org.eclipse.e4.ui.di.UIEventTopic;
@@ -35,14 +37,18 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.ocpsoft.prettytime.PrettyTime;
 
 
 public class FileDiffView implements FileDiffContract.View {
 
     private static final int[] COLUMN_ALIGNMENTS_DIFF = new int[] {SWT.CENTER, SWT.CENTER, SWT.LEFT};
     private static final int[] COLUMN_ALIGNMENTS_MERGE = new int[] {SWT.CENTER, SWT.CENTER, SWT.CENTER, SWT.LEFT};
+    private static final int[] COLUMN_ALIGNMENTS_LOGS = new int[] {SWT.LEFT, SWT.RIGHT};
     private static final int[] COLUMN_WEIGHTS_DIFF = new int[] {10, 10, 100};
     private static final int[] COLUMN_WEIGHTS_MERGE = new int[] {10, 10, 10, 100};
+    private static final int[] COLUMN_WEIGHTS_LOGS = new int[] {100, 30};
+
     private static final Color GREEN = new Color(Display.getCurrent(), 144, 238, 144);
     private static final Color RED = new Color(Display.getCurrent(), 240, 128, 128);
     private static final Color ORANGE = new Color(Display.getCurrent(), 226, 189, 51);
@@ -69,23 +75,15 @@ public class FileDiffView implements FileDiffContract.View {
 
     private Button btnMarkResolved;
 
+    private PrettyTime prettyTime = new PrettyTime(new Locale("de"));
+
+    private String lastCommitTime;
+
     @PostConstruct
     public void createPartControl(final Composite parent) {
         this.parent = parent;
         presenter.setView(this);
         parent.setLayout(new GridLayout(1, false));
-        lblHeader = new Label(parent, SWT.NONE | SWT.WRAP);
-        lblHeader.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        lblHeader.setFont(FontUtils.createFont(lblHeader, "Segoe UI", 10, SWT.BOLD));
-        lblHeader.setText("No diff available");
-
-        btnMarkResolved = new Button(parent, SWT.NONE);
-        GridData gd = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
-        gd.widthHint = 250;
-        gd.verticalIndent = 11;
-        btnMarkResolved.setLayoutData(gd);
-        btnMarkResolved.setText("Mark resolved");
-        btnMarkResolved.addListener(SWT.Selection, listener -> presenter.stageResolvedFile(presenter.getSelectedFileName()));
 
         scrollView = new ScrolledComposite(parent, SWT.V_SCROLL);
         scrollView.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -96,26 +94,28 @@ public class FileDiffView implements FileDiffContract.View {
         composite = new Composite(scrollView, SWT.NONE);
         composite.setLayout(new GridLayout(1, false));
         scrollView.setContent(composite);
+
+        presenter.loadLogs();
     }
 
     @Inject
     @Optional
     public void closeHandler(@UIEventTopic(UIEventConstants.LOAD_DIFF) GitFile file) {
-        if (presenter.getSelectedFileName() == null || !presenter.getSelectedFileName().equals(file)) {
-            clearScrollView();
-            if (file.getStatus() == GitFileStatus.CONFLICT) {
-                presenter.loadFileMergeDiff(file.getName(), GitFileStatus.CONFLICT);
-            } else {
-                presenter.loadFileContentDiff(file.getName());
-            }
-        }
+        //        if (presenter.getSelectedFileName() == null || !presenter.getSelectedFileName().equals(file)) {
+        //            clearScrollView();
+        //            if (file.getStatus() == GitFileStatus.CONFLICT) {
+        //                presenter.loadFileMergeDiff(file.getName(), GitFileStatus.CONFLICT);
+        //            } else {
+        //                presenter.loadFileContentDiff(file.getName());
+        //            }
+        //        }
     }
 
     @Inject
     @Optional
     public void reloadLastSelectedFile(@UIEventTopic(UIEventConstants.TOPIC_RELOAD_VIEW) String empty) {
-        clearScrollView();
-        presenter.reloadLastSelctedFile();
+        //clearScrollView();
+        //  presenter.reloadLastSelctedFile();
     }
 
     @Override
@@ -127,18 +127,31 @@ public class FileDiffView implements FileDiffContract.View {
         scrollView.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
 
+    private void fileDiffHeader(Composite composite) {
+        lblHeader = new Label(composite, SWT.NONE | SWT.WRAP);
+        lblHeader.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        lblHeader.setFont(FontUtils.createFont(lblHeader, "Segoe UI", 10, SWT.BOLD));
+        lblHeader.setText("No diff available");
+
+        btnMarkResolved = new Button(composite, SWT.NONE);
+        GridData gd = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+        gd.widthHint = 250;
+        gd.verticalIndent = 11;
+        btnMarkResolved.setLayoutData(gd);
+        btnMarkResolved.setText("Mark resolved");
+        btnMarkResolved.addListener(SWT.Selection, listener -> presenter.stageResolvedFile(presenter.getSelectedFileName()));
+    }
+
     @Override
     public void showMergeView(DiffFile diff) {
-        sync.syncExec(() -> {
-            this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
-            diff.getHunks().stream().filter(section -> section != null).forEach(section -> createMergeView(section));
-            updateScrollView();
-            this.parent.layout(true, true);
-        });
+        fileDiffHeader(composite);
+        this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
+        diff.getHunks().stream().filter(section -> section != null).forEach(section -> createMergeView(section));
+        updateScrollView();
+        this.parent.layout(true, true);
     }
 
     private void createMergeView(DiffHunk section) {
-
         Label lblDiffHeader = new Label(composite, SWT.NONE);
         lblDiffHeader.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));
         lblDiffHeader.setText(section.getHeader());
@@ -218,12 +231,11 @@ public class FileDiffView implements FileDiffContract.View {
 
     @Override
     public void showContentDiff(DiffFile diff) {
-        sync.syncExec(() -> {
-            this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
-            diff.getHunks().stream().filter(section -> section != null).forEach(section -> createContentDiffView(section));
-            updateScrollView();
-            this.parent.layout(true, true);
-        });
+        fileDiffHeader(composite);
+        this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
+        diff.getHunks().stream().filter(section -> section != null).forEach(section -> createContentDiffView(section));
+        updateScrollView();
+        this.parent.layout(true, true);
     }
 
     @Override
@@ -245,6 +257,7 @@ public class FileDiffView implements FileDiffContract.View {
         table.setLinesVisible(false);
 
         createColumns(3, table, COLUMN_ALIGNMENTS_DIFF);
+
         section.getLines().stream().forEach(line -> {
             TableItem item = new TableItem(table, SWT.NONE);
             item.setText(0, line.getNumberLeft());
@@ -270,5 +283,30 @@ public class FileDiffView implements FileDiffContract.View {
     @Override
     public void showError(Exception exception) {
         MessageDialog.openError(shell, "Error: ", exception.getMessage());
+    }
+
+    @Override
+    public void showLogs(List<CommitLog> logs) {
+        Composite layoutComposite = new Composite(composite, SWT.NONE);
+        layoutComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));
+
+        Table table = new Table(layoutComposite, SWT.FULL_SELECTION);
+        table.setHeaderVisible(false);
+        table.setLinesVisible(true);
+        lastCommitTime = "";
+        createColumns(2, table, COLUMN_ALIGNMENTS_LOGS);
+        logs.stream().forEach(log -> {
+            TableItem item = new TableItem(table, SWT.NONE);
+            item.setText(0, log.getShortMessage());
+            if (lastCommitTime.isEmpty()) {
+                lastCommitTime = prettyTime.format(log.getCommitTime());
+            } else if (!lastCommitTime.equals(prettyTime.format(log.getCommitTime()))) {
+                lastCommitTime = prettyTime.format(log.getCommitTime());
+                item.setText(1, lastCommitTime);
+            }
+        });
+        layoutComposite.setLayout(setColumnWeights(table, COLUMN_WEIGHTS_LOGS));
+        updateScrollView();
+        parent.layout(true, true);
     }
 }

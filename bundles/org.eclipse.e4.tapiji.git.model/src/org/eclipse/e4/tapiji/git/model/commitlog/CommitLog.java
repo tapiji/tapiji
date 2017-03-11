@@ -1,15 +1,18 @@
 package org.eclipse.e4.tapiji.git.model.commitlog;
 
 
+import java.util.Date;
+
+
 public class CommitLog {
 
     private String shortMessage;
     private String fullMessage;
     private String author;
     private String email;
-    private int commitTime;
+    private Date commitTime;
 
-    public CommitLog(String shortMessage, String fullMessage, String author, String email, int commitTime) {
+    public CommitLog(String shortMessage, String fullMessage, String author, String email, Date commitTime) {
         super();
         this.shortMessage = shortMessage;
         this.fullMessage = fullMessage;
@@ -34,7 +37,7 @@ public class CommitLog {
         return email;
     }
 
-    public int getCommitTime() {
+    public Date getCommitTime() {
         return commitTime;
     }
 

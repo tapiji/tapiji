@@ -14,6 +14,7 @@ public class PreferenceGeneralPage extends FieldEditorPreferencePage {
     @Override
     protected void createFieldEditors() {
 
+        setVisible(false);
     }
 
 }

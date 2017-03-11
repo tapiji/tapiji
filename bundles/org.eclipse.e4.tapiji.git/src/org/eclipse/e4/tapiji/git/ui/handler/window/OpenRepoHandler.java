@@ -1,7 +1,6 @@
 package org.eclipse.e4.tapiji.git.ui.handler.window;
 
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -16,7 +15,6 @@ import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.ui.preference.Preferences;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
 
 
@@ -40,17 +38,21 @@ public class OpenRepoHandler {
 
     @Execute
     public void exec(final IEclipseContext context, @Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
-        DirectoryDialog dialog = new DirectoryDialog(shell);
-        String result = dialog.open();
-        if (result != null) {
-            try {
-                service.mount(result);
-                prefs.addRepository("pesto", result);
-                executeCommand();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+
+        prefs.addRepository("pesto", "E:/cloni");
+        executeCommand();
+        //
+        //        DirectoryDialog dialog = new DirectoryDialog(shell);
+        //        String result = dialog.open();
+        //        if (result != null) {
+        //            try {
+        //                service.mount(result);
+        //                prefs.addRepository("pesto", result);
+        //                executeCommand();
+        //            } catch (IOException e) {
+        //                e.printStackTrace();
+        //            }
+        //        }
     }
 
     private void executeCommand() {

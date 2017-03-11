@@ -656,7 +656,7 @@ public class GitService implements IGitService {
                     for (RevCommit rev : commitLogs) {
                         RevCommit commit = walk.parseCommit(rev.getId());
                         logs.add(new CommitLog(commit.getShortMessage(), commit.getFullMessage(), commit.getAuthorIdent().getName(), commit.getAuthorIdent()
-                            .getEmailAddress(), commit.getCommitTime()));
+                            .getEmailAddress(), commit.getCommitterIdent().getWhen()));
                     }
                     walk.dispose();
                 } catch (IOException exception) {
@@ -665,7 +665,7 @@ public class GitService implements IGitService {
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<List<CommitLog>>(new ArrayList<>());
+            return new GitServiceResult<List<CommitLog>>(logs);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 

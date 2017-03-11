@@ -16,6 +16,7 @@ import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
+import org.eclipse.e4.tapiji.git.model.commitlog.CommitLog;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.diff.DiffLine;
 import org.eclipse.e4.tapiji.git.model.diff.DiffLineStatus;
@@ -80,12 +81,16 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
             @Override
             public void onSuccess(GitServiceResult<DiffFile> response) {
-                view.showContentDiff(response.getResult());
+                sync.asyncExec(() -> {
+                    view.showContentDiff(response.getResult());
+                });
             }
 
             @Override
             public void onError(GitServiceException exception) {
-                view.showError(exception);
+                sync.asyncExec(() -> {
+                    view.showError(exception);
+                });
             }
         });
     }
@@ -97,13 +102,16 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
             @Override
             public void onSuccess(GitServiceResult<DiffFile> response) {
-                sync.asyncExec(() -> mergeFile = response.getResult());
-                view.showMergeView(response.getResult());
+                sync.asyncExec(() -> {
+                    view.showMergeView(response.getResult());
+                });
             }
 
             @Override
             public void onError(GitServiceException exception) {
-                view.showError(exception);
+                sync.syncExec(() -> {
+                    view.showError(exception);
+                });
             }
         });
     }
@@ -139,7 +147,9 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
                 @Override
                 public void onError(GitServiceException exception) {
-                    view.showError(exception);
+                    sync.syncExec(() -> {
+                        view.showError(exception);
+                    });
                 }
             });
         } catch (Exception exception) {
@@ -148,5 +158,25 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
     }
 
     private Function<DiffLineStatus, Predicate<DiffLine>> checkLineStatus = status -> line -> line.getStatus() == status;
+
+    @Override
+    public void loadLogs() {
+        service.logs(new IGitServiceCallback<List<CommitLog>>() {
+
+            @Override
+            public void onSuccess(GitServiceResult<List<CommitLog>> response) {
+                sync.syncExec(() -> {
+                    view.showLogs(response.getResult());
+                });
+            }
+
+            @Override
+            public void onError(GitServiceException exception) {
+                sync.syncExec(() -> {
+                    view.showError(exception);
+                });
+            }
+        });
+    }
 
 }

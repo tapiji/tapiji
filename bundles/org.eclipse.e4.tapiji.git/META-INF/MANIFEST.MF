@@ -14,7 +14,8 @@ Require-Bundle: org.eclipse.e4.ui.model.workbench,
  org.eclipse.e4.ui.di,
  minimal-json,
  org.eclipse.equinox.registry,
- org.eclipse.equinox.preferences
+ org.eclipse.equinox.preferences,
+ org.ocpsoft.prettytime.core;bundle-version="4.0.1"
 Import-Package: javax.inject;version="1.0.0",
  org.eclipse.core.runtime.preferences;version="3.3.0",
  org.eclipse.e4.babel.editor.ui.handler.window,
