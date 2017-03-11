@@ -89,4 +89,6 @@ public interface IGitService {
     void logs(IGitServiceCallback<List<CommitLog>> callback);
 
     void profile(IGitServiceCallback<UserProfile> callback);
+
+    void saveProfile(IGitServiceCallback<Void> callback, UserProfile profile);
 }

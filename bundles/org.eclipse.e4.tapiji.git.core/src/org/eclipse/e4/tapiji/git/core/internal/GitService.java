@@ -59,6 +59,7 @@ import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -674,7 +675,23 @@ public class GitService implements IGitService {
             Config config = repository.getConfig();
             String name = config.getString("user", null, "name");
             String email = config.getString("user", null, "email");
+
             return new GitServiceResult<UserProfile>(new UserProfile(name, email));
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void saveProfile(IGitServiceCallback<Void> callback, UserProfile profile) {
+        CompletableFuture.supplyAsync(() -> {
+            StoredConfig config = repository.getConfig();
+            config.setString("user", null, "name", profile.getName());
+            config.setString("user", null, "email", profile.getEmail());
+            try {
+                config.save();
+            } catch (IOException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitServiceResult<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 

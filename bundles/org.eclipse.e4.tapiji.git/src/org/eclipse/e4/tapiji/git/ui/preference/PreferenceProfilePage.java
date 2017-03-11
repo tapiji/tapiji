@@ -7,6 +7,7 @@ import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.UserProfile;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
@@ -35,11 +36,10 @@ public class PreferenceProfilePage extends FieldEditorPreferencePage {
 
         addField(name);
         addField(email);
-        initProfile();
+        loadProfile();
     }
 
-    public void initProfile() {
-
+    public void loadProfile() {
         service.profile(new IGitServiceCallback<UserProfile>() {
 
             @Override
@@ -61,5 +61,27 @@ public class PreferenceProfilePage extends FieldEditorPreferencePage {
 
             }
         });
+    }
+
+    public void saveProfile() {
+        service.saveProfile(new IGitServiceCallback<Void>() {
+
+            @Override
+            public void onSuccess(GitServiceResult<Void> response) {
+                Log.d(TAG, "User and email saved.");
+            }
+
+            @Override
+            public void onError(GitServiceException exception) {
+                Log.d(TAG, "Can not save user profile!" + exception);
+            }
+        }, new UserProfile(name.getStringValue(), email.getStringValue()));
+    }
+
+    @Override
+    public boolean performOk() {
+        Log.d(TAG, "Perform ok");
+        saveProfile();
+        return super.performOk();
     }
 }
