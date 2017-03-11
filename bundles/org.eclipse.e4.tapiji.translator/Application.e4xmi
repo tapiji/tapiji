@@ -7,6 +7,7 @@
       </children>
     </children>
     <mainMenu xmi:id="_twgtQK82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.menu.translator">
+      <children xsi:type="menu:Menu" xmi:id="_ZjWMQAZdEeedNcmhLdhlrQ" elementId="org.eclipse.e4.tapiji.translator.menu.file" label="File"/>
       <children xsi:type="menu:Menu" xmi:id="_SXrxQAYlEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.menu.window" label="Window">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_YGpfMAYlEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.handledmenuitem.preferences" label="Preferences" command="_sJdT8AYqEeetZqLNxy9SVg"/>
       </children>

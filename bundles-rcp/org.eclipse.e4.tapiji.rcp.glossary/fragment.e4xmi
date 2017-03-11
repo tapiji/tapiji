@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_-QGVkLpBEeakeOgmvKbJcw">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_jTSUYLpCEeakeOgmvKbJcw" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
-    <elements xsi:type="menu:MenuContribution" xmi:id="_sngRwLpCEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.glossary.menucontribution.rcp" positionInParent="?before=org.eclipse.e4.tapiji.rcp.translator.menuseparator.save" parentId="org.eclipse.e4.tapiji.rcp.translator.menu.file">
+    <elements xsi:type="menu:MenuContribution" xmi:id="_sngRwLpCEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.glossary.menucontribution.rcp" positionInParent="?before=org.eclipse.e4.tapiji.rcp.translator.menuseparator.save" parentId="org.eclipse.e4.tapiji.translator.menu.file">
       <children xsi:type="menu:HandledMenuItem" xmi:id="_3raEELpCEeakeOgmvKbJcw" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.openglossary" label="Open Glossary" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/open_glossary.png" command="__roC8LpCEeakeOgmvKbJcw"/>
       <children xsi:type="menu:HandledMenuItem" xmi:id="_DAEq0Ls2EeaBepQNk7EkBg" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.newglossary" label="New Glossary" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/new_glossary.png" command="_3uj6ULs1EeaBepQNk7EkBg"/>
     </elements>

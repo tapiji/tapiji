@@ -103,7 +103,7 @@
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_161rsOrREeah_qW_gJKbyQ" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
-    <elements xsi:type="menu:MenuContribution" xmi:id="_4rspwOrREeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.menucontribution.git" positionInParent="?before=org.eclipse.e4.tapiji.glossary.menu.window" parentId="org.eclipse.e4.tapiji.menu.translator">
+    <elements xsi:type="menu:MenuContribution" xmi:id="_4rspwOrREeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.menucontribution.git" positionInParent="?before=org.eclipse.e4.tapiji.translator.menu.window" parentId="org.eclipse.e4.tapiji.menu.translator">
       <children xsi:type="menu:Menu" xmi:id="_--myQOrREeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.menu.git" label="Git">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_CeJbQOrSEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.clonerepo" label="Clone Repo" command="_F0x_4OrSEeah_qW_gJKbyQ"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_HUTL0ARCEeeodIldUFD27g" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.openrepo" label="Open Repo" command="_QP8RIARCEeeodIldUFD27g"/>
