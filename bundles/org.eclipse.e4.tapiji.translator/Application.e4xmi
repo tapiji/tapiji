@@ -6,7 +6,17 @@
         <children xsi:type="basic:PartSashContainer" xmi:id="__P9CYLIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.partsashcontainer.main"/>
       </children>
     </children>
-    <mainMenu xmi:id="_twgtQK82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.menu.translator"/>
+    <mainMenu xmi:id="_twgtQK82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.menu.translator">
+      <children xsi:type="menu:Menu" xmi:id="_SXrxQAYlEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.menu.window" label="Window">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_YGpfMAYlEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.handledmenuitem.preferences" label="Preferences" command="_sJdT8AYqEeetZqLNxy9SVg"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_yrcEUAZYEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.menu.help" label="Help">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_2KiBYAZYEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.handledmenuitem.changelog" label="Changelog" command="_9mJeYAZYEeetZqLNxy9SVg">
+          <parameters xmi:id="_axG8sAZZEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.parameter.changelog" name="org.eclipse.e4.tapiji.translator.commandparameter.changelog" value="platform:/plugin/org.eclipse.e4.tapiji.translator/files/changelog.txt"/>
+        </children>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_07VqYAZYEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.handledmenuitem.abouttapiji" label="About Tapiji" command="_vaPZUAZYEeetZqLNxy9SVg"/>
+      </children>
+    </mainMenu>
     <trimBars xmi:id="_RHmj8LInEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.trimbar.main">
       <children xsi:type="menu:ToolBar" xmi:id="_TwsGELInEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.toolbar.main"/>
     </trimBars>
@@ -19,8 +29,16 @@
     </trimBars>
   </children>
   <handlers xmi:id="_SaUWMOAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.handler.switch" contributionURI="bundleclass://org.eclipse.e4.tapiji.translator/org.eclipse.e4.tapiji.translator.ui.handler.window.PerpectiveSwitchHandler" command="_Pux9AOAgEeahm60FyqfB4g"/>
+  <handlers xmi:id="_roWK8AYqEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.handler.preferences" contributionURI="bundleclass://org.eclipse.e4.tapiji.translator/org.eclipse.e4.tapiji.translator.ui.handler.window.PreferenceHandler" command="_sJdT8AYqEeetZqLNxy9SVg"/>
+  <handlers xmi:id="_t1dz4AZYEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.handler.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.translator/org.eclipse.e4.tapiji.translator.ui.handler.window.AboutHandler" command="_vaPZUAZYEeetZqLNxy9SVg"/>
+  <handlers xmi:id="_-rk1YAZYEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.handler.changelog" contributionURI="bundleclass://org.eclipse.e4.tapiji.translator/org.eclipse.e4.tapiji.translator.ui.handler.window.ChangeLogHandler" command="_9mJeYAZYEeetZqLNxy9SVg"/>
   <commands xmi:id="_Pux9AOAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.command.perspectiveswitch" commandName="Perspective Switch">
     <parameters xmi:id="_VPnxAOmEEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.translator.commandparameter.perspective" name="perspective"/>
+  </commands>
+  <commands xmi:id="_sJdT8AYqEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.command.preferences" commandName="Preferences"/>
+  <commands xmi:id="_vaPZUAZYEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.command.about" commandName="About"/>
+  <commands xmi:id="_9mJeYAZYEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.command.changelog" commandName="Changelog">
+    <parameters xmi:id="_dIspsAZaEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.commandparameter.changelog" name="Changelog" optional="false"/>
   </commands>
   <addons xmi:id="_Lvp3Aa82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_Lvp3Aq82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>

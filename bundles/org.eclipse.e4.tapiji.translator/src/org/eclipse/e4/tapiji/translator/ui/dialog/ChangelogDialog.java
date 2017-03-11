@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.glossary.ui.dialog;
+package org.eclipse.e4.tapiji.translator.ui.dialog;
 
 
 import java.io.IOException;
@@ -17,12 +17,12 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 
-public class UpdateHistoryDialog extends Dialog {
+public class ChangelogDialog extends Dialog {
 
     private Shell shell;
     private Text text;
 
-    public UpdateHistoryDialog(Shell parent) {
+    public ChangelogDialog(Shell parent) {
         super(parent);
     }
 
@@ -67,7 +67,7 @@ public class UpdateHistoryDialog extends Dialog {
     }
 
     public static void show(final IEclipseContext context, final Shell shell, String changeLogFile) {
-        UpdateHistoryDialog dialog = new UpdateHistoryDialog(shell);
+        ChangelogDialog dialog = new ChangelogDialog(shell);
         ContextInjectionFactory.inject(dialog, context);
         dialog.open(changeLogFile);
     }

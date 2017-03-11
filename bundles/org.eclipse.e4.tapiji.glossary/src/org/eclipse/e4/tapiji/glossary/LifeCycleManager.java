@@ -7,7 +7,6 @@ import org.eclipse.e4.core.commands.ECommandService;
 import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.tapiji.glossary.ui.window.AboutHandler;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.resource.TapijiResourceConstants;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -34,7 +33,6 @@ public final class LifeCycleManager {
     private static final String TAG = LifeCycleManager.class.getSimpleName();
     private static final String COMMAND_EXIT = "org.eclipse.ui.file.exit";
     private static final String COMMAND_ABOUT = "org.eclipse.ui.help.aboutAction";
-
 
     @PostContextCreate
     void postContextCreate(final IEventBroker eventBroker, final IEclipseContext context, final ITapijiResourceProvider resourceProvider) {
@@ -86,7 +84,8 @@ public final class LifeCycleManager {
 
                         @Override
                         public void handleEvent(final Event event) {
-                            executeCommand(commandService, handlerService, COMMAND_ABOUT, new AboutHandler());
+                            // TODO
+                            //executeCommand(commandService, handlerService, COMMAND_ABOUT, new AboutHandler());
                         }
                     });
 
@@ -120,6 +119,7 @@ public final class LifeCycleManager {
         private void minimizeBehavior(final Shell shell) {
             shell.addShellListener(new ShellAdapter() {
 
+                @Override
                 public void shellIconified(final ShellEvent e) {
                     shell.setMinimized(true);
                 }

@@ -8,6 +8,29 @@
             uri="fragment.e4xmi">
       </fragment>
    </extension>
+   <extension
+         point="org.eclipse.e4.tapiji.translator.preferences">
+      <page
+            class="org.eclipse.e4.tapiji.git.ui.preference.PreferenceGeneralPage"
+            id="page_git_general"
+            order="2">
+      </page>
+      <page
+            category="page_git_general"
+            class="org.eclipse.e4.tapiji.git.ui.preference.PreferenceAuthenticationPage"
+            id="apge_git_auth"
+            order="4"
+            title="Authentication">
+      </page>
+      <page
+            category="page_git_general"
+            class="org.eclipse.e4.tapiji.git.ui.preference.PreferenceProfilePage"
+            id="page_git_profile"
+            order="3"
+            title="Profile">
+      </page>
+   </extension>
+
 
 
 </plugin>

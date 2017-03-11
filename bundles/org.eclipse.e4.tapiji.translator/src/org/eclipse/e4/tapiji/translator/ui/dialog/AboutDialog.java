@@ -1,4 +1,4 @@
-package org.eclipse.e4.tapiji.glossary.ui.dialog;
+package org.eclipse.e4.tapiji.translator.ui.dialog;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;

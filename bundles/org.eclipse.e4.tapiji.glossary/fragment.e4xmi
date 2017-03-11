@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_9nxHkLGsEea1SPQzlkSYSA">
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Xd1tsLGtEea1SPQzlkSYSA" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
-    <elements xsi:type="menu:MenuContribution" xmi:id="_tArkELGtEea1SPQzlkSYSA" elementId="org.eclipse.e4.tapiji.glossary.menucontribution.menu" parentId="org.eclipse.e4.tapiji.menu.translator">
-      <children xsi:type="menu:Menu" xmi:id="_ybHlULIiEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.menu.window" label="Window" mnemonics="W"/>
-      <children xsi:type="menu:Menu" xmi:id="_xgYQ0LIhEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.menu.help" label="Help" mnemonics="H">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_9TEbwLIhEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.changelog" label="Changelog" command="_CZl0MLIjEeal-_h9GBjgAw">
-          <parameters xmi:id="_pU7K8LIkEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.parameter.changelogfile" name="changelog_file" value="platform:/plugin/org.eclipse.e4.tapiji.glossary/files/changelog.txt"/>
-        </children>
-        <children xsi:type="menu:MenuSeparator" xmi:id="_76bN0LIhEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.menuseparator.0"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_3be9ULIhEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.handledmenuitem.about" label="About TapiJI" command="_Fnc3ULIjEeal-_h9GBjgAw"/>
-      </children>
-    </elements>
-  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_RwyUMLHBEeal-_h9GBjgAw" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
-    <elements xsi:type="commands:Command" xmi:id="_CZl0MLIjEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.command.changelog" commandName="Changelog">
-      <parameters xmi:id="_CZl0MbIjEeal-_h9GBjgAw" elementId="changelog_file" name="Changelog File"/>
-    </elements>
-    <elements xsi:type="commands:Command" xmi:id="_Fnc3ULIjEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.command.about" commandName="About"/>
     <elements xsi:type="commands:Command" xmi:id="_nX5VILpJEea2j6Vdo2WkOA" elementId="org.eclipse.e4.tapiji.glossary.command.addterm" commandName="Add Term"/>
     <elements xsi:type="commands:Command" xmi:id="_sYGfoLpJEea2j6Vdo2WkOA" elementId="org.eclipse.e4.tapiji.glossary.command.removeterm" commandName="Remove Term"/>
     <elements xsi:type="commands:Command" xmi:id="_eRltgLsxEeaBepQNk7EkBg" elementId="org.eclipse.e4.tapiji.glossary.command.editmode" commandName="Edit Mode"/>
@@ -26,8 +10,6 @@
     <elements xsi:type="commands:Command" xmi:id="_wDLYcLs0EeaBepQNk7EkBg" elementId="org.eclipse.e4.tapiji.glossary.command.reloadglossary" commandName="Reload Glossary"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_jWUngLHBEeal-_h9GBjgAw" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.application">
-    <elements xsi:type="commands:Handler" xmi:id="_HiEJ4LIjEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.handler.about" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.window.AboutHandler" command="_Fnc3ULIjEeal-_h9GBjgAw"/>
-    <elements xsi:type="commands:Handler" xmi:id="_IQAN8LIjEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.glossary.handler.changelog" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.window.UpdateHistory" command="_CZl0MLIjEeal-_h9GBjgAw"/>
     <elements xsi:type="commands:Handler" xmi:id="_lZtKILpJEea2j6Vdo2WkOA" elementId="org.eclipse.e4.tapiji.glossary.handler.addterm" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.treeviewer.handler.AddTermHandler" command="_nX5VILpJEea2j6Vdo2WkOA"/>
     <elements xsi:type="commands:Handler" xmi:id="_wIbWoLpJEea2j6Vdo2WkOA" elementId="org.eclipse.e4.tapiji.glossary.handler.removeterm" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.treeviewer.handler.RemoveTermHandler" command="_sYGfoLpJEea2j6Vdo2WkOA"/>
     <elements xsi:type="commands:Handler" xmi:id="_hLONELsxEeaBepQNk7EkBg" elementId="org.eclipse.e4.tapiji.glossary.handler.editmode" contributionURI="bundleclass://org.eclipse.e4.tapiji.glossary/org.eclipse.e4.tapiji.glossary.ui.treeviewer.handler.EditModeHandler" command="_eRltgLsxEeaBepQNk7EkBg"/>
