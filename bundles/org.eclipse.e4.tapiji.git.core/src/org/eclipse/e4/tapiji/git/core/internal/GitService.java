@@ -26,6 +26,7 @@ import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.Reference;
 import org.eclipse.e4.tapiji.git.model.ReferenceType;
+import org.eclipse.e4.tapiji.git.model.UserProfile;
 import org.eclipse.e4.tapiji.git.model.commitlog.CommitLog;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
@@ -54,6 +55,7 @@ import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.errors.TransportException;
+import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
@@ -663,6 +665,16 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitServiceResult<List<CommitLog>>(new ArrayList<>());
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void profile(IGitServiceCallback<UserProfile> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            Config config = repository.getConfig();
+            String name = config.getString("user", null, "name");
+            String email = config.getString("user", null, "email");
+            return new GitServiceResult<UserProfile>(new UserProfile(name, email));
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 

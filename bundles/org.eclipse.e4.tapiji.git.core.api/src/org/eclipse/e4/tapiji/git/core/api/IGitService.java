@@ -9,6 +9,7 @@ import java.util.Set;
 import org.eclipse.e4.tapiji.git.model.CommitReference;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.Reference;
+import org.eclipse.e4.tapiji.git.model.UserProfile;
 import org.eclipse.e4.tapiji.git.model.commitlog.CommitLog;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
@@ -86,4 +87,6 @@ public interface IGitService {
     void stageFile(String fileName, IGitServiceCallback<Void> callback);
 
     void logs(IGitServiceCallback<List<CommitLog>> callback);
+
+    void profile(IGitServiceCallback<UserProfile> callback);
 }
