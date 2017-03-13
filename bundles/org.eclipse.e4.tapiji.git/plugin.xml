@@ -9,25 +9,23 @@
       </fragment>
    </extension>
    <extension
-         point="org.eclipse.e4.tapiji.translator.preferences">
+         point="at.nucle.e4.plugin.preferences">
       <page
             class="org.eclipse.e4.tapiji.git.ui.preference.PreferenceGeneralPage"
-            id="page_git_general"
+            id="page_general"
             order="2">
       </page>
       <page
-            category="page_git_general"
+            category="page_general"
             class="org.eclipse.e4.tapiji.git.ui.preference.PreferenceAuthenticationPage"
-            id="apge_git_auth"
-            order="4"
-            title="Authentication">
+            id="page_auth"
+            order="3">
       </page>
       <page
-            category="page_git_general"
+            category="page_general"
             class="org.eclipse.e4.tapiji.git.ui.preference.PreferenceProfilePage"
-            id="page_git_profile"
-            order="3"
-            title="Profile">
+            id="page_profile"
+            order="4">
       </page>
    </extension>
 

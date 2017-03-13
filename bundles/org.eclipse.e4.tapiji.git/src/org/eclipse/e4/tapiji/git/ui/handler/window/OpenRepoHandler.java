@@ -38,7 +38,6 @@ public class OpenRepoHandler {
 
     @Execute
     public void exec(final IEclipseContext context, @Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
-
         prefs.addRepository("pesto", "E:/cloni");
         executeCommand();
         //

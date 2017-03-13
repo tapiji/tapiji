@@ -15,8 +15,8 @@ Require-Bundle: org.eclipse.e4.ui.workbench,
  org.eclipse.core.expressions;bundle-version="3.5.100",
  org.eclipse.e4.tapiji.logger,
  org.eclipse.jface;bundle-version="3.12.0",
- org.eclipse.equinox.preferences
+ org.eclipse.equinox.preferences,
+ at.nucle.e4.plugin.preferences.core.api;bundle-version="0.2.0"
 Import-Package: org.eclipse.core.runtime,
  org.eclipse.e4.tapiji.resource
-Export-Package: org.eclipse.e4.tapiji.translator.ui.preferences
 

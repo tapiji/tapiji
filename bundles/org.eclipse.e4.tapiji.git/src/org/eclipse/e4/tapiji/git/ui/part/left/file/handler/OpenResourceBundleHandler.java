@@ -17,16 +17,19 @@ import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.swt.widgets.Shell;
 
+
 @SuppressWarnings("restriction")
+
+// TODO REFACTOR
 public class OpenResourceBundleHandler extends AOpenResourceBundleHandler {
 
     private static final String TAG = OpenResourceBundleHandler.class.getSimpleName();
     private PropertyFile propertyFile;
-    
-	@Inject
+
+    @Inject
     private ECommandService commandService;
 
-	@Inject
+    @Inject
     private EHandlerService handlerService;
 
     @Override

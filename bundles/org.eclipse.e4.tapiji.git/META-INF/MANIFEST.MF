@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.e4.ui.model.workbench,
  minimal-json,
  org.eclipse.equinox.registry,
  org.eclipse.equinox.preferences,
- org.ocpsoft.prettytime.core;bundle-version="4.0.1"
+ org.ocpsoft.prettytime.core;bundle-version="4.0.1",
+ at.nucle.e4.plugin.preferences.core
 Import-Package: javax.inject;version="1.0.0",
  org.eclipse.core.runtime.preferences;version="3.3.0",
  org.eclipse.e4.babel.editor.ui.handler.window,
@@ -33,7 +34,6 @@ Import-Package: javax.inject;version="1.0.0",
  org.eclipse.e4.tapiji.mylyn.core.api,
  org.eclipse.e4.tapiji.mylyn.model,
  org.eclipse.e4.tapiji.resource,
- org.eclipse.e4.tapiji.translator.ui.preferences,
  org.eclipse.e4.tapiji.utils,
  org.eclipse.e4.ui.services,
  org.eclipse.jface.dialogs

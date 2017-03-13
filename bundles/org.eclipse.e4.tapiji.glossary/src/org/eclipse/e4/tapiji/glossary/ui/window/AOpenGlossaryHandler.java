@@ -14,14 +14,12 @@ import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.tapiji.utils.FileUtils;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
 
 public abstract class AOpenGlossaryHandler {
 
     private static final String TAG = AOpenGlossaryHandler.class.getSimpleName();
-
 
     @Execute
     public void execute(@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final IGlossaryService glossaryService, final StoreInstanceState instanceState) {
@@ -46,8 +44,8 @@ public abstract class AOpenGlossaryHandler {
 
             @Override
             protected IStatus run(final IProgressMonitor monitor) {
-            	System.out.println("OPEN GLOSSARYS");
-            	Log.d(TAG, "OPEN GLOSSARY");
+                System.out.println("OPEN GLOSSARYS");
+                Log.d(TAG, "OPEN GLOSSARY");
                 glossaryService.openGlossary(file);
                 return Status.OK_STATUS;
             }
@@ -55,10 +53,9 @@ public abstract class AOpenGlossaryHandler {
         job.schedule();
     }
 
-
     private void showErrorDialog(final Shell shell, final String fileName) {
         MessageDialog.openError(shell, String.format("Cannot open Glossary %s", fileName), "The choosen file does not represent a Glossary!");
     }
-    
+
     protected abstract String[] recentlyOpenedFiles(Shell shell);
 }

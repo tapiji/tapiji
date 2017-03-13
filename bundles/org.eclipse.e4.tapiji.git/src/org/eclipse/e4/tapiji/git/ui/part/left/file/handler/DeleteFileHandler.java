@@ -25,8 +25,6 @@ public class DeleteFileHandler {
     @Execute
     public void execute(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) PropertyFile propertyFile) {
         service.deleteFile(new File(propertyFile.getPath()));
-        eventBroker.post(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW, "");
-        eventBroker.post(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW, "");
+        eventBroker.post(UIEventConstants.TOPIC_RELOAD_VIEW, "");
     }
-
 }

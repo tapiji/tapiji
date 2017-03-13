@@ -27,6 +27,7 @@ public class PreferenceProfilePage extends FieldEditorPreferencePage {
 
     public PreferenceProfilePage() {
         super(GRID);
+        setTitle("Profile");
     }
 
     @Override
