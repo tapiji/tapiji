@@ -12,13 +12,29 @@
     </parent>
 
     <modules>
-		<module>org.eclipselabs.e4.tapiji.logger</module>
-		<module>org.eclipselabs.e4.tapiji.resource</module>
-		<module>org.eclipselabs.e4.tapiji.translator</module>
-		<module>org.eclipselabs.e4.tapiji.translator.core</module>
-		<module>org.eclipselabs.e4.tapiji.translator.core.api</module>
-		<module>org.eclipselabs.e4.tapiji.translator.i18n</module>
-		<module>org.eclipselabs.e4.tapiji.translator.model</module>
-		<module>org.eclipselabs.e4.tapiji.utils</module>
+		<!-- Common -->
+		<module>org.eclipse.e4.tapiji.logger</module>
+		<module>org.eclipse.e4.tapiji.resource</module>
+		<module>org.eclipse.e4.tapiji.translator</module>
+		<module>org.eclipse.e4.tapiji.utils</module>
+	
+		<!-- Glossary -->
+		<module>org.eclipse.e4.tapiji.glossary</module>
+		<module>org.eclipse.e4.tapiji.glossary.core</module>
+		<module>org.eclipse.e4.tapiji.glossary.core.api</module>
+		<module>org.eclipse.e4.tapiji.glossary.model</module>
+		
+		<!-- GIT -->
+		<module>org.eclipse.e4.tapiji.git</module>
+		<module>org.eclipse.e4.tapiji.git.core</module>
+		<module>org.eclipse.e4.tapiji.git.core.api</module>
+		<module>org.eclipse.e4.tapiji.git.model</module>
+		
+		<!-- Glossary -->
+		<module>org.eclipse.e4.tapiji.mylyn.ui</module>
+		<module>org.eclipse.e4.tapiji.mylyn.core</module>
+		<module>org.eclipse.e4.tapiji.mylyn.core.api</module>
+		<module>org.eclipse.e4.tapiji.mylyn.model</module>
+		
     </modules>
 </project> 
