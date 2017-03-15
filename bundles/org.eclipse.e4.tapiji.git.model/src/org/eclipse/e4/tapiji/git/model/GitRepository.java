@@ -25,7 +25,15 @@ public class GitRepository {
     }
 
     private String parseGitName(String repository) {
-        int lastPos = repository.lastIndexOf('/');
+        int lastPos;
+        if (!repository.startsWith("https:") && !repository.startsWith("http:") && !repository.startsWith("@")) {
+            lastPos = repository.lastIndexOf(':');
+        } else if (repository.lastIndexOf('/') != -1) {
+            lastPos = repository.lastIndexOf('/');
+        } else {
+            lastPos = 0;
+        }
+
         return repository.substring(lastPos + 1, repository.length()).replace(".git", "");
     }
 

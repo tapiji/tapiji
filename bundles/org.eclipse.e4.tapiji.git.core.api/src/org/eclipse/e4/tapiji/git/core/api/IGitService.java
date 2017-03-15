@@ -91,4 +91,6 @@ public interface IGitService {
     void profile(IGitServiceCallback<UserProfile> callback);
 
     void saveProfile(IGitServiceCallback<Void> callback, UserProfile profile);
+
+    String getUrl();
 }

@@ -82,7 +82,7 @@
             <children xsi:type="menu:DynamicMenuContribution" xmi:id="_4jslMPEwEeaWMuJeVV3wjA" elementId="org.eclipse.e4.tapiji.git.dynamicmenucontribution.changerepository" label="Change Repository" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeRepositoryHandler"/>
           </menu>
         </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_nqsYoPg_EeaaytU_-jBGDw" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.select.branch" label="Select Branch" command="_BS3iIPg_EeaaytU_-jBGDw">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_nqsYoPg_EeaaytU_-jBGDw" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.select.branch" toBeRendered="false" visible="false" label="Select Branch" command="_BS3iIPg_EeaaytU_-jBGDw">
           <menu xmi:id="_qoxTUPg_EeaaytU_-jBGDw" elementId="org.eclipse.e4.tapiji.git.menu.selectbranch" label="Select Branch">
             <children xsi:type="menu:DynamicMenuContribution" xmi:id="_47PI0Pg-EeaaytU_-jBGDw" elementId="org.eclipse.e4.tapiji.git.dynamicmenucontribution.changebranch" label="Change Branch" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ChangeBranchHandler"/>
           </menu>

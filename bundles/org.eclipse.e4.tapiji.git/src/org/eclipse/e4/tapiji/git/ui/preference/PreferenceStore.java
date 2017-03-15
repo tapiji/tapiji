@@ -10,6 +10,14 @@ public class PreferenceStore implements IPreferenceScope {
 
     public static String PREFERENCES_NODE_PATH = "org.eclipse.e4.tapiji.git";
 
+    public static final String COLOR_LINE_ADDED = "color_line_added";
+
+    public PreferenceStore() {
+        //  IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(PREFERENCES_NODE_PATH);
+
+        //  PreferenceConverter.setDefault(getScopeContext(), COLOR_LINE_ADDED, "");
+    }
+
     @Override
     public String getNode() {
         return PREFERENCES_NODE_PATH;

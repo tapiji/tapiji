@@ -9,7 +9,8 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.e4.core.contexts,
  org.eclipse.e4.core.di,
  org.eclipse.jgit,
- org.eclipse.e4.tapiji.git.model
+ org.eclipse.e4.tapiji.git.model,
+ com.jcraft.jsch
 Import-Package: javax.annotation,
  javax.inject,
  org.eclipse.e4.core.di.extensions,

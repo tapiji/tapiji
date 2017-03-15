@@ -91,6 +91,11 @@ public class GitService implements IGitService {
     }
 
     @Override
+    public String getUrl() {
+        return repository.getConfig().getString("remote", "origin", "url");
+    }
+
+    @Override
     public void mount(String directory) throws IOException {
         Log.d(TAG, "mount(" + directory + ")");
         if (directory != null) {

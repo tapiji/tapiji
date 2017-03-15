@@ -55,6 +55,7 @@ public class ChangeRepositoryHandler {
     public void aboutToShow(final List<MMenuElement> items, final EModelService modelService) {
         List<GitRepository> repositories = prefs.getRepositories();
         repositories.forEach(repository -> {
+            System.out.println("REPO NAME: " + repository.getName());
             MDirectMenuItem dynamicItem = modelService.createModelElement(MDirectMenuItem.class);
             dynamicItem.setLabel(repository.getName());
             dynamicItem.setContributionURI(UIEventConstants.MENU_CHANGE_REPOSITORY_CONTRIBUTION_URI);
@@ -77,6 +78,7 @@ public class ChangeRepositoryHandler {
             if (dropDownMenu instanceof HandledToolItemImpl) {
                 ((HandledToolItemImpl) dropDownMenu).setLabel(selectedRepository.getName());
             }
+            eventBroker.post(UIEventConstants.SWITCH_CONTENT_VIEW, null);
             setBranch(modelService, app);
             eventBroker.post(UIEventConstants.TOPIC_RELOAD_VIEW, "");
 
