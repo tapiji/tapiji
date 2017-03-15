@@ -9,8 +9,10 @@ import org.eclipse.e4.tapiji.git.model.UserProfile;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.di.UISynchronize;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.swt.widgets.Shell;
 
 
 public class PreferenceProfilePage extends FieldEditorPreferencePage {
@@ -24,6 +26,9 @@ public class PreferenceProfilePage extends FieldEditorPreferencePage {
 
     @Inject
     UISynchronize sync;
+
+    @Inject
+    Shell shell;
 
     public PreferenceProfilePage() {
         super(GRID);
@@ -59,30 +64,33 @@ public class PreferenceProfilePage extends FieldEditorPreferencePage {
 
             @Override
             public void onError(GitServiceException exception) {
-
+                Log.d(TAG, "Can not load user profile!" + exception);
+                MessageDialog.openError(shell, "Error: ", exception.getMessage());
             }
         });
     }
 
     public void saveProfile() {
-        service.saveProfile(new IGitServiceCallback<Void>() {
+        if (name != null && email != null) {
+            service.saveProfile(new IGitServiceCallback<Void>() {
 
-            @Override
-            public void onSuccess(GitServiceResult<Void> response) {
-                Log.d(TAG, "User and email saved.");
-            }
+                @Override
+                public void onSuccess(GitServiceResult<Void> response) {
+                    Log.d(TAG, "User and email saved.");
+                }
 
-            @Override
-            public void onError(GitServiceException exception) {
-                Log.d(TAG, "Can not save user profile!" + exception);
-            }
-        }, new UserProfile(name.getStringValue(), email.getStringValue()));
+                @Override
+                public void onError(GitServiceException exception) {
+                    Log.d(TAG, "Can not save user profile!" + exception);
+                    MessageDialog.openError(shell, "Error: ", exception.getMessage());
+                }
+            }, new UserProfile(name.getStringValue(), email.getStringValue()));
+        }
     }
 
     @Override
-    public boolean performOk() {
-        Log.d(TAG, "Perform ok");
+    protected void performApply() {
         saveProfile();
-        return super.performOk();
+        super.performApply();
     }
 }

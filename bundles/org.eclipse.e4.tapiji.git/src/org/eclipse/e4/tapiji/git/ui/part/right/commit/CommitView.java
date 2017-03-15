@@ -103,22 +103,20 @@ public class CommitView implements CommitContract.View {
     }
 
     @Override
-    public void sendUIEvent(String topic) {
-        sync.asyncExec(() -> eventBroker.post(topic, ""));
+    public void sendUIEvent(String topic, String content) {
+        sync.asyncExec(() -> eventBroker.post(topic, content));
     }
 
     @Inject
     @Optional
-    public void stagedFileHandler(@UIEventTopic(UIEventConstants.TOPIC_ON_FILES_STAGED) String payload) {
-        stagedFilesAvailable = true;
-        presenter.checkTextSummary(txtSummary.getText());
-    }
-
-    @Inject
-    @Optional
-    public void unstageFileHandler(@UIEventTopic(UIEventConstants.TOPIC_ON_FILES_UNSTAGED) String payload) {
-        stagedFilesAvailable = false;
-        disableCommitButton();
+    public void stagedUnstaged(@UIEventTopic(UIEventConstants.TOPIC_STAGED_UNSTAGED) String payload) {
+        if (payload.equals("staged")) {
+            stagedFilesAvailable = true;
+            presenter.checkTextSummary(txtSummary.getText());
+        } else {
+            stagedFilesAvailable = false;
+            disableCommitButton();
+        }
     }
 
     @Override

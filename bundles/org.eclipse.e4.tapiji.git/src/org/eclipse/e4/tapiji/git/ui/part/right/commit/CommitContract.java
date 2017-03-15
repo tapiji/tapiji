@@ -13,7 +13,7 @@ public interface CommitContract {
 
         void enableCommitButton();
 
-        void sendUIEvent(String topic);
+        void sendUIEvent(String topic, String content);
 
         void resetCommitView();
 

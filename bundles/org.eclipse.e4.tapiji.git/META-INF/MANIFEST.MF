@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.e4.ui.model.workbench,
  org.eclipse.equinox.registry,
  org.eclipse.equinox.preferences,
  org.ocpsoft.prettytime.core;bundle-version="4.0.1",
- at.nucle.e4.plugin.preferences.core
+ at.nucle.e4.plugin.preferences.core,
+ at.nucle.e4.plugin.preferences.core.api
 Import-Package: javax.inject;version="1.0.0",
  org.eclipse.core.runtime.preferences;version="3.3.0",
  org.eclipse.e4.babel.editor.ui.handler.window,

@@ -15,7 +15,6 @@ import org.eclipse.e4.tapiji.resource.TapijiResourceConstants;
 import org.eclipse.e4.tapiji.utils.FontUtils;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.di.UISynchronize;
-import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -36,9 +35,6 @@ public class UnstagedView implements UnstagedContract.View {
 
     @Inject
     UISynchronize sync;
-
-    @Inject
-    ESelectionService selectionService;
 
     @Inject
     UnstagedPresenter presenter;
@@ -74,7 +70,11 @@ public class UnstagedView implements UnstagedContract.View {
         table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         table.setLinesVisible(false);
         table.setHeaderVisible(false);
-        table.addListener(SWT.Selection, listener -> eventBroker.post(UIEventConstants.LOAD_DIFF, table.getSelection()[0].getData()));
+        table.addListener(SWT.Selection, listener -> {
+            if (table.getSelection()[0].getData() != null) {
+                eventBroker.post(UIEventConstants.SWITCH_CONTENT_VIEW, table.getSelection()[0].getData());
+            }
+        });
 
         TableColumn column = new TableColumn(table, SWT.LEFT);
         column.pack();
@@ -128,8 +128,8 @@ public class UnstagedView implements UnstagedContract.View {
     }
 
     @Override
-    public void sendUIEvent(String topic) {
-        sync.asyncExec(() -> eventBroker.post(topic, ""));
+    public void sendUIEvent(String topic, String payload) {
+        sync.asyncExec(() -> eventBroker.post(topic, payload));
     }
 
     @Override

@@ -3,23 +3,30 @@ package org.eclipse.e4.tapiji.git.ui.constant;
 
 public class UIEventConstants {
 
-    public static final String TOPIC_ON_FILES_STAGED = "TOPIC_FILES/ON_STAGED";
-    public static final String TOPIC_ON_FILES_UNSTAGED = "TOPIC_FILES/ON_UNSTAGED";
-
-    public static final String TOPIC_RELOAD_STAGE_VIEW = "TOPIC_RELOAD/STAGE_VIEW";
-    public static final String TOPIC_RELOAD_UNSTAGE_VIEW = "TOPIC_RELOAD/UNSTAGE_VIEW";
+    /*
+     * public static final String TOPIC_ON_FILES_STAGED = "TOPIC_FILES/ON_STAGED";
+     * public static final String TOPIC_ON_FILES_UNSTAGED = "TOPIC_FILES/ON_UNSTAGED";
+     * public static final String TOPIC_RELOAD_STAGE_VIEW = "TOPIC_RELOAD/STAGE_VIEW";
+     * public static final String TOPIC_RELOAD_UNSTAGE_VIEW = "TOPIC_RELOAD/UNSTAGE_VIEW";
+     */
 
     public static final String PERSPECTIVE_MAIN = "org.eclipse.e4.tapiji.translator.perspective.main";
     public static final String PERSPECTIVE_GIT = "org.eclipse.e4.tapiji.git.perspective.git";
 
     public static final String PARAMETER_PERSPECTIVE_ID = "org.eclipse.e4.tapiji.git.commandparameter.perspective";
 
-    public static final String LOAD_DIFF = "loadDiff";
+    // public static final String LOAD_DIFF = "loadDiff";
 
     public static final String TOPIC_SHOW_HIDE_UNSTAGE_BTN = "TOPIC_SHOW_HIDE/UNSTAGE_BTN";
+
+    public static final String SWITCH_CONTENT_VIEW = "SWITCH_CONTENT_VIEW";
+
+    public static final String TOPIC_STAGED_UNSTAGED = "TOPIC_STAGED_UNSTAGED";
+
     //===================================================
     // Reload View
     //===================================================
+
     public static final String TOPIC_RELOAD_VIEW = "TOPICRELOAD_VIEW";
 
     //===================================================

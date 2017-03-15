@@ -15,7 +15,7 @@ public interface UnstagedContract {
 
         void showError(GitServiceException exception);
 
-        void sendUIEvent(String topic);
+        void sendUIEvent(String topic, String payload);
 
         void setCursorWaitVisibility(boolean visibility);
 

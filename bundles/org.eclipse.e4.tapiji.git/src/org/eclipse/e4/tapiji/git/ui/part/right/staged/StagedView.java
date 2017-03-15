@@ -77,6 +77,11 @@ public class StagedView implements StagedContract.View {
         table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
         table.setHeaderVisible(false);
         table.setLinesVisible(false);
+        table.addListener(SWT.Selection, listener -> {
+            if (table.getSelection()[0].getData() != null) {
+                eventBroker.post(UIEventConstants.SWITCH_CONTENT_VIEW, table.getSelection()[0].getData());
+            }
+        });
 
         TableColumn column = new TableColumn(table, SWT.LEFT);
         column.pack();
@@ -114,15 +119,16 @@ public class StagedView implements StagedContract.View {
                 files.stream().forEach(file -> {
                     TableItem item = new TableItem(table, SWT.NONE);
                     item.setText(file.getName());
+                    item.setData(file);
                     if (file.getImage() != null) {
                         item.setImage(resourceProvider.loadImage(file.getImage()));
                     }
                 });
                 lblStagedFiles.setText(String.format("Staged Files (%1$d)", files.size()));
-                sendUIEvent(UIEventConstants.TOPIC_ON_FILES_STAGED);
+                //   sendUIEvent(UIEventConstants.TOPIC_STAGE / UNSTAFE);
             } else {
                 lblStagedFiles.setText("Staged Files");
-                sendUIEvent(UIEventConstants.TOPIC_ON_FILES_UNSTAGED);
+                //     sendUIEvent(UIEventConstants.TOPIC_ON_FILES_UNSTAGED);
             }
             parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
             parent.layout();
@@ -130,8 +136,8 @@ public class StagedView implements StagedContract.View {
     }
 
     @Override
-    public void sendUIEvent(String topic) {
-        sync.asyncExec(() -> eventBroker.post(topic, null));
+    public void sendUIEvent(String topic, String payload) {
+        sync.asyncExec(() -> eventBroker.post(topic, payload));
     }
 
     @Override

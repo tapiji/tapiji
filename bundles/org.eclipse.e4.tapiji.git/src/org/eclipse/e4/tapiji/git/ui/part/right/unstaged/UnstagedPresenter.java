@@ -19,6 +19,7 @@ import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFile;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
+import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.part.right.unstaged.UnstagedContract.View;
 
 
@@ -91,7 +92,6 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
             @Override
             public void onSuccess(GitServiceResult<Void> response) {
                 view.setCursorWaitVisibility(false);
-                loadUnCommittedChanges();
             }
 
             @Override
@@ -111,7 +111,7 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
             @Override
             public void onSuccess(GitServiceResult<Void> response) {
                 view.setCursorWaitVisibility(false);
-                loadUnCommittedChanges();
+                view.sendUIEvent(UIEventConstants.SWITCH_CONTENT_VIEW, null);
             }
 
             @Override

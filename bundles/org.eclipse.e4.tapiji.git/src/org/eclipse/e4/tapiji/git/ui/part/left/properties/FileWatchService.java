@@ -103,7 +103,7 @@ public final class FileWatchService {
         }, 150);
     }
 
-    interface FileWatcher {
+    public interface FileWatcher {
 
         void onFileChanged(Path path);
     }

@@ -9,16 +9,12 @@ public class PreferenceGeneralPage extends FieldEditorPreferencePage {
 
     public PreferenceGeneralPage() {
         super(GRID);
-        setTitle("Git");
+        setTitle("General");
     }
 
     @Override
     protected void createFieldEditors() {
-        ColorFieldEditor commentColor = new ColorFieldEditor("PRESF", "C&omments:", getFieldEditorParent());
-        ColorFieldEditor commentColor2 = new ColorFieldEditor("PRESF", "C&omments:", getFieldEditorParent());
-        addField(commentColor2);
-        addField(commentColor);
-        setVisible(false);
+        addField(new ColorFieldEditor("pref_text_color", "Text color:", getFieldEditorParent()));
+        addField(new ColorFieldEditor("pref_link_color", "Link color:", getFieldEditorParent()));
     }
-
 }

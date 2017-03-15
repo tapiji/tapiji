@@ -17,7 +17,7 @@ public interface StagedContract {
 
         void setCursorWaitVisibility(boolean visibility);
 
-        void sendUIEvent(String topic);
+        void sendUIEvent(String topic, String payload);
 
     }
 

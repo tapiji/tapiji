@@ -77,16 +77,11 @@ public class PropertiesView implements PropertiesContract.View {
         scrollView.setContent(compositeMain);
         scrollView.setMinSize(compositeMain.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         scrollView.setVisible(false);
-        presenter.watchService();
     }
 
     @Override
     public void sendUIEvent(String topic) {
         sync.asyncExec(() -> eventBroker.post(topic, ""));
-    }
-
-    public void registerWatchService(@UIEventTopic(UIEventConstants.TOPIC_REGISTER_WATCH_SERVICE) String payload) {
-        presenter.watchService();
     }
 
     @Inject

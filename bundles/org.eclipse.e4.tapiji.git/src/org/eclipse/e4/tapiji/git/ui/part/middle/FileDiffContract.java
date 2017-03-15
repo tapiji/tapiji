@@ -40,5 +40,7 @@ public interface FileDiffContract {
 
         void loadLogs();
 
+        void watchService();
+
     }
 }

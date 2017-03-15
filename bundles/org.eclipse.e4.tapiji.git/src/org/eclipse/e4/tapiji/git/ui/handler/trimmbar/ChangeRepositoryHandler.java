@@ -78,8 +78,6 @@ public class ChangeRepositoryHandler {
                 ((HandledToolItemImpl) dropDownMenu).setLabel(selectedRepository.getName());
             }
             setBranch(modelService, app);
-            eventBroker.post(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW, "");
-            eventBroker.post(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW, "");
             eventBroker.post(UIEventConstants.TOPIC_RELOAD_VIEW, "");
 
             executeCommand();

@@ -11,7 +11,6 @@ import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.model.GitServiceResult;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
-import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.mylyn.core.api.IMylynService;
 import org.eclipse.e4.tapiji.mylyn.model.Notification;
 import org.eclipse.e4.ui.di.UISynchronize;
@@ -38,9 +37,6 @@ public class DropStashHandler {
             @Override
             public void onSuccess(GitServiceResult<Void> response) {
                 sync.asyncExec(() -> mylyn.sendNotification(new Notification("Drop stash successful!", "TOOD")));
-                eventBroker.post(UIEventConstants.TOPIC_RELOAD_STAGE_VIEW, "");
-                eventBroker.post(UIEventConstants.TOPIC_RELOAD_UNSTAGE_VIEW, "");
-                eventBroker.post(UIEventConstants.TOPIC_RELOAD_VIEW, "");
             }
 
             @Override

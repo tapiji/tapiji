@@ -26,6 +26,7 @@
     <elements xsi:type="commands:Handler" xmi:id="_qmaysPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handler.pullfastforward" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.PullFastForwardHandler" command="_TFYKQPnbEeaw0el0AXi7EQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_JYyTsPncEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handler.pull" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.PullHandler" command="_OllvwPncEeaw0el0AXi7EQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_OS5VoARCEeeodIldUFD27g" elementId="org.eclipse.e4.tapiji.git.handler.openrepo" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.window.OpenRepoHandler" command="_QP8RIARCEeeodIldUFD27g"/>
+    <elements xsi:type="commands:Handler" xmi:id="_UpZI8Am5Eee7lqLL1AqW-Q" elementId="org.eclipse.e4.tapiji.git.handler.showlogs" contributionURI="bundleclass://org.eclipse.e4.tapiji.git/org.eclipse.e4.tapiji.git.ui.handler.trimmbar.ShowLogsHandler" command="_S1DdgAm5Eee7lqLL1AqW-Q"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_vAgfsOmFEear1K70oDQV4Q" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="commands:Command" xmi:id="_zniVMOmFEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.command.perspective.git" commandName="Perspective Git">
@@ -48,6 +49,7 @@
     <elements xsi:type="commands:Command" xmi:id="_TFYKQPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.command.pullfastforwardonly" commandName="Pull Fast Forward Only"/>
     <elements xsi:type="commands:Command" xmi:id="_OllvwPncEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.command.pull" commandName="Pull"/>
     <elements xsi:type="commands:Command" xmi:id="_QP8RIARCEeeodIldUFD27g" elementId="org.eclipse.e4.tapiji.git.command.openrepo" commandName="Open Repo"/>
+    <elements xsi:type="commands:Command" xmi:id="_S1DdgAm5Eee7lqLL1AqW-Q" elementId="org.eclipse.e4.tapiji.git.command.showlogs" commandName="Show Logs"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8h59QOmHEear1K70oDQV4Q" featurename="children" parentElementId="org.eclipse.e4.tapiji.translator.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_TPZo4OmIEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.git.perspective.git" label="TapiJI Git">
@@ -97,6 +99,9 @@
         </children>
         <children xsi:type="menu:HandledToolItem" xmi:id="_qOZSwPPREea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.stash" label="Stash" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_stash.png" command="_oF-_UPPSEea2ELhYKKDJOg"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_wEsXwPPREea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.pop" label="Pop" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_pop.png" command="_pU30UPPSEea2ELhYKKDJOg"/>
+      </children>
+      <children xsi:type="menu:ToolBar" xmi:id="_OZWHMAm5Eee7lqLL1AqW-Q" elementId="org.eclipse.e4.tapiji.git.toolbar.common">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_Q8gngAm5Eee7lqLL1AqW-Q" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.showlogs" label="Show Logs" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/show_git_log.png" tooltip="Show git log" command="_S1DdgAm5Eee7lqLL1AqW-Q"/>
       </children>
     </elements>
   </fragments>

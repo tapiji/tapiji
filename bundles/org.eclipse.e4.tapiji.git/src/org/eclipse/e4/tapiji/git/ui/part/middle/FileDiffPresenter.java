@@ -4,6 +4,7 @@ package org.eclipse.e4.tapiji.git.ui.part.middle;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -23,6 +24,7 @@ import org.eclipse.e4.tapiji.git.model.diff.DiffLineStatus;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
+import org.eclipse.e4.tapiji.git.ui.part.left.properties.FileWatchService;
 import org.eclipse.e4.tapiji.git.ui.part.middle.FileDiffContract.View;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.di.UISynchronize;
@@ -30,7 +32,7 @@ import org.eclipse.e4.ui.di.UISynchronize;
 
 @Creatable
 @Singleton
-public class FileDiffPresenter implements FileDiffContract.Presenter {
+public class FileDiffPresenter implements FileDiffContract.Presenter, FileWatchService.FileWatcher {
 
     private static final String TAG = FileDiffPresenter.class.getSimpleName();
 
@@ -39,6 +41,9 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
 
     @Inject
     UISynchronize sync;
+
+    @Inject
+    FileWatchService watchService;
 
     private DiffFile mergeFile;
 
@@ -142,7 +147,6 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
                         selectedFileName = null;
                         mergeFile = null;
                     });
-                    view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_VIEW);
                 }
 
                 @Override
@@ -177,6 +181,22 @@ public class FileDiffPresenter implements FileDiffContract.Presenter {
                 });
             }
         });
+    }
+
+    @Override
+    public void watchService() {
+        watchService.closeWatcher();
+        watchService.startWatcher(service.getDirectory().toPath(), this);
+    }
+
+    @Override
+    public void onFileChanged(Path path) {
+        view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_VIEW);
+    }
+
+    @PreDestroy
+    public void destroy() {
+        service.dispose();
     }
 
 }

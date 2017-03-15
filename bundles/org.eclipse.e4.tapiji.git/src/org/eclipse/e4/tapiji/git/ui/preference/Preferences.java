@@ -17,8 +17,6 @@ import org.eclipse.e4.tapiji.logger.Log;
 @Singleton
 public class Preferences {
 
-    public static String PREFERENCES_NODE_PATH = "org.eclipse.e4.tapiji.git";
-
     private static final String KEY_REPOSITORIES = Preferences.class.getPackage() + "_KEY_REPOSITORIES";
     private static final String KEY_SELECTED_REPOSITORY = Preferences.class.getPackage() + "_KEY_SELECTED_REPOSITORY";
 

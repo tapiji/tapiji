@@ -28,6 +28,12 @@
             order="4">
       </page>
    </extension>
+   <extension
+         point="at.nucle.e4.plugin.preference.scope">
+      <scope
+            class="org.eclipse.e4.tapiji.git.ui.preference.PreferenceStore">
+      </scope>
+   </extension>
 
 
 

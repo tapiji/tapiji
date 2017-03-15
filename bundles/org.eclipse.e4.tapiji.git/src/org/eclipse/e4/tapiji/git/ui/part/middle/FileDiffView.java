@@ -16,6 +16,7 @@ import org.eclipse.e4.tapiji.git.model.diff.DiffLine;
 import org.eclipse.e4.tapiji.git.model.diff.DiffLineStatus;
 import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFile;
+import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.utils.FontUtils;
 import org.eclipse.e4.ui.di.UIEventTopic;
@@ -96,19 +97,26 @@ public class FileDiffView implements FileDiffContract.View {
         scrollView.setContent(composite);
 
         presenter.loadLogs();
+        presenter.watchService();
     }
 
     @Inject
     @Optional
-    public void closeHandler(@UIEventTopic(UIEventConstants.LOAD_DIFF) GitFile file) {
-        //        if (presenter.getSelectedFileName() == null || !presenter.getSelectedFileName().equals(file)) {
-        //            clearScrollView();
-        //            if (file.getStatus() == GitFileStatus.CONFLICT) {
-        //                presenter.loadFileMergeDiff(file.getName(), GitFileStatus.CONFLICT);
-        //            } else {
-        //                presenter.loadFileContentDiff(file.getName());
-        //            }
-        //        }
+    public void showContentView(@UIEventTopic(UIEventConstants.SWITCH_CONTENT_VIEW) GitFile file) {
+        clearScrollView();
+        if (file == null) {
+            presenter.loadLogs();
+        } else {
+            if (file.getStatus() == GitFileStatus.CONFLICT) {
+                presenter.loadFileMergeDiff(file.getName(), GitFileStatus.CONFLICT);
+            } else {
+                presenter.loadFileContentDiff(file.getName());
+            }
+        }
+    }
+
+    public void registerWatchService(@UIEventTopic(UIEventConstants.TOPIC_REGISTER_WATCH_SERVICE) String payload) {
+        presenter.watchService();
     }
 
     @Inject
