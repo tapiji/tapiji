@@ -5,11 +5,13 @@ Change Log
 ### Added
  * Auto-adjust for text view, if you dont like this feature you can disable it in the settings
  * New RAP plugins for compatibility
- * Jface, Eclipse and swt stubs to the support package, because they are not available in rap
+ * Added Jface, Eclipse and swt stubs to the support package, because they are not available in rap
+ * Git views
  
 ### Changed
- *	Move rap text to rap text plugin
- *	Refactor Styled text and Source Viewer in support package, now compatible with RAP
+ * Move rap text to rap text plugin
+ * Refactor Styled text and Source Viewer in support package, now compatible with RAP
+ * Preference contribution
  
 ## [1.0.0] - 2015-12-03, PRE-RELEASE
 
