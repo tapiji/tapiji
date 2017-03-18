@@ -307,17 +307,11 @@ public class ContentView implements ContentContract.View {
         Table table = new Table(layoutComposite, SWT.FULL_SELECTION);
         table.setHeaderVisible(false);
         table.setLinesVisible(true);
-        lastCommitTime = "";
         createColumns(2, table, COLUMN_ALIGNMENTS_LOGS);
         logs.stream().forEach(log -> {
             TableItem item = new TableItem(table, SWT.NONE);
             item.setText(0, log.getShortMessage());
-            if (lastCommitTime.isEmpty()) {
-                lastCommitTime = prettyTime.format(log.getCommitTime());
-            } else if (!lastCommitTime.equals(prettyTime.format(log.getCommitTime()))) {
-                lastCommitTime = prettyTime.format(log.getCommitTime());
-                item.setText(1, lastCommitTime);
-            }
+            item.setText(1, prettyTime.format(log.getCommitTime()));
         });
         layoutComposite.setLayout(setColumnWeights(table, COLUMN_WEIGHTS_LOGS));
         updateScrollView();
