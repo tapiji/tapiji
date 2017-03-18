@@ -124,7 +124,7 @@ public class ContentView implements ContentContract.View {
     public void showMergeView(DiffFile diff) {
         fileDiffHeader(composite);
         this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
-        diff.getHunks().stream().filter(section -> section != null).forEach(section -> mergeView.createMergeView(composite, section));
+        diff.getHunks().stream().filter(section -> section != null).forEach(section -> mergeView.createMergeView(composite, section, diff));
         updateScrollView();
         this.parent.layout(true, true);
     }
@@ -152,7 +152,9 @@ public class ContentView implements ContentContract.View {
 
     @Override
     public void showError(Exception exception) {
-        MessageDialog.openError(shell, "Error: ", exception.getMessage());
+        sync.asyncExec(() -> {
+            MessageDialog.openError(shell, "Error: ", exception.getMessage());
+        });
     }
 
     @Override

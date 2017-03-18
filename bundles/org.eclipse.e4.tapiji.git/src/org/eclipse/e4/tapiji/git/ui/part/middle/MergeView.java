@@ -3,6 +3,7 @@ package org.eclipse.e4.tapiji.git.ui.part.middle;
 
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Creatable;
+import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.diff.DiffHunk;
 import org.eclipse.e4.tapiji.git.model.diff.DiffLine;
 import org.eclipse.e4.tapiji.git.model.diff.DiffLineStatus;
@@ -36,7 +37,7 @@ public class MergeView {
 
     private Button btnMarkResolved;
 
-    public void createMergeView(Composite composite, DiffHunk section) {
+    public void createMergeView(Composite composite, DiffHunk section, DiffFile file) {
         Label lblDiffHeader = new Label(composite, SWT.NONE);
         lblDiffHeader.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));
         lblDiffHeader.setText(section.getHeader());
@@ -47,7 +48,7 @@ public class MergeView {
         gd.verticalIndent = 11;
         btnMarkResolved.setLayoutData(gd);
         btnMarkResolved.setText("Mark resolved");
-        btnMarkResolved.addListener(SWT.Selection, listener -> presenter.stageResolvedFile(presenter.getSelectedFileName()));
+        btnMarkResolved.addListener(SWT.Selection, listener -> presenter.stageResolvedFile(file, presenter.getSelectedFileName()));
 
         Composite layoutComposite = new Composite(composite, SWT.NONE);
         layoutComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));

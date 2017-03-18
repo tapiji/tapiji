@@ -34,7 +34,7 @@ public interface ContentContract {
 
         void reloadLastSelctedFile();
 
-        void stageResolvedFile(String selectedFile);
+        void stageResolvedFile(DiffFile file, String selectedFile);
 
         String getSelectedFileName();
 

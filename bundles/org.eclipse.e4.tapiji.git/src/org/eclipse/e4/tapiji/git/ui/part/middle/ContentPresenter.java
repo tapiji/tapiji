@@ -38,7 +38,6 @@ public class ContentPresenter implements ContentContract.Presenter, FileWatchSer
 
     private String selectedFileName;
     private boolean conflict;
-    private DiffFile mergeFile;
     private View view;
 
     @Inject
@@ -113,9 +112,9 @@ public class ContentPresenter implements ContentContract.Presenter, FileWatchSer
     }
 
     @Override
-    public void stageResolvedFile(String selectedFile) {
+    public void stageResolvedFile(DiffFile diffFile, String selectedFile) {
         try {
-            List<String> lines = mergeFile.getHunks()
+            List<String> lines = diffFile.getHunks()
                 .get(0)
                 .getLines()
                 .stream()
@@ -123,15 +122,15 @@ public class ContentPresenter implements ContentContract.Presenter, FileWatchSer
                 .map(line -> line.getText())
                 .collect(Collectors.toList());
 
-            File file = new File(mergeFile.getFile());
+            File file = new File(diffFile.getFile());
             Files.write(file.toPath(), lines, Charset.defaultCharset());
             service.stageFile(selectedFile, new IGitServiceCallback<Void>() {
 
                 @Override
                 public void onSuccess(GitServiceResult<Void> response) {
+                    loadLogs();
                     sync.syncExec(() -> {
                         selectedFileName = null;
-                        mergeFile = null;
                     });
                 }
 
