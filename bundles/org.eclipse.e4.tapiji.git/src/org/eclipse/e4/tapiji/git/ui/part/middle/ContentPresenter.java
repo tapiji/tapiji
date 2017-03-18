@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -26,7 +25,6 @@ import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.part.left.properties.FileWatchService;
 import org.eclipse.e4.tapiji.git.ui.part.middle.ContentContract.View;
-import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.di.UISynchronize;
 
 
@@ -34,32 +32,20 @@ import org.eclipse.e4.ui.di.UISynchronize;
 @Singleton
 public class ContentPresenter implements ContentContract.Presenter, FileWatchService.FileWatcher {
 
-    private static final String TAG = ContentPresenter.class.getSimpleName();
+    private final IGitService service;
+    private final UISynchronize sync;
+    private final FileWatchService watchService;
 
     private String selectedFileName;
     private boolean conflict;
-
-    @Inject
-    UISynchronize sync;
-
-    @Inject
-    FileWatchService watchService;
-
     private DiffFile mergeFile;
-
-    @Inject
-    IGitService service;
-
     private View view;
 
-    @PostConstruct
-    public void create() {
-        Log.d("ON", "CREATE");
-    }
-
-    @PreDestroy
-    public void dispose() {
-        selectedFileName = null;
+    @Inject
+    public ContentPresenter(IGitService service, FileWatchService watchService, UISynchronize sync) {
+        this.service = service;
+        this.watchService = watchService;
+        this.sync = sync;
     }
 
     @Override

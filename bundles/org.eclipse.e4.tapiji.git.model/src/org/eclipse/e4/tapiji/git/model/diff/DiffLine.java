@@ -5,7 +5,7 @@ public class DiffLine {
 
     private final String numberLeft;
     private final String numberRight;
-    private final String text;
+    private String text;
     private DiffLineStatus status;
 
     public DiffLine(String lineNumberLeft, String lineNumberRight, String line) {
@@ -34,6 +34,10 @@ public class DiffLine {
 
     public void setStatus(DiffLineStatus status) {
         this.status = status;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     @Override
