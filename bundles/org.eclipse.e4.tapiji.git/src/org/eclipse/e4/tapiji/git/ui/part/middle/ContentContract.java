@@ -8,7 +8,7 @@ import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.ui.BasePresenter;
 
 
-public interface FileDiffContract {
+public interface ContentContract {
 
     interface View {
 

@@ -25,16 +25,16 @@ import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.part.left.properties.FileWatchService;
-import org.eclipse.e4.tapiji.git.ui.part.middle.FileDiffContract.View;
+import org.eclipse.e4.tapiji.git.ui.part.middle.ContentContract.View;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.di.UISynchronize;
 
 
 @Creatable
 @Singleton
-public class FileDiffPresenter implements FileDiffContract.Presenter, FileWatchService.FileWatcher {
+public class ContentPresenter implements ContentContract.Presenter, FileWatchService.FileWatcher {
 
-    private static final String TAG = FileDiffPresenter.class.getSimpleName();
+    private static final String TAG = ContentPresenter.class.getSimpleName();
 
     private String selectedFileName;
     private boolean conflict;
@@ -63,7 +63,7 @@ public class FileDiffPresenter implements FileDiffContract.Presenter, FileWatchS
     }
 
     @Override
-    public void setView(FileDiffContract.View view) {
+    public void setView(ContentContract.View view) {
         this.view = view;
     }
 

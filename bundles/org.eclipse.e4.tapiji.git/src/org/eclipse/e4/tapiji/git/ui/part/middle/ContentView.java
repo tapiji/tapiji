@@ -41,7 +41,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.ocpsoft.prettytime.PrettyTime;
 
 
-public class FileDiffView implements FileDiffContract.View {
+public class ContentView implements ContentContract.View {
 
     private static final int[] COLUMN_ALIGNMENTS_DIFF = new int[] {SWT.CENTER, SWT.CENTER, SWT.LEFT};
     private static final int[] COLUMN_ALIGNMENTS_MERGE = new int[] {SWT.CENTER, SWT.CENTER, SWT.CENTER, SWT.LEFT};
@@ -55,7 +55,7 @@ public class FileDiffView implements FileDiffContract.View {
     private static final Color ORANGE = new Color(Display.getCurrent(), 226, 189, 51);
 
     @Inject
-    FileDiffPresenter presenter;
+    ContentPresenter presenter;
 
     @Inject
     UISynchronize sync;

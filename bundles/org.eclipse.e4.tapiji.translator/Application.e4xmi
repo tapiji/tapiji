@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_Lvp3AK82Eea7Br2sj4MS9g" elementId="org.eclipselabs.e4.tapiji.application">
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_S7ZsAK82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.trimmedwindow.main" label="TapiJI Translator" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/tapiji.png" tooltip="Tooling for agile and process integrated Java Internationalization" x="150" y="150" width="1024" height="800">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_S7ZsAK82Eea7Br2sj4MS9g" elementId="org.eclipse.e4.tapiji.trimmedwindow.main" label="TapiJI Translator" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/tapiji.png" tooltip="Tooling for agile and process integrated Java Internationalization" bindingContexts="_W5mDwArnEeejaOzDGulKhw" x="150" y="150" width="1024" height="800">
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_2vIQ0LIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.perspectivestack.main">
       <children xsi:type="advanced:Perspective" xmi:id="_5YRdULIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.perspective.main" label="TapiJI Translator">
         <children xsi:type="basic:PartSashContainer" xmi:id="__P9CYLIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.partsashcontainer.main">
@@ -35,6 +35,12 @@
   <handlers xmi:id="_roWK8AYqEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.handler.preferences" contributionURI="bundleclass://org.eclipse.e4.tapiji.translator/org.eclipse.e4.tapiji.translator.ui.handler.window.PreferenceHandler" command="_sJdT8AYqEeetZqLNxy9SVg"/>
   <handlers xmi:id="_t1dz4AZYEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.handler.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.translator/org.eclipse.e4.tapiji.translator.ui.handler.window.AboutHandler" command="_vaPZUAZYEeetZqLNxy9SVg"/>
   <handlers xmi:id="_-rk1YAZYEeetZqLNxy9SVg" elementId="org.eclipse.e4.tapiji.translator.handler.changelog" contributionURI="bundleclass://org.eclipse.e4.tapiji.translator/org.eclipse.e4.tapiji.translator.ui.handler.window.ChangeLogHandler" command="_9mJeYAZYEeetZqLNxy9SVg"/>
+  <bindingTables xmi:id="_MDxwwArnEeejaOzDGulKhw" elementId="org.eclipse.e4.tapiji.translator.bindingtable.windowsdialogs" bindingContext="_W5mDwArnEeejaOzDGulKhw">
+    <bindings xmi:id="_N4DKwArnEeejaOzDGulKhw" elementId="org.eclipse.e4.tapiji.translator.keybinding.prefs" keySequence="M1+P" command="_sJdT8AYqEeetZqLNxy9SVg">
+      <tags>type:user</tags>
+    </bindings>
+  </bindingTables>
+  <rootContext xmi:id="_W5mDwArnEeejaOzDGulKhw" elementId="org.eclipse.e4.tapiji.translator.bindingcontext.windowsanddialogs" name="Windows and Dialogs"/>
   <commands xmi:id="_Pux9AOAgEeahm60FyqfB4g" elementId="org.eclipse.e4.tapiji.translator.command.perspectiveswitch" commandName="Perspective Switch">
     <parameters xmi:id="_VPnxAOmEEear1K70oDQV4Q" elementId="org.eclipse.e4.tapiji.translator.commandparameter.perspective" name="perspective"/>
   </commands>
