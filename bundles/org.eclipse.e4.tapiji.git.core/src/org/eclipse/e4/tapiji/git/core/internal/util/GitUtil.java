@@ -5,16 +5,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.eclipse.e4.tapiji.git.core.internal.diff.TapijiDiffFormatter;
 import org.eclipse.e4.tapiji.git.model.Reference;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
-import org.eclipse.e4.tapiji.git.model.stash.StashReference;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
+import org.eclipse.e4.tapiji.git.model.push.GitPushMessage;
+import org.eclipse.e4.tapiji.git.model.push.GitRemoteStatus;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRefNameException;
+import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 import org.eclipse.jgit.errors.AmbiguousObjectException;
@@ -22,26 +27,31 @@ import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.RevisionSyntaxException;
+import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.FileTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 
 
-public class JGitUtils {
+public class GitUtil {
 
     private static final int DIFF_CONTEXT = 3;
     private static final int CONFLICT_CONTEXT = 100000;
+    private static final String TAG = GitUtil.class.getSimpleName();
+    private static final String GIT_DIRECTORY_ENDING = ".git";
 
-    private JGitUtils() {
+    private GitUtil() {
         // only static access allowed
     }
 
@@ -253,20 +263,129 @@ public class JGitUtils {
         return commit;
     }
 
-    /*
+    /**
+     * Returns git config string value for the specified key.
      *
+     * @param repository
+     *            Represents the current git repository
+     * @param section
+     *            the section
+     * @param key
+     *            the key for the value
+     * @return a String value from the config,<code>null</code>if not found
      */
-    public static StashReference stashRef(String commitHash, Git git) throws InvalidRefNameException, GitAPIException {
+    public static String getConfig(Repository repository, String section, String key) {
+        StoredConfig config = repository.getConfig();
+        return config.getString(section, null, key);
+    }
+
+    /**
+     * Saves git config string value for the specified key
+     *
+     * @param repository
+     *            Represents the current git repository
+     * @param section
+     *            the section
+     * @param key
+     *            the key for the value
+     * @param value
+     *            value to write
+     * @throws IOException
+     *             can not write git config
+     */
+    public static void setConfig(Repository repository, String section, String key, String value) throws IOException {
+        StoredConfig config = repository.getConfig();
+        config.setString(section, null, key, value);
+        config.save();
+    }
+
+    /**
+     * Returns directory path of a git repository
+     *
+     * @param project path
+     * @return file
+     */
+    public static File getGitDirectory(String project) {
+        if (project.endsWith(GIT_DIRECTORY_ENDING)) {
+            return new File(project);
+        } else {
+            return new File(project + File.separator + GIT_DIRECTORY_ENDING);
+        }
+    }
+
+    /**
+     * @param exception
+     */
+    public static void wrapTransportException(TransportException exception) {
+        String message = exception.getMessage();
+        if (message.equals(JGitText.get().notAuthorized)) {
+            new GitException("", 401);
+        } else if (message.equals(JGitText.get().serviceNotPermitted)) {
+            new GitException("", 403);
+        } else {
+
+        }
+
+    }
+
+    //    public static void cloneRepository(String fromUrl, String directory, IGitServiceCallback<File> callback) {
+    //        Log.d(TAG, "cloneRepository(" + fromUrl + " to " + directory + ")");
+    //
+    //        File localPath = new File(directory, "");
+    //        if (!localPath.exists()) {
+    //            localPath.mkdir();
+    //        }
+    //
+    //        if (!localPath.delete()) {
+    //            callback.onError(new GitException("Could not delete temporary file " + localPath));
+    //        }
+    //
+    //        try (Git result = Git.cloneRepository().setURI(url).setBare(false).setDirectory(localPath).call()) {
+    //            try {
+    //                //mount(directory);
+    //                callback.onSuccess(new GitResponse<File>(result.getRepository().getDirectory()));
+    //            } catch (IOException e) {
+    //                callback.onError(new GitException(e.getMessage(), e.getCause()));
+    //            }
+    //        } catch (GitAPIException e) {
+    //            callback.onError(new GitException(e.getMessage(), e.getCause()));
+    //        }
+    //    }
+
+    public static List<GitPushMessage> parsePushResults(Iterable<PushResult> results) {
+        if (results == null) {
+            return Collections.emptyList();
+        } else {
+            return StreamSupport.stream(results.spliterator(), false).flatMap(result -> result.getRemoteUpdates().stream().map(update -> {
+                GitPushMessage message = new GitPushMessage();
+                message.setRemoteStatus(GitRemoteStatus.valueOf(update.getStatus().toString()));
+                message.setRemoteName(update.getTrackingRefUpdate().getRemoteName());
+                message.setLocalName(update.getTrackingRefUpdate().getLocalName());
+                return message;
+            })).collect(Collectors.toList());
+        }
+    }
+
+    /////////////////////// NEWWWWW
+
+    /**
+     * @param git
+     * @param hash
+     * @return
+     * @throws InvalidRefNameException
+     * @throws GitAPIException
+     */
+    public static int stashRef(Git git, String hash) throws InvalidRefNameException, GitAPIException {
         int ref = 0;
         Collection<RevCommit> list = git.stashList().call();
         for (RevCommit revCommit : list) {
-            if (revCommit.getName().equals(commitHash)) {
-                return new StashReference(ref);
+            if (revCommit.getName().equals(hash)) {
+                break;
             } else {
                 ref++;
             }
         }
-        return null;
+        return ref;
     }
 
 }

@@ -6,10 +6,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
-import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.GitResponse;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.Reference;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.ui.part.left.tag.TagContract.View;
 
 
@@ -31,12 +31,12 @@ public class TagPresenter implements TagContract.Presenter {
         service.tags(new IGitServiceCallback<List<Reference>>() {
 
             @Override
-            public void onSuccess(GitServiceResult<List<Reference>> response) {
-                view.showTags(response.getResult());
+            public void onSuccess(GitResponse<List<Reference>> response) {
+                view.showTags(response.body());
             }
 
             @Override
-            public void onError(GitServiceException exception) {
+            public void onError(GitException exception) {
                 view.showError(exception);
             }
         });

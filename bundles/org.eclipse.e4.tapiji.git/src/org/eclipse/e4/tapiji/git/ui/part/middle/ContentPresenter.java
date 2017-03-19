@@ -14,13 +14,13 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
-import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.GitResponse;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
-import org.eclipse.e4.tapiji.git.model.commitlog.CommitLog;
+import org.eclipse.e4.tapiji.git.model.commitlog.GitLog;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.diff.DiffLine;
 import org.eclipse.e4.tapiji.git.model.diff.DiffLineStatus;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.part.left.properties.FileWatchService;
@@ -70,14 +70,14 @@ public class ContentPresenter implements ContentContract.Presenter, FileWatchSer
         service.fileContent(file, new IGitServiceCallback<DiffFile>() {
 
             @Override
-            public void onSuccess(GitServiceResult<DiffFile> response) {
+            public void onSuccess(GitResponse<DiffFile> response) {
                 sync.asyncExec(() -> {
-                    view.showContentDiff(response.getResult());
+                    view.showContentDiff(response.body());
                 });
             }
 
             @Override
-            public void onError(GitServiceException exception) {
+            public void onError(GitException exception) {
                 sync.asyncExec(() -> {
                     view.showError(exception);
                 });
@@ -91,14 +91,14 @@ public class ContentPresenter implements ContentContract.Presenter, FileWatchSer
         service.fileMergeDiff(file, conflict, new IGitServiceCallback<DiffFile>() {
 
             @Override
-            public void onSuccess(GitServiceResult<DiffFile> response) {
+            public void onSuccess(GitResponse<DiffFile> response) {
                 sync.asyncExec(() -> {
-                    view.showMergeView(response.getResult());
+                    view.showMergeView(response.body());
                 });
             }
 
             @Override
-            public void onError(GitServiceException exception) {
+            public void onError(GitException exception) {
                 sync.syncExec(() -> {
                     view.showError(exception);
                 });
@@ -127,7 +127,7 @@ public class ContentPresenter implements ContentContract.Presenter, FileWatchSer
             service.stageFile(selectedFile, new IGitServiceCallback<Void>() {
 
                 @Override
-                public void onSuccess(GitServiceResult<Void> response) {
+                public void onSuccess(GitResponse<Void> response) {
                     loadLogs();
                     sync.syncExec(() -> {
                         selectedFileName = null;
@@ -135,7 +135,7 @@ public class ContentPresenter implements ContentContract.Presenter, FileWatchSer
                 }
 
                 @Override
-                public void onError(GitServiceException exception) {
+                public void onError(GitException exception) {
                     sync.syncExec(() -> {
                         view.showError(exception);
                     });
@@ -150,17 +150,17 @@ public class ContentPresenter implements ContentContract.Presenter, FileWatchSer
 
     @Override
     public void loadLogs() {
-        service.logs(new IGitServiceCallback<List<CommitLog>>() {
+        service.logs(new IGitServiceCallback<List<GitLog>>() {
 
             @Override
-            public void onSuccess(GitServiceResult<List<CommitLog>> response) {
+            public void onSuccess(GitResponse<List<GitLog>> response) {
                 sync.syncExec(() -> {
-                    view.showLogs(response.getResult());
+                    view.showLogs(response.body());
                 });
             }
 
             @Override
-            public void onError(GitServiceException exception) {
+            public void onError(GitException exception) {
                 sync.syncExec(() -> {
                     view.showError(exception);
                 });

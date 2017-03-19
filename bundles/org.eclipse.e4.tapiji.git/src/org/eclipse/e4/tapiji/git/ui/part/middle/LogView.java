@@ -3,7 +3,7 @@ package org.eclipse.e4.tapiji.git.ui.part.middle;
 
 import java.util.List;
 import org.eclipse.e4.core.di.annotations.Creatable;
-import org.eclipse.e4.tapiji.git.model.commitlog.CommitLog;
+import org.eclipse.e4.tapiji.git.model.commitlog.GitLog;
 import org.eclipse.e4.tapiji.git.ui.util.UIUtil;
 import org.eclipse.e4.tapiji.utils.FontUtils;
 import org.eclipse.swt.SWT;
@@ -21,7 +21,7 @@ public class LogView {
     private static final int[] COLUMN_ALIGNMENTS_LOGS = new int[] {SWT.LEFT, SWT.RIGHT};
     private static final int[] COLUMN_WEIGHTS_LOGS = new int[] {100, 30};
 
-    public void createView(List<CommitLog> logs, Composite composite, Label lblHeader, PrettyTime prettyTime) {
+    public void createView(List<GitLog> logs, Composite composite, Label lblHeader, PrettyTime prettyTime) {
         lblHeader = new Label(composite, SWT.NONE | SWT.WRAP);
         lblHeader.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         lblHeader.setFont(FontUtils.createFont(lblHeader, "Segoe UI", 10, SWT.BOLD));

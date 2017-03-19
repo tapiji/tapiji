@@ -71,7 +71,7 @@ public class ChangeRepositoryHandler {
     public void execute(MDirectMenuItem item, final EModelService modelService, MApplication app, Shell shell) {
         try {
             GitRepository selectedRepository = JsonParserUtil.parseGitRepository(item.getContainerData());
-            service.mount(selectedRepository.getDirectory());
+            service.openRepository(selectedRepository.getDirectory());
             prefs.setSelectedRepository(selectedRepository);
 
             MUIElement dropDownMenu = modelService.find(UIEventConstants.MENU_CHANGE_REPOSITORY_ID, app);

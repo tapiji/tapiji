@@ -8,9 +8,9 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
-import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.GitResponse;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.model.push.GitPushMessage;
 import org.eclipse.e4.tapiji.git.ui.dialog.LoginDialog;
 import org.eclipse.e4.tapiji.git.ui.preference.Preferences;
@@ -35,7 +35,7 @@ public class PushHandler {
         service.pushAll(new IGitServiceCallback<Void>() {
 
             @Override
-            public void onSuccess(GitServiceResult<Void> response) {
+            public void onSuccess(GitResponse<Void> response) {
                 List<GitPushMessage> messages = response.getMessages();
                 for (GitPushMessage message : messages) {
                     Log.d(TAG, message.toString());
@@ -53,7 +53,7 @@ public class PushHandler {
             }
 
             @Override
-            public void onError(GitServiceException exception) {
+            public void onError(GitException exception) {
                 Log.d(TAG, "onError(" + exception.toString() + ")");
                 if (exception.getCause() instanceof TransportException) {
                     Throwable throwable = ((TransportException) exception.getCause()).getCause();

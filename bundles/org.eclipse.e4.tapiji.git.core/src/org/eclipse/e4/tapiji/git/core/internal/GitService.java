@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,24 +15,21 @@ import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 import javax.inject.Inject;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.core.internal.file.FileService;
-import org.eclipse.e4.tapiji.git.core.internal.util.JGitUtils;
+import org.eclipse.e4.tapiji.git.core.internal.util.GitUtil;
 import org.eclipse.e4.tapiji.git.model.CommitReference;
-import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.GitResponse;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.Reference;
 import org.eclipse.e4.tapiji.git.model.ReferenceType;
 import org.eclipse.e4.tapiji.git.model.UserProfile;
-import org.eclipse.e4.tapiji.git.model.commitlog.CommitLog;
+import org.eclipse.e4.tapiji.git.model.commitlog.GitLog;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
-import org.eclipse.e4.tapiji.git.model.push.GitPushMessage;
-import org.eclipse.e4.tapiji.git.model.push.GitRemoteStatus;
 import org.eclipse.e4.tapiji.git.model.stash.StashReference;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.jgit.api.AddCommand;
@@ -55,14 +51,10 @@ import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.errors.TransportException;
-import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.FetchResult;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -75,13 +67,35 @@ public class GitService implements IGitService {
     @Inject
     FileService fileService;
 
+    @Inject
+    GitPush push;
+
+    @Inject
+    GitRepository gitRepository;
+
     private ExecutorService executorService;
     private Repository repository;
     private Git git;
     private String directory;
 
+    private String publicKeyPath;
+
+    private String privateKeyPath;
+
     public GitService() {
         executorService = Executors.newFixedThreadPool(10);
+    }
+
+    @Override
+    public void setPublicKeyPath(String keyPath) {
+        Log.d(TAG, "setPublicKeyPath called with [" + keyPath + "]");
+        this.publicKeyPath = keyPath;
+    }
+
+    @Override
+    public void setPrivateKeyPath(String keyPath) {
+        Log.d(TAG, "privateKeyPath called with [" + keyPath + "]");
+        this.privateKeyPath = keyPath;
     }
 
     @Override
@@ -96,45 +110,13 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void mount(String directory) throws IOException {
-        Log.d(TAG, "mount(" + directory + ")");
-        if (directory != null) {
-            if (!directory.endsWith(".git") && !directory.endsWith(".git/")) {
-                directory = directory + "/.git";
-            }
-            if (!new File(directory).exists()) {
-                throw new IllegalStateException("Git repository not available at " + directory);
-            }
-            if (!directory.equals(this.directory)) {
-                unmount();
-                this.directory = directory;
-                this.repository = new FileRepositoryBuilder().setGitDir(new File(directory)).readEnvironment().findGitDir().build();
-                this.git = new Git(repository);
-
-                repository.getRemoteNames().forEach(remot -> System.out.println(remot));
-            } else {
-                Log.d(TAG, "Directory already mounted: " + directory);
-            }
-        } else {
-            throw new IllegalStateException("Directory must not be null.");
-        }
-    }
-
-    @Override
     public void pushAll(IGitServiceCallback<Void> callback) {
-        CompletableFuture.supplyAsync(() -> {
-            Iterable<PushResult> results = null;
-            try {
-                results = git.push().setRemote("origin").setPushAll().setPushTags().call();
-            } catch (GitAPIException exception) {
-                throwAsUnchecked(exception);
-            }
-            return new GitServiceResult<Void>(null, parsePushResults(results));
-        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+        push.pushAll(git, privateKeyPath, callback, executorService);
     }
 
     @Override
     public void pushChangesWithCredentials(String password, String username, String directory, IGitServiceCallback<Void> callback) {
+
         CompletableFuture.supplyAsync(() -> {
             Iterable<PushResult> results = null;
             try {
@@ -145,33 +127,8 @@ public class GitService implements IGitService {
                 }
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null, parsePushResults(results));
+            return new GitResponse<Void>(null, GitUtil.parsePushResults(results));
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
-    }
-
-    @Override
-    public void cloneRepository(String url, String directory, IGitServiceCallback<File> callback) {
-        Log.d(TAG, "cloneRepository(" + url + " to " + directory + ")");
-
-        File localPath = new File(directory, "");
-        if (!localPath.exists()) {
-            localPath.mkdir();
-        }
-
-        if (!localPath.delete()) {
-            callback.onError(new GitServiceException("Could not delete temporary file " + localPath));
-        }
-
-        try (Git result = Git.cloneRepository().setURI(url).setBare(false).setDirectory(localPath).call()) {
-            try {
-                mount(directory);
-                callback.onSuccess(new GitServiceResult<File>(result.getRepository().getDirectory()));
-            } catch (IOException e) {
-                callback.onError(new GitServiceException(e.getMessage(), e.getCause()));
-            }
-        } catch (GitAPIException e) {
-            callback.onError(new GitServiceException(e.getMessage(), e.getCause()));
-        }
     }
 
     @Override
@@ -182,7 +139,7 @@ public class GitService implements IGitService {
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -196,7 +153,7 @@ public class GitService implements IGitService {
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -238,7 +195,7 @@ public class GitService implements IGitService {
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -256,7 +213,7 @@ public class GitService implements IGitService {
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -279,7 +236,7 @@ public class GitService implements IGitService {
             } catch (NoWorkTreeException | GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Map<GitFileStatus, Set<String>>>(states);
+            return new GitResponse<Map<GitFileStatus, Set<String>>>(states);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -289,8 +246,9 @@ public class GitService implements IGitService {
     }
 
     @Override
+    @Deprecated
     public List<Reference> branches() throws IOException {
-        return JGitUtils.getBranches(repository, 10);
+        return GitUtil.getBranches(repository, 10);
     }
 
     @Override
@@ -304,13 +262,13 @@ public class GitService implements IGitService {
             try {
                 switch (referenceType) {
                     case HEADS:
-                        references = JGitUtils.getBranches(repository, -1);
+                        references = GitUtil.getBranches(repository, -1);
                         break;
                     case TAGS:
-                        references = JGitUtils.getTags(repository, -1);
+                        references = GitUtil.getTags(repository, -1);
                         break;
                     case STASHES:
-                        references = JGitUtils.getStashes(repository, -1);
+                        references = GitUtil.getStashes(repository, -1);
                         break;
                     default:
                         throw new IllegalArgumentException("Wrong reference type " + referenceType);
@@ -318,7 +276,7 @@ public class GitService implements IGitService {
             } catch (IOException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<List<Reference>>(references);
+            return new GitResponse<List<Reference>>(references);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -332,22 +290,9 @@ public class GitService implements IGitService {
     }
 
     @Override
+    @Deprecated
     public void showFileDiff(IGitServiceCallback<Void> callback) {
 
-    }
-
-    private List<GitPushMessage> parsePushResults(Iterable<PushResult> results) {
-        if (results == null) {
-            return Collections.emptyList();
-        } else {
-            return StreamSupport.stream(results.spliterator(), false).flatMap(result -> result.getRemoteUpdates().stream().map(update -> {
-                GitPushMessage message = new GitPushMessage();
-                message.setRemoteStatus(GitRemoteStatus.valueOf(update.getStatus().toString()));
-                message.setRemoteName(update.getTrackingRefUpdate().getRemoteName());
-                message.setLocalName(update.getTrackingRefUpdate().getLocalName());
-                return message;
-            })).collect(Collectors.toList());
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -366,6 +311,7 @@ public class GitService implements IGitService {
     }
 
     @Override
+    @Deprecated
     public void checkout(String branch) {
         try {
             Ref ref = git.checkout()
@@ -385,7 +331,7 @@ public class GitService implements IGitService {
         CompletableFuture.supplyAsync(() -> {
             FetchCommand fetch = git.fetch().setCheckFetchedObjects(true).setRemoveDeletedRefs(true);
             Log.d(TAG, "stash(" + fetch + ")");
-            return new GitServiceResult<Void>(null);
+            return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -399,11 +345,12 @@ public class GitService implements IGitService {
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
+    @Deprecated
     public void stashes(IGitServiceCallback<List<CommitReference>> callback) {
         CompletableFuture.supplyAsync(() -> {
             List<CommitReference> stashes = null;
@@ -415,12 +362,12 @@ public class GitService implements IGitService {
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<List<CommitReference>>(stashes);
+            return new GitResponse<List<CommitReference>>(stashes);
         }, executorService).whenCompleteAsync((result, exception) -> {
             if (exception == null) {
                 callback.onSuccess(result);
             } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+                callback.onError(new GitException(exception.getMessage(), exception.getCause()));
             }
         });
     }
@@ -435,7 +382,7 @@ public class GitService implements IGitService {
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -443,7 +390,7 @@ public class GitService implements IGitService {
     public void popStash(String hash, IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
             try {
-                StashReference stashReference = JGitUtils.stashRef(hash, git);
+                StashReference stashReference = GitUtil.stashRef(hash, git);
                 if (stashReference != null) {
                     StashApplyCommand apply = git.stashApply().setStashRef(hash);
                     apply.call();
@@ -454,15 +401,16 @@ public class GitService implements IGitService {
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
+    @Deprecated
     public void dropStash(String hash, IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
             try {
-                StashReference stashReference = JGitUtils.stashRef(hash, git);
+                StashReference stashReference = GitUtil.stashRef(hash, git);
                 if (stashReference != null) {
                     git.stashDrop().setStashRef(stashReference.getReference()).call();
                 } else {
@@ -471,11 +419,12 @@ public class GitService implements IGitService {
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
+    @Deprecated
     public void stash(IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
             try {
@@ -483,7 +432,7 @@ public class GitService implements IGitService {
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -494,11 +443,11 @@ public class GitService implements IGitService {
                 //MergeCommand pull = git.merge();
                 //MergeResult result = pull.set.setFastForward(FastForwardMode.FF).call();
 
-                return new GitServiceResult<Void>(null);
+                return new GitResponse<Void>(null);
             } catch (Exception exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<DiffFile>(new DiffFile());
+            return new GitResponse<DiffFile>(new DiffFile());
         }, executorService).whenCompleteAsync((r, e) -> System.out.println("sddd"));
     }
 
@@ -514,9 +463,9 @@ public class GitService implements IGitService {
 
                 Stream.of(merge.getMergedCommits()).forEach(commit -> {
                     try {
-                        RevCommit revCommit = JGitUtils.parseCommitFrom(repository, commit);
-                        JGitUtils.getDiff(repository, null, JGitUtils.parseCommitFrom(repository, commit));
-                        //JGitUtils.getDiff(repository, "README - Copy.md");
+                        RevCommit revCommit = GitUtil.parseCommitFrom(repository, commit);
+                        GitUtil.getDiff(repository, null, GitUtil.parseCommitFrom(repository, commit));
+                        //GitUtil.getDiff(repository, "README - Copy.md");
                     } catch (MissingObjectException e) {
                         e.printStackTrace();
                     } catch (IncorrectObjectTypeException e) {
@@ -529,7 +478,7 @@ public class GitService implements IGitService {
             } catch (Exception exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -544,7 +493,7 @@ public class GitService implements IGitService {
             } catch (Exception exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -557,11 +506,11 @@ public class GitService implements IGitService {
 
                 Log.d(TAG, "REBASE: " + result.getRebaseResult());
 
-                return new GitServiceResult<Void>(null);
+                return new GitResponse<Void>(null);
             } catch (Exception exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<DiffFile>(new DiffFile());
+            return new GitResponse<DiffFile>(new DiffFile());
         }, executorService).whenCompleteAsync((r, e) -> System.out.println("sddd"));
 
     }
@@ -575,21 +524,22 @@ public class GitService implements IGitService {
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<String>(result.getMessages());
+            return new GitResponse<String>(result.getMessages());
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
-    private final <T> BiConsumer<GitServiceResult<T>, Throwable> onCompleteAsync(IGitServiceCallback<T> callback) {
+    private final <T> BiConsumer<GitResponse<T>, Throwable> onCompleteAsync(IGitServiceCallback<T> callback) {
         return (result, exception) -> {
             if (exception == null) {
                 callback.onSuccess(result);
             } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+                callback.onError(new GitException(exception.getMessage(), exception.getCause()));
             }
         };
     }
 
     @Override
+    @Deprecated
     public void unmount() {
         Log.d(TAG, "unmount(" + directory + ")");
         if (repository != null) {
@@ -604,6 +554,7 @@ public class GitService implements IGitService {
     }
 
     @Override
+    @Deprecated
     public void dispose() {
         unmount();
         executorService.shutdown();
@@ -613,12 +564,12 @@ public class GitService implements IGitService {
     public void fileMergeDiff(String file, GitFileStatus conflict, IGitServiceCallback<DiffFile> callback) {
         CompletableFuture.supplyAsync(() -> {
             try {
-                DiffFile diffFile = JGitUtils.getDiff(repository, file, true);
-                return new GitServiceResult<DiffFile>(diffFile);
+                DiffFile diffFile = GitUtil.getDiff(repository, file, true);
+                return new GitResponse<DiffFile>(diffFile);
             } catch (Exception exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<DiffFile>(new DiffFile());
+            return new GitResponse<DiffFile>(new DiffFile());
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -626,12 +577,12 @@ public class GitService implements IGitService {
     public void fileContent(String file, IGitServiceCallback<DiffFile> callback) {
         CompletableFuture.supplyAsync(() -> {
             try {
-                DiffFile diffFile = JGitUtils.getDiff(repository, file, false);
-                return new GitServiceResult<DiffFile>(diffFile);
+                DiffFile diffFile = GitUtil.getDiff(repository, file, false);
+                return new GitResponse<DiffFile>(diffFile);
             } catch (Exception exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<DiffFile>(new DiffFile());
+            return new GitResponse<DiffFile>(new DiffFile());
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -645,14 +596,15 @@ public class GitService implements IGitService {
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
-    public void logs(IGitServiceCallback<List<CommitLog>> callback) {
+    @Deprecated
+    public void logs(IGitServiceCallback<List<GitLog>> callback) {
         CompletableFuture.supplyAsync(() -> {
-            List<CommitLog> logs = new ArrayList<>();
+            List<GitLog> logs = new ArrayList<>();
             try {
                 LogCommand log = git.log();
                 log.setMaxCount(30);
@@ -660,8 +612,8 @@ public class GitService implements IGitService {
                 try (RevWalk walk = new RevWalk(repository)) {
                     for (RevCommit rev : commitLogs) {
                         RevCommit commit = walk.parseCommit(rev.getId());
-                        logs.add(new CommitLog(commit.getShortMessage(), commit.getFullMessage(), commit.getAuthorIdent().getName(), commit.getAuthorIdent()
-                            .getEmailAddress(), commit.getCommitterIdent().getWhen()));
+                        logs.add(new GitLog(commit.getShortMessage(), commit.getFullMessage(), commit.getAuthorIdent().getName(), commit.getAuthorIdent().getEmailAddress(), commit
+                            .getCommitterIdent().getWhen()));
                     }
                     walk.dispose();
                 } catch (IOException exception) {
@@ -670,34 +622,71 @@ public class GitService implements IGitService {
             } catch (GitAPIException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<List<CommitLog>>(logs);
+            return new GitResponse<List<GitLog>>(logs);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
     public void profile(IGitServiceCallback<UserProfile> callback) {
         CompletableFuture.supplyAsync(() -> {
-            Config config = repository.getConfig();
-            String name = config.getString("user", null, "name");
-            String email = config.getString("user", null, "email");
-
-            return new GitServiceResult<UserProfile>(new UserProfile(name, email));
+            return new GitResponse<UserProfile>(new UserProfile(GitUtil.getConfig(repository, "user", "name"), GitUtil.getConfig(repository, "user", "email")));
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
     public void saveProfile(IGitServiceCallback<Void> callback, UserProfile profile) {
         CompletableFuture.supplyAsync(() -> {
-            StoredConfig config = repository.getConfig();
-            config.setString("user", null, "name", profile.getName());
-            config.setString("user", null, "email", profile.getEmail());
             try {
-                config.save();
+                GitUtil.setConfig(repository, "user", "name", profile.getName());
+                GitUtil.setConfig(repository, "user", "email", profile.getEmail());
             } catch (IOException exception) {
                 throwAsUnchecked(exception);
             }
-            return new GitServiceResult<Void>(null);
+            return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    @Deprecated
+    public void openRepository(String directory) throws IOException {
+        final File gitDirectory = GitUtil.getGitDirectory(directory);
+        if (!gitDirectory.exists()) {
+            throw new IllegalStateException("Git repository not available at " + directory);
+        } else {
+            gitRepository.openRepository(gitDirectory);
+        }
+    }
+
+    @Override
+    @Deprecated
+    public void cloneRepository(String url, String directory, IGitServiceCallback<File> callback) {
+        Log.d(TAG, "cloneRepository called with [url: " + url + ", directory: " + directory + "]");
+        File localPath = new File(directory, "");
+        if (!localPath.exists()) {
+            localPath.mkdir();
+        }
+        gitRepository.cloneRepository(url, localPath, callback);
+        //        Log.d(TAG, "cloneRepository(" + url + " to " + directory + ")");
+        //
+        //        File localPath = new File(directory, "");
+        //        if (!localPath.exists()) {
+        //            localPath.mkdir();
+        //        }
+        //
+        //        if (!localPath.delete()) {
+        //            callback.onError(new GitException("Could not delete temporary file " + localPath));
+        //        }
+        //
+        //        try (Git result = Git.cloneRepository().setURI(url).setBare(false).setDirectory(localPath).call()) {
+        //            try {
+        //                mount(directory);
+        //                callback.onSuccess(new GitResponse<File>(result.getRepository().getDirectory()));
+        //            } catch (IOException e) {
+        //                callback.onError(new GitException(e.getMessage(), e.getCause()));
+        //            }
+        //        } catch (GitAPIException e) {
+        //            callback.onError(new GitException(e.getMessage(), e.getCause()));
+        //        }
     }
 
 }

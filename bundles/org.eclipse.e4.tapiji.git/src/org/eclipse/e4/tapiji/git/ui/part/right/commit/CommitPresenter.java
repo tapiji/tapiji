@@ -5,9 +5,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
-import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.GitResponse;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 
 
@@ -33,7 +33,7 @@ public class CommitPresenter implements CommitContract.Presenter {
         service.commitChanges(summary, description, new IGitServiceCallback<Void>() {
 
             @Override
-            public void onSuccess(GitServiceResult<Void> response) {
+            public void onSuccess(GitResponse<Void> response) {
                 view.setCursorWaitVisibility(false);
                 view.sendUIEvent(UIEventConstants.TOPIC_RELOAD_VIEW, "");
                 view.sendUIEvent(UIEventConstants.SWITCH_CONTENT_VIEW, null);
@@ -41,7 +41,7 @@ public class CommitPresenter implements CommitContract.Presenter {
             }
 
             @Override
-            public void onError(GitServiceException exception) {
+            public void onError(GitException exception) {
                 view.setCursorWaitVisibility(false);
                 view.showError(exception);
             }

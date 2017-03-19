@@ -42,7 +42,7 @@ public class PerpectiveSwitchHandler {
                             if (dropDownMenu instanceof HandledToolItemImpl) {
                                 ((HandledToolItemImpl) dropDownMenu).setLabel(repository.getName());
                             }
-                            service.mount(repository.getDirectory());
+                            service.openRepository(repository.getDirectory());
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

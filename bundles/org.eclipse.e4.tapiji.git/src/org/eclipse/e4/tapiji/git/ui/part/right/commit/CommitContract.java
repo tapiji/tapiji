@@ -1,7 +1,7 @@
 package org.eclipse.e4.tapiji.git.ui.part.right.commit;
 
 
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.ui.BasePresenter;
 
 
@@ -19,7 +19,7 @@ public interface CommitContract {
 
         void setCursorWaitVisibility(boolean visibility);
 
-        void showError(GitServiceException exception);
+        void showError(GitException exception);
 
     }
 

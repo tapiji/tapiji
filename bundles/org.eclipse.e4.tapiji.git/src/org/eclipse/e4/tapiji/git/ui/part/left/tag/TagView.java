@@ -5,7 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.model.Reference;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.resource.TapijiResourceConstants;
 import org.eclipse.e4.tapiji.utils.ColorUtils;
@@ -151,7 +151,7 @@ public class TagView implements TagContract.View {
     }
 
     @Override
-    public void showError(GitServiceException exception) {
+    public void showError(GitException exception) {
         sync.asyncExec(() -> {
             MessageDialog.openError(shell, "Error: ", exception.getMessage());
         });

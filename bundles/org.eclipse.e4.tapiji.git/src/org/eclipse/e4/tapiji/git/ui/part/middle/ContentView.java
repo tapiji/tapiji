@@ -8,9 +8,9 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.tapiji.git.model.commitlog.CommitLog;
+import org.eclipse.e4.tapiji.git.model.commitlog.GitLog;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.model.file.GitFile;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
@@ -144,7 +144,7 @@ public class ContentView implements ContentContract.View {
     }
 
     @Override
-    public void showError(GitServiceException exception) {
+    public void showError(GitException exception) {
         sync.asyncExec(() -> {
             MessageDialog.openError(shell, "Error: ", exception.getMessage());
         });
@@ -158,7 +158,7 @@ public class ContentView implements ContentContract.View {
     }
 
     @Override
-    public void showLogs(List<CommitLog> logs) {
+    public void showLogs(List<GitLog> logs) {
         logView.createView(logs, composite, lblHeader, prettyTime);
         updateScrollView();
         parent.layout(true, true);

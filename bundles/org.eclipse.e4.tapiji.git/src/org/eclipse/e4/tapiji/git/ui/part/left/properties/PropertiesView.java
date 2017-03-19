@@ -5,7 +5,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.part.left.file.FileView;
 import org.eclipse.e4.tapiji.git.ui.part.left.stash.StashView;
@@ -96,7 +96,7 @@ public class PropertiesView implements PropertiesContract.View {
     }
 
     @Override
-    public void showError(GitServiceException exception) {
+    public void showError(GitException exception) {
         sync.asyncExec(() -> {
             MessageDialog.openError(parent.getShell(), "Error: ", exception.getMessage());
         });

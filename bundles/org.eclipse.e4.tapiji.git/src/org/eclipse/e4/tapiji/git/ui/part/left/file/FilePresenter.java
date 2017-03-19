@@ -6,10 +6,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
-import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.GitResponse;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
-import org.eclipse.e4.tapiji.git.model.commitlog.CommitLog;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.commitlog.GitLog;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 import org.eclipse.e4.tapiji.git.ui.part.left.file.FileContract.View;
 
@@ -33,14 +33,14 @@ public class FilePresenter implements FileContract.Presenter {
         service.findPropertyFiles("*.properties", new IGitServiceCallback<List<PropertyDirectory>>() {
 
             @Override
-            public void onSuccess(GitServiceResult<List<PropertyDirectory>> response) {
-                List<PropertyDirectory> result = response.getResult();
+            public void onSuccess(GitResponse<List<PropertyDirectory>> response) {
+                List<PropertyDirectory> result = response.body();
                 int cntFiles = result.stream().mapToInt(dir -> dir.getFiles().size()).sum();
-                view.showFiles(response.getResult(), cntFiles);
+                view.showFiles(response.body(), cntFiles);
             }
 
             @Override
-            public void onError(GitServiceException exception) {
+            public void onError(GitException exception) {
                 view.showError(exception);
             }
         });
@@ -48,15 +48,15 @@ public class FilePresenter implements FileContract.Presenter {
 
     @Override
     public void loadLogs() {
-        service.logs(new IGitServiceCallback<List<CommitLog>>() {
+        service.logs(new IGitServiceCallback<List<GitLog>>() {
 
             @Override
-            public void onSuccess(GitServiceResult<List<CommitLog>> response) {
+            public void onSuccess(GitResponse<List<GitLog>> response) {
 
             }
 
             @Override
-            public void onError(GitServiceException exception) {
+            public void onError(GitException exception) {
                 // TODO Auto-generated method stub
 
             }

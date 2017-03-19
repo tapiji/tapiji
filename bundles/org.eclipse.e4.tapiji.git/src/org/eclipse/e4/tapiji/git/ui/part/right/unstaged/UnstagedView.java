@@ -7,7 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.model.file.GitFile;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
@@ -109,7 +109,7 @@ public class UnstagedView implements UnstagedContract.View {
     }
 
     @Override
-    public void showError(GitServiceException exception) {
+    public void showError(GitException exception) {
         sync.asyncExec(() -> {
             parent.setCursor(new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW));
             MessageDialog.openError(parent.getShell(), "Error: ", exception.getMessage());

@@ -10,7 +10,7 @@ import org.eclipse.e4.tapiji.git.model.CommitReference;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.Reference;
 import org.eclipse.e4.tapiji.git.model.UserProfile;
-import org.eclipse.e4.tapiji.git.model.commitlog.CommitLog;
+import org.eclipse.e4.tapiji.git.model.commitlog.GitLog;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
@@ -43,8 +43,6 @@ public interface IGitService {
     void popFirst(IGitServiceCallback<Void> callback);
 
     void fetch(IGitServiceCallback<Void> callback);
-
-    void mount(String directory) throws IOException;
 
     void deleteFile(File file);
 
@@ -86,11 +84,17 @@ public interface IGitService {
 
     void stageFile(String fileName, IGitServiceCallback<Void> callback);
 
-    void logs(IGitServiceCallback<List<CommitLog>> callback);
+    void logs(IGitServiceCallback<List<GitLog>> callback);
 
     void profile(IGitServiceCallback<UserProfile> callback);
 
     void saveProfile(IGitServiceCallback<Void> callback, UserProfile profile);
 
     String getUrl();
+
+    void setPublicKeyPath(String keyPath);
+
+    void setPrivateKeyPath(String keyPath);
+
+    void openRepository(String directory) throws IOException;
 }

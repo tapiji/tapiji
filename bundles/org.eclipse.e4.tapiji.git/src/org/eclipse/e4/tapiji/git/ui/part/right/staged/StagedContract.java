@@ -2,7 +2,7 @@ package org.eclipse.e4.tapiji.git.ui.part.right.staged;
 
 
 import java.util.List;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.model.file.GitFile;
 import org.eclipse.e4.tapiji.git.ui.BasePresenter;
 
@@ -11,7 +11,7 @@ public interface StagedContract {
 
     interface View {
 
-        void showError(GitServiceException exception);
+        void showError(GitException exception);
 
         void showStagedChanges(List<GitFile> files);
 

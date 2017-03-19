@@ -9,9 +9,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
-import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.GitResponse;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.ui.preference.Preferences;
 import org.eclipse.e4.tapiji.mylyn.core.api.IMylynService;
 import org.eclipse.e4.tapiji.mylyn.model.Notification;
@@ -193,16 +193,16 @@ public class CloneRepositoryDialog extends Dialog implements SelectionListener, 
     }
 
     @Override
-    public void onSuccess(GitServiceResult<File> gitServiceResult) {
+    public void onSuccess(GitResponse<File> gitServiceResult) {
         sync.syncExec(() -> {
             mylyn.sendNotification(new Notification("Repository cloned successfully", gitUrl));
-            prefs.addRepository(gitUrl, gitServiceResult.getResult().getAbsolutePath());
+            prefs.addRepository(gitUrl, gitServiceResult.body().getAbsolutePath());
             shell.close();
         });
     }
 
     @Override
-    public void onError(GitServiceException exception) {
+    public void onError(GitException exception) {
         sync.syncExec(() -> MessageDialog.openError(shell, "Error: ", exception.getMessage()));
     }
 }

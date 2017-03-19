@@ -4,7 +4,7 @@ package org.eclipse.e4.tapiji.git.ui.part.left.file;
 import java.util.List;
 import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Creatable;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.part.left.file.provider.ResourceBundleTreeContentProvider;
@@ -164,7 +164,7 @@ public class FileView implements FileContract.View {
     }
 
     @Override
-    public void showError(GitServiceException exception) {
+    public void showError(GitException exception) {
         sync.asyncExec(() -> {
             MessageDialog.openError(shell, "Error: ", exception.getMessage());
         });

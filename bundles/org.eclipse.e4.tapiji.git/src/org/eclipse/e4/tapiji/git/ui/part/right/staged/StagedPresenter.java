@@ -12,9 +12,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
-import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.GitResponse;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.model.file.GitFile;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
@@ -45,13 +45,13 @@ public class StagedPresenter implements StagedContract.Presenter {
         service.uncommittedChanges(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
 
             @Override
-            public void onSuccess(GitServiceResult<Map<GitFileStatus, Set<String>>> response) {
+            public void onSuccess(GitResponse<Map<GitFileStatus, Set<String>>> response) {
                 view.setCursorWaitVisibility(false);
                 List<GitFile> files = null;
-                if (response == null || response.getResult() == null || response.getResult().isEmpty()) {
+                if (response == null || response.body() == null || response.body().isEmpty()) {
                     files = Collections.emptyList();
                 } else {
-                    files = response.getResult()
+                    files = response.body()
                         .entrySet()
                         .stream()
                         .filter(contains.apply(GitFileStatus.ADDED).or(contains.apply(GitFileStatus.REMOVED)).or(contains.apply(GitFileStatus.CHANGED)))
@@ -67,7 +67,7 @@ public class StagedPresenter implements StagedContract.Presenter {
             }
 
             @Override
-            public void onError(GitServiceException exception) {
+            public void onError(GitException exception) {
                 view.setCursorWaitVisibility(false);
                 view.showError(exception);
             }
@@ -80,12 +80,12 @@ public class StagedPresenter implements StagedContract.Presenter {
         service.unstageAll(new IGitServiceCallback<Void>() {
 
             @Override
-            public void onSuccess(GitServiceResult<Void> response) {
+            public void onSuccess(GitResponse<Void> response) {
                 view.setCursorWaitVisibility(false);
             }
 
             @Override
-            public void onError(GitServiceException exception) {
+            public void onError(GitException exception) {
                 view.setCursorWaitVisibility(false);
                 view.showError(exception);
             }

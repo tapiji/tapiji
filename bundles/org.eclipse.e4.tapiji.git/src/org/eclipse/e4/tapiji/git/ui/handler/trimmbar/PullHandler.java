@@ -4,9 +4,9 @@ package org.eclipse.e4.tapiji.git.ui.handler.trimmbar;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
-import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.GitResponse;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.ui.preference.Preferences;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.tapiji.mylyn.core.api.IMylynService;
@@ -27,12 +27,12 @@ public class PullHandler {
         service.pullFastForward(new IGitServiceCallback<Void>() {
 
             @Override
-            public void onSuccess(GitServiceResult<Void> response) {
+            public void onSuccess(GitResponse<Void> response) {
                 sync.asyncExec(() -> mylyn.sendNotification(new Notification("Pull Successful", "")));
             }
 
             @Override
-            public void onError(GitServiceException exception) {
+            public void onError(GitException exception) {
                 Log.d(TAG, "PullHandler execute()" + exception);
                 if (exception.getCause() instanceof WrongRepositoryStateException) {
                     Log.d(TAG, "PullHandler execute()" + (exception.getCause()));

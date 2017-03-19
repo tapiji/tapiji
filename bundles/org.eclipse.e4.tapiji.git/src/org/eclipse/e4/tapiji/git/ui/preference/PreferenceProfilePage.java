@@ -3,10 +3,10 @@ package org.eclipse.e4.tapiji.git.ui.preference;
 
 import javax.inject.Inject;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
-import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.GitResponse;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.UserProfile;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -49,9 +49,9 @@ public class PreferenceProfilePage extends FieldEditorPreferencePage {
         service.profile(new IGitServiceCallback<UserProfile>() {
 
             @Override
-            public void onSuccess(GitServiceResult<UserProfile> response) {
+            public void onSuccess(GitResponse<UserProfile> response) {
                 sync.syncExec(() -> {
-                    UserProfile profile = response.getResult();
+                    UserProfile profile = response.body();
                     if (profile.getName() != null) {
                         name.setStringValue(profile.getName());
                     }
@@ -63,7 +63,7 @@ public class PreferenceProfilePage extends FieldEditorPreferencePage {
             }
 
             @Override
-            public void onError(GitServiceException exception) {
+            public void onError(GitException exception) {
                 Log.d(TAG, "Can not load user profile!" + exception);
                 MessageDialog.openError(shell, "Error: ", exception.getMessage());
             }
@@ -75,12 +75,12 @@ public class PreferenceProfilePage extends FieldEditorPreferencePage {
             service.saveProfile(new IGitServiceCallback<Void>() {
 
                 @Override
-                public void onSuccess(GitServiceResult<Void> response) {
+                public void onSuccess(GitResponse<Void> response) {
                     Log.d(TAG, "User and email saved.");
                 }
 
                 @Override
-                public void onError(GitServiceException exception) {
+                public void onError(GitException exception) {
                     Log.d(TAG, "Can not save user profile!" + exception);
                     MessageDialog.openError(shell, "Error: ", exception.getMessage());
                 }

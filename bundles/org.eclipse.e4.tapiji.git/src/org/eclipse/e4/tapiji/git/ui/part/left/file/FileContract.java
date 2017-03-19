@@ -2,7 +2,7 @@ package org.eclipse.e4.tapiji.git.ui.part.left.file;
 
 
 import java.util.List;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 import org.eclipse.e4.tapiji.git.ui.BasePresenter;
 
@@ -13,7 +13,7 @@ public interface FileContract {
 
         void showFiles(List<PropertyDirectory> result, int cntFiles);
 
-        void showError(GitServiceException exception);
+        void showError(GitException exception);
 
         FilePresenter getPresenter();
 

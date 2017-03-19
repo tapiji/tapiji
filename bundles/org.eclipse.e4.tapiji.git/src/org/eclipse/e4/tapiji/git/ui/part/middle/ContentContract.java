@@ -2,9 +2,9 @@ package org.eclipse.e4.tapiji.git.ui.part.middle;
 
 
 import java.util.List;
-import org.eclipse.e4.tapiji.git.model.commitlog.CommitLog;
+import org.eclipse.e4.tapiji.git.model.commitlog.GitLog;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.ui.BasePresenter;
 
 
@@ -16,7 +16,7 @@ public interface ContentContract {
 
         void showMergeView(DiffFile result);
 
-        void showError(GitServiceException exception);
+        void showError(GitException exception);
 
         void clearScrollView();
 
@@ -24,7 +24,7 @@ public interface ContentContract {
 
         void showError(Exception exception);
 
-        void showLogs(List<CommitLog> result);
+        void showLogs(List<GitLog> result);
 
     }
 

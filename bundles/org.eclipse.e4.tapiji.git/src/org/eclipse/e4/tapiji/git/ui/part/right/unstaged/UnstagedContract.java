@@ -2,7 +2,7 @@ package org.eclipse.e4.tapiji.git.ui.part.right.unstaged;
 
 
 import java.util.List;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.model.file.GitFile;
 import org.eclipse.e4.tapiji.git.ui.BasePresenter;
 
@@ -13,7 +13,7 @@ public interface UnstagedContract {
 
         void showUnCommittedChanges(List<GitFile> files);
 
-        void showError(GitServiceException exception);
+        void showError(GitException exception);
 
         void sendUIEvent(String topic, String payload);
 

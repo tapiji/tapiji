@@ -92,7 +92,7 @@ public class LoginDialog extends Dialog {
 
         Button btnLogin = new Button(compositeBtn, SWT.NONE);
         btnLogin.addListener(SWT.MouseDown, listener -> pushChanges());
-        btnLogin.setText("CommitLog In");
+        btnLogin.setText("GitLog In");
 
         Button btnCancel = new Button(compositeBtn, SWT.NONE);
         btnCancel.addListener(SWT.MouseDown, listener -> shell.close());

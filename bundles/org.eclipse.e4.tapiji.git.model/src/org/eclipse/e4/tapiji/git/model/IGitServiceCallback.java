@@ -1,10 +1,10 @@
 package org.eclipse.e4.tapiji.git.model;
 
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 
 public interface IGitServiceCallback<T> {
 
-    void onSuccess(GitServiceResult<T> response);
+    void onSuccess(GitResponse<T> response);
 
-    void onError(GitServiceException exception);
+    void onError(GitException exception);
 }

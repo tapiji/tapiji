@@ -11,9 +11,9 @@ import java.util.concurrent.ExecutorService;
 import javax.inject.Singleton;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.core.internal.GitService;
-import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.GitResponse;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 
 
@@ -32,12 +32,12 @@ public class FileService {
             } catch (IOException exception) {
                 GitService.throwAsUnchecked(exception);
             }
-            return new GitServiceResult<List<PropertyDirectory>>(finder.directories());
+            return new GitResponse<List<PropertyDirectory>>(finder.directories());
         }, executorService).whenCompleteAsync((result, exception) -> {
             if (exception == null) {
                 callback.onSuccess(result);
             } else {
-                callback.onError(new GitServiceException(exception.getMessage(), exception.getCause()));
+                callback.onError(new GitException(exception.getMessage(), exception.getCause()));
             }
         });
     }

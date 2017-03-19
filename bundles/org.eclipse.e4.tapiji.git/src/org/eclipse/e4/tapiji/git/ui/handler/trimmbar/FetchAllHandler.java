@@ -5,9 +5,9 @@ import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
-import org.eclipse.e4.tapiji.git.model.GitServiceResult;
+import org.eclipse.e4.tapiji.git.model.GitResponse;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
-import org.eclipse.e4.tapiji.git.model.exception.GitServiceException;
+import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.ui.preference.Preferences;
 import org.eclipse.e4.tapiji.mylyn.core.api.IMylynService;
 import org.eclipse.e4.tapiji.mylyn.model.Notification;
@@ -28,16 +28,16 @@ public class FetchAllHandler {
         service.fetchAll(new IGitServiceCallback<String>() {
 
             @Override
-            public void onSuccess(GitServiceResult<String> response) {
-                if (response.getResult() == null) {
+            public void onSuccess(GitResponse<String> response) {
+                if (response.body() == null) {
                     sync.asyncExec(() -> mylyn.sendNotification(new Notification("Fetch data successfully", "")));
                 } else {
-                    sync.asyncExec(() -> mylyn.sendNotification(new Notification("Fetch result", response.getResult())));
+                    sync.asyncExec(() -> mylyn.sendNotification(new Notification("Fetch result", response.body())));
                 }
             }
 
             @Override
-            public void onError(GitServiceException exception) {
+            public void onError(GitException exception) {
                 sync.asyncExec(() -> MessageDialog.openError(shell, "Error: ", exception.getMessage()));
             }
         });
