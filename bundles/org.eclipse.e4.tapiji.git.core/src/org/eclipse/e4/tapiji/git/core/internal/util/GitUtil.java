@@ -154,54 +154,6 @@ public class GitUtil {
     }
 
     /**
-     * Returns the list of tags in the repository.
-     *
-     * @param repository
-     *            Represents the current git repository.
-     * @param limit
-     *            The number of elements the tags should be limited to
-     * @return list
-     *         List of tags
-     * @throws IOException
-     *             The reference space cannot be accessed.
-     */
-    public static List<Reference> getTags(Repository repository, int limit) throws IOException {
-        return getRefs(repository, Constants.R_TAGS, limit);
-    }
-
-    /**
-     * Returns the list of local branches in the repository.
-     *
-     * @param repository
-     *            Represents the current git repository.
-     * @param limit
-     *            The number of elements the branches should be limited to
-     * @return list
-     *         List of local branches
-     * @throws IOException
-     *             The reference space cannot be accessed.
-     */
-    public static List<Reference> getBranches(Repository repository, int limit) throws IOException {
-        return getRefs(repository, Constants.R_HEADS, limit);
-    }
-
-    /**
-     * Returns the list of stashes in the repository.
-     *
-     * @param repository
-     *            Represents the current git repository.
-     * @param limit
-     *            The number of elements the stashes should be limited to
-     * @return list
-     *         List of stashes
-     * @throws IOException
-     *             The reference space cannot be accessed.
-     */
-    public static List<Reference> getStashes(Repository repository, int limit) throws IOException {
-        return getRefs(repository, Constants.R_STASH, limit);
-    }
-
-    /**
      * Returns a list of references.
      *
      * @param repository

@@ -3,9 +3,7 @@ package org.eclipse.e4.tapiji.git.core.internal;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +21,6 @@ import org.eclipse.e4.tapiji.git.model.CommitReference;
 import org.eclipse.e4.tapiji.git.model.GitResponse;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.Reference;
-import org.eclipse.e4.tapiji.git.model.ReferenceType;
 import org.eclipse.e4.tapiji.git.model.UserProfile;
 import org.eclipse.e4.tapiji.git.model.commitlog.GitLog;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
@@ -36,20 +33,13 @@ import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.LogCommand;
 import org.eclipse.jgit.api.MergeResult;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PullResult;
-import org.eclipse.jgit.api.ResetCommand;
-import org.eclipse.jgit.api.ResetCommand.ResetType;
-import org.eclipse.jgit.api.RmCommand;
 import org.eclipse.jgit.api.StashApplyCommand;
-import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.NoFilepatternException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
-import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.errors.TransportException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Ref;
@@ -106,12 +96,150 @@ public class GitService implements IGitService {
 
     @Override
     public String getUrl() {
-        return repository.getConfig().getString("remote", "origin", "url");
+        return gitRepository.getUrl();
     }
 
     @Override
+    public void commitChanges(String summary, String description, IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            gitRepository.commit(summary, description);
+            return new GitResponse<Void>(null);
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void stageAll(IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            gitRepository.stageAll();
+            return new GitResponse<Void>(null);
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void discardChanges(IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            gitRepository.discardChanges();
+            return new GitResponse<Void>(null);
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void logs(IGitServiceCallback<List<GitLog>> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            return new GitResponse<List<GitLog>>(gitRepository.logs(150));
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    @Deprecated
+    public void uncommittedChanges(IGitServiceCallback<Map<GitFileStatus, Set<String>>> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            return new GitResponse<Map<GitFileStatus, Set<String>>>(gitRepository.states());
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void tags(IGitServiceCallback<List<Reference>> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            return new GitResponse<List<Reference>>(gitRepository.tags(150));
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void openRepository(String directory) throws IOException {
+        final File gitDirectory = GitUtil.getGitDirectory(directory);
+        if (!gitDirectory.exists()) {
+            throw new IllegalStateException("Git repository not available at " + directory);
+        } else {
+            gitRepository.openRepository(gitDirectory);
+        }
+    }
+
+    @Override
+    public void profile(IGitServiceCallback<UserProfile> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            return new GitResponse<UserProfile>(new UserProfile(GitUtil.getConfig(repository, "user", "name"), GitUtil.getConfig(repository, "user", "email")));
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void saveProfile(IGitServiceCallback<Void> callback, UserProfile profile) {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                GitUtil.setConfig(repository, "user", "name", profile.getName());
+                GitUtil.setConfig(repository, "user", "email", profile.getEmail());
+            } catch (IOException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitResponse<Void>(null);
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void branches(IGitServiceCallback<List<Reference>> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            return new GitResponse<List<Reference>>(gitRepository.branches(150));
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void stashes(IGitServiceCallback<List<CommitReference>> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            List<CommitReference> stashes = null;
+            stashes = git.stashList().call().stream().map(commit -> {
+                return new CommitReference(commit.getFullMessage(), commit.getCommitTime(), commit.getType(), commit.getName());
+            }).collect(Collectors.toList());
+            return new GitResponse<List<CommitReference>>(stashes);
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void deleteFile(File file) {
+        if (file.delete()) {
+            System.out.println(file.getName() + " is deleted!");
+        } else {
+            System.out.println("Delete operation is failed.");
+        }
+    }
+
+    @Override
+    public void cloneRepository(String url, String directory, IGitServiceCallback<File> callback) {
+        Log.d(TAG, "cloneRepository called with [url: " + url + ", directory: " + directory + "]");
+        File localPath = new File(directory, "");
+        if (!localPath.exists()) {
+            localPath.mkdir();
+        }
+
+        if (!localPath.delete()) {
+            callback.onError(new GitException("Could not delete temporary file " + localPath));
+        }
+
+        CompletableFuture.supplyAsync(() -> {
+            gitRepository.cloneRepository(url, localPath);
+            return new GitResponse<File>(gitRepository.getDirectory());
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    /// ============================== OOOOOLLLLLLLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDDDDDDDDDDDDDD
+    @Override
     public void pushAll(IGitServiceCallback<Void> callback) {
         push.pushAll(git, privateKeyPath, callback, executorService);
+    }
+
+    @Override
+    @Deprecated
+    public void checkout(String branch) {
+        try {
+            Ref ref = git.checkout()
+                .setCreateBranch(false)
+                .setName(branch)
+                .setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK)
+                .setStartPoint(Constants.R_HEADS + branch)
+                .call();
+        } catch (GitAPIException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -132,62 +260,6 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void commitChanges(String summary, String description, IGitServiceCallback<Void> callback) {
-        CompletableFuture.supplyAsync(() -> {
-            try {
-                git.commit().setMessage(summary + "\n\n" + description).call();
-            } catch (GitAPIException exception) {
-                throwAsUnchecked(exception);
-            }
-            return new GitResponse<Void>(null);
-        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
-    }
-
-    @Override
-    public void stageAll(IGitServiceCallback<Void> callback) {
-        CompletableFuture.supplyAsync(() -> {
-            try {
-                Status status = git.status().call();
-                stageUntrackedFiles(status);
-                stageMissingFiles(status);
-            } catch (GitAPIException exception) {
-                throwAsUnchecked(exception);
-            }
-            return new GitResponse<Void>(null);
-        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
-    }
-
-    private void stageMissingFiles(Status status) throws NoFilepatternException, GitAPIException {
-        RmCommand rm = git.rm();
-        if (!status.getMissing().isEmpty()) {
-            status.getMissing().forEach(file -> rm.addFilepattern(file));
-            rm.call();
-        }
-    }
-
-    private void stageUntrackedFiles(Status status) throws NoFilepatternException, GitAPIException {
-        boolean empty = true;
-        AddCommand add = git.add();
-        if (!status.getUntracked().isEmpty()) {
-            status.getUntracked().forEach(file -> add.addFilepattern(file));
-            empty = false;
-        }
-
-        if (!status.getModified().isEmpty()) {
-            status.getModified().forEach(file -> add.addFilepattern(file));
-            empty = false;
-        }
-
-        if (!status.getConflicting().isEmpty()) {
-            status.getConflicting().forEach(file -> add.addFilepattern(file));
-            empty = false;
-        }
-        if (!empty) {
-            add.call();
-        }
-    }
-
-    @Override
     public void unstageAll(IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
             try {
@@ -196,87 +268,6 @@ public class GitService implements IGitService {
                 throwAsUnchecked(exception);
             }
             return new GitResponse<Void>(null);
-        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
-    }
-
-    @Override
-    public void discardChanges(IGitServiceCallback<Void> callback) {
-        CompletableFuture.supplyAsync(() -> {
-            try {
-
-                ResetCommand reset = git.reset();
-                reset.setMode(ResetType.HARD);
-                reset.setRef(Constants.HEAD);
-                reset.call();
-
-                git.clean().setCleanDirectories(true).call();
-            } catch (GitAPIException exception) {
-                throwAsUnchecked(exception);
-            }
-            return new GitResponse<Void>(null);
-        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
-    }
-
-    @Override
-    public void uncommittedChanges(IGitServiceCallback<Map<GitFileStatus, Set<String>>> callback) {
-        CompletableFuture.supplyAsync(() -> {
-            Map<GitFileStatus, Set<String>> states = new HashMap<>();
-            try {
-                Status status = git.status().call();
-                states.put(GitFileStatus.ADDED, status.getAdded());
-                states.put(GitFileStatus.CHANGED, status.getChanged());
-                states.put(GitFileStatus.MISSING, status.getMissing());
-                states.put(GitFileStatus.MODIFIED, status.getModified());
-                states.put(GitFileStatus.REMOVED, status.getRemoved());
-                states.put(GitFileStatus.UNCOMMITTED, status.getUncommittedChanges());
-                states.put(GitFileStatus.UNTRACKED, status.getUntracked());
-                states.put(GitFileStatus.UNTRACKED_FOLDERS, status.getUntrackedFolders());
-                states.put(GitFileStatus.CONFLICT, status.getConflicting());
-
-            } catch (NoWorkTreeException | GitAPIException exception) {
-                throwAsUnchecked(exception);
-            }
-            return new GitResponse<Map<GitFileStatus, Set<String>>>(states);
-        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
-    }
-
-    @Override
-    public void tags(IGitServiceCallback<List<Reference>> callback) {
-        getReferences(callback, ReferenceType.TAGS);
-    }
-
-    @Override
-    @Deprecated
-    public List<Reference> branches() throws IOException {
-        return GitUtil.getBranches(repository, 10);
-    }
-
-    @Override
-    public void branches(IGitServiceCallback<List<Reference>> callback) {
-        getReferences(callback, ReferenceType.HEADS);
-    }
-
-    private void getReferences(IGitServiceCallback<List<Reference>> callback, ReferenceType referenceType) {
-        CompletableFuture.supplyAsync(() -> {
-            List<Reference> references = new ArrayList<>();
-            try {
-                switch (referenceType) {
-                    case HEADS:
-                        references = GitUtil.getBranches(repository, -1);
-                        break;
-                    case TAGS:
-                        references = GitUtil.getTags(repository, -1);
-                        break;
-                    case STASHES:
-                        references = GitUtil.getStashes(repository, -1);
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Wrong reference type " + referenceType);
-                }
-            } catch (IOException exception) {
-                throwAsUnchecked(exception);
-            }
-            return new GitResponse<List<Reference>>(references);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -301,32 +292,6 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void deleteFile(File file) {
-        if (file.delete()) {
-            System.out.println(file.getName() + " is deleted!");
-        } else {
-            System.out.println("Delete operation is failed.");
-        }
-
-    }
-
-    @Override
-    @Deprecated
-    public void checkout(String branch) {
-        try {
-            Ref ref = git.checkout()
-                .setCreateBranch(false)
-                .setName(branch)
-                .setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK)
-                .setStartPoint(Constants.R_HEADS + branch)
-                .call();
-        } catch (GitAPIException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public void fetch(IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
             FetchCommand fetch = git.fetch().setCheckFetchedObjects(true).setRemoveDeletedRefs(true);
@@ -347,29 +312,6 @@ public class GitService implements IGitService {
             }
             return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
-    }
-
-    @Override
-    @Deprecated
-    public void stashes(IGitServiceCallback<List<CommitReference>> callback) {
-        CompletableFuture.supplyAsync(() -> {
-            List<CommitReference> stashes = null;
-            try {
-                stashes = git.stashList().call().stream().map(commit -> {
-                    return new CommitReference(commit.getFullMessage(), commit.getCommitTime(), commit.getType(), commit.getName());
-                }).collect(Collectors.toList());
-
-            } catch (GitAPIException exception) {
-                throwAsUnchecked(exception);
-            }
-            return new GitResponse<List<CommitReference>>(stashes);
-        }, executorService).whenCompleteAsync((result, exception) -> {
-            if (exception == null) {
-                callback.onSuccess(result);
-            } else {
-                callback.onError(new GitException(exception.getMessage(), exception.getCause()));
-            }
-        });
     }
 
     @Override
@@ -598,95 +540,6 @@ public class GitService implements IGitService {
             }
             return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
-    }
-
-    @Override
-    @Deprecated
-    public void logs(IGitServiceCallback<List<GitLog>> callback) {
-        CompletableFuture.supplyAsync(() -> {
-            List<GitLog> logs = new ArrayList<>();
-            try {
-                LogCommand log = git.log();
-                log.setMaxCount(30);
-                Iterable<RevCommit> commitLogs = log.call();
-                try (RevWalk walk = new RevWalk(repository)) {
-                    for (RevCommit rev : commitLogs) {
-                        RevCommit commit = walk.parseCommit(rev.getId());
-                        logs.add(new GitLog(commit.getShortMessage(), commit.getFullMessage(), commit.getAuthorIdent().getName(), commit.getAuthorIdent().getEmailAddress(), commit
-                            .getCommitterIdent().getWhen()));
-                    }
-                    walk.dispose();
-                } catch (IOException exception) {
-                    throwAsUnchecked(exception);
-                }
-            } catch (GitAPIException exception) {
-                throwAsUnchecked(exception);
-            }
-            return new GitResponse<List<GitLog>>(logs);
-        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
-    }
-
-    @Override
-    public void profile(IGitServiceCallback<UserProfile> callback) {
-        CompletableFuture.supplyAsync(() -> {
-            return new GitResponse<UserProfile>(new UserProfile(GitUtil.getConfig(repository, "user", "name"), GitUtil.getConfig(repository, "user", "email")));
-        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
-    }
-
-    @Override
-    public void saveProfile(IGitServiceCallback<Void> callback, UserProfile profile) {
-        CompletableFuture.supplyAsync(() -> {
-            try {
-                GitUtil.setConfig(repository, "user", "name", profile.getName());
-                GitUtil.setConfig(repository, "user", "email", profile.getEmail());
-            } catch (IOException exception) {
-                throwAsUnchecked(exception);
-            }
-            return new GitResponse<Void>(null);
-        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
-    }
-
-    @Override
-    @Deprecated
-    public void openRepository(String directory) throws IOException {
-        final File gitDirectory = GitUtil.getGitDirectory(directory);
-        if (!gitDirectory.exists()) {
-            throw new IllegalStateException("Git repository not available at " + directory);
-        } else {
-            gitRepository.openRepository(gitDirectory);
-        }
-    }
-
-    @Override
-    @Deprecated
-    public void cloneRepository(String url, String directory, IGitServiceCallback<File> callback) {
-        Log.d(TAG, "cloneRepository called with [url: " + url + ", directory: " + directory + "]");
-        File localPath = new File(directory, "");
-        if (!localPath.exists()) {
-            localPath.mkdir();
-        }
-        gitRepository.cloneRepository(url, localPath, callback);
-        //        Log.d(TAG, "cloneRepository(" + url + " to " + directory + ")");
-        //
-        //        File localPath = new File(directory, "");
-        //        if (!localPath.exists()) {
-        //            localPath.mkdir();
-        //        }
-        //
-        //        if (!localPath.delete()) {
-        //            callback.onError(new GitException("Could not delete temporary file " + localPath));
-        //        }
-        //
-        //        try (Git result = Git.cloneRepository().setURI(url).setBare(false).setDirectory(localPath).call()) {
-        //            try {
-        //                mount(directory);
-        //                callback.onSuccess(new GitResponse<File>(result.getRepository().getDirectory()));
-        //            } catch (IOException e) {
-        //                callback.onError(new GitException(e.getMessage(), e.getCause()));
-        //            }
-        //        } catch (GitAPIException e) {
-        //            callback.onError(new GitException(e.getMessage(), e.getCause()));
-        //        }
     }
 
 }

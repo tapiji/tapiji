@@ -64,8 +64,6 @@ public interface IGitService {
 
     void fetchAll(IGitServiceCallback<String> callback);
 
-    List<Reference> branches() throws IOException;
-
     void checkout(String branch);
 
     File getDirectory();

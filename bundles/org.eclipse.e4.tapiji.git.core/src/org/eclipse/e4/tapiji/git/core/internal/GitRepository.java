@@ -4,27 +4,36 @@ package org.eclipse.e4.tapiji.git.core.internal;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Set;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.core.internal.util.GitUtil;
 import org.eclipse.e4.tapiji.git.model.Reference;
 import org.eclipse.e4.tapiji.git.model.commitlog.GitLog;
+import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.logger.Log;
+import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.LogCommand;
+import org.eclipse.jgit.api.ResetCommand.ResetType;
+import org.eclipse.jgit.api.RmCommand;
 import org.eclipse.jgit.api.StashApplyCommand;
+import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRefNameException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
+import org.eclipse.jgit.api.errors.NoFilepatternException;
 import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.api.errors.RefAlreadyExistsException;
 import org.eclipse.jgit.api.errors.RefNotFoundException;
 import org.eclipse.jgit.api.errors.StashApplyFailureException;
 import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
+import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -141,6 +150,100 @@ public class GitRepository {
     }
 
     /**
+     * Record changes to the repository
+     *
+     * @param summary short summary
+     * @param description describing the changed
+     */
+    public void commit(String summary, String description) {
+        try (Git git = new Git(repository)) {
+            git.commit().setMessage(summary + "\n\n" + description).call();
+        } catch (GitAPIException exception) {
+            throwAsUnchecked(exception);
+        }
+    }
+
+    /**
+     * Telling where the working-tree, the index and the current HEAD differ
+     * from each other. Map of different file states {@link GitFileStatus}
+     *
+     * @return map of file states
+     */
+    public Map<GitFileStatus, Set<String>> states() {
+        Map<GitFileStatus, Set<String>> states = new HashMap<>();
+        try (Git git = new Git(repository)) {
+            Status status = git.status().call();
+            states.put(GitFileStatus.ADDED, status.getAdded());
+            states.put(GitFileStatus.CHANGED, status.getChanged());
+            states.put(GitFileStatus.MISSING, status.getMissing());
+            states.put(GitFileStatus.MODIFIED, status.getModified());
+            states.put(GitFileStatus.REMOVED, status.getRemoved());
+            states.put(GitFileStatus.UNCOMMITTED, status.getUncommittedChanges());
+            states.put(GitFileStatus.UNTRACKED, status.getUntracked());
+            states.put(GitFileStatus.UNTRACKED_FOLDERS, status.getUntrackedFolders());
+            states.put(GitFileStatus.CONFLICT, status.getConflicting());
+        } catch (NoWorkTreeException | GitAPIException exception) {
+            throwAsUnchecked(exception);
+        }
+        return states;
+    }
+
+    /**
+     * Discard a local changes
+     */
+    public void discardChanges() {
+        try (Git git = new Git(repository)) {
+            git.reset().setMode(ResetType.HARD).setRef(Constants.HEAD).call();
+            git.clean().setCleanDirectories(true).setForce(true).call();
+        } catch (NoWorkTreeException | GitAPIException exception) {
+            throwAsUnchecked(exception);
+        }
+    }
+
+    /**
+     * Add all file to the index
+     */
+    public void stageAll() {
+        try (Git git = new Git(repository)) {
+            Status status = git.status().call();
+            stageUntrackedFiles(git, status);
+            stageMissingFiles(git, status);
+        } catch (GitAPIException exception) {
+            throwAsUnchecked(exception);
+        }
+    }
+
+    private void stageMissingFiles(Git git, Status status) throws NoFilepatternException, GitAPIException {
+        RmCommand rm = git.rm();
+        if (!status.getMissing().isEmpty()) {
+            status.getMissing().forEach(file -> rm.addFilepattern(file));
+            rm.call();
+        }
+    }
+
+    private void stageUntrackedFiles(Git git, Status status) throws NoFilepatternException, GitAPIException {
+        boolean empty = true;
+        AddCommand add = git.add();
+        if (!status.getUntracked().isEmpty()) {
+            status.getUntracked().forEach(file -> add.addFilepattern(file));
+            empty = false;
+        }
+
+        if (!status.getModified().isEmpty()) {
+            status.getModified().forEach(file -> add.addFilepattern(file));
+            empty = false;
+        }
+
+        if (!status.getConflicting().isEmpty()) {
+            status.getConflicting().forEach(file -> add.addFilepattern(file));
+            empty = false;
+        }
+        if (!empty) {
+            add.call();
+        }
+    }
+
+    /**
      * Retuns stashed commits of the repository
      *
      * @return stashed sommits
@@ -177,7 +280,9 @@ public class GitRepository {
     }
 
     /**
-     * @param hash
+     * Apply a stashed commit
+     *
+     * @param hash from the commit
      * @throws GitAPIException
      * @throws StashApplyFailureException
      * @throws NoHeadException
@@ -226,8 +331,26 @@ public class GitRepository {
     }
 
     /**
+     * Returns the list of tags in the repository.
+     *
+     * @param repository
+     *            Represents the current git repository.
+     * @param limit
+     *            The number of elements the tags should be limited to
+     * @return list
+     *         List of tags
+     * @throws IOException
+     *             The reference space cannot be accessed.
+     */
+    public List<Reference> tags(int limit) throws IOException {
+        return GitUtil.getRefs(repository, Constants.R_TAGS, limit);
+    }
+
+    /**
      * Returns the list of local branches in the repository.
      *
+     * @param repository
+     *            Represents the current git repository.
      * @param limit
      *            The number of elements the branches should be limited to
      * @return list
@@ -235,45 +358,58 @@ public class GitRepository {
      * @throws IOException
      *             The reference space cannot be accessed.
      */
-    public List<Reference> getBranches(int limit) throws IOException {
-        return getRefs(Constants.R_HEADS, limit);
+    public List<Reference> branches(int limit) throws IOException {
+        return GitUtil.getRefs(repository, Constants.R_HEADS, limit);
     }
 
     /**
-     * Returns a list of references.
+     * Returns the list of stashes in the repository.
      *
-     * @param ref
-     *            From type {@link Constants.R_TAGS}, {@link Constants.R_STASH},
-     *            {@link Constants.R_REFS}, {@link Constants.R_REMOTE}, {@link Constants.R_HEADS},
-     *            {@link Constants.R_NOTES}
+     * @param repository
+     *            Represents the current git repository.
      * @param limit
-     *            The number of elements the refs should be limited to
-     *            If limit < 0 then all references are returned
+     *            The number of elements the stashes should be limited to
      * @return list
-     *         references of type {@link Reference}
+     *         List of stashes
      * @throws IOException
      *             The reference space cannot be accessed.
      */
-    public List<Reference> getRefs(String ref, int limit) throws IOException {
-        return repository.getRefDatabase()
-            .getRefs(ref)
-            .entrySet()
-            .stream()
-            .limit(limit < 0 ? Integer.MAX_VALUE : limit)
-            .map(entry -> new Reference(entry.getValue().getName(), entry.getValue().toString()))
-            .collect(Collectors.toList());
+    public List<Reference> stashes(int limit) throws IOException {
+        return GitUtil.getRefs(repository, Constants.R_STASH, limit);
     }
 
+    /**
+     * CLose current repository
+     */
     public void close() {
         if (repository != null) {
             repository.close();
         }
     }
 
+    /**
+     * Return the remote url
+     *
+     * @return url
+     */
+    public String getUrl() {
+        return repository.getConfig().getString("remote", "origin", "url");
+    }
+
+    /**
+     * Returns opened or cloned repository
+     *
+     * @return repository
+     */
     public Repository getRepository() {
         return repository;
     }
 
+    /**
+     * Return the directory of the repository
+     *
+     * @return file
+     */
     public File getDirectory() {
         return this.repository.getDirectory();
     }
@@ -282,25 +418,4 @@ public class GitRepository {
     public static <E extends Exception> void throwAsUnchecked(Exception exception) throws E {
         throw (E) exception;
     }
-
 }
-//if (directory != null) {
-//    if (!directory.endsWith(".git") && !directory.endsWith(".git/")) {
-//        directory = directory + "/.git";
-//    }
-//    if (!new File(directory).exists()) {
-//        throw new IllegalStateException("Git repository not available at " + directory);
-//    }
-//    if (!directory.equals(this.directory)) {
-//
-//} else {
-//    throw new IllegalStateException("Directory must not be null.");
-//}
-//File localPath = new File(directory, "");
-//if (!localPath.exists()) {
-//    localPath.mkdir();
-//}
-//
-//if (!localPath.delete()) {
-//    callback.onError(new GitException("Could not delete temporary file " + localPath));
-//}
