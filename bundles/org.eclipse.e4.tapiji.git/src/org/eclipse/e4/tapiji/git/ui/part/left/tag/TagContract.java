@@ -17,6 +17,8 @@ public interface TagContract {
 
         TagPresenter getPresenter();
 
+        void collapseView();
+
     }
 
     interface Presenter extends BasePresenter<View> {

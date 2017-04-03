@@ -16,6 +16,8 @@ public interface StashContract {
         void showError(GitException exception);
 
         StashPresenter getPresenter();
+
+        void collapseView();
     }
 
     interface Presenter extends BasePresenter<View> {

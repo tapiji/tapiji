@@ -5,7 +5,6 @@ package org.eclipse.e4.tapiji.git.ui.part.left.stash.handler;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.model.GitResponse;
@@ -32,7 +31,7 @@ public class ApplyStashHandler {
     UISynchronize sync;
 
     @Execute
-    public void execute(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) String commitHash, final IMylynService mylyn, Shell shell) {
+    public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) String commitHash, final IMylynService mylyn, Shell shell) {
         service.applyStash(commitHash, new IGitServiceCallback<Void>() {
 
             @Override

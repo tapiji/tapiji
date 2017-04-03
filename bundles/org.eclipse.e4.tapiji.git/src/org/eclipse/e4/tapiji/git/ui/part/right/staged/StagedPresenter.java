@@ -42,7 +42,7 @@ public class StagedPresenter implements StagedContract.Presenter {
     @Override
     public void loadStagedFiles() {
         view.setCursorWaitVisibility(true);
-        service.uncommittedChanges(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
+        service.fileStates(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
 
             @Override
             public void onSuccess(GitResponse<Map<GitFileStatus, Set<String>>> response) {

@@ -11,6 +11,7 @@ import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.model.GitResponse;
 import org.eclipse.e4.tapiji.git.model.IGitServiceCallback;
 import org.eclipse.e4.tapiji.git.model.exception.GitException;
+import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.preference.Preferences;
 import org.eclipse.e4.tapiji.mylyn.core.api.IMylynService;
 import org.eclipse.e4.tapiji.mylyn.model.Notification;
@@ -34,7 +35,7 @@ public class StashHandler {
             @Override
             public void onSuccess(GitResponse<Void> response) {
                 sync.asyncExec(() -> {
-                    //  eventBroker.post(UIEventConstants.TOPIC_RELOAD_VIEW, "");
+                    eventBroker.post(UIEventConstants.TOPIC_RELOAD_VIEW, "");
                     mylyn.sendNotification(new Notification("Files stashed", "Index 0"));
                 });
             }

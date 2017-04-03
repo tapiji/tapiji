@@ -28,7 +28,7 @@ public interface IGitService {
 
     void unstageAll(IGitServiceCallback<Void> callback);
 
-    void uncommittedChanges(IGitServiceCallback<Map<GitFileStatus, Set<String>>> callback);
+    void fileStates(IGitServiceCallback<Map<GitFileStatus, Set<String>>> callback);
 
     void tags(IGitServiceCallback<List<Reference>> callback);
 

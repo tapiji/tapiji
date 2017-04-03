@@ -111,15 +111,18 @@ public class TagView implements TagContract.View {
         lblTagCnt.addListener(SWT.MouseDown, listener -> viewVisibility(((GridData) layoutComposite.getLayoutData()).exclude));
     }
 
-    private void collapseView() {
+    @Override
+    public void collapseView() {
         viewVisibility(false);
     }
 
     private void viewVisibility(boolean visibility) {
-        ((GridData) layoutComposite.getLayoutData()).exclude = !visibility;
-        layoutComposite.setVisible(visibility);
-        scrolledComposite.setMinSize(parent.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-        parent.layout(true, true);
+        sync.asyncExec(() -> {
+            ((GridData) layoutComposite.getLayoutData()).exclude = !visibility;
+            layoutComposite.setVisible(visibility);
+            scrolledComposite.setMinSize(parent.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+            parent.layout(true, true);
+        });
     }
 
     private void expandView() {

@@ -32,11 +32,16 @@ public class TagPresenter implements TagContract.Presenter {
 
             @Override
             public void onSuccess(GitResponse<List<Reference>> response) {
-                view.showTags(response.body());
+                List<Reference> data = response.body();
+                if (data == null || data.isEmpty()) {
+                    view.collapseView();
+                }
+                view.showTags(data);
             }
 
             @Override
             public void onError(GitException exception) {
+                view.collapseView();
                 view.showError(exception);
             }
         });

@@ -30,11 +30,13 @@ public class PopHandler {
 
     @Execute
     public void execute(final IEclipseContext context, final Shell shell, final IGitService service, final IMylynService mylyn) {
+        System.out.println("WAHHHHHH");
         service.popFirst(new IGitServiceCallback<Void>() {
 
             @Override
             public void onSuccess(GitResponse<Void> response) {
                 sync.asyncExec(() -> {
+                    System.out.println("WAHHHHHH2");
                     //eventBroker.post(UIEventConstants.TOPIC_RELOAD_VIEW, "");
                     mylyn.sendNotification(new Notification("Pop and applied", "Index 0"));
                 });
@@ -42,6 +44,7 @@ public class PopHandler {
 
             @Override
             public void onError(GitException exception) {
+                System.out.println("WAHHHHHH2" + exception);
                 if (exception.getCause() instanceof StashApplyFailureException) {
                     sync.asyncExec(() -> MessageDialog.openError(shell, "Error Appliying Stash", "Can not apply stash while working dir is staged or unstaged."));
                 } else {

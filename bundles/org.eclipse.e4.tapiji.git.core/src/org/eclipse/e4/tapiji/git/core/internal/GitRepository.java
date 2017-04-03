@@ -200,6 +200,14 @@ public class GitRepository {
         }
     }
 
+    public void reset() {
+        try (Git git = new Git(repository)) {
+            git.reset().call();
+        } catch (NoWorkTreeException | GitAPIException exception) {
+            throwAsUnchecked(exception);
+        }
+    }
+
     /**
      * Add all file to the index
      */
@@ -290,7 +298,7 @@ public class GitRepository {
      */
     public void applyStash(String hash) throws WrongRepositoryStateException, NoHeadException, StashApplyFailureException, GitAPIException {
         try (Git git = new Git(repository)) {
-            StashApplyCommand apply = git.stashApply().setStashRef(hash);
+            StashApplyCommand apply = git.stashApply().ignoreRepositoryState(true).setStashRef(hash);
             apply.setApplyUntracked(true);
             apply.call();
         }
@@ -376,6 +384,18 @@ public class GitRepository {
      */
     public List<Reference> stashes(int limit) throws IOException {
         return GitUtil.getRefs(repository, Constants.R_STASH, limit);
+    }
+
+    /**
+     * @param position
+     * @throws GitAPIException
+     */
+    public void popStashAt(int position) throws GitAPIException {
+        try (Git git = new Git(repository)) {
+            Collection<RevCommit> stashes = git.stashList().call();
+            git.stashApply().setStashRef(stashes.stream().findFirst().get().getName()).call();
+            git.stashDrop().setStashRef(position).call();
+        }
     }
 
     /**

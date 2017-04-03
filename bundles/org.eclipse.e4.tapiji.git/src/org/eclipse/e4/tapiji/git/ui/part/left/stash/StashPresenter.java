@@ -32,13 +32,17 @@ public class StashPresenter implements StashContract.Presenter {
 
             @Override
             public void onSuccess(GitResponse<List<CommitReference>> response) {
+                List<CommitReference> data = response.body();
+                if (data == null || data.isEmpty()) {
+                    view.collapseView();
+                }
                 view.showStashes(response.body());
-
             }
 
             @Override
             public void onError(GitException exception) {
                 view.showError(exception);
+                view.collapseView();
             }
         });
     }

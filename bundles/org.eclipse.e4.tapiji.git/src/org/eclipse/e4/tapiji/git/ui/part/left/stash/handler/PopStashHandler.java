@@ -36,7 +36,7 @@ public class PopStashHandler {
 
             @Override
             public void onSuccess(GitResponse<Void> response) {
-                sync.asyncExec(() -> mylyn.sendNotification(new Notification("Pop stash successful!", "TOOD")));
+                sync.asyncExec(() -> mylyn.sendNotification(new Notification("Pop stash successful!", "")));
             }
 
             @Override

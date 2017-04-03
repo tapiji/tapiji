@@ -24,7 +24,7 @@ public class DebugHandler {
     @Execute
     public void debug(final IEclipseContext context, Shell shell, IGitService service) {
 
-        service.uncommittedChanges(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
+        service.fileStates(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
 
             @Override
             public void onSuccess(GitResponse<Map<GitFileStatus, Set<String>>> result) {
@@ -53,7 +53,7 @@ public class DebugHandler {
 
             }
         });
-        service.uncommittedChanges(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
+        service.fileStates(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
 
             @Override
             public void onSuccess(GitResponse<Map<GitFileStatus, Set<String>>> result) {
@@ -81,7 +81,7 @@ public class DebugHandler {
 
             }
         });
-        service.uncommittedChanges(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
+        service.fileStates(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
 
             @Override
             public void onSuccess(GitResponse<Map<GitFileStatus, Set<String>>> result) {

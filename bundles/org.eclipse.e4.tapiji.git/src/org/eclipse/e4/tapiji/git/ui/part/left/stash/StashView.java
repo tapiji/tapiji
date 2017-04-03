@@ -124,13 +124,16 @@ public class StashView implements StashContract.View {
     }
 
     private void viewVisibility(boolean visibility) {
-        ((GridData) layoutComposite.getLayoutData()).exclude = !visibility;
-        layoutComposite.setVisible(visibility);
-        scrolledComposite.setMinSize(parent.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-        parent.layout(true, true);
+        sync.asyncExec(() -> {
+            ((GridData) layoutComposite.getLayoutData()).exclude = !visibility;
+            layoutComposite.setVisible(visibility);
+            scrolledComposite.setMinSize(parent.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+            parent.layout(true, true);
+        });
     }
 
-    private void collapseView() {
+    @Override
+    public void collapseView() {
         viewVisibility(false);
     }
 

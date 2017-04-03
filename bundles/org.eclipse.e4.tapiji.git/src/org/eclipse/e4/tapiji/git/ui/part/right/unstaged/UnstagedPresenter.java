@@ -47,7 +47,7 @@ public class UnstagedPresenter implements UnstagedContract.Presenter {
     @Override
     public void loadUnCommittedChanges() {
         view.setCursorWaitVisibility(true);
-        service.uncommittedChanges(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
+        service.fileStates(new IGitServiceCallback<Map<GitFileStatus, Set<String>>>() {
 
             @Override
             public void onSuccess(GitResponse<Map<GitFileStatus, Set<String>>> response) {
