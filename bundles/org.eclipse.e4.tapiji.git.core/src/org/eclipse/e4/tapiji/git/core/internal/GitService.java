@@ -27,6 +27,7 @@ import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.transport.FetchResult;
 
 
 public class GitService implements IGitService {
@@ -156,11 +157,22 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void branches(IGitServiceCallback<List<Reference>> callback) {
+    public List<Reference> localBranches() {
+        List<Reference> branches = null;
+        try {
+            branches = git.localBranches(150);
+        } catch (IOException exception) {
+            throwAsUnchecked(exception);
+        }
+        return branches;
+    }
+
+    @Override
+    public void remoteBranches(IGitServiceCallback<List<Reference>> callback) {
         CompletableFuture.supplyAsync(() -> {
             List<Reference> branches = null;
             try {
-                branches = git.branches(150);
+                branches = git.remoteBranches(150);
             } catch (IOException exception) {
                 throwAsUnchecked(exception);
             }
@@ -303,6 +315,37 @@ public class GitService implements IGitService {
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
+    @Override
+    public void fetch(IGitServiceCallback<String> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            FetchResult result = null;
+            try {
+                result = git.fetch();
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitResponse<String>(result.getMessages());
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void checkout(String branch) {
+        try {
+            git.checkout(branch, false);
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void checkoutRemoteBranch(String name) {
+        try {
+            git.checkout(name, true);
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public static <E extends Exception> void throwAsUnchecked(Exception exception) throws E {
         throw (E) exception;
@@ -312,22 +355,6 @@ public class GitService implements IGitService {
     @Override
     public void pushAll(IGitServiceCallback<Void> callback) {
         //     push.pushAll(git, privateKeyPath, callback, executorService);
-    }
-
-    @Override
-    @Deprecated
-    public void checkout(String branch) {
-        //        try {
-        //            Ref ref = git.checkout()
-        //                .setCreateBranch(false)
-        //                .setName(branch)
-        //                .setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK)
-        //                .setStartPoint(Constants.R_HEADS + branch)
-        //                .call();
-        //        } catch (GitAPIException e) {
-        //            // TODO Auto-generated catch block
-        //            e.printStackTrace();
-        //        }
     }
 
     @Override
@@ -351,15 +378,6 @@ public class GitService implements IGitService {
     @Deprecated
     public void showFileDiff(IGitServiceCallback<Void> callback) {
 
-    }
-
-    @Override
-    public void fetch(IGitServiceCallback<Void> callback) {
-        //        CompletableFuture.supplyAsync(() -> {
-        //            FetchCommand fetch = git.fetch().setCheckFetchedObjects(true).setRemoveDeletedRefs(true);
-        //            Log.d(TAG, "stash(" + fetch + ")");
-        //            return new GitResponse<Void>(null);
-        //        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
@@ -458,19 +476,6 @@ public class GitService implements IGitService {
         //            return new GitResponse<DiffFile>(new DiffFile());
         //        }, executorService).whenCompleteAsync((r, e) -> System.out.println("sddd"));
 
-    }
-
-    @Override
-    public void fetchAll(IGitServiceCallback<String> callback) {
-        //        CompletableFuture.supplyAsync(() -> {
-        //            FetchResult result = null;
-        //            try {
-        //                result = git.fetch().setRemoveDeletedRefs(true).setCheckFetchedObjects(true).call();
-        //            } catch (GitAPIException exception) {
-        //                throwAsUnchecked(exception);
-        //            }
-        //            return new GitResponse<String>(result.getMessages());
-        //        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override

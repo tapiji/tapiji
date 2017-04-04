@@ -25,7 +25,7 @@ public class FetchAllHandler {
 
     @Execute
     public void execute(final Shell shell, final IGitService service, final IMylynService mylyn) {
-        service.fetchAll(new IGitServiceCallback<String>() {
+        service.fetch(new IGitServiceCallback<String>() {
 
             @Override
             public void onSuccess(GitResponse<String> response) {

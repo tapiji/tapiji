@@ -8,6 +8,7 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.part.left.file.FileView;
+import org.eclipse.e4.tapiji.git.ui.part.left.remotebranch.RemoteBranchView;
 import org.eclipse.e4.tapiji.git.ui.part.left.stash.StashView;
 import org.eclipse.e4.tapiji.git.ui.part.left.tag.TagView;
 import org.eclipse.e4.tapiji.logger.Log;
@@ -51,6 +52,9 @@ public class PropertiesView implements PropertiesContract.View {
     StashView stashView;
 
     @Inject
+    RemoteBranchView remoteBranchView;
+
+    @Inject
     TagView tagView;
 
     private Composite compositeMain;
@@ -73,6 +77,7 @@ public class PropertiesView implements PropertiesContract.View {
         filesView.createPartControl(compositeMain, scrollView);
         stashView.createPartControl(compositeMain, scrollView);
         tagView.createPartControl(compositeMain, scrollView);
+        remoteBranchView.createPartControl(compositeMain, scrollView);
 
         scrollView.setContent(compositeMain);
         scrollView.setMinSize(compositeMain.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -91,6 +96,7 @@ public class PropertiesView implements PropertiesContract.View {
         filesView.getPresenter().loadFiles();
         stashView.getPresenter().loadStashes();
         tagView.getPresenter().loadTags();
+        remoteBranchView.getPresenter().loadRemoteBranches();
         scrollView.setMinSize(compositeMain.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         scrollView.setVisible(true);
     }

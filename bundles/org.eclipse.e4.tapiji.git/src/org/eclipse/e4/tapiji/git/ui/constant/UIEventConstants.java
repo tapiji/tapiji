@@ -38,6 +38,7 @@ public class UIEventConstants {
 
     public static final String PROPERTY_TREE_VIEWER_MENU_ID = "org.eclipse.e4.tapiji.git.popupmenu.pv.treeviewer";
     public static final String PROPERTY_TABLE_VIEW_STASH_MENU_ID = "org.eclipse.e4.tapiji.git.popupmenu.stash.table";
+    public static final String PROPERTY_TABLE_VIEW_BRANCH_MENU_ID = "org.eclipse.e4.tapiji.git.popupmenu.remote.branch.table";
 
     public static final String MENU_CHANGE_REPOSITORY_ID = "org.eclipse.e4.tapiji.git.handledtoolitem.selected.repository";
     public static final String MENU_CHANGE_BRANCH_ID = "org.eclipse.e4.tapiji.git.handledtoolitem.select.branch";

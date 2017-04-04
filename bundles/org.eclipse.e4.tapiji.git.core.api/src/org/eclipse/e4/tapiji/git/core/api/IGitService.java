@@ -42,11 +42,9 @@ public interface IGitService {
 
     void popFirst(IGitServiceCallback<Void> callback);
 
-    void fetch(IGitServiceCallback<Void> callback);
+    void fetch(IGitServiceCallback<String> callback);
 
     void deleteFile(File file);
-
-    void unmount();
 
     void applyStash(String hash, IGitServiceCallback<Void> callback);
 
@@ -60,15 +58,11 @@ public interface IGitService {
 
     void fileContent(String hash, IGitServiceCallback<DiffFile> callback);
 
-    void branches(IGitServiceCallback<List<Reference>> callback);
+    List<Reference> localBranches();
 
-    void fetchAll(IGitServiceCallback<String> callback);
+    void remoteBranches(IGitServiceCallback<List<Reference>> callback);
 
     void checkout(String branch);
-
-    File getDirectory();
-
-    void dispose();
 
     void pullWithRebase();
 
@@ -95,4 +89,12 @@ public interface IGitService {
     void setPrivateKeyPath(String keyPath);
 
     void openRepository(String directory) throws IOException;
+
+    File getDirectory();
+
+    void dispose();
+
+    void unmount();
+
+    void checkoutRemoteBranch(String name);
 }

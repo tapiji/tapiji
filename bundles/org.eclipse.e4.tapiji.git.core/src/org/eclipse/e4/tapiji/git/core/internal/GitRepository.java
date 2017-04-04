@@ -3,6 +3,7 @@ package org.eclipse.e4.tapiji.git.core.internal;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,6 +17,8 @@ import org.eclipse.e4.tapiji.git.model.commitlog.GitLog;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.jgit.api.AddCommand;
+import org.eclipse.jgit.api.CreateBranchCommand;
+import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.LogCommand;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
@@ -39,6 +42,8 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.transport.FetchResult;
+import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 
@@ -47,7 +52,23 @@ public class GitRepository {
 
     private static final String TAG = GitRepository.class.getSimpleName();
 
+    private static List<RefSpec> refSpecs = new ArrayList<>();
+
     private Repository repository;
+
+    /**
+     * +<src>:<dst>
+     * <code>
+     *  + optional
+     *  <src> pattern on the remote side
+     *  <dst> references locally
+     * </code>
+     */
+    static {
+        refSpecs.add(new RefSpec("+refs/heads/*:refs/remotes/origin/*"));
+        refSpecs.add(new RefSpec("+refs/tags/*:refs/tags/*"));
+        refSpecs.add(new RefSpec("+refs/notes/*:refs/notes/*"));
+    }
 
     /**
      * Opens a local git repository
@@ -334,7 +355,7 @@ public class GitRepository {
     public void checkout(String branchName, boolean createBranch) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
         Log.d(TAG, "checkout called with: [ branchName: " + branchName + ", createBranch:" + createBranch + " ]");
         try (Git git = new Git(repository)) {
-            git.checkout().setName(branchName).setCreateBranch(createBranch).call();
+            git.checkout().setName(branchName).setCreateBranch(createBranch).setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK).call();
         }
     }
 
@@ -366,8 +387,24 @@ public class GitRepository {
      * @throws IOException
      *             The reference space cannot be accessed.
      */
-    public List<Reference> branches(int limit) throws IOException {
+    public List<Reference> localBranches(int limit) throws IOException {
         return GitUtil.getRefs(repository, Constants.R_HEADS, limit);
+    }
+
+    /**
+     * Returns the list of remote branches in the repository.
+     *
+     * @param repository
+     *            Represents the current git repository.
+     * @param limit
+     *            The number of elements the branches should be limited to
+     * @return list
+     *         List of local branches
+     * @throws IOException
+     *             The reference space cannot be accessed.
+     */
+    public List<Reference> remoteBranches(int limit) throws IOException {
+        return GitUtil.getRefs(repository, Constants.R_REMOTES, limit);
     }
 
     /**
@@ -395,6 +432,23 @@ public class GitRepository {
             Collection<RevCommit> stashes = git.stashList().call();
             git.stashApply().setStashRef(stashes.stream().findFirst().get().getName()).call();
             git.stashDrop().setStashRef(position).call();
+        }
+    }
+
+    /**
+     * Updates from the remote repository.Heads , tags and notes
+     * are retrieved.
+     *
+     * @return {@link FetchResult}
+     * @throws InvalidRemoteException
+     * @throws TransportException
+     * @throws GitAPIException
+     */
+    public FetchResult fetch() throws InvalidRemoteException, TransportException, GitAPIException {
+        try (Git git = new Git(repository)) {
+            FetchCommand fetch = git.fetch().setCheckFetchedObjects(true).setRemoveDeletedRefs(true);
+            fetch.setRefSpecs(refSpecs);
+            return fetch.call();
         }
     }
 
