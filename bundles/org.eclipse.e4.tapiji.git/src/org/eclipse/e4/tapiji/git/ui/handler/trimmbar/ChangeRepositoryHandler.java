@@ -1,11 +1,9 @@
 package org.eclipse.e4.tapiji.git.ui.handler.trimmbar;
 
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import javax.inject.Inject;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ParameterizedCommand;
@@ -16,11 +14,10 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.tapiji.git.core.api.IGitService;
 import org.eclipse.e4.tapiji.git.model.GitRepository;
-import org.eclipse.e4.tapiji.git.model.Reference;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
 import org.eclipse.e4.tapiji.git.ui.preference.Preferences;
+import org.eclipse.e4.tapiji.git.ui.util.UIUtil;
 import org.eclipse.e4.tapiji.git.util.JsonParserUtil;
-import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.e4.ui.di.AboutToShow;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
@@ -79,27 +76,12 @@ public class ChangeRepositoryHandler {
                 ((HandledToolItemImpl) dropDownMenu).setLabel(selectedRepository.getName());
             }
             eventBroker.post(UIEventConstants.SWITCH_CONTENT_VIEW, null);
-            setBranch(modelService, app);
+            UIUtil.setCurrentBranch(prefs.getSelectedRepository().getName(), service, modelService, app);
             eventBroker.post(UIEventConstants.TOPIC_RELOAD_VIEW, "");
 
             executeCommand();
         } catch (Exception exception) {
             MessageDialog.openError(shell, "Error: ", exception.getMessage());
-        }
-    }
-
-    private void setBranch(EModelService modelService, MApplication app) throws IOException {
-        List<Reference> branches = service.localBranches();
-        Optional<Reference> foundMaster = branches.stream().filter(branch -> branch.getName().toLowerCase().contains("master")).findAny();
-        MUIElement dropDownMenu = modelService.find(UIEventConstants.MENU_CHANGE_BRANCH_ID, app);
-        if (dropDownMenu instanceof HandledToolItemImpl) {
-            if (foundMaster.isPresent()) {
-                ((HandledToolItemImpl) dropDownMenu).setLabel(foundMaster.get().getName());
-            } else if (branches.size() >= 1) {
-                ((HandledToolItemImpl) dropDownMenu).setLabel(branches.get(0).getName());
-            } else {
-                Log.i("BRANCH", "NO BRANCH AVAILABLE");
-            }
         }
     }
 

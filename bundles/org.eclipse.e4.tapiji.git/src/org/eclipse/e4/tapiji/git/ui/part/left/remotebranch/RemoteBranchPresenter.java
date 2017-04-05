@@ -47,4 +47,5 @@ public class RemoteBranchPresenter implements RemoteBranchContract.Presenter {
             }
         });
     }
+
 }

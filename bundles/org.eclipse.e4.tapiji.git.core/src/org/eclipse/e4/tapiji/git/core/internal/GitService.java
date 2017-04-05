@@ -26,6 +26,7 @@ import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 import org.eclipse.e4.tapiji.logger.Log;
+import org.eclipse.jgit.api.PullResult;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.transport.FetchResult;
 
@@ -329,21 +330,54 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void checkout(String branch) {
+    public void checkout(String branch) throws GitAPIException {
         try {
             git.checkout(branch, false);
-        } catch (GitAPIException e) {
-            e.printStackTrace();
+        } catch (GitAPIException exception) {
+            throw exception;
         }
     }
 
     @Override
-    public void checkoutRemoteBranch(String name) {
+    public void checkoutRemoteBranch(String branch) throws GitAPIException {
         try {
-            git.checkout(name, true);
-        } catch (GitAPIException e) {
-            e.printStackTrace();
+            git.checkout(branch, true);
+        } catch (GitAPIException exception) {
+            throw exception;
         }
+    }
+
+    @Override
+    public void pull(IGitServiceCallback<Boolean> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            PullResult result = git.pull();
+            return new GitResponse<Boolean>(result.isSuccessful());
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void fileMergeDiff(String file, GitFileStatus conflict, IGitServiceCallback<DiffFile> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                DiffFile diffFile = git.mergeDiff(file);
+                return new GitResponse<DiffFile>(diffFile);
+            } catch (Exception exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitResponse<DiffFile>(new DiffFile());
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
+    }
+
+    @Override
+    public void stageMergedFile(String fileName, IGitServiceCallback<Void> callback) {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                git.addFile(fileName);
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitResponse<Void>(null);
+        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @SuppressWarnings("unchecked")
@@ -446,21 +480,6 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void pullFastForward(IGitServiceCallback<Void> callback) {
-        //        CompletableFuture.supplyAsync(() -> {
-        //            try {
-        //
-        //                // todo return merge result if conflict exists and handle view states
-        //                PullResult pull = git.pull().call();
-        //
-        //            } catch (Exception exception) {
-        //                throwAsUnchecked(exception);
-        //            }
-        //            return new GitResponse<Void>(null);
-        //        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
-    }
-
-    @Override
     public void pullWithRebase() {
         //        CompletableFuture.supplyAsync(() -> {
         //            try {
@@ -498,33 +517,6 @@ public class GitService implements IGitService {
     public void dispose() {
         unmount();
         executorService.shutdown();
-    }
-
-    @Override
-    public void fileMergeDiff(String file, GitFileStatus conflict, IGitServiceCallback<DiffFile> callback) {
-        //        CompletableFuture.supplyAsync(() -> {
-        //            try {
-        //                DiffFile diffFile = GitUtil.getDiff(repository, file, true);
-        //                return new GitResponse<DiffFile>(diffFile);
-        //            } catch (Exception exception) {
-        //                throwAsUnchecked(exception);
-        //            }
-        //            return new GitResponse<DiffFile>(new DiffFile());
-        //        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
-    }
-
-    @Override
-    public void stageFile(String fileName, IGitServiceCallback<Void> callback) {
-        //        CompletableFuture.supplyAsync(() -> {
-        //            try {
-        //                AddCommand add = git.add();
-        //                add.addFilepattern(fileName);
-        //                add.call();
-        //            } catch (GitAPIException exception) {
-        //                throwAsUnchecked(exception);
-        //            }
-        //            return new GitResponse<Void>(null);
-        //        }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
 }

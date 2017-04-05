@@ -14,6 +14,7 @@ import org.eclipse.e4.tapiji.git.model.commitlog.GitLog;
 import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
+import org.eclipse.jgit.api.errors.GitAPIException;
 
 
 public interface IGitService {
@@ -62,19 +63,17 @@ public interface IGitService {
 
     void remoteBranches(IGitServiceCallback<List<Reference>> callback);
 
-    void checkout(String branch);
+    void checkout(String branch) throws GitAPIException;
 
     void pullWithRebase();
 
     void pullWithMerge();
 
-    void pullFastForward(IGitServiceCallback<Void> callback);
-
     void mergeStatus(IGitServiceCallback<Void> callback);
 
     void fileMergeDiff(String name, GitFileStatus conflict, IGitServiceCallback<DiffFile> iGitServiceCallback);
 
-    void stageFile(String fileName, IGitServiceCallback<Void> callback);
+    void stageMergedFile(String fileName, IGitServiceCallback<Void> callback);
 
     void logs(IGitServiceCallback<List<GitLog>> callback);
 
@@ -96,5 +95,7 @@ public interface IGitService {
 
     void unmount();
 
-    void checkoutRemoteBranch(String name);
+    void checkoutRemoteBranch(String name) throws GitAPIException;
+
+    void pull(IGitServiceCallback<Boolean> callback);
 }

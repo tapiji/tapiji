@@ -14,6 +14,7 @@ import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.core.internal.util.GitUtil;
 import org.eclipse.e4.tapiji.git.model.Reference;
 import org.eclipse.e4.tapiji.git.model.commitlog.GitLog;
+import org.eclipse.e4.tapiji.git.model.diff.DiffFile;
 import org.eclipse.e4.tapiji.git.model.file.GitFileStatus;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.jgit.api.AddCommand;
@@ -21,6 +22,8 @@ import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.LogCommand;
+import org.eclipse.jgit.api.PullCommand;
+import org.eclipse.jgit.api.PullResult;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
 import org.eclipse.jgit.api.RmCommand;
 import org.eclipse.jgit.api.StashApplyCommand;
@@ -51,6 +54,8 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 public class GitRepository {
 
     private static final String TAG = GitRepository.class.getSimpleName();
+
+    private static final int TIMEOUT_PULL = 60;
 
     private static List<RefSpec> refSpecs = new ArrayList<>();
 
@@ -462,6 +467,28 @@ public class GitRepository {
     }
 
     /**
+     * Executes GIT pull command on the given repository
+     *
+     * @return PullResult
+     */
+    public PullResult pull() {
+        PullResult result = null;
+        try {
+            try (Git git = new Git(repository)) {
+                PullCommand pull = git.pull();
+                pull.setTimeout(TIMEOUT_PULL);
+
+                result = pull.call();
+
+            }
+        } catch (GitAPIException exception) {
+            throwAsUnchecked(exception);
+        }
+        return result;
+
+    }
+
+    /**
      * Return the remote url
      *
      * @return url
@@ -492,4 +519,17 @@ public class GitRepository {
     public static <E extends Exception> void throwAsUnchecked(Exception exception) throws E {
         throw (E) exception;
     }
+
+    public DiffFile mergeDiff(String fileName) throws IOException {
+        return GitUtil.getDiff(repository, fileName, true);
+    }
+
+    public void addFile(String fileName) throws NoFilepatternException, GitAPIException {
+        try (Git git = new Git(repository)) {
+            AddCommand add = git.add();
+            add.addFilepattern(fileName);
+            add.call();
+        }
+    }
+
 }

@@ -124,7 +124,7 @@ public class ContentPresenter implements ContentContract.Presenter, FileWatchSer
 
             File file = new File(diffFile.getFile());
             Files.write(file.toPath(), lines, Charset.defaultCharset());
-            service.stageFile(selectedFile, new IGitServiceCallback<Void>() {
+            service.stageMergedFile(selectedFile, new IGitServiceCallback<Void>() {
 
                 @Override
                 public void onSuccess(GitResponse<Void> response) {

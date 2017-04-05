@@ -7,6 +7,7 @@ import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.tapiji.git.model.Reference;
 import org.eclipse.e4.tapiji.git.model.exception.GitException;
 import org.eclipse.e4.tapiji.git.ui.constant.UIEventConstants;
+import org.eclipse.e4.tapiji.git.ui.util.GitUtil;
 import org.eclipse.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipse.e4.tapiji.resource.TapijiResourceConstants;
 import org.eclipse.e4.tapiji.utils.ColorUtils;
@@ -141,7 +142,7 @@ public class RemoteBranchView implements RemoteBranchContract.View {
                 lblRemoteBranchCnt.setText(String.valueOf(branches.size()));
                 branches.stream().forEach(branch -> {
                     TableItem item = new TableItem(table, SWT.NONE);
-                    item.setText(branch.getName());
+                    item.setText(GitUtil.parseBranchName(branch));
                     item.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_BRANCH));
                 });
                 registerTreeMenu();

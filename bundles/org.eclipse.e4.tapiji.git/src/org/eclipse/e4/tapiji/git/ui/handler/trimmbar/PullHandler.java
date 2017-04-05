@@ -24,11 +24,15 @@ public class PullHandler {
     @Execute
     public void execute(final Shell shell, final IGitService service, final IMylynService mylyn, UISynchronize sync) {
         Log.d(TAG, "PullHandler execute()");
-        service.pullFastForward(new IGitServiceCallback<Void>() {
+        service.pull(new IGitServiceCallback<Boolean>() {
 
             @Override
-            public void onSuccess(GitResponse<Void> response) {
-                sync.asyncExec(() -> mylyn.sendNotification(new Notification("Pull Successful", "")));
+            public void onSuccess(GitResponse<Boolean> response) {
+                if (response.body()) {
+                    sync.asyncExec(() -> mylyn.sendNotification(new Notification("Pull Successful", "")));
+                } else {
+                    sync.asyncExec(() -> mylyn.sendNotification(new Notification("Pull Failed", "")));
+                }
             }
 
             @Override

@@ -122,6 +122,7 @@ public class ContentView implements ContentContract.View {
 
     @Override
     public void showMergeView(DiffFile diff) {
+        clearScrollView();
         fileDiffHeader(composite);
         this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
         diff.getHunks().stream().filter(section -> section != null).forEach(section -> mergeView.createMergeView(composite, section, diff));
@@ -131,6 +132,7 @@ public class ContentView implements ContentContract.View {
 
     @Override
     public void showContentDiff(DiffFile diff) {
+        clearScrollView();
         fileDiffHeader(composite);
         this.lblHeader.setText(String.format("%1$s with %2$d additions and %3$d deletions", diff.getFile(), diff.getAdded(), diff.getDeleted()));
         diff.getHunks().stream().filter(section -> section != null).forEach(section -> diffView.createView(composite, section));
@@ -159,6 +161,7 @@ public class ContentView implements ContentContract.View {
 
     @Override
     public void showLogs(List<GitLog> logs) {
+        clearScrollView();
         logView.createView(logs, composite, lblHeader, prettyTime);
         updateScrollView();
         parent.layout(true, true);
