@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test
+Bundle-SymbolicName: org.eclipse.e4.tapiji.git.core.test
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: org.eclipse.e4.tapiji.git.core;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.junit;bundle-version="4.12.0",
+ org.eclipse.jgit.source;bundle-version="4.6.1",
+ org.eclipse.e4.tapiji.git.model,
+ org.eclipse.e4.babel.logger;bundle-version="1.0.0",
+ org.apache.log4j;bundle-version="1.2.15",
+ org.slf4j.api;bundle-version="1.7.2"
