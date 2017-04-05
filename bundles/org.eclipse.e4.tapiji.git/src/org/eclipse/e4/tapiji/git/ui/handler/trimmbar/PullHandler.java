@@ -31,7 +31,7 @@ public class PullHandler {
                 if (response.body()) {
                     sync.asyncExec(() -> mylyn.sendNotification(new Notification("Pull Successful", "")));
                 } else {
-                    sync.asyncExec(() -> mylyn.sendNotification(new Notification("Pull Failed", "")));
+                    sync.asyncExec(() -> mylyn.sendNotification(new Notification("Pull Failed", "Can not merge files. Commit unstaged changes")));
                 }
             }
 

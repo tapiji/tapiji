@@ -28,6 +28,7 @@ import org.eclipse.e4.tapiji.git.model.property.PropertyDirectory;
 import org.eclipse.e4.tapiji.logger.Log;
 import org.eclipse.jgit.api.PullResult;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.transport.FetchResult;
 
 
@@ -46,10 +47,6 @@ public class GitService implements IGitService {
 
     private ExecutorService executorService;
 
-    private String publicKeyPath;
-
-    private String privateKeyPath;
-
     public GitService() {
         executorService = Executors.newFixedThreadPool(10);
     }
@@ -57,13 +54,11 @@ public class GitService implements IGitService {
     @Override
     public void setPublicKeyPath(String keyPath) {
         Log.d(TAG, "setPublicKeyPath called with [" + keyPath + "]");
-        this.publicKeyPath = keyPath;
     }
 
     @Override
     public void setPrivateKeyPath(String keyPath) {
         Log.d(TAG, "privateKeyPath called with [" + keyPath + "]");
-        this.privateKeyPath = keyPath;
     }
 
     @Override
@@ -79,7 +74,11 @@ public class GitService implements IGitService {
     @Override
     public void commitChanges(String summary, String description, IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
-            git.commit(summary, description);
+            try {
+                git.commit(summary, description);
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
             return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
@@ -87,7 +86,11 @@ public class GitService implements IGitService {
     @Override
     public void stageAll(IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
-            git.stageAll();
+            try {
+                git.stageAll();
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
             return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
@@ -95,7 +98,11 @@ public class GitService implements IGitService {
     @Override
     public void discardChanges(IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
-            git.discardChanges();
+            try {
+                git.discardChanges();
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
             return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
@@ -103,14 +110,26 @@ public class GitService implements IGitService {
     @Override
     public void logs(IGitServiceCallback<List<GitLog>> callback) {
         CompletableFuture.supplyAsync(() -> {
-            return new GitResponse<List<GitLog>>(git.logs(150));
+            List<GitLog> logs = null;
+            try {
+                logs = git.logs(150);
+            } catch (GitAPIException | IOException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitResponse<List<GitLog>>(logs);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
     @Override
     public void fileStates(IGitServiceCallback<Map<GitFileStatus, Set<String>>> callback) {
         CompletableFuture.supplyAsync(() -> {
-            return new GitResponse<Map<GitFileStatus, Set<String>>>(git.states());
+            Map<GitFileStatus, Set<String>> states = null;
+            try {
+                states = git.states();
+            } catch (NoWorkTreeException | GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
+            return new GitResponse<Map<GitFileStatus, Set<String>>>(states);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
 
@@ -239,7 +258,11 @@ public class GitService implements IGitService {
     @Override
     public void unstageAll(IGitServiceCallback<Void> callback) {
         CompletableFuture.supplyAsync(() -> {
-            git.reset();
+            try {
+                git.reset();
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
             return new GitResponse<Void>(null);
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }
@@ -350,7 +373,12 @@ public class GitService implements IGitService {
     @Override
     public void pull(IGitServiceCallback<Boolean> callback) {
         CompletableFuture.supplyAsync(() -> {
-            PullResult result = git.pull();
+            PullResult result = null;
+            try {
+                result = git.pull();
+            } catch (GitAPIException exception) {
+                throwAsUnchecked(exception);
+            }
             return new GitResponse<Boolean>(result.isSuccessful());
         }, executorService).whenCompleteAsync(onCompleteAsync(callback));
     }

@@ -98,8 +98,8 @@
         <children xsi:type="menu:HandledToolItem" xmi:id="_aeRTwOrPEeah_qW_gJKbyQ" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.pull" label="Pull" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_pull.png" command="_OllvwPncEeaw0el0AXi7EQ">
           <menu xmi:id="_DLAYQPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.menu.pull">
             <children xsi:type="menu:HandledMenuItem" xmi:id="_Dum0kPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.fetchall" label="Fetch all" type="Radio" command="_OJv9wPnbEeaw0el0AXi7EQ"/>
-            <children xsi:type="menu:HandledMenuItem" xmi:id="_FmGhsPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.pullfast-forward-only" label="Pull (fast-forward-only)" type="Radio" command="_TFYKQPnbEeaw0el0AXi7EQ"/>
-            <children xsi:type="menu:HandledMenuItem" xmi:id="_Irx5MPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.pullrebase" label="Pull (rebase)" type="Radio" command="_emaN0OrPEeah_qW_gJKbyQ"/>
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_FmGhsPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.pullfast-forward-only" toBeRendered="false" visible="false" label="Pull (fast-forward-only)" type="Radio" command="_TFYKQPnbEeaw0el0AXi7EQ"/>
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_Irx5MPnbEeaw0el0AXi7EQ" elementId="org.eclipse.e4.tapiji.git.handledmenuitem.pullrebase" toBeRendered="false" visible="false" label="Pull (rebase)" type="Radio" command="_emaN0OrPEeah_qW_gJKbyQ"/>
           </menu>
         </children>
         <children xsi:type="menu:HandledToolItem" xmi:id="_qOZSwPPREea2ELhYKKDJOg" elementId="org.eclipse.e4.tapiji.git.handledtoolitem.stash" label="Stash" iconURI="platform:/plugin/org.eclipse.e4.tapiji.resource/icons/16x16/git_stash.png" command="_oF-_UPPSEea2ELhYKKDJOg"/>
