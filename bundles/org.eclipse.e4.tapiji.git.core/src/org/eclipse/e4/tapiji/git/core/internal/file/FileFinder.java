@@ -34,9 +34,11 @@ public class FileFinder extends SimpleFileVisitor<Path> {
                 if (found.isPresent()) {
                     found.get().addFile(PropertyFile.create(path.toFile()));
                 } else {
-                    PropertyDirectory dir = PropertyDirectory.create(path.getParent());
-                    dir.addFile(PropertyFile.create(path.toFile()));
-                    directories.add(dir);
+                    if (!path.toFile().getName().contains("build")) { // todo improve filter
+                        PropertyDirectory dir = PropertyDirectory.create(path.getParent());
+                        dir.addFile(PropertyFile.create(path.toFile()));
+                        directories.add(dir);
+                    }
                 }
             }
         }
