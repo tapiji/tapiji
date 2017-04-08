@@ -1,17 +1,17 @@
 <project>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.eclipselabs.e4.tapiji</groupId>
-    <artifactId>org.eclipselabs.e4.tapiji.root</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <parent>
-            <groupId>org.eclipselabs.e4.tapiji</groupId>
-            <artifactId>org.eclipselabs.e4.tapiji.configuration</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        <relativePath>./releng/org.eclipselabs.e4.tapiji.configuration</relativePath>
-    </parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.eclipse.e4.tapiji</groupId>
+	<artifactId>org.eclipse.e4.tapiji.root</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<parent>
+		<groupId>org.eclipse.e4.tapiji</groupId>
+		<artifactId>org.eclipse.e4.tapiji.configuration</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>./releng/org.eclipse.e4.tapiji.configuration</relativePath>
+	</parent>
 
-    <modules>
+	<modules>
 		<module>bundles</module>
-    </modules>
+	</modules>
 </project> 

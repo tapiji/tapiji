@@ -1,16 +1,16 @@
 <project>
+    <parent>
+        <groupId>org.eclipse.e4.tapiji</groupId>
+        <artifactId>org.eclipse.e4.tapiji.root</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+	
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.eclipselabs.e4.tapiji</groupId>
-    <artifactId>org.eclipselabs.e4.tapiji.bundles</artifactId>
+    <groupId>org.eclipse.e4.tapiji</groupId>
+    <artifactId>org.eclipse.e4.tapiji.bundles</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     
-    <parent>
-        <groupId>org.eclipselabs.e4.tapiji</groupId>
-        <artifactId>org.eclipselabs.e4.tapiji.root</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
-
     <modules>
 		<!-- Common -->
 		<module>org.eclipse.e4.tapiji.logger</module>
@@ -35,6 +35,9 @@
 		<module>org.eclipse.e4.tapiji.mylyn.core</module>
 		<module>org.eclipse.e4.tapiji.mylyn.core.api</module>
 		<module>org.eclipse.e4.tapiji.mylyn.model</module>
+		
+		<!-- I18N -->
+		<module>org.eclipse.e4.tapiji.translator.i18n</module>
 		
     </modules>
 </project> 
