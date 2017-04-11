@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Tapiji Target RCP" sequenceNumber="18">
+<?pde version="3.8"?><target name="Tapiji Target RCP" sequenceNumber="21">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.platform.sdk" version="4.6.0.I20160606-1100"/>
-<unit id="org.eclipse.equinox.sdk.feature.group" version="3.12.0.v20160606-1311"/>
-<unit id="org.eclipse.jdt.feature.group" version="3.12.0.v20160606-1100"/>
+<unit id="org.eclipse.platform.sdk" version="4.6.3.M20170301-0400"/>
+<unit id="org.eclipse.equinox.sdk.feature.group" version="3.12.0.v20170209-1843"/>
+<unit id="org.eclipse.jdt.feature.group" version="3.12.3.v20170301-0400"/>
 <repository location="http://download.eclipse.org/eclipse/updates/4.6/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.mylyn.commons.repositories.feature.group" version="1.13.0.v20160630-1702"/>
-<unit id="org.eclipse.mylyn.commons.feature.group" version="3.21.0.v20160707-1856"/>
-<unit id="org.eclipse.mylyn.commons.sdk.feature.group" version="3.21.0.v20160729-1739"/>
-<unit id="org.eclipse.mylyn.commons.identity.feature.group" version="1.13.0.v20160630-1702"/>
-<unit id="org.eclipse.mylyn.commons.notifications.feature.group" version="1.13.0.v20160721-2347"/>
+<unit id="org.eclipse.mylyn.commons.repositories.feature.group" version="1.14.0.v20161024-1634"/>
+<unit id="org.eclipse.mylyn.commons.feature.group" version="3.22.0.v20170213-1708"/>
+<unit id="org.eclipse.mylyn.commons.sdk.feature.group" version="3.22.0.v20170214-1636"/>
+<unit id="org.eclipse.mylyn.commons.identity.feature.group" version="1.14.0.v20161024-1634"/>
+<unit id="org.eclipse.mylyn.commons.notifications.feature.group" version="1.14.0.v20161024-1634"/>
 <repository location="http://download.eclipse.org/mylyn/releases/latest"/>
 </location>
 <location path="${project_loc}\libs" type="Directory"/>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.jgit.feature.group" version="4.6.1.201703071140-r"/>
-<unit id="org.eclipse.jgit.source.feature.group" version="4.6.1.201703071140-r"/>
+<unit id="org.eclipse.jgit.feature.group" version="4.7.0.201704051617-r"/>
+<unit id="org.eclipse.jgit.source.feature.group" version="4.7.0.201704051617-r"/>
 <repository location="http://download.eclipse.org/egit/updates"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">

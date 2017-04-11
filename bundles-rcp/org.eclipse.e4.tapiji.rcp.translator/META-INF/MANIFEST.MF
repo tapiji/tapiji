@@ -3,11 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Rcp
 Bundle-SymbolicName: org.eclipse.e4.tapiji.rcp.translator;singleton:=true
 Bundle-Version: 1.0.0
-Require-Bundle: org.eclipse.e4.ui.model.workbench;bundle-version="1.2.0.v20160229-1459",
- org.eclipse.e4.core.di.annotations,
+Require-Bundle: org.eclipse.e4.core.di.annotations,
  org.eclipse.swt,
  org.eclipse.e4.ui.workbench,
  org.eclipse.e4.core.contexts,
- org.eclipse.jface
+ org.eclipse.jface,
+ org.eclipse.e4.ui.model.workbench
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.eclipse.e4.tapiji.logger
