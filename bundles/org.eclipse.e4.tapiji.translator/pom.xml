@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<parent>
+		<groupId>org.eclipse.e4.tapiji</groupId>
+		<artifactId>org.eclipse.e4.tapiji.bundles</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.eclipse.e4.tapiji</groupId>
+	<artifactId>org.eclipse.e4.tapiji.translator</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<dependencies>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>e4Preferences</id>
+			<url>https://dl.bintray.com/nucle/e4preferences/</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
+
+</project>

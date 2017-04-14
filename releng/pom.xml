@@ -1,18 +1,18 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.eclipselabs.e4.tapiji</groupId>
-    <artifactId>org.eclipselabs.e4.tapiji.releng</artifactId>
+    <groupId>org.eclipse.e4.tapiji</groupId>
+    <artifactId>org.eclipse.e4.tapiji.releng</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     
     <parent>
-        <groupId>org.eclipselabs.e4.tapiji</groupId>
-        <artifactId>org.eclipselabs.e4.tapiji.root</artifactId>
+        <groupId>org.eclipse.e4.tapiji</groupId>
+        <artifactId>org.eclipse.e4.tapiji.root</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <modules>
-		<module>org.eclipselabs.e4.tapiji.translator.update</module>
-		<module>org.eclipselabs.e4.tapiji.translator.product</module>
+		<module>org.eclipse.e4.tapiji.translator.update</module>
+		<module>org.eclipse.e4.tapiji.translator.product</module>
     </modules>
 </project>
