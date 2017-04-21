@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+   <extension
+         id="org.eclipse.e4.tapiji.mylyn.ui.fragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="review.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.mylyn.tasks.core.repositories">
+      <connectorCore
+            class="org.eclipse.e4.tapiji.mylyn.core.connector.translator.TranslatorRepositoryConnector"
+            name="TranslatorRepository">
+      </connectorCore>
+   </extension>
+
+</plugin>

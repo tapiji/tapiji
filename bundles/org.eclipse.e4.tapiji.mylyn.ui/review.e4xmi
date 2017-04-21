@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_aDaNICHMEeeNnph4kuntFg">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_baHhYCHMEeeNnph4kuntFg" featurename="children" parentElementId="org.eclipse.e4.tapiji.translator.partstack.translator" positionInList="index:2">
+    <elements xsi:type="basic:Part" xmi:id="_3mvvMCHMEeeNnph4kuntFg" elementId="org.eclipse.e4.tapiji.mylyn.ui.part.tasks" contributionURI="bundleclass://org.eclipse.e4.tapiji.mylyn.ui/org.eclipse.e4.tapiji.mylyn.ui.review.tasks.TasksView" label="Tasks" tooltip="Tasks"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_DUsSICHPEeeNnph4kuntFg" featurename="children" parentElementId="org.eclipse.e4.tapiji.translator.partstack.main" positionInList="">
+    <elements xsi:type="basic:Part" xmi:id="_FKCDICHPEeeNnph4kuntFg" elementId="org.eclipse.e4.tapiji.mylyn.ui.part.0" contributionURI="bundleclass://org.eclipse.e4.tapiji.mylyn.ui/org.eclipse.e4.tapiji.mylyn.ui.review.task.TaskView"/>
+  </fragments>
+</fragment:ModelFragments>

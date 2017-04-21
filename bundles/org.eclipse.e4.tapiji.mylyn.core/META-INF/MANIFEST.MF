@@ -13,8 +13,11 @@ Require-Bundle: org.eclipse.swt,
  org.eclipse.mylyn.commons.workbench,
  org.eclipse.e4.core.contexts,
  org.eclipse.e4.core.di,
- org.eclipse.e4.ui.model.workbench
-Export-Package: org.eclipse.e4.tapiji.mylyn.core.internal
+ org.eclipse.e4.ui.model.workbench,
+ org.eclipse.mylyn.tasks.core,
+ org.eclipse.equinox.registry,
+ org.eclipse.jdt.annotation
+Export-Package: org.eclipse.e4.tapiji.mylyn.core.connector.translator
 Service-Component: OSGI-INF/service.xml
 Import-Package: javax.inject,
  org.eclipse.e4.tapiji.mylyn.core.api,

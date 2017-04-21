@@ -4,6 +4,7 @@
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_2vIQ0LIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.perspectivestack.main">
       <children xsi:type="advanced:Perspective" xmi:id="_5YRdULIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.perspective.main" label="TapiJI Translator">
         <children xsi:type="basic:PartSashContainer" xmi:id="__P9CYLIlEeal-_h9GBjgAw" elementId="org.eclipse.e4.tapiji.translator.partsashcontainer.main">
+          <children xsi:type="basic:PartStack" xmi:id="_-QtDoCNqEeeSI5sgYtaZvA" elementId="org.eclipse.e4.tapiji.translator.partstack.main"/>
           <children xsi:type="basic:PartStack" xmi:id="_FGo1YApsEeev1vvTm6fM9g" elementId="org.eclipse.e4.tapiji.translator.partstack.translator"/>
         </children>
       </children>
